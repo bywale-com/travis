@@ -1,0 +1,33 @@
+---
+description: Parametric elimination — kill placating chrome; one job, border budget, quiet doors
+globs: src/**/*.{tsx,ts,css}
+alwaysApply: true
+---
+
+# Parametric elimination
+
+**Thesis:** Constraints that kill the 4 — not a formula that generates an 8.  
+**Metaphor:** Prospect for attention; don’t placate every control.
+
+Full law: `docs/build-foundation/06-parametric-elimination.md`  
+Exemplars: `docs/build-foundation/06-parametric-elimination-applied.md`
+
+## Do
+
+- **One job per surface** — second job goes behind a door (popover, sheet, selected-only detail)
+- **Border budget** — remove boxes/hairlines/dashed frames that don’t serve the job
+- **Quiet until invited** — secondary tools as text/icon until intent; detail prose not on every row
+- **One loud action** per beat — demote the rest
+- **Don’t placate empty chrome** — placeholders get muted lines, not equal section bars
+
+## Don't
+
+- Always-on filter grids / option stacks when a Filter (or similar) door would do
+- Dashed full-width secondary CTAs
+- Equal bordered section headers competing with the living index
+- Bordered cards + full body copy on every list row
+- Accent rings on every selectable item — prefer quiet selected state (hairline / wash / weight)
+
+## Grade a change
+
+Name the job → list doors vs work → count loud actions → count unnecessary borders.

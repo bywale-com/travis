@@ -1,0 +1,42 @@
+---
+description: How Analysis — DNA cuts, visibility, leaves, flow anchors
+globs: "**/howAnalysis/**/*.ts"
+alwaysApply: false
+---
+
+# How Analysis authoring
+
+Full methodology: `docs/build-foundation/01-ui-first-and-how.md`.
+
+## Structure
+
+- One **molecular outcome** per epic; first How mirrors it.
+- **Cut parent answers** into child questions — preserve DNA.
+- Sibling order left-to-right = clause order in parent answer.
+
+## Visibility (strict)
+
+| Layer | Language |
+|-------|----------|
+| Outcome + nodes **before** a true leaf | User-visible only |
+| **True leaf only** | Process language allowed |
+
+Stop when the next How would repeat the parent or need invisible language upstream.
+
+## DNA (strict)
+
+Child questions must trace to a phrase in the **parent answer**.
+
+- Process names belong in the **leaf answer**, not non-leaf questions.
+
+## Flow crystallization
+
+When children under a parent are all leaves, that parent **is** the flow anchor. See `docs/build-foundation/04-flows-and-shipping.md`.
+
+## C3 per node
+
+Question · Clarity · Criteria (when + conditions) · Components
+
+## Affordance-grain Clarity (densify)
+
+Clarity must name controls and, for each state-writing affordance, the downstream reader — not only the module. Components table: `UI · Kind · Status · Affordance`. Densify both critical and cosmetic; criticality is labeled afterward (`docs/wiring/WIRING-CRITICAL-INTERACTION.md`). Full rule: `docs/sme/implementation/CLICKPATH-DENSIFICATION.md`.

@@ -1,0 +1,23 @@
+---
+description: Overlay escape — portal menus/popovers; never clip under overflow hidden
+globs: src/**/*.{tsx,ts,css}
+alwaysApply: true
+---
+
+# Overlay escape
+
+**Thesis:** Absolute menus inside `overflow: hidden|auto` cards/panes get clipped. Portal + fixed.
+
+Full law: `docs/build-foundation/07-overlay-escape.md`
+
+## Do
+
+- Floating menus / popovers / dropdowns → portal to `document.body` + `position: fixed`
+- Anchor with `getBoundingClientRect`; listen to scroll/resize
+- Prefer shadcn Popover / DropdownMenu (they portal by default)
+
+## Don't
+
+- Absolute-position a menu under a card that uses `overflow: "hidden"` for radius
+- “Fix” clipping by growing parent `minHeight` so the menu fits inside the clip
+- Assume a higher `z-index` escapes overflow clipping

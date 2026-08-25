@@ -1,0 +1,35 @@
+---
+description: Surface registry — wrap UI regions with stable id + functional label
+globs: src/**/*.tsx
+alwaysApply: true
+---
+
+# Surface registry (live map)
+
+Every documented UI surface registers via a **boundary wrapper** — not a static panel list or closed id union.
+
+The live map answers: *what is this region called?* and *where does it live?* (hover highlights the matching surface).
+
+## Do
+
+- Wrap each documented region once with stable `id`, functional `label`, optional icon, `order`, tokens
+- Co-locate surface metadata in config files that also drive UI labels when possible
+- Use functional labels (roles), not component filenames
+- Support pattern surfaces (one id, many row instances) with shared highlight wiring
+- Prefer runtime tree from registration over hand-maintained trees
+
+## Don't
+
+- Maintain a closed `DocsComponentId`-style union as source of truth
+- Hand-edit the live map for every new panel
+- Duplicate ids across unrelated surfaces
+- Ship a meaningful new region with no boundary
+
+## Adding a region
+
+1. Wrap the root in the boundary component.
+2. If it has configurable children, map them from shared config in the parent.
+3. Assign sibling `order`; mark off-screen / conditional appropriately.
+4. Ensure the live tree lists it and highlight works.
+
+See `docs/build-foundation/02-surface-registry.md` and `docs/build-foundation/00-rudiments.md`.

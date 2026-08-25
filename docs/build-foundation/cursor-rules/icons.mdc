@@ -1,0 +1,33 @@
+---
+description: Icons — registry for chrome/trees; stroke library for controls
+globs: src/**/*.tsx
+alwaysApply: true
+---
+
+# Icons
+
+## Two roles — don’t mix
+
+| Surface | Style | Use for |
+|---------|--------|---------|
+| Trees, nav, surface-registry icons | Product icon **registry** | Named chrome icons with token tint |
+| Interactive controls | Stroke library (e.g. Lucide) | Chevrons, close, menus, checkboxes |
+
+## Do
+
+- Add new chrome icons only through the registry map
+- Tint with theme tokens via a color prop
+- Preserve semantic status colors when they carry meaning
+
+## Don't
+
+- Import raw SVG assets ad hoc in feature components
+- Flatten meaningful status colors to muted without reason
+- Branch on `isDark` for icon color when tokens exist
+
+## Adapt for this repo
+
+- Name the registry module and wrapper component
+- Document which slug/name scheme the product uses
+
+See `docs/build-foundation/03-visual-system.md`.
