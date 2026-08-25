@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-25 20:00 UTC — Face + plate + PLATE-READ on `main`. **Living PM packets PR** = reusable branch `pm/packets` (see [`PM-PACKETS.md`](./PM-PACKETS.md)); **001** = voice session. Speech-end = Engineer grain. SA: ascribe from 001 pastes. Engineer: wait for SA ascribe / founder handoff before plant.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-25 20:05 UTC — Face + plate + PLATE-READ on `main`. **Living PM packets PR [#1](https://github.com/bywale-com/travis/pull/1)** (`pm/packets`; reuse forever). **001** = voice session (`git fetch origin pull/1/head`). Speech-end = Engineer grain. SA: ascribe from 001 pastes. Engineer: wait for SA ascribe / founder handoff before plant.
 
 **How we maintain this log**
 

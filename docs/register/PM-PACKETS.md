@@ -15,9 +15,9 @@
 
 After the first packet PR is open, record it here and in [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) **Current**:
 
-- **PR:** _(filled when opened)_  
+- **PR:** [#1](https://github.com/bywale-com/travis/pull/1)  
 - **Branch:** `pm/packets`  
-- Fetch: `git fetch origin pull/<N>/head` then `git show FETCH_HEAD:docs/register/PM-PACKET-….md`
+- Fetch: `git fetch origin pull/1/head` then `git show FETCH_HEAD:docs/register/PM-PACKET-….md`
 
 ## Packets
 
