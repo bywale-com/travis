@@ -1,10 +1,11 @@
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/server/db/client";
-import { voiceSession } from "@/server/db/schema";
+import { agentBinding, voiceSession } from "@/server/db/schema";
 
 type PatchBody = {
-  status: "listening" | "paused" | "ending" | "ended" | "speaking";
+  status?: "listening" | "paused" | "ending" | "ended" | "speaking";
+  viewMode?: "voice" | "log";
 };
 
 export async function PATCH(
@@ -14,16 +15,20 @@ export async function PATCH(
   const { id } = await ctx.params;
   const body = (await req.json()) as PatchBody;
 
-  if (!body.status) {
-    return NextResponse.json({ error: "status required" }, { status: 400 });
+  if (!body.status && !body.viewMode) {
+    return NextResponse.json(
+      { error: "status or viewMode required" },
+      { status: 400 },
+    );
   }
 
-  const endedAt = body.status === "ended" ? new Date() : null;
+  const endedAt = body.status === "ended" ? new Date() : undefined;
 
   const [session] = await db
     .update(voiceSession)
     .set({
-      status: body.status,
+      ...(body.status ? { status: body.status } : {}),
+      ...(body.viewMode ? { viewMode: body.viewMode } : {}),
       ...(endedAt ? { endedAt } : {}),
     })
     .where(eq(voiceSession.id, id))
@@ -33,5 +38,17 @@ export async function PATCH(
     return NextResponse.json({ error: "Session not found" }, { status: 404 });
   }
 
-  return NextResponse.json({ session });
+  const [active] = await db
+    .select()
+    .from(agentBinding)
+    .where(eq(agentBinding.id, session.activeBindingId))
+    .limit(1);
+
+  return NextResponse.json({
+    session: {
+      ...session,
+      activeLabel: active?.label,
+      activeSeatKey: active?.seatKey,
+    },
+  });
 }

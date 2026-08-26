@@ -1,17 +1,18 @@
 /**
- * Cursor cloud send port (SCP-001 + Hotfix 001).
- * Stand-in unless binding has non-empty bc-… id AND CURSOR_API_KEY is set.
- * Never Agent.create per utterance — resume + send only.
- * Hotfix 001: stream assistant text; skip thinking/tool spam.
+ * Cursor cloud send port (SCP-001 + Hotfix 001 + SCP-002 thought/post split).
  */
 
 export type CursorStreamEvent =
   | { type: "status"; text: string }
+  /** Legacy hotfix — same as post_delta */
   | { type: "delta"; text: string }
+  | { type: "thought_delta"; text: string }
+  | { type: "post_delta"; text: string }
   | {
       type: "done";
       mode: "stand-in" | "real" | "error";
       assistantText: string;
+      thoughtText?: string;
       agentId?: string;
       runId?: string;
       statusText: string;
@@ -37,7 +38,6 @@ function textFromAssistantMessage(content: unknown): string {
   return out;
 }
 
-/** Best-effort stitch of assistant steps when stream deltas were thin. */
 async function assistantTextFromConversation(run: {
   conversation?: () => Promise<unknown>;
 }): Promise<string> {
@@ -48,11 +48,14 @@ async function assistantTextFromConversation(run: {
     const parts: string[] = [];
     for (const turn of turns) {
       const t = turn as {
-        type?: string;
-        turn?: { steps?: Array<{ type?: string; message?: { text?: string; content?: unknown } }> };
+        turn?: {
+          steps?: Array<{
+            type?: string;
+            message?: { text?: string; content?: unknown };
+          }>;
+        };
       };
-      const steps = t.turn?.steps ?? [];
-      for (const step of steps) {
+      for (const step of t.turn?.steps ?? []) {
         if (step.type !== "assistantMessage") continue;
         const msg = step.message;
         if (!msg) continue;
@@ -81,6 +84,7 @@ export async function* streamCursorReply(params: {
     const assistantText =
       "Got it. (Cursor stand-in — set CURSOR_API_KEY and a bc-… agent_binding row for a real run.)";
     yield { type: "status", text: "stand-in" };
+    yield { type: "post_delta", text: assistantText };
     yield { type: "delta", text: assistantText };
     yield {
       type: "done",
@@ -99,7 +103,8 @@ export async function* streamCursorReply(params: {
 
     yield { type: "status", text: "running" };
 
-    let assistantText = "";
+    let thoughtText = "";
+    let postText = "";
 
     if (typeof run.stream === "function") {
       for await (const event of run.stream()) {
@@ -110,14 +115,22 @@ export async function* streamCursorReply(params: {
           text?: string;
         };
 
-        if (e.type === "thinking" || e.type === "tool_call" || e.type === "tool_use") {
+        if (e.type === "tool_call" || e.type === "tool_use") continue;
+
+        if (e.type === "thinking") {
+          const chunk = e.text ?? "";
+          if (chunk) {
+            thoughtText += chunk;
+            yield { type: "thought_delta", text: chunk };
+          }
           continue;
         }
 
         if (e.type === "assistant") {
           const chunk = textFromAssistantMessage(e.message?.content);
           if (chunk) {
-            assistantText += chunk;
+            postText += chunk;
+            yield { type: "post_delta", text: chunk };
             yield { type: "delta", text: chunk };
           }
           continue;
@@ -131,14 +144,16 @@ export async function* streamCursorReply(params: {
 
     const result = await run.wait();
 
-    if (!assistantText.trim()) {
+    if (!postText.trim()) {
       const fromConversation = await assistantTextFromConversation(run);
       if (fromConversation) {
-        assistantText = fromConversation;
+        postText = fromConversation;
+        yield { type: "post_delta", text: fromConversation };
         yield { type: "delta", text: fromConversation };
       } else if (result.result?.trim()) {
-        assistantText = result.result.trim();
-        yield { type: "delta", text: assistantText };
+        postText = result.result.trim();
+        yield { type: "post_delta", text: postText };
+        yield { type: "delta", text: postText };
       }
     }
 
@@ -147,7 +162,8 @@ export async function* streamCursorReply(params: {
       yield {
         type: "done",
         mode: "error",
-        assistantText: assistantText.trim() || msg,
+        assistantText: postText.trim() || msg,
+        thoughtText: thoughtText.trim() || undefined,
         agentId,
         runId: result.id,
         statusText: "error",
@@ -159,9 +175,10 @@ export async function* streamCursorReply(params: {
       type: "done",
       mode: "real",
       assistantText:
-        assistantText.trim() ||
+        postText.trim() ||
         result.result?.trim() ||
         "Run finished (no assistant text).",
+      thoughtText: thoughtText.trim() || undefined,
       agentId,
       runId: result.id,
       statusText: result.status === "cancelled" ? "cancelled" : "finished",
