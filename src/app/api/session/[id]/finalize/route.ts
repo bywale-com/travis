@@ -1,7 +1,6 @@
 import { desc, eq } from "drizzle-orm";
-import { NextResponse } from "next/server";
 import { matchConductorPhrase } from "@/lib/conductor";
-import { sendToCursor } from "@/server/cursor-port";
+import { streamCursorReply } from "@/server/cursor-port";
 import { db } from "@/server/db/client";
 import {
   agentBinding,
@@ -14,9 +13,13 @@ type Body = {
   utterance: string;
 };
 
+function sse(event: string, data: unknown): string {
+  return `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
+}
+
 /**
- * Finalize utterance when conductor phrase matches (or client already detected).
- * Writes user turn, invokes Cursor send port, writes assistant/status turns.
+ * Finalize utterance when conductor phrase matches.
+ * Hotfix 001: SSE — user turn → running status → assistant deltas → done.
  */
 export async function POST(
   req: Request,
@@ -33,10 +36,10 @@ export async function POST(
     .limit(1);
 
   if (!session) {
-    return NextResponse.json({ error: "Session not found" }, { status: 404 });
+    return Response.json({ error: "Session not found" }, { status: 404 });
   }
   if (session.status === "ended") {
-    return NextResponse.json({ error: "Session ended" }, { status: 400 });
+    return Response.json({ error: "Session ended" }, { status: 400 });
   }
 
   const phrases = await db
@@ -50,7 +53,7 @@ export async function POST(
   );
 
   if (!match.matched) {
-    return NextResponse.json({
+    return Response.json({
       matched: false,
       cleanedText: match.cleanedText,
     });
@@ -58,7 +61,7 @@ export async function POST(
 
   const prompt = match.cleanedText.trim();
   if (!prompt) {
-    return NextResponse.json(
+    return Response.json(
       {
         matched: true,
         error: "Conductor matched but no prompt text left after stripping phrase.",
@@ -92,39 +95,97 @@ export async function POST(
     .where(eq(agentBinding.id, session.bindingId))
     .limit(1);
 
-  const sendResult = await sendToCursor({
-    cursorAgentId: binding?.cursorAgentId ?? "",
-    prompt,
+  const encoder = new TextEncoder();
+
+  const stream = new ReadableStream({
+    async start(controller) {
+      const send = (event: string, data: unknown) => {
+        controller.enqueue(encoder.encode(sse(event, data)));
+      };
+
+      try {
+        send("matched", {
+          matched: true,
+          matchedPhrase: match.matchedPhrase,
+          userTurn,
+        });
+        send("status", { text: "running" });
+
+        let assistantText = "";
+        let donePayload: {
+          mode: string;
+          statusText: string;
+          agentId?: string;
+          runId?: string;
+        } | null = null;
+
+        for await (const ev of streamCursorReply({
+          cursorAgentId: binding?.cursorAgentId ?? "",
+          prompt,
+        })) {
+          if (ev.type === "status") {
+            send("status", { text: ev.text });
+          } else if (ev.type === "delta") {
+            assistantText += ev.text;
+            send("delta", { text: ev.text });
+          } else if (ev.type === "done") {
+            if (!assistantText.trim()) {
+              assistantText = ev.assistantText;
+            }
+            donePayload = {
+              mode: ev.mode,
+              statusText: ev.statusText,
+              agentId: ev.agentId,
+              runId: ev.runId,
+            };
+          }
+        }
+
+        const finalAssistant = assistantText.trim() || "Run finished (no assistant text).";
+
+        const [assistantTurn] = await db
+          .insert(voiceTurn)
+          .values({
+            sessionId,
+            seq,
+            role: "assistant",
+            text: finalAssistant,
+          })
+          .returning();
+        seq += 1;
+
+        let statusTurn = null;
+        const statusText = donePayload?.statusText ?? "finished";
+        [statusTurn] = await db
+          .insert(voiceTurn)
+          .values({
+            sessionId,
+            seq,
+            role: "status",
+            text: statusText,
+          })
+          .returning();
+
+        send("done", {
+          matched: true,
+          mode: donePayload?.mode ?? "real",
+          matchedPhrase: match.matchedPhrase,
+          turns: [userTurn, assistantTurn, statusTurn].filter(Boolean),
+        });
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        send("error", { error: msg });
+      } finally {
+        controller.close();
+      }
+    },
   });
 
-  const [assistantTurn] = await db
-    .insert(voiceTurn)
-    .values({
-      sessionId,
-      seq,
-      role: "assistant",
-      text: sendResult.assistantText,
-    })
-    .returning();
-  seq += 1;
-
-  let statusTurn = null;
-  if (sendResult.statusText) {
-    [statusTurn] = await db
-      .insert(voiceTurn)
-      .values({
-        sessionId,
-        seq,
-        role: "status",
-        text: sendResult.statusText,
-      })
-      .returning();
-  }
-
-  return NextResponse.json({
-    matched: true,
-    matchedPhrase: match.matchedPhrase,
-    mode: sendResult.mode,
-    turns: [userTurn, assistantTurn, statusTurn].filter(Boolean),
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/event-stream; charset=utf-8",
+      "Cache-Control": "no-cache, no-transform",
+      Connection: "keep-alive",
+    },
   });
 }

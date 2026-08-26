@@ -61,6 +61,8 @@ export function VoiceSession({ t }: { t: Tokens }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sttSupported, setSttSupported] = useState(true);
+  const [liveStatus, setLiveStatus] = useState<string | null>(null);
+  const [streamingAssistant, setStreamingAssistant] = useState("");
 
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const committedRef = useRef("");
@@ -90,7 +92,7 @@ export function VoiceSession({ t }: { t: Tokens }) {
 
   useEffect(() => {
     threadEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [turns, draft]);
+  }, [turns, draft, streamingAssistant, liveStatus]);
 
   const stopRecognition = useCallback(() => {
     listeningWantedRef.current = false;
@@ -113,49 +115,117 @@ export function VoiceSession({ t }: { t: Tokens }) {
       finalizingRef.current = true;
       setBusy(true);
       setError(null);
+      setLiveStatus(null);
+      setStreamingAssistant("");
       try {
         const res = await fetch(`/api/session/${sid}/finalize`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ utterance }),
         });
-        const data = await res.json();
-        if (!res.ok) {
-          setError(data.error ?? "Finalize failed");
-        } else if (data.matched) {
-          committedRef.current = "";
-          interimRef.current = "";
-          setDraft("");
-          await refreshTurns(sid);
-          // TTS stand-in: speak assistant text via browser when available
-          const assistant = (data.turns as Turn[] | undefined)?.find(
-            (x) => x.role === "assistant",
-          );
-          if (assistant?.text && typeof window !== "undefined" && window.speechSynthesis) {
-            setPresence("speaking");
-            await fetch(`/api/session/${sid}`, {
-              method: "PATCH",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ status: "speaking" }),
-            });
-            const u = new SpeechSynthesisUtterance(assistant.text);
-            await new Promise<void>((resolve) => {
-              u.onend = () => resolve();
-              u.onerror = () => resolve();
-              window.speechSynthesis.speak(u);
-            });
-            if (listeningWantedRef.current) {
-              setPresence("listening");
+
+        const ct = res.headers.get("content-type") ?? "";
+        if (!ct.includes("text/event-stream")) {
+          const data = await res.json();
+          if (!res.ok) {
+            setError(data.error ?? "Finalize failed");
+          } else if (!data.matched) {
+            // Phrase not matched — keep listening / draft
+          } else if (data.error) {
+            setError(data.error);
+          }
+          return;
+        }
+
+        committedRef.current = "";
+        interimRef.current = "";
+        setDraft("");
+
+        const reader = res.body?.getReader();
+        if (!reader) throw new Error("No response stream");
+
+        const decoder = new TextDecoder();
+        let buffer = "";
+        let finalAssistantText = "";
+
+        const handleEvent = async (event: string, raw: string) => {
+          const data = JSON.parse(raw) as Record<string, unknown>;
+          if (event === "matched") {
+            const userTurn = data.userTurn as Turn | undefined;
+            if (userTurn) {
+              setTurns((prev) =>
+                prev.some((t) => t.id === userTurn.id) ? prev : [...prev, userTurn],
+              );
+            }
+            setLiveStatus("running");
+          } else if (event === "status") {
+            setLiveStatus(String(data.text ?? "running"));
+          } else if (event === "delta") {
+            const chunk = String(data.text ?? "");
+            if (chunk) {
+              finalAssistantText += chunk;
+              setStreamingAssistant((prev) => prev + chunk);
+            }
+          } else if (event === "done") {
+            setLiveStatus(null);
+            setStreamingAssistant("");
+            await refreshTurns(sid);
+            const turns = data.turns as Turn[] | undefined;
+            const assistant =
+              turns?.find((x) => x.role === "assistant") ??
+              (finalAssistantText
+                ? ({ text: finalAssistantText } as Turn)
+                : undefined);
+            if (assistant?.text && typeof window !== "undefined" && window.speechSynthesis) {
+              setPresence("speaking");
               await fetch(`/api/session/${sid}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ status: "listening" }),
+                body: JSON.stringify({ status: "speaking" }),
               });
+              const u = new SpeechSynthesisUtterance(assistant.text);
+              await new Promise<void>((resolve) => {
+                u.onend = () => resolve();
+                u.onerror = () => resolve();
+                window.speechSynthesis.speak(u);
+              });
+              if (listeningWantedRef.current) {
+                setPresence("listening");
+                await fetch(`/api/session/${sid}`, {
+                  method: "PATCH",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ status: "listening" }),
+                });
+              }
             }
+          } else if (event === "error") {
+            setError(String(data.error ?? "Stream error"));
+            setLiveStatus(null);
+            setStreamingAssistant("");
+          }
+        };
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const parts = buffer.split("\n\n");
+          buffer = parts.pop() ?? "";
+          for (const part of parts) {
+            if (!part.trim()) continue;
+            let eventName = "message";
+            const dataLines: string[] = [];
+            for (const line of part.split("\n")) {
+              if (line.startsWith("event:")) eventName = line.slice(6).trim();
+              else if (line.startsWith("data:")) dataLines.push(line.slice(5).trim());
+            }
+            if (dataLines.length) await handleEvent(eventName, dataLines.join("\n"));
           }
         }
       } catch (e) {
         setError(e instanceof Error ? e.message : String(e));
+        setLiveStatus(null);
+        setStreamingAssistant("");
       } finally {
         finalizingRef.current = false;
         setBusy(false);
@@ -522,6 +592,34 @@ export function VoiceSession({ t }: { t: Tokens }) {
             }}
           >
             {draft}
+          </div>
+        )}
+        {liveStatus && (
+          <p
+            style={{
+              textAlign: "center",
+              fontSize: 12,
+              color: t.statusText,
+              margin: 0,
+            }}
+          >
+            {liveStatus}
+          </p>
+        )}
+        {streamingAssistant && (
+          <div
+            style={{
+              alignSelf: "flex-start",
+              maxWidth: "88%",
+              background: t.assistantBubble,
+              border: `1px solid ${t.border}`,
+              borderRadius: 16,
+              padding: "10px 14px",
+              fontSize: 15,
+              lineHeight: 1.45,
+            }}
+          >
+            {streamingAssistant}
           </div>
         )}
         <div ref={threadEndRef} />
