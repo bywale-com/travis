@@ -44,18 +44,31 @@ Detailed seat READMEs: [`docs/seats/`](docs/seats/).
 
 ## Status
 
-**Phase One — stand-up.** Seats, logs, brief, and method pack are in. Product code is not yet planted. First product flag lives in the Phase One log (opening stamp).
+**SCP-001 planted** — phone-first voice session + done-phrase conductor + Cursor send port (stand-in until `CURSOR_API_KEY` is set). Stores live in Postgres schema `travis`.
+
+### Local run
+
+```bash
+cp .env.example .env.local   # set DATABASE_URL; optional CURSOR_API_KEY + SEED_CURSOR_AGENT_ID
+npm install
+npm run db:push
+npm run db:seed
+npm run dev
+```
+
+Open the app on a phone browser (or desktop Chrome). Say a done phrase (seeded: *I'm done with this message* / *I'm done with this* / *I'm done*) to finalize a turn.
 
 ---
 
 ## Layout
 
 ```
+src/                     # Next.js app (voice face + API)
 docs/
   README.md              # seats front door (paste prompts)
   seats/                 # detailed PM / SA / Engineer READMEs
   method/                # portable Om Coda method
   build-foundation/      # portable build pack + PROJECT-BRIEF
-  register/              # product thesis + PM/SA logs
+  register/              # product thesis + PM/SA logs + packets
 AGENTS.md                # Engineer always-on
 ```
