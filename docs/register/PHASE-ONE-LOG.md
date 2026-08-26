@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-25 20:05 UTC — Face + plate + PLATE-READ on `main`. **Living PM packets PR [#1](https://github.com/bywale-com/travis/pull/1)** (`pm/packets`; reuse forever). **001** = voice session (`git fetch origin pull/1/head`). Speech-end = Engineer grain. SA: ascribe from 001 pastes. Engineer: wait for SA ascribe / founder handoff before plant.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-26 20:15 UTC — **PM packets PR [#1](https://github.com/bywale-com/travis/pull/1) merged** (founder; fine). **001** is on `main`. No living PM PR open — next packet **002** opens the next reusable PR on `pm/packets` after pull. SA/Engineer work has also landed on `main` (SCP-001 / plant). Face flag 14:00 unchanged.
 
 **How we maintain this log**
 
@@ -241,3 +241,11 @@ Do not build three products. Do not rush judgment before the pipe exists.
 **Kind:** Process. Founder: push main codebase to main first; create a PR for the packet inside the PM’s own reusable PR; new packet numbering each time.
 
 **Law:** [`PM-PACKETS.md`](./PM-PACKETS.md) — `PM-PACKET-NNN-SLUG.md`; never reuse NNN; one branch/PR `pm/packets`.
+
+---
+
+## 2026-08-26 20:15 UTC — PM packets PR #1 merged (founder)
+
+**Kind:** Process. Founder: mistakenly merged the living PM packets PR; okay / no undo.
+
+**Effect:** **001** is on `main`. Living-PR slot is empty until **002**. Law unchanged: while a living PR is open, append there; after merge, open the next living PR for the next numbers — still pull before cutting.
