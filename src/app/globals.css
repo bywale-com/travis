@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+:root {
+  --travis-font: "Segoe UI", "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+  --travis-accent: #2f5d50;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--travis-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
