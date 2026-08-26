@@ -12,7 +12,7 @@
 
 ## Living PR
 
-- **PR:** _(opening — see GitHub)_
+- **PR:** [#4](https://github.com/bywale-com/travis/pull/4)
 - **Branch:** `pm/packets`
 
 ## Packets
