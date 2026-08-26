@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-26 20:15 UTC — **PM packets PR [#1](https://github.com/bywale-com/travis/pull/1) merged** (founder; fine). **001** is on `main`. No living PM PR open — next packet **002** opens the next reusable PR on `pm/packets` after pull. SA/Engineer work has also landed on `main` (SCP-001 / plant). Face flag 14:00 unchanged.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 — **PM-PACKET-002 locked** ([`PM-PACKET-002-ROOM.md`](./PM-PACKET-002-ROOM.md) on living PM PR). Founder approved room glass. **Next seat: SA** — ascribe from packet SA paste → change packet → **Engineer**. Flag 14:00 unchanged.
 
 **How we maintain this log**
 
@@ -249,3 +249,239 @@ Do not build three products. Do not rush judgment before the pipe exists.
 **Kind:** Process. Founder: mistakenly merged the living PM packets PR; okay / no undo.
 
 **Effect:** **001** is on `main`. Living-PR slot is empty until **002**. Law unchanged: while a living PR is open, append there; after merge, open the next living PR for the next numbers — still pull before cutting.
+
+---
+
+## 2026-08-26 20:40 UTC — Seat routing by what comes to mind (founder)
+
+**Kind:** Type A / process law. Why the conversation moved from Engineer “hot fixes” back into this PM log.
+
+**Founder wording — which seat you start with:**
+
+> Conversations that focus on the direction, vision, shape, the look… of the software, the app — if what I’m thinking starts in that place, I would usually have it with the PM… If what immediately comes to mind is something that feels like it’s a table or a system or like a question about the system usually, or like an addition or a change, I would usually start with the SA. But… this one was almost totally about backend… the code, the app itself… So it felt natural to have with the engineer.
+
+**Agent alignment (not a substitute flag):**
+
+| Starts as… | Open with |
+|------------|-----------|
+| Direction / vision / shape / look | **PM** |
+| Table / system / system question / addition or change to the machine | **SA** |
+| Code / backend / the app as built | **Engineer** |
+
+---
+
+## 2026-08-26 20:41 UTC — Engineer packets are hotfixes (founder)
+
+**Kind:** Process / trail law.
+
+**Founder wording:**
+
+> You should also be able to create packets… for traceability… Definitely create a packet… Don’t call it a patch, call it like a hot fix… Sometimes the engineer creating its own packet, it’s like a hot fix… so it’d be like hot fix number one. That already distinguishes it from… a regular packet that usually starts with either an SA or a PM.
+
+**Already stood up (Engineer):** [`HOTFIXES.md`](./HOTFIXES.md) · [`HOTFIX-001-ASSISTANT-STREAM.md`](./HOTFIX-001-ASSISTANT-STREAM.md) — format `HOTFIX-NNN-SLUG.md`; trail = git + PRs; do not append PM/SA logs for the cut itself. Matches founder naming.
+
+---
+
+## 2026-08-26 20:42 UTC — Product reshape: Travis as room (founder; not locked)
+
+**Kind:** Type A direction. Inflection — may matter to product shape. **Not a new flag.** Flag remains 14:00.
+
+**Founder wording:**
+
+> Why am I having this discussion? … it kind of reshapes what we’re building towards… We’re actually building a room… using Travis feels like a live environment… Travis is like a room… PM is like the facilitator… that’s who I’m usually speaking, that’s the default personality, but I should also be able to speak with the engineer… Maybe it’s not inside Travis directly, but it probably is… I could go into a room or something, I don’t know, I’m not thinking clearly… Maybe Travis might be the PM? There’s clearly some room factor here, I don’t… I’m not quite sure. We’ll talk about it.
+
+**PM hold (agent alignment — not the flag):**
+
+- Do **not** lock room architecture, COO, multi-agent UI, or “Travis = PM” as product law yet.
+- Do hold: **default speak-to = PM facilitator**; **Engineer must be speakable** somehow; hotfix trail proves Engineer-originated work is first-class.
+- Parked next (with earlier multi-seat auto-chain): who you address in the live session, and whether “room” is modality, metaphor, or a real surface.
+- Hotfix 001 must-not already says: do not mint COO / room / Travis-as-agent from that cut — correct until this direction is locked in a PM packet.
+
+**Ask (inflection):** stamp only for now (done), or cut a short Phase One thesis addendum / Type A note on “room + addressable seats” without plates yet?
+
+---
+
+## 2026-08-26 21:10 UTC — Standing question: Me · Travis · elevated agents
+
+**Kind:** Type A. Founder: keep this question in mind — critical for what is envisioned.
+
+**Standing question (founder):**
+
+> What is the relationship between Me, Travis and the other Agents? Especially the agents that I personally created / elevated.
+
+**Founder notes (pre-conversation; park, do not lose):**
+
+- everyone staying informed  
+- rooms or just one room  
+- adding agents to the room  
+- seeing agents in the room  
+- still talking to me  
+- main agents  
+
+**Unacceptable** called on something prior in the founder’s own notes — stamp as marker only; no invented gloss.
+
+---
+
+## 2026-08-26 21:11 UTC — External thread: Viktor / ambient vs summoned (imported)
+
+**Kind:** Reference / perimeter. External agent conversation founder is bringing into this log because it matters for Travis direction. **Not founder product flag.**
+
+**Founder ask to external agent:** are Slack-embedded agents (Viktor etc.) always in the chat listening, only when called, or listening for where things are relevant?
+
+**Imported alignment (external; for Travis mapping):**
+
+- Two lanes: **summoned** (@-mention → execute) and **ambient** (watches conversation, decides when to speak).
+- Hard center = **interrupt threshold** on a stream (“surface only what clears the bar”).
+- Viktor tunes against **surveillance-creep** (don’t annoy the shared room). Travis tunes against **occupying you** (don’t break the one voice channel). Same mechanism, different failure mode.
+- Context fear: firehose ≠ context window if built right — cheap gate + distilled state object + external store; cost scales with threshold-clearing events, not channel volume.
+- **Interrupt-threshold layer and context-economics layer are the same layer.**
+- Viktor = closed proactive-in-chat pattern, not proof of orchestrating heterogeneous agents you already run.
+
+**Travis join (agent alignment — not flag):** v1 pipe still surfaces everything readable; triage bar later. This thread is why the bar exists twice — attention **and** token budget.
+
+---
+
+## 2026-08-26 21:12 UTC — Prompting isn’t cosmetic? (founder question)
+
+**Kind:** Type A / metaphysics of seats. Founder stating opinion while asking.
+
+**Founder wording:**
+
+> I don’t believe prompting is cosmetic, because when I prompt something to be a PM… it’s more relevant to the processes… a PM does plates… SA has a group of processes… engineer has a group of processes… when you prompt, you’re kind of just saying… this is what you focus on… in the repo… these are your processes… Almost like… I don’t think it’s like editing its own system message… Cursor… It’s like a chat… Is that cosmetic? … it’s not editing its own weights. If it was editing its weights… then you can make the case that… it’s a separate agent. But right now, it just feels like a chat… That matters because what I’m envisioning… Talking with the PM which has… an agent with a… process protocol… Why do I even have to separate things into chats? If it’s really cosmetic… Is separating… cosmetic, or does it help at all on the backend? Why do I feel like the engineer chat is more… an engineer than the PM chat? Is that cosmetic? That’s the real question.
+
+**PM answer (agent alignment — not a product flag; for discussion):**
+
+**Not cosmetic. Also not separate trained agents.** Both can be true.
+
+| Claim | True? | Why |
+|-------|-------|-----|
+| Separate **weights** / self-trained “PM agent” vs “Engineer agent” | **No** (Cursor chat as we use it) | Same model family; seat paste / `AGENTS.md` / rules compose **instructions + which files you tend to read**, not a fine-tune. |
+| Separate **chats** are meaningless theater | **No** | Each chat is its own **transcript / context composition**. Backend effect is real: what is already in the window, what tools were used, what packets/logs were touched, what mistakes were corrected in *this* thread. That is why Engineer chat *feels* more engineer — accumulated engineer process + code trail, not a different soul. |
+| Prompting / seat identity is “just words” | **Half** | Words alone are weak. **Processes + trails + which slice of the repo is live in context** are the non-cosmetic part. Prompt says “you are PM”; the Phase One log + plates + packet protocol *are* the PM. Without those, the prompt is costume. |
+
+So: separating chats **helps on the backend** as **context isolation and process continuity** — the same move as “distilled state object, not the whole firehose.” It does **not** mean you have elevated, weight-distinct agents. The elevation you feel is **protocol + memory slice + permissions of attention**, not training.
+
+**Implication for the standing Me · Travis · agents question (still open):**
+
+- If seats are process-protocols + memory slices, Travis-as-room can default-speak to **PM protocol**, hand the mic to **Engineer protocol**, without needing three trained beings.
+- Agents you “personally created / elevated” might be the same shape: named protocol + trail + when summoned vs ambient — **not** automatically separate models.
+- Whether that is enough, or you need true elevated agents later, is **not locked**. Founder’s fear about context cost maps here: one room with three protocols still needs a gate so the room firehose does not become every seat’s context.
+
+**Do not:** mint room UI, COO, or multi-agent product from this stamp. Hold the question.
+
+---
+
+## 2026-08-26 21:25 UTC — Room addressing model (founder; UI direction)
+
+**Kind:** Type A → Type B soon (plates). Main goal remembered: speak with the PM — expanded by room, not replaced.
+
+**Founder wording:**
+
+> Let’s talk about the UI and the plates. First of all let’s not forget the main goal. The main goal was to be able to speak with the PM. But it’s not only the PM because I like this idea of a room. Is it a room? No, it’s a room, it’s a room. It’s like… Slack… You can speak with one person directly or you can be in a room… with still that same person… Are you still talking to me? … The default person in a room is always the PM or the chosen… this is like the stuff that’s modular… who you can choose as the default agent to be talking to… You start talking with any other agent, you… call them… Then everything from that point is talking with that agent… like a dead man’s switch… after like a couple of turns or if you don’t say something or… a certain amount of time has passed or a certain threshold is met… Then… when you start talking again… that agent will ask, “Are you talking with me?” The last agent you were talking to… And if you say no… you expect to say no X person. If you don’t say no X person, then it defaults to the PM that message.
+
+**Addressing law (founder shape — agent alignment labels only):**
+
+| Move | What happens |
+|------|----------------|
+| Open room | Default addressee = **PM** or **chosen default** (modular) |
+| Call by name | From that point, turns go to **that** agent |
+| Silence / threshold (dead-man) | Last agent asks: **“Are you talking with me?”** |
+| “No” (no name) | That utterance / next address → **default (PM)** |
+| “No, X” | Switch to **X** |
+
+Slack dual: **direct with one** vs **in a room with them** — both real; room is the Travis live environment.
+
+**Still modular / not frozen:** exact threshold (turns vs time vs other); whether “direct” is a separate surface from “room”; how agents appear in the room (notes: seeing / adding agents).
+
+---
+
+## 2026-08-26 21:26 UTC — Do we need agents distinct from Cursor? (founder ask)
+
+**Kind:** Join to standing Me · Travis · agents question.
+
+**Founder:**
+
+> Now doesn’t this mean that there we’d need agents distinct from Cursor? Or maybe not still.
+
+**PM answer (agent alignment — not flag):**
+
+**You need agents distinct as addressable seats. You do not need agents distinct as Cursor-replacement models.**
+
+| Layer | Distinct? | Why |
+|-------|-----------|-----|
+| **Names in the room** (PM, Engineer, …) | **Yes** | Call-by-name, default, dead-man, “are you talking with me?” require stable identities. |
+| **Process protocol + memory slice per seat** | **Yes** | Same reason separate chats aren’t cosmetic — each addressee needs its own distilled context / trail, or Engineer collapses into PM mush. |
+| **Separate trained weights / non-Cursor beings** | **Not required for this UI law** | Cursor (durable agent / run / stream) can still be the **execution substrate** under each seat: one Cursor agent id per seat, or one conductor that sends runs with that seat’s protocol. |
+| **Travis itself** | **Yes, as the room + addressing runtime** | Travis is not “another Cursor chat UI.” It is the room that routes voice to the current addressee and holds dead-man / default. Cursor stays buried execution — same as v1 pipe, with routing. |
+
+So: **maybe not still** — if “distinct from Cursor” means leave Cursor / invent new model hosts. **Yes** — if it means Travis must own **named seats** that are not just one anonymous Cursor thread. The room law forces **multi-slice addressing**, not necessarily **multi-vendor brains**.
+
+**Do not lock** SA store shapes or Engineer plant of routing yet. Next glass: plates for default-listening room, called-switch, dead-man prompt.
+
+---
+
+## 2026-08-26 21:40 UTC — Room v1 plates R1–R6 (ideation; no packet yet)
+
+**Kind:** Type B glass. Founder: ideate v1 + plates; no external AI agents yet; existing agents only; see plates first — we won’t decide room-from-this until after look.
+
+**Landed:** [`ROOM-FACE.md`](./ROOM-FACE.md) + plates R1–R6 under `docs/register/plates/travis-room-r*.png`.
+
+| ID | State |
+|----|--------|
+| R1 | Default room · listening to PM |
+| R2 | Called Engineer |
+| R3 | Dead-man “Are you talking with me?” |
+| R4 | “No.” → back to PM |
+| R5 | “No, SA.” → SA |
+| R6 | Presence / seeing agents in the room |
+
+**Ask:** like / recut which states? Then cut **PM-PACKET-002** on living `pm/packets` PR (pull first).
+
+---
+
+## 2026-08-26 22:45 UTC — Room log + thought banner + reader (founder sketches F1–F3)
+
+**Kind:** Type A/B foundation. Founder paper sketches → three mock images.
+
+**Founder architecture (wording preserved where quoted):**
+
+- **One overall chat log**, ordered by timestamp.
+- **Thought** can show in chat but **does not speak** — only what is **posted** in the message log is read aloud by default.
+- **Top banner** above the message log for agents in **thought process** — so when you scroll, agents still working on earlier messages don’t get lost.
+- **Thought stream** in banner = easy way to show thinking being streamed.
+- **Reader separated from agents:** Travis / probably **PM for now** reads other agents’ **posted** messages aloud with attribution — e.g. *“oh btw, SA says in response to the question about xyz a few moments ago / yesterday …”* + quote.
+- User can **respond directly to Engineer**; Eng listens for references up to threshold; then **Travis asks “Who was that meant for?”** when ambiguous.
+
+**Founder sketches filed:** F1 base Eng + PM typing · F2 thought banner · F3 scroll PM reply.
+
+**Extended plates:** R7 reader/facilitator · R8 who-was-that-for. [`ROOM-FACE.md`](./ROOM-FACE.md) updated.
+
+**Ask:** enough to packet 002, or recut one more state (thought → post promotion)?
+
+---
+
+## 2026-08-26 23:00 UTC — Two modes: Travis-only voice vs log view (founder recut)
+
+**Kind:** Type A/B inflection — reshapes room UI.
+
+**Founder (preserved):**
+
+- Recent pass opened eyes to how it should look. **Likes F2 shell:** Travis serif logo · **End session at top** (not bottom big button). Color still TBD.
+- **Two modes both exist:**
+  - **Talking:** only talking with **Travis** (facilitator). Travis watches logs. User *can* switch to log view.
+  - **Log view:** separate — user reads message log; read-aloud not required.
+- **Agents don't talk back** — they **message in chat**; **Travis reads** (Mode A). User can address Eng/SA/PM.
+- **Mode A glass:** Travis + maybe **tiny subtitle** while Travis speaks — glance only, **not** full log.
+- **Mode B glass:** full log · fix **message parity** (user right, agents left — prior plate wrong) · **thought strip compact** (overlapping circles, glow = thinking, **no** mandatory open text; **tap** for thought log) · **reference reply** — founder dislikes prior rendition; use **minimal quote rail**.
+
+**Plates regenerated:** A1 A2 (voice) · B1 B2 (log). [`ROOM-FACE.md`](./ROOM-FACE.md) rewritten.
+
+---
+
+## 2026-08-27 — PM-PACKET-002 locked (founder approved)
+
+**Kind:** Packet cut. Founder: approved room glass; ready for SA → Engineer. Merge hotfix separately.
+
+**Landed:** [`PM-PACKET-002-ROOM.md`](./PM-PACKET-002-ROOM.md) on living PM packets PR. [`ROOM-FACE.md`](./ROOM-FACE.md) + plates A1–A2 B1–B2.
+
+**Next:** SA runs packet SA paste → change packet → Engineer plants.
