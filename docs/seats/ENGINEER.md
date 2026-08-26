@@ -69,8 +69,9 @@ v1 surfaces everything **readable** from the assistant stream.
 
 ### 6. Your trail
 
-- Commits and pull requests.  
-- **Do not append** PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.  
+- Commits and pull requests.
+- **Hotfixes:** ad-hoc engineer-originated cuts (smoke / code / backend grain, not a PM or SA packet) use `docs/register/HOTFIX-NNN-….md` + index [`../register/HOTFIXES.md`](../register/HOTFIXES.md). PR titles: `Hotfix NNN — …`.
+- **Do not append** PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
 - If you need a decision, ask the founder to seat PM or SA — do not self-promote into those logs.
 
 ---
