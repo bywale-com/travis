@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 — **PM-PACKET-002 locked** ([`PM-PACKET-002-ROOM.md`](./PM-PACKET-002-ROOM.md) on living PM PR). Founder approved room glass. **Next seat: SA** — ascribe from packet SA paste → change packet → **Engineer**. Flag 14:00 unchanged.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 — **PM-PACKET-002 locked** on living PR [#4](https://github.com/bywale-com/travis/pull/4). Founder approved. **Next: SA** ascribe → change packet → Engineer. Merge hotfix separately.
 
 **How we maintain this log**
 
