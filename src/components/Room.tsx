@@ -8,6 +8,8 @@ import {
 } from "@/lib/absorb-text";
 import { matchConductorPhrase } from "@/lib/conductor";
 import { parseDeadManResponse, seatKeyToShort } from "@/lib/router";
+import type { QueueSeatDto } from "@/lib/queue-logic";
+import { QueueChips, QueueLog } from "@/components/QueueChrome";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -64,9 +66,9 @@ type SpeechRecognitionEventLike = {
 const DEAD_MAN_MS = 180_000;
 
 const SEAT_COLORS: Record<string, string> = {
-  pm: "#6b7a70",
-  sa: "#c45c28",
-  engineer: "#6a7380",
+  pm: "#C4A07A",
+  sa: "#E07A3D",
+  engineer: "#8B6E5C",
 };
 
 function SeatMark({
@@ -79,7 +81,7 @@ function SeatMark({
   glow?: boolean;
 }) {
   const isTravis = seatKey === "travis" || !seatKey;
-  const color = isTravis ? "#5c534b" : (SEAT_COLORS[seatKey] ?? "#9a8f84");
+  const color = isTravis ? "#6B5E52" : (SEAT_COLORS[seatKey] ?? "#A39486");
   const mark = isTravis ? "T" : seatKeyToShort(seatKey);
   return (
     <span
@@ -88,7 +90,7 @@ function SeatMark({
         height: size,
         borderRadius: "50%",
         background: color,
-        color: "#faf7f2",
+        color: "#FFFCF8",
   fontSize: size < 32 ? 10 : 11,
         fontWeight: 600,
         display: "inline-flex",
@@ -183,6 +185,7 @@ export function Room({ t }: { t: Tokens }) {
   const [subtitle, setSubtitle] = useState("");
   const [expandedThoughtId, setExpandedThoughtId] = useState<string | null>(null);
   const [liveThoughts, setLiveThoughts] = useState<Record<string, string>>({});
+  const [queueSeats, setQueueSeats] = useState<QueueSeatDto[]>([]);
 
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const committedRef = useRef("");
@@ -201,12 +204,22 @@ export function Room({ t }: { t: Tokens }) {
   const startRecognitionRef = useRef<() => void>(() => {});
   const recognitionLiveRef = useRef(false);
   const listenRestartGenRef = useRef(0);
-  const pendingUtteranceRef = useRef("");
+  const inflightRef = useRef(0);
 
   viewModeRef.current = viewMode;
   busyRef.current = busy;
   presenceRef.current = presence;
   sessionRef.current = session;
+
+  const applyQueue = useCallback((queue: { seats?: QueueSeatDto[] } | undefined) => {
+    if (queue?.seats) setQueueSeats(queue.seats);
+  }, []);
+
+  const refreshQueue = useCallback(async (sessionId: string) => {
+    const res = await fetch(`/api/session/${sessionId}/queue`);
+    const data = await res.json();
+    applyQueue(data.queue);
+  }, [applyQueue]);
 
   const refreshTurns = useCallback(async (sessionId: string) => {
     const res = await fetch(`/api/session/${sessionId}/turns`);
@@ -233,6 +246,16 @@ export function Room({ t }: { t: Tokens }) {
       })
       .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    const sid = session?.id;
+    if (!sid) return;
+    void refreshQueue(sid);
+    const timer = window.setInterval(() => {
+      void refreshQueue(sid);
+    }, 4000);
+    return () => window.clearInterval(timer);
+  }, [session?.id, refreshQueue]);
 
   useEffect(() => {
     logEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -321,22 +344,155 @@ export function Room({ t }: { t: Tokens }) {
     })();
   }, []);
 
+  const beginInflight = useCallback(() => {
+    inflightRef.current += 1;
+    busyRef.current = true;
+    setBusy(true);
+  }, []);
+
+  const endInflight = useCallback(() => {
+    inflightRef.current = Math.max(0, inflightRef.current - 1);
+    if (inflightRef.current === 0) {
+      busyRef.current = false;
+      setBusy(false);
+      if (
+        listeningWantedRef.current &&
+        !presenceBlocksListen(presenceRef.current)
+      ) {
+        if (presenceRef.current === "speaking") {
+          setPresence("listening");
+          setSubtitle("Listening…");
+        }
+        scheduleListenRestart();
+      }
+      resetDeadManTimer();
+    }
+  }, [resetDeadManTimer, scheduleListenRestart]);
+
+  const consumeAgentStream = useCallback(
+    async (sid: string, res: Response) => {
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error("No response stream");
+
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let postAcc = "";
+      let seatLabel = "PM";
+
+      const handleEvent = async (event: string, raw: string) => {
+        const data = JSON.parse(raw) as Record<string, unknown>;
+
+        if (event === "queued" || event === "queue") {
+          applyQueue(data.queue as { seats?: QueueSeatDto[] } | undefined);
+          return;
+        }
+
+        if (event === "matched") {
+          const userTurn = data.userTurn as Turn | undefined;
+          if (userTurn) {
+            setTurns((prev) =>
+              prev.some((x) => x.id === userTurn.id) ? prev : [...prev, userTurn],
+            );
+          }
+          if (data.activeLabel) {
+            seatLabel = String(data.activeLabel);
+            setSession((s) =>
+              s
+                ? {
+                    ...s,
+                    activeLabel: String(data.activeLabel),
+                    activeSeatKey: String(data.activeSeatKey ?? s.activeSeatKey),
+                  }
+                : s,
+            );
+          }
+          setLiveStatus("running");
+        } else if (event === "thought") {
+          const turn = data.turn as Turn;
+          setTurns((prev) =>
+            prev.some((x) => x.id === turn.id) ? prev : [...prev, turn],
+          );
+          setLiveThoughts((prev) => ({ ...prev, [turn.id]: turn.text }));
+        } else if (event === "thought_delta") {
+          const id = String(data.id);
+          const text = String(data.text);
+          setLiveThoughts((prev) => ({ ...prev, [id]: text }));
+        } else if (event === "post_delta") {
+          const chunk = String(data.text ?? "");
+          if (data.seatLabel) seatLabel = String(data.seatLabel);
+          if (data.seatKey) setStreamingSeat(String(data.seatKey));
+          if (chunk) {
+            postAcc = absorbText(postAcc, chunk).acc;
+            setStreamingPost(postAcc);
+          }
+        } else if (event === "status") {
+          setLiveStatus(String(data.text ?? "running"));
+        } else if (event === "done") {
+          setLiveStatus(null);
+          setStreamingPost("");
+          setStreamingSeat(null);
+          await refreshTurns(sid);
+          await refreshQueue(sid);
+          const postTurn = data.postTurn as Turn | undefined;
+          const postText = postTurn?.text ?? postAcc;
+          const label = String(data.seatLabel ?? seatLabel);
+
+          if (postText && viewModeRef.current === "voice") {
+            const line = `${label} says… ${postText.slice(0, 120)}${postText.length > 120 ? "…" : ""}`;
+            setSubtitle(line);
+            setPresence("speaking");
+            haltRecognition();
+            await fetch(`/api/session/${sid}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ status: "speaking" }),
+            });
+            await facilitatorSpeak(`${label} says. ${postText}`);
+            if (listeningWantedRef.current) {
+              setPresence("listening");
+              setSubtitle("Listening…");
+              await fetch(`/api/session/${sid}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: "listening" }),
+              });
+            }
+          }
+        } else if (event === "error") {
+          const msg = String(data.error ?? "Stream error");
+          if (!/agent_busy/i.test(msg)) setError(msg);
+        }
+      };
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const parts = buffer.split("\n\n");
+        buffer = parts.pop() ?? "";
+        for (const part of parts) {
+          if (!part.trim()) continue;
+          let eventName = "message";
+          const dataLines: string[] = [];
+          for (const line of part.split("\n")) {
+            if (line.startsWith("event:")) eventName = line.slice(6).trim();
+            else if (line.startsWith("data:")) dataLines.push(line.slice(5).trim());
+          }
+          if (dataLines.length) await handleEvent(eventName, dataLines.join("\n"));
+        }
+      }
+    },
+    [applyQueue, haltRecognition, refreshQueue, refreshTurns],
+  );
+
   const finalizeUtterance = useCallback(
     async (utterance: string) => {
       const sid = sessionIdRef.current;
-      if (!sid || finalizingRef.current) {
-        if (sid && finalizingRef.current && utterance.trim()) {
-          pendingUtteranceRef.current = utterance.trim();
-        }
-        return;
-      }
+      if (!sid || !utterance.trim()) return;
+
+      beginInflight();
       finalizingRef.current = true;
-      busyRef.current = true;
-      setBusy(true);
       setError(null);
-      setLiveStatus(null);
-      setStreamingPost("");
-      setStreamingSeat(null);
       haltRecognition();
       listenSoon();
 
@@ -350,6 +506,26 @@ export function Room({ t }: { t: Tokens }) {
         const ct = res.headers.get("content-type") ?? "";
         if (!ct.includes("text/event-stream")) {
           const data = await res.json();
+          if (data.queued) {
+            applyQueue(data.queue as { seats?: QueueSeatDto[] } | undefined);
+            committedRef.current = "";
+            interimRef.current = "";
+            setDraft("");
+            if (data.activeLabel) {
+              setSession((s) =>
+                s
+                  ? {
+                      ...s,
+                      activeLabel: String(data.activeLabel),
+                      activeSeatKey: String(
+                        data.activeSeatKey ?? s.activeSeatKey,
+                      ),
+                    }
+                  : s,
+              );
+            }
+            return;
+          }
           if (data.routerHandled) {
             await refreshSession(sid);
             setSubtitle("");
@@ -364,136 +540,51 @@ export function Room({ t }: { t: Tokens }) {
         committedRef.current = "";
         interimRef.current = "";
         setDraft("");
-
-        const reader = res.body?.getReader();
-        if (!reader) throw new Error("No response stream");
-
-        const decoder = new TextDecoder();
-        let buffer = "";
-        let postAcc = "";
-        let seatLabel = "PM";
-
-        const handleEvent = async (event: string, raw: string) => {
-          const data = JSON.parse(raw) as Record<string, unknown>;
-
-          if (event === "matched") {
-            const userTurn = data.userTurn as Turn | undefined;
-            if (userTurn) {
-              setTurns((prev) =>
-                prev.some((x) => x.id === userTurn.id) ? prev : [...prev, userTurn],
-              );
-            }
-            if (data.activeLabel) {
-              seatLabel = String(data.activeLabel);
-              setSession((s) =>
-                s
-                  ? {
-                      ...s,
-                      activeLabel: String(data.activeLabel),
-                      activeSeatKey: String(data.activeSeatKey ?? s.activeSeatKey),
-                    }
-                  : s,
-              );
-            }
-            setLiveStatus("running");
-          } else if (event === "thought") {
-            const turn = data.turn as Turn;
-            setTurns((prev) =>
-              prev.some((x) => x.id === turn.id) ? prev : [...prev, turn],
-            );
-            setLiveThoughts((prev) => ({ ...prev, [turn.id]: turn.text }));
-          } else if (event === "thought_delta") {
-            const id = String(data.id);
-            const text = String(data.text);
-            setLiveThoughts((prev) => ({ ...prev, [id]: text }));
-          } else if (event === "post_delta") {
-            const chunk = String(data.text ?? "");
-            if (data.seatLabel) seatLabel = String(data.seatLabel);
-            if (data.seatKey) setStreamingSeat(String(data.seatKey));
-            if (chunk) {
-              postAcc = absorbText(postAcc, chunk).acc;
-              setStreamingPost(postAcc);
-            }
-          } else if (event === "status") {
-            setLiveStatus(String(data.text ?? "running"));
-          } else if (event === "done") {
-            setLiveStatus(null);
-            setStreamingPost("");
-            setStreamingSeat(null);
-            await refreshTurns(sid);
-            const postTurn = data.postTurn as Turn | undefined;
-            const postText = postTurn?.text ?? postAcc;
-            const label = String(data.seatLabel ?? seatLabel);
-
-            if (postText && viewModeRef.current === "voice") {
-              const line = `${label} says… ${postText.slice(0, 120)}${postText.length > 120 ? "…" : ""}`;
-              setSubtitle(line);
-              setPresence("speaking");
-              haltRecognition();
-              await fetch(`/api/session/${sid}`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ status: "speaking" }),
-              });
-              await facilitatorSpeak(`${label} says. ${postText}`);
-              if (listeningWantedRef.current) {
-                setPresence("listening");
-                setSubtitle("Listening…");
-                await fetch(`/api/session/${sid}`, {
-                  method: "PATCH",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ status: "listening" }),
-                });
-              }
-            }
-          } else if (event === "error") {
-            setError(String(data.error ?? "Stream error"));
-          }
-        };
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
-          const parts = buffer.split("\n\n");
-          buffer = parts.pop() ?? "";
-          for (const part of parts) {
-            if (!part.trim()) continue;
-            let eventName = "message";
-            const dataLines: string[] = [];
-            for (const line of part.split("\n")) {
-              if (line.startsWith("event:")) eventName = line.slice(6).trim();
-              else if (line.startsWith("data:")) dataLines.push(line.slice(5).trim());
-            }
-            if (dataLines.length) await handleEvent(eventName, dataLines.join("\n"));
-          }
-        }
+        await consumeAgentStream(sid, res);
       } catch (e) {
         setError(e instanceof Error ? e.message : String(e));
       } finally {
         finalizingRef.current = false;
-        busyRef.current = false;
-        setBusy(false);
-        if (
-          listeningWantedRef.current &&
-          !presenceBlocksListen(presenceRef.current)
-        ) {
-          if (presenceRef.current === "speaking") {
-            setPresence("listening");
-            setSubtitle("Listening…");
-          }
-          const pending = pendingUtteranceRef.current.trim();
-          pendingUtteranceRef.current = "";
-          if (pending) {
-            void finalizeUtterance(pending);
-          } else {
-            scheduleListenRestart();
-          }
-        }
-        resetDeadManTimer();
+        endInflight();
       }
     },
-    [haltRecognition, listenSoon, refreshSession, refreshTurns, resetDeadManTimer, scheduleListenRestart],
+    [
+      applyQueue,
+      beginInflight,
+      consumeAgentStream,
+      endInflight,
+      haltRecognition,
+      listenSoon,
+      refreshSession,
+    ],
+  );
+
+  const postQueueJson = useCallback(
+    async (url: string, body: unknown) => {
+      const sid = sessionIdRef.current;
+      if (!sid) return;
+      beginInflight();
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        const ct = res.headers.get("content-type") ?? "";
+        if (!ct.includes("text/event-stream")) {
+          const data = await res.json();
+          applyQueue(data.queue as { seats?: QueueSeatDto[] } | undefined);
+          if (!res.ok && data.error) setError(String(data.error));
+          return;
+        }
+        await consumeAgentStream(sid, res);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : String(e));
+      } finally {
+        endInflight();
+      }
+    },
+    [applyQueue, beginInflight, consumeAgentStream, endInflight],
   );
 
   const startRecognition = useCallback(() => {
@@ -598,6 +689,7 @@ export function Room({ t }: { t: Tokens }) {
       sessionIdRef.current = s.id;
       setViewMode(s.viewMode ?? "voice");
       setTurns([]);
+      setQueueSeats([]);
       setSubtitle("Listening…");
       setPresence("listening");
       startRecognition();
@@ -662,6 +754,7 @@ export function Room({ t }: { t: Tokens }) {
     setSession(null);
     sessionIdRef.current = null;
     setSubtitle("");
+    setQueueSeats([]);
   };
 
   const activeThoughts = turns.filter(
@@ -975,6 +1068,25 @@ export function Room({ t }: { t: Tokens }) {
             </p>
           )}
 
+          {session && (
+            <QueueChips
+              t={t}
+              seats={queueSeats}
+              onSendHead={(seatKey) =>
+                void postQueueJson(`/api/session/${session.id}/queue/head`, {
+                  seatKey,
+                  action: "send",
+                })
+              }
+              onDeleteHead={(seatKey) =>
+                void postQueueJson(`/api/session/${session.id}/queue/head`, {
+                  seatKey,
+                  action: "delete",
+                })
+              }
+            />
+          )}
+
           <div style={{ padding: "8px 20px 28px", textAlign: "center" }}>
             <button
               type="button"
@@ -1110,6 +1222,24 @@ export function Room({ t }: { t: Tokens }) {
                   </div>
                 );
               })}
+            {session && (
+              <QueueLog
+                t={t}
+                seats={queueSeats}
+                onSendItem={(id) =>
+                  void postQueueJson(
+                    `/api/session/${session.id}/queue/${id}`,
+                    { action: "send" },
+                  )
+                }
+                onDeleteItem={(id) =>
+                  void postQueueJson(
+                    `/api/session/${session.id}/queue/${id}`,
+                    { action: "delete" },
+                  )
+                }
+              />
+            )}
             {streamingPost && (
               <div
                 style={{

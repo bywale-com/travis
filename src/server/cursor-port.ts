@@ -1,12 +1,14 @@
 /**
- * Cursor cloud send port (SCP-001 + Hotfix 001 + SCP-002 thought/post split).
+ * Cursor cloud send port (SCP-001 + Hotfix 001 + SCP-002 + SCP-003).
+ * Persist run.id as soon as send returns. Busy → yield busy (enqueue), not retry-as-product.
  */
 
 import { absorbText } from "@/lib/absorb-text";
 import {
-  BUSY_RETRY_DELAYS_MS,
   delay,
   isAgentBusyError,
+  isRunNotCancellable,
+  RACE_RETRY_DELAY_MS,
 } from "@/lib/cursor-busy";
 
 export type CursorStreamEvent =
@@ -15,6 +17,8 @@ export type CursorStreamEvent =
   | { type: "delta"; text: string }
   | { type: "thought_delta"; text: string }
   | { type: "post_delta"; text: string }
+  | { type: "run_started"; runId: string }
+  | { type: "busy"; discoveredRunId: string | null }
   | {
       type: "done";
       mode: "stand-in" | "real" | "error";
@@ -28,6 +32,10 @@ export type CursorStreamEvent =
 
 function isCloudAgentId(id: string): boolean {
   return /^bc-[a-f0-9-]+$/i.test(id.trim());
+}
+
+function apiKey(): string {
+  return process.env.CURSOR_API_KEY?.trim() ?? "";
 }
 
 function textFromAssistantMessage(content: unknown): string {
@@ -81,12 +89,159 @@ async function assistantTextFromConversation(run: {
   }
 }
 
+function isActiveRunStatus(status: string | undefined): boolean {
+  const s = (status ?? "").toLowerCase();
+  return s === "running" || s === "creating";
+}
+
+export async function discoverActiveRunId(
+  agentId: string,
+): Promise<string | null> {
+  const key = apiKey();
+  if (!agentId || !isCloudAgentId(agentId) || !key) return null;
+  try {
+    const { Agent } = await import("@cursor/sdk");
+    const listed = await Agent.listRuns(agentId, {
+      runtime: "cloud",
+      limit: 1,
+      apiKey: key,
+    });
+    const run = listed.items?.[0];
+    if (!run) return null;
+    if (!isActiveRunStatus(run.status)) return null;
+    return run.id ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function cancelCursorRun(
+  agentId: string,
+  runId: string,
+): Promise<void> {
+  const key = apiKey();
+  if (!agentId || !runId || !key) return;
+  const { Agent } = await import("@cursor/sdk");
+  try {
+    await Agent.cancelRun(runId, {
+      runtime: "cloud",
+      agentId,
+      apiKey: key,
+    });
+  } catch (err) {
+    if (isRunNotCancellable(err)) return;
+    throw err;
+  }
+}
+
+async function* streamRunEvents(
+  run: {
+    id: string;
+    stream?: () => AsyncIterable<unknown>;
+    wait: () => Promise<{
+      id?: string;
+      status?: string;
+      result?: string;
+      error?: { message?: string };
+    }>;
+    conversation?: () => Promise<unknown>;
+  },
+  agentId: string,
+): AsyncGenerator<CursorStreamEvent> {
+  yield { type: "status", text: "running" };
+
+  let thoughtText = "";
+  let postText = "";
+
+  if (typeof run.stream === "function") {
+    for await (const event of run.stream()) {
+      const e = event as {
+        type?: string;
+        message?: { content?: unknown };
+        status?: string;
+        text?: string;
+      };
+
+      if (e.type === "tool_call" || e.type === "tool_use") continue;
+
+      if (e.type === "thinking") {
+        const chunk = e.text ?? "";
+        if (chunk) {
+          const next = absorbText(thoughtText, chunk);
+          if (next.delta) {
+            thoughtText = next.acc;
+            yield { type: "thought_delta", text: next.delta };
+          }
+        }
+        continue;
+      }
+
+      if (e.type === "assistant") {
+        const chunk = textFromAssistantMessage(e.message?.content);
+        if (chunk) {
+          const next = absorbText(postText, chunk);
+          if (next.delta) {
+            postText = next.acc;
+            yield { type: "post_delta", text: next.delta };
+          }
+        }
+        continue;
+      }
+
+      if (e.type === "status" && e.status) {
+        yield { type: "status", text: String(e.status).toLowerCase() };
+      }
+    }
+  }
+
+  const result = await run.wait();
+
+  if (!postText.trim()) {
+    const fromConversation = await assistantTextFromConversation(run);
+    if (fromConversation) {
+      postText = fromConversation;
+      yield { type: "post_delta", text: fromConversation };
+    } else if (result.result?.trim()) {
+      postText = result.result.trim();
+      yield { type: "post_delta", text: postText };
+    }
+  }
+
+  if (result.status === "error") {
+    const msg = result.error?.message ?? "Run error";
+    yield {
+      type: "done",
+      mode: "error",
+      assistantText: postText.trim(),
+      thoughtText: thoughtText.trim() || undefined,
+      agentId,
+      runId: result.id ?? run.id,
+      statusText: "error",
+      error: msg,
+    };
+    return;
+  }
+
+  yield {
+    type: "done",
+    mode: "real",
+    assistantText:
+      postText.trim() ||
+      result.result?.trim() ||
+      "Run finished (no assistant text).",
+    thoughtText: thoughtText.trim() || undefined,
+    agentId,
+    runId: result.id ?? run.id,
+    statusText: result.status === "cancelled" ? "cancelled" : "finished",
+  };
+}
+
 export async function* streamCursorReply(params: {
   cursorAgentId: string;
   prompt: string;
 }): AsyncGenerator<CursorStreamEvent> {
   const agentId = params.cursorAgentId?.trim() ?? "";
-  const key = process.env.CURSOR_API_KEY?.trim() ?? "";
+  const key = apiKey();
 
   if (!agentId || !isCloudAgentId(agentId) || !key) {
     const assistantText =
@@ -103,116 +258,56 @@ export async function* streamCursorReply(params: {
   }
 
   const { Agent } = await import("@cursor/sdk");
+  const agent = await Agent.resume(agentId, { apiKey: key });
 
-  let lastErr: unknown;
-  for (let attempt = 0; attempt <= BUSY_RETRY_DELAYS_MS.length; attempt++) {
+  try {
+    let run: Awaited<ReturnType<typeof agent.send>> | undefined;
+
     try {
-      await using agent = await Agent.resume(agentId, { apiKey: key });
-      const run = await agent.send(params.prompt);
-
-      yield { type: "status", text: "running" };
-
-      let thoughtText = "";
-      let postText = "";
-
-      if (typeof run.stream === "function") {
-        for await (const event of run.stream()) {
-          const e = event as {
-            type?: string;
-            message?: { content?: unknown };
-            status?: string;
-            text?: string;
-          };
-
-          if (e.type === "tool_call" || e.type === "tool_use") continue;
-
-          if (e.type === "thinking") {
-            const chunk = e.text ?? "";
-            if (chunk) {
-              const next = absorbText(thoughtText, chunk);
-              if (next.delta) {
-                thoughtText = next.acc;
-                yield { type: "thought_delta", text: next.delta };
-              }
-            }
-            continue;
-          }
-
-          if (e.type === "assistant") {
-            const chunk = textFromAssistantMessage(e.message?.content);
-            if (chunk) {
-              const next = absorbText(postText, chunk);
-              if (next.delta) {
-                postText = next.acc;
-                yield { type: "post_delta", text: next.delta };
-              }
-            }
-            continue;
-          }
-
-          if (e.type === "status" && e.status) {
-            yield { type: "status", text: String(e.status).toLowerCase() };
-          }
-        }
-      }
-
-      const result = await run.wait();
-
-      if (!postText.trim()) {
-        const fromConversation = await assistantTextFromConversation(run);
-        if (fromConversation) {
-          postText = fromConversation;
-          yield { type: "post_delta", text: fromConversation };
-        } else if (result.result?.trim()) {
-          postText = result.result.trim();
-          yield { type: "post_delta", text: postText };
-        }
-      }
-
-      if (result.status === "error") {
-        const msg = result.error?.message ?? "Run error";
+      run = await agent.send(params.prompt);
+    } catch (err) {
+      if (!isAgentBusyError(err)) {
+        const msg = err instanceof Error ? err.message : String(err);
         yield {
           type: "done",
           mode: "error",
-          assistantText: postText.trim(),
-          thoughtText: thoughtText.trim() || undefined,
-          agentId,
-          runId: result.id,
+          assistantText: "",
           statusText: "error",
           error: msg,
         };
         return;
       }
 
-      yield {
-        type: "done",
-        mode: "real",
-        assistantText:
-          postText.trim() ||
-          result.result?.trim() ||
-          "Run finished (no assistant text).",
-        thoughtText: thoughtText.trim() || undefined,
-        agentId,
-        runId: result.id,
-        statusText: result.status === "cancelled" ? "cancelled" : "finished",
-      };
-      return;
-    } catch (err) {
-      lastErr = err;
-      const canRetry =
-        isAgentBusyError(err) && attempt < BUSY_RETRY_DELAYS_MS.length;
-      if (!canRetry) break;
-      yield { type: "status", text: "running" };
-      await delay(BUSY_RETRY_DELAYS_MS[attempt]);
-    }
-  }
+      const discovered = await discoverActiveRunId(agentId);
+      if (discovered) {
+        yield { type: "busy", discoveredRunId: discovered };
+        return;
+      }
 
-  const msg = lastErr instanceof Error ? lastErr.message : String(lastErr);
-  yield {
-    type: "done",
-    mode: "error",
-    assistantText: "",
-    statusText: "error",
-    error: msg,
-  };
+      await delay(RACE_RETRY_DELAY_MS);
+      try {
+        run = await agent.send(params.prompt);
+      } catch (err2) {
+        if (isAgentBusyError(err2)) {
+          const again = await discoverActiveRunId(agentId);
+          yield { type: "busy", discoveredRunId: again };
+          return;
+        }
+        const msg = err2 instanceof Error ? err2.message : String(err2);
+        yield {
+          type: "done",
+          mode: "error",
+          assistantText: "",
+          statusText: "error",
+          error: msg,
+        };
+        return;
+      }
+    }
+
+    yield { type: "run_started", runId: run.id };
+    yield* streamRunEvents(run, agentId);
+  } finally {
+    await agent[Symbol.asyncDispose]();
+  }
 }
