@@ -246,6 +246,7 @@ export async function POST(
         let donePayload: {
           mode: string;
           statusText: string;
+          error?: string;
         } | null = null;
 
         for await (const ev of streamCursorReply({
@@ -287,11 +288,20 @@ export async function POST(
               send("post_delta", { text: next.delta, seatKey, seatLabel });
             }
           } else if (ev.type === "done") {
-            if (!postText.trim()) postText = ev.assistantText;
+            if (ev.mode !== "error" && !postText.trim()) {
+              postText = ev.assistantText;
+            } else if (
+              ev.mode === "error" &&
+              ev.assistantText.trim() &&
+              !postText.trim()
+            ) {
+              postText = ev.assistantText;
+            }
             if (!thoughtText.trim() && ev.thoughtText) thoughtText = ev.thoughtText;
             donePayload = {
               mode: ev.mode,
               statusText: ev.statusText,
+              error: ev.error,
             };
           }
         }
@@ -322,22 +332,26 @@ export async function POST(
           seq += 1;
         }
 
-        const finalPost =
-          postText.trim() || "Run finished (no assistant text).";
-
-        const [postTurn] = await db
-          .insert(voiceTurn)
-          .values({
-            sessionId,
-            seq,
-            role: "assistant",
-            kind: "agent_post",
-            seatKey,
-            speakable: true,
-            text: finalPost,
-          })
-          .returning();
-        seq += 1;
+        const bareError = donePayload?.mode === "error" && !postText.trim();
+        let postTurn: (typeof userTurn) | null = null;
+        if (!bareError) {
+          const finalPost =
+            postText.trim() || "Run finished (no assistant text).";
+          const [row] = await db
+            .insert(voiceTurn)
+            .values({
+              sessionId,
+              seq,
+              role: "assistant",
+              kind: "agent_post",
+              seatKey,
+              speakable: true,
+              text: finalPost,
+            })
+            .returning();
+          postTurn = row;
+          seq += 1;
+        }
 
         const statusText = donePayload?.statusText ?? "finished";
         const [statusTurn] = await db
@@ -352,6 +366,12 @@ export async function POST(
           })
           .returning();
 
+        if (bareError) {
+          send("error", {
+            error: donePayload?.error ?? "Cursor send failed",
+          });
+        }
+
         send("done", {
           matched: true,
           mode: donePayload?.mode ?? "real",
@@ -360,7 +380,9 @@ export async function POST(
           seatLabel,
           postTurn,
           thoughtTurnId,
-          turns: [userTurn, postTurn, statusTurn],
+          turns: postTurn
+            ? [userTurn, postTurn, statusTurn]
+            : [userTurn, statusTurn],
         });
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
