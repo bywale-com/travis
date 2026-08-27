@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 22:55 UTC — **PM-PACKET-004 locked** (Talk \| Type toggle, log composer, `@`, mic). Next: SA.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 23:26 UTC — **PM vocative smoke.** “testing if this works p.m.” reached this seat. Packet 004 still locked; next SA.
 
 **How we maintain this log**
 
@@ -669,3 +669,16 @@ Label **Type** on the pill is agent alignment — founder did not name the word.
 Control lives in the **room-chip row**. Two-state toggle, not a third `Eng · live`-style chip. Mode A unchanged. C3/C4 not recut.
 
 **Next:** SA ascribes (Talk|Type session state, Type send vs conductor, `@` vs via-pill, composer mic STT). Engineer plants after SA. Do not plant from this packet alone.
+
+---
+
+## 2026-08-27 23:26 UTC — Vocative smoke: “p.m.” reached this seat
+
+**Kind:** Lived pipe. Not a new flag.
+
+**Founder (preserved):** testing if this works p.m.
+
+**Yes.** This chat is the PM. Id `bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea` (title: Pm ID provision). Distinct from the earlier PM bind `bc-da5db04b-db60-414e-b0c3-c8ed337d45d4`.
+
+004 still locked. Next still SA. No product change from this stamp.
+
