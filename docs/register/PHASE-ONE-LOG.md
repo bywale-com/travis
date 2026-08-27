@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 14:45 UTC — **Considering:** prototype-ant look pass + queue glass (C1–C4). Not locked. Prior: PM-PACKET-002 locked.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 14:50 UTC — Queue forks locked: **both modes**, force send **barges**, **two icons only**. Still not a packet. Prior: C1–C4 considering; PM-PACKET-002 locked.
 
 **How we maintain this log**
 
@@ -513,3 +513,19 @@ So: **maybe not still** — if “distinct from Cursor” means leave Cursor / i
 **Note:** `bywale-com/om-co` was not visible to this agent. Translation approximated from locked A/B plates + Ant primitives. Recut when that repo is on the environment.
 
 **Ask:** like C3/C4 (or both)? Force send = barge the live run, or jump the line when it ends? Stop at two icons? Then lock a packet harder than 002.
+
+---
+
+## 2026-08-27 14:50 UTC — Queue forks locked (founder)
+
+**Kind:** Inflection. Three forks from the 14:45 stamp, answered. Not a packet.
+
+**Founder (preserved):**
+
+- Question one (C3 vs C4 vs both): **yes, both.**
+- Question two (barge vs wait): **barge the live run.**
+- Question three (third icon?): **just stop with these two icons for now.**
+
+**Locked on FACE:** [`PROTOTYPE-ANT-QUEUE-FACE.md`](./PROTOTYPE-ANT-QUEUE-FACE.md) — Mode A chip + Mode B rows for the same waiting line; force send interrupts the current run; send icon + delete icon only.
+
+**Ask:** cut **PM-PACKET-003** from C1–C4 + these forks, or recut plates against om-co first?

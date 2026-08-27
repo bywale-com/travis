@@ -1,6 +1,6 @@
 # Prototype-ant pass + queue — FACE (considering)
 
-**Status:** Ideation. **Not locked.** Not a packet.  
+**Status:** Ideation. **Three forks locked 2026-08-27** (below). Still **not a packet**.  
 **Product face:** smartphone web (`travis.app`)  
 **Locked shell this pass sits on:** [`ROOM-FACE.md`](./ROOM-FACE.md) (PM-PACKET-002)  
 **Log:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md)
@@ -38,11 +38,19 @@ Locked A1–B2 remain the 002 law. C-plates are a **look + queue** considering p
 
 ---
 
-## Queue law (agent alignment — not locked)
+## Queue law (founder-locked forks · 2026-08-27)
+
+Founder answers, preserved:
+
+1. **Both homes.** Mode A glance (C4) **and** Mode B rows (C3). Same waiting line; two views.
+2. **Force send barges the live run.** It does not wait for the current batch to finish. (How Cursor cancel/interrupt is ascribed = SA. Glass law is barge.)
+3. **Two icons only for now.** Force send (send icon) · delete. No third.
+
+Still alignment, not a packet:
 
 - **One queue per addressee**, not one anonymous FIFO. A line waiting for Eng does not steal a line meant for PM.
 - The queued object is still **your** utterance (right, Mode B). The **via Eng / via PM** mark is the addressing parity.
-- **Force send** barges the live run (icon only). **Delete** drops that queued line (icon only). No kebab. No third loud button on the row.
+- Icons only. No kebab. No labels required on the row.
 - Mode A: no log. Queue is a **quiet chip** (C4), not bubbles.
 - Mode B: queue is a **muted dashed user row** under a `Queued · {seat}` label (C3).
 - Not an error. Waiting is not `[agent_busy]` in the thread.
@@ -63,15 +71,12 @@ Prototype-ant (this approximation): product tokens on Ant Design primitives (Tag
 |--------|--------|
 | **1. Copy** | Queue chip / `Queued · Eng` · force-send icon · delete icon · Mode A quiet waiting · Mode B dashed right-side user rows · addressing on the queued object. Cream/orange shell closer to C1–C4 than to planted green. |
 | **2. Do not build** | Email-campaign scenery on C2. Double-checkmarks as a product receipt. Hang-up button. Default Ant blue. Forest-green as the identity. Kebab of extra queue actions. |
-| **3. Implied** | Queue is per active addressee. Icons work (force send, delete). Mode switch preserves the waiting line. Thought glow still means that seat is running. |
-| **4. Completes** | Empty queue (chip gone). Two seats each with a waiting line. Force-send while another seat is the addressee. |
-| **5. Out of scope this considering** | SA store / worker for durable queue. Cancel-the-live-run law. Binding picker. Triage. om-co method recut once that repo is visible. |
+| **3. Implied** | Queue is per active addressee. Icons work (force send barges; delete drops). Mode switch preserves the waiting line. Thought glow still means that seat is running. After barge, that queued line is the live send. |
+| **4. Completes** | Empty queue (chip gone). Two seats each with a waiting line. |
+| **5. Out of scope this considering** | SA store / worker for durable queue. Binding picker. Triage. Third queue action. om-co method recut once that repo is visible. |
 
 ---
 
 ## Open
 
-- Like C3 vs C4 as the home of the queue, or both (A glance + B rows)?
-- Force send = barge (interrupt live run) or jump-the-line when the run ends?
-- Third option, or stop at two icons?
-- Recut C-plates against om-co before packet, or lock from these?
+- Cut **PM-PACKET-003** from these plates + locked forks, or recut C-plates against om-co first?
