@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 00:51 UTC — **This SA chat id:** `bc-0a1fb1c1-bbea-4d31-a370-6917c235b9c8`. Lands in `agent_binding.cursor_agent_id` for `seat_key=sa`.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 19:38 UTC — **PM-PACKET-003 pass cut.** SCP-003: per-seat `queued_utterance` + `seat_live_run`; barge = Cursor `cancel` (quoted); Hotfix 007 hold replaced. Look is not this packet.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -272,3 +272,34 @@ SCP-001 seed field updated.
 **Packet hygiene:** SCP-002 seed still listed the superseded PM id (`…d5d4`). Corrected that cell to the 19:12 value `bc-da5db04b-db60-414e-b0c3-c8ed337d45d4` in the same seed table. Do not edit the 19:10 stamp.
 
 **Ask:** Engineer load this SA id into the `sa` row now (seed/env, not SPA), or wait until you also have an Engineer `bc-…`?
+
+---
+
+## 2026-08-27 19:38 UTC — Pass on PM-PACKET-003 (queue + barge)
+
+**Why:** Founder: run the pass on the new existing packet. Glass = [`PM-PACKET-003-LOOK-QUEUE.md`](https://github.com/bywale-com/travis/pull/15) (locked 18:45 UTC). SA paste A–G. Did not rewrite look hex as a flag. Did not mint from C3/C4 scenery.
+
+**Inventory (stood-up, quoted):**
+
+| A–G | Fit |
+|-----|-----|
+| A. Per-addressee queue vs HF007 | HF007 = one `pendingUtteranceRef`. Missing per-seat durable line. **Mint `queued_utterance` keyed by `binding_id`.** |
+| B. Item grain | utterance text + dest binding + seq + session. **Not** a `voice_turn`. Empty seed. |
+| C. Barge | **Not silence.** SDK `run.cancel()` / `Agent.cancelRun(runId)` · REST `POST /v1/agents/{id}/runs/{runId}/cancel`. Need persisted `runId` → **mint `seat_live_run`.** |
+| D. Delete | Drop that row only; later seq on the same seat stays. Chip delete = head. |
+| E. Empty / two seats / mode switch | Query the table. No chip when count=0. Two bindings may both have rows. |
+| F. HF006 | SDK: `AgentBusyError.isRetryable === false`. Product path = enqueue (or barge), never `agent_post` the SDK string. Race-only retry if `listRuns` shows no active run. |
+| G. Look | **Named silence.** Engineer retokens from 003. No theme store. |
+
+**Hard locks (no Engineer leftover):**
+
+1. Conductor + dest after 002 router → if that seat is live/busy, **enqueue**, else send.  
+2. Force send **cancels** that seat’s run, then sends **that** line (Mode B) or **head** (Mode A chip). Not “wait until free.”  
+3. Faceless **drain head** when the live run terminals — hands-free, one at a time.  
+4. Barge of a bound live chat cancels that `bc-…` agent’s active run (may be the Cursor seat chat). Stood-up binding law; do not mint a dodge agent.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-003-QUEUE-BARGE.md`](./SYSTEMS-CHANGE-PACKET-003-QUEUE-BARGE.md)
+
+**Witnessed (do not edit 00:51):** Hotfix 003/008 already bound SA `bc-0a1fb1c1-bbea-4d31-a370-6917c235b9c8` plus current PM/Engineer ids in SQL. 00:51 ask is closed by those rows.
+
+**Ask:** Engineer handoff on 003 (queue machine). Look retoken may proceed in parallel from PM-003 without this store.
