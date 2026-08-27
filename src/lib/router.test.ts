@@ -37,6 +37,39 @@ test("bare seat name switches with empty remainder", () => {
   assert.equal(r.remainder, "");
 });
 
+test("hey engineer is a vocative to Engineer and still sends", () => {
+  const r = parseCallByName("hey engineer");
+  assert.equal(r.seatKey, "engineer");
+  assert.equal(r.remainder, "hey engineer");
+});
+
+test("hey engineer plus a prompt keeps the prompt", () => {
+  const r = parseCallByName("hey engineer look at the stream");
+  assert.equal(r.seatKey, "engineer");
+  assert.equal(r.remainder, "look at the stream");
+});
+
+test("trailing vocative switches — lived smoke ending in engineer", () => {
+  const r = parseCallByName(
+    "testing to see if everything works correctly now engine engineer",
+  );
+  assert.equal(r.seatKey, "engineer");
+  assert.equal(
+    r.remainder,
+    "testing to see if everything works correctly now engine engineer",
+  );
+});
+
+test("trailing the engineer is a noun, not a call", () => {
+  const r = parseCallByName("that's a job for the engineer");
+  assert.equal(r.seatKey, null);
+});
+
+test("spoken p.m. at the end is PM", () => {
+  const r = parseCallByName("this next bit is for you p.m.");
+  assert.equal(r.seatKey, "pm");
+});
+
 test("dead-man no switches to default", () => {
   const r = parseDeadManResponse("No.");
   assert.equal(r.action, "default");
