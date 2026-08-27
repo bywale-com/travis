@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 20:35 UTC — Founder: C4 / C-plates look is **not** the plant. Trace below. Queue forks still hold. Recut plates from live Mode A. Do not plant C4 chrome.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 20:45 UTC — Engineer **PR 17** recuts plant to C-plates (open). Queue forks hold. Do not recut C images.
 
 **How we maintain this log**
 
@@ -571,3 +571,20 @@ Pocket: **look** (cream/terracotta, Ant Tags, overlapping thought circles — ha
 **Still locked (queue, not C4 chrome):** both homes · barge · two icons · per addressee.
 
 **Ask:** recut C4 (and C1) as a **photo of psi Mode A + queue chip**, not a new identity?
+
+---
+
+## 2026-08-27 20:45 UTC — Engineer PR 17 (check)
+
+**Kind:** Lived plant. Not a new flag.
+
+**Founder:** check PR 17 — looks like the Engineer worked.
+
+**Yes.** Same Engineer seat as SCP-003.
+
+- **[#16](https://github.com/bywale-com/travis/pull/16) merged** — queue machine. Look was hex-only on old chrome. That is why psi still looked like the old Mode A.
+- **[#17](https://github.com/bywale-com/travis/pull/17) open** — (1) stop Open session clobbering live seat ids from stale env; (2) recut chrome to C-plates: Ant Tags, Instrument Serif wordmark, glow orb + status below, C4 waiting bar, C3 dashed rows. Teaching line removed.
+
+**Founder later:** likes the C images; do not recut them. Packet focuses the photo. Gap was plant not following the photo — 17 is that follow.
+
+**Next:** merge 17 if the glass is the C photos; End session → Open session on the phone.
