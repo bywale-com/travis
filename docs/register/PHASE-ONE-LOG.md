@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 22:25 UTC — Considering: **log composer + @** (D1 D2). Not a packet. 003 C photos still locked.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 22:52 UTC — Considering: **D3** one plate (Type pill in chip row + composer + mic + `@`). Not a packet.
 
 **How we maintain this log**
 
@@ -627,3 +627,24 @@ FACE status line corrected: C images **are** the look. The 20:35 “recut from p
 C3/C4 not recut. Voice mode unchanged.
 
 **Ask:** like D1/D2 enough to packet? Send with no `@` = current via-pill?
+
+---
+
+## 2026-08-27 22:52 UTC — D3: Type pill in the chip row (founder)
+
+**Kind:** Type B. One plate. Economical recut of D2.
+
+**Founder (preserved):**
+
+- Stick to current look; D1 had critical misses; move past it.
+- Be economical: D2 already showed composer + `@`.
+- Missing: **toggle** in log — current way (no composer) vs this type way. Toggle reveals composer **and** changes the mode.
+- Finger: pill **next to the room chips** (`Room · via …` · `Eng · live`). Add it to that row.
+- **Mic** in the composer (speech into the box). Different from Mode A.
+- Like this option. **One plate:** take D2, add that pill. Boom.
+
+**Landed:** [`plates/travis-d3-log-type-toggle.png`](./plates/travis-d3-log-type-toggle.png) · FACE updated. D1/D2 history. Photo of record = **D3**.
+
+Label **Type** on the pill is agent alignment — founder did not name the word.
+
+**Ask:** keep **Type** as the chip word? Like D3 enough to packet?

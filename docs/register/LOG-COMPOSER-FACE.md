@@ -1,39 +1,42 @@
 # Log composer + @ address — FACE (considering)
 
-**Status:** Ideation. **Not a packet.** Founder sent from Travis: log-mode typing + `@` pick. Plates justified; only two.  
-**Sits on:** Mode B from [`ROOM-FACE.md`](./ROOM-FACE.md) + C look [`PROTOTYPE-ANT-QUEUE-FACE.md`](./PROTOTYPE-ANT-QUEUE-FACE.md). Does **not** recut C3/C4.  
+**Status:** Ideation. **Not a packet.** Photo of record for this pass: **D3 only**.  
+**Sits on:** Mode B + C look. Does **not** recut C3/C4.  
 **Log:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md)
 
 ---
 
 ## Founder wording (this pass)
 
-- Moving in the right direction. Sending this from Travis.
-- Introduce a **text box**, like a regular chat app — **write text**.
-- Lives in **log mode only**. Not in voice mode.
-- Alternate way to reference agents in this text mode: type **`@`** → submodal of agents **in the room**, by **title** → pick → keep writing the rest.
-- New plates justified. Only as many as justified.
+- Stick to the **current look** when plating. D1 drifted on critical chrome; move past it.
+- Be **economical**: D2 already had composer + `@`. Don’t need a composer-only PNG.
+- Log mode needs a **toggle**: current way (no composer — talk as log already does) vs this type way (composer). Toggle **reveals the composer and changes the mode**.
+- Finger: the pill lives **in the room-chip row** (`Room · via …` · `Eng · live`) — add it next to those chips.
+- **Mic** in the composer (speech into this box). Different from Mode A voice.
+- **One plate:** take D2, add that pill to the existing chips. That solves it.
 
 ---
 
-## Plates (two)
+## Plate (one)
 
 | ID | File | State |
 |----|------|--------|
-| **D1** | [`plates/travis-d1-log-composer.png`](./plates/travis-d1-log-composer.png) | Mode B · quiet composer · placeholder Message… · one send icon |
-| **D2** | [`plates/travis-d2-log-at-mention.png`](./plates/travis-d2-log-at-mention.png) | Same shell · `@Eng` chip in the field · popover PM / SA / Engineer by title |
+| **D3** | [`plates/travis-d3-log-type-toggle.png`](./plates/travis-d3-log-type-toggle.png) | Mode B · **Type** pill ON in the chip row · composer · mic · send · `@` popover |
 
-Voice mode: **no** composer. 002/003 glass unchanged there.
+D1 / D2 kept as history. **D3 is the photo.** Off (no composer, current log listen) is Completes — no extra PNG.
+
+**Type** on the pill is agent alignment for the label. Founder did not name the word.
+
+Voice mode: **no** composer, **no** Type pill.
 
 ---
 
 ## Glass law (alignment, not locked)
 
-- One job on D1: type a turn in the log.
-- One job on D2: pick addressee with `@`, then keep typing.
-- Composer is quiet until invited (you opened log). Not a dashed full-width CTA. Not a mic. Not attachments.
-- `@` list is the agents **already in the room** (PM · SA · Engineer). Titles, not emails, not a cloud-agent picker.
-- Addressing parity still holds: the turn belongs to who you `@` (or the current via-pill if you send with no `@`). Do not invent a second router in the packet until founder locks.
+- Chip row: `Room · via {seat}` · `{seat} · live` · **Type** (on = composer; off = current log, no field).
+- Type ON: field + **mic** (fills this box) + send. `@` → room seats by title → chip → keep typing.
+- Type OFF: log as it exists now. No field.
+- Not Mode A. Not a mic farm. Not attach.
 
 ---
 
@@ -41,15 +44,15 @@ Voice mode: **no** composer. 002/003 glass unchanged there.
 
 | Bucket | Draft |
 |--------|--------|
-| **1. Copy** | Log-only composer. Placeholder. Send icon. `@` opens a small list of room seats by title. Chip in the field after pick. Keep typing. |
-| **2. Do not build** | Composer on Mode A. Paperclip / attach. Mic in the field. iPhone bezel. Checkmarks. k8s / Hub teaching copy. Full-screen agent sheet. Binding picker of `bc-…` ids. |
-| **3. Implied** | Keyboard works. Send posts a user turn to the current or `@` addressee. Popover dismisses on pick. Empty `@` list not pictured. |
-| **4. Completes** | Send with no `@` uses current via. Backspace the chip. Two `@`s in one line — not pictured; ask before law. |
-| **5. Out of scope** | Voice-mode typing. New seats. Triage. Recutting C plates. |
+| **1. Copy** | Type pill in the chip row. On: composer, mic, send, `@` list by title. Off: current log, no composer. |
+| **2. Do not build** | Composer / Type pill on Mode A. Paperclip. Bezel. Checkmarks. k8s copy. Full-screen agent sheet. Recutting C plates. D1 as a second plant. |
+| **3. Implied** | Toggle reveals/hides the field and switches log sub-mode. Keyboard. Send posts. `@` pick dismisses list. Mic writes into the field (not Mode A orb). |
+| **4. Completes** | Type OFF state (no extra PNG). Send with no `@` = current via. |
+| **5. Out of scope** | Voice-mode typing. New seats. Triage. |
 
 ---
 
 ## Open
 
-- Like D1/D2 enough to packet, or recut the `@` list density?
-- Send with no `@` = current via-pill — yes/no?
+- Word on the pill: **Type** — keep / recut the label?
+- Like D3 enough to packet?
