@@ -25,3 +25,4 @@
 | 008 | [`HOTFIX-008-BIND-SEATS-SQL.md`](./HOTFIX-008-BIND-SEATS-SQL.md) | SQL to bind current PM / SA / Engineer on `agent_binding` |
 | 009 | [`HOTFIX-009-STT-ROUTE-QUOTE.md`](./HOTFIX-009-STT-ROUTE-QUOTE.md) | STT carry across pause; stale busy ≠ queue; quote rail; rebind PM |
 | 010 | [`HOTFIX-010-VOCATIVE-ROUTE.md`](./HOTFIX-010-VOCATIVE-ROUTE.md) | `hey engineer` / trailing seat name switches addressee |
+| 011 | [`HOTFIX-011-COMPOSER-SEND.md`](./HOTFIX-011-COMPOSER-SEND.md) | Type send clears immediately; log paints now; composer stays free |

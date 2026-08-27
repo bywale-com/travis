@@ -178,12 +178,19 @@ export function LogComposer({
   const submit = async () => {
     haltMic();
     const chipSeatKey = (chip?.seatKey as SeatKey | undefined) ?? null;
-    const ok = await onSend({ text, chipSeatKey });
-    if (ok === false) return;
+    const keptText = text;
+    const keptChip = chip;
     setText("");
     setChip(null);
     heldRef.current = "";
     committedRef.current = "";
+    const ok = await onSend({ text: keptText, chipSeatKey });
+    if (ok === false) {
+      setText(keptText);
+      setChip(keptChip);
+      heldRef.current = keptText;
+      committedRef.current = keptText;
+    }
     fieldRef.current?.focus();
   };
 
