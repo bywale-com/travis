@@ -59,7 +59,7 @@ Still alignment, not extra forks:
 
 ## Look law (why the plant still feels distant)
 
-Locked plates are **cream + terracotta**, serif Travis, Ant-like Tags, no forest-green chrome. Planted tokens (`#2f5d50` accent, Georgia-on-green pills) kept placement and missed the plate’s temperature. Next packet should name tokens, type, Tag vs homemade pill, and thought-strip overlap **in the packet**, not hope the plant infers them.
+Locked plates are **cream + terracotta**, serif Travis, Ant-like Tags, no forest-green chrome. Planted tokens (`#2f5d50` accent, Georgia-on-green pills) kept placement and missed the plate’s temperature. **PM-PACKET-003** names tokens, type, Tag vs homemade pill, and thought-strip overlap.
 
 Prototype-ant (this approximation): product tokens on Ant Design primitives (Tag, Avatar, text Button, icon Button). Not default Ant blue. Stroke icons for force send / delete.
 
