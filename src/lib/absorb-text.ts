@@ -119,3 +119,14 @@ export function mergeLiveTranscript(committed: string, interim: string): string 
   if (!a) return collapseSpeechStutter(b);
   return collapseSpeechStutter(absorbFinalTranscript(a, b));
 }
+
+/**
+ * Web Speech starts a new recognizer after silence. That session's result
+ * list is empty, so callers must keep prior finals and absorb the new ones.
+ */
+export function carryDraftAcrossRestart(
+  held: string,
+  sessionFinals: string,
+): string {
+  return collapseSpeechStutter(absorbFinalTranscript(held, sessionFinals));
+}

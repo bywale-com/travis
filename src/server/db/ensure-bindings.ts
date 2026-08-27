@@ -12,10 +12,9 @@ const SEATS = [
   {
     seatKey: "pm" as const,
     label: "PM",
-    env:
-      process.env.SEED_CURSOR_AGENT_ID_PM?.trim() ||
-      process.env.SEED_CURSOR_AGENT_ID?.trim() ||
-      "",
+    // Do not fall back to SEED_CURSOR_AGENT_ID — that alias was the dead
+    // seed and froze PM on the wrong chat after fill-blanks-only landed.
+    env: process.env.SEED_CURSOR_AGENT_ID_PM?.trim() || "",
   },
   {
     seatKey: "sa" as const,

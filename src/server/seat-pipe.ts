@@ -1,8 +1,8 @@
 import { desc, eq } from "drizzle-orm";
-import { delay } from "@/lib/cursor-busy";
+import { delay, isDeadStreamError } from "@/lib/cursor-busy";
 import { absorbText } from "@/lib/absorb-text";
 import { seatKeyToLabel } from "@/lib/router";
-import type { QueueSnapshot } from "@/lib/queue-logic";
+import { shouldQueueForSeat, type QueueSnapshot } from "@/lib/queue-logic";
 import {
   cancelCursorRun,
   discoverActiveRunId,
@@ -51,6 +51,24 @@ export async function nextTurnSeq(sessionId: string) {
   return (last?.seq ?? 0) + 1;
 }
 
+/**
+ * True only if this seat still has an active Cursor run. A leftover
+ * seat_live_run row against a finished/dead stream is cleared so the
+ * next utterance sends instead of queuing.
+ */
+export async function seatHasActiveRun(
+  binding: AgentBinding,
+): Promise<boolean> {
+  const live = await getLiveRun(binding.id);
+  if (!live) return false;
+  const active = await discoverActiveRunId(binding.cursorAgentId ?? "");
+  if (shouldQueueForSeat({ hasLiveRow: true, cursorHasActiveRun: Boolean(active) })) {
+    return true;
+  }
+  await claimLiveRun(binding.id);
+  return false;
+}
+
 export async function persistDiscoveredRun(params: {
   bindingId: string;
   sessionId: string;
@@ -96,6 +114,7 @@ type SendFn = (event: string, data: unknown) => void;
 async function insertUserTurn(
   sessionId: string,
   prompt: string,
+  seatKey: SeatKey,
 ): Promise<VoiceTurn> {
   const seq = await nextTurnSeq(sessionId);
   const [row] = await db
@@ -105,6 +124,7 @@ async function insertUserTurn(
       seq,
       role: "user",
       kind: "user",
+      seatKey,
       speakable: true,
       text: prompt,
     })
@@ -151,7 +171,7 @@ export async function pipeOneSend(params: {
     return { ownedTerminal: false, queue };
   }
 
-  const userTurn = await insertUserTurn(sessionId, prompt);
+  const userTurn = await insertUserTurn(sessionId, prompt, seatKey);
   send("matched", {
     matched: true,
     matchedPhrase: params.matchedPhrase,
@@ -294,6 +314,7 @@ export async function pipeOneSend(params: {
         role: "assistant",
         kind: "agent_post",
         seatKey,
+        referenceTurnId: userTurn.id,
         speakable: true,
         text: finalPost,
       })
@@ -322,9 +343,15 @@ export async function pipeOneSend(params: {
     }
   }
 
+  const deadStream =
+    bareError || isDeadStreamError(donePayload?.error ?? statusText);
+
   let ownedTerminal = false;
   if (liveRunId) {
     ownedTerminal = await releaseLiveRunIfMatch(binding.id, liveRunId);
+  }
+  if (!ownedTerminal && deadStream) {
+    ownedTerminal = !(await seatHasActiveRun(binding));
   }
 
   send("done", {
@@ -372,8 +399,7 @@ export async function sendOrEnqueue(params: {
   send: SendFn;
   matchedPhrase?: string;
 }): Promise<"queued" | "sent"> {
-  const live = await getLiveRun(params.binding.id);
-  if (live) {
+  if (await seatHasActiveRun(params.binding)) {
     const queue = await enqueueOnSeat({
       sessionId: params.sessionId,
       binding: params.binding,

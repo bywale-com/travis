@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { busySendDecision, isAgentBusyError, isRunNotCancellable } from "./cursor-busy";
+import {
+  busySendDecision,
+  isAgentBusyError,
+  isDeadStreamError,
+  isRunNotCancellable,
+} from "./cursor-busy";
 
 test("isAgentBusyError matches the SDK busy envelope", () => {
   assert.equal(
@@ -24,6 +29,15 @@ test("isAgentBusyError ignores unrelated send failures", () => {
     isAgentBusyError(new Error("Run stream is no longer available")),
     false,
   );
+});
+
+test("isDeadStreamError matches the gone-run footer", () => {
+  assert.equal(
+    isDeadStreamError(new Error("Run stream is no longer available")),
+    true,
+  );
+  assert.equal(isDeadStreamError("stream is not available"), true);
+  assert.equal(isDeadStreamError(new Error("[agent_busy]")), false);
 });
 
 test("isRunNotCancellable treats 409 as barge success", () => {

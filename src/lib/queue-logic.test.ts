@@ -4,6 +4,7 @@ import {
   groupQueueSeats,
   headItem,
   queuedBlockLabel,
+  shouldQueueForSeat,
   waitingChipLabel,
 } from "./queue-logic";
 
@@ -59,4 +60,23 @@ test("groupQueueSeats omits empty seats and keeps per-seat order", () => {
   assert.equal(snap.seats[1].seatKey, "engineer");
   assert.equal(snap.seats[1].items.map((i) => i.id).join(","), "1,2");
   assert.equal(snap.seats.find((s) => s.seatKey === "sa"), undefined);
+});
+
+test("queue is per-seat and only when Cursor still has an active run", () => {
+  assert.equal(
+    shouldQueueForSeat({ hasLiveRow: true, cursorHasActiveRun: true }),
+    true,
+  );
+  assert.equal(
+    shouldQueueForSeat({ hasLiveRow: true, cursorHasActiveRun: false }),
+    false,
+  );
+  assert.equal(
+    shouldQueueForSeat({ hasLiveRow: false, cursorHasActiveRun: true }),
+    false,
+  );
+  assert.equal(
+    shouldQueueForSeat({ hasLiveRow: false, cursorHasActiveRun: false }),
+    false,
+  );
 });

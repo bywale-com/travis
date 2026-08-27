@@ -3,6 +3,7 @@
 import {
   absorbFinalTranscript,
   absorbText,
+  carryDraftAcrossRestart,
   collapseSpeechStutter,
   mergeLiveTranscript,
 } from "@/lib/absorb-text";
@@ -150,6 +151,7 @@ export function Room({ t }: { t: Tokens }) {
 
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const committedRef = useRef("");
+  const heldDraftRef = useRef("");
   const interimRef = useRef("");
   const listeningWantedRef = useRef(false);
   const sessionIdRef = useRef<string | null>(null);
@@ -248,7 +250,27 @@ export function Room({ t }: { t: Tokens }) {
     }, DEAD_MAN_MS);
   }, [refreshSession, refreshTurns]);
 
+  const persistHeldDraft = useCallback(() => {
+    const merged = mergeLiveTranscript(
+      carryDraftAcrossRestart(heldDraftRef.current, committedRef.current),
+      interimRef.current,
+    );
+    if (!merged.trim()) return;
+    heldDraftRef.current = merged;
+    committedRef.current = merged;
+    interimRef.current = "";
+    setDraft(merged);
+  }, []);
+
+  const clearDraft = useCallback(() => {
+    heldDraftRef.current = "";
+    committedRef.current = "";
+    interimRef.current = "";
+    setDraft("");
+  }, []);
+
   const haltRecognition = useCallback(() => {
+    persistHeldDraft();
     recognitionLiveRef.current = false;
     const rec = recognitionRef.current;
     if (!rec) return;
@@ -265,7 +287,7 @@ export function Room({ t }: { t: Tokens }) {
       }
     }
     recognitionRef.current = null;
-  }, []);
+  }, [persistHeldDraft]);
 
   const listenSoon = useCallback(() => {
     window.setTimeout(() => {
@@ -469,9 +491,7 @@ export function Room({ t }: { t: Tokens }) {
           const data = await res.json();
           if (data.queued) {
             applyQueue(data.queue as { seats?: QueueSeatDto[] } | undefined);
-            committedRef.current = "";
-            interimRef.current = "";
-            setDraft("");
+            clearDraft();
             if (data.activeLabel) {
               setSession((s) =>
                 s
@@ -490,17 +510,13 @@ export function Room({ t }: { t: Tokens }) {
           if (data.routerHandled) {
             await refreshSession(sid);
             setSubtitle("");
-            committedRef.current = "";
-            interimRef.current = "";
-            setDraft("");
+            clearDraft();
           }
           if (!res.ok && data.error) setError(data.error);
           return;
         }
 
-        committedRef.current = "";
-        interimRef.current = "";
-        setDraft("");
+        clearDraft();
         await consumeAgentStream(sid, res);
       } catch (e) {
         setError(e instanceof Error ? e.message : String(e));
@@ -512,6 +528,7 @@ export function Room({ t }: { t: Tokens }) {
     [
       applyQueue,
       beginInflight,
+      clearDraft,
       consumeAgentStream,
       endInflight,
       haltRecognition,
@@ -562,17 +579,20 @@ export function Room({ t }: { t: Tokens }) {
     rec.onresult = (ev) => {
       lastSpeechRef.current = Date.now();
       resetDeadManTimer();
-      let committed = "";
+      let sessionCommitted = "";
       let interim = "";
       for (let i = 0; i < ev.results.length; i++) {
         const piece = ev.results[i][0]?.transcript ?? "";
         if (ev.results[i].isFinal) {
-          committed = absorbFinalTranscript(committed, piece);
+          sessionCommitted = absorbFinalTranscript(sessionCommitted, piece);
         } else {
           interim += piece;
         }
       }
-      committed = collapseSpeechStutter(committed);
+      const committed = carryDraftAcrossRestart(
+        heldDraftRef.current,
+        sessionCommitted,
+      );
       committedRef.current = committed;
       interimRef.current = interim;
       const full = mergeLiveTranscript(committed, interim);
@@ -608,6 +628,7 @@ export function Room({ t }: { t: Tokens }) {
     };
 
     rec.onend = () => {
+      persistHeldDraft();
       recognitionLiveRef.current = false;
       if (!listeningWantedRef.current) return;
       if (presenceRef.current === "paused" || presenceRef.current === "ended") {
@@ -634,7 +655,7 @@ export function Room({ t }: { t: Tokens }) {
       recognitionLiveRef.current = false;
     }
     resetDeadManTimer();
-  }, [finalizeUtterance, haltRecognition, resetDeadManTimer]);
+  }, [finalizeUtterance, haltRecognition, persistHeldDraft, resetDeadManTimer]);
 
   startRecognitionRef.current = startRecognition;
 
@@ -651,6 +672,7 @@ export function Room({ t }: { t: Tokens }) {
       setViewMode(s.viewMode ?? "voice");
       setTurns([]);
       setQueueSeats([]);
+      clearDraft();
       setSubtitle("Listening…");
       setPresence("listening");
       startRecognition();
@@ -716,6 +738,7 @@ export function Room({ t }: { t: Tokens }) {
     sessionIdRef.current = null;
     setSubtitle("");
     setQueueSeats([]);
+    clearDraft();
   };
 
   const activeThoughts = turns.filter(
