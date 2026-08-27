@@ -149,6 +149,15 @@ export async function pipeOneSend(params: {
   const seatKey = (binding.seatKey ?? "pm") as SeatKey;
   const seatLabel = binding.label ?? seatKeyToLabel(seatKey);
 
+  const userTurn = await insertUserTurn(sessionId, prompt, seatKey);
+  send("matched", {
+    matched: true,
+    matchedPhrase: params.matchedPhrase,
+    userTurn,
+    activeSeatKey: seatKey,
+    activeLabel: seatLabel,
+  });
+
   const gen = params.gen ?? streamCursorReply({
     cursorAgentId: binding.cursorAgentId ?? "",
     prompt,
@@ -161,6 +170,8 @@ export async function pipeOneSend(params: {
 
   if (first.value.type === "busy") {
     await gen.return(undefined);
+    await db.delete(voiceTurn).where(eq(voiceTurn.id, userTurn.id));
+    send("retract", { id: userTurn.id });
     const queue = await enqueueOnSeat({
       sessionId,
       binding,
@@ -170,15 +181,6 @@ export async function pipeOneSend(params: {
     send("queued", { queue });
     return { ownedTerminal: false, queue };
   }
-
-  const userTurn = await insertUserTurn(sessionId, prompt, seatKey);
-  send("matched", {
-    matched: true,
-    matchedPhrase: params.matchedPhrase,
-    userTurn,
-    activeSeatKey: seatKey,
-    activeLabel: seatLabel,
-  });
 
   let seq = userTurn.seq + 1;
   let thoughtTurnId: string | null = null;

@@ -368,7 +368,7 @@ export function Room({ t }: { t: Tokens }) {
   }, [resetDeadManTimer, scheduleListenRestart]);
 
   const consumeAgentStream = useCallback(
-    async (sid: string, res: Response) => {
+    async (sid: string, res: Response, tempUserId?: string) => {
       const reader = res.body?.getReader();
       if (!reader) throw new Error("No response stream");
 
@@ -381,16 +381,32 @@ export function Room({ t }: { t: Tokens }) {
         const data = JSON.parse(raw) as Record<string, unknown>;
 
         if (event === "queued" || event === "queue") {
+          if (tempUserId) {
+            setTurns((prev) => prev.filter((x) => x.id !== tempUserId));
+          }
           applyQueue(data.queue as { seats?: QueueSeatDto[] } | undefined);
+          return;
+        }
+
+        if (event === "retract") {
+          const id = String(data.id ?? "");
+          if (id) {
+            setTurns((prev) => prev.filter((x) => x.id !== id && x.id !== tempUserId));
+          }
           return;
         }
 
         if (event === "matched") {
           const userTurn = data.userTurn as Turn | undefined;
           if (userTurn) {
-            setTurns((prev) =>
-              prev.some((x) => x.id === userTurn.id) ? prev : [...prev, userTurn],
-            );
+            setTurns((prev) => {
+              const withoutTemp = tempUserId
+                ? prev.filter((x) => x.id !== tempUserId)
+                : prev;
+              return withoutTemp.some((x) => x.id === userTurn.id)
+                ? withoutTemp
+                : [...withoutTemp, userTurn];
+            });
           }
           if (data.activeLabel) {
             seatLabel = String(data.activeLabel);
@@ -584,7 +600,23 @@ export function Room({ t }: { t: Tokens }) {
     async (args: { text: string; chipSeatKey: SeatKey | null }) => {
       const sid = sessionIdRef.current;
       if (!sid) return false;
-      beginInflight();
+      const prompt = args.text.trim();
+      const tempId = prompt ? `tmp-${crypto.randomUUID()}` : "";
+      if (prompt) {
+        const seatKey = args.chipSeatKey ?? sessionRef.current?.activeSeatKey ?? "pm";
+        setTurns((prev) => [
+          ...prev,
+          {
+            id: tempId,
+            seq: (prev[prev.length - 1]?.seq ?? 0) + 1,
+            role: "user",
+            kind: "user",
+            seatKey,
+            text: prompt,
+            createdAt: new Date().toISOString(),
+          },
+        ]);
+      }
       setError(null);
       try {
         const res = await fetch(`/api/session/${sid}/send`, {
@@ -594,6 +626,9 @@ export function Room({ t }: { t: Tokens }) {
         });
         const ct = res.headers.get("content-type") ?? "";
         if (!ct.includes("text/event-stream")) {
+          if (tempId) {
+            setTurns((prev) => prev.filter((x) => x.id !== tempId));
+          }
           const data = await res.json();
           if (data.routerHandled) await refreshSession(sid);
           applyQueue(data.queue as { seats?: QueueSeatDto[] } | undefined);
@@ -603,23 +638,22 @@ export function Room({ t }: { t: Tokens }) {
           }
           return true;
         }
-        await consumeAgentStream(sid, res);
-        await refreshSession(sid);
+        void consumeAgentStream(sid, res, tempId || undefined).catch((e) => {
+          setError(e instanceof Error ? e.message : String(e));
+          if (tempId) {
+            setTurns((prev) => prev.filter((x) => x.id !== tempId));
+          }
+        });
         return true;
       } catch (e) {
+        if (tempId) {
+          setTurns((prev) => prev.filter((x) => x.id !== tempId));
+        }
         setError(e instanceof Error ? e.message : String(e));
         return false;
-      } finally {
-        endInflight();
       }
     },
-    [
-      applyQueue,
-      beginInflight,
-      consumeAgentStream,
-      endInflight,
-      refreshSession,
-    ],
+    [applyQueue, consumeAgentStream, refreshSession],
   );
 
   const startRecognition = useCallback(() => {
@@ -1374,7 +1408,6 @@ export function Room({ t }: { t: Tokens }) {
             <LogComposer
               t={t}
               seats={roomSeats}
-              disabled={busy}
               onSend={sendTyped}
             />
           )}
