@@ -1,19 +1,19 @@
-# Log text format — FACE (considering)
+# Log text format — FACE
 
-**Status:** Considering. Not a packet. Photo: **E1**.  
-**Sits on:** Mode B + 003 look + **004** Talk|Type composer. Does **not** recut C3/C4 or D3.  
+**Status:** Locked in **PM-PACKET-005** ([`PM-PACKET-005-LOG-FORMAT.md`](./PM-PACKET-005-LOG-FORMAT.md)). Photo of record: **E1**.  
+**Sits on:** Mode B + 003 look + **004** Talk|Type. Does **not** recut C3/C4 or D3.  
 **Log:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md)  
-**Named earlier:** Hotfix 005 parked **bubble markdown / spacing** — no FACE grain. This is that grain.
+**Named earlier:** Hotfix 005 parked bubble markdown — this packet is that grain.
 
 ---
 
 ## Founder wording (this pass)
 
 - Time to work on **text formatting** — even **composer** formatting.
-- Claude’s composer **expands** with the text up to a **limit**, then you **scroll inside** the composer. Travis stays a **flat** composer. None of that happen.
+- Claude’s composer **expands** with the text up to a **limit**, then you **scroll inside** the composer. Travis stays a **flat** composer.
 - Better text formatting on what is coming from the **agents** (what you receive). Maybe **not too much** on what you send.
 - Sets the **stage** for images and other file types — how those are **organized** in the thread.
-- This **justifies plates**. Talking to the PM.
+- Like **E1** enough to packet.
 
 ---
 
@@ -21,44 +21,41 @@
 
 | ID | File | State |
 |----|------|--------|
-| **E1** | [`plates/travis-e1-log-format.png`](./plates/travis-e1-log-format.png) | Mode B · Type · **grown** composer (wrapped lines) · Eng bubble **organized** (heading, list, inline code) |
+| **E1** | [`plates/travis-e1-log-format.png`](./plates/travis-e1-log-format.png) | Mode B · Type · **grown** composer · Eng bubble **organized** (heading, list, inline code) |
 
-D3 stays the 004 photo (toggle, `@`, mic, send). E1 adds **format + grow**. Do not plant E1 as a second Talk|Type.
+D3 stays the 004 photo. E1 adds **format + grow**. Do not plant E1 as a second Talk|Type.
 
-**Completes (no extra PNG):** composer at **max height** with **scroll inside** the field. Talk mode (no composer) with the same receive format.
+**Completes (no extra PNG):** composer at **max height** with **scroll inside** the field. Same receive format in Talk (no composer).
 
-**Not on this plate:** images, files, attach, a formatting toolbar, send-side rich text.
-
----
-
-## Glass law (draft — not locked)
-
-**Receive (the loud job).** Agent posts are **organized**, not a flat dump. Grain this photo shows: short heading, spaced list, inline code. Same cream bubble / hairline / you-right agents-left as 003. User bubbles stay **plain**.
-
-**Composer (Type only).** Field **grows** with wrapped text up to a cap, then **scrolls inside**. Mic + send stay. No toolbar. No paperclip. Not Mode A.
-
-**Stage, not this plant.** Images and other file types will live in the **same thread order** as formatted text. Do not invent a gallery, attach control, or file chrome on this plate.
-
-**004 still holds.** Talk | Type. `@` by title. Mic into the field. This pocket does not rewrite that.
+**Not this plant:** images, files, attach, a formatting toolbar, send-side rich text.
 
 ---
 
-## Five buckets (draft)
+## Glass law
+
+Locked in the packet.
+
+- **Receive:** agent posts organized — heading, spaced list, inline code, paragraphs. User bubbles plain.
+- **Composer (Type):** grows with wrap to a cap, then inner scroll. Mic + send. No toolbar.
+- **004** still owns Talk | Type, `@`, composer mic.
+- Images/files = **stage**. Same thread order later. Not this packet.
+
+---
+
+## Five buckets
+
+Filled in the packet. Draft below is history; packet wins.
 
 | Bucket | Draft |
 |--------|--------|
-| **1. Copy** | Organized agent text in the log. Type composer grows with wrap, then inner scroll. |
-| **2. Do not build** | Bezel. Keyboard as product. Checkmarks. Globe-on-pill if plant dropped it. Formatting toolbar. Paperclip. Recutting C3/C4/D3. k8s / Hub copy. Photos of people. |
-| **3. Implied** | Markdown-ish receive (heading, list, code, paragraphs). Thread still scrolls. Keyboard. Send still posts. |
-| **4. Completes** | Composer at max + inner scroll. Same receive format in Talk (no field). |
-| **5. Out of scope** | Images / files as a plant. Attach. Send-side rich editor. Triage. Mode A composer. Changing 003 queue or 004 toggle. |
+| **1. Copy** | Organized agent text. Type composer grows, then inner scroll. |
+| **2. Do not build** | Toolbar. Attach. Recutting C3/C4/D3. Bezel. Keyboard as product. |
+| **3. Implied** | Markdown-ish subset. Thread scrolls. TTS with hygiene. |
+| **4. Completes** | Max + inner scroll. Same format in Talk. |
+| **5. Out of scope** | Image/file plant. Triage. Changing 003/004 law. |
 
 ---
 
 ## Open
 
-- Like **E1** enough to packet?
-- Receive grain = heading + list + inline code (not a markdown kitchen sink)?
-- Composer max + inner scroll as Completes (no second PNG)?
-- Images/files stay **stage** — not this packet?
-- **004** still goes to SA first. This is the next glass pocket.
+- **Next: SA** ascribe 005 (and 004 if not yet). Engineer plants after SA.

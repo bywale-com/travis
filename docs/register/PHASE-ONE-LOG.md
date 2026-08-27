@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 23:40 UTC — **Log format considering (E1).** Composer grow + received text organized. Not a packet. 004 still next for SA.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 23:56 UTC — **PM-PACKET-005 locked** (E1: receive format + composer grow). Next: SA (004 and 005).
 
 **How we maintain this log**
 
@@ -707,4 +707,18 @@ Control lives in the **room-chip row**. Two-state toggle, not a third `Eng · li
 D3 stays 004. C3/C4 not recut. No attach. No formatting toolbar. Images/files = **stage**, not this plant.
 
 **Ask:** like E1 enough to packet? Receive grain = heading + list + inline code (not a markdown kitchen sink)? Composer max + inner scroll as Completes (no second PNG)? Images/files stay stage? **004 still goes to SA first.**
+
+---
+
+## 2026-08-27 23:56 UTC — PM-PACKET-005 locked (E1)
+
+**Kind:** Type B packet. Log text format. Does not rewrite 004.
+
+**Founder (preserved):** Yes, I like E1 enough to packet it.
+
+**Locked:** [`PM-PACKET-005-LOG-FORMAT.md`](PM-PACKET-005-LOG-FORMAT.md) · photo [`plates/travis-e1-log-format.png`](plates/travis-e1-log-format.png) · FACE [`LOG-FORMAT-FACE.md`](LOG-FORMAT-FACE.md). Living glass: [PR #15](https://github.com/bywale-com/travis/pull/15).
+
+**This packet:** organized **receive** (heading, list, inline code, paragraphs). Type composer **grows** then **scrolls inside**. User send stays plain. Images/files stay **stage**. C3/C4/D3 not recut.
+
+**Next:** SA ascribes **004** (Talk|Type machine) and **005** (render vs store, TTS hygiene, composer cap). Engineer plants after SA. Do not plant from this packet alone.
 
