@@ -77,8 +77,8 @@ Extend the SCP-001 voice pipe into a **room**: one session, two views (voice / l
 
 | seat_key | label | cursor_agent_id |
 |----------|-------|-----------------|
-| `pm` | PM | `bc-da5db04b-db60-414e-b0c3-c8ed337d5d4` (founder seed) |
-| `sa` | SA | empty until operator seeds row |
+| `pm` | PM | `bc-da5db04b-db60-414e-b0c3-c8ed337d45d4` (founder 2026-08-26, 19:12 correction) |
+| `sa` | SA | `bc-0a1fb1c1-bbea-4d31-a370-6917c235b9c8` (this SA chat, 2026-08-27) |
 | `engineer` | Engineer | empty until operator seeds row |
 
 Empty id ⇒ that seat’s runs use stand-in until row updated — same law as 001.

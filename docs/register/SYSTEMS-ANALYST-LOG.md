@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-26 19:12 UTC — **Agent id corrected:** `bc-da5db04b-db60-414e-b0c3-c8ed337d45d4` in SCP-001 `agent_binding` seed. Prior 19:10 id had a missing digit.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 00:51 UTC — **This SA chat id:** `bc-0a1fb1c1-bbea-4d31-a370-6917c235b9c8`. Lands in `agent_binding.cursor_agent_id` for `seat_key=sa`.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -245,3 +245,30 @@ You do **not** need to paste an id into this chat for SCP-001 to start: Cursor p
 **Supersedes:** `…c8ed337d5d4` from 19:10.
 
 SCP-001 seed field updated.
+
+---
+
+## 2026-08-27 00:51 UTC — Seat accepted; this chat’s cloud agent id
+
+**Why:** Founder seated Systems Analyst and asked for this chat’s id.
+
+**Accepted:**
+
+- Job-law from **founder** only. Not PM. Not Engineer.
+- Own: Story → Requirements → stores/contracts/ports; three layers (materialized · map-only · named silence); change packets so Engineer only cuts.
+- Read-only: PHASE-ONE-LOG flag wording. Current PM pointer: **PM-PACKET-002** locked on living PR [#4](https://github.com/bywale-com/travis/pull/4); next was SA ascribe (already cut as SCP-002; Engineer planted; Hotfix 002 on `main`).
+- Do not: mint tables from pictures; rewrite the flagship; ship secrets; puppet desktop Cursor; plant app code.
+
+**This run (stood-up Cursor, not Travis store):**
+
+| Field | Value |
+|-------|--------|
+| `bcId` | `bc-0a1fb1c1-bbea-4d31-a370-6917c235b9c8` |
+| URL | https://cursor.com/agents/bc-0a1fb1c1-bbea-4d31-a370-6917c235b9c8 |
+| Source | Cloud Agents `run-info` for this chat |
+
+**Ascribe:** same grain as PM 19:10/19:12. Lands only in **`agent_binding.cursor_agent_id`** for **`seat_key=sa`** (SCP-002 seed table updated). Label `SA`, runtime `cloud`. Never a SPA/source constant.
+
+**Packet hygiene:** SCP-002 seed still listed the superseded PM id (`…d5d4`). Corrected that cell to the 19:12 value `bc-da5db04b-db60-414e-b0c3-c8ed337d45d4` in the same seed table. Do not edit the 19:10 stamp.
+
+**Ask:** Engineer load this SA id into the `sa` row now (seed/env, not SPA), or wait until you also have an Engineer `bc-…`?
