@@ -201,6 +201,7 @@ export function Room({ t }: { t: Tokens }) {
   const startRecognitionRef = useRef<() => void>(() => {});
   const recognitionLiveRef = useRef(false);
   const listenRestartGenRef = useRef(0);
+  const pendingUtteranceRef = useRef("");
 
   viewModeRef.current = viewMode;
   busyRef.current = busy;
@@ -282,6 +283,15 @@ export function Room({ t }: { t: Tokens }) {
     recognitionRef.current = null;
   }, []);
 
+  const listenSoon = useCallback(() => {
+    window.setTimeout(() => {
+      if (!listeningWantedRef.current) return;
+      if (presenceBlocksListen(presenceRef.current)) return;
+      if (presenceRef.current === "speaking" || speechEngineBusy()) return;
+      startRecognitionRef.current();
+    }, 300);
+  }, []);
+
   const stopRecognition = useCallback(() => {
     listeningWantedRef.current = false;
     listenRestartGenRef.current += 1;
@@ -314,7 +324,12 @@ export function Room({ t }: { t: Tokens }) {
   const finalizeUtterance = useCallback(
     async (utterance: string) => {
       const sid = sessionIdRef.current;
-      if (!sid || finalizingRef.current) return;
+      if (!sid || finalizingRef.current) {
+        if (sid && finalizingRef.current && utterance.trim()) {
+          pendingUtteranceRef.current = utterance.trim();
+        }
+        return;
+      }
       finalizingRef.current = true;
       busyRef.current = true;
       setBusy(true);
@@ -323,6 +338,7 @@ export function Room({ t }: { t: Tokens }) {
       setStreamingPost("");
       setStreamingSeat(null);
       haltRecognition();
+      listenSoon();
 
       try {
         const res = await fetch(`/api/session/${sid}/finalize`, {
@@ -413,6 +429,7 @@ export function Room({ t }: { t: Tokens }) {
               const line = `${label} says… ${postText.slice(0, 120)}${postText.length > 120 ? "…" : ""}`;
               setSubtitle(line);
               setPresence("speaking");
+              haltRecognition();
               await fetch(`/api/session/${sid}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
@@ -465,12 +482,18 @@ export function Room({ t }: { t: Tokens }) {
             setPresence("listening");
             setSubtitle("Listening…");
           }
-          scheduleListenRestart();
+          const pending = pendingUtteranceRef.current.trim();
+          pendingUtteranceRef.current = "";
+          if (pending) {
+            void finalizeUtterance(pending);
+          } else {
+            scheduleListenRestart();
+          }
         }
         resetDeadManTimer();
       }
     },
-    [haltRecognition, refreshSession, refreshTurns, resetDeadManTimer, scheduleListenRestart],
+    [haltRecognition, listenSoon, refreshSession, refreshTurns, resetDeadManTimer, scheduleListenRestart],
   );
 
   const startRecognition = useCallback(() => {
@@ -515,7 +538,7 @@ export function Room({ t }: { t: Tokens }) {
         void finalizeUtterance(full);
         return;
       }
-      if (match.matched && !finalizingRef.current) {
+      if (match.matched) {
         const committedMatch = matchConductorPhrase(
           committedRef.current,
           phrasesRef.current,
@@ -538,7 +561,7 @@ export function Room({ t }: { t: Tokens }) {
       if (presenceRef.current === "paused" || presenceRef.current === "ended") {
         return;
       }
-      if (presenceRef.current === "speaking" || finalizingRef.current) return;
+      if (presenceRef.current === "speaking") return;
       if (speechEngineBusy()) return;
       window.setTimeout(() => {
         if (!listeningWantedRef.current) return;
@@ -546,8 +569,7 @@ export function Room({ t }: { t: Tokens }) {
         if (presenceRef.current === "paused" || presenceRef.current === "ended") {
           return;
         }
-        if (presenceRef.current === "speaking" || finalizingRef.current) return;
-        if (speechEngineBusy()) return;
+        if (presenceRef.current === "speaking" || speechEngineBusy()) return;
         startRecognitionRef.current();
       }, 250);
     };
