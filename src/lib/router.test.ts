@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { parseCallByName, seatKeyToShort } from "./router";
+import { parseCallByName, parseDeadManResponse, seatKeyToShort } from "./router";
 
 test("call-by-name accepts punctuation separator", () => {
   const r = parseCallByName("Engineer — pull the brief");
@@ -35,6 +35,22 @@ test("bare seat name switches with empty remainder", () => {
   const r = parseCallByName("Engineer");
   assert.equal(r.seatKey, "engineer");
   assert.equal(r.remainder, "");
+});
+
+test("dead-man no switches to default", () => {
+  const r = parseDeadManResponse("No.");
+  assert.equal(r.action, "default");
+});
+
+test("dead-man no SA switches seat", () => {
+  const r = parseDeadManResponse("no, SA");
+  assert.equal(r.action, "seat");
+  assert.equal(r.seatKey, "sa");
+});
+
+test("dead-man ignores a real turn so it can still send", () => {
+  const r = parseDeadManResponse("engineer look at the stream");
+  assert.equal(r.action, "ignore");
 });
 
 test("seatKeyToShort matches plate chips", () => {

@@ -54,20 +54,27 @@ export function parseCallByName(utterance: string): {
 }
 
 export function parseDeadManResponse(utterance: string): {
-  action: "default" | "seat";
+  action: "default" | "seat" | "stay" | "ignore";
   seatKey?: SeatKey;
 } {
-  const t = utterance.trim().toLowerCase();
-  if (t === "no" || t === "no.") return { action: "default" };
+  const t = utterance
+    .trim()
+    .toLowerCase()
+    .replace(/[.?!]+$/g, "")
+    .replace(/\s+/g, " ");
+
+  if (t === "no" || t === "nope") return { action: "default" };
+  if (t === "yes" || t === "yeah" || t === "yep") return { action: "stay" };
 
   const m = t.match(/^no[,.\s]+(.+)$/);
   if (m) {
     const alias = m[1].trim();
-    const seatKey = SEAT_ALIASES[alias] ?? SEAT_ALIASES[alias.replace(/\s+/g, " ")];
+    const seatKey =
+      SEAT_ALIASES[alias] ?? SEAT_ALIASES[alias.replace(/\s+/g, " ")];
     if (seatKey) return { action: "seat", seatKey };
   }
 
-  return { action: "default" };
+  return { action: "ignore" };
 }
 
 export function parseClarificationResponse(utterance: string): SeatKey | null {

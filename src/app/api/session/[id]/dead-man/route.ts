@@ -19,6 +19,9 @@ export async function POST(
   if (!session || session.status === "ended") {
     return NextResponse.json({ error: "Session not available" }, { status: 400 });
   }
+  if (session.viewMode === "log" || session.status !== "listening") {
+    return NextResponse.json({ ok: true, skipped: true });
+  }
   if (session.routerState !== "normal") {
     return NextResponse.json({ ok: true, skipped: true });
   }
