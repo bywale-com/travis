@@ -1,6 +1,8 @@
 "use client";
 
+import { absorbFinalTranscript, absorbText, collapseSpeechStutter } from "@/lib/absorb-text";
 import { matchConductorPhrase } from "@/lib/conductor";
+import { seatKeyToShort } from "@/lib/router";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -55,10 +57,44 @@ type SpeechRecognitionEventLike = {
 };
 
 const SEAT_COLORS: Record<string, string> = {
-  pm: "#2f5d50",
-  sa: "#5c4d7a",
-  engineer: "#8b6914",
+  pm: "#6b7a70",
+  sa: "#c45c28",
+  engineer: "#6a7380",
 };
+
+function SeatMark({
+  seatKey,
+  size = 28,
+  glow = false,
+}: {
+  seatKey: string;
+  size?: number;
+  glow?: boolean;
+}) {
+  const isTravis = seatKey === "travis" || !seatKey;
+  const color = isTravis ? "#5c534b" : (SEAT_COLORS[seatKey] ?? "#9a8f84");
+  const mark = isTravis ? "T" : seatKeyToShort(seatKey);
+  return (
+    <span
+      style={{
+        width: size,
+        height: size,
+        borderRadius: "50%",
+        background: color,
+        color: "#faf7f2",
+  fontSize: size < 32 ? 10 : 11,
+        fontWeight: 600,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexShrink: 0,
+        boxShadow: glow ? `0 0 0 3px ${color}44` : "none",
+      }}
+    >
+      {mark}
+    </span>
+  );
+}
 
 function getSpeechRecognition(): (new () => SpeechRecognitionLike) | null {
   if (typeof window === "undefined") return null;
@@ -265,10 +301,10 @@ export function Room({ t }: { t: Tokens }) {
           } else if (event === "post_delta") {
             const chunk = String(data.text ?? "");
             if (data.seatLabel) seatLabel = String(data.seatLabel);
+            if (data.seatKey) setStreamingSeat(String(data.seatKey));
             if (chunk) {
-              postAcc += chunk;
+              postAcc = absorbText(postAcc, chunk).acc;
               setStreamingPost(postAcc);
-              setStreamingSeat(seatLabel);
             }
           } else if (event === "status") {
             setLiveStatus(String(data.text ?? "running"));
@@ -356,10 +392,14 @@ export function Room({ t }: { t: Tokens }) {
         else interim += piece;
       }
       if (newlyFinal) {
-        committedRef.current = `${committedRef.current} ${newlyFinal}`.trim();
+        committedRef.current = collapseSpeechStutter(
+          absorbFinalTranscript(committedRef.current, newlyFinal),
+        );
       }
       interimRef.current = interim;
-      const full = `${committedRef.current} ${interim}`.trim();
+      const full = collapseSpeechStutter(
+        `${committedRef.current} ${interim}`.trim(),
+      );
       setDraft(full);
 
       const match = matchConductorPhrase(full, phrasesRef.current);
@@ -369,9 +409,8 @@ export function Room({ t }: { t: Tokens }) {
           phrasesRef.current,
         );
         if (committedMatch.matched || !interim) {
-          void finalizeUtterance(
-            committedMatch.matched ? committedRef.current : full,
-          );
+          const raw = committedMatch.matched ? committedRef.current : full;
+          void finalizeUtterance(collapseSpeechStutter(raw));
         }
       }
     };
@@ -477,14 +516,21 @@ export function Room({ t }: { t: Tokens }) {
       (t.thoughtStatus === "streaming" || liveThoughts[t.id]),
   );
 
+  const viaShort = seatKeyToShort(session?.activeSeatKey);
   const statusLine =
     presence === "listening"
-      ? "Listening… tap once to pause"
+      ? `Listening to ${viaShort}…`
       : presence === "paused"
         ? "Paused — tap to resume"
         : presence === "speaking"
           ? "Travis speaking…"
           : "Session ended";
+  const statusHint =
+    presence === "listening"
+      ? "tap once to pause"
+      : presence === "paused"
+        ? "tap to resume"
+        : "";
 
   const shellStyle = {
     minHeight: "100dvh",
@@ -555,11 +601,10 @@ export function Room({ t }: { t: Tokens }) {
             style={{
               border: "none",
               background: "transparent",
-              color: t.textMuted,
+              color: t.accent,
               fontSize: 13,
               cursor: "pointer",
-              textDecoration: "underline",
-              textUnderlineOffset: 3,
+              fontWeight: 500,
             }}
           >
             End session
@@ -577,16 +622,24 @@ export function Room({ t }: { t: Tokens }) {
         >
           <span
             style={{
-              padding: "4px 10px",
+              padding: "5px 12px",
+              borderRadius: 999,
+              background: t.bgElevated,
+              border: `1px solid ${t.border}`,
+              color: t.textSecondary,
+            }}
+          >
+            Room · via {viaShort}
+          </span>
+          <span
+            style={{
+              padding: "5px 12px",
               borderRadius: 999,
               background: t.accentSoft,
               color: t.accent,
             }}
           >
-            Room · via {session.activeLabel}
-          </span>
-          <span style={{ padding: "4px 10px", borderRadius: 999, background: t.hoverBg }}>
-            {session.activeLabel} · live
+            {viaShort} · live
           </span>
         </div>
       </SurfaceBoundary>
@@ -594,17 +647,37 @@ export function Room({ t }: { t: Tokens }) {
       {viewMode === "voice" ? (
         <>
           <SurfaceBoundary id="voice-presence" label="Voice presence" order={2}>
+            <p
+              style={{
+                textAlign: "center",
+                color: t.textPrimary,
+                fontSize: 22,
+                fontWeight: 600,
+                margin: "28px 20px 18px",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              {statusLine}
+            </p>
             <button
               type="button"
               onClick={() => void togglePause()}
               disabled={presence === "speaking" || busy}
+              aria-label={statusHint || statusLine}
               style={{
-                margin: "12px auto 0",
-                width: 120,
-                height: 120,
+                margin: "0 auto",
+                width: 148,
+                height: 148,
                 borderRadius: "50%",
-                border: `2px solid ${presence === "paused" ? t.border : t.presenceRing}`,
-                background: t.accentSoft,
+                border: "none",
+                background:
+                  presence === "paused"
+                    ? t.hoverBg
+                    : `radial-gradient(circle at 50% 45%, #f8c9a8 0%, ${t.accentSoft} 55%, #ead3c2 100%)`,
+                boxShadow:
+                  presence === "listening" || presence === "speaking"
+                    ? `0 0 0 12px ${t.accent}14, 0 0 40px ${t.accent}33`
+                    : "none",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -613,33 +686,21 @@ export function Room({ t }: { t: Tokens }) {
             >
               <span
                 style={{
-                  width: presence === "listening" ? 28 : 18,
-                  height: presence === "listening" ? 28 : 18,
+                  width: presence === "paused" ? 18 : 22,
+                  height: presence === "paused" ? 18 : 22,
                   borderRadius: presence === "paused" ? 4 : "50%",
                   background: t.accent,
+                  opacity: 0.85,
                 }}
               />
             </button>
-            <p style={{ textAlign: "center", color: t.textMuted, fontSize: 14, margin: "10px 20px 4px" }}>
-              {statusLine}
-            </p>
-            {subtitle && (
-              <p
-                style={{
-                  textAlign: "center",
-                  color: t.textSecondary,
-                  fontSize: 13,
-                  margin: "0 24px 8px",
-                  lineHeight: 1.4,
-                  maxHeight: 48,
-                  overflow: "hidden",
-                }}
-              >
-                {subtitle}
+            {statusHint && (
+              <p style={{ textAlign: "center", color: t.textMuted, fontSize: 13, margin: "14px 20px 0" }}>
+                {statusHint}
               </p>
             )}
             {liveStatus && (
-              <p style={{ textAlign: "center", fontSize: 12, color: t.statusText, margin: 0 }}>
+              <p style={{ textAlign: "center", fontSize: 12, color: t.statusText, margin: "8px 0 0" }}>
                 {liveStatus}
               </p>
             )}
@@ -647,7 +708,23 @@ export function Room({ t }: { t: Tokens }) {
 
           <div style={{ flex: 1 }} />
 
-          <div style={{ padding: "12px 20px 28px", textAlign: "center" }}>
+          {subtitle && (
+            <p
+              style={{
+                textAlign: "center",
+                color: t.textSecondary,
+                fontSize: 13,
+                margin: "0 28px 8px",
+                lineHeight: 1.4,
+                maxHeight: 48,
+                overflow: "hidden",
+              }}
+            >
+              {subtitle}
+            </p>
+          )}
+
+          <div style={{ padding: "8px 20px 28px", textAlign: "center" }}>
             <button
               type="button"
               onClick={() => void switchViewMode("log")}
@@ -672,9 +749,9 @@ export function Room({ t }: { t: Tokens }) {
               style={{
                 display: "flex",
                 justifyContent: "center",
-                gap: 0,
-                padding: "12px 20px 8px",
-                minHeight: 56,
+                alignItems: "center",
+                padding: "10px 20px 4px",
+                minHeight: 52,
               }}
             >
               {(["pm", "sa", "engineer"] as const).map((key, i) => {
@@ -690,30 +767,30 @@ export function Room({ t }: { t: Tokens }) {
                       thought && setExpandedThoughtId(expanded ? null : thought.id)
                     }
                     style={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: "50%",
-                      border: active ? `2px solid ${SEAT_COLORS[key]}` : `1px solid ${t.border}`,
-                      background: SEAT_COLORS[key] + (active ? "33" : "18"),
+                      border: "none",
+                      background: "transparent",
+                      padding: 0,
                       marginLeft: i > 0 ? -10 : 0,
                       zIndex: 3 - i,
                       cursor: thought ? "pointer" : "default",
-                      opacity: thought ? 1 : 0.35,
+                      opacity: thought || session.activeSeatKey === key ? 1 : 0.45,
                     }}
-                    aria-label={`${key} thought`}
-                  />
+                    aria-label={`${seatKeyToShort(key)} thought`}
+                  >
+                    <SeatMark seatKey={key} size={38} glow={!!active} />
+                  </button>
                 );
               })}
             </div>
-            {expandedThoughtId && liveThoughts[expandedThoughtId] && (
+            {expandedThoughtId && (
               <div
                 style={{
-                  margin: "0 16px 8px",
+                  margin: "8px 16px",
                   padding: "10px 12px",
                   background: t.bgElevated,
-                  border: `1px solid ${t.border}`,
                   borderRadius: 12,
                   fontSize: 13,
+                  fontStyle: "italic",
                   color: t.textSecondary,
                   maxHeight: 120,
                   overflowY: "auto",
@@ -723,6 +800,21 @@ export function Room({ t }: { t: Tokens }) {
                   turns.find((x) => x.id === expandedThoughtId)?.text}
               </div>
             )}
+            <div style={{ textAlign: "center", padding: "4px 20px 8px" }}>
+              <button
+                type="button"
+                onClick={() => void switchViewMode("voice")}
+                style={{
+                  border: "none",
+                  background: "transparent",
+                  color: t.accent,
+                  fontSize: 13,
+                  cursor: "pointer",
+                }}
+              >
+                ← Back to voice
+              </button>
+            </div>
           </SurfaceBoundary>
 
           <SurfaceBoundary
@@ -732,10 +824,10 @@ export function Room({ t }: { t: Tokens }) {
             style={{
               flex: 1,
               overflowY: "auto",
-              padding: "8px 16px 12px",
+              padding: "8px 16px 20px",
               display: "flex",
               flexDirection: "column",
-              gap: 10,
+              gap: 14,
             }}
           >
             {turns
@@ -743,13 +835,12 @@ export function Room({ t }: { t: Tokens }) {
                 (turn) =>
                   turn.kind === "user" ||
                   turn.kind === "agent_post" ||
-                  turn.kind === "travis_prompt" ||
-                  turn.kind === "status",
+                  turn.kind === "travis_prompt",
               )
               .map((turn) => {
                 const isUser = turn.kind === "user";
                 const isPrompt = turn.kind === "travis_prompt";
-                if (turn.kind === "status" && turn.text === "finished") return null;
+                const seat = turn.seatKey ?? (isPrompt ? "" : "pm");
 
                 const refTurn = turn.referenceTurnId
                   ? turns.find((x) => x.id === turn.referenceTurnId)
@@ -760,80 +851,106 @@ export function Room({ t }: { t: Tokens }) {
                     key={turn.id}
                     style={{
                       alignSelf: isUser ? "flex-end" : "flex-start",
-                      maxWidth: "88%",
+                      maxWidth: "92%",
                       display: "flex",
-                      flexDirection: "column",
-                      gap: 4,
+                      flexDirection: isUser ? "column" : "row",
+                      alignItems: isUser ? "flex-end" : "flex-start",
+                      gap: 8,
                     }}
                   >
                     {!isUser && (
-                      <span style={{ fontSize: 11, color: t.textMuted, marginLeft: 4 }}>
-                        {turn.seatKey ? turn.seatKey.toUpperCase() : "Travis"} ·{" "}
-                        {formatTime(turn.createdAt)}
-                      </span>
+                      <SeatMark
+                        seatKey={isPrompt ? "travis" : seat || "pm"}
+                        size={28}
+                      />
                     )}
-                    <div
-                      style={{
-                        background: isUser
-                          ? t.userBubble
-                          : isPrompt
-                            ? t.hoverBg
-                            : t.assistantBubble,
-                        border: isUser ? "none" : `1px solid ${t.border}`,
-                        borderLeft: refTurn ? `3px solid ${t.accent}` : undefined,
-                        borderRadius: 16,
-                        padding: "10px 14px",
-                        fontSize: 15,
-                        lineHeight: 1.45,
-                      }}
-                    >
-                      {refTurn && (
-                        <p
-                          style={{
-                            margin: "0 0 8px",
-                            fontSize: 12,
-                            fontStyle: "italic",
-                            color: t.textMuted,
-                            borderLeft: `2px solid ${t.border}`,
-                            paddingLeft: 8,
-                          }}
-                        >
-                          {refTurn.text.slice(0, 120)}
-                          {refTurn.text.length > 120 ? "…" : ""}
-                        </p>
-                      )}
-                      {turn.text}
-                      {!isUser && turn.kind === "agent_post" && (
-                        <button
-                          type="button"
-                          onClick={() => void facilitatorSpeak(turn.text)}
-                          style={{
-                            display: "block",
-                            marginTop: 8,
-                            border: "none",
-                            background: "transparent",
-                            color: t.accent,
-                            fontSize: 12,
-                            cursor: "pointer",
-                          }}
-                        >
-                          Play
-                        </button>
-                      )}
+                    <div style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }}>
+                      <span
+                        style={{
+                          fontSize: 11,
+                          color: t.textMuted,
+                          alignSelf: isUser ? "flex-end" : "flex-start",
+                          marginLeft: isUser ? 0 : 2,
+                        }}
+                      >
+                        {isUser
+                          ? formatTime(turn.createdAt)
+                          : `${isPrompt ? "Travis" : seatKeyToShort(seat)} · ${formatTime(turn.createdAt)}`}
+                      </span>
+                      <div
+                        style={{
+                          background: isUser
+                            ? t.userBubble
+                            : isPrompt
+                              ? t.hoverBg
+                              : t.assistantBubble,
+                          border: isUser ? "none" : `1px solid ${t.border}`,
+                          borderLeft: refTurn ? `3px solid ${t.accent}` : undefined,
+                          borderRadius: isUser ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
+                          padding: "10px 14px",
+                          fontSize: 15,
+                          lineHeight: 1.45,
+                          color: t.textPrimary,
+                        }}
+                      >
+                        {refTurn && (
+                          <p
+                            style={{
+                              margin: "0 0 8px",
+                              fontSize: 12,
+                              fontStyle: "italic",
+                              color: t.textMuted,
+                              borderLeft: `2px solid ${t.accent}`,
+                              paddingLeft: 8,
+                            }}
+                          >
+                            {refTurn.text.slice(0, 120)}
+                            {refTurn.text.length > 120 ? "…" : ""}
+                          </p>
+                        )}
+                        {turn.text}
+                        {!isUser && turn.kind === "agent_post" && (
+                          <button
+                            type="button"
+                            onClick={() => void facilitatorSpeak(turn.text)}
+                            style={{
+                              display: "block",
+                              marginTop: 8,
+                              border: "none",
+                              background: "transparent",
+                              color: t.accent,
+                              fontSize: 12,
+                              cursor: "pointer",
+                              padding: 0,
+                            }}
+                          >
+                            Play reply
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );
               })}
             {streamingPost && (
-              <div style={{ alignSelf: "flex-start", maxWidth: "88%" }}>
-                <span style={{ fontSize: 11, color: t.textMuted }}>
-                  {streamingSeat ?? "Agent"} · now
-                </span>
+              <div
+                style={{
+                  alignSelf: "flex-start",
+                  maxWidth: "92%",
+                  display: "flex",
+                  gap: 8,
+                }}
+              >
+                <SeatMark
+                  seatKey={streamingSeat ?? session.activeSeatKey}
+                  size={28}
+                  glow
+                />
                 <div
                   style={{
                     background: t.assistantBubble,
                     border: `1px solid ${t.border}`,
-                    borderRadius: 16,
+                    borderRadius: "16px 16px 16px 4px",
                     padding: "10px 14px",
                     fontSize: 15,
                   }}
@@ -847,9 +964,9 @@ export function Room({ t }: { t: Tokens }) {
                 style={{
                   alignSelf: "flex-end",
                   maxWidth: "88%",
-                  opacity: 0.55,
+                  opacity: 0.7,
                   background: t.userBubble,
-                  borderRadius: 16,
+                  borderRadius: "16px 16px 4px 16px",
                   padding: "10px 14px",
                   fontSize: 15,
                 }}
@@ -859,24 +976,6 @@ export function Room({ t }: { t: Tokens }) {
             )}
             <div ref={logEndRef} />
           </SurfaceBoundary>
-
-          <div style={{ padding: "12px 20px 28px", textAlign: "center" }}>
-            <button
-              type="button"
-              onClick={() => void switchViewMode("voice")}
-              style={{
-                border: "none",
-                background: "transparent",
-                color: t.textMuted,
-                fontSize: 14,
-                cursor: "pointer",
-                textDecoration: "underline",
-                textUnderlineOffset: 3,
-              }}
-            >
-              Back to voice
-            </button>
-          </div>
         </>
       )}
 

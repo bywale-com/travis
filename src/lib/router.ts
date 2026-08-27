@@ -18,20 +18,39 @@ export function seatKeyToLabel(key: SeatKey): string {
   return "Engineer";
 }
 
-/** Utterance starts with {PM|SA|Engineer|Eng} + separator → switch seat, return remainder. */
+/** Plate chips use Eng, not the full table label. */
+export function seatKeyToShort(key: string | null | undefined): string {
+  if (key === "sa") return "SA";
+  if (key === "engineer") return "Eng";
+  if (key === "pm") return "PM";
+  return "Travis";
+}
+
+/**
+ * Utterance starts with {PM|SA|Engineer|Eng} plus separator or whitespace.
+ * Bare name (no remainder) is a switch-only call.
+ */
 export function parseCallByName(utterance: string): {
   seatKey: SeatKey | null;
   remainder: string;
 } {
   const trimmed = utterance.trim();
   const re =
-    /^(PM|SA|Systems Analyst|Engineer|Eng)\s*[—\-:,]\s*([\s\S]*)$/i;
-  const m = trimmed.match(re);
-  if (!m) return { seatKey: null, remainder: trimmed };
+    /^(PM|SA|Systems Analyst|Engineer|Eng)(?:\s*[—\-:,]\s*|\s+)([\s\S]*)$/i;
+  const punct = trimmed.match(re);
+  if (punct) {
+    const alias = punct[1].trim().toLowerCase();
+    const seatKey = SEAT_ALIASES[alias] ?? null;
+    return { seatKey, remainder: (punct[2] ?? "").trim() };
+  }
 
-  const alias = m[1].trim().toLowerCase();
-  const seatKey = SEAT_ALIASES[alias] ?? null;
-  return { seatKey, remainder: (m[2] ?? "").trim() };
+  const bare = trimmed.match(/^(PM|SA|Systems Analyst|Engineer|Eng)\s*[.?!]*$/i);
+  if (bare) {
+    const alias = bare[1].trim().toLowerCase();
+    return { seatKey: SEAT_ALIASES[alias] ?? null, remainder: "" };
+  }
+
+  return { seatKey: null, remainder: trimmed };
 }
 
 export function parseDeadManResponse(utterance: string): {

@@ -1,4 +1,5 @@
 import { desc, eq } from "drizzle-orm";
+import { absorbText } from "@/lib/absorb-text";
 import { matchConductorPhrase } from "@/lib/conductor";
 import {
   parseCallByName,
@@ -154,6 +155,15 @@ export async function POST(
   }
 
   if (!prompt) {
+    if (calledSeat) {
+      const binding = await bindingForSeat(calledSeat);
+      return Response.json({
+        matched: false,
+        routerHandled: true,
+        activeSeatKey: calledSeat,
+        activeLabel: binding?.label ?? seatKeyToLabel(calledSeat),
+      });
+    }
     return Response.json(
       {
         matched: true,
@@ -221,7 +231,7 @@ export async function POST(
           if (ev.type === "status") {
             send("status", { text: ev.text });
           } else if (ev.type === "thought_delta") {
-            thoughtText += ev.text;
+            thoughtText = absorbText(thoughtText, ev.text).acc;
             if (!thoughtTurnId) {
               const [row] = await db
                 .insert(voiceTurn)
@@ -233,7 +243,7 @@ export async function POST(
                   seatKey,
                   speakable: false,
                   thoughtStatus: "streaming",
-                  text: ev.text,
+                  text: thoughtText,
                 })
                 .returning();
               thoughtTurnId = row.id;
@@ -246,12 +256,12 @@ export async function POST(
                 .where(eq(voiceTurn.id, thoughtTurnId));
               send("thought_delta", { id: thoughtTurnId, text: thoughtText });
             }
-          } else if (
-            ev.type === "post_delta" ||
-            ev.type === "delta"
-          ) {
-            postText += ev.text;
-            send("post_delta", { text: ev.text, seatKey, seatLabel });
+          } else if (ev.type === "post_delta") {
+            const next = absorbText(postText, ev.text);
+            postText = next.acc;
+            if (next.delta) {
+              send("post_delta", { text: next.delta, seatKey, seatLabel });
+            }
           } else if (ev.type === "done") {
             if (!postText.trim()) postText = ev.assistantText;
             if (!thoughtText.trim() && ev.thoughtText) thoughtText = ev.thoughtText;

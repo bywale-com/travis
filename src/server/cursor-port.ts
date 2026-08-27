@@ -2,6 +2,8 @@
  * Cursor cloud send port (SCP-001 + Hotfix 001 + SCP-002 thought/post split).
  */
 
+import { absorbText } from "@/lib/absorb-text";
+
 export type CursorStreamEvent =
   | { type: "status"; text: string }
   /** Legacy hotfix — same as post_delta */
@@ -85,7 +87,6 @@ export async function* streamCursorReply(params: {
       "Got it. (Cursor stand-in — set CURSOR_API_KEY and a bc-… agent_binding row for a real run.)";
     yield { type: "status", text: "stand-in" };
     yield { type: "post_delta", text: assistantText };
-    yield { type: "delta", text: assistantText };
     yield {
       type: "done",
       mode: "stand-in",
@@ -120,8 +121,11 @@ export async function* streamCursorReply(params: {
         if (e.type === "thinking") {
           const chunk = e.text ?? "";
           if (chunk) {
-            thoughtText += chunk;
-            yield { type: "thought_delta", text: chunk };
+            const next = absorbText(thoughtText, chunk);
+            if (next.delta) {
+              thoughtText = next.acc;
+              yield { type: "thought_delta", text: next.delta };
+            }
           }
           continue;
         }
@@ -129,9 +133,11 @@ export async function* streamCursorReply(params: {
         if (e.type === "assistant") {
           const chunk = textFromAssistantMessage(e.message?.content);
           if (chunk) {
-            postText += chunk;
-            yield { type: "post_delta", text: chunk };
-            yield { type: "delta", text: chunk };
+            const next = absorbText(postText, chunk);
+            if (next.delta) {
+              postText = next.acc;
+              yield { type: "post_delta", text: next.delta };
+            }
           }
           continue;
         }
@@ -149,11 +155,9 @@ export async function* streamCursorReply(params: {
       if (fromConversation) {
         postText = fromConversation;
         yield { type: "post_delta", text: fromConversation };
-        yield { type: "delta", text: fromConversation };
       } else if (result.result?.trim()) {
         postText = result.result.trim();
         yield { type: "post_delta", text: postText };
-        yield { type: "delta", text: postText };
       }
     }
 
