@@ -1,6 +1,6 @@
 # Prototype-ant pass + queue — FACE
 
-**Status:** Packet 003 **queue law locked**. **Look from C-plates is not locked** — founder 2026-08-27: C4 does not match planted Mode A; generating plates this way was the wrong method. Recut from live `travis-psi` Mode A.  
+**Status:** **PM-PACKET-003 locked.** Photos of record = **C3** (log + queue) and **C4** (voice + queue). Founder likes them; **do not recut.** Packet focuses the photo (copy vs ignore). Engineer planted: #16 queue machine, #17 C-chrome, #18 STT/quote follow. PM is not generating more plates.  
 **Product face:** smartphone web (`travis.app`)  
 **Locked shell this pass sits on:** [`ROOM-FACE.md`](./ROOM-FACE.md) (PM-PACKET-002)  
 **Log:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md)

@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 20:45 UTC — Engineer **PR 17** recuts plant to C-plates (open). Queue forks hold. Do not recut C images.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 22:06 UTC — PM **003 locked**, C photos kept. Engineer #16–#18 merged. PM not inventing more glass. Founder grades plant vs photo.
 
 **How we maintain this log**
 
@@ -588,3 +588,17 @@ Pocket: **look** (cream/terracotta, Ant Tags, overlapping thought circles — ha
 **Founder later:** likes the C images; do not recut them. Packet focuses the photo. Gap was plant not following the photo — 17 is that follow.
 
 **Next:** merge 17 if the glass is the C photos; End session → Open session on the phone.
+
+---
+
+## 2026-08-27 22:06 UTC — PM seat: not spinning more glass
+
+**Kind:** Seat status. Founder: are you actively working as well / done.
+
+**PM for this pocket is done inventing.** Packet 003 is cut. C3 + C4 are the photos. Founder: like them, do not recut. Written packet focuses the photo; it does not replace it.
+
+Engineer has since merged **#16** (queue machine), **#17** (C-chrome + bind fix), **#18** (STT/quote). That is plant, not PM.
+
+**Still open (not a new flag):** founder grades plant vs C photos (PM grade was 7/10 on 17 **code**, preview SSO-blocked). If the plant is short, Engineer moves toward the **same** photos. PM does not draw a fifth set.
+
+FACE status line corrected: C images **are** the look. The 20:35 “recut from psi” ask is superseded.
