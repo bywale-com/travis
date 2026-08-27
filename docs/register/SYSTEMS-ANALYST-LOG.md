@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-26 19:12 UTC — **Agent id corrected:** `bc-da5db04b-db60-414e-b0c3-c8ed337d45d4` in SCP-001 `agent_binding` seed. Prior 19:10 id had a missing digit.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 22:58 UTC — **PM-PACKET-004 pass cut.** SCP-004: `log_submode` talk\|type; Type send reuses `sendOrEnqueue`; `@` from `agent_binding`. Handoff is go.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -245,3 +245,94 @@ You do **not** need to paste an id into this chat for SCP-001 to start: Cursor p
 **Supersedes:** `…c8ed337d5d4` from 19:10.
 
 SCP-001 seed field updated.
+
+---
+
+## 2026-08-27 00:51 UTC — Seat accepted; this chat’s cloud agent id
+
+**Why:** Founder seated Systems Analyst and asked for this chat’s id.
+
+**Accepted:**
+
+- Job-law from **founder** only. Not PM. Not Engineer.
+- Own: Story → Requirements → stores/contracts/ports; three layers (materialized · map-only · named silence); change packets so Engineer only cuts.
+- Read-only: PHASE-ONE-LOG flag wording. Current PM pointer: **PM-PACKET-002** locked on living PR [#4](https://github.com/bywale-com/travis/pull/4); next was SA ascribe (already cut as SCP-002; Engineer planted; Hotfix 002 on `main`).
+- Do not: mint tables from pictures; rewrite the flagship; ship secrets; puppet desktop Cursor; plant app code.
+
+**This run (stood-up Cursor, not Travis store):**
+
+| Field | Value |
+|-------|--------|
+| `bcId` | `bc-0a1fb1c1-bbea-4d31-a370-6917c235b9c8` |
+| URL | https://cursor.com/agents/bc-0a1fb1c1-bbea-4d31-a370-6917c235b9c8 |
+| Source | Cloud Agents `run-info` for this chat |
+
+**Ascribe:** same grain as PM 19:10/19:12. Lands only in **`agent_binding.cursor_agent_id`** for **`seat_key=sa`** (SCP-002 seed table updated). Label `SA`, runtime `cloud`. Never a SPA/source constant.
+
+**Packet hygiene:** SCP-002 seed still listed the superseded PM id (`…d5d4`). Corrected that cell to the 19:12 value `bc-da5db04b-db60-414e-b0c3-c8ed337d45d4` in the same seed table. Do not edit the 19:10 stamp.
+
+**Ask:** Engineer load this SA id into the `sa` row now (seed/env, not SPA), or wait until you also have an Engineer `bc-…`?
+
+---
+
+## 2026-08-27 19:38 UTC — Pass on PM-PACKET-003 (queue + barge)
+
+**Why:** Founder: run the pass on the new existing packet. Glass = [`PM-PACKET-003-LOOK-QUEUE.md`](https://github.com/bywale-com/travis/pull/15) (locked 18:45 UTC). SA paste A–G. Did not rewrite look hex as a flag. Did not mint from C3/C4 scenery.
+
+**Inventory (stood-up, quoted):**
+
+| A–G | Fit |
+|-----|-----|
+| A. Per-addressee queue vs HF007 | HF007 = one `pendingUtteranceRef`. Missing per-seat durable line. **Mint `queued_utterance` keyed by `binding_id`.** |
+| B. Item grain | utterance text + dest binding + seq + session. **Not** a `voice_turn`. Empty seed. |
+| C. Barge | **Not silence.** SDK `run.cancel()` / `Agent.cancelRun(runId)` · REST `POST /v1/agents/{id}/runs/{runId}/cancel`. Need persisted `runId` → **mint `seat_live_run`.** |
+| D. Delete | Drop that row only; later seq on the same seat stays. Chip delete = head. |
+| E. Empty / two seats / mode switch | Query the table. No chip when count=0. Two bindings may both have rows. |
+| F. HF006 | SDK: `AgentBusyError.isRetryable === false`. Product path = enqueue (or barge), never `agent_post` the SDK string. Race-only retry if `listRuns` shows no active run. |
+| G. Look | **Named silence.** Engineer retokens from 003. No theme store. |
+
+**Hard locks (no Engineer leftover):**
+
+1. Conductor + dest after 002 router → if that seat is live/busy, **enqueue**, else send.  
+2. Force send **cancels** that seat’s run, then sends **that** line (Mode B) or **head** (Mode A chip). Not “wait until free.”  
+3. Faceless **drain head** when the live run terminals — hands-free, one at a time.  
+4. Barge of a bound live chat cancels that `bc-…` agent’s active run (may be the Cursor seat chat). Stood-up binding law; do not mint a dodge agent.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-003-QUEUE-BARGE.md`](./SYSTEMS-CHANGE-PACKET-003-QUEUE-BARGE.md)
+
+**Witnessed (do not edit 00:51):** Hotfix 003/008 already bound SA `bc-0a1fb1c1-bbea-4d31-a370-6917c235b9c8` plus current PM/Engineer ids in SQL. 00:51 ask is closed by those rows.
+
+**Ask:** Engineer handoff on 003 (queue machine). Look retoken may proceed in parallel from PM-003 without this store.
+
+---
+
+## 2026-08-27 19:54 UTC — Founder: don’t ask; it’s ready
+
+**Kind:** Inflection. Founder correction on this seat’s mouth.
+
+**Founder:** don’t need a revise; get it ready; stop speaking in hedges; be direct.
+
+**Locked:** SCP-003 handoff is **go**. No founder fork left on queue/barge. Engineer cuts. Look retoken is parallel from PM-003, not a blocker.
+
+---
+
+## 2026-08-27 22:58 UTC — Pass on PM-PACKET-004 (Talk / Type)
+
+**Why:** Founder: run the pass on the newest PM packet. Glass = PM-PACKET-004 on PR [#15](https://github.com/bywale-com/travis/pull/15) (locked 22:55). Photo D3. Did not mint from PNG copy.
+
+**Witness:** SCP-003 queue is already planted on `main` (`queued_utterance`, `seat_live_run`, `sendOrEnqueue`). This pass does not reopen 003.
+
+**A–F:**
+
+| | Lock |
+|--|------|
+| A | `voice_session.log_submode` `talk` \| `type`. Default talk. Remember for this session only. |
+| B | Type send = send button into **existing** `sendOrEnqueue`. No I’m done. `@` chip wins dest; else 010 parse; else via-pill. |
+| C | `@` list = `agent_binding` titles. No new table. Chip is UI until send. |
+| D | Composer mic = same STT, into the field. Type turns room listen off. |
+| E | Talk = today’s log path, no box. |
+| F | Busy seat still queues (003). |
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-004-LOG-COMPOSER.md`](./SYSTEMS-CHANGE-PACKET-004-LOG-COMPOSER.md)
+
+**Handoff is go.** Engineer plants. Founder does not need to pick a fork.
