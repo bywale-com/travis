@@ -49,7 +49,7 @@ Detailed seat READMEs: [`docs/seats/`](docs/seats/).
 ### Local run
 
 ```bash
-cp .env.example .env.local   # set DATABASE_URL; optional CURSOR_API_KEY + SEED_CURSOR_AGENT_ID
+cp .env.example .env.local   # set DATABASE_URL; optional CURSOR_API_KEY + SEED_CURSOR_AGENT_ID_*
 npm install
 npm run db:push
 npm run db:seed
