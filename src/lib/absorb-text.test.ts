@@ -4,6 +4,7 @@ import {
   absorbFinalTranscript,
   absorbText,
   collapseSpeechStutter,
+  mergeLiveTranscript,
 } from "./absorb-text";
 
 test("absorbText treats snapshots as replace, not concatenate", () => {
@@ -40,5 +41,38 @@ test("collapseSpeechStutter flattens word and phrase repeats", () => {
   assert.equal(
     collapseSpeechStutter(raw),
     "engineer can I see the engineer talking",
+  );
+});
+
+test("collapseSpeechStutter folds growing concatenations from Android STT", () => {
+  const raw =
+    "and also what happens when I keep talking and also what happens when I keep talking like this and also what happens when I keep talking like this does it keep getting routed back to you";
+  assert.equal(
+    collapseSpeechStutter(raw),
+    "and also what happens when I keep talking like this does it keep getting routed back to you",
+  );
+});
+
+test("collapseSpeechStutter folds short growing prefixes", () => {
+  assert.equal(
+    collapseSpeechStutter("I don't I don't switch out of the engineer"),
+    "I don't switch out of the engineer",
+  );
+});
+
+test("mergeLiveTranscript does not glue committed onto an overlapping interim", () => {
+  assert.equal(
+    mergeLiveTranscript(
+      "when I'm talking it starts",
+      "when I'm talking it starts to duplicate what I'm saying",
+    ),
+    "when I'm talking it starts to duplicate what I'm saying",
+  );
+});
+
+test("mergeLiveTranscript keeps committed when interim is only a tail already present", () => {
+  assert.equal(
+    mergeLiveTranscript("hello there friend", "friend"),
+    "hello there friend",
   );
 });

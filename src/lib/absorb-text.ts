@@ -28,10 +28,43 @@ export function absorbFinalTranscript(committed: string, incoming: string): stri
   if (bl.startsWith(al) || bl.startsWith(`${al} `)) return b;
   if (al.startsWith(bl) || al.startsWith(`${bl} `)) return a;
   if (al.endsWith(bl) || al.endsWith(` ${bl}`)) return a;
+
+  const aw = a.split(/\s+/).filter(Boolean);
+  const bw = b.split(/\s+/).filter(Boolean);
+  for (let k = Math.min(aw.length, bw.length); k >= 3; k--) {
+    const tail = aw.slice(-k).join(" ").toLowerCase();
+    const head = bw.slice(0, k).join(" ").toLowerCase();
+    if (tail === head || bl.startsWith(tail)) {
+      return [...aw.slice(0, -k), ...bw].join(" ");
+    }
+  }
+
   return `${a} ${b}`.trim();
 }
 
-/** Collapse consecutive duplicate words and repeated n-grams from Web Speech. */
+/** Drop a leading phrase when the rest starts with the same phrase (growing concat). */
+function foldGrowingConcat(words: string[]): string[] {
+  const w = [...words];
+  let i = 0;
+  let guard = 0;
+  while (i < w.length && guard++ < 80) {
+    let folded = false;
+    const maxN = Math.min(24, w.length - i - 1);
+    for (let n = maxN; n >= 2; n--) {
+      const head = w.slice(i, i + n).join(" ").toLowerCase();
+      const rest = w.slice(i + n).join(" ").toLowerCase();
+      if (rest.startsWith(head)) {
+        w.splice(i, n);
+        folded = true;
+        break;
+      }
+    }
+    if (!folded) i += 1;
+  }
+  return w;
+}
+
+/** Collapse consecutive duplicate words, repeated n-grams, and growing concatenations. */
 export function collapseSpeechStutter(text: string): string {
   const words = text.split(/\s+/).filter(Boolean);
   const dedup: string[] = [];
@@ -71,5 +104,18 @@ export function collapseSpeechStutter(text: string): string {
     result = next;
   }
 
-  return result.join(" ");
+  return foldGrowingConcat(result).join(" ");
+}
+
+/**
+ * Live draft = committed finals + current interim, without gluing a copy
+ * of the same sentence onto itself (Android often re-sends the committed
+ * prefix as interim).
+ */
+export function mergeLiveTranscript(committed: string, interim: string): string {
+  const a = committed.trim();
+  const b = interim.trim();
+  if (!b) return collapseSpeechStutter(a);
+  if (!a) return collapseSpeechStutter(b);
+  return collapseSpeechStutter(absorbFinalTranscript(a, b));
 }
