@@ -165,6 +165,10 @@ function waitForSpeechIdle(timeoutMs = 8000): Promise<void> {
   });
 }
 
+function presenceBlocksListen(presence: Presence): boolean {
+  return presence === "ended" || presence === "paused";
+}
+
 export function Room({ t }: { t: Tokens }) {
   const [session, setSession] = useState<Session | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("voice");
@@ -292,9 +296,7 @@ export function Room({ t }: { t: Tokens }) {
       await delay(350);
       if (gen !== listenRestartGenRef.current) return;
       if (!listeningWantedRef.current) return;
-      if (presenceRef.current === "ended" || presenceRef.current === "paused") {
-        return;
-      }
+      if (presenceBlocksListen(presenceRef.current)) return;
       if (speechEngineBusy()) return;
       startRecognitionRef.current();
       for (let i = 0; i < 3; i++) {
@@ -302,9 +304,7 @@ export function Room({ t }: { t: Tokens }) {
         if (gen !== listenRestartGenRef.current) return;
         if (!listeningWantedRef.current) return;
         if (recognitionLiveRef.current) return;
-        if (presenceRef.current === "ended" || presenceRef.current === "paused") {
-          return;
-        }
+        if (presenceBlocksListen(presenceRef.current)) return;
         if (speechEngineBusy()) return;
         startRecognitionRef.current();
       }
@@ -459,8 +459,7 @@ export function Room({ t }: { t: Tokens }) {
         setBusy(false);
         if (
           listeningWantedRef.current &&
-          presenceRef.current !== "ended" &&
-          presenceRef.current !== "paused"
+          !presenceBlocksListen(presenceRef.current)
         ) {
           if (presenceRef.current === "speaking") {
             setPresence("listening");
