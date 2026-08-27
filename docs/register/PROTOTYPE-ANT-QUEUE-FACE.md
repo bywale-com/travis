@@ -1,11 +1,11 @@
-# Prototype-ant pass + queue — FACE (considering)
+# Prototype-ant pass + queue — FACE
 
-**Status:** Ideation. **Three forks locked 2026-08-27** (below). Still **not a packet**.  
+**Status:** Locked in **PM-PACKET-003** ([`PM-PACKET-003-LOOK-QUEUE.md`](./PM-PACKET-003-LOOK-QUEUE.md)). Founder: create the packet (2026-08-27).  
 **Product face:** smartphone web (`travis.app`)  
 **Locked shell this pass sits on:** [`ROOM-FACE.md`](./ROOM-FACE.md) (PM-PACKET-002)  
 **Log:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md)
 
-**Why this file exists:** Founder asked to re-imagine the planted look in **prototype-ant**, and to plate a **queue** when you send to a seat that already has an active run. Look at these before we cut a packet harder than 002.
+**Why this file exists:** Founder asked to re-imagine the planted look in **prototype-ant**, and to plate a **queue** when you send to a seat that already has an active run.
 
 **om-co:** `https://github.com/bywale-com/om-co.git` was not reachable from this agent (404). Translation here is from **locked Travis plates + Ant Design component archetypes themed to Travis tokens**. Recut against the actual prototype-ant method when that repo is on the environment.
 
@@ -34,7 +34,7 @@
 | **C3** | [`plates/travis-c3-mode-b-queue-engineer.png`](./plates/travis-c3-mode-b-queue-engineer.png) | Mode B · Eng still running · **Queued · Eng** dashed user rows · force send + delete icons |
 | **C4** | [`plates/travis-c4-mode-a-queue-glance.png`](./plates/travis-c4-mode-a-queue-glance.png) | Mode A · no bubbles · quiet **1 waiting · Eng** chip · same two icons |
 
-Locked A1–B2 remain the 002 law. C-plates are a **look + queue** considering pass on top.
+Locked A1–B2 remain the 002 shell law. C-plates + packet 003 are the look + queue pocket on top.
 
 ---
 
@@ -46,7 +46,7 @@ Founder answers, preserved:
 2. **Force send barges the live run.** It does not wait for the current batch to finish. (How Cursor cancel/interrupt is ascribed = SA. Glass law is barge.)
 3. **Two icons only for now.** Force send (send icon) · delete. No third.
 
-Still alignment, not a packet:
+Still alignment, not extra forks:
 
 - **One queue per addressee**, not one anonymous FIFO. A line waiting for Eng does not steal a line meant for PM.
 - The queued object is still **your** utterance (right, Mode B). The **via Eng / via PM** mark is the addressing parity.
@@ -65,7 +65,9 @@ Prototype-ant (this approximation): product tokens on Ant Design primitives (Tag
 
 ---
 
-## Five buckets (draft — fill for real when we lock)
+## Five buckets
+
+Filled in [`PM-PACKET-003-LOOK-QUEUE.md`](./PM-PACKET-003-LOOK-QUEUE.md). Draft below is history; packet wins.
 
 | Bucket | Draft |
 |--------|--------|
@@ -73,10 +75,10 @@ Prototype-ant (this approximation): product tokens on Ant Design primitives (Tag
 | **2. Do not build** | Email-campaign scenery on C2. Double-checkmarks as a product receipt. Hang-up button. Default Ant blue. Forest-green as the identity. Kebab of extra queue actions. |
 | **3. Implied** | Queue is per active addressee. Icons work (force send barges; delete drops). Mode switch preserves the waiting line. Thought glow still means that seat is running. After barge, that queued line is the live send. |
 | **4. Completes** | Empty queue (chip gone). Two seats each with a waiting line. |
-| **5. Out of scope this considering** | SA store / worker for durable queue. Binding picker. Triage. Third queue action. om-co method recut once that repo is visible. |
+| **5. Out of scope this pocket** | Binding picker. Triage. Third queue action. om-co method as a plant gate. |
 
 ---
 
 ## Open
 
-- Cut **PM-PACKET-003** from these plates + locked forks, or recut C-plates against om-co first?
+- **Next: SA** ascribe queue/barge → change packet. Engineer retokens look from 003 without waiting on that store.

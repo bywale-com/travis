@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 14:50 UTC — Queue forks locked: **both modes**, force send **barges**, **two icons only**. Still not a packet. Prior: C1–C4 considering; PM-PACKET-002 locked.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 18:45 UTC — **PM-PACKET-003 locked** (look + per-seat queue, barge). Next: **SA** ascribe queue/barge; Engineer may retoken look from 003.
 
 **How we maintain this log**
 
@@ -529,3 +529,17 @@ So: **maybe not still** — if “distinct from Cursor” means leave Cursor / i
 **Locked on FACE:** [`PROTOTYPE-ANT-QUEUE-FACE.md`](./PROTOTYPE-ANT-QUEUE-FACE.md) — Mode A chip + Mode B rows for the same waiting line; force send interrupts the current run; send icon + delete icon only.
 
 **Ask:** cut **PM-PACKET-003** from C1–C4 + these forks, or recut plates against om-co first?
+
+---
+
+## 2026-08-27 18:45 UTC — PM-PACKET-003 locked (founder: create the packet)
+
+**Kind:** Packet cut.
+
+**Founder (preserved):** “Of course create the packet.”
+
+**Landed:** [`PM-PACKET-003-LOOK-QUEUE.md`](./PM-PACKET-003-LOOK-QUEUE.md) · FACE [`PROTOTYPE-ANT-QUEUE-FACE.md`](./PROTOTYPE-ANT-QUEUE-FACE.md) · plates C1–C4.
+
+Pocket: **look** (cream/terracotta, Ant Tags, overlapping thought circles — harder than 002) + **queue** (per addressee · both Mode A chip and Mode B rows · force send **barges** · two icons).
+
+**Next:** SA paste in 003 → change packet for queue/barge machine. Engineer may retoken look from 003 without that store. Do not mint a queue table in the SPA.
