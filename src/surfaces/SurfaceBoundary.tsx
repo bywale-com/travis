@@ -86,7 +86,7 @@ export function SurfaceBoundary({
       style={{
         ...style,
         outline:
-          highlightId === id ? "2px solid var(--travis-accent, #2f5d50)" : undefined,
+          highlightId === id ? "2px solid var(--travis-accent, #E07A3D)" : undefined,
         outlineOffset: highlightId === id ? 2 : undefined,
       }}
     >

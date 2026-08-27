@@ -1,5 +1,5 @@
 /**
- * Travis schema migrate — SCP-001 base + SCP-002 room extensions.
+ * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue.
  */
 import { config } from "dotenv";
 import postgres from "postgres";
@@ -135,7 +135,30 @@ async function main() {
     WHERE seat_key IS NULL AND label ILIKE 'pm'
   `;
 
-  console.log("travis schema + SCP-002 room extensions ready");
+  await sql`
+    CREATE TABLE IF NOT EXISTS travis.queued_utterance (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      session_id uuid NOT NULL REFERENCES travis.voice_session(id),
+      binding_id uuid NOT NULL REFERENCES travis.agent_binding(id),
+      seat_key text NOT NULL,
+      seq integer NOT NULL,
+      text text NOT NULL,
+      created_at timestamptz NOT NULL DEFAULT now(),
+      UNIQUE (session_id, binding_id, seq)
+    )
+  `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS travis.seat_live_run (
+      binding_id uuid PRIMARY KEY REFERENCES travis.agent_binding(id),
+      session_id uuid NOT NULL REFERENCES travis.voice_session(id),
+      cursor_run_id text NOT NULL,
+      user_turn_id uuid REFERENCES travis.voice_turn(id),
+      started_at timestamptz NOT NULL DEFAULT now()
+    )
+  `;
+
+  console.log("travis schema + SCP-002 room + SCP-003 queue ready");
   await sql.end();
 }
 
