@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 — **PM-PACKET-002 locked** on living PR [#4](https://github.com/bywale-com/travis/pull/4). Founder approved. **Next: SA** ascribe → change packet → Engineer. Merge hotfix separately.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 00:50 UTC — This chat seated as **PM**. Agent id `bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea`. Prior: PM-PACKET-002 locked; next SA ascribe if still open.
 
 **How we maintain this log**
 
@@ -485,3 +485,18 @@ So: **maybe not still** — if “distinct from Cursor” means leave Cursor / i
 **Landed:** [`PM-PACKET-002-ROOM.md`](./PM-PACKET-002-ROOM.md) on living PM packets PR. [`ROOM-FACE.md`](./ROOM-FACE.md) + plates A1–A2 B1–B2.
 
 **Next:** SA runs packet SA paste → change packet → Engineer plants.
+
+---
+
+## 2026-08-27 00:50 UTC — This chat seated as PM; agent id given
+
+**Kind:** Seat identity. Founder: “You are the PM. Provide your id.”
+
+**This chat is the Product Manager.** Not SA. Not Engineer.
+
+**Agent id (this run):** `bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea`  
+**URL:** https://cursor.com/agents/bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea
+
+**Not the same as** the earlier founder-seeded PM binding (SA-corrected): `bc-da5db04b-db60-414e-b0c3-c8ed337d45d4`. That id lives in `agent_binding` seed history. This chat’s id is new.
+
+**Ask:** bind this id as the PM `agent_binding.cursor_agent_id` (SA/Engineer), or keep talking here as a Cursor chat only?
