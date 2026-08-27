@@ -7,6 +7,7 @@ const PM_AGENT_ID = process.env.SEED_CURSOR_AGENT_ID ?? "";
 const PHRASES = [
   "I'm done with this message",
   "I'm done with this",
+  "I'm done talking",
   "I'm done",
 ];
 

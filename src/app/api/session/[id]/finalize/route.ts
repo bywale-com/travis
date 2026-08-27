@@ -70,36 +70,70 @@ export async function POST(
     return Response.json({ error: "Session ended" }, { status: 400 });
   }
 
-  // Router: dead-man response (short utterance, no conductor required)
+  const phrases = await db
+    .select()
+    .from(turnConductorPhrase)
+    .where(eq(turnConductorPhrase.active, true));
+
+  const match = matchConductorPhrase(
+    utterance,
+    phrases.map((p) => p.phrase),
+  );
+
+  // Dead-man: only short no / no X / yes. A real turn falls through and sends.
   if (session.routerState === "awaiting_dead_man") {
-    const parsed = parseDeadManResponse(utterance);
-    const targetKey =
-      parsed.action === "seat" && parsed.seatKey ? parsed.seatKey : "pm";
-    const binding = await bindingForSeat(targetKey);
-    if (binding) {
-      await setActiveBinding(sessionId, binding.id);
-      [session] = await db
-        .select()
-        .from(voiceSession)
-        .where(eq(voiceSession.id, sessionId))
-        .limit(1);
+    const forRouter = match.matched ? match.cleanedText : utterance;
+    const parsed = parseDeadManResponse(forRouter);
+    if (parsed.action !== "ignore") {
+      const targetKey =
+        parsed.action === "seat" && parsed.seatKey
+          ? parsed.seatKey
+          : parsed.action === "stay"
+            ? ((
+                await db
+                  .select()
+                  .from(agentBinding)
+                  .where(eq(agentBinding.id, session.activeBindingId))
+                  .limit(1)
+              )[0]?.seatKey as SeatKey | undefined) ?? "pm"
+            : "pm";
+      const binding = await bindingForSeat(targetKey);
+      if (parsed.action !== "stay" && binding) {
+        await setActiveBinding(sessionId, binding.id);
+        [session] = await db
+          .select()
+          .from(voiceSession)
+          .where(eq(voiceSession.id, sessionId))
+          .limit(1);
+      }
+      await db
+        .update(voiceSession)
+        .set({ routerState: "normal" })
+        .where(eq(voiceSession.id, sessionId));
+
+      return Response.json({
+        matched: false,
+        routerHandled: true,
+        activeSeatKey: targetKey,
+        activeLabel: binding?.label ?? seatKeyToLabel(targetKey),
+      });
     }
     await db
       .update(voiceSession)
       .set({ routerState: "normal" })
       .where(eq(voiceSession.id, sessionId));
-
-    return Response.json({
-      matched: false,
-      routerHandled: true,
-      activeSeatKey: targetKey,
-      activeLabel: binding?.label ?? seatKeyToLabel(targetKey),
-    });
+    [session] = await db
+      .select()
+      .from(voiceSession)
+      .where(eq(voiceSession.id, sessionId))
+      .limit(1);
   }
 
   // Router: clarification
   if (session.routerState === "awaiting_clarification") {
-    const seatKey = parseClarificationResponse(utterance);
+    const seatKey = parseClarificationResponse(
+      match.matched ? match.cleanedText : utterance,
+    );
     if (!seatKey) {
       return Response.json({
         matched: false,
@@ -121,16 +155,6 @@ export async function POST(
       activeLabel: binding?.label ?? seatKeyToLabel(seatKey),
     });
   }
-
-  const phrases = await db
-    .select()
-    .from(turnConductorPhrase)
-    .where(eq(turnConductorPhrase.active, true));
-
-  const match = matchConductorPhrase(
-    utterance,
-    phrases.map((p) => p.phrase),
-  );
 
   if (!match.matched) {
     return Response.json({

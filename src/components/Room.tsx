@@ -2,7 +2,7 @@
 
 import { absorbFinalTranscript, absorbText, collapseSpeechStutter } from "@/lib/absorb-text";
 import { matchConductorPhrase } from "@/lib/conductor";
-import { seatKeyToShort } from "@/lib/router";
+import { parseDeadManResponse, seatKeyToShort } from "@/lib/router";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -55,6 +55,8 @@ type SpeechRecognitionEventLike = {
     };
   };
 };
+
+const DEAD_MAN_MS = 180_000;
 
 const SEAT_COLORS: Record<string, string> = {
   pm: "#6b7a70",
@@ -155,6 +157,16 @@ export function Room({ t }: { t: Tokens }) {
   const logEndRef = useRef<HTMLDivElement | null>(null);
   const deadManTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSpeechRef = useRef<number>(Date.now());
+  const viewModeRef = useRef<ViewMode>("voice");
+  const busyRef = useRef(false);
+  const presenceRef = useRef<Presence>("ended");
+  const sessionRef = useRef<Session | null>(null);
+  const startRecognitionRef = useRef<() => void>(() => {});
+
+  viewModeRef.current = viewMode;
+  busyRef.current = busy;
+  presenceRef.current = presence;
+  sessionRef.current = session;
 
   const refreshTurns = useCallback(async (sessionId: string) => {
     const res = await fetch(`/api/session/${sessionId}/turns`);
@@ -190,21 +202,27 @@ export function Room({ t }: { t: Tokens }) {
     lastSpeechRef.current = Date.now();
     if (deadManTimerRef.current) clearTimeout(deadManTimerRef.current);
     if (!sessionIdRef.current || !listeningWantedRef.current) return;
+    if (viewModeRef.current !== "voice") return;
+    if (presenceRef.current !== "listening") return;
     deadManTimerRef.current = setTimeout(async () => {
       const sid = sessionIdRef.current;
       if (!sid || !listeningWantedRef.current) return;
-      if (Date.now() - lastSpeechRef.current < 44000) return;
+      if (viewModeRef.current !== "voice") return;
+      if (presenceRef.current !== "listening") return;
+      if (finalizingRef.current || busyRef.current) return;
+      if (Date.now() - lastSpeechRef.current < DEAD_MAN_MS - 1000) return;
       const res = await fetch(`/api/session/${sid}/dead-man`, { method: "POST" });
       if (res.ok) {
         await refreshTurns(sid);
         await refreshSession(sid);
-        if (viewMode === "voice") {
+        if (viewModeRef.current === "voice") {
           setSubtitle("Are you talking with me?");
           await facilitatorSpeak("Are you talking with me?");
+          startRecognitionRef.current();
         }
       }
-    }, 45000);
-  }, [refreshSession, refreshTurns, viewMode]);
+    }, DEAD_MAN_MS);
+  }, [refreshSession, refreshTurns]);
 
   const stopRecognition = useCallback(() => {
     listeningWantedRef.current = false;
@@ -226,6 +244,7 @@ export function Room({ t }: { t: Tokens }) {
       const sid = sessionIdRef.current;
       if (!sid || finalizingRef.current) return;
       finalizingRef.current = true;
+      busyRef.current = true;
       setBusy(true);
       setError(null);
       setLiveStatus(null);
@@ -317,7 +336,7 @@ export function Room({ t }: { t: Tokens }) {
             const postText = postTurn?.text ?? postAcc;
             const label = String(data.seatLabel ?? seatLabel);
 
-            if (postText && viewMode === "voice") {
+            if (postText && viewModeRef.current === "voice") {
               const line = `${label} says… ${postText.slice(0, 120)}${postText.length > 120 ? "…" : ""}`;
               setSubtitle(line);
               setPresence("speaking");
@@ -335,6 +354,7 @@ export function Room({ t }: { t: Tokens }) {
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ status: "listening" }),
                 });
+                startRecognitionRef.current();
               }
             }
           } else if (event === "error") {
@@ -363,11 +383,15 @@ export function Room({ t }: { t: Tokens }) {
         setError(e instanceof Error ? e.message : String(e));
       } finally {
         finalizingRef.current = false;
+        busyRef.current = false;
         setBusy(false);
+        if (listeningWantedRef.current && presenceRef.current !== "ended") {
+          startRecognitionRef.current();
+        }
         resetDeadManTimer();
       }
     },
-    [refreshSession, refreshTurns, resetDeadManTimer, viewMode],
+    [refreshSession, refreshTurns, resetDeadManTimer],
   );
 
   const startRecognition = useCallback(() => {
@@ -403,6 +427,17 @@ export function Room({ t }: { t: Tokens }) {
       setDraft(full);
 
       const match = matchConductorPhrase(full, phrasesRef.current);
+      const deadMan = parseDeadManResponse(full);
+      const awaitingDeadMan =
+        sessionRef.current?.routerState === "awaiting_dead_man";
+      if (
+        awaitingDeadMan &&
+        deadMan.action !== "ignore" &&
+        !finalizingRef.current
+      ) {
+        void finalizeUtterance(full);
+        return;
+      }
       if (match.matched && !finalizingRef.current) {
         const committedMatch = matchConductorPhrase(
           committedRef.current,
@@ -421,13 +456,15 @@ export function Room({ t }: { t: Tokens }) {
     };
 
     rec.onend = () => {
-      if (listeningWantedRef.current && !finalizingRef.current) {
+      if (!listeningWantedRef.current) return;
+      window.setTimeout(() => {
+        if (!listeningWantedRef.current) return;
         try {
           rec.start();
         } catch {
-          /* ignore */
+          startRecognitionRef.current();
         }
-      }
+      }, 250);
     };
 
     recognitionRef.current = rec;
@@ -438,6 +475,8 @@ export function Room({ t }: { t: Tokens }) {
     }
     resetDeadManTimer();
   }, [finalizeUtterance, resetDeadManTimer, stopRecognition]);
+
+  startRecognitionRef.current = startRecognition;
 
   const openSession = async () => {
     setError(null);
@@ -487,12 +526,19 @@ export function Room({ t }: { t: Tokens }) {
   const switchViewMode = async (mode: ViewMode) => {
     if (!session) return;
     setViewMode(mode);
+    viewModeRef.current = mode;
     await fetch(`/api/session/${session.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ viewMode: mode }),
     });
     setSession((s) => (s ? { ...s, viewMode: mode } : s));
+    if (mode === "log") {
+      if (deadManTimerRef.current) clearTimeout(deadManTimerRef.current);
+    } else {
+      resetDeadManTimer();
+      if (listeningWantedRef.current) startRecognitionRef.current();
+    }
   };
 
   const endSession = async () => {
@@ -699,6 +745,9 @@ export function Room({ t }: { t: Tokens }) {
                 {statusHint}
               </p>
             )}
+            <p style={{ textAlign: "center", color: t.textMuted, fontSize: 12, margin: "8px 28px 0", lineHeight: 1.4 }}>
+              Start with PM, SA, or Engineer. End with I&apos;m done.
+            </p>
             {liveStatus && (
               <p style={{ textAlign: "center", fontSize: 12, color: t.statusText, margin: "8px 0 0" }}>
                 {liveStatus}

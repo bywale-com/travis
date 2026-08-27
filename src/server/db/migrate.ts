@@ -121,6 +121,15 @@ async function main() {
   `;
 
   await sql`
+    INSERT INTO travis.turn_conductor_phrase (phrase, active)
+    SELECT 'I''m done talking', true
+    WHERE NOT EXISTS (
+      SELECT 1 FROM travis.turn_conductor_phrase
+      WHERE lower(phrase) = lower('I''m done talking')
+    )
+  `;
+
+  await sql`
     UPDATE travis.agent_binding
     SET seat_key = 'pm'
     WHERE seat_key IS NULL AND label ILIKE 'pm'
