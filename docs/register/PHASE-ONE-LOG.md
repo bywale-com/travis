@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 — **PM-PACKET-002 locked** on living PR [#4](https://github.com/bywale-com/travis/pull/4). Founder approved. **Next: SA** ascribe → change packet → Engineer. Merge hotfix separately.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 14:45 UTC — **Considering:** prototype-ant look pass + queue glass (C1–C4). Not locked. Prior: PM-PACKET-002 locked.
 
 **How we maintain this log**
 
@@ -485,3 +485,31 @@ So: **maybe not still** — if “distinct from Cursor” means leave Cursor / i
 **Landed:** [`PM-PACKET-002-ROOM.md`](./PM-PACKET-002-ROOM.md) on living PM packets PR. [`ROOM-FACE.md`](./ROOM-FACE.md) + plates A1–A2 B1–B2.
 
 **Next:** SA runs packet SA paste → change packet → Engineer plants.
+
+---
+
+## 2026-08-27 14:45 UTC — Prototype-ant look + queue plates (considering)
+
+**Kind:** Type B glass (look) + Type A addressing (queue belongs to the addressee). Not a packet.
+
+**Founder (this pass, preserved):**
+
+- Re-imagine existing Travis look in **prototype-ant**.
+- Plant is distant from plated: color and some placement; general look still off. Specify harder in the next packet.
+- Send to an agent with an **active run** should **queue**, not fail.
+- **Parity:** whoever was supposed to get the message still gets it.
+- Queued-message options: **force send** (send icon) and **delete**. Maybe a third; two is enough to plate. Icons live with the other control icons.
+- Backend out of this pass. Show plates.
+
+**Landed (ideation):** [`PROTOTYPE-ANT-QUEUE-FACE.md`](./PROTOTYPE-ANT-QUEUE-FACE.md) · plates C1–C4 under `docs/register/plates/travis-c*.png`.
+
+| ID | State |
+|----|--------|
+| C1 | Mode A voice · cream/orange · Ant Tags |
+| C2 | Mode B log · overlapping thought circles · L/R parity |
+| C3 | Mode B · **Queued · Eng** · dashed user rows · send + delete icons |
+| C4 | Mode A · quiet **1 waiting · Eng** chip · same two icons |
+
+**Note:** `bywale-com/om-co` was not visible to this agent. Translation approximated from locked A/B plates + Ant primitives. Recut when that repo is on the environment.
+
+**Ask:** like C3/C4 (or both)? Force send = barge the live run, or jump the line when it ends? Stop at two icons? Then lock a packet harder than 002.
