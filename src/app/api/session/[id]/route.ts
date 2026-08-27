@@ -6,6 +6,7 @@ import { agentBinding, voiceSession } from "@/server/db/schema";
 type PatchBody = {
   status?: "listening" | "paused" | "ending" | "ended" | "speaking";
   viewMode?: "voice" | "log";
+  logSubmode?: "talk" | "type";
 };
 
 export async function PATCH(
@@ -15,20 +16,25 @@ export async function PATCH(
   const { id } = await ctx.params;
   const body = (await req.json()) as PatchBody;
 
-  if (!body.status && !body.viewMode) {
+  if (!body.status && !body.viewMode && !body.logSubmode) {
     return NextResponse.json(
-      { error: "status or viewMode required" },
+      { error: "status, viewMode, or logSubmode required" },
       { status: 400 },
     );
   }
 
   const endedAt = body.status === "ended" ? new Date() : undefined;
+  const logSubmode =
+    body.logSubmode === "type" || body.logSubmode === "talk"
+      ? body.logSubmode
+      : undefined;
 
   const [session] = await db
     .update(voiceSession)
     .set({
       ...(body.status ? { status: body.status } : {}),
       ...(body.viewMode ? { viewMode: body.viewMode } : {}),
+      ...(logSubmode ? { logSubmode } : {}),
       ...(endedAt ? { endedAt } : {}),
     })
     .where(eq(voiceSession.id, id))
@@ -49,6 +55,7 @@ export async function PATCH(
       ...session,
       activeLabel: active?.label,
       activeSeatKey: active?.seatKey,
+      logSubmode: session.logSubmode === "type" ? "type" : "talk",
     },
   });
 }

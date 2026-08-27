@@ -203,7 +203,12 @@ async function main() {
     WHERE NOT EXISTS (SELECT 1 FROM travis.agent_binding WHERE seat_key = 'engineer')
   `;
 
-  console.log("travis schema + SCP-002 room + SCP-003 queue ready");
+  await sql`
+    ALTER TABLE travis.voice_session
+    ADD COLUMN IF NOT EXISTS log_submode text NOT NULL DEFAULT 'talk'
+  `;
+
+  console.log("travis schema + SCP-002 room + SCP-003 queue + SCP-004 log_submode ready");
   await sql.end();
 }
 

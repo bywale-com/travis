@@ -24,11 +24,13 @@ function sessionPayload(
   session: typeof voiceSession.$inferSelect,
   active: typeof agentBinding.$inferSelect,
   defaultBinding: typeof agentBinding.$inferSelect,
+  seats: Array<{ seatKey: string | null; label: string }>,
 ) {
   return {
     id: session.id,
     status: session.status,
     viewMode: session.viewMode,
+    logSubmode: session.logSubmode === "type" ? "type" : "talk",
     routerState: session.routerState,
     activeBindingId: session.activeBindingId,
     defaultBindingId: session.defaultBindingId,
@@ -36,7 +38,25 @@ function sessionPayload(
     activeLabel: active.label,
     defaultLabel: defaultBinding.label,
     createdAt: session.createdAt,
+    seats,
   };
+}
+
+const SEAT_ORDER = ["pm", "sa", "engineer"] as const;
+
+async function roomSeats() {
+  const rows = await db
+    .select({
+      seatKey: agentBinding.seatKey,
+      label: agentBinding.label,
+    })
+    .from(agentBinding)
+    .where(eq(agentBinding.active, true));
+  return [...rows].sort((a, b) => {
+    const ia = SEAT_ORDER.indexOf(a.seatKey as (typeof SEAT_ORDER)[number]);
+    const ib = SEAT_ORDER.indexOf(b.seatKey as (typeof SEAT_ORDER)[number]);
+    return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+  });
 }
 
 /** Open room session: default + active = PM binding, view voice, router normal. */
@@ -63,7 +83,7 @@ export async function POST() {
     .returning();
 
   return NextResponse.json({
-    session: sessionPayload(session, binding, binding),
+    session: sessionPayload(session, binding, binding, await roomSeats()),
   });
 }
 
@@ -97,6 +117,7 @@ export async function GET(req: Request) {
         row.session,
         row.active,
         defaultBinding ?? row.active,
+        await roomSeats(),
       ),
     });
   }
