@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 22:06 UTC — PM **003 locked**, C photos kept. Engineer #16–#18 merged. PM not inventing more glass. Founder grades plant vs photo.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 22:25 UTC — Considering: **log composer + @** (D1 D2). Not a packet. 003 C photos still locked.
 
 **How we maintain this log**
 
@@ -602,3 +602,28 @@ Engineer has since merged **#16** (queue machine), **#17** (C-chrome + bind fix)
 **Still open (not a new flag):** founder grades plant vs C photos (PM grade was 7/10 on 17 **code**, preview SSO-blocked). If the plant is short, Engineer moves toward the **same** photos. PM does not draw a fifth set.
 
 FACE status line corrected: C images **are** the look. The 20:35 “recut from psi” ask is superseded.
+
+---
+
+## 2026-08-27 22:25 UTC — Log composer + @ (founder, from Travis)
+
+**Kind:** Type B glass on Mode B. New pocket. Not a packet.
+
+**Founder (preserved, sent from Travis):**
+
+- Moving in the right direction.
+- Introduce a **text box** like a regular chat app — ability to write text.
+- Lives in **log mode**. Not in voice mode.
+- Alternate addressing in that text mode: type **`@`** → submodal of agents **in the chat**, by **title** → pick → keep writing.
+- New plates justified. Only as many as justified.
+
+**Landed (considering):** [`LOG-COMPOSER-FACE.md`](./LOG-COMPOSER-FACE.md) · two plates only:
+
+| ID | State |
+|----|--------|
+| D1 | Mode B · quiet composer · Message… · send icon |
+| D2 | `@Eng` in the field · popover PM / SA / Engineer by title |
+
+C3/C4 not recut. Voice mode unchanged.
+
+**Ask:** like D1/D2 enough to packet? Send with no `@` = current via-pill?
