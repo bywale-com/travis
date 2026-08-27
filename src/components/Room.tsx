@@ -11,8 +11,10 @@ import { matchConductorPhrase } from "@/lib/conductor";
 import { parseDeadManResponse, seatKeyToShort } from "@/lib/router";
 import type { QueueSeatDto } from "@/lib/queue-logic";
 import { QueueChips, QueueLog, SeatMark } from "@/components/QueueChrome";
+import { LogComposer, type RoomSeat } from "@/components/LogComposer";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
+import type { SeatKey } from "@/server/db/schema";
 import { Button, Tag } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -33,11 +35,15 @@ type Session = {
   id: string;
   status: string;
   viewMode: "voice" | "log";
+  logSubmode?: "talk" | "type";
   routerState: string;
   activeSeatKey: string;
   activeLabel: string;
   defaultLabel: string;
+  seats?: RoomSeat[];
 };
+
+type LogSubmode = "talk" | "type";
 
 type Presence = "listening" | "paused" | "speaking" | "ended";
 type ViewMode = "voice" | "log";
@@ -148,6 +154,8 @@ export function Room({ t }: { t: Tokens }) {
   const [expandedThoughtId, setExpandedThoughtId] = useState<string | null>(null);
   const [liveThoughts, setLiveThoughts] = useState<Record<string, string>>({});
   const [queueSeats, setQueueSeats] = useState<QueueSeatDto[]>([]);
+  const [logSubmode, setLogSubmode] = useState<LogSubmode>("talk");
+  const [roomSeats, setRoomSeats] = useState<RoomSeat[]>([]);
 
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const committedRef = useRef("");
@@ -161,6 +169,7 @@ export function Room({ t }: { t: Tokens }) {
   const deadManTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSpeechRef = useRef<number>(Date.now());
   const viewModeRef = useRef<ViewMode>("voice");
+  const logSubmodeRef = useRef<LogSubmode>("talk");
   const busyRef = useRef(false);
   const presenceRef = useRef<Presence>("ended");
   const sessionRef = useRef<Session | null>(null);
@@ -170,6 +179,7 @@ export function Room({ t }: { t: Tokens }) {
   const inflightRef = useRef(0);
 
   viewModeRef.current = viewMode;
+  logSubmodeRef.current = logSubmode;
   busyRef.current = busy;
   presenceRef.current = presence;
   sessionRef.current = session;
@@ -197,6 +207,11 @@ export function Room({ t }: { t: Tokens }) {
     if (data.session) {
       setSession(data.session);
       setViewMode(data.session.viewMode ?? "voice");
+      const sub =
+        data.session.logSubmode === "type" ? "type" : "talk";
+      setLogSubmode(sub);
+      logSubmodeRef.current = sub;
+      if (Array.isArray(data.session.seats)) setRoomSeats(data.session.seats);
     }
   }, []);
 
@@ -565,7 +580,52 @@ export function Room({ t }: { t: Tokens }) {
     [applyQueue, beginInflight, consumeAgentStream, endInflight],
   );
 
+  const sendTyped = useCallback(
+    async (args: { text: string; chipSeatKey: SeatKey | null }) => {
+      const sid = sessionIdRef.current;
+      if (!sid) return false;
+      beginInflight();
+      setError(null);
+      try {
+        const res = await fetch(`/api/session/${sid}/send`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(args),
+        });
+        const ct = res.headers.get("content-type") ?? "";
+        if (!ct.includes("text/event-stream")) {
+          const data = await res.json();
+          if (data.routerHandled) await refreshSession(sid);
+          applyQueue(data.queue as { seats?: QueueSeatDto[] } | undefined);
+          if (!res.ok && data.error) {
+            setError(String(data.error));
+            return false;
+          }
+          return true;
+        }
+        await consumeAgentStream(sid, res);
+        await refreshSession(sid);
+        return true;
+      } catch (e) {
+        setError(e instanceof Error ? e.message : String(e));
+        return false;
+      } finally {
+        endInflight();
+      }
+    },
+    [
+      applyQueue,
+      beginInflight,
+      consumeAgentStream,
+      endInflight,
+      refreshSession,
+    ],
+  );
+
   const startRecognition = useCallback(() => {
+    if (viewModeRef.current === "log" && logSubmodeRef.current === "type") {
+      return;
+    }
     const Ctor = getSpeechRecognition();
     if (!Ctor) return;
     haltRecognition();
@@ -672,6 +732,14 @@ export function Room({ t }: { t: Tokens }) {
       setViewMode(s.viewMode ?? "voice");
       setTurns([]);
       setQueueSeats([]);
+      setLogSubmode("talk");
+      logSubmodeRef.current = "talk";
+      setRoomSeats(s.seats ?? []);
+      if (!s.seats?.length) {
+        const bindRes = await fetch("/api/bindings");
+        const bindData = await bindRes.json();
+        if (Array.isArray(bindData.seats)) setRoomSeats(bindData.seats);
+      }
       clearDraft();
       setSubtitle("Listening…");
       setPresence("listening");
@@ -718,9 +786,36 @@ export function Room({ t }: { t: Tokens }) {
     setSession((s) => (s ? { ...s, viewMode: mode } : s));
     if (mode === "log") {
       if (deadManTimerRef.current) clearTimeout(deadManTimerRef.current);
+      if (logSubmodeRef.current === "type") {
+        stopRecognition();
+      } else {
+        resetDeadManTimer();
+        if (listeningWantedRef.current) startRecognitionRef.current();
+      }
     } else {
       resetDeadManTimer();
-      if (listeningWantedRef.current) startRecognitionRef.current();
+      listeningWantedRef.current = true;
+      startRecognitionRef.current();
+    }
+  };
+
+  const setLogInput = async (mode: LogSubmode) => {
+    if (!session) return;
+    setLogSubmode(mode);
+    logSubmodeRef.current = mode;
+    setSession((s) => (s ? { ...s, logSubmode: mode } : s));
+    await fetch(`/api/session/${session.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ logSubmode: mode }),
+    });
+    if (mode === "type") {
+      stopRecognition();
+    } else {
+      listeningWantedRef.current = true;
+      setPresence("listening");
+      setSubtitle("Listening…");
+      startRecognitionRef.current();
     }
   };
 
@@ -883,6 +978,38 @@ export function Room({ t }: { t: Tokens }) {
           >
             {viaShort} · live
           </Tag>
+          {viewMode === "log" && (
+            <SurfaceBoundary
+              id="log-submode-toggle"
+              label="Talk or Type"
+              order={2}
+              style={{ display: "inline-flex", gap: 0 }}
+            >
+              {(["talk", "type"] as const).map((mode) => {
+                const on = logSubmode === mode;
+                return (
+                  <button
+                    key={mode}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => void setLogInput(mode)}
+                    style={{
+                      margin: 0,
+                      padding: "4px 12px",
+                      borderRadius: mode === "talk" ? "999px 0 0 999px" : "0 999px 999px 0",
+                      border: `1px solid ${on ? t.accent : t.border}`,
+                      background: on ? t.accent : t.bgElevated,
+                      color: on ? t.bgPrimary : t.textSecondary,
+                      fontSize: 12,
+                      cursor: "pointer",
+                    }}
+                  >
+                    {mode === "talk" ? "Talk" : "Type"}
+                  </button>
+                );
+              })}
+            </SurfaceBoundary>
+          )}
         </div>
       </SurfaceBoundary>
 
@@ -1056,6 +1183,14 @@ export function Room({ t }: { t: Tokens }) {
           </div>
         </div>
       ) : (
+        <div
+          style={{
+            flex: 1,
+            minHeight: 0,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           <SurfaceBoundary
             id="thread"
             label="Thread"
@@ -1218,7 +1353,7 @@ export function Room({ t }: { t: Tokens }) {
                 </div>
               </div>
             )}
-            {draft && (
+            {draft && logSubmode !== "type" && (
               <div
                 style={{
                   alignSelf: "flex-end",
@@ -1235,6 +1370,15 @@ export function Room({ t }: { t: Tokens }) {
             )}
             <div ref={logEndRef} />
           </SurfaceBoundary>
+          {logSubmode === "type" && (
+            <LogComposer
+              t={t}
+              seats={roomSeats}
+              disabled={busy}
+              onSend={sendTyped}
+            />
+          )}
+        </div>
       )}
 
       {error && (

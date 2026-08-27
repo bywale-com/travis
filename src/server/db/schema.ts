@@ -36,6 +36,8 @@ export const voiceSession = travis.table("voice_session", {
     .notNull()
     .references(() => agentBinding.id),
   viewMode: text("view_mode").notNull().default("voice"),
+  /** Mode B only: talk = current log listen; type = composer. */
+  logSubmode: text("log_submode").notNull().default("talk"),
   routerState: text("router_state").notNull().default("normal"),
   status: text("status").notNull().default("listening"),
   createdAt: timestamp("created_at", { withTimezone: true })
