@@ -1,8 +1,10 @@
 /**
- * Apply operator-supplied Cursor agent ids onto agent_binding.
- * Ids come from server env only — never SPA constants.
+ * Fill blank agent_binding ids from server env.
+ * Never overwrite a live SQL/operator bind — Open session was clobbering
+ * PM back to a dead seed id whenever Vercel env lagged the table.
  */
 import { eq } from "drizzle-orm";
+import { envMayWriteBinding } from "@/lib/seat-binding";
 import { db } from "./client";
 import { agentBinding } from "./schema";
 
@@ -46,7 +48,7 @@ export async function ensureSeatBindings(): Promise<void> {
       continue;
     }
 
-    if (seat.env && existing.cursorAgentId !== seat.env) {
+    if (envMayWriteBinding(existing.cursorAgentId, seat.env)) {
       await db
         .update(agentBinding)
         .set({ cursorAgentId: seat.env })

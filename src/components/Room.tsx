@@ -9,9 +9,10 @@ import {
 import { matchConductorPhrase } from "@/lib/conductor";
 import { parseDeadManResponse, seatKeyToShort } from "@/lib/router";
 import type { QueueSeatDto } from "@/lib/queue-logic";
-import { QueueChips, QueueLog } from "@/components/QueueChrome";
+import { QueueChips, QueueLog, SeatMark } from "@/components/QueueChrome";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
+import { Button, Tag } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type Turn = {
@@ -64,46 +65,6 @@ type SpeechRecognitionEventLike = {
 };
 
 const DEAD_MAN_MS = 180_000;
-
-const SEAT_COLORS: Record<string, string> = {
-  pm: "#C4A07A",
-  sa: "#E07A3D",
-  engineer: "#8B6E5C",
-};
-
-function SeatMark({
-  seatKey,
-  size = 28,
-  glow = false,
-}: {
-  seatKey: string;
-  size?: number;
-  glow?: boolean;
-}) {
-  const isTravis = seatKey === "travis" || !seatKey;
-  const color = isTravis ? "#6B5E52" : (SEAT_COLORS[seatKey] ?? "#A39486");
-  const mark = isTravis ? "T" : seatKeyToShort(seatKey);
-  return (
-    <span
-      style={{
-        width: size,
-        height: size,
-        borderRadius: "50%",
-        background: color,
-        color: "#FFFCF8",
-  fontSize: size < 32 ? 10 : 11,
-        fontWeight: 600,
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexShrink: 0,
-        boxShadow: glow ? `0 0 0 3px ${color}44` : "none",
-      }}
-    >
-      {mark}
-    </span>
-  );
-}
 
 function getSpeechRecognition(): (new () => SpeechRecognitionLike) | null {
   if (typeof window === "undefined") return null;
@@ -764,19 +725,23 @@ export function Room({ t }: { t: Tokens }) {
   );
 
   const viaShort = seatKeyToShort(session?.activeSeatKey);
-  const statusLine =
-    presence === "listening"
-      ? `Listening to ${viaShort}…`
-      : presence === "paused"
-        ? "Paused — tap to resume"
-        : presence === "speaking"
-          ? "Travis speaking…"
-          : "Session ended";
+  const listenLine =
+    presence === "paused"
+      ? "Paused — tap to resume"
+      : presence === "speaking"
+        ? "Travis speaking…"
+        : "Listening... tap once to pause";
   const statusHint =
     presence === "listening"
       ? "tap once to pause"
       : presence === "paused"
         ? "tap to resume"
+        : "";
+  const runningLabel =
+    liveStatus && liveStatus !== "stand-in"
+      ? `${session?.activeLabel ?? viaShort} is still running.`
+      : subtitle && presence !== "speaking"
+        ? subtitle
         : "";
 
   const shellStyle = {
@@ -795,29 +760,34 @@ export function Room({ t }: { t: Tokens }) {
   if (!session) {
     return (
       <div style={{ ...shellStyle, alignItems: "center", justifyContent: "center", padding: 24 }}>
-        <h1 style={{ fontSize: 40, fontWeight: 600, fontFamily: "Georgia, serif", margin: 0 }}>
+        <h1
+          style={{
+            fontSize: 44,
+            fontWeight: 400,
+            fontFamily: "var(--travis-serif), Georgia, serif",
+            margin: 0,
+            color: t.textPrimary,
+          }}
+        >
           Travis
         </h1>
         <p style={{ color: t.textSecondary, marginTop: 8, textAlign: "center", maxWidth: 280 }}>
           One room — talk with Travis. Agents post in the log; Travis reads.
         </p>
-        <button
-          type="button"
+        <Button
+          type="primary"
           disabled={busy}
           onClick={() => void openSession()}
           style={{
             marginTop: 28,
-            border: "none",
-            background: t.accent,
-            color: "#fff",
-            padding: "14px 28px",
+            height: 48,
+            padding: "0 28px",
             borderRadius: 999,
             fontSize: 16,
-            cursor: "pointer",
           }}
         >
           Open session
-        </button>
+        </Button>
         {error && <p style={{ color: t.dangerQuiet, marginTop: 16 }}>{error}</p>}
       </div>
     );
@@ -845,28 +815,17 @@ export function Room({ t }: { t: Tokens }) {
         >
           <span
             style={{
-              fontFamily: "Georgia, serif",
-              fontSize: 26,
-              fontWeight: 600,
+              fontFamily: "var(--travis-serif), Georgia, serif",
+              fontSize: 28,
+              fontWeight: 400,
               letterSpacing: "-0.02em",
             }}
           >
             Travis
           </span>
-          <button
-            type="button"
-            onClick={() => void endSession()}
-            style={{
-              border: "none",
-              background: "transparent",
-              color: t.accent,
-              fontSize: 13,
-              cursor: "pointer",
-              fontWeight: 500,
-            }}
-          >
+          <Button type="link" onClick={() => void endSession()} style={{ padding: 0 }}>
             End session
-          </button>
+          </Button>
         </header>
         <div
           style={{
@@ -878,27 +837,29 @@ export function Room({ t }: { t: Tokens }) {
             color: t.textSecondary,
           }}
         >
-          <span
+          <Tag
             style={{
-              padding: "5px 12px",
-              borderRadius: 999,
+              margin: 0,
+              padding: "4px 12px",
               background: t.bgElevated,
-              border: `1px solid ${t.border}`,
+              borderColor: t.border,
               color: t.textSecondary,
             }}
           >
+            <span style={{ color: t.accent, marginRight: 6 }}>●</span>
             Room · via {viaShort}
-          </span>
-          <span
+          </Tag>
+          <Tag
             style={{
-              padding: "5px 12px",
-              borderRadius: 999,
+              margin: 0,
+              padding: "4px 12px",
               background: t.accentSoft,
+              borderColor: "transparent",
               color: t.accent,
             }}
           >
             {viaShort} · live
-          </span>
+          </Tag>
         </div>
       </SurfaceBoundary>
 
@@ -959,20 +920,14 @@ export function Room({ t }: { t: Tokens }) {
                   turns.find((x) => x.id === expandedThoughtId)?.text}
               </div>
             )}
-            <div style={{ textAlign: "center", padding: "4px 20px 8px" }}>
-              <button
-                type="button"
+            <div style={{ textAlign: "left", padding: "4px 20px 8px" }}>
+              <Button
+                type="link"
                 onClick={() => void switchViewMode("voice")}
-                style={{
-                  border: "none",
-                  background: "transparent",
-                  color: t.accent,
-                  fontSize: 13,
-                  cursor: "pointer",
-                }}
+                style={{ padding: 0 }}
               >
                 ← Back to voice
-              </button>
+              </Button>
             </div>
           </SurfaceBoundary>
       )}
@@ -988,85 +943,59 @@ export function Room({ t }: { t: Tokens }) {
           }}
         >
           <SurfaceBoundary id="voice-presence" label="Voice presence" order={2}>
-            <p
-              style={{
-                textAlign: "center",
-                color: t.textPrimary,
-                fontSize: 22,
-                fontWeight: 600,
-                margin: "28px 20px 18px",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              {statusLine}
-            </p>
+            <div style={{ flex: 1, minHeight: 24 }} />
             <button
               type="button"
               onClick={() => void togglePause()}
-              disabled={presence === "speaking" || busy}
-              aria-label={statusHint || statusLine}
+              disabled={presence === "speaking"}
+              aria-label={statusHint || listenLine}
               style={{
                 margin: "0 auto",
-                width: 148,
-                height: 148,
+                width: 176,
+                height: 176,
                 borderRadius: "50%",
                 border: "none",
+                padding: 0,
                 background:
                   presence === "paused"
                     ? t.hoverBg
-                    : `radial-gradient(circle at 50% 45%, #f8c9a8 0%, ${t.accentSoft} 55%, #ead3c2 100%)`,
+                    : `radial-gradient(circle at 50% 48%, ${t.accent} 0%, ${t.accent}cc 32%, ${t.accentSoft} 62%, transparent 78%)`,
                 boxShadow:
                   presence === "listening" || presence === "speaking"
-                    ? `0 0 0 12px ${t.accent}14, 0 0 40px ${t.accent}33`
+                    ? `0 0 0 18px ${t.accent}14, 0 0 56px ${t.accent}40, 0 0 120px ${t.accent}22`
                     : "none",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
                 cursor: presence === "speaking" ? "default" : "pointer",
               }}
-            >
-              <span
-                style={{
-                  width: presence === "paused" ? 18 : 22,
-                  height: presence === "paused" ? 18 : 22,
-                  borderRadius: presence === "paused" ? 4 : "50%",
-                  background: t.accent,
-                  opacity: 0.85,
-                }}
-              />
-            </button>
-            {statusHint && (
-              <p style={{ textAlign: "center", color: t.textMuted, fontSize: 13, margin: "14px 20px 0" }}>
-                {statusHint}
-              </p>
-            )}
-            <p style={{ textAlign: "center", color: t.textMuted, fontSize: 12, margin: "8px 28px 0", lineHeight: 1.4 }}>
-              Start with PM, SA, or Engineer. End with I&apos;m done.
-            </p>
-            {liveStatus && (
-              <p style={{ textAlign: "center", fontSize: 12, color: t.statusText, margin: "8px 0 0" }}>
-                {liveStatus}
-              </p>
-            )}
-          </SurfaceBoundary>
-
-          <div style={{ flex: 1 }} />
-
-          {subtitle && (
+            />
             <p
               style={{
                 textAlign: "center",
-                color: t.textSecondary,
-                fontSize: 13,
-                margin: "0 28px 8px",
-                lineHeight: 1.4,
-                maxHeight: 48,
-                overflow: "hidden",
+                color: presence === "listening" ? t.accent : t.textPrimary,
+                fontSize: 20,
+                fontWeight: 400,
+                fontFamily: "var(--travis-serif), Georgia, serif",
+                margin: "22px 24px 0",
+                letterSpacing: "-0.02em",
               }}
             >
-              {subtitle}
+              {listenLine}
             </p>
-          )}
+            {runningLabel ? (
+              <p
+                style={{
+                  textAlign: "center",
+                  color: t.textMuted,
+                  fontSize: 13,
+                  margin: "8px 28px 0",
+                  lineHeight: 1.4,
+                }}
+              >
+                {runningLabel}
+              </p>
+            ) : null}
+          </SurfaceBoundary>
+
+          <div style={{ flex: 1 }} />
 
           {session && (
             <QueueChips
@@ -1088,21 +1017,19 @@ export function Room({ t }: { t: Tokens }) {
           )}
 
           <div style={{ padding: "8px 20px 28px", textAlign: "center" }}>
-            <button
-              type="button"
+            <Button
+              type="link"
               onClick={() => void switchViewMode("log")}
               style={{
-                border: "none",
-                background: "transparent",
-                color: t.textMuted,
-                fontSize: 14,
-                cursor: "pointer",
+                padding: 0,
+                color: t.accent,
                 textDecoration: "underline",
-                textUnderlineOffset: 3,
+                textUnderlineOffset: 4,
+                textDecorationStyle: "dashed",
               }}
             >
               View log
-            </button>
+            </Button>
           </div>
         </div>
       ) : (
@@ -1175,6 +1102,7 @@ export function Room({ t }: { t: Tokens }) {
                               ? t.hoverBg
                               : t.assistantBubble,
                           border: isUser ? "none" : `1px solid ${t.border}`,
+                          boxShadow: "0 2px 10px rgba(44,36,28,0.05)",
                           borderLeft: refTurn ? `3px solid ${t.accent}` : undefined,
                           borderRadius: isUser ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
                           padding: "10px 14px",
