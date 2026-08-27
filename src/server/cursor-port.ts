@@ -3,6 +3,11 @@
  */
 
 import { absorbText } from "@/lib/absorb-text";
+import {
+  BUSY_RETRY_DELAYS_MS,
+  delay,
+  isAgentBusyError,
+} from "@/lib/cursor-busy";
 
 export type CursorStreamEvent =
   | { type: "status"; text: string }
@@ -18,6 +23,7 @@ export type CursorStreamEvent =
       agentId?: string;
       runId?: string;
       statusText: string;
+      error?: string;
     };
 
 function isCloudAgentId(id: string): boolean {
@@ -96,104 +102,117 @@ export async function* streamCursorReply(params: {
     return;
   }
 
-  try {
-    const { Agent } = await import("@cursor/sdk");
+  const { Agent } = await import("@cursor/sdk");
 
-    await using agent = await Agent.resume(agentId, { apiKey: key });
-    const run = await agent.send(params.prompt);
+  let lastErr: unknown;
+  for (let attempt = 0; attempt <= BUSY_RETRY_DELAYS_MS.length; attempt++) {
+    try {
+      await using agent = await Agent.resume(agentId, { apiKey: key });
+      const run = await agent.send(params.prompt);
 
-    yield { type: "status", text: "running" };
+      yield { type: "status", text: "running" };
 
-    let thoughtText = "";
-    let postText = "";
+      let thoughtText = "";
+      let postText = "";
 
-    if (typeof run.stream === "function") {
-      for await (const event of run.stream()) {
-        const e = event as {
-          type?: string;
-          message?: { content?: unknown };
-          status?: string;
-          text?: string;
+      if (typeof run.stream === "function") {
+        for await (const event of run.stream()) {
+          const e = event as {
+            type?: string;
+            message?: { content?: unknown };
+            status?: string;
+            text?: string;
+          };
+
+          if (e.type === "tool_call" || e.type === "tool_use") continue;
+
+          if (e.type === "thinking") {
+            const chunk = e.text ?? "";
+            if (chunk) {
+              const next = absorbText(thoughtText, chunk);
+              if (next.delta) {
+                thoughtText = next.acc;
+                yield { type: "thought_delta", text: next.delta };
+              }
+            }
+            continue;
+          }
+
+          if (e.type === "assistant") {
+            const chunk = textFromAssistantMessage(e.message?.content);
+            if (chunk) {
+              const next = absorbText(postText, chunk);
+              if (next.delta) {
+                postText = next.acc;
+                yield { type: "post_delta", text: next.delta };
+              }
+            }
+            continue;
+          }
+
+          if (e.type === "status" && e.status) {
+            yield { type: "status", text: String(e.status).toLowerCase() };
+          }
+        }
+      }
+
+      const result = await run.wait();
+
+      if (!postText.trim()) {
+        const fromConversation = await assistantTextFromConversation(run);
+        if (fromConversation) {
+          postText = fromConversation;
+          yield { type: "post_delta", text: fromConversation };
+        } else if (result.result?.trim()) {
+          postText = result.result.trim();
+          yield { type: "post_delta", text: postText };
+        }
+      }
+
+      if (result.status === "error") {
+        const msg = result.error?.message ?? "Run error";
+        yield {
+          type: "done",
+          mode: "error",
+          assistantText: postText.trim(),
+          thoughtText: thoughtText.trim() || undefined,
+          agentId,
+          runId: result.id,
+          statusText: "error",
+          error: msg,
         };
-
-        if (e.type === "tool_call" || e.type === "tool_use") continue;
-
-        if (e.type === "thinking") {
-          const chunk = e.text ?? "";
-          if (chunk) {
-            const next = absorbText(thoughtText, chunk);
-            if (next.delta) {
-              thoughtText = next.acc;
-              yield { type: "thought_delta", text: next.delta };
-            }
-          }
-          continue;
-        }
-
-        if (e.type === "assistant") {
-          const chunk = textFromAssistantMessage(e.message?.content);
-          if (chunk) {
-            const next = absorbText(postText, chunk);
-            if (next.delta) {
-              postText = next.acc;
-              yield { type: "post_delta", text: next.delta };
-            }
-          }
-          continue;
-        }
-
-        if (e.type === "status" && e.status) {
-          yield { type: "status", text: String(e.status).toLowerCase() };
-        }
+        return;
       }
-    }
 
-    const result = await run.wait();
-
-    if (!postText.trim()) {
-      const fromConversation = await assistantTextFromConversation(run);
-      if (fromConversation) {
-        postText = fromConversation;
-        yield { type: "post_delta", text: fromConversation };
-      } else if (result.result?.trim()) {
-        postText = result.result.trim();
-        yield { type: "post_delta", text: postText };
-      }
-    }
-
-    if (result.status === "error") {
-      const msg = result.error?.message ?? "Run error";
       yield {
         type: "done",
-        mode: "error",
-        assistantText: postText.trim() || msg,
+        mode: "real",
+        assistantText:
+          postText.trim() ||
+          result.result?.trim() ||
+          "Run finished (no assistant text).",
         thoughtText: thoughtText.trim() || undefined,
         agentId,
         runId: result.id,
-        statusText: "error",
+        statusText: result.status === "cancelled" ? "cancelled" : "finished",
       };
       return;
+    } catch (err) {
+      lastErr = err;
+      const canRetry =
+        isAgentBusyError(err) && attempt < BUSY_RETRY_DELAYS_MS.length;
+      if (!canRetry) break;
+      yield { type: "status", text: "running" };
+      await delay(BUSY_RETRY_DELAYS_MS[attempt]);
     }
-
-    yield {
-      type: "done",
-      mode: "real",
-      assistantText:
-        postText.trim() ||
-        result.result?.trim() ||
-        "Run finished (no assistant text).",
-      thoughtText: thoughtText.trim() || undefined,
-      agentId,
-      runId: result.id,
-      statusText: result.status === "cancelled" ? "cancelled" : "finished",
-    };
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    yield {
-      type: "done",
-      mode: "error",
-      assistantText: `Cursor send failed: ${msg}`,
-      statusText: "error",
-    };
   }
+
+  const msg = lastErr instanceof Error ? lastErr.message : String(lastErr);
+  yield {
+    type: "done",
+    mode: "error",
+    assistantText: "",
+    statusText: "error",
+    error: msg,
+  };
 }
