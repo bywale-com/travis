@@ -1,6 +1,6 @@
 # Prototype-ant pass + queue — FACE
 
-**Status:** Locked in **PM-PACKET-003** ([`PM-PACKET-003-LOOK-QUEUE.md`](./PM-PACKET-003-LOOK-QUEUE.md)). Founder: create the packet (2026-08-27).  
+**Status:** Packet 003 **queue law locked**. **Look from C-plates is not locked** — founder 2026-08-27: C4 does not match planted Mode A; generating plates this way was the wrong method. Recut from live `travis-psi` Mode A.  
 **Product face:** smartphone web (`travis.app`)  
 **Locked shell this pass sits on:** [`ROOM-FACE.md`](./ROOM-FACE.md) (PM-PACKET-002)  
 **Log:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md)

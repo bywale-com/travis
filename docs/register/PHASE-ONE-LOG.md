@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 18:45 UTC — **PM-PACKET-003 locked** (look + per-seat queue, barge). Next: **SA** ascribe queue/barge; Engineer may retoken look from 003.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 20:35 UTC — Founder: C4 / C-plates look is **not** the plant. Trace below. Queue forks still hold. Recut plates from live Mode A. Do not plant C4 chrome.
 
 **How we maintain this log**
 
@@ -543,3 +543,31 @@ So: **maybe not still** — if “distinct from Cursor” means leave Cursor / i
 Pocket: **look** (cream/terracotta, Ant Tags, overlapping thought circles — harder than 002) + **queue** (per addressee · both Mode A chip and Mode B rows · force send **barges** · two icons).
 
 **Next:** SA paste in 003 → change packet for queue/barge machine. Engineer may retoken look from 003 without that store. Do not mint a queue table in the SPA.
+
+---
+
+## 2026-08-27 20:35 UTC — Why C4 ≠ plant ≠ A1 (founder: unacceptable)
+
+**Kind:** Founder correction. Method failure on plates.
+
+**Founder (preserved):** C4 looks so different. Look at the existing app — it looks different from what we specced. Then why are we generating the plates? Trace exactly why.
+
+**What is actually on `travis-psi.vercel.app` Mode A (opened 2026-08-27):** Georgia “Travis” · orange “End session” · left-aligned text pills `Room · via PM` / `PM · live` (no icons) · sans **Listening to PM…** above a peach radial orb with a small orange center dot · muted “tap once to pause” · teaching line “Start with PM, SA, or Engineer…” · muted underline **View log**. Cream page, terracotta `#c45c28` (Hotfix 002). No hang-up. No iPhone bezel. No queue chrome.
+
+**Why the plant ≠ locked A1 (002 spec):**
+
+1. **SCP-001 plant** (2026-08-26) invented forest green `#2f5d50`. 002 left color TBD. Engineer guessed.
+2. **Hotfix 002** retokened light to cream/orange *toward* B1/B2 — temperature closer; still not A1: pills left not centered; no thin concentric rings (box-shadow blob + 22px inner dot); extra teaching copy; End session is loud orange not muted grey; A1 hang-up + kebab were correctly **not** planted (002 must-not / scenery).
+3. **Image → CSS is lossy.** Nobody measured A1. Approximation.
+
+**Why C4 ≠ the plant (this chat):**
+
+1. Founder asked to reimagine in prototype-ant. `om-co` was 404. Agent generated C1–C4 from **A1 PNG + prose** (“Ant Tags”, iPhone 9:16, prototype-ant). **Did not screenshot travis-psi.**
+2. Image model invented chrome that is in neither A1 nor the app: people/globe icons on both pills, “Listening…” as huge orange **serif**, waveform inside the orb, Safari/iPhone frame, white elevated queue **card**.
+3. Packet 003 then **locked C-plates as the look** and still cited plant `#2f5d50` — that hex has been gone since Hotfix 002. Wrong source of truth.
+
+**Why generate plates at all:** to show the **queue chip** on Mode A (C4) and dashed rows on Mode B (C3). That job did not require redrawing the whole shell. The shell should have been the live app. Only the queue object was new.
+
+**Still locked (queue, not C4 chrome):** both homes · barge · two icons · per addressee.
+
+**Ask:** recut C4 (and C1) as a **photo of psi Mode A + queue chip**, not a new identity?

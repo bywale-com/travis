@@ -6,7 +6,9 @@
 **Plates:** [`PROTOTYPE-ANT-QUEUE-FACE.md`](./PROTOTYPE-ANT-QUEUE-FACE.md) · C1 [`plates/travis-c1-mode-a-voice-prototype-ant.png`](./plates/travis-c1-mode-a-voice-prototype-ant.png) · C2 [`plates/travis-c2-mode-b-log-prototype-ant.png`](./plates/travis-c2-mode-b-log-prototype-ant.png) · C3 [`plates/travis-c3-mode-b-queue-engineer.png`](./plates/travis-c3-mode-b-queue-engineer.png) · C4 [`plates/travis-c4-mode-a-queue-glance.png`](./plates/travis-c4-mode-a-queue-glance.png).  
 **Builds on:** [`PM-PACKET-002-ROOM.md`](./PM-PACKET-002-ROOM.md) (living PR [#4](https://github.com/bywale-com/travis/pull/4)) · room plant on `main` · Hotfix 006 (`agent_busy` retry, do not post SDK as Eng) · Hotfix 007 (in-memory hold of next done-phrase — **no** force/delete chrome).  
 **Flag:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) **14:00 UTC** — do not overwrite. Read: [`PLATE-READ.md`](./PLATE-READ.md).  
-**Does not:** mint tables from PNG; invent a third queue action; jump-the-line instead of barge; default Ant blue; keep planted forest-green as identity; Hub scenery; triage.
+**Does not:** mint tables from PNG; invent a third queue action; jump-the-line instead of barge; default Ant blue; Hub scenery; triage.
+
+**Correction 2026-08-27 20:35 (founder):** C4 (and the C-set chrome) was **not** traced from the planted app. `travis-psi` Mode A is already cream/terracotta (Hotfix 002 — not `#2f5d50`). C4 is image-model output (iPhone bezel, people/globe icons, serif “Listening…”, white queue card). **Do not plant C4 chrome as the look.** Queue law below still holds. Recut plates from **live Mode A + queue chip only**.
 
 ---
 
