@@ -1,6 +1,7 @@
 import { desc, eq, ne } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/server/db/client";
+import { ensureSeatBindings } from "@/server/db/ensure-bindings";
 import { agentBinding, voiceSession } from "@/server/db/schema";
 
 async function getPmBinding() {
@@ -40,6 +41,7 @@ function sessionPayload(
 
 /** Open room session: default + active = PM binding, view voice, router normal. */
 export async function POST() {
+  await ensureSeatBindings();
   const binding = await getPmBinding();
   if (!binding) {
     return NextResponse.json(
