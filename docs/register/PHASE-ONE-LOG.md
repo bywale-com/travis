@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 23:26 UTC — **PM vocative smoke.** “testing if this works p.m.” reached this seat. Packet 004 still locked; next SA.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 23:40 UTC — **Log format considering (E1).** Composer grow + received text organized. Not a packet. 004 still next for SA.
 
 **How we maintain this log**
 
@@ -681,4 +681,30 @@ Control lives in the **room-chip row**. Two-state toggle, not a third `Eng · li
 **Yes.** This chat is the PM. Id `bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea` (title: Pm ID provision). Distinct from the earlier PM bind `bc-da5db04b-db60-414e-b0c3-c8ed337d45d4`.
 
 004 still locked. Next still SA. No product change from this stamp.
+
+---
+
+## 2026-08-27 23:40 UTC — Log text format (founder; justifies plates)
+
+**Kind:** Type B glass. New considering pocket. Not a packet. Does not rewrite 004.
+
+**Founder (preserved, from Travis):**
+
+- Given what is already possible, time to work on **text formatting** — even **composer** formatting.
+- Claude: composer **expands** to contain the text up to a **limit**, then you **scroll inside** the composer. Travis: still a **flat** composer. None of that happens.
+- Better formatting on what comes from the **agents** (what you **receive**). Maybe not too much on what you send.
+- Sets the **stage** for images and other file types — how that is **organized** in the thread.
+- This **justifies plates**. For the PM.
+
+**Lived gap (plant):** agent bubbles dump `turn.text` as a flat string. No markdown. 004’s D3 composer is a **single-line** field. Hotfix 005 already named bubble formatting and parked it — no FACE grain until now.
+
+**Landed (considering):** [`LOG-FORMAT-FACE.md`](LOG-FORMAT-FACE.md) · one plate:
+
+| ID | State |
+|----|--------|
+| E1 | Mode B · Type · grown composer (wrapped lines) · Eng bubble organized (heading, list, inline code) |
+
+D3 stays 004. C3/C4 not recut. No attach. No formatting toolbar. Images/files = **stage**, not this plant.
+
+**Ask:** like E1 enough to packet? Receive grain = heading + list + inline code (not a markdown kitchen sink)? Composer max + inner scroll as Completes (no second PNG)? Images/files stay stage? **004 still goes to SA first.**
 
