@@ -1,50 +1,52 @@
+import { Send, Trash2 } from "lucide-react";
 import type { ReactNode } from "react";
+import { Button } from "antd";
 import {
   queuedBlockLabel,
   waitingChipLabel,
   type QueueSeatDto,
 } from "@/lib/queue-logic";
+import { seatKeyToShort } from "@/lib/router";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
 
-function IconSend({ color }: { color: string }) {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke={color}
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M22 2L11 13" />
-      <path d="M22 2l-7 20-4-9-9-4 20-7z" />
-    </svg>
-  );
-}
+const SEAT_COLORS: Record<string, string> = {
+  pm: "#8A9A8E",
+  sa: "#E07A3D",
+  engineer: "#7E96B5",
+};
 
-function IconDelete({ color }: { color: string }) {
+export function SeatMark({
+  seatKey,
+  size = 28,
+  glow = false,
+}: {
+  seatKey: string;
+  size?: number;
+  glow?: boolean;
+}) {
+  const isTravis = seatKey === "travis" || !seatKey;
+  const color = isTravis ? "#6B5E52" : (SEAT_COLORS[seatKey] ?? "#A39486");
+  const mark = isTravis ? "T" : seatKeyToShort(seatKey);
   return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke={color}
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
+    <span
+      style={{
+        width: size,
+        height: size,
+        borderRadius: "50%",
+        background: color,
+        color: "#FFFCF8",
+        fontSize: size < 32 ? 10 : 11,
+        fontWeight: 600,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexShrink: 0,
+        boxShadow: glow ? `0 0 0 3px ${color}55, 0 0 14px ${color}66` : "none",
+      }}
     >
-      <polyline points="3 6 5 6 21 6" />
-      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-      <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-      <line x1="10" y1="11" x2="10" y2="17" />
-      <line x1="14" y1="11" x2="14" y2="17" />
-    </svg>
+      {mark}
+    </span>
   );
 }
 
@@ -58,24 +60,18 @@ function IconBtn({
   children: ReactNode;
 }) {
   return (
-    <button
-      type="button"
+    <Button
+      type="text"
       aria-label={label}
       onClick={onClick}
-      style={{
-        border: "none",
-        background: "transparent",
-        padding: 4,
-        cursor: "pointer",
-        display: "inline-flex",
-        lineHeight: 0,
-      }}
+      style={{ padding: 4, height: 28, width: 28 }}
     >
       {children}
-    </button>
+    </Button>
   );
 }
 
+/** C4: floating glance bar, not a tiny centered pill. */
 export function QueueChips({
   t,
   seats,
@@ -94,40 +90,41 @@ export function QueueChips({
         style={{
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
           gap: 8,
-          padding: "4px 20px 8px",
+          padding: "4px 16px 12px",
         }}
       >
         {seats.map((seat) => (
           <div
             key={seat.seatKey}
             style={{
-              display: "inline-flex",
+              display: "flex",
               alignItems: "center",
-              gap: 4,
-              padding: "4px 8px 4px 12px",
-              borderRadius: 999,
+              gap: 10,
+              padding: "10px 12px 10px 14px",
+              borderRadius: 16,
               background: t.bgElevated,
               border: `1px solid ${t.border}`,
-              color: t.textSecondary,
-              fontSize: 12,
+              boxShadow: "0 6px 20px rgba(44,36,28,0.06)",
+              color: t.textPrimary,
+              fontSize: 14,
             }}
           >
-            <span>
+            <SeatMark seatKey={seat.seatKey} size={28} />
+            <span style={{ flex: 1, minWidth: 0 }}>
               {waitingChipLabel(seat.items.length, seat.seatKey)}
             </span>
             <IconBtn
               label={`Force send ${seat.short}`}
               onClick={() => onSendHead(seat.seatKey)}
             >
-              <IconSend color={t.accent} />
+              <Send size={16} color={t.accent} />
             </IconBtn>
             <IconBtn
               label={`Delete waiting ${seat.short}`}
               onClick={() => onDeleteHead(seat.seatKey)}
             >
-              <IconDelete color={t.textMuted} />
+              <Trash2 size={16} color={t.textMuted} />
             </IconBtn>
           </div>
         ))}
@@ -136,6 +133,7 @@ export function QueueChips({
   );
 }
 
+/** C3: dashed peach user-right rows under Queued · {seat}. */
 export function QueueLog({
   t,
   seats,
@@ -155,7 +153,9 @@ export function QueueLog({
           <p
             style={{
               margin: "8px 0 0",
-              fontSize: 12,
+              fontSize: 11,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
               color: t.textMuted,
               textAlign: "right",
             }}
@@ -168,51 +168,37 @@ export function QueueLog({
               data-surface-id="queue-row"
               style={{
                 alignSelf: "flex-end",
-                width: "92%",
+                width: "88%",
                 marginLeft: "auto",
-                border: `1px dashed ${t.border}`,
+                border: `1px dashed ${t.accent}99`,
+                background: t.userBubble,
                 borderRadius: "16px 16px 4px 16px",
                 padding: "10px 12px",
-                background: "transparent",
                 color: t.textPrimary,
                 fontSize: 15,
                 lineHeight: 1.45,
               }}
             >
+              <span style={{ display: "block" }}>{item.text}</span>
               <div
                 style={{
                   display: "flex",
-                  alignItems: "flex-start",
-                  gap: 8,
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  gap: 2,
+                  marginTop: 6,
                 }}
               >
-                <span style={{ flex: 1, minWidth: 0 }}>{item.text}</span>
-                <span style={{ display: "inline-flex", flexShrink: 0 }}>
-                  <IconBtn
-                    label="Force send"
-                    onClick={() => onSendItem(item.id)}
-                  >
-                    <IconSend color={t.accent} />
-                  </IconBtn>
-                  <IconBtn
-                    label="Delete queued line"
-                    onClick={() => onDeleteItem(item.id)}
-                  >
-                    <IconDelete color={t.textMuted} />
-                  </IconBtn>
+                <span style={{ fontSize: 11, color: t.textMuted, marginRight: "auto" }}>
+                  · {seat.short}
                 </span>
+                <IconBtn label="Force send" onClick={() => onSendItem(item.id)}>
+                  <Send size={16} color={t.accent} />
+                </IconBtn>
+                <IconBtn label="Delete queued line" onClick={() => onDeleteItem(item.id)}>
+                  <Trash2 size={16} color={t.textMuted} />
+                </IconBtn>
               </div>
-              <span
-                style={{
-                  display: "block",
-                  marginTop: 4,
-                  fontSize: 11,
-                  color: t.textMuted,
-                  textAlign: "right",
-                }}
-              >
-                · {seat.short}
-              </span>
             </div>
           ))}
         </div>
