@@ -23,3 +23,4 @@
 | 006 | [`HOTFIX-006-AGENT-BUSY.md`](./HOTFIX-006-AGENT-BUSY.md) | Retry `agent_busy` on the send port; do not post the SDK error as Eng |
 | 007 | [`HOTFIX-007-LISTEN-OVERLAP.md`](./HOTFIX-007-LISTEN-OVERLAP.md) | Listen during an in-flight run; hold the next done-phrase |
 | 008 | [`HOTFIX-008-BIND-SEATS-SQL.md`](./HOTFIX-008-BIND-SEATS-SQL.md) | SQL to bind current PM / SA / Engineer on `agent_binding` |
+| 009 | [`HOTFIX-009-STT-ROUTE-QUOTE.md`](./HOTFIX-009-STT-ROUTE-QUOTE.md) | STT carry across pause; stale busy ≠ queue; quote rail; rebind PM |

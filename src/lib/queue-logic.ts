@@ -29,6 +29,17 @@ export function queuedBlockLabel(seatKey: string): string {
   return `Queued · ${seatKeyToShort(seatKey)}`;
 }
 
+/**
+ * Queue is per addressee. A Travis live-run row is not enough — Cursor
+ * must still have an active run on that seat. Stale row → send now.
+ */
+export function shouldQueueForSeat(opts: {
+  hasLiveRow: boolean;
+  cursorHasActiveRun: boolean;
+}): boolean {
+  return opts.hasLiveRow && opts.cursorHasActiveRun;
+}
+
 /** Head of a seat = smallest seq still present. */
 export function headItem<T extends { seq: number }>(items: T[]): T | null {
   if (!items.length) return null;

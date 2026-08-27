@@ -3,9 +3,11 @@ import { test } from "node:test";
 import {
   absorbFinalTranscript,
   absorbText,
+  carryDraftAcrossRestart,
   collapseSpeechStutter,
   mergeLiveTranscript,
 } from "./absorb-text";
+import { parseCallByName } from "./router";
 
 test("absorbText treats snapshots as replace, not concatenate", () => {
   let acc = "";
@@ -74,5 +76,48 @@ test("mergeLiveTranscript keeps committed when interim is only a tail already pr
   assert.equal(
     mergeLiveTranscript("hello there friend", "friend"),
     "hello there friend",
+  );
+});
+
+test("carryDraftAcrossRestart keeps a held sentence and appends a new clause", () => {
+  assert.equal(
+    carryDraftAcrossRestart(
+      "Engineer look at the stream",
+      "there's a second problem",
+    ),
+    "Engineer look at the stream there's a second problem",
+  );
+});
+
+test("carryDraftAcrossRestart keeps held when the new session has no finals yet", () => {
+  assert.equal(
+    carryDraftAcrossRestart(
+      "oh my God there's actually a second problem",
+      "",
+    ),
+    "oh my God there's actually a second problem",
+  );
+});
+
+test("carryDraftAcrossRestart folds a restarted growing concat", () => {
+  assert.equal(
+    carryDraftAcrossRestart(
+      "Engineer can I see",
+      "Engineer can I see the engineer talking",
+    ),
+    "Engineer can I see the engineer talking",
+  );
+});
+
+test("carryDraftAcrossRestart keeps a leading seat call across a silence restart", () => {
+  assert.equal(
+    carryDraftAcrossRestart("Engineer", ""),
+    "Engineer",
+  );
+  assert.equal(
+    parseCallByName(
+      carryDraftAcrossRestart("Engineer look at this", "there's a second problem"),
+    ).seatKey,
+    "engineer",
   );
 });

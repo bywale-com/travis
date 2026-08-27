@@ -39,6 +39,13 @@ INSERT INTO travis.agent_binding (seat_key, label, cursor_agent_id, runtime, act
 SELECT 'engineer', 'Engineer', 'bc-94804572-3a2f-4075-b290-a95c73730bd3', 'cloud', true
 WHERE NOT EXISTS (SELECT 1 FROM travis.agent_binding WHERE seat_key = 'engineer');
 
+-- Live row on PM was for the dead seed id. Drop it so the next PM send
+-- is not queued against a run that no longer exists.
+DELETE FROM travis.seat_live_run slr
+USING travis.agent_binding ab
+WHERE slr.binding_id = ab.id
+  AND ab.seat_key = 'pm';
+
 COMMIT;
 
 SELECT seat_key, label, cursor_agent_id, active

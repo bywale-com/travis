@@ -24,6 +24,16 @@ export function isRunNotCancellable(err: unknown): boolean {
   return /run_not_cancellable/i.test(msg) || /not cancellable/i.test(msg);
 }
 
+/** Dead/expired run stream — clear that seat's live row; do not keep queueing. */
+export function isDeadStreamError(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err ?? "");
+  return (
+    /no longer available/i.test(msg) ||
+    /run stream/i.test(msg) ||
+    /stream is not available/i.test(msg)
+  );
+}
+
 /** Enqueue unless busy fired with no known live run — then one race retry. */
 export function busySendDecision(args: {
   storedRunId: string | null;

@@ -16,11 +16,11 @@ import {
 import type { SeatKey } from "@/server/db/schema";
 import {
   enqueueOnSeat,
+  seatHasActiveRun,
   sendOrEnqueue,
   sse,
   sseHeaders,
 } from "@/server/seat-pipe";
-import { getLiveRun } from "@/server/queue";
 
 type Body = { utterance: string };
 
@@ -201,8 +201,7 @@ export async function POST(
   const seatKey = (binding.seatKey ?? "pm") as SeatKey;
   const seatLabel = binding.label ?? seatKeyToLabel(seatKey);
 
-  const live = await getLiveRun(binding.id);
-  if (live) {
+  if (await seatHasActiveRun(binding)) {
     const queue = await enqueueOnSeat({
       sessionId,
       binding,
