@@ -16,19 +16,19 @@ export type Tokens = {
 };
 
 export const light: Tokens = {
-  bgPrimary: "#f6f4f1",
-  bgElevated: "#ffffff",
-  textPrimary: "#1a1a1a",
-  textSecondary: "#4a4a4a",
-  textMuted: "#8a8680",
-  border: "#e4e0d8",
-  accent: "#2f5d50",
-  accentSoft: "#d8ebe4",
-  hoverBg: "#efece6",
-  userBubble: "#e8f0ed",
-  assistantBubble: "#ffffff",
-  statusText: "#8a8680",
-  presenceRing: "#2f5d50",
+  bgPrimary: "#f3eee7",
+  bgElevated: "#faf7f2",
+  textPrimary: "#2a221c",
+  textSecondary: "#5c534b",
+  textMuted: "#9a8f84",
+  border: "#e6ddd3",
+  accent: "#c45c28",
+  accentSoft: "#f4e0d2",
+  hoverBg: "#efe8df",
+  userBubble: "#f0d9c6",
+  assistantBubble: "#f7f3ee",
+  statusText: "#9a8f84",
+  presenceRing: "#c45c28",
   dangerQuiet: "#6b4f4f",
 };
 
