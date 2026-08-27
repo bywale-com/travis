@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 22:52 UTC — Considering: **D3** one plate (Type pill in chip row + composer + mic + `@`). Not a packet.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-27 22:55 UTC — **PM-PACKET-004 locked** (Talk \| Type toggle, log composer, `@`, mic). Next: SA.
 
 **How we maintain this log**
 
@@ -648,3 +648,24 @@ C3/C4 not recut. Voice mode unchanged.
 Label **Type** on the pill is agent alignment — founder did not name the word.
 
 **Ask:** keep **Type** as the chip word? Like D3 enough to packet?
+
+---
+
+## 2026-08-27 22:55 UTC — PM-PACKET-004 locked (Talk | Type)
+
+**Kind:** Type B packet. Log sub-mode. Not a recut of C plates.
+
+**Founder (preserved):** D3 is fine. It’s a **toggle**, not just a chip. Specify in the packet, in writing — including the two titles. Only two options. Create the packet.
+
+**Locked:** [`PM-PACKET-004-LOG-COMPOSER.md`](PM-PACKET-004-LOG-COMPOSER.md) · photo [`plates/travis-d3-log-type-toggle.png`](plates/travis-d3-log-type-toggle.png) · FACE [`LOG-COMPOSER-FACE.md`](LOG-COMPOSER-FACE.md). Living glass: [PR #15](https://github.com/bywale-com/travis/pull/15).
+
+**Toggle titles (two options only — agent alignment; founder asked for titles, did not name the words):**
+
+| Title | Log |
+|-------|-----|
+| **Talk** | Current log. No composer. Speech / done-phrase as log already works. |
+| **Type** | Composer on. Field, mic-into-field, send, `@` by title. |
+
+Control lives in the **room-chip row**. Two-state toggle, not a third `Eng · live`-style chip. Mode A unchanged. C3/C4 not recut.
+
+**Next:** SA ascribes (Talk|Type session state, Type send vs conductor, `@` vs via-pill, composer mic STT). Engineer plants after SA. Do not plant from this packet alone.

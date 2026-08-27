@@ -1,6 +1,6 @@
 # Log composer + @ address — FACE (considering)
 
-**Status:** Ideation. **Not a packet.** Photo of record for this pass: **D3 only**.  
+**Status:** Locked in **PM-PACKET-004** ([`PM-PACKET-004-LOG-COMPOSER.md`](./PM-PACKET-004-LOG-COMPOSER.md)). Photo of record: **D3**. Toggle titles **Talk | Type**.  
 **Sits on:** Mode B + C look. Does **not** recut C3/C4.  
 **Log:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md)
 
@@ -23,19 +23,21 @@
 |----|------|--------|
 | **D3** | [`plates/travis-d3-log-type-toggle.png`](./plates/travis-d3-log-type-toggle.png) | Mode B · **Type** pill ON in the chip row · composer · mic · send · `@` popover |
 
-D1 / D2 kept as history. **D3 is the photo.** Off (no composer, current log listen) is Completes — no extra PNG.
+D1 / D2 kept as history. **D3 is the photo.** **Talk** (no composer, current log listen) is Completes — no extra PNG.
 
-**Type** on the pill is agent alignment for the label. Founder did not name the word.
+**Titles locked in 004:** **Talk** | **Type** (agent alignment — founder asked for the two titles, did not name the words).
 
-Voice mode: **no** composer, **no** Type pill.
+Voice mode: **no** composer, **no** Talk/Type toggle.
 
 ---
 
-## Glass law (alignment, not locked)
+## Glass law
 
-- Chip row: `Room · via {seat}` · `{seat} · live` · **Type** (on = composer; off = current log, no field).
-- Type ON: field + **mic** (fills this box) + send. `@` → room seats by title → chip → keep typing.
-- Type OFF: log as it exists now. No field.
+Locked in the packet. Toggle is **Talk | Type**, two states, in the chip row. Not a third live-status chip.
+
+- Chip row: `Room · via {seat}` · `{seat} · live` · **Talk | Type** toggle (Type = composer; Talk = current log, no field).
+- **Type:** field + **mic** (fills this box) + send. `@` → room seats by title → chip → keep typing.
+- **Talk:** log as it exists now. No field.
 - Not Mode A. Not a mic farm. Not attach.
 
 ---
@@ -44,15 +46,14 @@ Voice mode: **no** composer, **no** Type pill.
 
 | Bucket | Draft |
 |--------|--------|
-| **1. Copy** | Type pill in the chip row. On: composer, mic, send, `@` list by title. Off: current log, no composer. |
-| **2. Do not build** | Composer / Type pill on Mode A. Paperclip. Bezel. Checkmarks. k8s copy. Full-screen agent sheet. Recutting C plates. D1 as a second plant. |
+| **1. Copy** | **Talk \| Type** toggle in the chip row. Type: composer, mic, send, `@` list by title. Talk: current log, no composer. |
+| **2. Do not build** | Composer / Talk\|Type on Mode A. Paperclip. Bezel. Checkmarks. k8s copy. Full-screen agent sheet. Recutting C plates. D1 as a second plant. |
 | **3. Implied** | Toggle reveals/hides the field and switches log sub-mode. Keyboard. Send posts. `@` pick dismisses list. Mic writes into the field (not Mode A orb). |
-| **4. Completes** | Type OFF state (no extra PNG). Send with no `@` = current via. |
+| **4. Completes** | Talk state (no extra PNG). Send with no `@` = current via. |
 | **5. Out of scope** | Voice-mode typing. New seats. Triage. |
 
 ---
 
 ## Open
 
-- Word on the pill: **Type** — keep / recut the label?
-- Like D3 enough to packet?
+- **Next: SA** ascribe → change packet. Engineer plants from D3 + 004.
