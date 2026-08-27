@@ -1,6 +1,11 @@
 "use client";
 
-import { absorbFinalTranscript, absorbText, collapseSpeechStutter } from "@/lib/absorb-text";
+import {
+  absorbFinalTranscript,
+  absorbText,
+  collapseSpeechStutter,
+  mergeLiveTranscript,
+} from "@/lib/absorb-text";
 import { matchConductorPhrase } from "@/lib/conductor";
 import { parseDeadManResponse, seatKeyToShort } from "@/lib/router";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
@@ -132,6 +137,34 @@ function facilitatorSpeak(text: string): Promise<void> {
   });
 }
 
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+}
+
+function speechEngineBusy(): boolean {
+  if (typeof window === "undefined" || !window.speechSynthesis) return false;
+  return window.speechSynthesis.speaking || window.speechSynthesis.pending;
+}
+
+function waitForSpeechIdle(timeoutMs = 8000): Promise<void> {
+  if (typeof window === "undefined" || !window.speechSynthesis) {
+    return Promise.resolve();
+  }
+  const started = Date.now();
+  return new Promise((resolve) => {
+    const tick = () => {
+      if (!speechEngineBusy() || Date.now() - started > timeoutMs) {
+        resolve();
+        return;
+      }
+      window.setTimeout(tick, 80);
+    };
+    tick();
+  });
+}
+
 export function Room({ t }: { t: Tokens }) {
   const [session, setSession] = useState<Session | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("voice");
@@ -162,6 +195,8 @@ export function Room({ t }: { t: Tokens }) {
   const presenceRef = useRef<Presence>("ended");
   const sessionRef = useRef<Session | null>(null);
   const startRecognitionRef = useRef<() => void>(() => {});
+  const recognitionLiveRef = useRef(false);
+  const listenRestartGenRef = useRef(0);
 
   viewModeRef.current = viewMode;
   busyRef.current = busy;
@@ -224,19 +259,56 @@ export function Room({ t }: { t: Tokens }) {
     }, DEAD_MAN_MS);
   }, [refreshSession, refreshTurns]);
 
-  const stopRecognition = useCallback(() => {
-    listeningWantedRef.current = false;
-    if (deadManTimerRef.current) clearTimeout(deadManTimerRef.current);
+  const haltRecognition = useCallback(() => {
+    recognitionLiveRef.current = false;
     const rec = recognitionRef.current;
-    if (rec) {
+    if (!rec) return;
+    rec.onend = null;
+    rec.onresult = null;
+    rec.onerror = null;
+    try {
+      rec.abort();
+    } catch {
       try {
-        rec.onend = null;
         rec.stop();
       } catch {
         /* ignore */
       }
-      recognitionRef.current = null;
     }
+    recognitionRef.current = null;
+  }, []);
+
+  const stopRecognition = useCallback(() => {
+    listeningWantedRef.current = false;
+    listenRestartGenRef.current += 1;
+    if (deadManTimerRef.current) clearTimeout(deadManTimerRef.current);
+    haltRecognition();
+  }, [haltRecognition]);
+
+  const scheduleListenRestart = useCallback(() => {
+    const gen = ++listenRestartGenRef.current;
+    void (async () => {
+      await waitForSpeechIdle();
+      await delay(350);
+      if (gen !== listenRestartGenRef.current) return;
+      if (!listeningWantedRef.current) return;
+      if (presenceRef.current === "ended" || presenceRef.current === "paused") {
+        return;
+      }
+      if (speechEngineBusy()) return;
+      startRecognitionRef.current();
+      for (let i = 0; i < 3; i++) {
+        await delay(400 * (i + 1));
+        if (gen !== listenRestartGenRef.current) return;
+        if (!listeningWantedRef.current) return;
+        if (recognitionLiveRef.current) return;
+        if (presenceRef.current === "ended" || presenceRef.current === "paused") {
+          return;
+        }
+        if (speechEngineBusy()) return;
+        startRecognitionRef.current();
+      }
+    })();
   }, []);
 
   const finalizeUtterance = useCallback(
@@ -250,6 +322,7 @@ export function Room({ t }: { t: Tokens }) {
       setLiveStatus(null);
       setStreamingPost("");
       setStreamingSeat(null);
+      haltRecognition();
 
       try {
         const res = await fetch(`/api/session/${sid}/finalize`, {
@@ -354,7 +427,6 @@ export function Room({ t }: { t: Tokens }) {
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ status: "listening" }),
                 });
-                startRecognitionRef.current();
               }
             }
           } else if (event === "error") {
@@ -385,19 +457,27 @@ export function Room({ t }: { t: Tokens }) {
         finalizingRef.current = false;
         busyRef.current = false;
         setBusy(false);
-        if (listeningWantedRef.current && presenceRef.current !== "ended") {
-          startRecognitionRef.current();
+        if (
+          listeningWantedRef.current &&
+          presenceRef.current !== "ended" &&
+          presenceRef.current !== "paused"
+        ) {
+          if (presenceRef.current === "speaking") {
+            setPresence("listening");
+            setSubtitle("Listening…");
+          }
+          scheduleListenRestart();
         }
         resetDeadManTimer();
       }
     },
-    [refreshSession, refreshTurns, resetDeadManTimer],
+    [haltRecognition, refreshSession, refreshTurns, resetDeadManTimer, scheduleListenRestart],
   );
 
   const startRecognition = useCallback(() => {
     const Ctor = getSpeechRecognition();
     if (!Ctor) return;
-    stopRecognition();
+    haltRecognition();
     listeningWantedRef.current = true;
 
     const rec = new Ctor();
@@ -408,22 +488,20 @@ export function Room({ t }: { t: Tokens }) {
     rec.onresult = (ev) => {
       lastSpeechRef.current = Date.now();
       resetDeadManTimer();
+      let committed = "";
       let interim = "";
-      let newlyFinal = "";
-      for (let i = ev.resultIndex; i < ev.results.length; i++) {
+      for (let i = 0; i < ev.results.length; i++) {
         const piece = ev.results[i][0]?.transcript ?? "";
-        if (ev.results[i].isFinal) newlyFinal += piece;
-        else interim += piece;
+        if (ev.results[i].isFinal) {
+          committed = absorbFinalTranscript(committed, piece);
+        } else {
+          interim += piece;
+        }
       }
-      if (newlyFinal) {
-        committedRef.current = collapseSpeechStutter(
-          absorbFinalTranscript(committedRef.current, newlyFinal),
-        );
-      }
+      committed = collapseSpeechStutter(committed);
+      committedRef.current = committed;
       interimRef.current = interim;
-      const full = collapseSpeechStutter(
-        `${committedRef.current} ${interim}`.trim(),
-      );
+      const full = mergeLiveTranscript(committed, interim);
       setDraft(full);
 
       const match = matchConductorPhrase(full, phrasesRef.current);
@@ -456,25 +534,34 @@ export function Room({ t }: { t: Tokens }) {
     };
 
     rec.onend = () => {
+      recognitionLiveRef.current = false;
       if (!listeningWantedRef.current) return;
+      if (presenceRef.current === "paused" || presenceRef.current === "ended") {
+        return;
+      }
+      if (presenceRef.current === "speaking" || finalizingRef.current) return;
+      if (speechEngineBusy()) return;
       window.setTimeout(() => {
         if (!listeningWantedRef.current) return;
-        try {
-          rec.start();
-        } catch {
-          startRecognitionRef.current();
+        if (recognitionLiveRef.current) return;
+        if (presenceRef.current === "paused" || presenceRef.current === "ended") {
+          return;
         }
+        if (presenceRef.current === "speaking" || finalizingRef.current) return;
+        if (speechEngineBusy()) return;
+        startRecognitionRef.current();
       }, 250);
     };
 
     recognitionRef.current = rec;
     try {
       rec.start();
+      recognitionLiveRef.current = true;
     } catch {
-      /* ignore */
+      recognitionLiveRef.current = false;
     }
     resetDeadManTimer();
-  }, [finalizeUtterance, resetDeadManTimer, stopRecognition]);
+  }, [finalizeUtterance, haltRecognition, resetDeadManTimer]);
 
   startRecognitionRef.current = startRecognition;
 
@@ -580,6 +667,8 @@ export function Room({ t }: { t: Tokens }) {
 
   const shellStyle = {
     minHeight: "100dvh",
+    height: "100dvh",
+    overflow: "hidden",
     display: "flex",
     flexDirection: "column" as const,
     background: t.bgPrimary,
@@ -622,6 +711,15 @@ export function Room({ t }: { t: Tokens }) {
 
   return (
     <div style={shellStyle}>
+      <div
+        style={{
+          flexShrink: 0,
+          position: "sticky",
+          top: 0,
+          zIndex: 20,
+          background: t.bgPrimary,
+        }}
+      >
       <SurfaceBoundary id="session-header" label="Session header" order={1}>
         <header
           style={{
@@ -690,8 +788,91 @@ export function Room({ t }: { t: Tokens }) {
         </div>
       </SurfaceBoundary>
 
+      {viewMode === "log" && (
+          <SurfaceBoundary id="thought-strip" label="Thought circles" order={3}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "10px 20px 4px",
+                minHeight: 52,
+              }}
+            >
+              {(["pm", "sa", "engineer"] as const).map((key, i) => {
+                const thought = activeThoughts.find((t) => t.seatKey === key);
+                const streaming = thought && liveThoughts[thought.id];
+                const active = thought?.thoughtStatus === "streaming" || !!streaming;
+                const expanded = thought && expandedThoughtId === thought.id;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() =>
+                      thought && setExpandedThoughtId(expanded ? null : thought.id)
+                    }
+                    style={{
+                      border: "none",
+                      background: "transparent",
+                      padding: 0,
+                      marginLeft: i > 0 ? -10 : 0,
+                      zIndex: 3 - i,
+                      cursor: thought ? "pointer" : "default",
+                      opacity: thought || session.activeSeatKey === key ? 1 : 0.45,
+                    }}
+                    aria-label={`${seatKeyToShort(key)} thought`}
+                  >
+                    <SeatMark seatKey={key} size={38} glow={!!active} />
+                  </button>
+                );
+              })}
+            </div>
+            {expandedThoughtId && (
+              <div
+                style={{
+                  margin: "8px 16px",
+                  padding: "10px 12px",
+                  background: t.bgElevated,
+                  borderRadius: 12,
+                  fontSize: 13,
+                  fontStyle: "italic",
+                  color: t.textSecondary,
+                  maxHeight: 120,
+                  overflowY: "auto",
+                }}
+              >
+                {liveThoughts[expandedThoughtId] ||
+                  turns.find((x) => x.id === expandedThoughtId)?.text}
+              </div>
+            )}
+            <div style={{ textAlign: "center", padding: "4px 20px 8px" }}>
+              <button
+                type="button"
+                onClick={() => void switchViewMode("voice")}
+                style={{
+                  border: "none",
+                  background: "transparent",
+                  color: t.accent,
+                  fontSize: 13,
+                  cursor: "pointer",
+                }}
+              >
+                ← Back to voice
+              </button>
+            </div>
+          </SurfaceBoundary>
+      )}
+      </div>
+
       {viewMode === "voice" ? (
-        <>
+        <div
+          style={{
+            flex: 1,
+            minHeight: 0,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           <SurfaceBoundary id="voice-presence" label="Voice presence" order={2}>
             <p
               style={{
@@ -790,88 +971,15 @@ export function Room({ t }: { t: Tokens }) {
               View log
             </button>
           </div>
-        </>
+        </div>
       ) : (
-        <>
-          <SurfaceBoundary id="thought-strip" label="Thought circles" order={3}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "10px 20px 4px",
-                minHeight: 52,
-              }}
-            >
-              {(["pm", "sa", "engineer"] as const).map((key, i) => {
-                const thought = activeThoughts.find((t) => t.seatKey === key);
-                const streaming = thought && liveThoughts[thought.id];
-                const active = thought?.thoughtStatus === "streaming" || !!streaming;
-                const expanded = thought && expandedThoughtId === thought.id;
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() =>
-                      thought && setExpandedThoughtId(expanded ? null : thought.id)
-                    }
-                    style={{
-                      border: "none",
-                      background: "transparent",
-                      padding: 0,
-                      marginLeft: i > 0 ? -10 : 0,
-                      zIndex: 3 - i,
-                      cursor: thought ? "pointer" : "default",
-                      opacity: thought || session.activeSeatKey === key ? 1 : 0.45,
-                    }}
-                    aria-label={`${seatKeyToShort(key)} thought`}
-                  >
-                    <SeatMark seatKey={key} size={38} glow={!!active} />
-                  </button>
-                );
-              })}
-            </div>
-            {expandedThoughtId && (
-              <div
-                style={{
-                  margin: "8px 16px",
-                  padding: "10px 12px",
-                  background: t.bgElevated,
-                  borderRadius: 12,
-                  fontSize: 13,
-                  fontStyle: "italic",
-                  color: t.textSecondary,
-                  maxHeight: 120,
-                  overflowY: "auto",
-                }}
-              >
-                {liveThoughts[expandedThoughtId] ||
-                  turns.find((x) => x.id === expandedThoughtId)?.text}
-              </div>
-            )}
-            <div style={{ textAlign: "center", padding: "4px 20px 8px" }}>
-              <button
-                type="button"
-                onClick={() => void switchViewMode("voice")}
-                style={{
-                  border: "none",
-                  background: "transparent",
-                  color: t.accent,
-                  fontSize: 13,
-                  cursor: "pointer",
-                }}
-              >
-                ← Back to voice
-              </button>
-            </div>
-          </SurfaceBoundary>
-
           <SurfaceBoundary
             id="thread"
             label="Thread"
             order={4}
             style={{
               flex: 1,
+              minHeight: 0,
               overflowY: "auto",
               padding: "8px 16px 20px",
               display: "flex",
@@ -1025,7 +1133,6 @@ export function Room({ t }: { t: Tokens }) {
             )}
             <div ref={logEndRef} />
           </SurfaceBoundary>
-        </>
       )}
 
       {error && (

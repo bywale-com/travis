@@ -1,5 +1,5 @@
 import { desc, eq } from "drizzle-orm";
-import { absorbText } from "@/lib/absorb-text";
+import { absorbText, collapseSpeechStutter } from "@/lib/absorb-text";
 import { matchConductorPhrase } from "@/lib/conductor";
 import {
   parseCallByName,
@@ -163,7 +163,7 @@ export async function POST(
     });
   }
 
-  let prompt = match.cleanedText.trim();
+  let prompt = collapseSpeechStutter(match.cleanedText.trim());
   const { seatKey: calledSeat, remainder } = parseCallByName(prompt);
   if (calledSeat) {
     const binding = await bindingForSeat(calledSeat);
@@ -175,7 +175,7 @@ export async function POST(
         .where(eq(voiceSession.id, sessionId))
         .limit(1);
     }
-    prompt = remainder.trim();
+    prompt = collapseSpeechStutter(remainder.trim());
   }
 
   if (!prompt) {
