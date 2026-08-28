@@ -139,6 +139,38 @@ function presenceBlocksListen(presence: Presence): boolean {
   return presence === "ended" || presence === "paused";
 }
 
+function QuietTextButton({
+  t,
+  label,
+  onClick,
+  loud,
+  disabled,
+}: {
+  t: Tokens;
+  label: string;
+  onClick: () => void;
+  loud?: boolean;
+  disabled?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      style={{
+        border: "none",
+        background: "transparent",
+        color: disabled ? t.textMuted : loud ? t.accent : t.textMuted,
+        fontSize: 13,
+        padding: 0,
+        cursor: disabled ? "default" : "pointer",
+      }}
+    >
+      {label}
+    </button>
+  );
+}
+
 export function Room({ t }: { t: Tokens }) {
   const [session, setSession] = useState<Session | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("voice");
@@ -284,25 +316,40 @@ export function Room({ t }: { t: Tokens }) {
     setDraft("");
   }, []);
 
-  const haltRecognition = useCallback(() => {
-    persistHeldDraft();
-    recognitionLiveRef.current = false;
-    const rec = recognitionRef.current;
-    if (!rec) return;
-    rec.onend = null;
-    rec.onresult = null;
-    rec.onerror = null;
-    try {
-      rec.abort();
-    } catch {
+  const haltRecognition = useCallback(
+    (opts?: { persist?: boolean }) => {
+      if (opts?.persist !== false) persistHeldDraft();
+      recognitionLiveRef.current = false;
+      const rec = recognitionRef.current;
+      if (!rec) return;
+      rec.onend = null;
+      rec.onresult = null;
+      rec.onerror = null;
       try {
-        rec.stop();
+        rec.abort();
       } catch {
-        /* ignore */
+        try {
+          rec.stop();
+        } catch {
+          /* ignore */
+        }
       }
+      recognitionRef.current = null;
+    },
+    [persistHeldDraft],
+  );
+
+  const clearAccumulated = useCallback(() => {
+    haltRecognition({ persist: false });
+    clearDraft();
+    if (presenceRef.current === "paused" || presenceRef.current === "ended") {
+      return;
     }
-    recognitionRef.current = null;
-  }, [persistHeldDraft]);
+    if (viewModeRef.current === "log" && logSubmodeRef.current === "type") {
+      return;
+    }
+    if (listeningWantedRef.current) startRecognitionRef.current();
+  }, [clearDraft, haltRecognition]);
 
   const listenSoon = useCallback(() => {
     window.setTimeout(() => {
@@ -786,7 +833,7 @@ export function Room({ t }: { t: Tokens }) {
   };
 
   const togglePause = async () => {
-    if (!session || presence === "ended") return;
+    if (!session || presence === "ended" || presence === "speaking") return;
     if (presence === "paused") {
       setPresence("listening");
       setSubtitle("Listening…");
@@ -1177,6 +1224,34 @@ export function Room({ t }: { t: Tokens }) {
                 {runningLabel}
               </p>
             ) : null}
+            {draft ? (
+              <div
+                style={{
+                  margin: "16px 28px 0",
+                  textAlign: "center",
+                }}
+              >
+                <p
+                  style={{
+                    margin: 0,
+                    color: t.textSecondary,
+                    fontSize: 15,
+                    lineHeight: 1.4,
+                    maxHeight: "4.2em",
+                    overflow: "hidden",
+                  }}
+                >
+                  {draft}
+                </p>
+                <div style={{ marginTop: 8 }}>
+                  <QuietTextButton
+                    t={t}
+                    label="Clear"
+                    onClick={clearAccumulated}
+                  />
+                </div>
+              </div>
+            ) : null}
           </SurfaceBoundary>
 
           <div style={{ flex: 1 }} />
@@ -1404,6 +1479,47 @@ export function Room({ t }: { t: Tokens }) {
             )}
             <div ref={logEndRef} />
           </SurfaceBoundary>
+          {logSubmode === "talk" && (
+            <SurfaceBoundary
+              id="talk-listen"
+              label="Talk listen"
+              order={5}
+              style={{
+                flexShrink: 0,
+                padding: "10px 16px 16px",
+                background: t.bgPrimary,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 16,
+                borderTop: `1px solid ${t.border}`,
+              }}
+            >
+              <span style={{ color: t.textMuted, fontSize: 13 }}>
+                {presence === "paused"
+                  ? "Paused"
+                  : presence === "speaking"
+                    ? "Travis speaking…"
+                    : "Listening"}
+              </span>
+              <span style={{ display: "flex", gap: 16 }}>
+                {draft ? (
+                  <QuietTextButton
+                    t={t}
+                    label="Clear"
+                    onClick={clearAccumulated}
+                  />
+                ) : null}
+                <QuietTextButton
+                  t={t}
+                  label={presence === "paused" ? "Resume" : "Pause"}
+                  loud
+                  disabled={presence === "speaking"}
+                  onClick={() => void togglePause()}
+                />
+              </span>
+            </SurfaceBoundary>
+          )}
           {logSubmode === "type" && (
             <LogComposer
               t={t}
