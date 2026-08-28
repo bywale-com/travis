@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 23:56 UTC — **PM-PACKET-005 locked** (E1: receive format + composer grow). Next: SA (004 and 005).
+**Current (read first, then the newest stamp at the bottom):** 2026-08-28 00:37 UTC — **PM still listening.** Founder smoke: start with the engineer. This seat is still PM; Engineer is a different bind. 004/005 wait on SA.
 
 **How we maintain this log**
 
@@ -721,4 +721,18 @@ D3 stays 004. C3/C4 not recut. No attach. No formatting toolbar. Images/files = 
 **This packet:** organized **receive** (heading, list, inline code, paragraphs). Type composer **grows** then **scrolls inside**. User send stays plain. Images/files stay **stage**. C3/C4/D3 not recut.
 
 **Next:** SA ascribes **004** (Talk|Type machine) and **005** (render vs store, TTS hygiene, composer cap). Engineer plants after SA. Do not plant from this packet alone.
+
+---
+
+## 2026-08-28 00:37 UTC — Listening smoke: still PM; Engineer is another bind
+
+**Kind:** Lived pipe. Not a new flag. Not a seat switch.
+
+**Founder (preserved):** so is this listening testing it out with the let’s start with the engineer
+
+**Yes, listening.** This chat is still the **PM** (`bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea`). It did not become Engineer. Trailing “engineer” on a PM-bound run stayed here.
+
+To start Engineer work: send to the **Engineer** bind (leading `Engineer` / `Eng`, or that seat’s live run). Do not plant 004/005 from this PM chat.
+
+**Gate:** SA has not ascribed 004 or 005. Engineer waits on that. Packets stay locked. No product change from this stamp.
 
