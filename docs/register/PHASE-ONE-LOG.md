@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-28 14:56 UTC — **Voice: Travis-agnostic of agents.** Stop / say again / simplify. ElevenLabs considering. Pause-by-voice is future. Not a packet.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-28 14:59 UTC — **Room use case:** tell the others without the PR dance. Agents chime in from the same place. Not a packet.
 
 **How we maintain this log**
 
@@ -879,4 +879,33 @@ Joins 14:44 (talk to Travis directly) and 14:53 (lived gaps). Does **not** overw
 | **Talk to Travis agnostic of agents** | Travis is a being you address, not only a speaker for Eng. | 14:44 copy. |
 
 **Ask:** ElevenLabs — hold as considering, or tag SA for the vendor/config grain (I will not mint)? Stop / say-again as the next voice plate, or keep living with the modulator until you say packet?
+
+---
+
+## 2026-08-28 14:59 UTC — Room: chime in without the PR dance (founder)
+
+**Kind:** Type A use case. Lived. Not a packet. Flag remains 14:00. Seat: PM.
+
+**Founder (preserved; STT cleaned):**
+
+- Critical use case: I need you to **communicate what I and the PM just talked about** — this last couple of chats — as a **reference**, so the **agents** (abilities and so on) can **chime in**.
+- Think what I would have to do today: ask you to **commit to the PR**, then say **Engineer, look at what the PM is saying**.
+- Then what’s the purpose of the **room**? One purpose: talk to **every agent from the same place**. The second: this — they can chime in on what was just said, without that dance.
+- This is for the PM.
+
+Joins 21:10 (**everyone staying informed**) and 14:44 (**tell Travis: talk to this agent, communicate this idea**). Does **not** overwrite 14:00. Does **not** plant ambient Viktor-listen.
+
+**Do not from this stamp:** mint a broadcast table, auto-page Engineer/SA from this PM bind, treat git as the product bus, recut L1.
+
+---
+
+**The dance this kills (agent alignment — not the flag)**
+
+Today the shared memory of a PM talk is **this log + PR #15**. To get Engineer to comment, founder must **switch addressee** and point at the log. That is a pipe with extra homework. The room’s second job is: **the talk is already in the room**, so “chime in” does not require a commit as the envelope.
+
+v1 still addresses **one seat per send**. This use case is **summoned** fan-out / room-visible trail — not ambient interruption. SA ascribes when locked. I cannot reach Engineer or SA from this bind; that gap *is* the use case.
+
+**Last couple of chats (reference, still this log — the workaround):** live in Travis; L1 first land; voice is a jumbled mess; talk to Travis agnostic of agents (stop / say again / simplify); ElevenLabs considering, no hard-code; View log stays a button; pause-by-voice is future.
+
+**Ask:** next glass = **“Travis, tell Engineer / the room what we just said”** (summoned), or hold until rooms-as-primitive (L1) is packed? Ambient chime-in stays later.
 
