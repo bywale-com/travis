@@ -1,5 +1,6 @@
-import { desc, eq, ne } from "drizzle-orm";
+import { and, desc, eq, ne, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
+import { clientIpFromHeaders } from "@/server/client-ip";
 import { db } from "@/server/db/client";
 import { ensureSeatBindings } from "@/server/db/ensure-bindings";
 import { agentBinding, voiceSession } from "@/server/db/schema";
@@ -59,9 +60,72 @@ async function roomSeats() {
   });
 }
 
-/** Open room session: default + active = PM binding, view voice, router normal. */
-export async function POST() {
+async function ensureClientIpColumn() {
+  await db.execute(
+    sql`ALTER TABLE travis.voice_session ADD COLUMN IF NOT EXISTS client_ip text NOT NULL DEFAULT ''`,
+  );
+}
+
+async function payloadFor(session: typeof voiceSession.$inferSelect) {
+  const [active] = await db
+    .select()
+    .from(agentBinding)
+    .where(eq(agentBinding.id, session.activeBindingId))
+    .limit(1);
+  const [defaultBinding] = await db
+    .select()
+    .from(agentBinding)
+    .where(eq(agentBinding.id, session.defaultBindingId))
+    .limit(1);
+  if (!active) return null;
+  return sessionPayload(
+    session,
+    active,
+    defaultBinding ?? active,
+    await roomSeats(),
+  );
+}
+
+async function liveSessionForIp(ip: string) {
+  if (ip) {
+    const [row] = await db
+      .select()
+      .from(voiceSession)
+      .where(and(eq(voiceSession.clientIp, ip), ne(voiceSession.status, "ended")))
+      .orderBy(desc(voiceSession.createdAt))
+      .limit(1);
+    if (row) return row;
+  }
+
+  const empties = await db
+    .select()
+    .from(voiceSession)
+    .where(and(eq(voiceSession.clientIp, ""), ne(voiceSession.status, "ended")))
+    .orderBy(desc(voiceSession.createdAt))
+    .limit(2);
+  if (empties.length === 1 && ip) {
+    const [stamped] = await db
+      .update(voiceSession)
+      .set({ clientIp: ip })
+      .where(eq(voiceSession.id, empties[0].id))
+      .returning();
+    return stamped ?? empties[0];
+  }
+  return null;
+}
+
+/** Open or resume the live room for this IP. */
+export async function POST(req: Request) {
   await ensureSeatBindings();
+  await ensureClientIpColumn();
+  const ip = clientIpFromHeaders(req.headers);
+
+  const existing = await liveSessionForIp(ip);
+  if (existing) {
+    const payload = await payloadFor(existing);
+    if (payload) return NextResponse.json({ session: payload, resumed: true });
+  }
+
   const binding = await getPmBinding();
   if (!binding) {
     return NextResponse.json(
@@ -79,11 +143,13 @@ export async function POST() {
       viewMode: "voice",
       routerState: "normal",
       status: "listening",
+      clientIp: ip,
     })
     .returning();
 
   return NextResponse.json({
     session: sessionPayload(session, binding, binding, await roomSeats()),
+    resumed: false,
   });
 }
 
@@ -122,20 +188,12 @@ export async function GET(req: Request) {
     });
   }
 
-  const rows = await db
-    .select({
-      id: voiceSession.id,
-      status: voiceSession.status,
-      viewMode: voiceSession.viewMode,
-      createdAt: voiceSession.createdAt,
-      activeLabel: agentBinding.label,
-      activeSeatKey: agentBinding.seatKey,
-    })
-    .from(voiceSession)
-    .innerJoin(agentBinding, eq(voiceSession.activeBindingId, agentBinding.id))
-    .where(ne(voiceSession.status, "ended"))
-    .orderBy(desc(voiceSession.createdAt))
-    .limit(5);
-
-  return NextResponse.json({ sessions: rows });
+  await ensureClientIpColumn();
+  const ip = clientIpFromHeaders(req.headers);
+  const existing = await liveSessionForIp(ip);
+  if (!existing) {
+    return NextResponse.json({ session: null });
+  }
+  const payload = await payloadFor(existing);
+  return NextResponse.json({ session: payload });
 }

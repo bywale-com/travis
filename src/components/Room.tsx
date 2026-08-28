@@ -9,6 +9,7 @@ import {
 } from "@/lib/absorb-text";
 import { matchConductorPhrase } from "@/lib/conductor";
 import { speakableAgentPost } from "@/lib/agent-post";
+import { flushSpeakBuffer, pullClosedSentences } from "@/lib/speak-sentences";
 import { parseDeadManResponse, seatKeyToShort } from "@/lib/router";
 import type { QueueSeatDto } from "@/lib/queue-logic";
 import { QueueChips, QueueLog, SeatMark } from "@/components/QueueChrome";
@@ -96,17 +97,29 @@ function formatTime(iso?: string) {
   }
 }
 
-function facilitatorSpeak(text: string): Promise<void> {
+function cancelSpeech() {
+  if (typeof window === "undefined" || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+}
+
+function queueUtterance(text: string): Promise<void> {
   if (typeof window === "undefined" || !window.speechSynthesis) {
     return Promise.resolve();
   }
+  const spoken = text.trim();
+  if (!spoken) return Promise.resolve();
   return new Promise((resolve) => {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
+    const u = new SpeechSynthesisUtterance(spoken);
     u.onend = () => resolve();
     u.onerror = () => resolve();
+    window.speechSynthesis.resume();
     window.speechSynthesis.speak(u);
   });
+}
+
+function facilitatorSpeak(text: string): Promise<void> {
+  cancelSpeech();
+  return queueUtterance(text);
 }
 
 function delay(ms: number): Promise<void> {
@@ -427,6 +440,29 @@ export function Room({ t }: { t: Tokens }) {
       let buffer = "";
       const postBySeat: Record<string, string> = {};
       let seatLabel = "PM";
+      const speakUnits: Record<string, number> = {};
+      let speakChain = Promise.resolve();
+      let voiceReadStarted = false;
+
+      const enqueueVoice = (raw: string) => {
+        if (viewModeRef.current !== "voice") return;
+        const said = speakableAgentPost(raw).trim();
+        if (!said) return;
+        if (!voiceReadStarted) {
+          voiceReadStarted = true;
+          setPresence("speaking");
+          haltRecognition();
+          setSubtitle(`${seatLabel} says…`);
+          void fetch(`/api/session/${sid}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "speaking" }),
+          });
+          const intro = `${seatLabel} says.`;
+          speakChain = speakChain.then(() => queueUtterance(intro));
+        }
+        speakChain = speakChain.then(() => queueUtterance(said));
+      };
 
       const handleEvent = async (event: string, raw: string) => {
         const data = JSON.parse(raw) as Record<string, unknown>;
@@ -490,11 +526,18 @@ export function Room({ t }: { t: Tokens }) {
           if (chunk) {
             postBySeat[sk] = absorbText(postBySeat[sk] ?? "", chunk).acc;
             setStreamingPosts({ ...postBySeat });
+            const { closed } = pullClosedSentences(postBySeat[sk]);
+            const already = speakUnits[sk] ?? 0;
+            for (let i = already; i < closed.length; i++) {
+              enqueueVoice(closed[i]);
+            }
+            speakUnits[sk] = Math.max(already, closed.length);
           }
         } else if (event === "status") {
           setLiveStatus(String(data.text ?? "running"));
         } else if (event === "done") {
           const sk = String(data.seatKey ?? "_");
+          const acc = postBySeat[sk] ?? "";
           delete postBySeat[sk];
           setStreamingPosts({ ...postBySeat });
           setLiveStatus(null);
@@ -502,21 +545,20 @@ export function Room({ t }: { t: Tokens }) {
           await refreshTurns(sid);
           await refreshQueue(sid);
           const postTurn = data.postTurn as Turn | undefined;
-          const postText = postTurn?.text ?? "";
+          const postText = postTurn?.text ?? acc;
           const spoken = speakableAgentPost(postText);
           const label = String(data.seatLabel ?? seatLabel);
+          const units = flushSpeakBuffer(postText);
+          const already = speakUnits[sk] ?? 0;
+          for (let i = already; i < units.length; i++) {
+            enqueueVoice(units[i]);
+          }
+          speakUnits[sk] = Math.max(already, units.length);
 
-          if (spoken && viewModeRef.current === "voice") {
+          if (voiceReadStarted && viewModeRef.current === "voice") {
             const line = `${label} says… ${spoken.slice(0, 120)}${spoken.length > 120 ? "…" : ""}`;
             setSubtitle(line);
-            setPresence("speaking");
-            haltRecognition();
-            await fetch(`/api/session/${sid}`, {
-              method: "PATCH",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ status: "speaking" }),
-            });
-            await facilitatorSpeak(`${label} says. ${spoken}`);
+            await speakChain;
             if (listeningWantedRef.current) {
               setPresence("listening");
               setSubtitle("Listening…");
@@ -809,21 +851,16 @@ export function Room({ t }: { t: Tokens }) {
 
   startRecognitionRef.current = startRecognition;
 
-  const openSession = async () => {
-    setError(null);
-    setBusy(true);
-    try {
-      const res = await fetch("/api/session", { method: "POST" });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Open failed");
-      const s = data.session as Session;
+  const attachSession = useCallback(
+    async (s: Session, resume: boolean) => {
       setSession(s);
       sessionIdRef.current = s.id;
-      setViewMode(s.viewMode ?? "voice");
-      setTurns([]);
-      setQueueSeats([]);
-      setLogSubmode("talk");
-      logSubmodeRef.current = "talk";
+      const mode: ViewMode = s.viewMode === "log" ? "log" : "voice";
+      setViewMode(mode);
+      viewModeRef.current = mode;
+      const sub: LogSubmode = s.logSubmode === "type" ? "type" : "talk";
+      setLogSubmode(sub);
+      logSubmodeRef.current = sub;
       setRoomSeats(s.seats ?? []);
       if (!s.seats?.length) {
         const bindRes = await fetch("/api/bindings");
@@ -831,15 +868,68 @@ export function Room({ t }: { t: Tokens }) {
         if (Array.isArray(bindData.seats)) setRoomSeats(bindData.seats);
       }
       clearDraft();
-      setSubtitle("Listening…");
+      if (resume) {
+        await refreshTurns(s.id);
+        await refreshQueue(s.id);
+      } else {
+        setTurns([]);
+        setQueueSeats([]);
+      }
+      if (s.status === "paused") {
+        setPresence("paused");
+        setSubtitle("Paused");
+        stopRecognition();
+        return;
+      }
+      if (sub === "type") {
+        stopRecognition();
+        setPresence("listening");
+        setSubtitle("");
+        return;
+      }
       setPresence("listening");
+      setSubtitle("Listening…");
       startRecognition();
+    },
+    [clearDraft, refreshQueue, refreshTurns, startRecognition, stopRecognition],
+  );
+
+  const openSession = async () => {
+    setError(null);
+    setBusy(true);
+    try {
+      const res = await fetch("/api/session", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Open failed");
+      await attachSession(data.session as Session, Boolean(data.resumed));
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
       setBusy(false);
     }
   };
+
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const res = await fetch("/api/session");
+        const data = await res.json();
+        if (cancelled || !data.session) return;
+        setBusy(true);
+        await attachSession(data.session as Session, true);
+      } catch {
+        /* stay on landing */
+      } finally {
+        if (!cancelled) setBusy(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // Boot once per page load — do not re-bind when listen callbacks churn.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const togglePause = async () => {
     if (!session || presence === "ended" || presence === "speaking") return;
@@ -912,7 +1002,7 @@ export function Room({ t }: { t: Tokens }) {
   const endSession = async () => {
     if (!session) return;
     stopRecognition();
-    window.speechSynthesis?.cancel();
+    cancelSpeech();
     await fetch(`/api/session/${session.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -994,7 +1084,7 @@ export function Room({ t }: { t: Tokens }) {
             fontSize: 16,
           }}
         >
-          Open session
+          {busy ? "Resuming…" : "Open session"}
         </Button>
         {error && <p style={{ color: t.dangerQuiet, marginTop: 16 }}>{error}</p>}
       </div>
