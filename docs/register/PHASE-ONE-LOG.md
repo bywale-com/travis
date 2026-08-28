@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-28 14:44 UTC — **Vision (not locked):** live in Travis. Travis is agentic — partner, facilitator, liaison. Talk to Travis and to sub-agents. L1 still considering.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-28 14:53 UTC — **Lived: trying to live in Travis.** L1 plate is in the register, not on the phone face. Not planted.
 
 **How we maintain this log**
 
@@ -828,4 +828,20 @@ This answers the 02:11 fork. Travis-as-agent is **not only** backstage janitor. 
 **Live in Travis** = don’t leave this app to do the work. Rooms (L1) are how you enter. Agentic Travis is how you stay. Equipped with tools is later glass + SA — not this stamp.
 
 **Ask:** this is the copy — did I get the being right (partner + facilitator + liaison, not a fourth Cursor chat UI)? Hold, or lock a Type A note under 21:10? L1 still the immediate glass.
+
+---
+
+## 2026-08-28 14:53 UTC — Lived: work from Travis; where is L1
+
+**Kind:** Lived use. Not a packet.
+
+**Founder (preserved):** testing — going to try to live inside the Travis app and work from here. Still some things unable to do; hard to state them; will try to build from here and see. You were able to create the plate, right — the room, separate rooms — where is it?
+
+**Yes.** Plate **L1** exists. It is **not** on the phone face. It is a PNG in the repo:
+
+`docs/register/plates/travis-l1-select-room.png`
+
+FACE: [`SELECT-ROOM-FACE.md`](SELECT-ROOM-FACE.md). Living PR [#15](https://github.com/bywale-com/travis/pull/15). Considering — not planted. Open session still goes into the one room.
+
+Gaps they hit while living here: name when they become speakable. Do not invent them.
 
