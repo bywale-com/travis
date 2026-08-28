@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-28 14:16 UTC — **L1 select-room considering.** First land = pick a room that exists. Not a packet.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-28 14:44 UTC — **Vision (not locked):** live in Travis. Travis is agentic — partner, facilitator, liaison. Talk to Travis and to sub-agents. L1 still considering.
 
 **How we maintain this log**
 
@@ -800,4 +800,32 @@ Photo: [`plates/travis-l1-select-room.png`](plates/travis-l1-select-room.png). R
 `Om` / “another codebase” = scenery (two exist so select is real). Not a name lock. No create. C3/C4/D3/E1 not recut.
 
 **Ask:** like L1 enough to packet? After pick, still Mode A (002)? End session returns here?
+
+---
+
+## 2026-08-28 14:44 UTC — Live in Travis: agentic partner (founder; not locked)
+
+**Kind:** Type A vision. Founder: copy me. **Not a new flag. Not a packet.** Flag remains 14:00. Joins 02:11 (Travis as agent) and 21:10 (Me · Travis · agents). Seat: PM.
+
+**Founder (preserved; STT cleaned in capture, not in meaning):**
+
+> I want to live in Travis. I don’t want to have to leave Travis. It just needs to be equipped with all kinds of tools. Agentic in itself. For sure it’s going to need that for the things I want to do. It has to be its own agent.
+>
+> I want to be able to talk to Travis directly. I want to be able to talk to the sub-agents. I also want to be able to tell Travis: talk to this agent, communicate this idea. So it’s smart enough — not only ideas — it can look at repos. It has its own opinion. I’m rarely going to be asking it for advice, tips, stuff like that. It’s more like a partner. And a facilitator of course. And liaison. Business analyst more like me.
+
+Does **not** overwrite 14:00 (open this app, not Cursor; talk; hear replies). Does **not** plant this as v1. v1 stays the pipe + one room.
+
+**Do not from this stamp:** mint Travis-as-agent store, recut L1, invent a fourth live pill, plant “leave Cursor forever” as Engineer work, mint tables.
+
+---
+
+**Copypack (agent alignment — not the flag)**
+
+This answers the 02:11 fork. Travis-as-agent is **not only** backstage janitor. You **talk to Travis**. You **talk to sub-agents**. You **tell Travis to go talk to an agent**. Three moves. Travis has tools, looks at repos, has an opinion — **partner / facilitator / liaison / BA-like-you**, not a tips bot.
+
+002’s planted law (Travis is the only *voice*; agents post; Travis reads) can still hold while this vision is the **being** you live with. Sub-agents remaining Cursor durable agents is still the 21:26 answer until locked otherwise.
+
+**Live in Travis** = don’t leave this app to do the work. Rooms (L1) are how you enter. Agentic Travis is how you stay. Equipped with tools is later glass + SA — not this stamp.
+
+**Ask:** this is the copy — did I get the being right (partner + facilitator + liaison, not a fourth Cursor chat UI)? Hold, or lock a Type A note under 21:10? L1 still the immediate glass.
 
