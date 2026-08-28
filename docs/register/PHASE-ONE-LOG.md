@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-28 15:02 UTC — **Envelope for Engineer:** [PR #27](https://github.com/bywale-com/travis/pull/27). Not a packet. Last chats wrapped so founder can ask Engineer in the room.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-28 18:59 UTC — **Imported: harness vs model.** Travis is the harness; Cursor is the buried brain. Four primitives. Not a flag. Not a packet.
 
 **How we maintain this log**
 
@@ -920,4 +920,47 @@ v1 still addresses **one seat per send**. This use case is **summoned** fan-out 
 **Landed:** [`ENVELOPE-LIVE-IN-TRAVIS.md`](https://github.com/bywale-com/travis/blob/cursor/envelope-live-in-travis-b9ea/docs/register/ENVELOPE-LIVE-IN-TRAVIS.md) · **[PR #27](https://github.com/bywale-com/travis/pull/27)** · branch `cursor/envelope-live-in-travis-b9ea`.
 
 Engineer: read only. Founder will ask. Do not plant from the envelope.
+
+---
+
+## 2026-08-28 18:59 UTC — Harness vs model (imported; founder brought)
+
+**Kind:** Type A. Imported discussion summary. **Not founder product flag.** Same shape as the 21:11 Viktor import: it matters for Travis direction; it does not replace 14:00.
+
+**Founder brought this text (preserve):**
+
+> **Discussion Summary: Deconstructing the "AI Harness" and its First Principles** This conversation evolved from a simple terminology query into a deep exploration of AI system architecture, first principles, and the mechanics of self-improving autonomous agents.
+>
+> **Phase 1: Clarifying the Meta Terminology** — Ground-level: *“recreating Claude’s harness.”* Separate the AI **model** (raw neural network / brain behind an API) from the **harness** (software wrapper, UI, memory management, tool integration). Claude the model is not a harness. The Claude *web application* is a harness that houses the model. Recreating it means building a custom application around the raw API.
+>
+> **Phase 2: Model vs harness** — Raw model: “brain in a jar,” stateless, single-turn, plain text, no built-in memory or file handling. Harness (app): persistent conversation memory, file/document parsing, execution sandboxes, UI rendering, safety guardrails. Other harnesses: IDEs (Cursor), automation pipelines (Zapier).
+>
+> **Phase 3: Universal primitives** — because everything into or out of a model is fundamentally **text**:
+> 1. **Ingestion** (World → Text): PDFs, audio, UI clicks → tokens.
+> 2. **Context injection** (State → Text): system instructions, history, retrieved docs prepended.
+> 3. **Output parsing** (Text → Actions/UI): JSON/HTML → software events or visual elements.
+> 4. **Orchestration** (The Loop): feed action output back as input; multi-step.
+>
+> **Phase 4: Self-building harnesses** — a model with a code execution engine can inspect its limits, write new tools, **build its own harness**. Mirrors open-interpreter, dynamic agent loops, **MCP** (discover/inspect/connect tools).
+
+**Do not from this stamp:** plant MCP, plant a Claude-app clone, mint tool tables, overwrite 14:00, recut L1, tell Engineer to implement a self-building harness.
+
+---
+
+**Travis join (agent alignment — not the flag)**
+
+Travis is **not** recreating Claude. Travis is a **harness around Cursor** (durable agents / runs / stream). Cursor is the buried brain. The 14:00 flag is the harness job: speak, send, hear, see images — without opening Cursor.
+
+| Primitive | Travis today (v1 pipe) |
+|-----------|-------------------------|
+| Ingestion | STT (and Type composer). |
+| Context injection | Seat paste, logs, packets — what this chat already is. |
+| Output parsing | Assistant text → TTS + log; images in order. Hygiene: don’t speak thinking/tool spam. |
+| Orchestration | Session loop. One addressee per send. |
+
+**Live in Travis / its own agent** (14:44, 02:11) is Phase 4: harness that can look at repos, assemble rooms, edit its own codebase or spin a sub-agent. That is vision. v1 stays a thin harness. Self-building + MCP are **not** this week’s plant.
+
+Cursor itself is already a harness (IDE) around a model. Travis is a **second harness** (phone-first room) around Cursor’s agent API — not around the desktop chat UI.
+
+**Ask:** hold here, or add a short join to the Engineer envelope ([PR #27](https://github.com/bywale-com/travis/pull/27))? Do not packet this.
 
