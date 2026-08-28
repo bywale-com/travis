@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-28 14:53 UTC — **Lived: trying to live in Travis.** L1 plate is in the register, not on the phone face. Not planted.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-28 14:56 UTC — **Voice: Travis-agnostic of agents.** Stop / say again / simplify. ElevenLabs considering. Pause-by-voice is future. Not a packet.
 
 **How we maintain this log**
 
@@ -844,4 +844,39 @@ This answers the 02:11 fork. Travis-as-agent is **not only** backstage janitor. 
 FACE: [`SELECT-ROOM-FACE.md`](SELECT-ROOM-FACE.md). Living PR [#15](https://github.com/bywale-com/travis/pull/15). Considering — not planted. Open session still goes into the one room.
 
 Gaps they hit while living here: name when they become speakable. Do not invent them.
+
+---
+
+## 2026-08-28 14:56 UTC — Voice: talk to Travis, not the modulator (founder)
+
+**Kind:** Type A + lived Type B. Not a packet. Not ElevenLabs plant. Flag remains 14:00.
+
+**Founder (preserved; STT doubles collapsed):**
+
+- The one thing I cannot do: we’re really going to have to **improve the voice functionality**.
+- Thinking about integrating **ElevenLabs** — it’s already built. Cost question; probably negligible. Not only cost: integrate the things that need to be integrated.
+- Hate **hard-coding**. Anytime data is required: what **field** inside of what **table**, what does it control, does it need its own controls — those are tables too.
+- Current voice modulator: feels like a **jumbled mess** when I’m hearing it talk.
+- Need to **talk to Travis agnostic of the agents**. Travis just read that thing; I wanted to say **stop**, **wait**, **start again**, **this is what this person is saying**, **rephrase**.
+- Travis is totally agnostic — probably **its own agent**, separate from simply facilitating between agents and between me and agents.
+- Use case: **hey Travis, wait, stop, say that again, please simplify what is it saying.**
+- Don’t want buttons for anything — except when I actually want buttons. **View log** remains a button. **Pause / resume** we should signal with **voice**. That’s the future.
+
+Joins 14:44 (talk to Travis directly) and 14:53 (lived gaps). Does **not** overwrite 14:00. Does **not** recut L1.
+
+**Do not from this stamp:** plant ElevenLabs, mint a voice-vendor table, invent pause-phrase law, recut 002 pause-on-orb, plant “simplify” as v1 triage.
+
+---
+
+**Split (agent alignment — not the flag)**
+
+| Move | What it is | When |
+|------|------------|------|
+| **Stop / wait / say that again** | Facilitator of the **read**. You are talking to Travis about the voice, not sending a new Cursor turn. | Next voice pocket when you want glass. |
+| **Simplify / rephrase what it’s saying** | Travis-as-agent (opinion / liaison). Adjacent to v2 judgment. | Vision. Not v1 pipe. |
+| **ElevenLabs** | Replace the jumbled in-house modulator. Cost + integrate; **no hard-code** — SA ascribes field/table when locked. | Considering. |
+| **Pause / resume by voice** | Same as stop/wait, without the orb. View log stays a button. | Founder: future. |
+| **Talk to Travis agnostic of agents** | Travis is a being you address, not only a speaker for Eng. | 14:44 copy. |
+
+**Ask:** ElevenLabs — hold as considering, or tag SA for the vendor/config grain (I will not mint)? Stop / say-again as the next voice plate, or keep living with the modulator until you say packet?
 
