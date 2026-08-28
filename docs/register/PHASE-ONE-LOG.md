@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-28 00:37 UTC — **PM still listening.** Founder smoke: start with the engineer. This seat is still PM; Engineer is a different bind. 004/005 wait on SA.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-28 02:11 UTC — **Vision (not locked):** rooms as primitive; Cursor agents room-agnostic; Travis will have to become an agent. v1 pipe + one room still the product. Next still SA on 004/005.
 
 **How we maintain this log**
 
@@ -735,4 +735,46 @@ D3 stays 004. C3/C4 not recut. No attach. No formatting toolbar. Images/files = 
 To start Engineer work: send to the **Engineer** bind (leading `Engineer` / `Eng`, or that seat’s live run). Do not plant 004/005 from this PM chat.
 
 **Gate:** SA has not ascribed 004 or 005. Engineer waits on that. Packets stay locked. No product change from this stamp.
+
+---
+
+## 2026-08-28 02:11 UTC — Vision: rooms as primitive; Travis as agent (founder; not locked)
+
+**Kind:** Type A vision. Use-case paint. **Not a new flag. Not a packet. Not SA tables.** Flag remains 14:00. Seat: PM (founder: keep this part for the PM; may tag SA later).
+
+**Founder (preserved; STT doubles collapsed in capture, not in meaning):**
+
+- Paint the vision for where this is going — at least as a use case. Think, not even productizing it; what we’re doing is productizing regardless.
+- **Rooms is going to be a primitive.** First-class. This is a room, but a room that houses a **select group of agents I handpicked**.
+- Another room: agents for a **different codebase**. Assemble that room, those agents. Could be the same agents; more than likely **not**, because from a different codebase. That’s the primary reason — pick another three.
+- **Cursor agents are room-agnostic.** They don’t know what rooms they are in. The room itself is why you pick another three.
+- **Travis is going to have to become an agent.** No way around it. Too many things that are practically agentic: grab these agents in Cursor, organize them in a room. That requires an agent with access to Cursor — work Cursor, take the agent IDs it needs, pretty much **edit its own codebase**, or spin up a sub-agent inside Cursor to do that.
+- Modular approach to everything: tables and a dumb runtime, tables and fields. Painting the vision; not that far off. Don’t get too far ahead. This part stays with the PM.
+
+Joins standing 21:10 question (Me · Travis · elevated agents; rooms or just one; adding / seeing agents) and 20:42 / 21:25 room-as-live-environment. Does **not** replace “speak with the PM” as the main goal. Does **not** overwrite 14:00.
+
+**Do not from this stamp:** plant N rooms, plant Travis-as-Cursor-agent, mint tables, recut 002/003/004/005, puppet Cursor desktop chat.
+
+---
+
+**Use case (agent alignment — not the flag)**
+
+One **room** = a handpicked roster + the codebase those agents work. You walk into the Travis room for that repo and talk to *that* PM / SA / Engineer. Cursor durable agents stay buried execution. They do not “live in” the room; the room **cites** them. That is why they are room-agnostic, and why a second codebase is usually a second three — not because Cursor invented rooms, because **you** assembled a different roster against a different repo.
+
+v1’s planted Travis room (this repo, these three binds) is then the **first instance** of that primitive, not a different product.
+
+**Assembling** a room is the agentic job: list Cursor cloud agents, take ids, write membership. That is why Travis “has to become an agent” — something with Cursor access that can bind ids into Travis (edit this codebase or a sub-agent that does). Supported path stays Cloud Agents API / `@cursor/sdk`, not desktop puppeting.
+
+**Modular (named for later SA, not minted here):** a room has a roster, a default seat, a codebase/repo it is for. Membership is Travis’s, not Cursor’s. When you tag SA, they ascribe. Not this stamp.
+
+---
+
+**Ideas (asked; still alignment, not lock)**
+
+1. **Travis-the-agent vs Travis-the-room.** The room is what you are in. The agent is backstage janitor (assemble / rebind). You still talk to **PM** in the room. Fork: is Travis-as-agent a fourth mic in the room, or a worker that never takes the voice channel?
+2. **Same agent id in two rooms** is legal if agents are room-agnostic — and dangerous for context. Founder’s “more than likely not the same three” is the safer default until SA names isolation.
+3. **Voice switch of rooms** (“open the other codebase”) is Type B later. Primitive first.
+4. **v1 does not wait on this.** Pipe + one room + 004/005 still the build. This vision is the perimeter the one room was always pointing at.
+
+**Ask:** stamp only (this). Packet later when you want rooms-as-primitive on the glass? Travis-as-agent: fourth seat, or backstage only? Tag SA when you want the store grain — I will not mint it.
 
