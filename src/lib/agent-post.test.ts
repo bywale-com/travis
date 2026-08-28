@@ -1,0 +1,64 @@
+import assert from "node:assert/strict";
+import { test } from "node:test";
+import { parseAgentPost, speakableAgentPost } from "./agent-post";
+
+test("heading, list, inline code, paragraphs", () => {
+  const blocks = parseAgentPost(
+    [
+      "## Bind path",
+      "",
+      "- quote the user turn",
+      "- keep `via` on the session",
+      "- do not mint a table",
+      "",
+      "That is the plant.",
+      "Second sentence same para.",
+    ].join("\n"),
+  );
+  assert.equal(blocks[0]?.type, "heading");
+  assert.equal(blocks[1]?.type, "list");
+  assert.equal(blocks[2]?.type, "paragraph");
+  if (blocks[0]?.type === "heading") {
+    assert.equal(blocks[0].inlines[0]?.type, "text");
+    assert.equal(blocks[0].inlines[0] && "text" in blocks[0].inlines[0] ? blocks[0].inlines[0].text : "", "Bind path");
+  }
+  if (blocks[1]?.type === "list") {
+    assert.equal(blocks[1].ordered, false);
+    assert.equal(blocks[1].items.length, 3);
+    const via = blocks[1].items[1].find((p) => p.type === "code");
+    assert.equal(via && via.type === "code" ? via.text : "", "via");
+  }
+});
+
+test("bold-only line is a heading, not a bar", () => {
+  const blocks = parseAgentPost("**Bind path**\n\n- one");
+  assert.equal(blocks[0]?.type, "heading");
+  assert.equal(blocks[1]?.type, "list");
+});
+
+test("numbered list", () => {
+  const blocks = parseAgentPost("1. alpha\n2. beta `x`");
+  assert.equal(blocks[0]?.type, "list");
+  if (blocks[0]?.type === "list") {
+    assert.equal(blocks[0].ordered, true);
+    assert.equal(blocks[0].items.length, 2);
+  }
+});
+
+test("speakable strips hashes, ticks, and list marks", () => {
+  const spoken = speakableAgentPost(
+    "## Bind path\n\n- keep `via` on the session\n\nDone.",
+  );
+  assert.equal(spoken.includes("#"), false);
+  assert.equal(spoken.includes("`"), false);
+  assert.equal(spoken.includes("- keep"), false);
+  assert.match(spoken, /Bind path/);
+  assert.match(spoken, /keep via on the session/);
+  assert.match(spoken, /Done/);
+});
+
+test("flat text stays one paragraph", () => {
+  const blocks = parseAgentPost("just a line");
+  assert.equal(blocks.length, 1);
+  assert.equal(blocks[0]?.type, "paragraph");
+});

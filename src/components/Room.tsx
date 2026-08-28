@@ -8,9 +8,11 @@ import {
   mergeLiveTranscript,
 } from "@/lib/absorb-text";
 import { matchConductorPhrase } from "@/lib/conductor";
+import { speakableAgentPost } from "@/lib/agent-post";
 import { parseDeadManResponse, seatKeyToShort } from "@/lib/router";
 import type { QueueSeatDto } from "@/lib/queue-logic";
 import { QueueChips, QueueLog, SeatMark } from "@/components/QueueChrome";
+import { AgentPostBody } from "@/components/AgentPostBody";
 import { LogComposer, type RoomSeat } from "@/components/LogComposer";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
@@ -148,7 +150,9 @@ export function Room({ t }: { t: Tokens }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [liveStatus, setLiveStatus] = useState<string | null>(null);
-  const [streamingPost, setStreamingPost] = useState("");
+  const [streamingPosts, setStreamingPosts] = useState<Record<string, string>>(
+    {},
+  );
   const [streamingSeat, setStreamingSeat] = useState<string | null>(null);
   const [subtitle, setSubtitle] = useState("");
   const [expandedThoughtId, setExpandedThoughtId] = useState<string | null>(null);
@@ -237,7 +241,7 @@ export function Room({ t }: { t: Tokens }) {
 
   useEffect(() => {
     logEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [turns, draft, streamingPost, liveStatus]);
+  }, [turns, draft, streamingPosts, liveStatus]);
 
   const resetDeadManTimer = useCallback(() => {
     lastSpeechRef.current = Date.now();
@@ -374,7 +378,7 @@ export function Room({ t }: { t: Tokens }) {
 
       const decoder = new TextDecoder();
       let buffer = "";
-      let postAcc = "";
+      const postBySeat: Record<string, string> = {};
       let seatLabel = "PM";
 
       const handleEvent = async (event: string, raw: string) => {
@@ -433,26 +437,30 @@ export function Room({ t }: { t: Tokens }) {
           setLiveThoughts((prev) => ({ ...prev, [id]: text }));
         } else if (event === "post_delta") {
           const chunk = String(data.text ?? "");
+          const sk = String(data.seatKey ?? "_");
           if (data.seatLabel) seatLabel = String(data.seatLabel);
           if (data.seatKey) setStreamingSeat(String(data.seatKey));
           if (chunk) {
-            postAcc = absorbText(postAcc, chunk).acc;
-            setStreamingPost(postAcc);
+            postBySeat[sk] = absorbText(postBySeat[sk] ?? "", chunk).acc;
+            setStreamingPosts({ ...postBySeat });
           }
         } else if (event === "status") {
           setLiveStatus(String(data.text ?? "running"));
         } else if (event === "done") {
+          const sk = String(data.seatKey ?? "_");
+          delete postBySeat[sk];
+          setStreamingPosts({ ...postBySeat });
           setLiveStatus(null);
-          setStreamingPost("");
           setStreamingSeat(null);
           await refreshTurns(sid);
           await refreshQueue(sid);
           const postTurn = data.postTurn as Turn | undefined;
-          const postText = postTurn?.text ?? postAcc;
+          const postText = postTurn?.text ?? "";
+          const spoken = speakableAgentPost(postText);
           const label = String(data.seatLabel ?? seatLabel);
 
-          if (postText && viewModeRef.current === "voice") {
-            const line = `${label} says… ${postText.slice(0, 120)}${postText.length > 120 ? "…" : ""}`;
+          if (spoken && viewModeRef.current === "voice") {
+            const line = `${label} says… ${spoken.slice(0, 120)}${spoken.length > 120 ? "…" : ""}`;
             setSubtitle(line);
             setPresence("speaking");
             haltRecognition();
@@ -461,7 +469,7 @@ export function Room({ t }: { t: Tokens }) {
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ status: "speaking" }),
             });
-            await facilitatorSpeak(`${label} says. ${postText}`);
+            await facilitatorSpeak(`${label} says. ${spoken}`);
             if (listeningWantedRef.current) {
               setPresence("listening");
               setSubtitle("Listening…");
@@ -597,13 +605,14 @@ export function Room({ t }: { t: Tokens }) {
   );
 
   const sendTyped = useCallback(
-    async (args: { text: string; chipSeatKey: SeatKey | null }) => {
+    async (args: { text: string; chipSeatKeys: SeatKey[] }) => {
       const sid = sessionIdRef.current;
       if (!sid) return false;
       const prompt = args.text.trim();
       const tempId = prompt ? `tmp-${crypto.randomUUID()}` : "";
       if (prompt) {
-        const seatKey = args.chipSeatKey ?? sessionRef.current?.activeSeatKey ?? "pm";
+        const seatKey =
+          args.chipSeatKeys[0] ?? sessionRef.current?.activeSeatKey ?? "pm";
         setTurns((prev) => [
           ...prev,
           {
@@ -1318,11 +1327,17 @@ export function Room({ t }: { t: Tokens }) {
                             {refTurn.text.length > 120 ? "…" : ""}
                           </p>
                         )}
-                        {turn.text}
+                        {turn.kind === "agent_post" ? (
+                          <AgentPostBody text={turn.text} t={t} />
+                        ) : (
+                          turn.text
+                        )}
                         {!isUser && turn.kind === "agent_post" && (
                           <button
                             type="button"
-                            onClick={() => void facilitatorSpeak(turn.text)}
+                            onClick={() =>
+                              void facilitatorSpeak(speakableAgentPost(turn.text))
+                            }
                             style={{
                               display: "block",
                               marginTop: 8,
@@ -1360,8 +1375,9 @@ export function Room({ t }: { t: Tokens }) {
                 }
               />
             )}
-            {streamingPost && (
+            {Object.entries(streamingPosts).map(([sk, liveText]) => (
               <div
+                key={sk}
                 style={{
                   alignSelf: "flex-start",
                   maxWidth: "92%",
@@ -1370,7 +1386,7 @@ export function Room({ t }: { t: Tokens }) {
                 }}
               >
                 <SeatMark
-                  seatKey={streamingSeat ?? session.activeSeatKey}
+                  seatKey={sk === "_" ? (streamingSeat ?? session.activeSeatKey) : sk}
                   size={28}
                   glow
                 />
@@ -1383,10 +1399,10 @@ export function Room({ t }: { t: Tokens }) {
                     fontSize: 15,
                   }}
                 >
-                  {streamingPost}
+                  <AgentPostBody text={liveText} t={t} />
                 </div>
               </div>
-            )}
+            ))}
             {draft && logSubmode !== "type" && (
               <div
                 style={{

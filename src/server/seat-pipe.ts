@@ -51,6 +51,48 @@ export async function nextTurnSeq(sessionId: string) {
   return (last?.seq ?? 0) + 1;
 }
 
+const seqTails = new Map<string, Promise<unknown>>();
+
+async function withSeqLock<T>(sessionId: string, fn: () => Promise<T>): Promise<T> {
+  const prev = seqTails.get(sessionId) ?? Promise.resolve();
+  let release!: (value: unknown) => void;
+  const next = new Promise((resolve) => {
+    release = resolve;
+  });
+  seqTails.set(
+    sessionId,
+    prev.then(() => next),
+  );
+  try {
+    await prev;
+    return await fn();
+  } finally {
+    release(undefined);
+  }
+}
+
+async function insertTurn(
+  sessionId: string,
+  values: {
+    role: string;
+    kind: string;
+    seatKey?: SeatKey | null;
+    speakable: boolean;
+    text: string;
+    thoughtStatus?: string | null;
+    referenceTurnId?: string | null;
+  },
+): Promise<VoiceTurn> {
+  return withSeqLock(sessionId, async () => {
+    const seq = await nextTurnSeq(sessionId);
+    const [row] = await db
+      .insert(voiceTurn)
+      .values({ sessionId, seq, ...values })
+      .returning();
+    return row;
+  });
+}
+
 /**
  * True only if this seat still has an active Cursor run. A leftover
  * seat_live_run row against a finished/dead stream is cleared so the
@@ -111,25 +153,18 @@ export async function enqueueOnSeat(params: {
 
 type SendFn = (event: string, data: unknown) => void;
 
-async function insertUserTurn(
+export async function insertUserTurn(
   sessionId: string,
   prompt: string,
   seatKey: SeatKey,
 ): Promise<VoiceTurn> {
-  const seq = await nextTurnSeq(sessionId);
-  const [row] = await db
-    .insert(voiceTurn)
-    .values({
-      sessionId,
-      seq,
-      role: "user",
-      kind: "user",
-      seatKey,
-      speakable: true,
-      text: prompt,
-    })
-    .returning();
-  return row;
+  return insertTurn(sessionId, {
+    role: "user",
+    kind: "user",
+    seatKey,
+    speakable: true,
+    text: prompt,
+  });
 }
 
 /**
@@ -144,12 +179,16 @@ export async function pipeOneSend(params: {
   send: SendFn;
   matchedPhrase?: string;
   gen?: AsyncGenerator<CursorStreamEvent>;
+  /** Fan-out shares one user turn across dests. */
+  userTurn?: VoiceTurn;
 }): Promise<{ ownedTerminal: boolean; queue?: QueueSnapshot }> {
   const { sessionId, binding, prompt, send } = params;
   const seatKey = (binding.seatKey ?? "pm") as SeatKey;
   const seatLabel = binding.label ?? seatKeyToLabel(seatKey);
 
-  const userTurn = await insertUserTurn(sessionId, prompt, seatKey);
+  const createdHere = !params.userTurn;
+  const userTurn =
+    params.userTurn ?? (await insertUserTurn(sessionId, prompt, seatKey));
   send("matched", {
     matched: true,
     matchedPhrase: params.matchedPhrase,
@@ -170,8 +209,10 @@ export async function pipeOneSend(params: {
 
   if (first.value.type === "busy") {
     await gen.return(undefined);
-    await db.delete(voiceTurn).where(eq(voiceTurn.id, userTurn.id));
-    send("retract", { id: userTurn.id });
+    if (createdHere) {
+      await db.delete(voiceTurn).where(eq(voiceTurn.id, userTurn.id));
+      send("retract", { id: userTurn.id });
+    }
     const queue = await enqueueOnSeat({
       sessionId,
       binding,
@@ -182,7 +223,6 @@ export async function pipeOneSend(params: {
     return { ownedTerminal: false, queue };
   }
 
-  let seq = userTurn.seq + 1;
   let thoughtTurnId: string | null = null;
   let thoughtText = "";
   let postText = "";
@@ -215,21 +255,15 @@ export async function pipeOneSend(params: {
     } else if (ev.type === "thought_delta") {
       thoughtText = absorbText(thoughtText, ev.text).acc;
       if (!thoughtTurnId) {
-        const [row] = await db
-          .insert(voiceTurn)
-          .values({
-            sessionId,
-            seq,
-            role: "assistant",
-            kind: "agent_thought",
-            seatKey,
-            speakable: false,
-            thoughtStatus: "streaming",
-            text: thoughtText,
-          })
-          .returning();
+        const row = await insertTurn(sessionId, {
+          role: "assistant",
+          kind: "agent_thought",
+          seatKey,
+          speakable: false,
+          thoughtStatus: "streaming",
+          text: thoughtText,
+        });
         thoughtTurnId = row.id;
-        seq += 1;
         send("thought", { turn: row });
       } else {
         await db
@@ -281,21 +315,15 @@ export async function pipeOneSend(params: {
       })
       .where(eq(voiceTurn.id, thoughtTurnId));
   } else if (thoughtText.trim() && !thoughtTurnId) {
-    const [row] = await db
-      .insert(voiceTurn)
-      .values({
-        sessionId,
-        seq,
-        role: "assistant",
-        kind: "agent_thought",
-        seatKey,
-        speakable: false,
-        thoughtStatus: postText.trim() ? "promoted" : "collapsed",
-        text: thoughtText.trim(),
-      })
-      .returning();
+    const row = await insertTurn(sessionId, {
+      role: "assistant",
+      kind: "agent_thought",
+      seatKey,
+      speakable: false,
+      thoughtStatus: postText.trim() ? "promoted" : "collapsed",
+      text: thoughtText.trim(),
+    });
     thoughtTurnId = row.id;
-    seq += 1;
   }
 
   const donePayload = doneBox.current;
@@ -308,35 +336,23 @@ export async function pipeOneSend(params: {
       ? ""
       : "Run finished (no assistant text).";
   if (finalPost) {
-    const [row] = await db
-      .insert(voiceTurn)
-      .values({
-        sessionId,
-        seq,
-        role: "assistant",
-        kind: "agent_post",
-        seatKey,
-        referenceTurnId: userTurn.id,
-        speakable: true,
-        text: finalPost,
-      })
-      .returning();
-    postTurn = row;
-    seq += 1;
+    postTurn = await insertTurn(sessionId, {
+      role: "assistant",
+      kind: "agent_post",
+      seatKey,
+      referenceTurnId: userTurn.id,
+      speakable: true,
+      text: finalPost,
+    });
   }
 
   const statusText = donePayload?.statusText ?? "finished";
-  const [statusTurn] = await db
-    .insert(voiceTurn)
-    .values({
-      sessionId,
-      seq,
-      role: "status",
-      kind: "status",
-      speakable: false,
-      text: statusText,
-    })
-    .returning();
+  const statusTurn = await insertTurn(sessionId, {
+    role: "status",
+    kind: "status",
+    speakable: false,
+    text: statusText,
+  });
 
   if (bareError) {
     const errText = donePayload?.error ?? "Cursor send failed";
@@ -400,6 +416,7 @@ export async function sendOrEnqueue(params: {
   prompt: string;
   send: SendFn;
   matchedPhrase?: string;
+  userTurn?: VoiceTurn;
 }): Promise<"queued" | "sent"> {
   if (await seatHasActiveRun(params.binding)) {
     const queue = await enqueueOnSeat({
@@ -417,6 +434,53 @@ export async function sendOrEnqueue(params: {
     await drainHead(params.sessionId, params.binding, params.send);
   }
   return "sent";
+}
+
+/**
+ * Type @ fan-out: one user turn, each tagged seat gets the same body.
+ * Per-seat queue still applies. Single dest keeps 003 retract-on-busy.
+ */
+export async function sendOrEnqueueMany(params: {
+  sessionId: string;
+  bindings: AgentBinding[];
+  prompt: string;
+  send: SendFn;
+}): Promise<void> {
+  const { sessionId, bindings, prompt, send } = params;
+  if (bindings.length === 0) return;
+  if (bindings.length === 1) {
+    await sendOrEnqueue({
+      sessionId,
+      binding: bindings[0],
+      prompt,
+      send,
+    });
+    return;
+  }
+
+  const lead = bindings[0];
+  const last = bindings[bindings.length - 1];
+  const leadKey = (lead.seatKey ?? "pm") as SeatKey;
+  const lastKey = (last.seatKey ?? "pm") as SeatKey;
+  const userTurn = await insertUserTurn(sessionId, prompt, leadKey);
+  send("matched", {
+    matched: true,
+    userTurn,
+    activeSeatKey: lastKey,
+    activeLabel: last.label ?? seatKeyToLabel(lastKey),
+  });
+
+  await Promise.allSettled(
+    bindings.map((binding) =>
+      sendOrEnqueue({
+        sessionId,
+        binding,
+        prompt,
+        send,
+        userTurn,
+      }),
+    ),
+  );
 }
 
 export async function bargeQueuedItem(params: {
