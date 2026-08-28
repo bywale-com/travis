@@ -27,3 +27,5 @@
 | 010 | [`HOTFIX-010-VOCATIVE-ROUTE.md`](./HOTFIX-010-VOCATIVE-ROUTE.md) | `hey engineer` / trailing seat name switches addressee |
 | 011 | [`HOTFIX-011-COMPOSER-SEND.md`](./HOTFIX-011-COMPOSER-SEND.md) | Type send clears immediately; log paints now; composer stays free |
 | 012 | [`HOTFIX-012-TALK-PAUSE-CLEAR.md`](./HOTFIX-012-TALK-PAUSE-CLEAR.md) | Talk pause/resume; clear accumulated draft in Talk and voice |
+| 013 | [`HOTFIX-013-SENTENCE-TTS.md`](./HOTFIX-013-SENTENCE-TTS.md) | Voice reads assistant sentences as they land, not one dump at done |
+| 014 | [`HOTFIX-014-IP-SESSION.md`](./HOTFIX-014-IP-SESSION.md) | Resume the live room by client IP; End still ends |

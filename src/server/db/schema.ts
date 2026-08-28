@@ -40,6 +40,8 @@ export const voiceSession = travis.table("voice_session", {
   logSubmode: text("log_submode").notNull().default("talk"),
   routerState: text("router_state").notNull().default("normal"),
   status: text("status").notNull().default("listening"),
+  /** Stand-in identity until a real user. Empty = do not resume. */
+  clientIp: text("client_ip").notNull().default(""),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),

@@ -208,7 +208,12 @@ async function main() {
     ADD COLUMN IF NOT EXISTS log_submode text NOT NULL DEFAULT 'talk'
   `;
 
-  console.log("travis schema + SCP-002 room + SCP-003 queue + SCP-004 log_submode ready");
+  await sql`
+    ALTER TABLE travis.voice_session
+    ADD COLUMN IF NOT EXISTS client_ip text NOT NULL DEFAULT ''
+  `;
+
+  console.log("travis schema + SCP-002 room + SCP-003 queue + SCP-004 log_submode + client_ip ready");
   await sql.end();
 }
 
