@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-28 02:11 UTC — **Vision (not locked):** rooms as primitive; Cursor agents room-agnostic; Travis will have to become an agent. v1 pipe + one room still the product. Next still SA on 004/005.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-28 14:16 UTC — **L1 select-room considering.** First land = pick a room that exists. Not a packet.
 
 **How we maintain this log**
 
@@ -777,4 +777,27 @@ v1’s planted Travis room (this repo, these three binds) is then the **first in
 4. **v1 does not wait on this.** Pipe + one room + 004/005 still the build. This vision is the perimeter the one room was always pointing at.
 
 **Ask:** stamp only (this). Packet later when you want rooms-as-primitive on the glass? Travis-as-agent: fourth seat, or backstage only? Tag SA when you want the store grain — I will not mint it.
+
+---
+
+## 2026-08-28 14:16 UTC — Select room, first land (founder; plate)
+
+**Kind:** Type B glass on the 02:11 Type A vision. Immediate pocket. Not a packet.
+
+**Founder (preserved):**
+
+- Critically, very importantly, the plate to generate now — the immediate thing worth working on — is that area where you **select the room you want**, **select the room that exists**.
+- First place you are supposed to **land** when you get onto Travis.
+
+**Landed (considering):** [`SELECT-ROOM-FACE.md`](SELECT-ROOM-FACE.md) · one plate:
+
+| ID | State |
+|----|--------|
+| L1 | First land · index of existing rooms · Travis selected · second row quieter |
+
+Photo: [`plates/travis-l1-select-room.png`](plates/travis-l1-select-room.png). Recut once: first generate still had in-room pills (`Room · via Eng`); those do not belong before a room is open. L1 is the no-session land.
+
+`Om` / “another codebase” = scenery (two exist so select is real). Not a name lock. No create. C3/C4/D3/E1 not recut.
+
+**Ask:** like L1 enough to packet? After pick, still Mode A (002)? End session returns here?
 
