@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-28 14:59 UTC — **Room use case:** tell the others without the PR dance. Agents chime in from the same place. Not a packet.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-28 15:02 UTC — **Envelope for Engineer:** [PR #27](https://github.com/bywale-com/travis/pull/27). Not a packet. Last chats wrapped so founder can ask Engineer in the room.
 
 **How we maintain this log**
 
@@ -908,4 +908,16 @@ v1 still addresses **one seat per send**. This use case is **summoned** fan-out 
 **Last couple of chats (reference, still this log — the workaround):** live in Travis; L1 first land; voice is a jumbled mess; talk to Travis agnostic of agents (stop / say again / simplify); ElevenLabs considering, no hard-code; View log stays a button; pause-by-voice is future.
 
 **Ask:** next glass = **“Travis, tell Engineer / the room what we just said”** (summoned), or hold until rooms-as-primitive (L1) is packed? Ambient chime-in stays later.
+
+---
+
+## 2026-08-28 15:02 UTC — Envelope cut for Engineer (founder)
+
+**Kind:** Envelope. Not a packet. Founder: call it a holiday — wrap the last chats so Engineer is up to speed in the same room.
+
+**Founder (preserved):** create a short envelope of everything in these last couple of chats. Create a PR. I’ll tell Engineer to look at it and peek what we’re talking about, so I can ask the questions I want. Long-form of what we want Travis to be able to do (tell the others without the dance). For the PM.
+
+**Landed:** [`ENVELOPE-LIVE-IN-TRAVIS.md`](https://github.com/bywale-com/travis/blob/cursor/envelope-live-in-travis-b9ea/docs/register/ENVELOPE-LIVE-IN-TRAVIS.md) · **[PR #27](https://github.com/bywale-com/travis/pull/27)** · branch `cursor/envelope-live-in-travis-b9ea`.
+
+Engineer: read only. Founder will ask. Do not plant from the envelope.
 
