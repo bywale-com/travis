@@ -443,11 +443,21 @@ export function Room({ t }: { t: Tokens }) {
       const speakUnits: Record<string, number> = {};
       let speakChain = Promise.resolve();
       let voiceReadStarted = false;
+      let spokenSpeakable = "";
 
       const enqueueVoice = (raw: string) => {
         if (viewModeRef.current !== "voice") return;
-        const said = speakableAgentPost(raw).trim();
+        let said = speakableAgentPost(raw).trim();
         if (!said) return;
+        if (spokenSpeakable) {
+          if (said === spokenSpeakable || spokenSpeakable.startsWith(said)) {
+            return;
+          }
+          if (said.startsWith(spokenSpeakable)) {
+            said = said.slice(spokenSpeakable.length).trim();
+            if (!said) return;
+          }
+        }
         if (!voiceReadStarted) {
           voiceReadStarted = true;
           setPresence("speaking");
@@ -461,6 +471,7 @@ export function Room({ t }: { t: Tokens }) {
           const intro = `${seatLabel} says.`;
           speakChain = speakChain.then(() => queueUtterance(intro));
         }
+        spokenSpeakable = spokenSpeakable ? `${spokenSpeakable} ${said}` : said;
         speakChain = speakChain.then(() => queueUtterance(said));
       };
 

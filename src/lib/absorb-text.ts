@@ -79,7 +79,7 @@ export function collapseSpeechStutter(text: string): string {
   }
 
   let result = dedup;
-  for (let n = Math.min(5, Math.floor(result.length / 2)); n >= 2; n--) {
+  for (let n = Math.min(12, Math.floor(result.length / 2)); n >= 2; n--) {
     const next: string[] = [];
     let i = 0;
     while (i < result.length) {
@@ -104,7 +104,30 @@ export function collapseSpeechStutter(text: string): string {
     result = next;
   }
 
-  return foldGrowingConcat(result).join(" ");
+  return foldRestartedPassage(foldGrowingConcat(result)).join(" ");
+}
+
+/**
+ * Web Speech often restarts after a hitch and dumps the same long
+ * passage again, with a few junk words in between ("exit again").
+ * Phrase n-grams (2–5) miss that. Keep the later copy.
+ */
+function foldRestartedPassage(words: string[]): string[] {
+  const lower = words.map((w) => w.toLowerCase());
+  const minN = 6;
+  const maxJunk = 8;
+  const maxN = Math.min(40, Math.floor(words.length / 2));
+  for (let n = maxN; n >= minN; n--) {
+    const head = lower.slice(0, n).join(" ");
+    for (let junk = 0; junk <= maxJunk; junk++) {
+      const at = n + junk;
+      if (at + n > lower.length) break;
+      if (lower.slice(at, at + n).join(" ") === head) {
+        return foldRestartedPassage(words.slice(at));
+      }
+    }
+  }
+  return words;
 }
 
 /**
