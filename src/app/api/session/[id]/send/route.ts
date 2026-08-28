@@ -1,13 +1,17 @@
 import { eq } from "drizzle-orm";
 import { collapseSpeechStutter } from "@/lib/absorb-text";
-import { resolveTypedSend } from "@/lib/typed-dest";
+import { resolveTypedSend, uniqueSeatKeys } from "@/lib/typed-dest";
 import { seatKeyToLabel } from "@/lib/router";
 import { db } from "@/server/db/client";
 import { agentBinding, voiceSession } from "@/server/db/schema";
-import type { SeatKey } from "@/server/db/schema";
-import { sendOrEnqueue, sse, sseHeaders } from "@/server/seat-pipe";
+import type { AgentBinding, SeatKey } from "@/server/db/schema";
+import { sendOrEnqueueMany, sse, sseHeaders } from "@/server/seat-pipe";
 
-type Body = { text?: string; chipSeatKey?: SeatKey | null };
+type Body = {
+  text?: string;
+  chipSeatKey?: SeatKey | null;
+  chipSeatKeys?: SeatKey[] | null;
+};
 
 async function bindingForSeat(seatKey: SeatKey) {
   const [row] = await db
@@ -33,6 +37,7 @@ export async function POST(
   const { id: sessionId } = await ctx.params;
   const body = (await req.json()) as Body;
   const decided = resolveTypedSend({
+    chipSeatKeys: uniqueSeatKeys(body.chipSeatKeys ?? []),
     chipSeatKey: body.chipSeatKey ?? null,
     text: body.text ?? "",
   });
@@ -54,31 +59,38 @@ export async function POST(
     return Response.json({ empty: true });
   }
 
-  const destKey = decided.seatKey;
-  if (destKey) {
-    const dest = await bindingForSeat(destKey);
-    if (dest) {
-      await setActiveBinding(sessionId, dest.id);
-      [session] = await db
-        .select()
-        .from(voiceSession)
-        .where(eq(voiceSession.id, sessionId))
-        .limit(1);
+  const destBindings: AgentBinding[] = [];
+  if (decided.kind === "switch" || decided.kind === "send") {
+    const keys =
+      decided.kind === "switch" ? [decided.seatKey] : decided.seatKeys;
+    for (const key of keys) {
+      const dest = await bindingForSeat(key);
+      if (dest) destBindings.push(dest);
     }
   }
 
-  const [binding] = await db
+  const sticky = destBindings[destBindings.length - 1];
+  if (sticky) {
+    await setActiveBinding(sessionId, sticky.id);
+    [session] = await db
+      .select()
+      .from(voiceSession)
+      .where(eq(voiceSession.id, sessionId))
+      .limit(1);
+  }
+
+  const [active] = await db
     .select()
     .from(agentBinding)
     .where(eq(agentBinding.id, session!.activeBindingId))
     .limit(1);
 
-  if (!binding) {
+  if (!active) {
     return Response.json({ error: "No active binding" }, { status: 400 });
   }
 
-  const seatKey = (binding.seatKey ?? "pm") as SeatKey;
-  const seatLabel = binding.label ?? seatKeyToLabel(seatKey);
+  const seatKey = (active.seatKey ?? "pm") as SeatKey;
+  const seatLabel = active.label ?? seatKeyToLabel(seatKey);
 
   if (decided.kind === "switch") {
     return Response.json({
@@ -90,6 +102,7 @@ export async function POST(
   }
 
   const prompt = collapseSpeechStutter(decided.prompt);
+  const bindings = destBindings.length ? destBindings : [active];
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
@@ -98,9 +111,9 @@ export async function POST(
         controller.enqueue(encoder.encode(sse(event, data)));
       };
       try {
-        await sendOrEnqueue({
+        await sendOrEnqueueMany({
           sessionId,
-          binding,
+          bindings,
           prompt,
           send,
         });

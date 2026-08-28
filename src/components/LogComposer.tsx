@@ -10,10 +10,21 @@ import type { SeatKey } from "@/server/db/schema";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
 import { AtSign, Mic, Send } from "lucide-react";
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from "react";
 import { createPortal } from "react-dom";
 
 export type RoomSeat = { seatKey: string; label: string };
+
+/** Grow with wrap up to 12 lines / 36vh, then scroll inside (005). */
+const COMPOSER_LINE_PX = 21;
+const COMPOSER_MAX_LINES = 12;
 
 type SpeechRec = {
   continuous: boolean;
@@ -36,6 +47,14 @@ function getSpeechRecognition(): (new () => SpeechRec) | null {
   return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
 }
 
+function composerCapPx(): number {
+  if (typeof window === "undefined") return COMPOSER_LINE_PX * COMPOSER_MAX_LINES;
+  return Math.min(
+    COMPOSER_LINE_PX * COMPOSER_MAX_LINES,
+    Math.round(window.innerHeight * 0.36),
+  );
+}
+
 export function LogComposer({
   t,
   seats,
@@ -47,20 +66,27 @@ export function LogComposer({
   disabled?: boolean;
   onSend: (args: {
     text: string;
-    chipSeatKey: SeatKey | null;
+    chipSeatKeys: SeatKey[];
   }) => Promise<void | boolean>;
 }) {
   const [text, setText] = useState("");
-  const [chip, setChip] = useState<RoomSeat | null>(null);
+  const [chips, setChips] = useState<RoomSeat[]>([]);
   const [mentionOpen, setMentionOpen] = useState(false);
   const [micOn, setMicOn] = useState(false);
   const [menuBox, setMenuBox] = useState<DOMRect | null>(null);
-  const fieldRef = useRef<HTMLInputElement | null>(null);
+  const fieldRef = useRef<HTMLTextAreaElement | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const recRef = useRef<SpeechRec | null>(null);
   const heldRef = useRef("");
   const committedRef = useRef("");
   const wantedRef = useRef(false);
+
+  const fitField = useCallback(() => {
+    const el = fieldRef.current;
+    if (!el) return;
+    el.style.height = "0px";
+    el.style.height = `${Math.min(el.scrollHeight, composerCapPx())}px`;
+  }, []);
 
   const closeMention = useCallback(() => {
     setMentionOpen(false);
@@ -75,13 +101,20 @@ export function LogComposer({
 
   const pickSeat = useCallback(
     (seat: RoomSeat) => {
-      setChip(seat);
+      setChips((prev) =>
+        prev.some((c) => c.seatKey === seat.seatKey) ? prev : [...prev, seat],
+      );
       setText((prev) => prev.replace(/@\s*$/, "").trimStart());
       closeMention();
       fieldRef.current?.focus();
     },
     [closeMention],
   );
+
+  const dropChip = useCallback((seatKey: string) => {
+    setChips((prev) => prev.filter((c) => c.seatKey !== seatKey));
+    fieldRef.current?.focus();
+  }, []);
 
   const haltMic = useCallback(() => {
     wantedRef.current = false;
@@ -150,6 +183,10 @@ export function LogComposer({
 
   useEffect(() => () => haltMic(), [haltMic]);
 
+  useLayoutEffect(() => {
+    fitField();
+  }, [text, fitField]);
+
   useEffect(() => {
     if (!mentionOpen) return;
     const onKey = (e: globalThis.KeyboardEvent) => {
@@ -177,32 +214,32 @@ export function LogComposer({
 
   const submit = async () => {
     haltMic();
-    const chipSeatKey = (chip?.seatKey as SeatKey | undefined) ?? null;
+    const chipSeatKeys = chips.map((c) => c.seatKey as SeatKey);
     const keptText = text;
-    const keptChip = chip;
+    const keptChips = chips;
     setText("");
-    setChip(null);
+    setChips([]);
     heldRef.current = "";
     committedRef.current = "";
-    const ok = await onSend({ text: keptText, chipSeatKey });
+    const ok = await onSend({ text: keptText, chipSeatKeys });
     if (ok === false) {
       setText(keptText);
-      setChip(keptChip);
+      setChips(keptChips);
       heldRef.current = keptText;
       committedRef.current = keptText;
     }
     fieldRef.current?.focus();
   };
 
-  const onKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
+  const onKeyDown = (e: ReactKeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       void submit();
       return;
     }
-    if (e.key === "Backspace" && !text && chip) {
+    if (e.key === "Backspace" && !text && chips.length) {
       e.preventDefault();
-      setChip(null);
+      setChips((prev) => prev.slice(0, -1));
     }
     if (e.key === "@" || (e.key === "2" && e.shiftKey)) {
       window.setTimeout(openMention, 0);
@@ -213,6 +250,10 @@ export function LogComposer({
     setText(value);
     if (value.endsWith("@")) openMention();
   };
+
+  const untagged = seats.filter(
+    (seat) => !chips.some((c) => c.seatKey === seat.seatKey),
+  );
 
   const list =
     mentionOpen && menuBox
@@ -235,31 +276,44 @@ export function LogComposer({
               overflow: "hidden",
             }}
           >
-            {seats.map((seat) => (
-              <button
-                key={seat.seatKey}
-                type="button"
-                onClick={() => pickSeat(seat)}
+            {untagged.length === 0 ? (
+              <p
                 style={{
-                  display: "flex",
-                  width: "100%",
-                  gap: 10,
-                  alignItems: "center",
+                  margin: 0,
                   padding: "10px 12px",
-                  border: "none",
-                  background: "transparent",
-                  color: t.textPrimary,
-                  fontSize: 14,
-                  textAlign: "left",
-                  cursor: "pointer",
+                  color: t.textMuted,
+                  fontSize: 13,
                 }}
               >
-                <span style={{ color: t.accent, fontWeight: 600, minWidth: 36 }}>
-                  {seatKeyToShort(seat.seatKey)}
-                </span>
-                <span>{seat.label}</span>
-              </button>
-            ))}
+                All tagged
+              </p>
+            ) : (
+              untagged.map((seat) => (
+                <button
+                  key={seat.seatKey}
+                  type="button"
+                  onClick={() => pickSeat(seat)}
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    gap: 10,
+                    alignItems: "center",
+                    padding: "10px 12px",
+                    border: "none",
+                    background: "transparent",
+                    color: t.textPrimary,
+                    fontSize: 14,
+                    textAlign: "left",
+                    cursor: "pointer",
+                  }}
+                >
+                  <span style={{ color: t.accent, fontWeight: 600, minWidth: 36 }}>
+                    {seatKeyToShort(seat.seatKey)}
+                  </span>
+                  <span>{seat.label}</span>
+                </button>
+              ))
+            )}
           </SurfaceBoundary>
           </div>,
           document.body,
@@ -283,7 +337,7 @@ export function LogComposer({
         data-at-mention="field"
         style={{
           display: "flex",
-          alignItems: "center",
+          alignItems: "flex-end",
           gap: 8,
           background: t.bgElevated,
           border: `1px solid ${t.border}`,
@@ -307,38 +361,65 @@ export function LogComposer({
         >
           <Mic size={18} />
         </button>
-        {chip && (
-          <span
-            style={{
-              background: t.accentSoft,
-              color: t.accent,
-              borderRadius: 999,
-              padding: "2px 8px",
-              fontSize: 13,
-              fontWeight: 600,
-              flexShrink: 0,
-            }}
-          >
-            @{seatKeyToShort(chip.seatKey)}
-          </span>
-        )}
-        <input
-          ref={fieldRef}
-          value={text}
-          disabled={disabled}
-          placeholder={chip ? "Keep writing…" : "Message"}
-          onChange={(e) => onChange(e.target.value)}
-          onKeyDown={onKeyDown}
+        <div
           style={{
             flex: 1,
-            border: "none",
-            outline: "none",
-            background: "transparent",
-            color: t.textPrimary,
-            fontSize: 15,
             minWidth: 0,
+            display: "flex",
+            flexDirection: "column",
+            gap: 4,
           }}
-        />
+        >
+          {chips.length > 0 && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              {chips.map((chip) => (
+                <button
+                  key={chip.seatKey}
+                  type="button"
+                  aria-label={`Remove @${seatKeyToShort(chip.seatKey)}`}
+                  onClick={() => dropChip(chip.seatKey)}
+                  style={{
+                    background: t.accentSoft,
+                    color: t.accent,
+                    borderRadius: 999,
+                    padding: "2px 8px",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    flexShrink: 0,
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  @{seatKeyToShort(chip.seatKey)}
+                </button>
+              ))}
+            </div>
+          )}
+          <textarea
+            ref={fieldRef}
+            value={text}
+            disabled={disabled}
+            rows={1}
+            placeholder={chips.length ? "Keep writing…" : "Message"}
+            onChange={(e) => onChange(e.target.value)}
+            onKeyDown={onKeyDown}
+            style={{
+              width: "100%",
+              border: "none",
+              outline: "none",
+              background: "transparent",
+              color: t.textPrimary,
+              fontSize: 15,
+              lineHeight: `${COMPOSER_LINE_PX}px`,
+              minHeight: COMPOSER_LINE_PX,
+              maxHeight: "min(36vh, 252px)",
+              resize: "none",
+              overflowY: "auto",
+              padding: "2px 0",
+              fontFamily: "inherit",
+            }}
+          />
+        </div>
         <button
           type="button"
           aria-label="Address"
