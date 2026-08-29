@@ -275,6 +275,7 @@ export async function startTravisMouth(opts: {
   let nextPlay = 0;
   let closed = false;
   let speakDone: (() => void) | null = null;
+  let bargeSpeak: (() => void) | null = null;
 
   const playPcm = (b64: string) => {
     const pcm = base64ToPcm16(b64);
@@ -322,24 +323,26 @@ export async function startTravisMouth(opts: {
         if (audio) playPcm(audio);
         if (message.serverContent?.turnComplete) {
           speakDone?.();
-          speakDone = null;
         }
       },
       onerror: (e: { message?: string }) => {
         opts.onError?.(e.message ?? "Mouth error");
-        speakDone?.();
-        speakDone = null;
+        bargeSpeak?.();
       },
       onclose: () => {
         closed = true;
-        speakDone?.();
-        speakDone = null;
+        bargeSpeak?.();
       },
     },
   })) as LiveSess;
 
+  function playbackDrained(): boolean {
+    return playing.length === 0 && playCtx.currentTime >= nextPlay - 0.02;
+  }
+
   function stopSpeaking() {
-    speakDone?.();
+    bargeSpeak?.();
+    bargeSpeak = null;
     speakDone = null;
     for (const src of playing) {
       try {
@@ -357,7 +360,38 @@ export async function startTravisMouth(opts: {
     if (!said || closed) return Promise.resolve();
     stopSpeaking();
     return new Promise((resolve) => {
-      speakDone = resolve;
+      let settled = false;
+      let watchdog = 0;
+      const settle = () => {
+        if (settled) return;
+        settled = true;
+        bargeSpeak = null;
+        speakDone = null;
+        window.clearTimeout(watchdog);
+        resolve();
+      };
+      bargeSpeak = settle;
+      speakDone = () => {
+        let quietAt = performance.now();
+        let lastNext = nextPlay;
+        const tick = () => {
+          if (settled) return;
+          if (nextPlay !== lastNext) {
+            lastNext = nextPlay;
+            quietAt = performance.now();
+          }
+          if (playbackDrained() && performance.now() - quietAt > 250) {
+            settle();
+            return;
+          }
+          window.setTimeout(tick, 60);
+        };
+        tick();
+      };
+      watchdog = window.setTimeout(
+        () => speakDone?.(),
+        Math.min(90_000, Math.max(10_000, said.length * 90)),
+      );
       live.sendClientContent({
         turns: `Read this aloud, verbatim, nothing else:\n\n${said}`,
         turnComplete: true,
