@@ -1,6 +1,7 @@
 import { desc, eq } from "drizzle-orm";
 import { delay, isDeadStreamError } from "@/lib/cursor-busy";
 import { absorbText } from "@/lib/absorb-text";
+import { isTravisSeat } from "@/lib/seats";
 import { seatKeyToLabel } from "@/lib/router";
 import { shouldQueueForSeat, type QueueSnapshot } from "@/lib/queue-logic";
 import {
@@ -101,6 +102,7 @@ async function insertTurn(
 export async function seatHasActiveRun(
   binding: AgentBinding,
 ): Promise<boolean> {
+  if (isTravisSeat(binding.seatKey)) return false;
   const live = await getLiveRun(binding.id);
   if (!live) return false;
   const active = await discoverActiveRunId(binding.cursorAgentId ?? "");
@@ -137,6 +139,9 @@ export async function enqueueOnSeat(params: {
   text: string;
   discoveredRunId?: string | null;
 }): Promise<QueueSnapshot> {
+  if (isTravisSeat(params.binding.seatKey)) {
+    throw new Error("Travis is never queued");
+  }
   await persistDiscoveredRun({
     bindingId: params.binding.id,
     sessionId: params.sessionId,
@@ -151,7 +156,7 @@ export async function enqueueOnSeat(params: {
   return queueSnapshot(params.sessionId);
 }
 
-type SendFn = (event: string, data: unknown) => void;
+export type SendFn = (event: string, data: unknown) => void;
 
 export async function insertUserTurn(
   sessionId: string,
@@ -164,6 +169,34 @@ export async function insertUserTurn(
     seatKey,
     speakable: true,
     text: prompt,
+  });
+}
+
+export async function insertAgentPostTurn(
+  sessionId: string,
+  text: string,
+  seatKey: SeatKey,
+  referenceTurnId?: string | null,
+): Promise<VoiceTurn> {
+  return insertTurn(sessionId, {
+    role: "assistant",
+    kind: "agent_post",
+    seatKey,
+    referenceTurnId: referenceTurnId ?? undefined,
+    speakable: true,
+    text,
+  });
+}
+
+export async function insertStatusTurn(
+  sessionId: string,
+  text: string,
+): Promise<VoiceTurn> {
+  return insertTurn(sessionId, {
+    role: "status",
+    kind: "status",
+    speakable: false,
+    text,
   });
 }
 
@@ -183,6 +216,9 @@ export async function pipeOneSend(params: {
   userTurn?: VoiceTurn;
 }): Promise<{ ownedTerminal: boolean; queue?: QueueSnapshot }> {
   const { sessionId, binding, prompt, send } = params;
+  if (isTravisSeat(binding.seatKey)) {
+    throw new Error("Travis dest never uses the Cursor send path");
+  }
   const seatKey = (binding.seatKey ?? "pm") as SeatKey;
   const seatLabel = binding.label ?? seatKeyToLabel(seatKey);
 
@@ -418,6 +454,9 @@ export async function sendOrEnqueue(params: {
   matchedPhrase?: string;
   userTurn?: VoiceTurn;
 }): Promise<"queued" | "sent"> {
+  if (isTravisSeat(params.binding.seatKey)) {
+    throw new Error("Travis dest never uses the Cursor send path");
+  }
   if (await seatHasActiveRun(params.binding)) {
     const queue = await enqueueOnSeat({
       sessionId: params.sessionId,
@@ -445,24 +484,28 @@ export async function sendOrEnqueueMany(params: {
   bindings: AgentBinding[];
   prompt: string;
   send: SendFn;
+  userTurn?: VoiceTurn;
 }): Promise<void> {
   const { sessionId, bindings, prompt, send } = params;
-  if (bindings.length === 0) return;
-  if (bindings.length === 1) {
+  const cursorOnly = bindings.filter((b) => !isTravisSeat(b.seatKey));
+  if (cursorOnly.length === 0) return;
+  if (cursorOnly.length === 1) {
     await sendOrEnqueue({
       sessionId,
-      binding: bindings[0],
+      binding: cursorOnly[0],
       prompt,
       send,
+      userTurn: params.userTurn,
     });
     return;
   }
 
-  const lead = bindings[0];
-  const last = bindings[bindings.length - 1];
+  const lead = cursorOnly[0];
+  const last = cursorOnly[cursorOnly.length - 1];
   const leadKey = (lead.seatKey ?? "pm") as SeatKey;
   const lastKey = (last.seatKey ?? "pm") as SeatKey;
-  const userTurn = await insertUserTurn(sessionId, prompt, leadKey);
+  const userTurn =
+    params.userTurn ?? (await insertUserTurn(sessionId, prompt, leadKey));
   send("matched", {
     matched: true,
     userTurn,
@@ -471,7 +514,7 @@ export async function sendOrEnqueueMany(params: {
   });
 
   await Promise.allSettled(
-    bindings.map((binding) =>
+    cursorOnly.map((binding) =>
       sendOrEnqueue({
         sessionId,
         binding,

@@ -42,6 +42,8 @@ export const voiceSession = travis.table("voice_session", {
   status: text("status").notNull().default("listening"),
   /** Stand-in identity until a real user. Empty = do not resume. */
   clientIp: text("client_ip").notNull().default(""),
+  /** Gemini Live resume handle. Empty on open. Clear on End. */
+  travisLiveHandle: text("travis_live_handle"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -119,4 +121,4 @@ export type TurnKind =
   | "status"
   | "travis_prompt";
 
-export type SeatKey = "pm" | "sa" | "engineer";
+export type SeatKey = "pm" | "sa" | "engineer" | "travis";

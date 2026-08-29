@@ -26,6 +26,12 @@ const SEATS = [
     label: "Engineer",
     env: process.env.SEED_CURSOR_AGENT_ID_ENGINEER?.trim() || "",
   },
+  {
+    seatKey: "travis" as const,
+    label: "Travis",
+    // Always empty. Never resume. Never fill from env.
+    env: "",
+  },
 ];
 
 export async function ensureSeatBindings(): Promise<void> {

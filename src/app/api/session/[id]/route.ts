@@ -24,6 +24,7 @@ export async function PATCH(
   }
 
   const endedAt = body.status === "ended" ? new Date() : undefined;
+  const clearLive = body.status === "ended";
   const logSubmode =
     body.logSubmode === "type" || body.logSubmode === "talk"
       ? body.logSubmode
@@ -36,6 +37,7 @@ export async function PATCH(
       ...(body.viewMode ? { viewMode: body.viewMode } : {}),
       ...(logSubmode ? { logSubmode } : {}),
       ...(endedAt ? { endedAt } : {}),
+      ...(clearLive ? { travisLiveHandle: null } : {}),
     })
     .where(eq(voiceSession.id, id))
     .returning();

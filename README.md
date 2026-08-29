@@ -1,5 +1,13 @@
 # travis
 
+## Implementation
+
+Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
+
+- **2026-08-29** · SCP-006 · [PR #30](https://github.com/bywale-com/travis/pull/30) — You can call Travis like a seat and talk to him on Live audio, because the room only had Cursor dests and his mouth was `speechSynthesis` on someone else’s text.
+
+---
+
 Travis is a **voice interface between you and Cursor** — speak instructions, hear replies, see images and artifacts when they cannot be spoken. Phone is the primary device. Cursor stays the execution surface; you never have to stare at it to stay in the loop.
 
 **Agent seats** (paste-prompts + identity): [`docs/README.md`](docs/README.md) — Product Manager, Systems Analyst, and Engineer. Always-on for the Engineer: [`AGENTS.md`](AGENTS.md). Trails: [`docs/register/PHASE-ONE-LOG.md`](docs/register/PHASE-ONE-LOG.md) (PM/founder) · [`docs/register/SYSTEMS-ANALYST-LOG.md`](docs/register/SYSTEMS-ANALYST-LOG.md) (SA) · git + PRs (Engineer — do not append those logs).

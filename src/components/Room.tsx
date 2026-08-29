@@ -10,7 +10,9 @@ import {
 import { matchConductorPhrase } from "@/lib/conductor";
 import { speakableAgentPost } from "@/lib/agent-post";
 import { flushSpeakBuffer, pullClosedSentences } from "@/lib/speak-sentences";
-import { parseDeadManResponse, seatKeyToShort } from "@/lib/router";
+import { parseCallByName, parseDeadManResponse, seatKeyToShort } from "@/lib/router";
+import { isTravisSeat } from "@/lib/seats";
+import { startTravisLive, type TravisLiveSession } from "@/lib/travis-live-client";
 import type { QueueSeatDto } from "@/lib/queue-logic";
 import { QueueChips, QueueLog, SeatMark } from "@/components/QueueChrome";
 import { AgentPostBody } from "@/components/AgentPostBody";
@@ -226,6 +228,7 @@ export function Room({ t }: { t: Tokens }) {
   const recognitionLiveRef = useRef(false);
   const listenRestartGenRef = useRef(0);
   const inflightRef = useRef(0);
+  const liveRef = useRef<TravisLiveSession | null>(null);
 
   viewModeRef.current = viewMode;
   logSubmodeRef.current = logSubmode;
@@ -294,6 +297,7 @@ export function Room({ t }: { t: Tokens }) {
     if (!sessionIdRef.current || !listeningWantedRef.current) return;
     if (viewModeRef.current !== "voice") return;
     if (presenceRef.current !== "listening") return;
+    if (isTravisSeat(sessionRef.current?.activeSeatKey)) return;
     deadManTimerRef.current = setTimeout(async () => {
       const sid = sessionIdRef.current;
       if (!sid || !listeningWantedRef.current) return;
@@ -355,6 +359,11 @@ export function Room({ t }: { t: Tokens }) {
     },
     [persistHeldDraft],
   );
+
+  const stopLive = useCallback(() => {
+    liveRef.current?.stop();
+    liveRef.current = null;
+  }, []);
 
   const clearAccumulated = useCallback(() => {
     haltRecognition({ persist: false });
@@ -596,6 +605,42 @@ export function Room({ t }: { t: Tokens }) {
     [applyQueue, haltRecognition, refreshQueue, refreshTurns],
   );
 
+  const connectLive = useCallback(
+    async (sid: string) => {
+      if (liveRef.current) return;
+      haltRecognition();
+      listeningWantedRef.current = false;
+      setSubtitle("Talking with Travis…");
+      const handle = await startTravisLive({
+        sessionId: sid,
+        onUnwired: () => {
+          setSubtitle("Travis isn’t wired");
+          void refreshTurns(sid);
+        },
+        onUserText: () => {
+          void refreshTurns(sid);
+        },
+        onTravisText: () => {
+          void refreshTurns(sid);
+        },
+        onSeatStream: (res) => {
+          stopLive();
+          void consumeAgentStream(sid, res);
+          void refreshSession(sid);
+        },
+        onError: (msg) => setError(msg),
+      });
+      liveRef.current = handle;
+    },
+    [
+      consumeAgentStream,
+      haltRecognition,
+      refreshSession,
+      refreshTurns,
+      stopLive,
+    ],
+  );
+
   const finalizeUtterance = useCallback(
     async (utterance: string) => {
       const sid = sessionIdRef.current;
@@ -639,6 +684,9 @@ export function Room({ t }: { t: Tokens }) {
             await refreshSession(sid);
             setSubtitle("");
             clearDraft();
+            if (data.destTravis && viewModeRef.current === "voice") {
+              void connectLive(sid);
+            }
           }
           if (!res.ok && data.error) setError(data.error);
           return;
@@ -658,6 +706,7 @@ export function Room({ t }: { t: Tokens }) {
       beginInflight,
       clearDraft,
       consumeAgentStream,
+      connectLive,
       endInflight,
       haltRecognition,
       listenSoon,
@@ -758,6 +807,12 @@ export function Room({ t }: { t: Tokens }) {
     if (viewModeRef.current === "log" && logSubmodeRef.current === "type") {
       return;
     }
+    if (
+      isTravisSeat(sessionRef.current?.activeSeatKey) &&
+      viewModeRef.current === "voice"
+    ) {
+      return;
+    }
     const Ctor = getSpeechRecognition();
     if (!Ctor) return;
     haltRecognition();
@@ -789,6 +844,43 @@ export function Room({ t }: { t: Tokens }) {
       interimRef.current = interim;
       const full = mergeLiveTranscript(committed, interim);
       setDraft(full);
+
+      const destTravis = isTravisSeat(sessionRef.current?.activeSeatKey);
+      if (destTravis) {
+        return;
+      }
+
+      const called = parseCallByName(committed || full);
+      if (called.seatKey === "travis" && !finalizingRef.current) {
+        const sid = sessionIdRef.current;
+        if (sid) {
+          void fetch(`/api/session/${sid}/address`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ utterance: committed || full }),
+          })
+            .then((r) => r.json())
+            .then((data: { destTravis?: boolean; activeLabel?: string; activeSeatKey?: string }) => {
+              if (data.activeLabel) {
+                setSession((s) =>
+                  s
+                    ? {
+                        ...s,
+                        activeLabel: String(data.activeLabel),
+                        activeSeatKey: String(data.activeSeatKey ?? "travis"),
+                      }
+                    : s,
+                );
+              }
+              clearDraft();
+              if (data.destTravis && viewModeRef.current === "voice") {
+                void connectLive(sid);
+              }
+              void refreshTurns(sid);
+            });
+        }
+        return;
+      }
 
       const match = matchConductorPhrase(full, phrasesRef.current);
       const deadMan = parseDeadManResponse(full);
@@ -847,7 +939,15 @@ export function Room({ t }: { t: Tokens }) {
       recognitionLiveRef.current = false;
     }
     resetDeadManTimer();
-  }, [finalizeUtterance, haltRecognition, persistHeldDraft, resetDeadManTimer]);
+  }, [
+    clearDraft,
+    connectLive,
+    finalizeUtterance,
+    haltRecognition,
+    persistHeldDraft,
+    refreshTurns,
+    resetDeadManTimer,
+  ]);
 
   startRecognitionRef.current = startRecognition;
 
@@ -888,10 +988,22 @@ export function Room({ t }: { t: Tokens }) {
         return;
       }
       setPresence("listening");
+      if (isTravisSeat(s.activeSeatKey) && mode === "voice") {
+        setSubtitle("Talking with Travis…");
+        void connectLive(s.id);
+        return;
+      }
       setSubtitle("Listening…");
       startRecognition();
     },
-    [clearDraft, refreshQueue, refreshTurns, startRecognition, stopRecognition],
+    [
+      clearDraft,
+      connectLive,
+      refreshQueue,
+      refreshTurns,
+      startRecognition,
+      stopRecognition,
+    ],
   );
 
   const openSession = async () => {
@@ -931,6 +1043,16 @@ export function Room({ t }: { t: Tokens }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const sid = session?.id;
+    if (!sid || presence === "ended" || presence === "paused") return;
+    if (isTravisSeat(session.activeSeatKey) && viewMode === "voice") {
+      void connectLive(sid);
+      return;
+    }
+    stopLive();
+  }, [session?.id, session?.activeSeatKey, viewMode, presence, connectLive, stopLive]);
+
   const togglePause = async () => {
     if (!session || presence === "ended" || presence === "speaking") return;
     if (presence === "paused") {
@@ -941,10 +1063,15 @@ export function Room({ t }: { t: Tokens }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: "listening" }),
       });
-      startRecognition();
+      if (isTravisSeat(session.activeSeatKey)) {
+        void connectLive(session.id);
+      } else {
+        startRecognition();
+      }
     } else {
       setPresence("paused");
       stopRecognition();
+      stopLive();
       setSubtitle("Paused");
       await fetch(`/api/session/${session.id}`, {
         method: "PATCH",
@@ -965,6 +1092,7 @@ export function Room({ t }: { t: Tokens }) {
     });
     setSession((s) => (s ? { ...s, viewMode: mode } : s));
     if (mode === "log") {
+      stopLive();
       if (deadManTimerRef.current) clearTimeout(deadManTimerRef.current);
       if (logSubmodeRef.current === "type") {
         stopRecognition();
@@ -974,8 +1102,12 @@ export function Room({ t }: { t: Tokens }) {
       }
     } else {
       resetDeadManTimer();
-      listeningWantedRef.current = true;
-      startRecognitionRef.current();
+      if (isTravisSeat(session.activeSeatKey)) {
+        void connectLive(session.id);
+      } else {
+        listeningWantedRef.current = true;
+        startRecognitionRef.current();
+      }
     }
   };
 
@@ -991,6 +1123,7 @@ export function Room({ t }: { t: Tokens }) {
     });
     if (mode === "type") {
       stopRecognition();
+      stopLive();
     } else {
       listeningWantedRef.current = true;
       setPresence("listening");
@@ -1002,6 +1135,7 @@ export function Room({ t }: { t: Tokens }) {
   const endSession = async () => {
     if (!session) return;
     stopRecognition();
+    stopLive();
     cancelSpeech();
     await fetch(`/api/session/${session.id}`, {
       method: "PATCH",
