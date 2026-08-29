@@ -2,10 +2,18 @@ import { eq } from "drizzle-orm";
 import { collapseSpeechStutter } from "@/lib/absorb-text";
 import { resolveTypedSend, uniqueSeatKeys } from "@/lib/typed-dest";
 import { seatKeyToLabel } from "@/lib/router";
+import { isTravisSeat } from "@/lib/seats";
 import { db } from "@/server/db/client";
 import { agentBinding, voiceSession } from "@/server/db/schema";
 import type { AgentBinding, SeatKey } from "@/server/db/schema";
-import { sendOrEnqueueMany, sse, sseHeaders } from "@/server/seat-pipe";
+import { noteTravisUnwired } from "@/server/travis-dest";
+import { pipeTravisText } from "@/server/travis-reply";
+import {
+  insertUserTurn,
+  sendOrEnqueueMany,
+  sse,
+  sseHeaders,
+} from "@/server/seat-pipe";
 
 type Body = {
   text?: string;
@@ -103,6 +111,10 @@ export async function POST(
 
   const prompt = collapseSpeechStutter(decided.prompt);
   const bindings = destBindings.length ? destBindings : [active];
+  const travisBinds = bindings.filter((b) => isTravisSeat(b.seatKey));
+  const cursorBinds = bindings.filter((b) => !isTravisSeat(b.seatKey));
+
+  if (travisBinds.length) await noteTravisUnwired(sessionId);
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
@@ -111,12 +123,27 @@ export async function POST(
         controller.enqueue(encoder.encode(sse(event, data)));
       };
       try {
-        await sendOrEnqueueMany({
-          sessionId,
-          bindings,
-          prompt,
-          send,
-        });
+        const shared =
+          travisBinds.length && cursorBinds.length
+            ? await insertUserTurn(sessionId, prompt, "travis")
+            : undefined;
+        if (travisBinds.length) {
+          await pipeTravisText({
+            sessionId,
+            prompt,
+            send,
+            userTurn: shared,
+          });
+        }
+        if (cursorBinds.length) {
+          await sendOrEnqueueMany({
+            sessionId,
+            bindings: cursorBinds,
+            prompt,
+            send,
+            userTurn: shared,
+          });
+        }
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         send("error", { error: msg });

@@ -6,7 +6,7 @@ export type TypedDest =
   | { kind: "switch"; seatKey: SeatKey }
   | { kind: "send"; seatKeys: SeatKey[]; prompt: string };
 
-const SEATS: readonly SeatKey[] = ["pm", "sa", "engineer"];
+const SEATS: readonly SeatKey[] = ["pm", "sa", "engineer", "travis"];
 
 export function isSeatKey(value: string): value is SeatKey {
   return (SEATS as readonly string[]).includes(value);

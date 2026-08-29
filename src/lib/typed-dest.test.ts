@@ -71,3 +71,23 @@ test("no chip and no name stays sticky", () => {
     assert.equal(r.prompt, "look at the log");
   }
 });
+
+test("Type @ Travis is a dest", () => {
+  const r = resolveTypedSend({
+    chipSeatKeys: ["travis"],
+    text: "what's waiting",
+  });
+  assert.equal(r.kind, "send");
+  if (r.kind === "send") assert.deepEqual(r.seatKeys, ["travis"]);
+});
+
+test("mixed Travis + Engineer chips fan out", () => {
+  const r = resolveTypedSend({
+    chipSeatKeys: ["travis", "engineer"],
+    text: "look at this",
+  });
+  assert.equal(r.kind, "send");
+  if (r.kind === "send") {
+    assert.deepEqual(r.seatKeys, ["travis", "engineer"]);
+  }
+});

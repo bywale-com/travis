@@ -7,6 +7,7 @@ import {
   parseDeadManResponse,
   seatKeyToLabel,
 } from "@/lib/router";
+import { isTravisSeat, isVocativeOnlyCall } from "@/lib/seats";
 import { db } from "@/server/db/client";
 import {
   agentBinding,
@@ -14,6 +15,8 @@ import {
   voiceSession,
 } from "@/server/db/schema";
 import type { SeatKey } from "@/server/db/schema";
+import { noteTravisUnwired } from "@/server/travis-dest";
+import { pipeTravisText } from "@/server/travis-reply";
 import {
   enqueueOnSeat,
   seatHasActiveRun,
@@ -172,9 +175,11 @@ export async function POST(
   if (!prompt) {
     if (calledSeat) {
       const binding = await bindingForSeat(calledSeat);
+      if (isTravisSeat(calledSeat)) await noteTravisUnwired(sessionId);
       return Response.json({
         matched: false,
         routerHandled: true,
+        destTravis: isTravisSeat(calledSeat),
         activeSeatKey: calledSeat,
         activeLabel: binding?.label ?? seatKeyToLabel(calledSeat),
       });
@@ -200,6 +205,41 @@ export async function POST(
 
   const seatKey = (binding.seatKey ?? "pm") as SeatKey;
   const seatLabel = binding.label ?? seatKeyToLabel(seatKey);
+
+  if (isTravisSeat(seatKey)) {
+    await noteTravisUnwired(sessionId);
+    const fromCall = calledSeat
+      ? isVocativeOnlyCall(match.cleanedText, remainder.trim(), calledSeat)
+      : false;
+    const travisPrompt = fromCall || !prompt ? "" : prompt;
+    if (!travisPrompt) {
+      return Response.json({
+        matched: false,
+        routerHandled: true,
+        destTravis: true,
+        activeSeatKey: seatKey,
+        activeLabel: seatLabel,
+      });
+    }
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      async start(controller) {
+        const send = (event: string, data: unknown) => {
+          controller.enqueue(encoder.encode(sse(event, data)));
+        };
+        try {
+          await pipeTravisText({ sessionId, prompt: travisPrompt, send });
+        } catch (err) {
+          send("error", {
+            error: err instanceof Error ? err.message : String(err),
+          });
+        } finally {
+          controller.close();
+        }
+      },
+    });
+    return new Response(stream, { headers: sseHeaders() });
+  }
 
   if (await seatHasActiveRun(binding)) {
     const queue = await enqueueOnSeat({

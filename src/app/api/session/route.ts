@@ -1,5 +1,6 @@
 import { and, desc, eq, ne, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
+import { sortRoomSeats } from "@/lib/seats";
 import { clientIpFromHeaders } from "@/server/client-ip";
 import { db } from "@/server/db/client";
 import { ensureSeatBindings } from "@/server/db/ensure-bindings";
@@ -43,8 +44,6 @@ function sessionPayload(
   };
 }
 
-const SEAT_ORDER = ["pm", "sa", "engineer"] as const;
-
 async function roomSeats() {
   const rows = await db
     .select({
@@ -53,16 +52,18 @@ async function roomSeats() {
     })
     .from(agentBinding)
     .where(eq(agentBinding.active, true));
-  return [...rows].sort((a, b) => {
-    const ia = SEAT_ORDER.indexOf(a.seatKey as (typeof SEAT_ORDER)[number]);
-    const ib = SEAT_ORDER.indexOf(b.seatKey as (typeof SEAT_ORDER)[number]);
-    return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
-  });
+  return sortRoomSeats(rows);
 }
 
 async function ensureClientIpColumn() {
   await db.execute(
     sql`ALTER TABLE travis.voice_session ADD COLUMN IF NOT EXISTS client_ip text NOT NULL DEFAULT ''`,
+  );
+}
+
+async function ensureTravisLiveColumn() {
+  await db.execute(
+    sql`ALTER TABLE travis.voice_session ADD COLUMN IF NOT EXISTS travis_live_handle text`,
   );
 }
 
@@ -118,6 +119,7 @@ async function liveSessionForIp(ip: string) {
 export async function POST(req: Request) {
   await ensureSeatBindings();
   await ensureClientIpColumn();
+  await ensureTravisLiveColumn();
   const ip = clientIpFromHeaders(req.headers);
 
   const existing = await liveSessionForIp(ip);
@@ -188,7 +190,9 @@ export async function GET(req: Request) {
     });
   }
 
+  await ensureSeatBindings();
   await ensureClientIpColumn();
+  await ensureTravisLiveColumn();
   const ip = clientIpFromHeaders(req.headers);
   const existing = await liveSessionForIp(ip);
   if (!existing) {

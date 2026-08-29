@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/server/db/client";
 import { agentBinding, voiceSession } from "@/server/db/schema";
 import type { SeatKey } from "@/server/db/schema";
+import { isTravisSeat } from "@/lib/seats";
 import { deleteQueuedItem, getQueueHead, queueSnapshot } from "@/server/queue";
 import {
   bargeQueuedItem,
@@ -27,6 +28,9 @@ export async function POST(
   }
   if (session.status === "ended") {
     return Response.json({ error: "Session ended" }, { status: 400 });
+  }
+  if (isTravisSeat(body.seatKey)) {
+    return Response.json({ error: "Travis is never queued" }, { status: 400 });
   }
   if (!body.seatKey || !body.action) {
     return Response.json(
