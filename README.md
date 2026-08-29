@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-08-29** · Hotfix 016 · [PR #28](https://github.com/bywale-com/travis/pull/28) — The last seven cuts sit at the top of the README and every new packet/hotfix prepends a line, because the Engineer trail lived only in git and the seat prompt was missing the protocols we already run.
 - **2026-08-28** · Hotfix 015 · [PR #26](https://github.com/bywale-com/travis/pull/26) — A long spoken line that restarts after a hitch now lands once, because Web Speech was dumping the whole passage again and the old stutter fold only caught 2–5 word repeats.
 - **2026-08-28** · Hotfix 013 · [PR #25](https://github.com/bywale-com/travis/pull/25) — Voice reads assistant sentences as they land, because TTS waited for stream `done` and dumped the whole post.
 - **2026-08-28** · Hotfix 014 · [PR #25](https://github.com/bywale-com/travis/pull/25) — A refresh keeps the live room, because the SPA session died while the turns were still in Postgres; End still ends.

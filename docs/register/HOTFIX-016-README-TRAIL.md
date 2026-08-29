@@ -26,5 +26,5 @@ The Engineer trail was git + PRs only. A new chat could not see what just landed
 
 ## Verify
 
-1. README Implementation is above the Travis intro; seven historical lines plus this cut’s line once the PR number exists.
+1. README Implementation is above the Travis intro; this cut’s line plus the seven historical lines.
 2. A fresh Engineer paste includes: README prepend, skip-SA glass, envelope read-not-plant, no recut plates, hotfix max+1.
