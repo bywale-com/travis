@@ -4,7 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
-- **2026-08-29** · SCP-006 · [PR #30](https://github.com/bywale-com/travis/pull/30) — You can call Travis like a seat and talk to him on Live audio, because the room only had Cursor dests and his mouth was `speechSynthesis` on someone else’s text.
+- **2026-08-29** · SCP-006 · [PR #31](https://github.com/bywale-com/travis/pull/31) — You can call Travis like a seat and talk to him on Live audio, because the room only had Cursor dests and his mouth was `speechSynthesis` on someone else’s text.
 
 ---
 
