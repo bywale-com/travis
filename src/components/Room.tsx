@@ -12,7 +12,13 @@ import { speakableAgentPost } from "@/lib/agent-post";
 import { flushSpeakBuffer, pullClosedSentences } from "@/lib/speak-sentences";
 import { parseCallByName, parseDeadManResponse, seatKeyToShort } from "@/lib/router";
 import { isTravisSeat } from "@/lib/seats";
-import { startTravisLive, type TravisLiveSession } from "@/lib/travis-live-client";
+import { parseReadFacilitator } from "@/lib/read-facilitator";
+import {
+  startTravisLive,
+  startTravisMouth,
+  type TravisLiveSession,
+  type TravisMouth,
+} from "@/lib/travis-live-client";
 import type { QueueSeatDto } from "@/lib/queue-logic";
 import { QueueChips, QueueLog, SeatMark } from "@/components/QueueChrome";
 import { AgentPostBody } from "@/components/AgentPostBody";
@@ -229,6 +235,14 @@ export function Room({ t }: { t: Tokens }) {
   const listenRestartGenRef = useRef(0);
   const inflightRef = useRef(0);
   const liveRef = useRef<TravisLiveSession | null>(null);
+  const mouthRef = useRef<TravisMouth | null>(null);
+  const speakGenRef = useRef(0);
+  const lastSpokenRef = useRef("");
+  const lastSeatPostRef = useRef<{
+    text: string;
+    seatKey: string;
+    turnId?: string;
+  } | null>(null);
 
   viewModeRef.current = viewMode;
   logSubmodeRef.current = logSubmode;
@@ -365,6 +379,104 @@ export function Room({ t }: { t: Tokens }) {
     liveRef.current = null;
   }, []);
 
+  const stopMouth = useCallback(() => {
+    mouthRef.current?.stop();
+    mouthRef.current = null;
+  }, []);
+
+  const stopRead = useCallback(() => {
+    speakGenRef.current += 1;
+    mouthRef.current?.stopSpeaking();
+    cancelSpeech();
+    if (presenceRef.current === "speaking") {
+      setPresence("listening");
+      setSubtitle("Listening…");
+      listeningWantedRef.current = true;
+      startRecognitionRef.current();
+    }
+  }, []);
+
+  const speakUnit = useCallback(async (sid: string, text: string) => {
+    const said = text.trim();
+    if (!said) return;
+    lastSpokenRef.current = said;
+    const gen = speakGenRef.current;
+    if (!mouthRef.current) {
+      mouthRef.current = await startTravisMouth({
+        sessionId: sid,
+        onError: (msg) => setError(msg),
+      });
+    }
+    if (speakGenRef.current !== gen) return;
+    if (mouthRef.current) {
+      await mouthRef.current.speakText(said);
+      return;
+    }
+    await queueUtterance(said);
+  }, []);
+
+  const replayRead = useCallback(async () => {
+    const sid = sessionIdRef.current;
+    const said = lastSpokenRef.current.trim();
+    if (!sid || !said) return;
+    speakGenRef.current += 1;
+    mouthRef.current?.stopSpeaking();
+    cancelSpeech();
+    setPresence("speaking");
+    setSubtitle("Say that again…");
+    const gen = speakGenRef.current;
+    await speakUnit(sid, said);
+    if (speakGenRef.current !== gen) return;
+    setPresence("listening");
+    setSubtitle("Listening…");
+    listeningWantedRef.current = true;
+    startRecognitionRef.current();
+  }, [speakUnit]);
+
+  const simplifyRead = useCallback(async () => {
+    const sid = sessionIdRef.current;
+    const post = lastSeatPostRef.current;
+    if (!sid || !post?.text.trim()) return;
+    speakGenRef.current += 1;
+    mouthRef.current?.stopSpeaking();
+    cancelSpeech();
+    setSubtitle("Simplifying…");
+    const res = await fetch(`/api/session/${sid}/simplify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        text: post.text,
+        referenceTurnId: post.turnId ?? null,
+      }),
+    });
+    const data = (await res.json()) as {
+      text?: string;
+      turn?: Turn;
+      wired?: boolean;
+    };
+    if (data.turn) {
+      setTurns((prev) =>
+        prev.some((x) => x.id === data.turn!.id) ? prev : [...prev, data.turn!],
+      );
+    }
+    const spoken = (data.text ?? "").trim();
+    if (!spoken) {
+      setSubtitle(
+        data.wired === false ? "Travis isn’t wired" : "Listening…",
+      );
+      setPresence("listening");
+      return;
+    }
+    setPresence("speaking");
+    const gen = speakGenRef.current;
+    await speakUnit(sid, spoken);
+    if (speakGenRef.current !== gen) return;
+    setPresence("listening");
+    setSubtitle("Listening…");
+    listeningWantedRef.current = true;
+    startRecognitionRef.current();
+  }, [speakUnit]);
+
   const clearAccumulated = useCallback(() => {
     haltRecognition({ persist: false });
     clearDraft();
@@ -381,7 +493,6 @@ export function Room({ t }: { t: Tokens }) {
     window.setTimeout(() => {
       if (!listeningWantedRef.current) return;
       if (presenceBlocksListen(presenceRef.current)) return;
-      if (presenceRef.current === "speaking" || speechEngineBusy()) return;
       startRecognitionRef.current();
     }, 300);
   }, []);
@@ -460,7 +571,8 @@ export function Room({ t }: { t: Tokens }) {
         if (!voiceReadStarted) {
           voiceReadStarted = true;
           setPresence("speaking");
-          haltRecognition();
+          listeningWantedRef.current = true;
+          startRecognitionRef.current();
           setSubtitle(`${seatLabel} says…`);
           void fetch(`/api/session/${sid}`, {
             method: "PATCH",
@@ -468,9 +580,9 @@ export function Room({ t }: { t: Tokens }) {
             body: JSON.stringify({ status: "speaking" }),
           });
           const intro = `${seatLabel} says.`;
-          speakChain = speakChain.then(() => queueUtterance(intro));
+          speakChain = speakChain.then(() => speakUnit(sid, intro));
         }
-        speakChain = speakChain.then(() => queueUtterance(said));
+        speakChain = speakChain.then(() => speakUnit(sid, said));
       };
 
       const handleEvent = async (event: string, raw: string) => {
@@ -555,6 +667,13 @@ export function Room({ t }: { t: Tokens }) {
           await refreshQueue(sid);
           const postTurn = data.postTurn as Turn | undefined;
           const postText = postTurn?.text ?? acc;
+          if (postText.trim() && data.seatKey && data.seatKey !== "travis") {
+            lastSeatPostRef.current = {
+              text: postText,
+              seatKey: String(data.seatKey),
+              turnId: postTurn?.id,
+            };
+          }
           const spoken = speakableAgentPost(postText);
           const label = String(data.seatLabel ?? seatLabel);
           const units = flushSpeakBuffer(postText);
@@ -602,12 +721,13 @@ export function Room({ t }: { t: Tokens }) {
         }
       }
     },
-    [applyQueue, haltRecognition, refreshQueue, refreshTurns],
+    [applyQueue, refreshQueue, refreshTurns, speakUnit],
   );
 
   const connectLive = useCallback(
     async (sid: string) => {
       if (liveRef.current) return;
+      stopMouth();
       haltRecognition();
       listeningWantedRef.current = false;
       setSubtitle("Talking with Travis…");
@@ -638,6 +758,7 @@ export function Room({ t }: { t: Tokens }) {
       refreshSession,
       refreshTurns,
       stopLive,
+      stopMouth,
     ],
   );
 
@@ -850,6 +971,15 @@ export function Room({ t }: { t: Tokens }) {
         return;
       }
 
+      const fac = parseReadFacilitator(committed || full);
+      if (fac && !finalizingRef.current) {
+        clearDraft();
+        if (fac === "stop") stopRead();
+        if (fac === "replay") void replayRead();
+        if (fac === "simplify") void simplifyRead();
+        return;
+      }
+
       const called = parseCallByName(committed || full);
       if (called.seatKey === "travis" && !finalizingRef.current) {
         const sid = sessionIdRef.current;
@@ -918,15 +1048,12 @@ export function Room({ t }: { t: Tokens }) {
       if (presenceRef.current === "paused" || presenceRef.current === "ended") {
         return;
       }
-      if (presenceRef.current === "speaking") return;
-      if (speechEngineBusy()) return;
       window.setTimeout(() => {
         if (!listeningWantedRef.current) return;
         if (recognitionLiveRef.current) return;
         if (presenceRef.current === "paused" || presenceRef.current === "ended") {
           return;
         }
-        if (presenceRef.current === "speaking" || speechEngineBusy()) return;
         startRecognitionRef.current();
       }, 250);
     };
@@ -946,7 +1073,10 @@ export function Room({ t }: { t: Tokens }) {
     haltRecognition,
     persistHeldDraft,
     refreshTurns,
+    replayRead,
     resetDeadManTimer,
+    simplifyRead,
+    stopRead,
   ]);
 
   startRecognitionRef.current = startRecognition;
@@ -1047,11 +1177,20 @@ export function Room({ t }: { t: Tokens }) {
     const sid = session?.id;
     if (!sid || presence === "ended" || presence === "paused") return;
     if (isTravisSeat(session.activeSeatKey) && viewMode === "voice") {
+      stopMouth();
       void connectLive(sid);
       return;
     }
     stopLive();
-  }, [session?.id, session?.activeSeatKey, viewMode, presence, connectLive, stopLive]);
+  }, [
+    session?.id,
+    session?.activeSeatKey,
+    viewMode,
+    presence,
+    connectLive,
+    stopLive,
+    stopMouth,
+  ]);
 
   const togglePause = async () => {
     if (!session || presence === "ended" || presence === "speaking") return;
@@ -1072,6 +1211,7 @@ export function Room({ t }: { t: Tokens }) {
       setPresence("paused");
       stopRecognition();
       stopLive();
+      stopMouth();
       setSubtitle("Paused");
       await fetch(`/api/session/${session.id}`, {
         method: "PATCH",
@@ -1093,6 +1233,7 @@ export function Room({ t }: { t: Tokens }) {
     setSession((s) => (s ? { ...s, viewMode: mode } : s));
     if (mode === "log") {
       stopLive();
+      stopMouth();
       if (deadManTimerRef.current) clearTimeout(deadManTimerRef.current);
       if (logSubmodeRef.current === "type") {
         stopRecognition();
@@ -1136,6 +1277,8 @@ export function Room({ t }: { t: Tokens }) {
     if (!session) return;
     stopRecognition();
     stopLive();
+    stopMouth();
+    speakGenRef.current += 1;
     cancelSpeech();
     await fetch(`/api/session/${session.id}`, {
       method: "PATCH",
@@ -1410,9 +1553,18 @@ export function Room({ t }: { t: Tokens }) {
             <div style={{ flex: 1, minHeight: 24 }} />
             <button
               type="button"
-              onClick={() => void togglePause()}
-              disabled={presence === "speaking"}
-              aria-label={statusHint || listenLine}
+              onClick={() => {
+                if (presence === "speaking") {
+                  stopRead();
+                  return;
+                }
+                void togglePause();
+              }}
+              aria-label={
+                presence === "speaking"
+                  ? "Stop the read"
+                  : statusHint || listenLine
+              }
               style={{
                 margin: "0 auto",
                 width: 176,
@@ -1428,7 +1580,7 @@ export function Room({ t }: { t: Tokens }) {
                   presence === "listening" || presence === "speaking"
                     ? `0 0 0 18px ${t.accent}14, 0 0 56px ${t.accent}40, 0 0 120px ${t.accent}22`
                     : "none",
-                cursor: presence === "speaking" ? "default" : "pointer",
+                cursor: "pointer",
               }}
             />
             <p

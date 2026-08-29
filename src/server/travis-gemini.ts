@@ -109,3 +109,25 @@ export async function generateTravisText(params: {
   }
   return "";
 }
+
+/** Rewrite a seat post for speech. Not a Cursor run. */
+export async function simplifySeatPost(text: string): Promise<string> {
+  const key = geminiKey();
+  if (!key) return "";
+  const { GoogleGenAI } = await import("@google/genai");
+  const ai = new GoogleGenAI({ apiKey: key });
+  const res = await ai.models.generateContent({
+    model: TRAVIS_TEXT_MODEL,
+    contents: [
+      {
+        role: "user",
+        parts: [
+          {
+            text: `Say this back shorter and plainer for someone listening, same meaning. No preamble. No markdown.\n\n${text.trim()}`,
+          },
+        ],
+      },
+    ],
+  });
+  return String((res as { text?: string }).text ?? "").trim();
+}

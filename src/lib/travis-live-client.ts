@@ -8,6 +8,14 @@ type ToolDecl = {
 
 export type TravisLiveSession = {
   stop: () => void;
+  speakText?: (text: string) => Promise<void>;
+  stopSpeaking?: () => void;
+};
+
+export type TravisMouth = {
+  stop: () => void;
+  speakText: (text: string) => Promise<void>;
+  stopSpeaking: () => void;
 };
 
 function pcmToBase64(buf: Float32Array): string {
@@ -239,4 +247,134 @@ export async function startTravisLive(opts: {
   }
 
   return { stop };
+}
+
+/** Output-only Live: Travis voices a seat post. Does not persist transcripts. */
+export async function startTravisMouth(opts: {
+  sessionId: string;
+  onError?: (msg: string) => void;
+}): Promise<TravisMouth | null> {
+  const tokenRes = await fetch(`/api/session/${opts.sessionId}/live/token`, {
+    method: "POST",
+  });
+  const tokenData = (await tokenRes.json()) as {
+    wired?: boolean;
+    token?: string;
+    model?: string;
+  };
+  if (!tokenData.wired || !tokenData.token) return null;
+
+  const { GoogleGenAI, Modality } = await import("@google/genai");
+  const ai = new GoogleGenAI({
+    apiKey: tokenData.token,
+    httpOptions: { apiVersion: "v1alpha" },
+  });
+
+  const playCtx = new AudioContext({ sampleRate: 24000 });
+  const playing: AudioBufferSourceNode[] = [];
+  let nextPlay = 0;
+  let closed = false;
+  let speakDone: (() => void) | null = null;
+
+  const playPcm = (b64: string) => {
+    const pcm = base64ToPcm16(b64);
+    const f32 = new Float32Array(pcm.length);
+    for (let i = 0; i < pcm.length; i++) f32[i] = pcm[i] / 0x8000;
+    const buf = playCtx.createBuffer(1, f32.length, 24000);
+    buf.copyToChannel(f32, 0);
+    const src = playCtx.createBufferSource();
+    src.buffer = buf;
+    src.connect(playCtx.destination);
+    const now = playCtx.currentTime;
+    const startAt = Math.max(now, nextPlay);
+    src.start(startAt);
+    nextPlay = startAt + buf.duration;
+    playing.push(src);
+    src.onended = () => {
+      const i = playing.indexOf(src);
+      if (i >= 0) playing.splice(i, 1);
+    };
+  };
+
+  type LiveSess = {
+    sendClientContent: (p: unknown) => void;
+    close: () => void;
+  };
+
+  const live = (await ai.live.connect({
+    model: tokenData.model ?? "gemini-2.5-flash-native-audio-preview-12-2025",
+    config: {
+      responseModalities: [Modality.AUDIO],
+      systemInstruction:
+        "You are Travis’s voice. When given text to read, speak it aloud faithfully. Do not add commentary. Do not call tools.",
+    },
+    callbacks: {
+      onmessage: (message: {
+        serverContent?: {
+          modelTurn?: { parts?: Array<{ inlineData?: { data?: string } }> };
+          turnComplete?: boolean;
+        };
+      }) => {
+        if (closed) return;
+        const audio = message.serverContent?.modelTurn?.parts?.find(
+          (p) => p.inlineData?.data,
+        )?.inlineData?.data;
+        if (audio) playPcm(audio);
+        if (message.serverContent?.turnComplete) {
+          speakDone?.();
+          speakDone = null;
+        }
+      },
+      onerror: (e: { message?: string }) => {
+        opts.onError?.(e.message ?? "Mouth error");
+        speakDone?.();
+        speakDone = null;
+      },
+      onclose: () => {
+        closed = true;
+        speakDone?.();
+        speakDone = null;
+      },
+    },
+  })) as LiveSess;
+
+  function stopSpeaking() {
+    speakDone?.();
+    speakDone = null;
+    for (const src of playing) {
+      try {
+        src.stop();
+      } catch {
+        /* ignore */
+      }
+    }
+    playing.length = 0;
+    nextPlay = playCtx.currentTime;
+  }
+
+  function speakText(text: string): Promise<void> {
+    const said = text.trim();
+    if (!said || closed) return Promise.resolve();
+    stopSpeaking();
+    return new Promise((resolve) => {
+      speakDone = resolve;
+      live.sendClientContent({
+        turns: `Read this aloud, verbatim, nothing else:\n\n${said}`,
+        turnComplete: true,
+      });
+    });
+  }
+
+  function stop() {
+    closed = true;
+    stopSpeaking();
+    try {
+      live.close();
+    } catch {
+      /* ignore */
+    }
+    void playCtx.close();
+  }
+
+  return { stop, speakText, stopSpeaking };
 }
