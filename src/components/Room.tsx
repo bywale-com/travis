@@ -587,6 +587,7 @@ export function Room({ t }: { t: Tokens }) {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ status: "listening" }),
               });
+              startRecognitionRef.current();
             }
           }
         } else if (event === "error") {
@@ -826,8 +827,24 @@ export function Room({ t }: { t: Tokens }) {
     }
     const Ctor = getSpeechRecognition();
     if (!Ctor) return;
+    const gen = ++listenRestartGenRef.current;
     haltRecognition();
     listeningWantedRef.current = true;
+
+    const attach = (attempt: number) => {
+    if (gen !== listenRestartGenRef.current) return;
+    if (!listeningWantedRef.current) return;
+    if (presenceBlocksListen(presenceRef.current)) return;
+    if (viewModeRef.current === "log" && logSubmodeRef.current === "type") {
+      return;
+    }
+    if (
+      isTravisSeat(sessionRef.current?.activeSeatKey) &&
+      viewModeRef.current === "voice"
+    ) {
+      return;
+    }
+    if (recognitionLiveRef.current && recognitionRef.current) return;
 
     const rec = new Ctor();
     rec.continuous = true;
@@ -857,7 +874,7 @@ export function Room({ t }: { t: Tokens }) {
       setDraft(full);
 
       const destTravis = isTravisSeat(sessionRef.current?.activeSeatKey);
-      if (destTravis) {
+      if (destTravis && viewModeRef.current === "voice") {
         return;
       }
 
@@ -948,7 +965,14 @@ export function Room({ t }: { t: Tokens }) {
       recognitionLiveRef.current = true;
     } catch {
       recognitionLiveRef.current = false;
+      recognitionRef.current = null;
+      if (attempt < 6) {
+        window.setTimeout(() => attach(attempt + 1), 160 * (attempt + 1));
+      }
     }
+    };
+
+    window.setTimeout(() => attach(0), 140);
     resetDeadManTimer();
   }, [
     clearDraft,
@@ -961,6 +985,25 @@ export function Room({ t }: { t: Tokens }) {
   ]);
 
   startRecognitionRef.current = startRecognition;
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      if (!listeningWantedRef.current) return;
+      if (recognitionLiveRef.current) return;
+      if (presenceBlocksListen(presenceRef.current)) return;
+      if (viewModeRef.current === "log" && logSubmodeRef.current === "type") {
+        return;
+      }
+      if (
+        isTravisSeat(sessionRef.current?.activeSeatKey) &&
+        viewModeRef.current === "voice"
+      ) {
+        return;
+      }
+      startRecognitionRef.current();
+    }, 1600);
+    return () => window.clearInterval(id);
+  }, []);
 
   const attachSession = useCallback(
     async (s: Session, resume: boolean) => {

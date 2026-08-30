@@ -141,6 +141,9 @@ export function LogComposer({
     if (!Ctor) return;
     haltMic();
     wantedRef.current = true;
+    let attempts = 0;
+    const attach = () => {
+    if (!wantedRef.current) return;
     const rec = new Ctor();
     rec.continuous = true;
     rec.interimResults = true;
@@ -178,7 +181,11 @@ export function LogComposer({
       setMicOn(true);
     } catch {
       setMicOn(false);
+      recRef.current = null;
+      if (attempts++ < 6) window.setTimeout(attach, 160 * attempts);
     }
+    };
+    window.setTimeout(attach, 140);
   }, [haltMic]);
 
   useEffect(() => () => haltMic(), [haltMic]);

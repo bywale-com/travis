@@ -17,12 +17,17 @@ function normalizeTail(s: string): string {
     .toLowerCase();
 }
 
+/** Web Speech often expands I'm → I am. Same locked phrase. */
+function foldSttContractions(s: string): string {
+  return s.replace(/\bi am done\b/gi, "I'm done");
+}
+
 /** Prefer longer phrases first (caller should sort). */
 export function matchConductorPhrase(
   utterance: string,
   phrases: string[],
 ): PhraseMatch {
-  const trimmed = utterance.trim();
+  const trimmed = foldSttContractions(utterance.trim());
   if (!trimmed) {
     return { matched: false, cleanedText: "" };
   }
