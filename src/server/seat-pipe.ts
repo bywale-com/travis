@@ -188,6 +188,46 @@ export async function insertAgentPostTurn(
   });
 }
 
+/** Live output is snapshots/deltas. One Travis post, not a row per chunk. */
+export async function absorbLiveTravisPost(
+  sessionId: string,
+  text: string,
+): Promise<VoiceTurn> {
+  const incoming = text.trim();
+  return withSeqLock(sessionId, async () => {
+    const [last] = await db
+      .select()
+      .from(voiceTurn)
+      .where(eq(voiceTurn.sessionId, sessionId))
+      .orderBy(desc(voiceTurn.seq))
+      .limit(1);
+    if (last?.kind === "agent_post" && last.seatKey === "travis") {
+      const { acc } = absorbText(last.text, incoming);
+      if (acc === last.text) return last;
+      const [row] = await db
+        .update(voiceTurn)
+        .set({ text: acc })
+        .where(eq(voiceTurn.id, last.id))
+        .returning();
+      return row;
+    }
+    const seq = await nextTurnSeq(sessionId);
+    const [row] = await db
+      .insert(voiceTurn)
+      .values({
+        sessionId,
+        seq,
+        role: "assistant",
+        kind: "agent_post",
+        seatKey: "travis",
+        speakable: true,
+        text: incoming,
+      })
+      .returning();
+    return row;
+  });
+}
+
 export async function insertStatusTurn(
   sessionId: string,
   text: string,

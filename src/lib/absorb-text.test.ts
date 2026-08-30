@@ -62,6 +62,22 @@ test("collapseSpeechStutter folds short growing prefixes", () => {
   );
 });
 
+test("collapseSpeechStutter folds a long restart with a short hitch", () => {
+  const a =
+    "okay let's see what are some engineer what were some of the things we wanted to fix in this previous hotfix";
+  const raw = `${a} exit again ${a} is it again okay why is it duplicating`;
+  assert.equal(
+    collapseSpeechStutter(raw),
+    `${a} is it again okay why is it duplicating`,
+  );
+});
+
+test("carryDraftAcrossRestart folds a restarted passage after junk", () => {
+  const a =
+    "okay let's see what are some engineer what were some of the things we wanted to fix in this previous hotfix";
+  assert.equal(carryDraftAcrossRestart(a, `exit again ${a}`), a);
+});
+
 test("mergeLiveTranscript does not glue committed onto an overlapping interim", () => {
   assert.equal(
     mergeLiveTranscript(
