@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-08-30** · Hotfix 018 · [PR #33](https://github.com/bywale-com/travis/pull/33) — Dest Travis talks on Gemini 3.6 Flash and Live 3.1, because 2.5-flash 404s for a new key.
 - **2026-08-29** · SCP-006 · [PR #31](https://github.com/bywale-com/travis/pull/31) — You can call Travis like a seat and talk to him on Live audio, because the room only had Cursor dests and his mouth was `speechSynthesis` on someone else’s text.
 
 ---
