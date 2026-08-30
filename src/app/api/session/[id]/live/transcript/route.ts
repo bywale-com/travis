@@ -5,12 +5,13 @@ import { isCursorSeat, isVocativeOnlyCall } from "@/lib/seats";
 import { db } from "@/server/db/client";
 import { agentBinding, voiceSession } from "@/server/db/schema";
 import {
-  insertAgentPostTurn,
+  absorbLiveTravisPost,
   insertUserTurn,
   sendOrEnqueue,
   sse,
   sseHeaders,
 } from "@/server/seat-pipe";
+import { collapseSpeechStutter } from "@/lib/absorb-text";
 
 type Body = {
   role?: "user" | "travis";
@@ -46,11 +47,15 @@ export async function POST(
   }
 
   if (body.role === "travis") {
-    const turn = await insertAgentPostTurn(sessionId, text, "travis");
+    const turn = await absorbLiveTravisPost(sessionId, text);
     return NextResponse.json({ ok: true, turn });
   }
 
-  const userTurn = await insertUserTurn(sessionId, text, "travis");
+  const userTurn = await insertUserTurn(
+    sessionId,
+    collapseSpeechStutter(text),
+    "travis",
+  );
   const { seatKey, remainder } = parseCallByName(text);
   if (seatKey && isCursorSeat(seatKey)) {
     const [binding] = await db

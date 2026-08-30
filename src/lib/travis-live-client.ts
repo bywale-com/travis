@@ -1,5 +1,6 @@
 "use client";
 
+import { absorbText, collapseSpeechStutter } from "@/lib/absorb-text";
 import { TRAVIS_LIVE_MODEL } from "@/lib/travis-models";
 
 type ToolDecl = {
@@ -87,6 +88,10 @@ export async function startTravisLive(opts: {
   };
   let live: LiveSess | null = null;
   let closed = false;
+  let userAcc = "";
+  let travisAcc = "";
+  let userFlush: ReturnType<typeof setTimeout> | null = null;
+  let pendingHandle: string | undefined;
 
   const persist = async (
     role: "user" | "travis",
@@ -110,6 +115,19 @@ export async function startTravisLive(opts: {
     if (role === "user") opts.onUserText(text);
     if (role === "travis") opts.onTravisText(text);
     return data;
+  };
+
+  const flushUser = () => {
+    if (userFlush != null) {
+      clearTimeout(userFlush);
+      userFlush = null;
+    }
+    const said = collapseSpeechStutter(userAcc);
+    userAcc = "";
+    if (!said) return;
+    void persist("user", said, pendingHandle).then((data) => {
+      if (data?.stopLive) stop();
+    });
   };
 
   live = (await ai.live.connect({
@@ -155,19 +173,23 @@ export async function startTravisLive(opts: {
         )?.inlineData?.data;
         if (audio) playPcm(audio);
         const out = message.serverContent?.outputTranscription?.text;
-        if (out?.trim()) void persist("travis", out.trim());
+        if (out?.trim()) {
+          travisAcc = absorbText(travisAcc, out.trim()).acc;
+          void persist("travis", travisAcc);
+        }
         const inn = message.serverContent?.inputTranscription?.text;
         if (inn?.trim()) {
-          void persist(
-            "user",
-            inn.trim(),
-            message.sessionResumptionUpdate?.newHandle,
-          ).then((data) => {
-            if (data?.stopLive) stop();
-          });
+          userAcc = absorbText(userAcc, inn.trim()).acc;
+          if (userFlush != null) clearTimeout(userFlush);
+          userFlush = setTimeout(flushUser, 850);
         }
         if (message.sessionResumptionUpdate?.newHandle) {
-          void persist("user", "", message.sessionResumptionUpdate.newHandle);
+          pendingHandle = message.sessionResumptionUpdate.newHandle;
+          void persist("user", "", pendingHandle);
+        }
+        if (message.serverContent?.turnComplete) {
+          flushUser();
+          travisAcc = "";
         }
         const calls = message.toolCall?.functionCalls ?? [];
         if (calls.length && live) {
@@ -223,6 +245,10 @@ export async function startTravisLive(opts: {
 
   function stop() {
     closed = true;
+    if (userFlush != null) {
+      clearTimeout(userFlush);
+      userFlush = null;
+    }
     try {
       live?.close();
     } catch {

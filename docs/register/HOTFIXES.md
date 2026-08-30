@@ -30,3 +30,4 @@
 | 013 | [`HOTFIX-013-SENTENCE-TTS.md`](./HOTFIX-013-SENTENCE-TTS.md) | Voice reads assistant sentences as they land, not one dump at done |
 | 014 | [`HOTFIX-014-IP-SESSION.md`](./HOTFIX-014-IP-SESSION.md) | Resume the live room by client IP; End still ends |
 | 018 | [`HOTFIX-018-GEMINI-MODELS.md`](./HOTFIX-018-GEMINI-MODELS.md) | Pin Gemini 3.6 text + 3.1 Live; 2.5 404 for new keys |
+| 019 | [`HOTFIX-019-SPEECH-TEXT.md`](./HOTFIX-019-SPEECH-TEXT.md) | Fold STT restarts; absorb Live speech into one turn |
