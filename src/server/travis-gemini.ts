@@ -3,15 +3,14 @@
  * Key stays server-side.
  */
 
+import { TRAVIS_LIVE_MODEL, TRAVIS_TEXT_MODEL } from "@/lib/travis-models";
 import {
   TRAVIS_SYSTEM,
   TRAVIS_TOOL_DECLS,
   runTravisTool,
 } from "@/server/travis-tools";
 
-export const TRAVIS_LIVE_MODEL =
-  "gemini-2.5-flash-native-audio-preview-12-2025";
-export const TRAVIS_TEXT_MODEL = "gemini-2.5-flash";
+export { TRAVIS_LIVE_MODEL, TRAVIS_TEXT_MODEL };
 
 export function geminiKey(): string {
   return process.env.GEMINI_API_KEY?.trim() ?? "";

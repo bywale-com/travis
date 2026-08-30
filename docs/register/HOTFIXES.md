@@ -29,3 +29,4 @@
 | 012 | [`HOTFIX-012-TALK-PAUSE-CLEAR.md`](./HOTFIX-012-TALK-PAUSE-CLEAR.md) | Talk pause/resume; clear accumulated draft in Talk and voice |
 | 013 | [`HOTFIX-013-SENTENCE-TTS.md`](./HOTFIX-013-SENTENCE-TTS.md) | Voice reads assistant sentences as they land, not one dump at done |
 | 014 | [`HOTFIX-014-IP-SESSION.md`](./HOTFIX-014-IP-SESSION.md) | Resume the live room by client IP; End still ends |
+| 018 | [`HOTFIX-018-GEMINI-MODELS.md`](./HOTFIX-018-GEMINI-MODELS.md) | Pin Gemini 3.6 text + 3.1 Live; 2.5 404 for new keys |
