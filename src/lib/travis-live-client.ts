@@ -1,5 +1,7 @@
 "use client";
 
+import { TRAVIS_LIVE_MODEL } from "@/lib/travis-models";
+
 type ToolDecl = {
   name: string;
   description: string;
@@ -111,7 +113,7 @@ export async function startTravisLive(opts: {
   };
 
   live = (await ai.live.connect({
-    model: tokenData.model ?? "gemini-2.5-flash-native-audio-preview-12-2025",
+    model: tokenData.model ?? TRAVIS_LIVE_MODEL,
     config: {
       responseModalities: [Modality.AUDIO],
       systemInstruction: tokenData.systemInstruction,
