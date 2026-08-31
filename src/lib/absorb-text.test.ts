@@ -147,3 +147,13 @@ test("keepSpeechDraft does not let an empty restart wipe a draft", () => {
     "look at the log now",
   );
 });
+
+test("keepSpeechDraft does not let a short network fragment wipe a draft", () => {
+  const held = "engineer look at this long thing I was saying";
+  assert.equal(keepSpeechDraft(held, "saying"), held);
+  assert.equal(keepSpeechDraft(held, "look"), `${held} look`);
+});
+
+test("keepSpeechDraft still takes a stutter fold of the same line", () => {
+  assert.equal(keepSpeechDraft("hello hello there", "hello there"), "hello there");
+});

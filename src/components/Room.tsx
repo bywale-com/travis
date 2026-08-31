@@ -1048,6 +1048,7 @@ export function Room({ t }: { t: Tokens }) {
     rec.onstart = () => {
       recognitionLiveRef.current = true;
       sttArmingRef.current = false;
+      setError((prev) => (prev?.startsWith("STT:") ? null : prev));
     };
 
     rec.onend = () => {

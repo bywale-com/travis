@@ -187,6 +187,31 @@ test("ending with no phrase keeps the draft for the next breath", () => {
   assert.equal(e.heldDraft, "engineer look at the log");
 });
 
+test("a network result-list reset does not wipe an all-interim draft", () => {
+  const e = new Ear();
+  const said = "engineer look at this long thing I was saying";
+  e.result([], said);
+  assert.equal(e.lastHeard, said);
+  // Chrome resets the result list to a leftover fragment, then errors.
+  e.result(["saying"], "");
+  assert.equal(e.lastHeard, said, "the fragment must not replace the draft");
+  e.end();
+  assert.equal(e.heldDraft, said);
+  assert.deepEqual(e.sends, []);
+});
+
+test("after a network hitch the next breath appends, it does not start over", () => {
+  const e = new Ear();
+  e.result([], "engineer look at the log");
+  e.result(["log"], "");
+  e.end();
+  e.result(["and also the queue"], "");
+  assert.equal(
+    e.lastHeard,
+    "engineer look at the log and also the queue",
+  );
+});
+
 test("a long readback never abandons the ear", () => {
   let waited = 0;
   let restarts = 0;
