@@ -8,11 +8,18 @@ import {
   keepSpeechDraft,
   mergeLiveTranscript,
 } from "@/lib/absorb-text";
-import { matchConductorPhrase } from "@/lib/conductor";
+import { conductorGate, conductorOnEnd } from "@/lib/conductor";
 import { speakableAgentPost } from "@/lib/agent-post";
 import { flushSpeakBuffer, pullClosedSentences } from "@/lib/speak-sentences";
 import { parseCallByName, parseDeadManResponse, seatKeyToShort } from "@/lib/router";
-import { modeSwitchEarAction, sttOnEndAction, whichEar, type EarState } from "@/lib/ear";
+import {
+  modeSwitchEarAction,
+  sttOnEndAction,
+  sttShouldKeepWaiting,
+  whichEar,
+  STT_ONEND_RETRY_MS,
+  type EarState,
+} from "@/lib/ear";
 import { isTravisSeat } from "@/lib/seats";
 import { startTravisLive, type TravisLiveSession } from "@/lib/travis-live-client";
 import type { QueueSeatDto } from "@/lib/queue-logic";
@@ -701,11 +708,16 @@ export function Room({ t }: { t: Tokens }) {
     async (utterance: string) => {
       const sid = sessionIdRef.current;
       if (!sid || !utterance.trim()) return;
+      if (finalizingRef.current) return;
 
       beginInflight();
       finalizingRef.current = true;
       setError(null);
       haltRecognition();
+      // The phrase is captured in `utterance`. Leaving it on the accumulator
+      // lets a later reply land behind it, where the end-anchored conductor
+      // can never match again.
+      clearDraft();
       listenSoon();
 
       try {
@@ -981,7 +993,6 @@ export function Room({ t }: { t: Tokens }) {
         return;
       }
 
-      const match = matchConductorPhrase(full, phrasesRef.current);
       const deadMan = parseDeadManResponse(full);
       const awaitingDeadMan =
         sessionRef.current?.routerState === "awaiting_dead_man";
@@ -993,16 +1004,13 @@ export function Room({ t }: { t: Tokens }) {
         void finalizeUtterance(full);
         return;
       }
-      if (match.matched) {
-        const committedMatch = matchConductorPhrase(
-          committedRef.current,
-          phrasesRef.current,
-        );
-        if (committedMatch.matched || !interim) {
-          const raw = committedMatch.matched ? committedRef.current : full;
-          void finalizeUtterance(collapseSpeechStutter(raw));
-        }
-      }
+      const gate = conductorGate({
+        committed: committedRef.current,
+        interim,
+        full,
+        phrases: phrasesRef.current,
+      });
+      if (gate.send) void finalizeUtterance(collapseSpeechStutter(gate.text));
     };
 
     rec.onerror = (ev) => {
@@ -1021,11 +1029,21 @@ export function Room({ t }: { t: Tokens }) {
     rec.onend = () => {
       persistHeldDraft();
       recognitionLiveRef.current = false;
+
+      const settled = conductorOnEnd({
+        text: lastHeardRef.current,
+        phrases: phrasesRef.current,
+      });
+      if (settled.send && !finalizingRef.current) {
+        void finalizeUtterance(collapseSpeechStutter(settled.text));
+        return;
+      }
+
       if (!listeningWantedRef.current) return;
       if (presenceRef.current === "paused" || presenceRef.current === "ended") {
         return;
       }
-      let tries = 0;
+      let waited = 0;
       const retry = () => {
         const action = sttOnEndAction({
           wanted: listeningWantedRef.current,
@@ -1034,12 +1052,15 @@ export function Room({ t }: { t: Tokens }) {
           recLive: recognitionLiveRef.current,
         });
         if (action === "wait") {
-          if (tries++ < 24) window.setTimeout(retry, 400);
+          waited += STT_ONEND_RETRY_MS;
+          if (sttShouldKeepWaiting(waited)) {
+            window.setTimeout(retry, STT_ONEND_RETRY_MS);
+          }
           return;
         }
         if (action === "restart") startRecognitionRef.current();
       };
-      window.setTimeout(retry, 400);
+      window.setTimeout(retry, STT_ONEND_RETRY_MS);
     };
 
     recognitionRef.current = rec;
@@ -1060,7 +1081,6 @@ export function Room({ t }: { t: Tokens }) {
     resetDeadManTimer();
   }, [
     clearDraft,
-    connectLive,
     finalizeUtterance,
     haltRecognition,
     persistHeldDraft,

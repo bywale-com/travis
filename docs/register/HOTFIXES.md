@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **024**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **025**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -35,3 +35,4 @@
 | 021 | [`HOTFIX-021-STT-HOLD.md`](./HOTFIX-021-STT-HOLD.md) | Empty STT restart does not wipe the draft; Talk re-arms after Voice |
 | 022 | [`HOTFIX-022-MIC-MODES.md`](./HOTFIX-022-MIC-MODES.md) | Voice has an ear after refresh; Talk/Type/Voice release the mic |
 | 023 | [`HOTFIX-023-EAR-TTS.md`](./HOTFIX-023-EAR-TTS.md) | Dest Engineer Talk↔Voice keep one ear; TTS no longer leaves STT dead |
+| 024 | [`HOTFIX-024-DONE-PHRASE.md`](./HOTFIX-024-DONE-PHRASE.md) | I'm done sends when the phrase never finalizes; readback stops abandoning the ear |

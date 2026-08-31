@@ -58,3 +58,39 @@ export function matchConductorPhrase(
 
   return { matched: false, cleanedText: trimmed };
 }
+
+export type ConductorGate = { send: boolean; text: string };
+
+const NO_SEND: ConductorGate = { send: false, text: "" };
+
+/**
+ * Live gate while the recognizer is running. A phrase that only exists in
+ * interim text is not committed yet — the speaker may still be mid-sentence —
+ * so hold it. `conductorOnEnd` picks it up once the session settles.
+ */
+export function conductorGate(opts: {
+  committed: string;
+  interim: string;
+  full: string;
+  phrases: string[];
+}): ConductorGate {
+  if (!matchConductorPhrase(opts.full, opts.phrases).matched) return NO_SEND;
+  if (matchConductorPhrase(opts.committed, opts.phrases).matched) {
+    return { send: true, text: opts.committed };
+  }
+  if (!opts.interim.trim()) return { send: true, text: opts.full };
+  return NO_SEND;
+}
+
+/**
+ * The recognizer ended. Web Speech often never promotes the closing phrase to
+ * a final result, so the live gate held it and nothing sent. Whatever is on
+ * the draft now is settled — decide here or the turn is lost until refresh.
+ */
+export function conductorOnEnd(opts: {
+  text: string;
+  phrases: string[];
+}): ConductorGate {
+  if (!matchConductorPhrase(opts.text, opts.phrases).matched) return NO_SEND;
+  return { send: true, text: opts.text };
+}
