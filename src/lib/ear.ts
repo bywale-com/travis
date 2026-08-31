@@ -58,3 +58,15 @@ export function sttOnEndAction(opts: {
   if (opts.presence === "speaking" || opts.ttsBusy) return "wait";
   return "restart";
 }
+
+/**
+ * A readback can run longer than any fixed retry budget. Giving up mid-read
+ * leaves the ear dead until the watchdog happens to fire, which is how a
+ * reply left capture off. Keep waiting while listening is still wanted.
+ */
+export const STT_ONEND_RETRY_MS = 400;
+export const STT_ONEND_MAX_WAIT_MS = 120_000;
+
+export function sttShouldKeepWaiting(waitedMs: number): boolean {
+  return waitedMs < STT_ONEND_MAX_WAIT_MS;
+}
