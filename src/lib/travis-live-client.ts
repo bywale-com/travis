@@ -10,7 +10,7 @@ type ToolDecl = {
 };
 
 export type TravisLiveSession = {
-  stop: () => void;
+  stop: () => Promise<void>;
 };
 
 function pcmToBase64(buf: Float32Array): string {
@@ -39,6 +39,7 @@ export async function startTravisLive(opts: {
   onTravisText: (text: string) => void;
   onSeatStream: (res: Response) => void;
   onError: (msg: string) => void;
+  onClose?: () => void;
 }): Promise<TravisLiveSession | null> {
   const tokenRes = await fetch(`/api/session/${opts.sessionId}/live/token`, {
     method: "POST",
@@ -64,6 +65,7 @@ export async function startTravisLive(opts: {
   });
 
   const playCtx = new AudioContext({ sampleRate: 24000 });
+  void playCtx.resume();
   let nextPlay = 0;
 
   const playPcm = (b64: string) => {
@@ -92,6 +94,7 @@ export async function startTravisLive(opts: {
   let travisAcc = "";
   let userFlush: ReturnType<typeof setTimeout> | null = null;
   let pendingHandle: string | undefined;
+  let stopFn: () => Promise<void> = async () => {};
 
   const persist = async (
     role: "user" | "travis",
@@ -126,10 +129,11 @@ export async function startTravisLive(opts: {
     userAcc = "";
     if (!said) return;
     void persist("user", said, pendingHandle).then((data) => {
-      if (data?.stopLive) stop();
+      if (data?.stopLive) void stopFn();
     });
   };
 
+  try {
   live = (await ai.live.connect({
     model: tokenData.model ?? TRAVIS_LIVE_MODEL,
     config: {
@@ -223,6 +227,7 @@ export async function startTravisLive(opts: {
       },
       onclose: () => {
         closed = true;
+        opts.onClose?.();
       },
     },
   })) as LiveSess;
@@ -231,8 +236,11 @@ export async function startTravisLive(opts: {
     audio: { echoCancellation: true, noiseSuppression: true },
   });
   const capCtx = new AudioContext({ sampleRate: 16000 });
+  void capCtx.resume();
   const src = capCtx.createMediaStreamSource(mic);
   const proc = capCtx.createScriptProcessor(4096, 1, 1);
+  const silent = capCtx.createGain();
+  silent.gain.value = 0;
   proc.onaudioprocess = (ev) => {
     if (closed || !live) return;
     const ch = ev.inputBuffer.getChannelData(0);
@@ -241,7 +249,8 @@ export async function startTravisLive(opts: {
     });
   };
   src.connect(proc);
-  proc.connect(capCtx.destination);
+  proc.connect(silent);
+  silent.connect(capCtx.destination);
 
   function stop() {
     closed = true;
@@ -258,13 +267,35 @@ export async function startTravisLive(opts: {
     try {
       proc.disconnect();
       src.disconnect();
+      silent.disconnect();
       void capCtx.close();
       void playCtx.close();
     } catch {
       /* ignore */
     }
-    for (const t of mic.getTracks()) t.stop();
+    const tracks = mic.getTracks();
+    for (const t of tracks) t.stop();
+    return new Promise<void>((resolve) => {
+      window.setTimeout(resolve, 400);
+    });
   }
+  stopFn = stop;
 
   return { stop };
+  } catch (err) {
+    closed = true;
+    try {
+      live?.close();
+    } catch {
+      /* ignore */
+    }
+    live = null;
+    try {
+      void playCtx.close();
+    } catch {
+      /* ignore */
+    }
+    opts.onError(err instanceof Error ? err.message : String(err));
+    return null;
+  }
 }
