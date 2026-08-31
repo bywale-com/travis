@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-31 17:48 UTC — **T-set considering.** Fresh Travis system (not Ant). Three modes Paper · Ink · Volt. Not a packet.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-31 19:29 UTC — **005 addendum:** links are links; don’t leak `**`. That one for now.
 
 **How we maintain this log**
 
@@ -1021,4 +1021,16 @@ Does **not** overwrite 14:00. Does **not** replace voice as the primary channel 
 Paths: `docs/register/plates/travis-t0-system-three-modes.png` … `travis-t6-log-type-paper.png`. C/D/E/L plates not recut; this set is competing look, not yet of record.
 
 **Ask:** like T0–T6 enough to packet as the look? Default Paper? Recut which screen?
+
+---
+
+## 2026-08-31 19:29 UTC — Receive format: links + no leaked asterisks (founder)
+
+**Kind:** Type B. Tightening **005**, not a new packet. Lived from Travis.
+
+**Founder (preserved; STT doubles collapsed):** keep in mind as we build. Text format of messages better. **Links I want to be links.** Specific format with **double asterisks** in front of a sentence always comes across like that — that should be fixed. Click links directly. That one for now.
+
+**Locked into 005:** clickable links. `**` is weight, not visible marks. Not a markdown kitchen sink. No extra plate.
+
+Engineer plants with 005 (SA if render vs store still open). Do not invent the rest of markdown this stamp.
 

@@ -10,6 +10,13 @@
 
 **The look of record is the photo. This packet focuses it.**
 
+**Lived addendum 2026-08-31 (founder, testing — that one for now):**
+
+- **Links are links.** Clickable in the log. Not a raw URL dump you cannot open.
+- **Do not leak `**`.** Double-asterisk weight must render as weight, not show the marks.
+
+Still not a markdown kitchen sink. Still 005. No extra PNG.
+
 ---
 
 ## Do not miss
@@ -83,7 +90,7 @@ Do not mint tables SA refused. Do not append PM/SA logs. Two buckets only.
 
 ## Five buckets (PLATE-READ)
 
-1. **Copy:** Organized agent text in the log (heading, list, inline code, paragraphs). Type composer **grows** with wrap, then **scrolls inside** at a cap. User send stays plain. Log mode only.
+1. **Copy:** Organized agent text in the log (heading, list, inline code, paragraphs). **Links are links** (clickable). **`**` weight renders**, marks do not show. Type composer **grows** with wrap, then **scrolls inside** at a cap. User send stays plain. Log mode only.
 
 2. **Do not build:** Formatting toolbar. Paperclip / attach. Send-side rich editor. Bezel as product. Keyboard as product. Checkmarks. Globe-on-pill if plant dropped it. Photos of people. k8s / Hub copy. Recutting C3/C4/D3. E1 as a second Talk|Type plant. Image/file gallery.
 
@@ -102,6 +109,7 @@ Do not mint tables SA refused. Do not append PM/SA logs. Two buckets only.
 - Better formatting on what comes from the **agents** (receive). Maybe not too much on what you send.
 - Sets the **stage** for images and other file types — how they are **organized** in the thread.
 - This justifies plates. **Like E1 enough to packet.**
+- Lived 2026-08-31: links must be clickable; double asterisks must not show as marks. That one for now.
 
 ---
 
