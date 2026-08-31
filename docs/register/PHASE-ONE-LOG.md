@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-31 19:29 UTC — **005 addendum:** links are links; don’t leak `**`. That one for now.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-31 21:52 UTC — **Gap: routing speech.** Mic works. Name lands late (“engineer” near the end / for the engineer). Plant wants the name first or last-without-the. Not a packet.
 
 **How we maintain this log**
 
@@ -1033,4 +1033,31 @@ Paths: `docs/register/plates/travis-t0-system-three-modes.png` … `travis-t6-lo
 **Locked into 005:** clickable links. `**` is weight, not visible marks. Not a markdown kitchen sink. No extra plate.
 
 Engineer plants with 005 (SA if render vs store still open). Do not invent the rest of markdown this stamp.
+
+---
+
+## 2026-08-31 21:52 UTC — Gap: routing, not the mic (founder)
+
+**Kind:** Type B. Lived addressing. Not a packet.
+
+**Founder (preserved; STT concat collapsed):**
+
+- Mic works really well.
+- Takes a strong PM to name the gap.
+- It’s routing to the right person — **what is the method exactly.**
+- Part language, part how the format works.
+- Using the product: I often **say engineer close to the end**.
+- The real gap is just the **routing**.
+
+**Exact gap (agent alignment — the identification they asked for):**
+
+Capture is not the hole. **Who the turn is for** is the hole.
+
+How you actually speak: the seat lands **late** — `… engineer`, `for the engineer`, `p.m.` at the end.
+
+What the plant does (`parseCallByName` on `main`): switch only if the name is **first**, a **hey/hi/okay** vocative, **bare**, or the **last word** — and it **refuses** if that last word is preceded by `the` / `a` / `an`. So **`for the engineer` stays on whoever you were already talking to.** A name sitting near the end but not last also misses.
+
+Must-not still holds: do not steal `the engineer talking` in the middle of a sentence.
+
+**Ask:** lock this as a small addressing packet (006) so Engineer may plant late-name / `for the {seat}` — or send Engineer from here as a hotfix on the same law?
 
