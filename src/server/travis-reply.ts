@@ -59,7 +59,23 @@ export async function pipeTravisText(params: {
     return;
   }
 
-  if (!reply) reply = "…";
+  if (!reply) {
+    // An ellipsis looked like Travis answering. Say the model returned nothing
+    // so an exhausted tool loop or a blocked response is visible.
+    const status = await insertStatusTurn(
+      sessionId,
+      "Travis had no reply — the model returned nothing.",
+    );
+    send("done", {
+      matched: true,
+      mode: "empty",
+      seatKey: "travis",
+      seatLabel: "Travis",
+      postTurn: null,
+      turns: [userTurn, status],
+    });
+    return;
+  }
   send("post_delta", {
     text: reply,
     seatKey: "travis",

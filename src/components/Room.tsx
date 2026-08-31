@@ -21,6 +21,7 @@ import {
   type EarState,
 } from "@/lib/ear";
 import { readJson } from "@/lib/http";
+import { isLoggedTurn, isQuietStatus } from "@/lib/turn-view";
 import { isTravisSeat } from "@/lib/seats";
 import { startTravisLive, type TravisLiveSession } from "@/lib/travis-live-client";
 import type { QueueSeatDto } from "@/lib/queue-logic";
@@ -1795,13 +1796,26 @@ export function Room({ t }: { t: Tokens }) {
             }}
           >
             {turns
-              .filter(
-                (turn) =>
-                  turn.kind === "user" ||
-                  turn.kind === "agent_post" ||
-                  turn.kind === "travis_prompt",
-              )
+              .filter((turn) => isLoggedTurn(turn.kind))
               .map((turn) => {
+                if (isQuietStatus(turn.kind)) {
+                  return (
+                    <p
+                      key={turn.id}
+                      style={{
+                        alignSelf: "center",
+                        margin: 0,
+                        maxWidth: "86%",
+                        textAlign: "center",
+                        color: t.textMuted,
+                        fontSize: 12,
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {turn.text}
+                    </p>
+                  );
+                }
                 const isUser = turn.kind === "user";
                 const isPrompt = turn.kind === "travis_prompt";
                 const seat = turn.seatKey ?? (isPrompt ? "" : "pm");
