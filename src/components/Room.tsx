@@ -12,6 +12,7 @@ import { matchConductorPhrase } from "@/lib/conductor";
 import { speakableAgentPost } from "@/lib/agent-post";
 import { flushSpeakBuffer, pullClosedSentences } from "@/lib/speak-sentences";
 import { parseCallByName, parseDeadManResponse, seatKeyToShort } from "@/lib/router";
+import { modeSwitchEarAction, sttOnEndAction, whichEar, type EarState } from "@/lib/ear";
 import { isTravisSeat } from "@/lib/seats";
 import { startTravisLive, type TravisLiveSession } from "@/lib/travis-live-client";
 import type { QueueSeatDto } from "@/lib/queue-logic";
@@ -591,19 +592,22 @@ export function Room({ t }: { t: Tokens }) {
           }
           speakUnits[sk] = Math.max(already, units.length);
 
-          if (voiceReadStarted && viewModeRef.current === "voice") {
+          if (voiceReadStarted) {
             const line = `${label} says… ${spoken.slice(0, 120)}${spoken.length > 120 ? "…" : ""}`;
             setSubtitle(line);
             await speakChain;
+            await waitForSpeechIdle();
+            await delay(500);
+            presenceRef.current = "listening";
+            setPresence("listening");
+            setSubtitle("Listening…");
             if (listeningWantedRef.current) {
-              setPresence("listening");
-              setSubtitle("Listening…");
               await fetch(`/api/session/${sid}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ status: "listening" }),
               });
-              startRecognitionRef.current();
+              scheduleListenRestart();
             }
           }
         } else if (event === "error") {
@@ -630,7 +634,7 @@ export function Room({ t }: { t: Tokens }) {
         }
       }
     },
-    [applyQueue, haltRecognition, refreshQueue, refreshTurns],
+    [applyQueue, haltRecognition, refreshQueue, refreshTurns, scheduleListenRestart],
   );
 
   const connectLive = useCallback(
@@ -1021,17 +1025,21 @@ export function Room({ t }: { t: Tokens }) {
       if (presenceRef.current === "paused" || presenceRef.current === "ended") {
         return;
       }
-      if (presenceRef.current === "speaking") return;
-      if (speechEngineBusy()) return;
-      window.setTimeout(() => {
-        if (!listeningWantedRef.current) return;
-        if (recognitionLiveRef.current) return;
-        if (presenceRef.current === "paused" || presenceRef.current === "ended") {
+      let tries = 0;
+      const retry = () => {
+        const action = sttOnEndAction({
+          wanted: listeningWantedRef.current,
+          presence: presenceRef.current,
+          ttsBusy: speechEngineBusy(),
+          recLive: recognitionLiveRef.current,
+        });
+        if (action === "wait") {
+          if (tries++ < 24) window.setTimeout(retry, 400);
           return;
         }
-        if (presenceRef.current === "speaking" || speechEngineBusy()) return;
-        startRecognitionRef.current();
-      }, 400);
+        if (action === "restart") startRecognitionRef.current();
+      };
+      window.setTimeout(retry, 400);
     };
 
     recognitionRef.current = rec;
@@ -1072,6 +1080,7 @@ export function Room({ t }: { t: Tokens }) {
         sttArmingRef.current = false;
       }
       if (presenceBlocksListen(presenceRef.current)) return;
+      if (presenceRef.current === "speaking" || speechEngineBusy()) return;
       if (viewModeRef.current === "log" && logSubmodeRef.current === "type") {
         return;
       }
@@ -1100,8 +1109,18 @@ export function Room({ t }: { t: Tokens }) {
     const destTravis = isTravisSeat(sessionRef.current?.activeSeatKey);
     const voice = viewModeRef.current === "voice";
     const sid = sessionIdRef.current;
+    const want = whichEar({
+      viewMode: viewModeRef.current,
+      logSubmode: logSubmodeRef.current,
+      destTravis,
+      liveUp: Boolean(liveRef.current),
+    });
 
-    if (voice && destTravis && liveRef.current) return;
+    if (want === "stt" && recognitionLiveRef.current && recognitionRef.current) {
+      return;
+    }
+
+    if (want === "live") return;
 
     if (liveRef.current && !(voice && destTravis)) {
       await stopLive();
@@ -1246,6 +1265,12 @@ export function Room({ t }: { t: Tokens }) {
 
   const switchViewMode = async (mode: ViewMode) => {
     if (!session) return;
+    const from: EarState = {
+      viewMode: viewModeRef.current,
+      logSubmode: logSubmodeRef.current,
+      destTravis: isTravisSeat(session.activeSeatKey),
+      liveUp: Boolean(liveRef.current),
+    };
     setViewMode(mode);
     viewModeRef.current = mode;
     await fetch(`/api/session/${session.id}`, {
@@ -1254,13 +1279,31 @@ export function Room({ t }: { t: Tokens }) {
       body: JSON.stringify({ viewMode: mode }),
     });
     setSession((s) => (s ? { ...s, viewMode: mode } : s));
-    if (mode === "log" && logSubmodeRef.current === "type") {
+    presenceRef.current = "listening";
+    setPresence("listening");
+    setSubtitle("Listening…");
+    if (deadManTimerRef.current) clearTimeout(deadManTimerRef.current);
+    resetDeadManTimer();
+    const to = {
+      viewMode: mode,
+      logSubmode: logSubmodeRef.current,
+      destTravis: isTravisSeat(session.activeSeatKey),
+      liveUp: Boolean(liveRef.current),
+    };
+    const switchAction = modeSwitchEarAction({
+      from,
+      to,
+      recLive: Boolean(recognitionLiveRef.current && recognitionRef.current),
+    });
+    if (switchAction === "keep") {
+      listeningWantedRef.current = true;
+      return;
+    }
+    if (switchAction === "release") {
       stopRecognition();
       await stopLive();
       return;
     }
-    if (deadManTimerRef.current) clearTimeout(deadManTimerRef.current);
-    resetDeadManTimer();
     await armEar();
   };
 
@@ -1787,9 +1830,24 @@ export function Room({ t }: { t: Tokens }) {
                         {!isUser && turn.kind === "agent_post" && (
                           <button
                             type="button"
-                            onClick={() =>
-                              void facilitatorSpeak(speakableAgentPost(turn.text))
-                            }
+                            onClick={() => {
+                              haltRecognition();
+                              void (async () => {
+                                await facilitatorSpeak(
+                                  speakableAgentPost(turn.text),
+                                );
+                                await waitForSpeechIdle();
+                                await delay(500);
+                                if (logSubmodeRef.current === "type") return;
+                                if (presenceBlocksListen(presenceRef.current)) {
+                                  return;
+                                }
+                                listeningWantedRef.current = true;
+                                presenceRef.current = "listening";
+                                setPresence("listening");
+                                startRecognitionRef.current();
+                              })();
+                            }}
                             style={{
                               display: "block",
                               marginTop: 8,
