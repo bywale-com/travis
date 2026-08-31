@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-28 18:59 UTC — **Imported: harness vs model.** Travis is the harness; Cursor is the buried brain. Four primitives. Not a flag. Not a packet.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-31 17:17 UTC — **Vision: Travis orchestrates in the background.** Keep talking while it works. Present when done. Board is an external apparatus (later). Not a packet.
 
 **How we maintain this log**
 
@@ -963,4 +963,38 @@ Travis is **not** recreating Claude. Travis is a **harness around Cursor** (dura
 Cursor itself is already a harness (IDE) around a model. Travis is a **second harness** (phone-first room) around Cursor’s agent API — not around the desktop chat UI.
 
 **Ask:** hold here, or add a short join to the Engineer envelope ([PR #27](https://github.com/bywale-com/travis/pull/27))? Do not packet this.
+
+---
+
+## 2026-08-31 17:17 UTC — Travis orchestrates in the background; the board (founder)
+
+**Kind:** Type A vision. On top of what is already agreed. **Not a new flag. Not a packet.** Flag remains 14:00. Do not lose this. Joins 003 queue/barge, 18:59 harness loop, 19:32 visual overflow.
+
+**Founder (preserved; STT cleaned):**
+
+- Don’t lose track of them.
+- On top of everything already agreed — Travis should be able to do, or where it’s going, the vision.
+- Travis itself is an **orchestrator**. It can do stuff, given the tools it has. Beyond that: the **ability to do things**.
+- Example: “Travis, find me research on this X thing.” It’s doing the research. **I can keep talking to Travis about another thing.** When that’s done, it would know how to **present** what it found.
+- We’ve talked about this briefly: **queuing**, **barging**. Travis himself can do that.
+- I can keep talking to Travis while it works on a task or an error **in the background**.
+- The **visual display** side is critical. That’s what turns this from just Claude to something closer to **Jarvis** in Iron Man.
+- “Hey Travis… maybe we have a document that already exists somewhere? **Place that on the board.**”
+- The **board** is an **external apparatus** that Travis has access to. We’ll talk more about that. That’s where this is going.
+
+Does **not** overwrite 14:00. Does **not** replace voice as the primary channel (19:32 still holds: visual is overflow, not the product center).
+
+**Do not from this stamp:** plant a research-job runner, mint a board table, plant Fieldtop/Jarvis as the face, recut 003 barge into “Travis background,” packet the board.
+
+---
+
+**Join (agent alignment — not the flag)**
+
+**003 barge** is per-seat: next line waits on a **busy Cursor agent**. This stamp is **Travis** holding a **background job** while you stay on the mic with Travis. Same family (work continues; you are not blocked). Different owner: the orchestrator, not Eng’s run.
+
+**Present when done** = know how to come back — speak, put in the log, or push to the board. Hygiene of *when* to interrupt you is later (v2 triage). v1 still does not invent that judgment.
+
+**The board** = the 19:32 overflow pane, named as an apparatus Travis can **place** things on (“put that document on the board”). Not the phone. Not Cursor. Talk more later — hold the grain, don’t plate it this stamp.
+
+**Ask:** hold the board until you want to talk it. Background-while-talking: keep as vision, or is it the next thing to plate after L1? Envelope ([PR #27](https://github.com/bywale-com/travis/pull/27)) — add this join, or wait until you tell Engineer to peek again?
 
