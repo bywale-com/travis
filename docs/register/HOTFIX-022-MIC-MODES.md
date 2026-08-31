@@ -11,16 +11,16 @@
 
 021 held the draft and re-armed Talk. It did not give Voice an ear.
 
-1. **Voice dest Travis killed Web Speech** and waited on Gemini Live. After refresh there is no user gesture, `AudioContext` stays suspended / `getUserMedia` fails, Live never comes up, and STT was forbidden — so Voice was mute. Talk still used Web Speech, so Talk worked.
-2. **Live `getUserMedia` held the mic** after a Voice visit. Talk/Type then started STT against a track that had not been released.
-3. **Resume treated leftover Type as “no listen” even in Voice**, so a Type session that later opened Voice never started the ear.
+1. **Voice dest Travis killed Web Speech** and waited on Gemini Live. After refresh there is no user gesture, Live never comes up, STT was forbidden — Voice mute, Talk still worked.
+2. **Talk ↔ Voice dest Engineer share one Web Speech ear.** Every switch aborted it. Chrome will not give the mic back until refresh. Type is a different recognizer, so it looked fine.
+3. **TTS (`speechSynthesis`) ends the recognizer.** Room `onend` saw “speaking” and **gave up**. Play reply and Voice readback left Talk/Voice deaf. Type retries on `onend`, so it survived.
 
 ## Cut
 
-1. Voice always has an ear: Live only while it is actually up; otherwise Web Speech (same as Talk), including dest Travis.
-2. Mode switch fully stops Live tracks, waits, then arms the ear for the new mode. Type composer auto-starts its mic.
-3. Leftover Type submode does not mute Voice on refresh.
-4. Live: resume audio contexts, do not play the mic into the speaker, release tracks on stop, fall back to STT on failure.
+1. Voice always has an ear: Live only while it is actually up; otherwise Web Speech.
+2. Talk ↔ Voice dest Engineer: **do not abort** the recognizer if it is already live. Unpause on mode switch.
+3. After TTS (Voice readback or Play reply), wait until synthesis is idle, then restart listen. `onend` retries while the mouth is busy instead of quitting.
+4. Type composer auto-starts its own mic. Leftover Type does not mute Voice on refresh.
 
 ## Must-not
 
@@ -30,7 +30,6 @@
 
 ## Verify
 
-1. Refresh on Voice (dest Travis or Engineer): speak — draft / Live hears you. No refresh needed after that.
-2. Talk → Type → Voice → Talk: mic comes back each time without refresh.
-3. Dest Travis Voice: Live if it connects; if it doesn’t, I’m done still sends like Talk.
-4. Dest Engineer Voice: I’m done still sends.
+1. Dest Engineer, Talk: speak, **I’m done**, hear the reply (or Play reply) — Talk still hears you after the read.
+2. Talk → Voice → Talk without refresh: draft still grows; I’m done still sends.
+3. Type stays independent. Voice dest Travis: Live if it connects; otherwise STT.
