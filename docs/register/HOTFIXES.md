@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **026**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **027**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -37,3 +37,4 @@
 | 023 | [`HOTFIX-023-EAR-TTS.md`](./HOTFIX-023-EAR-TTS.md) | Dest Engineer Talk↔Voice keep one ear; TTS no longer leaves STT dead |
 | 024 | [`HOTFIX-024-DONE-PHRASE.md`](./HOTFIX-024-DONE-PHRASE.md) | I'm done sends when the phrase never finalizes; readback stops abandoning the ear |
 | 025 | [`HOTFIX-025-SEND-DURING-RUN.md`](./HOTFIX-025-SEND-DURING-RUN.md) | Revert 024's busy guard — a turn must reach the server while a seat works |
+| 026 | [`HOTFIX-026-JSON-ERRORS.md`](./HOTFIX-026-JSON-ERRORS.md) | Lazy DB connect + JSON error bodies so a failure names its own cause |
