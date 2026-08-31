@@ -59,6 +59,26 @@ export function matchConductorPhrase(
   return { matched: false, cleanedText: trimmed };
 }
 
+/**
+ * A turn can be gated twice for the same words — once live, once when the
+ * session settles. Suppress that repeat only, and only briefly. A run being
+ * in flight must never block the next turn: per-seat queueing decides that
+ * on the server (hotfix 007/009).
+ */
+export const SEND_DEDUPE_MS = 2500;
+
+export function isDuplicateSend(opts: {
+  text: string;
+  lastText: string;
+  lastAtMs: number;
+  nowMs: number;
+}): boolean {
+  const text = opts.text.trim();
+  if (!text) return false;
+  if (text !== opts.lastText.trim()) return false;
+  return opts.nowMs - opts.lastAtMs < SEND_DEDUPE_MS;
+}
+
 export type ConductorGate = { send: boolean; text: string };
 
 const NO_SEND: ConductorGate = { send: false, text: "" };

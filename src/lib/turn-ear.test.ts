@@ -15,8 +15,11 @@ import {
 import {
   conductorGate,
   conductorOnEnd,
+  isDuplicateSend,
   matchConductorPhrase,
+  SEND_DEDUPE_MS,
 } from "./conductor";
+import { parseCallByName } from "./router";
 import {
   STT_ONEND_MAX_WAIT_MS,
   STT_ONEND_RETRY_MS,
@@ -213,4 +216,99 @@ test("a long readback never abandons the ear", () => {
 
 test("waiting is bounded so a dead session cannot spin forever", () => {
   assert.equal(sttShouldKeepWaiting(STT_ONEND_MAX_WAIT_MS), false);
+});
+
+/**
+ * Hotfix 007/009: you may keep talking while a seat is working. The server
+ * decides send-or-queue per seat. A client-side "already busy" guard silently
+ * eats the turn instead, which is worse than either outcome.
+ */
+class Pipe {
+  sending = false;
+  lastText = "";
+  lastAt = 0;
+  openStreams = 0;
+  posted: string[] = [];
+  dropped: string[] = [];
+
+  finalize(utterance: string, nowMs: number) {
+    const text = utterance.trim();
+    if (!text) return;
+    if (this.sending) {
+      this.dropped.push(text);
+      return;
+    }
+    if (
+      isDuplicateSend({
+        text,
+        lastText: this.lastText,
+        lastAtMs: this.lastAt,
+        nowMs,
+      })
+    ) {
+      this.dropped.push(text);
+      return;
+    }
+    this.sending = true;
+    this.lastText = text;
+    this.lastAt = nowMs;
+    this.posted.push(text);
+    // Response headers are back; the reply now streams in the background.
+    this.sending = false;
+    this.openStreams += 1;
+  }
+
+  closeStream() {
+    this.openStreams = Math.max(0, this.openStreams - 1);
+  }
+}
+
+test("a turn still reaches the server while an earlier reply is streaming", () => {
+  const p = new Pipe();
+  p.finalize("engineer look at the queue I'm done", 0);
+  assert.equal(p.openStreams, 1, "first reply is still streaming");
+  p.finalize("sa what is the store shape I'm done", 4000);
+  assert.deepEqual(p.posted, [
+    "engineer look at the queue I'm done",
+    "sa what is the store shape I'm done",
+  ]);
+  assert.deepEqual(p.dropped, [], "nothing may be silently swallowed");
+});
+
+test("a repeat turn to the same busy seat still reaches the server to be queued", () => {
+  const p = new Pipe();
+  p.finalize("engineer look at the queue I'm done", 0);
+  p.finalize("engineer also check the pm queue I'm done", 5000);
+  assert.equal(p.posted.length, 2, "the server queues it — the client must not");
+  assert.deepEqual(p.dropped, []);
+});
+
+test("the same words gated twice in a moment only send once", () => {
+  const p = new Pipe();
+  p.finalize("engineer look at the queue I'm done", 0);
+  p.finalize("engineer look at the queue I'm done", 300);
+  assert.equal(p.posted.length, 1);
+  assert.equal(p.dropped.length, 1);
+});
+
+test("saying the same thing again later is a real turn, not a duplicate", () => {
+  const p = new Pipe();
+  p.finalize("engineer status I'm done", 0);
+  p.finalize("engineer status I'm done", SEND_DEDUPE_MS + 1);
+  assert.equal(p.posted.length, 2);
+});
+
+/**
+ * When turns are swallowed the draft keeps growing, and the blob that finally
+ * sends no longer starts with the seat name — so the router falls back to the
+ * sticky addressee. That is how "send to Engineer" arrives at PM.
+ */
+test("a swallowed turn is why addressing drifts back to the sticky seat", () => {
+  const clean = parseCallByName("engineer look at the queue");
+  assert.equal(clean.seatKey, "engineer");
+
+  const blob = parseCallByName(
+    "okay so I'm done engineer can you check the queue now",
+  );
+  assert.equal(blob.seatKey, null, "leading word is not a seat — stays sticky");
 });
