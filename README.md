@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-08-31** · Hotfix 022 · [PR #37](https://github.com/bywale-com/travis/pull/37) — Voice hears you after a refresh and Talk/Type/Voice no longer steal the mic from each other, because dest-Travis Voice disabled Web Speech while Live never got the device.
 - **2026-08-31** · Hotfix 021 · [PR #36](https://github.com/bywale-com/travis/pull/36) — A short pause no longer wipes what you said, and Voice↔Talk starts the ear again without a refresh, because empty Web Speech restarts cleared the draft and abort left capture armed-but-dead.
 - **2026-08-30** · Hotfix 020 · [PR #35](https://github.com/bywale-com/travis/pull/35) — I’m done sends on Talk again and the ear comes back after a Voice/Talk switch, because dest Travis skipped the conductor and Chrome STT died on abort+start.
 - **2026-08-30** · Hotfix 019 · [PR #34](https://github.com/bywale-com/travis/pull/34) — Speech text folds a restarted passage and Live no longer writes a turn per syllable, because 3.1 partials and Web Speech restarts were doubling and chopping the log.
