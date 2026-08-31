@@ -8,7 +8,7 @@ import {
   keepSpeechDraft,
   mergeLiveTranscript,
 } from "@/lib/absorb-text";
-import { conductorGate, conductorOnEnd } from "@/lib/conductor";
+import { conductorGate, conductorOnEnd, isDuplicateSend } from "@/lib/conductor";
 import { speakableAgentPost } from "@/lib/agent-post";
 import { flushSpeakBuffer, pullClosedSentences } from "@/lib/speak-sentences";
 import { parseCallByName, parseDeadManResponse, seatKeyToShort } from "@/lib/router";
@@ -229,6 +229,8 @@ export function Room({ t }: { t: Tokens }) {
   const sessionIdRef = useRef<string | null>(null);
   const phrasesRef = useRef<string[]>([]);
   const finalizingRef = useRef(false);
+  const sendingRef = useRef(false);
+  const lastSentRef = useRef<{ text: string; at: number }>({ text: "", at: 0 });
   const logEndRef = useRef<HTMLDivElement | null>(null);
   const deadManTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSpeechRef = useRef<number>(Date.now());
@@ -708,7 +710,24 @@ export function Room({ t }: { t: Tokens }) {
     async (utterance: string) => {
       const sid = sessionIdRef.current;
       if (!sid || !utterance.trim()) return;
-      if (finalizingRef.current) return;
+
+      // Suppress the same words being gated twice — never a turn for another
+      // seat while a run streams. Whether that sends or queues is the
+      // server's per-seat call, and it cannot make it if we swallow the turn.
+      const text = utterance.trim();
+      if (sendingRef.current) return;
+      if (
+        isDuplicateSend({
+          text,
+          lastText: lastSentRef.current.text,
+          lastAtMs: lastSentRef.current.at,
+          nowMs: Date.now(),
+        })
+      ) {
+        return;
+      }
+      sendingRef.current = true;
+      lastSentRef.current = { text, at: Date.now() };
 
       beginInflight();
       finalizingRef.current = true;
@@ -726,6 +745,9 @@ export function Room({ t }: { t: Tokens }) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ utterance }),
         });
+        // The turn is away. Anything said from here on is a new turn and must
+        // be allowed to reach the server even while this reply streams.
+        sendingRef.current = false;
 
         const ct = res.headers.get("content-type") ?? "";
         if (!ct.includes("text/event-stream")) {
@@ -765,6 +787,7 @@ export function Room({ t }: { t: Tokens }) {
       } catch (e) {
         setError(e instanceof Error ? e.message : String(e));
       } finally {
+        sendingRef.current = false;
         finalizingRef.current = false;
         endInflight();
       }

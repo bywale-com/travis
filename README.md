@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-08-31** · Hotfix 025 · [PR #40](https://github.com/bywale-com/travis/pull/40) — You can send again while a seat is still working, and `engineer …` stops landing on PM, because 024’s busy guard swallowed every turn for the length of a run.
 - **2026-08-31** · Hotfix 024 · [PR #39](https://github.com/bywale-com/travis/pull/39) — I’m done sends even when Web Speech never finalizes the phrase, and a long readback no longer abandons the ear, because the live gate held interim text that `onend` never re-checked.
 - **2026-08-31** · Hotfix 023 · [PR #38](https://github.com/bywale-com/travis/pull/38) — Dest Engineer Talk and Voice keep one ear and capture comes back after a read, because abort-on-switch and TTS onend were leaving Chrome STT dead.
 - **2026-08-31** · Hotfix 022 · [PR #37](https://github.com/bywale-com/travis/pull/37) — Voice hears you after a refresh and Talk/Type/Voice no longer steal the mic from each other, because dest-Travis Voice disabled Web Speech while Live never got the device.
