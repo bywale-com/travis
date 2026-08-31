@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-31 17:17 UTC — **Vision: Travis orchestrates in the background.** Keep talking while it works. Present when done. Board is an external apparatus (later). Not a packet.
+**Current (read first, then the newest stamp at the bottom):** 2026-08-31 17:48 UTC — **T-set considering.** Fresh Travis system (not Ant). Three modes Paper · Ink · Volt. Not a packet.
 
 **How we maintain this log**
 
@@ -997,4 +997,28 @@ Does **not** overwrite 14:00. Does **not** replace voice as the primary channel 
 **The board** = the 19:32 overflow pane, named as an apparatus Travis can **place** things on (“put that document on the board”). Not the phone. Not Cursor. Talk more later — hold the grain, don’t plate it this stamp.
 
 **Ask:** hold the board until you want to talk it. Background-while-talking: keep as vision, or is it the next thing to plate after L1? Envelope ([PR #27](https://github.com/bywale-com/travis/pull/27)) — add this join, or wait until you tell Engineer to peek again?
+
+---
+
+## 2026-08-31 17:48 UTC — T-set: fresh system, three modes (founder; plates)
+
+**Kind:** Type B glass + design system. Considering. Not a packet. Not Ant.
+
+**Founder (preserved):** love to see designs; as many screens as justified. Three **distinct** modes — not light/dark toggle plus one; more neon; PM decides. Fresh design system; Travis exists in it; **not Ant**. Current look is not it (fonts, logo). Complete redesign. Consolidate what’s allowed on one screen; don’t fake Voice and Talk/Type as one. Don’t leave anything out. (PR 27 review was a typo — skip unless needed.)
+
+**Landed (considering):** [`TRAVIS-SYSTEM-FACE.md`](TRAVIS-SYSTEM-FACE.md)
+
+| ID | Screen | Mode |
+|----|--------|------|
+| T0 | System board: wordmark, Paper / Ink / Volt | all three |
+| T1 | First land · select room | Paper |
+| T2 | Voice · listen · background work · queue · board line | Paper |
+| T3 | Voice | Ink |
+| T4 | Voice | Volt |
+| T5 | Log Talk · no composer · queue · format | Paper |
+| T6 | Log Type · toggle · grown composer · `@` | Paper |
+
+Paths: `docs/register/plates/travis-t0-system-three-modes.png` … `travis-t6-log-type-paper.png`. C/D/E/L plates not recut; this set is competing look, not yet of record.
+
+**Ask:** like T0–T6 enough to packet as the look? Default Paper? Recut which screen?
 
