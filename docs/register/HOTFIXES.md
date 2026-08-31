@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **022**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **023**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -33,3 +33,4 @@
 | 019 | [`HOTFIX-019-SPEECH-TEXT.md`](./HOTFIX-019-SPEECH-TEXT.md) | Fold STT restarts; absorb Live speech into one turn |
 | 020 | [`HOTFIX-020-STT-EAR.md`](./HOTFIX-020-STT-EAR.md) | Ear restarts after mode switch; I’m done on Talk dest Travis |
 | 021 | [`HOTFIX-021-STT-HOLD.md`](./HOTFIX-021-STT-HOLD.md) | Empty STT restart does not wipe the draft; Talk re-arms after Voice |
+| 022 | [`HOTFIX-022-MIC-MODES.md`](./HOTFIX-022-MIC-MODES.md) | Voice has an ear after refresh; Talk/Type/Voice release the mic |

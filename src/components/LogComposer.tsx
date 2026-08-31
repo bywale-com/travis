@@ -247,7 +247,13 @@ export function LogComposer({
     window.setTimeout(attach, 400);
   }, [haltMic, persistHeldDraft]);
 
-  useEffect(() => () => haltMic(), [haltMic]);
+  useEffect(() => {
+    const id = window.setTimeout(() => startMic(), 400);
+    return () => {
+      window.clearTimeout(id);
+      haltMic();
+    };
+  }, [haltMic, startMic]);
 
   useEffect(() => {
     const id = window.setInterval(() => {
