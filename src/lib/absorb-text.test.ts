@@ -5,6 +5,7 @@ import {
   absorbText,
   carryDraftAcrossRestart,
   collapseSpeechStutter,
+  keepSpeechDraft,
   mergeLiveTranscript,
 } from "./absorb-text";
 import { parseCallByName } from "./router";
@@ -135,5 +136,14 @@ test("carryDraftAcrossRestart keeps a leading seat call across a silence restart
       carryDraftAcrossRestart("Engineer look at this", "there's a second problem"),
     ).seatKey,
     "engineer",
+  );
+});
+
+test("keepSpeechDraft does not let an empty restart wipe a draft", () => {
+  assert.equal(keepSpeechDraft("look at the log", ""), "look at the log");
+  assert.equal(keepSpeechDraft("look at the log", "   "), "look at the log");
+  assert.equal(
+    keepSpeechDraft("look at the log", "look at the log now"),
+    "look at the log now",
   );
 });

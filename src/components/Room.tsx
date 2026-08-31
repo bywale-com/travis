@@ -5,6 +5,7 @@ import {
   absorbText,
   carryDraftAcrossRestart,
   collapseSpeechStutter,
+  keepSpeechDraft,
   mergeLiveTranscript,
 } from "@/lib/absorb-text";
 import { matchConductorPhrase } from "@/lib/conductor";
@@ -60,6 +61,7 @@ type SpeechRecognitionLike = {
   onresult: ((ev: SpeechRecognitionEventLike) => void) | null;
   onerror: ((ev: { error: string }) => void) | null;
   onend: (() => void) | null;
+  onstart: (() => void) | null;
   start: () => void;
   stop: () => void;
   abort: () => void;
@@ -211,8 +213,11 @@ export function Room({ t }: { t: Tokens }) {
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const committedRef = useRef("");
   const heldDraftRef = useRef("");
+  const lastHeardRef = useRef("");
   const interimRef = useRef("");
   const listeningWantedRef = useRef(false);
+  const sttArmingRef = useRef(false);
+  const sttArmStartedRef = useRef(0);
   const sessionIdRef = useRef<string | null>(null);
   const phrasesRef = useRef<string[]>([]);
   const finalizingRef = useRef(false);
@@ -323,15 +328,18 @@ export function Room({ t }: { t: Tokens }) {
       carryDraftAcrossRestart(heldDraftRef.current, committedRef.current),
       interimRef.current,
     );
-    if (!merged.trim()) return;
-    heldDraftRef.current = merged;
-    committedRef.current = merged;
+    const keep = keepSpeechDraft(lastHeardRef.current, merged);
+    if (!keep.trim()) return;
+    lastHeardRef.current = keep;
+    heldDraftRef.current = keep;
+    committedRef.current = keep;
     interimRef.current = "";
-    setDraft(merged);
+    setDraft(keep);
   }, []);
 
   const clearDraft = useCallback(() => {
     heldDraftRef.current = "";
+    lastHeardRef.current = "";
     committedRef.current = "";
     interimRef.current = "";
     setDraft("");
@@ -346,6 +354,7 @@ export function Room({ t }: { t: Tokens }) {
       rec.onend = null;
       rec.onresult = null;
       rec.onerror = null;
+      rec.onstart = null;
       try {
         rec.abort();
       } catch {
@@ -388,6 +397,7 @@ export function Room({ t }: { t: Tokens }) {
 
   const stopRecognition = useCallback(() => {
     listeningWantedRef.current = false;
+    sttArmingRef.current = false;
     listenRestartGenRef.current += 1;
     if (deadManTimerRef.current) clearTimeout(deadManTimerRef.current);
     haltRecognition();
@@ -823,28 +833,45 @@ export function Room({ t }: { t: Tokens }) {
       isTravisSeat(sessionRef.current?.activeSeatKey) &&
       viewModeRef.current === "voice"
     ) {
+      haltRecognition();
+      sttArmingRef.current = false;
       return;
     }
     const Ctor = getSpeechRecognition();
     if (!Ctor) return;
+    sttArmingRef.current = true;
+    sttArmStartedRef.current = Date.now();
     const gen = ++listenRestartGenRef.current;
     haltRecognition();
     listeningWantedRef.current = true;
 
     const attach = (attempt: number) => {
-    if (gen !== listenRestartGenRef.current) return;
-    if (!listeningWantedRef.current) return;
-    if (presenceBlocksListen(presenceRef.current)) return;
+    if (gen !== listenRestartGenRef.current) {
+      return;
+    }
+    if (!listeningWantedRef.current) {
+      sttArmingRef.current = false;
+      return;
+    }
+    if (presenceBlocksListen(presenceRef.current)) {
+      sttArmingRef.current = false;
+      return;
+    }
     if (viewModeRef.current === "log" && logSubmodeRef.current === "type") {
+      sttArmingRef.current = false;
       return;
     }
     if (
       isTravisSeat(sessionRef.current?.activeSeatKey) &&
       viewModeRef.current === "voice"
     ) {
+      sttArmingRef.current = false;
       return;
     }
-    if (recognitionLiveRef.current && recognitionRef.current) return;
+    if (recognitionLiveRef.current && recognitionRef.current) {
+      sttArmingRef.current = false;
+      return;
+    }
 
     const rec = new Ctor();
     rec.continuous = true;
@@ -864,13 +891,21 @@ export function Room({ t }: { t: Tokens }) {
           interim += piece;
         }
       }
+      const sessionMerged = mergeLiveTranscript(sessionCommitted, interim);
+      if (!sessionMerged.trim() && lastHeardRef.current.trim()) return;
       const committed = carryDraftAcrossRestart(
         heldDraftRef.current,
         sessionCommitted,
       );
+      const full = keepSpeechDraft(
+        lastHeardRef.current,
+        mergeLiveTranscript(committed, interim),
+      );
+      if (!full.trim()) return;
       committedRef.current = committed;
       interimRef.current = interim;
-      const full = mergeLiveTranscript(committed, interim);
+      lastHeardRef.current = full;
+      heldDraftRef.current = keepSpeechDraft(heldDraftRef.current, committed);
       setDraft(full);
 
       const destTravis = isTravisSeat(sessionRef.current?.activeSeatKey);
@@ -935,8 +970,16 @@ export function Room({ t }: { t: Tokens }) {
     };
 
     rec.onerror = (ev) => {
+      recognitionLiveRef.current = false;
+      sttArmingRef.current = false;
+      persistHeldDraft();
       if (ev.error === "no-speech" || ev.error === "aborted") return;
       setError(`STT: ${ev.error}`);
+    };
+
+    rec.onstart = () => {
+      recognitionLiveRef.current = true;
+      sttArmingRef.current = false;
     };
 
     rec.onend = () => {
@@ -956,23 +999,24 @@ export function Room({ t }: { t: Tokens }) {
         }
         if (presenceRef.current === "speaking" || speechEngineBusy()) return;
         startRecognitionRef.current();
-      }, 250);
+      }, 400);
     };
 
     recognitionRef.current = rec;
     try {
       rec.start();
-      recognitionLiveRef.current = true;
     } catch {
       recognitionLiveRef.current = false;
       recognitionRef.current = null;
-      if (attempt < 6) {
-        window.setTimeout(() => attach(attempt + 1), 160 * (attempt + 1));
+      if (attempt < 8) {
+        window.setTimeout(() => attach(attempt + 1), 280 * (attempt + 1));
+        return;
       }
+      sttArmingRef.current = false;
     }
     };
 
-    window.setTimeout(() => attach(0), 140);
+    window.setTimeout(() => attach(0), 400);
     resetDeadManTimer();
   }, [
     clearDraft,
@@ -990,6 +1034,10 @@ export function Room({ t }: { t: Tokens }) {
     const id = window.setInterval(() => {
       if (!listeningWantedRef.current) return;
       if (recognitionLiveRef.current) return;
+      if (sttArmingRef.current) {
+        if (Date.now() - sttArmStartedRef.current < 2500) return;
+        sttArmingRef.current = false;
+      }
       if (presenceBlocksListen(presenceRef.current)) return;
       if (viewModeRef.current === "log" && logSubmodeRef.current === "type") {
         return;
@@ -1152,7 +1200,8 @@ export function Room({ t }: { t: Tokens }) {
         stopRecognition();
       } else {
         resetDeadManTimer();
-        if (listeningWantedRef.current) startRecognitionRef.current();
+        listeningWantedRef.current = true;
+        startRecognitionRef.current();
       }
     } else {
       resetDeadManTimer();

@@ -153,3 +153,13 @@ export function carryDraftAcrossRestart(
 ): string {
   return collapseSpeechStutter(absorbFinalTranscript(held, sessionFinals));
 }
+
+/**
+ * A silence restart often fires an empty result list before onend.
+ * That must not replace a draft we already heard.
+ */
+export function keepSpeechDraft(prev: string, next: string): string {
+  const n = next.trim();
+  if (!n) return prev.trim();
+  return n;
+}

@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **022**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -32,3 +32,4 @@
 | 018 | [`HOTFIX-018-GEMINI-MODELS.md`](./HOTFIX-018-GEMINI-MODELS.md) | Pin Gemini 3.6 text + 3.1 Live; 2.5 404 for new keys |
 | 019 | [`HOTFIX-019-SPEECH-TEXT.md`](./HOTFIX-019-SPEECH-TEXT.md) | Fold STT restarts; absorb Live speech into one turn |
 | 020 | [`HOTFIX-020-STT-EAR.md`](./HOTFIX-020-STT-EAR.md) | Ear restarts after mode switch; I’m done on Talk dest Travis |
+| 021 | [`HOTFIX-021-STT-HOLD.md`](./HOTFIX-021-STT-HOLD.md) | Empty STT restart does not wipe the draft; Talk re-arms after Voice |
