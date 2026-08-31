@@ -1,6 +1,7 @@
 import { and, desc, eq, ne, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { sortRoomSeats } from "@/lib/seats";
+import { jsonRoute } from "@/server/api-error";
 import { clientIpFromHeaders } from "@/server/client-ip";
 import { db } from "@/server/db/client";
 import { ensureSeatBindings } from "@/server/db/ensure-bindings";
@@ -117,6 +118,10 @@ async function liveSessionForIp(ip: string) {
 
 /** Open or resume the live room for this IP. */
 export async function POST(req: Request) {
+  return jsonRoute(() => openOrResume(req));
+}
+
+async function openOrResume(req: Request) {
   await ensureSeatBindings();
   await ensureClientIpColumn();
   await ensureTravisLiveColumn();
@@ -156,6 +161,10 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: Request) {
+  return jsonRoute(() => readSession(req));
+}
+
+async function readSession(req: Request) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
 

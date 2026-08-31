@@ -1,5 +1,6 @@
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
+import { jsonRoute } from "@/server/api-error";
 import { db } from "@/server/db/client";
 import { ensureSeatBindings } from "@/server/db/ensure-bindings";
 import { agentBinding } from "@/server/db/schema";
@@ -8,6 +9,10 @@ import { sortRoomSeats } from "@/lib/seats";
 
 /** Room seats by title only — never cursor_agent_id. */
 export async function GET() {
+  return jsonRoute(readSeats);
+}
+
+async function readSeats() {
   await ensureSeatBindings();
   const rows = await db
     .select({

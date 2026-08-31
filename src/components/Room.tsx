@@ -20,6 +20,7 @@ import {
   STT_ONEND_RETRY_MS,
   type EarState,
 } from "@/lib/ear";
+import { readJson } from "@/lib/http";
 import { isTravisSeat } from "@/lib/seats";
 import { startTravisLive, type TravisLiveSession } from "@/lib/travis-live-client";
 import type { QueueSeatDto } from "@/lib/queue-logic";
@@ -1206,7 +1207,7 @@ export function Room({ t }: { t: Tokens }) {
       setRoomSeats(s.seats ?? []);
       if (!s.seats?.length) {
         const bindRes = await fetch("/api/bindings");
-        const bindData = await bindRes.json();
+        const bindData = await readJson<{ seats?: RoomSeat[] }>(bindRes);
         if (Array.isArray(bindData.seats)) setRoomSeats(bindData.seats);
       }
       clearDraft();
@@ -1250,7 +1251,11 @@ export function Room({ t }: { t: Tokens }) {
     setBusy(true);
     try {
       const res = await fetch("/api/session", { method: "POST" });
-      const data = await res.json();
+      const data = await readJson<{
+        session?: Session;
+        resumed?: boolean;
+        error?: string;
+      }>(res);
       if (!res.ok) throw new Error(data.error ?? "Open failed");
       await attachSession(data.session as Session, Boolean(data.resumed));
     } catch (e) {
@@ -1265,12 +1270,15 @@ export function Room({ t }: { t: Tokens }) {
     void (async () => {
       try {
         const res = await fetch("/api/session");
-        const data = await res.json();
-        if (cancelled || !data.session) return;
+        const data = await readJson<{ session?: Session; error?: string }>(res);
+        if (cancelled) return;
+        if (!res.ok || data.error) throw new Error(data.error ?? "Resume failed");
+        if (!data.session) return;
         setBusy(true);
-        await attachSession(data.session as Session, true);
-      } catch {
-        /* stay on landing */
+        await attachSession(data.session, true);
+      } catch (e) {
+        // Landing is the right place to stand, but say why we could not resume.
+        if (!cancelled) setError(e instanceof Error ? e.message : String(e));
       } finally {
         if (!cancelled) setBusy(false);
       }
