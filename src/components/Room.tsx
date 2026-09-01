@@ -555,6 +555,7 @@ export function Room({ t }: { t: Tokens }) {
       let spokenSpeakable = "";
       let heardQueued = false;
       let heardSent = false;
+      let sawTerminal = false;
 
       const enqueueVoice = (raw: string) => {
         if (viewModeRef.current !== "voice") return;
@@ -594,6 +595,7 @@ export function Room({ t }: { t: Tokens }) {
             heardQueued = true;
             playQueuedCue();
           }
+          sawTerminal = true;
           if (tempUserId) {
             setTurns((prev) => prev.filter((x) => x.id !== tempUserId));
           }
@@ -684,6 +686,7 @@ export function Room({ t }: { t: Tokens }) {
         } else if (event === "status") {
           setLiveStatus(String(data.text ?? "running"));
         } else if (event === "done") {
+          sawTerminal = true;
           const sk = String(data.seatKey ?? "_");
           const acc = postBySeat[sk] ?? "";
           delete postBySeat[sk];
@@ -743,6 +746,12 @@ export function Room({ t }: { t: Tokens }) {
           }
           if (dataLines.length) await handleEvent(eventName, dataLines.join("\n"));
         }
+      }
+      if (!sawTerminal) {
+        setLiveStatus(null);
+        setStreamingSeat(null);
+        await refreshTurns(sid);
+        await refreshQueue(sid);
       }
     },
     [applyQueue, haltRecognition, refreshQueue, refreshTurns, scheduleListenRestart],

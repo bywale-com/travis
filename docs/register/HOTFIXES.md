@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **032**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **033**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -42,3 +42,4 @@
 | 029 | [`HOTFIX-029-OPENAI-TRAVIS.md`](./HOTFIX-029-OPENAI-TRAVIS.md) | Dest Travis brain/mouth is OpenAI Realtime + text, not Gemini |
 | 030 | [`HOTFIX-030-QUEUE-SEND-SOUNDS.md`](./HOTFIX-030-QUEUE-SEND-SOUNDS.md) | Drain a stuck queue when Cursor is idle; hold live posts; swoosh on send, cue on queued |
 | 031 | [`HOTFIX-031-AUDIBLE-SEND-SOUNDS.md`](./HOTFIX-031-AUDIBLE-SEND-SOUNDS.md) | Send swoosh and queue cue actually play on the phone |
+| 032 | [`HOTFIX-032-HARVEST-DEAD-STREAM.md`](./HOTFIX-032-HARVEST-DEAD-STREAM.md) | When the Cursor SSE dies, pull the finished run into the log and drop “is still running” |

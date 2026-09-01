@@ -24,6 +24,20 @@ export async function getLiveRun(
   return row ?? null;
 }
 
+export async function liveRunsForSession(
+  sessionId: string,
+): Promise<Array<{ live: SeatLiveRun; binding: AgentBinding }>> {
+  const rows = await db
+    .select({
+      live: seatLiveRun,
+      binding: agentBinding,
+    })
+    .from(seatLiveRun)
+    .innerJoin(agentBinding, eq(seatLiveRun.bindingId, agentBinding.id))
+    .where(eq(seatLiveRun.sessionId, sessionId));
+  return rows;
+}
+
 export async function upsertLiveRun(params: {
   bindingId: string;
   sessionId: string;

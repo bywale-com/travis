@@ -129,6 +129,40 @@ export async function probeCursorRun(agentId: string): Promise<{
   }
 }
 
+/**
+ * Look at the stored run id, not the latest listRuns row. A newer
+ * follow-up on the same seat must not hide a finished run's text.
+ */
+export async function harvestFinishedRun(params: {
+  agentId: string;
+  runId: string;
+}): Promise<{ status: "active" | "idle" | "unknown"; assistantText: string }> {
+  const key = apiKey();
+  const agentId = params.agentId.trim();
+  const runId = params.runId.trim();
+  if (!agentId || !runId || !isCloudAgentId(agentId) || !key) {
+    return { status: "unknown", assistantText: "" };
+  }
+  try {
+    const { Agent } = await import("@cursor/sdk");
+    const run = await Agent.getRun(runId, {
+      runtime: "cloud",
+      agentId,
+      apiKey: key,
+    });
+    if (isActiveRunStatus(run.status)) {
+      return { status: "active", assistantText: "" };
+    }
+    let text = await assistantTextFromConversation(run);
+    if (!text.trim() && typeof run.result === "string") {
+      text = run.result.trim();
+    }
+    return { status: "idle", assistantText: text.trim() };
+  } catch {
+    return { status: "unknown", assistantText: "" };
+  }
+}
+
 export async function cancelCursorRun(
   agentId: string,
   runId: string,
