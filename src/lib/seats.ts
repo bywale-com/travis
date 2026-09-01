@@ -34,7 +34,7 @@ export function sortRoomSeats<T extends { seatKey: string | null }>(
 
 /** "hey travis" / remainder equals the vocative — switch only, do not send. */
 export function isVocativeOnlyCall(
-  utterance: string,
+  _utterance: string,
   remainder: string,
   seatKey: SeatKey,
 ): boolean {

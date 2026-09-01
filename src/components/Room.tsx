@@ -1100,7 +1100,7 @@ export function Room({ t }: { t: Tokens }) {
 
       const called = committed.trim()
         ? parseCallByName(committed)
-        : { seatKey: null as const, remainder: "" };
+        : { seatKey: null, remainder: "" };
       if (
         called.seatKey === "travis" &&
         !finalizingRef.current &&
