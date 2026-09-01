@@ -6,6 +6,7 @@ Newest first. On completion of a packet or hotfix the Engineer **prepends** one 
 
 - **2026-09-01** · Hotfix 031 · [PR #46](https://github.com/bywale-com/travis/pull/46) — You hear a whoosh when a turn sends and two notes when it queues, because 030’s Web Audio ran after the SSE and the phone muted it.
 - **2026-09-01** · Hotfix 030 · [PR #45](https://github.com/bywale-com/travis/pull/45) — A follow-up queued while a seat is working sends once Cursor is idle, live posts survive a dropped stream, and you hear a swoosh on send or a cue when it queues, because drain only ran at SSE-end and posts lived only in the phone until done.
+- **2026-09-01** · Hotfix 029 · [PR #44](https://github.com/bywale-com/travis/pull/44) — Dest Travis talks on OpenAI Realtime and text, because the Gemini pin was a provider choice, not a room law.
 - **2026-08-31** · Hotfix 028 · [PR #43](https://github.com/bywale-com/travis/pull/43) — A `STT: Network` hitch no longer wipes what you already said, because Chrome’s leftover fragment was replacing the whole draft.
 - **2026-08-31** · Hotfix 026 · [PR #41](https://github.com/bywale-com/travis/pull/41) — A failed Open session now names its own cause instead of “Unexpected end of JSON input”, because the DB threw at import where no route could catch it and every reply came back empty.
 - **2026-08-31** · Hotfix 025 · [PR #40](https://github.com/bywale-com/travis/pull/40) — You can send again while a seat is still working, and `engineer …` stops landing on PM, because 024’s busy guard swallowed every turn for the length of a run.

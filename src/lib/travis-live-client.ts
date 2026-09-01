@@ -1,36 +1,16 @@
 "use client";
 
 import { absorbText, collapseSpeechStutter } from "@/lib/absorb-text";
-import { TRAVIS_LIVE_MODEL } from "@/lib/travis-models";
-
-type ToolDecl = {
-  name: string;
-  description: string;
-  parameters: Record<string, unknown>;
-};
+import {
+  interpretRealtimeEvent,
+  parseEphemeralSecret,
+  realtimeSessionConfig,
+  type ToolDecl,
+} from "@/lib/travis-openai";
 
 export type TravisLiveSession = {
   stop: () => Promise<void>;
 };
-
-function pcmToBase64(buf: Float32Array): string {
-  const out = new Int16Array(buf.length);
-  for (let i = 0; i < buf.length; i++) {
-    const s = Math.max(-1, Math.min(1, buf[i]));
-    out[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
-  }
-  const bytes = new Uint8Array(out.buffer);
-  let bin = "";
-  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
-  return btoa(bin);
-}
-
-function base64ToPcm16(b64: string): Int16Array {
-  const bin = atob(b64);
-  const bytes = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  return new Int16Array(bytes.buffer);
-}
 
 export async function startTravisLive(opts: {
   sessionId: string;
@@ -48,67 +28,34 @@ export async function startTravisLive(opts: {
     wired?: boolean;
     token?: string;
     model?: string;
-    handle?: string;
     tools?: ToolDecl[];
     systemInstruction?: string;
     error?: string;
   };
   if (!tokenData.wired || !tokenData.token) {
+    if (tokenData.error) opts.onError(tokenData.error);
     opts.onUnwired();
     return null;
   }
 
-  const { GoogleGenAI, Modality } = await import("@google/genai");
-  const ai = new GoogleGenAI({
-    apiKey: tokenData.token,
-    httpOptions: { apiVersion: "v1alpha" },
-  });
+  const secret = parseEphemeralSecret({ value: tokenData.token });
+  if (!secret) {
+    opts.onUnwired();
+    return null;
+  }
 
-  const playCtx = new AudioContext({ sampleRate: 24000 });
-  void playCtx.resume();
-  let nextPlay = 0;
-
-  const playPcm = (b64: string) => {
-    const pcm = base64ToPcm16(b64);
-    const f32 = new Float32Array(pcm.length);
-    for (let i = 0; i < pcm.length; i++) f32[i] = pcm[i] / 0x8000;
-    const buf = playCtx.createBuffer(1, f32.length, 24000);
-    buf.copyToChannel(f32, 0);
-    const src = playCtx.createBufferSource();
-    src.buffer = buf;
-    src.connect(playCtx.destination);
-    const now = playCtx.currentTime;
-    const startAt = Math.max(now, nextPlay);
-    src.start(startAt);
-    nextPlay = startAt + buf.duration;
-  };
-
-  type LiveSess = {
-    sendRealtimeInput: (p: unknown) => void;
-    sendToolResponse: (p: unknown) => void;
-    close: () => void;
-  };
-  let live: LiveSess | null = null;
   let closed = false;
   let userAcc = "";
   let travisAcc = "";
   let userFlush: ReturnType<typeof setTimeout> | null = null;
-  let pendingHandle: string | undefined;
   let stopFn: () => Promise<void> = async () => {};
 
-  const persist = async (
-    role: "user" | "travis",
-    text: string,
-    handle?: string,
-  ) => {
-    const res = await fetch(
-      `/api/session/${opts.sessionId}/live/transcript`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ role, text, handle }),
-      },
-    );
+  const persist = async (role: "user" | "travis", text: string) => {
+    const res = await fetch(`/api/session/${opts.sessionId}/live/transcript`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ role, text }),
+    });
     const ct = res.headers.get("content-type") ?? "";
     if (ct.includes("text/event-stream")) {
       opts.onSeatStream(res);
@@ -120,181 +67,190 @@ export async function startTravisLive(opts: {
     return data;
   };
 
-  const flushUser = () => {
+  const flushUser = (forced?: string) => {
     if (userFlush != null) {
       clearTimeout(userFlush);
       userFlush = null;
     }
-    const said = collapseSpeechStutter(userAcc);
+    const said = collapseSpeechStutter(forced ?? userAcc);
     userAcc = "";
     if (!said) return;
-    void persist("user", said, pendingHandle).then((data) => {
+    void persist("user", said).then((data) => {
       if (data?.stopLive) void stopFn();
     });
   };
 
-  try {
-  live = (await ai.live.connect({
-    model: tokenData.model ?? TRAVIS_LIVE_MODEL,
-    config: {
-      responseModalities: [Modality.AUDIO],
-      systemInstruction: tokenData.systemInstruction,
-      sessionResumption: tokenData.handle
-        ? { handle: tokenData.handle }
-        : {},
-      tools: tokenData.tools?.length
-        ? [
-            {
-              functionDeclarations: tokenData.tools.map((t) => ({
-                name: t.name,
-                description: t.description,
-                parameters: t.parameters,
-              })),
-            },
-          ]
-        : undefined,
-    },
-    callbacks: {
-      onmessage: (message: {
-        serverContent?: {
-          modelTurn?: { parts?: Array<{ inlineData?: { data?: string } }> };
-          outputTranscription?: { text?: string };
-          inputTranscription?: { text?: string };
-          turnComplete?: boolean;
-        };
-        toolCall?: {
-          functionCalls?: Array<{
-            id?: string;
-            name?: string;
-            args?: Record<string, unknown>;
-          }>;
-        };
-        sessionResumptionUpdate?: { newHandle?: string };
-      }) => {
-        if (closed) return;
-        const audio = message.serverContent?.modelTurn?.parts?.find(
-          (p) => p.inlineData?.data,
-        )?.inlineData?.data;
-        if (audio) playPcm(audio);
-        const out = message.serverContent?.outputTranscription?.text;
-        if (out?.trim()) {
-          travisAcc = absorbText(travisAcc, out.trim()).acc;
-          void persist("travis", travisAcc);
-        }
-        const inn = message.serverContent?.inputTranscription?.text;
-        if (inn?.trim()) {
-          userAcc = absorbText(userAcc, inn.trim()).acc;
-          if (userFlush != null) clearTimeout(userFlush);
-          userFlush = setTimeout(flushUser, 850);
-        }
-        if (message.sessionResumptionUpdate?.newHandle) {
-          pendingHandle = message.sessionResumptionUpdate.newHandle;
-          void persist("user", "", pendingHandle);
-        }
-        if (message.serverContent?.turnComplete) {
-          flushUser();
-          travisAcc = "";
-        }
-        const calls = message.toolCall?.functionCalls ?? [];
-        if (calls.length && live) {
-          void (async () => {
-            const responses = [];
-            for (const call of calls) {
-              const toolRes = await fetch(
-                `/api/session/${opts.sessionId}/live/tool`,
-                {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    name: call.name,
-                    args: call.args ?? {},
-                  }),
-                },
-              );
-              const json = (await toolRes.json()) as { text?: string };
-              responses.push({
-                id: call.id,
-                name: call.name,
-                response: { result: json.text ?? "" },
-              });
-            }
-            live?.sendToolResponse({ functionResponses: responses });
-          })();
-        }
-      },
-      onerror: (e: { message?: string }) => {
-        opts.onError(e.message ?? "Live error");
-      },
-      onclose: () => {
-        closed = true;
-        opts.onClose?.();
-      },
-    },
-  })) as LiveSess;
+  const audioEl = document.createElement("audio");
+  audioEl.autoplay = true;
+  const pc = new RTCPeerConnection();
+  let dc: RTCDataChannel | null = null;
+  let mic: MediaStream | null = null;
 
-  const mic = await navigator.mediaDevices.getUserMedia({
-    audio: { echoCancellation: true, noiseSuppression: true },
-  });
-  const capCtx = new AudioContext({ sampleRate: 16000 });
-  void capCtx.resume();
-  const src = capCtx.createMediaStreamSource(mic);
-  const proc = capCtx.createScriptProcessor(4096, 1, 1);
-  const silent = capCtx.createGain();
-  silent.gain.value = 0;
-  proc.onaudioprocess = (ev) => {
-    if (closed || !live) return;
-    const ch = ev.inputBuffer.getChannelData(0);
-    live.sendRealtimeInput({
-      media: { mimeType: "audio/pcm;rate=16000", data: pcmToBase64(ch) },
-    });
+  const sendEvent = (obj: unknown) => {
+    if (closed || dc?.readyState !== "open") return;
+    dc.send(JSON.stringify(obj));
   };
-  src.connect(proc);
-  proc.connect(silent);
-  silent.connect(capCtx.destination);
 
-  function stop() {
-    closed = true;
-    if (userFlush != null) {
-      clearTimeout(userFlush);
-      userFlush = null;
+  const runTools = async (
+    calls: Array<{ name: string; callId: string; args: Record<string, unknown> }>,
+  ) => {
+    for (const call of calls) {
+      const toolRes = await fetch(`/api/session/${opts.sessionId}/live/tool`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: call.name, args: call.args }),
+      });
+      const json = (await toolRes.json()) as { text?: string };
+      sendEvent({
+        type: "conversation.item.create",
+        item: {
+          type: "function_call_output",
+          call_id: call.callId,
+          output: json.text ?? "",
+        },
+      });
     }
-    try {
-      live?.close();
-    } catch {
-      /* ignore */
-    }
-    live = null;
-    try {
-      proc.disconnect();
-      src.disconnect();
-      silent.disconnect();
-      void capCtx.close();
-      void playCtx.close();
-    } catch {
-      /* ignore */
-    }
-    const tracks = mic.getTracks();
-    for (const t of tracks) t.stop();
-    return new Promise<void>((resolve) => {
-      window.setTimeout(resolve, 400);
+    sendEvent({ type: "response.create" });
+  };
+
+  pc.ontrack = (e) => {
+    audioEl.srcObject = e.streams[0] ?? null;
+    void audioEl.play().catch(() => {});
+  };
+
+  try {
+    mic = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: true, noiseSuppression: true },
     });
-  }
-  stopFn = stop;
+    for (const track of mic.getAudioTracks()) pc.addTrack(track, mic);
 
-  return { stop };
+    dc = pc.createDataChannel("oai-events");
+    dc.addEventListener("open", () => {
+      sendEvent({
+        type: "session.update",
+        session: realtimeSessionConfig({
+          instructions: tokenData.systemInstruction ?? "",
+          tools: tokenData.tools ?? [],
+        }),
+      });
+    });
+    dc.addEventListener("message", (e) => {
+      if (closed) return;
+      let ev: unknown;
+      try {
+        ev = JSON.parse(String(e.data));
+      } catch {
+        return;
+      }
+      if (!ev || typeof ev !== "object") return;
+      const actions = interpretRealtimeEvent(ev);
+      for (const action of actions) {
+        if (action.op === "error") {
+          opts.onError(action.message);
+          continue;
+        }
+        if (action.op === "user_delta") {
+          userAcc = absorbText(userAcc, action.text).acc;
+          if (userFlush != null) clearTimeout(userFlush);
+          userFlush = setTimeout(() => flushUser(), 850);
+          continue;
+        }
+        if (action.op === "user_flush") {
+          if (action.text) userAcc = action.text;
+          flushUser();
+          continue;
+        }
+        if (action.op === "travis_delta") {
+          travisAcc = absorbText(travisAcc, action.text).acc;
+          void persist("travis", travisAcc);
+          continue;
+        }
+        if (action.op === "travis_flush") {
+          if (travisAcc.trim()) void persist("travis", travisAcc);
+          travisAcc = "";
+          continue;
+        }
+        if (action.op === "tools") void runTools(action.calls);
+      }
+    });
+
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+    if (pc.iceGatheringState !== "complete") {
+      await new Promise<void>((resolve) => {
+        const t = window.setTimeout(resolve, 1500);
+        pc.onicegatheringstatechange = () => {
+          if (pc.iceGatheringState === "complete") {
+            window.clearTimeout(t);
+            resolve();
+          }
+        };
+      });
+    }
+
+    const sdp = pc.localDescription?.sdp;
+    if (!sdp) throw new Error("Live: no SDP offer");
+    const sdpRes = await fetch("https://api.openai.com/v1/realtime/calls", {
+      method: "POST",
+      body: sdp,
+      headers: {
+        Authorization: `Bearer ${secret}`,
+        "Content-Type": "application/sdp",
+      },
+    });
+    const answerSdp = await sdpRes.text();
+    if (!sdpRes.ok) {
+      throw new Error(answerSdp.slice(0, 180) || `Live ${sdpRes.status}`);
+    }
+    await pc.setRemoteDescription({ type: "answer", sdp: answerSdp });
+
+    function stop() {
+      closed = true;
+      if (userFlush != null) {
+        clearTimeout(userFlush);
+        userFlush = null;
+      }
+      try {
+        dc?.close();
+      } catch {
+        /* ignore */
+      }
+      dc = null;
+      try {
+        pc.close();
+      } catch {
+        /* ignore */
+      }
+      audioEl.pause();
+      audioEl.srcObject = null;
+      const tracks = mic?.getTracks() ?? [];
+      for (const t of tracks) t.stop();
+      mic = null;
+      opts.onClose?.();
+      return new Promise<void>((resolve) => {
+        window.setTimeout(resolve, 400);
+      });
+    }
+    stopFn = stop;
+    pc.addEventListener("connectionstatechange", () => {
+      if (closed) return;
+      if (pc.connectionState === "failed" || pc.connectionState === "closed") {
+        opts.onClose?.();
+      }
+    });
+    return { stop };
   } catch (err) {
     closed = true;
     try {
-      live?.close();
+      dc?.close();
+      pc.close();
     } catch {
       /* ignore */
     }
-    live = null;
-    try {
-      void playCtx.close();
-    } catch {
-      /* ignore */
-    }
+    audioEl.pause();
+    audioEl.srcObject = null;
+    const tracks = mic?.getTracks() ?? [];
+    for (const t of tracks) t.stop();
     opts.onError(err instanceof Error ? err.message : String(err));
     return null;
   }

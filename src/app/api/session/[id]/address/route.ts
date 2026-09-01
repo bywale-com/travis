@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { parseCallByName, seatKeyToLabel } from "@/lib/router";
 import { isTravisSeat } from "@/lib/seats";
-import { travisIsWired } from "@/server/travis-gemini";
+import { travisIsWired } from "@/server/travis-openai";
 import {
   bindingForSeat,
   noteTravisUnwired,
