@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { queueSnapshot } from "@/server/queue";
+import { inspectAndNudgeQueue } from "@/server/seat-pipe";
 
-/** Session queue snapshot — grouped by seat, empty seats omitted. */
+/** Session queue snapshot. Nudges stale live-run rows; names seats ready to drain. */
 export async function GET(
   _req: Request,
   ctx: { params: Promise<{ id: string }> },
 ) {
   const { id } = await ctx.params;
-  const queue = await queueSnapshot(id);
-  return NextResponse.json({ queue });
+  const { queue, drainable } = await inspectAndNudgeQueue(id);
+  return NextResponse.json({ queue, drainable });
 }

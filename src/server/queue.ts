@@ -166,6 +166,28 @@ export async function getQueueHead(
   return row ?? null;
 }
 
+/** Distinct addressees that still have waiting lines in this session. */
+export async function bindingsWithQueuedItems(
+  sessionId: string,
+): Promise<AgentBinding[]> {
+  const rows = await db
+    .select({
+      binding: agentBinding,
+    })
+    .from(queuedUtterance)
+    .innerJoin(agentBinding, eq(queuedUtterance.bindingId, agentBinding.id))
+    .where(eq(queuedUtterance.sessionId, sessionId))
+    .orderBy(asc(queuedUtterance.seq));
+  const seen = new Set<string>();
+  const out: AgentBinding[] = [];
+  for (const row of rows) {
+    if (seen.has(row.binding.id)) continue;
+    seen.add(row.binding.id);
+    out.push(row.binding);
+  }
+  return out;
+}
+
 export async function queueSnapshot(
   sessionId: string,
 ): Promise<QueueSnapshot> {
