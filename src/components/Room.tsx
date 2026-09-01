@@ -22,7 +22,7 @@ import {
 } from "@/lib/ear";
 import { readJson } from "@/lib/http";
 import { isTravisSeat } from "@/lib/seats";
-import { playQueuedCue, playSendSwoosh, resumeSendSounds } from "@/lib/send-sounds";
+import { playQueuedCue, playSendSwoosh, releaseSendSounds, resumeSendSounds } from "@/lib/send-sounds";
 import { startTravisLive, type TravisLiveSession } from "@/lib/travis-live-client";
 import type { QueueSeatDto } from "@/lib/queue-logic";
 import { QueueChips, QueueLog, SeatMark } from "@/components/QueueChrome";
@@ -370,6 +370,15 @@ export function Room({ t }: { t: Tokens }) {
   useEffect(() => {
     logEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [turns, draft, streamingPosts, liveStatus]);
+
+  useEffect(() => {
+    if (!session) return;
+    const onVis = () => {
+      if (document.visibilityState === "visible") resumeSendSounds();
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, [session]);
 
   const resetDeadManTimer = useCallback(() => {
     lastSpeechRef.current = Date.now();
@@ -1495,6 +1504,7 @@ export function Room({ t }: { t: Tokens }) {
     setSubtitle("");
     setQueueSeats([]);
     clearDraft();
+    releaseSendSounds();
   };
 
   const activeThoughts = turns.filter(
@@ -1538,7 +1548,10 @@ export function Room({ t }: { t: Tokens }) {
 
   if (!session) {
     return (
-      <div style={{ ...shellStyle, alignItems: "center", justifyContent: "center", padding: 24 }}>
+      <div
+        style={{ ...shellStyle, alignItems: "center", justifyContent: "center", padding: 24 }}
+        onPointerDown={() => resumeSendSounds()}
+      >
         <h1
           style={{
             fontSize: 44,
@@ -1573,7 +1586,7 @@ export function Room({ t }: { t: Tokens }) {
   }
 
   return (
-    <div style={shellStyle}>
+    <div style={shellStyle} onPointerDown={() => resumeSendSounds()}>
       <div
         style={{
           flexShrink: 0,
