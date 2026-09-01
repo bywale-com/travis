@@ -22,7 +22,7 @@ There was no ear-feedback that a turn had actually left the phone versus parked 
 1. Persist a growing `agent_post` during `post_delta` (same row for that user turn + seat). A dropped SSE still leaves the log with what had already been said. Room polls turns with the queue so a remount paints them.
 2. `refreshTurns` merges streaming thoughts instead of wiping `liveThoughts` to `{}`.
 3. Queue GET nudges a leftover live-run row when Cursor is idle, and names drainable seats. The phone POSTs `/queue/drain` as SSE and consumes it. Drain does not run while Cursor still has an active run, and does not drain when listRuns fails (unknown ≠ idle). Claim-delete + a per-binding drain lock so two pollers cannot double-send the same line.
-4. Swoosh when a turn actually sends (Talk, Type, Voice I’m-done, dest Travis Live user flush). Two-note cue when it is queued. Same across modes. No sound table — Web Audio on the client.
+4. Swoosh when a turn actually sends (Talk, Type, Voice I’m-done, dest Travis Live user flush). Two-note cue when it is queued. Same across modes. Generated WAV on `HTMLAudioElement`, armed on tap — Web Audio scheduled on the later SSE is silent on a phone.
 
 ## Must-not
 
