@@ -7,6 +7,7 @@ import {
   mergeLiveTranscript,
 } from "@/lib/absorb-text";
 import { seatKeyToShort } from "@/lib/router";
+import { resumeSendSounds } from "@/lib/send-sounds";
 import type { SeatKey } from "@/server/db/schema";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
@@ -299,6 +300,7 @@ export function LogComposer({
 
   const submit = async () => {
     haltMic();
+    resumeSendSounds();
     const chipSeatKeys = chips.map((c) => c.seatKey as SeatKey);
     const keptText = text;
     const keptChips = chips;
