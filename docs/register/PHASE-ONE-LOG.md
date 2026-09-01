@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-31 21:52 UTC — **Gap: routing speech.** Mic works. Name lands late (“engineer” near the end / for the engineer). Plant wants the name first or last-without-the. Not a packet.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-01 15:00 UTC — **Lived proof:** “for the engineer” landed on PM. Routing gap confirmed.
 
 **How we maintain this log**
 
@@ -1060,4 +1060,14 @@ What the plant does (`parseCallByName` on `main`): switch only if the name is **
 Must-not still holds: do not steal `the engineer talking` in the middle of a sentence.
 
 **Ask:** lock this as a small addressing packet (006) so Engineer may plant late-name / `for the {seat}` — or send Engineer from here as a hotfix on the same law?
+
+---
+
+## 2026-09-01 15:00 UTC — Lived: for the engineer still PM
+
+**Kind:** Lived proof of 21:52. Talk-mode sound test.
+
+**Founder (preserved):** the engineer for the engineer testing sound on test testing swoosh sound on talk mode for the engineer
+
+**Landed here.** This bind is still PM. Confirms: **`for the engineer` does not switch.** Swoosh/Talk sound is Engineer glass if it failed — this chat cannot plant it.
 
