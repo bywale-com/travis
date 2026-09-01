@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { inspectAndNudgeQueue } from "@/server/seat-pipe";
 
-/** Session queue snapshot. Nudges stale live-run rows; names seats ready to drain. */
+/** Session queue snapshot. Harvests finished Cursor runs whose SSE died; nudges stale live-run rows; names seats ready to drain. */
 export async function GET(
   _req: Request,
   ctx: { params: Promise<{ id: string }> },

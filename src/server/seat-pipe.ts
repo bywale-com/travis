@@ -5,12 +5,14 @@ import { isTravisSeat } from "@/lib/seats";
 import { seatKeyToLabel } from "@/lib/router";
 import {
   isDrainableSeat,
+  shouldHarvestStoredRun,
   shouldQueueForSeat,
   type QueueSnapshot,
 } from "@/lib/queue-logic";
 import {
   cancelCursorRun,
   discoverActiveRunId,
+  harvestFinishedRun,
   probeCursorRun,
   streamCursorReply,
   type CursorStreamEvent,
@@ -30,6 +32,7 @@ import {
   getLiveRun,
   getQueueHead,
   getQueuedItem,
+  liveRunsForSession,
   queueSnapshot,
   releaseLiveRunIfMatch,
   upsertLiveRun,
@@ -581,6 +584,41 @@ export async function drainHead(
 }
 
 /**
+ * If the SSE died before `done`, the Cursor run may still finish. Pull
+ * that run's assistant text into the log and drop the leftover live-run
+ * row. A newer follow-up on the same seat does not block this.
+ */
+export async function reapFinishedLiveRuns(sessionId: string): Promise<void> {
+  const rows = await liveRunsForSession(sessionId);
+  for (const { live, binding } of rows) {
+    if (isTravisSeat(binding.seatKey)) continue;
+    const harvested = await harvestFinishedRun({
+      agentId: binding.cursorAgentId ?? "",
+      runId: live.cursorRunId,
+    });
+    if (!shouldHarvestStoredRun({ storedRunStatus: harvested.status })) {
+      continue;
+    }
+    const seatKey = (binding.seatKey ?? "pm") as SeatKey;
+    const finalPost = harvested.assistantText.trim()
+      ? harvested.assistantText.trim()
+      : "Run finished (no assistant text).";
+    if (live.userTurnId) {
+      await absorbStreamingAgentPost({
+        sessionId,
+        userTurnId: live.userTurnId,
+        seatKey,
+        text: finalPost,
+      });
+    } else {
+      await insertAgentPostTurn(sessionId, finalPost, seatKey);
+    }
+    await insertStatusTurn(sessionId, "finished");
+    await releaseLiveRunIfMatch(binding.id, live.cursorRunId);
+  }
+}
+
+/**
  * Clear a leftover live-run row when Cursor is idle, and name seats whose
  * waiting lines can send now. Does not drain — the phone opens an SSE for that.
  */
@@ -588,6 +626,7 @@ export async function inspectAndNudgeQueue(sessionId: string): Promise<{
   queue: QueueSnapshot;
   drainable: SeatKey[];
 }> {
+  await reapFinishedLiveRuns(sessionId);
   const bindings = await bindingsWithQueuedItems(sessionId);
   const drainable: SeatKey[] = [];
   for (const binding of bindings) {

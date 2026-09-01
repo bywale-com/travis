@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-01** · Hotfix 032 · [PR #47](https://github.com/bywale-com/travis/pull/47) — When a seat finishes in Cursor after Travis’s stream dies, the log still gets the post and stops saying they are running, because the serverless SSE ended before any `post_delta` and the leftover live-run never harvested that run.
 - **2026-09-01** · Hotfix 031 · [PR #46](https://github.com/bywale-com/travis/pull/46) — You hear a whoosh when a turn sends and two notes when it queues, because 030’s Web Audio ran after the SSE and the phone muted it.
 - **2026-09-01** · Hotfix 030 · [PR #45](https://github.com/bywale-com/travis/pull/45) — A follow-up queued while a seat is working sends once Cursor is idle, live posts survive a dropped stream, and you hear a swoosh on send or a cue when it queues, because drain only ran at SSE-end and posts lived only in the phone until done.
 - **2026-09-01** · Hotfix 029 · [PR #44](https://github.com/bywale-com/travis/pull/44) — Dest Travis talks on OpenAI Realtime and text, because the Gemini pin was a provider choice, not a room law.
