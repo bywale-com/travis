@@ -40,6 +40,18 @@ export function shouldQueueForSeat(opts: {
   return opts.hasLiveRow && opts.cursorHasActiveRun;
 }
 
+/**
+ * Drain only when this seat still has waiting lines and Cursor is not
+ * in a run. A leftover live-run row is not a reason to wait — that row
+ * is stale once Cursor is idle. A live Cursor run with no row still waits.
+ */
+export function isDrainableSeat(opts: {
+  hasQueue: boolean;
+  cursorHasActiveRun: boolean;
+}): boolean {
+  return opts.hasQueue && !opts.cursorHasActiveRun;
+}
+
 /** Head of a seat = smallest seq still present. */
 export function headItem<T extends { seq: number }>(items: T[]): T | null {
   if (!items.length) return null;

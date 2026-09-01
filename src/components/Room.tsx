@@ -22,6 +22,7 @@ import {
 } from "@/lib/ear";
 import { readJson } from "@/lib/http";
 import { isTravisSeat } from "@/lib/seats";
+import { playQueuedCue, playSendSwoosh, resumeSendSounds } from "@/lib/send-sounds";
 import { startTravisLive, type TravisLiveSession } from "@/lib/travis-live-client";
 import type { QueueSeatDto } from "@/lib/queue-logic";
 import { QueueChips, QueueLog, SeatMark } from "@/components/QueueChrome";
@@ -245,6 +246,10 @@ export function Room({ t }: { t: Tokens }) {
   const listenRestartGenRef = useRef(0);
   const inflightRef = useRef(0);
   const liveRef = useRef<TravisLiveSession | null>(null);
+  const drainingRef = useRef(false);
+  const consumeAgentStreamRef = useRef<
+    (sid: string, res: Response, tempUserId?: string) => Promise<void>
+  >(async () => {});
 
   viewModeRef.current = viewMode;
   logSubmodeRef.current = logSubmode;
@@ -265,8 +270,31 @@ export function Room({ t }: { t: Tokens }) {
   const refreshTurns = useCallback(async (sessionId: string) => {
     const res = await fetch(`/api/session/${sessionId}/turns`);
     const data = await res.json();
-    setTurns(data.turns ?? []);
-    setLiveThoughts({});
+    const nextTurns = (data.turns ?? []) as Turn[];
+    setTurns(nextTurns);
+    setLiveThoughts((prev) => {
+      const next: Record<string, string> = { ...prev };
+      for (const t of nextTurns) {
+        if (t.kind !== "agent_thought") continue;
+        if (t.thoughtStatus === "streaming") {
+          const cur = next[t.id] ?? "";
+          next[t.id] = t.text.length >= cur.length ? t.text : cur;
+        } else {
+          delete next[t.id];
+        }
+      }
+      return next;
+    });
+    setStreamingPosts((prev) => {
+      const next = { ...prev };
+      for (const [sk, text] of Object.entries(prev)) {
+        const latest = [...nextTurns]
+          .reverse()
+          .find((t) => t.kind === "agent_post" && (t.seatKey ?? "_") === sk);
+        if (latest && latest.text.length >= text.length) delete next[sk];
+      }
+      return next;
+    });
   }, []);
 
   const refreshSession = useCallback(async (sessionId: string) => {
@@ -296,12 +324,48 @@ export function Room({ t }: { t: Tokens }) {
   useEffect(() => {
     const sid = session?.id;
     if (!sid) return;
-    void refreshQueue(sid);
+    let cancelled = false;
+    const tick = async () => {
+      if (cancelled) return;
+      try {
+        const res = await fetch(`/api/session/${sid}/queue`);
+        const data = (await res.json()) as {
+          queue?: { seats?: QueueSeatDto[] };
+          drainable?: string[];
+        };
+        if (cancelled) return;
+        applyQueue(data.queue);
+        void refreshTurns(sid);
+        const drainable = Array.isArray(data.drainable) ? data.drainable : [];
+        if (!drainable.length || drainingRef.current) return;
+        drainingRef.current = true;
+        try {
+          const drainRes = await fetch(`/api/session/${sid}/queue/drain`, {
+            method: "POST",
+          });
+          if (cancelled) return;
+          const ct = drainRes.headers.get("content-type") ?? "";
+          if (ct.includes("text/event-stream")) {
+            await consumeAgentStreamRef.current(sid, drainRes);
+          }
+          await refreshTurns(sid);
+          await refreshQueue(sid);
+        } finally {
+          drainingRef.current = false;
+        }
+      } catch {
+        /* next tick retries */
+      }
+    };
+    void tick();
     const timer = window.setInterval(() => {
-      void refreshQueue(sid);
+      void tick();
     }, 4000);
-    return () => window.clearInterval(timer);
-  }, [session?.id, refreshQueue]);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+    };
+  }, [session?.id, applyQueue, refreshQueue, refreshTurns]);
 
   useEffect(() => {
     logEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -480,6 +544,8 @@ export function Room({ t }: { t: Tokens }) {
       let speakChain = Promise.resolve();
       let voiceReadStarted = false;
       let spokenSpeakable = "";
+      let heardQueued = false;
+      let heardSent = false;
 
       const enqueueVoice = (raw: string) => {
         if (viewModeRef.current !== "voice") return;
@@ -514,10 +580,19 @@ export function Room({ t }: { t: Tokens }) {
       const handleEvent = async (event: string, raw: string) => {
         const data = JSON.parse(raw) as Record<string, unknown>;
 
-        if (event === "queued" || event === "queue") {
+        if (event === "queued") {
+          if (!heardQueued) {
+            heardQueued = true;
+            playQueuedCue();
+          }
           if (tempUserId) {
             setTurns((prev) => prev.filter((x) => x.id !== tempUserId));
           }
+          applyQueue(data.queue as { seats?: QueueSeatDto[] } | undefined);
+          return;
+        }
+
+        if (event === "queue") {
           applyQueue(data.queue as { seats?: QueueSeatDto[] } | undefined);
           return;
         }
@@ -531,6 +606,10 @@ export function Room({ t }: { t: Tokens }) {
         }
 
         if (event === "matched") {
+          if (!heardSent && !heardQueued) {
+            heardSent = true;
+            playSendSwoosh();
+          }
           const userTurn = data.userTurn as Turn | undefined;
           if (userTurn) {
             setTurns((prev) => {
@@ -565,6 +644,19 @@ export function Room({ t }: { t: Tokens }) {
           const id = String(data.id);
           const text = String(data.text);
           setLiveThoughts((prev) => ({ ...prev, [id]: text }));
+        } else if (event === "post") {
+          const turn = data.turn as Turn | undefined;
+          if (turn) {
+            setTurns((prev) => {
+              const i = prev.findIndex((x) => x.id === turn.id);
+              if (i >= 0) {
+                const copy = [...prev];
+                copy[i] = { ...copy[i], ...turn };
+                return copy;
+              }
+              return [...prev, turn];
+            });
+          }
         } else if (event === "post_delta") {
           const chunk = String(data.text ?? "");
           const sk = String(data.seatKey ?? "_");
@@ -646,6 +738,7 @@ export function Room({ t }: { t: Tokens }) {
     },
     [applyQueue, haltRecognition, refreshQueue, refreshTurns, scheduleListenRestart],
   );
+  consumeAgentStreamRef.current = consumeAgentStream;
 
   const connectLive = useCallback(
     async (sid: string): Promise<boolean> => {
@@ -661,6 +754,7 @@ export function Room({ t }: { t: Tokens }) {
             void refreshTurns(sid);
           },
           onUserText: () => {
+            playSendSwoosh();
             void refreshTurns(sid);
           },
           onTravisText: () => {
@@ -730,6 +824,7 @@ export function Room({ t }: { t: Tokens }) {
       sendingRef.current = true;
       lastSentRef.current = { text, at: Date.now() };
 
+      resumeSendSounds();
       beginInflight();
       finalizingRef.current = true;
       setError(null);
@@ -754,6 +849,7 @@ export function Room({ t }: { t: Tokens }) {
         if (!ct.includes("text/event-stream")) {
           const data = await res.json();
           if (data.queued) {
+            playQueuedCue();
             applyQueue(data.queue as { seats?: QueueSeatDto[] } | undefined);
             clearDraft();
             if (data.activeLabel) {
@@ -857,6 +953,7 @@ export function Room({ t }: { t: Tokens }) {
         ]);
       }
       setError(null);
+      resumeSendSounds();
       try {
         const res = await fetch(`/api/session/${sid}/send`, {
           method: "POST",
@@ -1250,6 +1347,7 @@ export function Room({ t }: { t: Tokens }) {
   const openSession = async () => {
     setError(null);
     setBusy(true);
+    resumeSendSounds();
     try {
       const res = await fetch("/api/session", { method: "POST" });
       const data = await readJson<{
@@ -1293,6 +1391,7 @@ export function Room({ t }: { t: Tokens }) {
 
   const togglePause = async () => {
     if (!session || presence === "ended" || presence === "speaking") return;
+    resumeSendSounds();
     if (presence === "paused") {
       setPresence("listening");
       setSubtitle("Listening…");
@@ -1796,12 +1895,25 @@ export function Room({ t }: { t: Tokens }) {
             }}
           >
             {turns
-              .filter(
-                (turn) =>
-                  turn.kind === "user" ||
-                  turn.kind === "agent_post" ||
-                  turn.kind === "travis_prompt",
-              )
+              .filter((turn) => {
+                if (
+                  turn.kind !== "user" &&
+                  turn.kind !== "agent_post" &&
+                  turn.kind !== "travis_prompt"
+                ) {
+                  return false;
+                }
+                if (turn.kind !== "agent_post") return true;
+                const live = streamingPosts[turn.seatKey ?? "_"];
+                if (!live) return true;
+                const lastUser = [...turns]
+                  .reverse()
+                  .find((t) => t.kind === "user");
+                if (lastUser && turn.referenceTurnId === lastUser.id) {
+                  return false;
+                }
+                return true;
+              })
               .map((turn) => {
                 const isUser = turn.kind === "user";
                 const isPrompt = turn.kind === "travis_prompt";
