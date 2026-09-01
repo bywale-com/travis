@@ -40,3 +40,4 @@
 | 026 | [`HOTFIX-026-JSON-ERRORS.md`](./HOTFIX-026-JSON-ERRORS.md) | Lazy DB connect + JSON error bodies so a failure names its own cause |
 | 028 | [`HOTFIX-028-STT-NETWORK-HOLD.md`](./HOTFIX-028-STT-NETWORK-HOLD.md) | Network STT hitch must not wipe the draft already heard |
 | 030 | [`HOTFIX-030-QUEUE-SEND-SOUNDS.md`](./HOTFIX-030-QUEUE-SEND-SOUNDS.md) | Drain a stuck queue when Cursor is idle; hold live posts; swoosh on send, cue on queued |
+| 031 | [`HOTFIX-031-AUDIBLE-SEND-SOUNDS.md`](./HOTFIX-031-AUDIBLE-SEND-SOUNDS.md) | Send swoosh and queue cue actually play on the phone |
