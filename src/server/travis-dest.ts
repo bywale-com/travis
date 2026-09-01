@@ -1,5 +1,5 @@
 import { desc, eq } from "drizzle-orm";
-import { travisIsWired } from "@/server/travis-gemini";
+import { travisIsWired } from "@/server/travis-openai";
 import { insertStatusTurn } from "@/server/seat-pipe";
 import { db } from "@/server/db/client";
 import { agentBinding, voiceSession, voiceTurn } from "@/server/db/schema";

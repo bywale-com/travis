@@ -1,4 +1,4 @@
-import { generateTravisText, travisIsWired } from "@/server/travis-gemini";
+import { generateTravisText, travisIsWired } from "@/server/travis-openai";
 import {
   insertAgentPostTurn,
   insertStatusTurn,

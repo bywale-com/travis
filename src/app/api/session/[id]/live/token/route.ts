@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
-import { mintLiveToken, travisIsWired } from "@/server/travis-gemini";
+import { mintLiveToken, travisIsWired } from "@/server/travis-openai";
 import { TRAVIS_SYSTEM, TRAVIS_TOOL_DECLS } from "@/server/travis-tools";
 import { db } from "@/server/db/client";
 import { voiceSession } from "@/server/db/schema";
@@ -31,7 +31,7 @@ export async function POST(
   }
 
   try {
-    const minted = await mintLiveToken();
+    const minted = await mintLiveToken(sessionId);
     if (!minted) {
       return NextResponse.json({ wired: false });
     }
