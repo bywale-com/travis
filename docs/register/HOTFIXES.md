@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **030**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **031**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -40,3 +40,4 @@
 | 026 | [`HOTFIX-026-JSON-ERRORS.md`](./HOTFIX-026-JSON-ERRORS.md) | Lazy DB connect + JSON error bodies so a failure names its own cause |
 | 028 | [`HOTFIX-028-STT-NETWORK-HOLD.md`](./HOTFIX-028-STT-NETWORK-HOLD.md) | Network STT hitch must not wipe the draft already heard |
 | 029 | [`HOTFIX-029-OPENAI-TRAVIS.md`](./HOTFIX-029-OPENAI-TRAVIS.md) | Dest Travis brain/mouth is OpenAI Realtime + text, not Gemini |
+| 030 | [`HOTFIX-030-QUEUE-SEND-SOUNDS.md`](./HOTFIX-030-QUEUE-SEND-SOUNDS.md) | Drain a stuck queue when Cursor is idle; hold live posts; swoosh on send, cue on queued |

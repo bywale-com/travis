@@ -3,6 +3,7 @@ import { test } from "node:test";
 import {
   groupQueueSeats,
   headItem,
+  isDrainableSeat,
   queuedBlockLabel,
   shouldQueueForSeat,
   waitingChipLabel,
@@ -77,6 +78,21 @@ test("queue is per-seat and only when Cursor still has an active run", () => {
   );
   assert.equal(
     shouldQueueForSeat({ hasLiveRow: false, cursorHasActiveRun: false }),
+    false,
+  );
+});
+
+test("drain when the seat has a queue and Cursor is idle", () => {
+  assert.equal(
+    isDrainableSeat({ hasQueue: true, cursorHasActiveRun: false }),
+    true,
+  );
+  assert.equal(
+    isDrainableSeat({ hasQueue: true, cursorHasActiveRun: true }),
+    false,
+  );
+  assert.equal(
+    isDrainableSeat({ hasQueue: false, cursorHasActiveRun: false }),
     false,
   );
 });
