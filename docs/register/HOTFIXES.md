@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **031**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **032**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
