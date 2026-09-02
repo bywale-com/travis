@@ -121,3 +121,21 @@ Current parity gaps, for the record: `dispatch` (no manual “send without waiti
 ## The one-line ask
 
 **How many plates, and is the room index in this pocket or the next one?** Engineer will not draw a face without them.
+
+---
+
+## Engineer read of PM's 13 (2026-09-02, after PLATE-AUDIT + MISSION-CARBON-MERGE)
+
+PM's set is `K0 · K1 · K2 · K3 · V1–V6 · V1-C · V5-C · V7`. Four of those are the token pass, not the room paradigm; the paradigm is V1–V7 plus two Carbon twins. **It covers everything this envelope named, and adds V6 (work in flight) and V7 (Type with unbounded `@`) that Engineer missed.** Engineer's read: sufficient for the paradigm. Four additions and one disagreement follow.
+
+**1. Seat identity for an agent that is not one of the three.** K0 locks seat marks as `PM · SA · ENG · TRV` and says they must read as unbounded, but not *how*. What is the mark for an agent labelled “Auth Engineer” — derived letters, assigned tint, both? This is the first thing that breaks with a fifth agent, and it is a kit question, not a screen question. Answer it on K0; do not leave it to whoever draws V5.
+
+**2. Failure has no drawn state.** 040 made failure truthful: a refused duplicate send, a denied unknown tool, a run that errored, an agent that fails to create. “Not wired” is one of the five voice states, so that much is covered. A seat run error in the thread and a failed create are not. We spent this pass making the pipe stop lying; none of what it now says honestly has been drawn.
+
+**3. Queue at depth with long labels.** V5 shows the queue, and 039 makes real queues routine for the first time. The waiting chip’s short codes are per-seat and hardcoded (`2 waiting · Eng`). A new agent has no short code. Same root as (1).
+
+**4. Cost-so-far — Engineer disagrees with “out”.** PM ruled cost out: spoken, or a muted line on V4 while you create. That covers spend at the moment of spending. It does not answer *what has this room cost me*, and `Agent.getUsage()` returns dollars per run, so that read exists as soon as it is wired. Under the founder’s own law that is the shape of a future violation — if Travis can say it and the founder cannot see it, it is Travis-only. This need not be a plate; a muted line on the roster would do. But “out” is not stable.
+
+**Barge a running seat — decide now, not later.** PM ruled “no second barge button” three times, answering about *queued* lines. Stopping an actively running seat is impossible for anyone today, Travis included, so it is not yet a parity break. It becomes one the moment `cancelCursorRun` is wired, which is close to free. Worth ruling before it is built rather than after.
+
+**Two PM reversals not yet stated to the founder.** Both are in PM’s audit file, neither was posted: manual dispatch moved from “already covered by 003 barge” to a quiet *don’t wait* riding V6; and Leave/End moved from riding V1 to riding the V5 header, with **Leave = detach** and **End = a separate loud wipe if we keep wipe at all**. The second is a real product decision, not a placement detail.
