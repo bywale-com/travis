@@ -12,6 +12,7 @@ import { conductorGate, conductorOnEnd, isDuplicateSend } from "@/lib/conductor"
 import { speakableAgentPost } from "@/lib/agent-post";
 import { flushSpeakBuffer, pullClosedSentences } from "@/lib/speak-sentences";
 import { applyMaleVoice } from "@/lib/speak-voice";
+import { isPinnedToBottom } from "@/lib/thread-scroll";
 import { parseCallByName, parseDeadManResponse, seatKeyToShort } from "@/lib/router";
 import {
   modeSwitchEarAction,
@@ -221,6 +222,7 @@ export function Room({ t }: { t: Tokens }) {
   const [queueSeats, setQueueSeats] = useState<QueueSeatDto[]>([]);
   const [logSubmode, setLogSubmode] = useState<LogSubmode>("talk");
   const [roomSeats, setRoomSeats] = useState<RoomSeat[]>([]);
+  const [threadPinned, setThreadPinned] = useState(true);
 
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const committedRef = useRef("");
@@ -235,7 +237,8 @@ export function Room({ t }: { t: Tokens }) {
   const finalizingRef = useRef(false);
   const sendingRef = useRef(false);
   const lastSentRef = useRef<{ text: string; at: number }>({ text: "", at: 0 });
-  const logEndRef = useRef<HTMLDivElement | null>(null);
+  const threadRef = useRef<HTMLDivElement | null>(null);
+  const threadPinnedRef = useRef(true);
   const deadManTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSpeechRef = useRef<number>(Date.now());
   const viewModeRef = useRef<ViewMode>("voice");
@@ -369,9 +372,38 @@ export function Room({ t }: { t: Tokens }) {
     };
   }, [session?.id, applyQueue, refreshQueue, refreshTurns]);
 
+  const scrollThreadToLatest = useCallback(() => {
+    const el = threadRef.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+    threadPinnedRef.current = true;
+    setThreadPinned(true);
+  }, []);
+
+  /**
+   * Our own jump always lands exactly at the bottom, so any scroll event that
+   * reports otherwise came from the founder's thumb.
+   */
+  const onThreadScroll = useCallback(() => {
+    const el = threadRef.current;
+    if (!el) return;
+    const pinned = isPinnedToBottom(el);
+    if (pinned === threadPinnedRef.current) return;
+    threadPinnedRef.current = pinned;
+    setThreadPinned(pinned);
+  }, []);
+
   useEffect(() => {
-    logEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (!threadPinnedRef.current) return;
+    const el = threadRef.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
   }, [turns, draft, streamingPosts, liveStatus]);
+
+  useEffect(() => {
+    if (viewMode !== "log") return;
+    scrollThreadToLatest();
+  }, [viewMode, logSubmode, scrollThreadToLatest]);
 
   useEffect(() => {
     if (!session) return;
@@ -1933,6 +1965,8 @@ export function Room({ t }: { t: Tokens }) {
             id="thread"
             label="Thread"
             order={4}
+            ref={threadRef}
+            onScroll={onThreadScroll}
             style={{
               flex: 1,
               minHeight: 0,
@@ -2141,8 +2175,23 @@ export function Room({ t }: { t: Tokens }) {
                 {draft}
               </div>
             )}
-            <div ref={logEndRef} />
           </SurfaceBoundary>
+          {!threadPinned && (
+            <div
+              style={{
+                flexShrink: 0,
+                display: "flex",
+                justifyContent: "center",
+                padding: "0 16px 6px",
+              }}
+            >
+              <QuietTextButton
+                t={t}
+                label="Jump to latest"
+                onClick={scrollThreadToLatest}
+              />
+            </div>
+          )}
           {logSubmode === "talk" && (
             <SurfaceBoundary
               id="talk-listen"

@@ -9,6 +9,8 @@ import {
   useState,
   type CSSProperties,
   type ReactNode,
+  type Ref,
+  type UIEventHandler,
 } from "react";
 
 export type SurfaceMeta = {
@@ -69,10 +71,14 @@ export function SurfaceBoundary({
   children,
   className,
   style,
+  ref,
+  onScroll,
 }: SurfaceMeta & {
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
+  ref?: Ref<HTMLDivElement>;
+  onScroll?: UIEventHandler<HTMLDivElement>;
 }) {
   const { register, highlightId } = useSurfaceRegistry();
 
@@ -80,6 +86,8 @@ export function SurfaceBoundary({
 
   return (
     <div
+      ref={ref}
+      onScroll={onScroll}
       data-surface-id={id}
       data-surface-label={label}
       className={className}
