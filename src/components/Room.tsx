@@ -11,6 +11,7 @@ import {
 import { conductorGate, conductorOnEnd, isDuplicateSend } from "@/lib/conductor";
 import { speakableAgentPost } from "@/lib/agent-post";
 import { flushSpeakBuffer, pullClosedSentences } from "@/lib/speak-sentences";
+import { applyMaleVoice } from "@/lib/speak-voice";
 import { isPinnedToBottom } from "@/lib/thread-scroll";
 import { parseCallByName, parseDeadManResponse, seatKeyToShort } from "@/lib/router";
 import {
@@ -125,6 +126,7 @@ function queueUtterance(text: string): Promise<void> {
   if (!spoken) return Promise.resolve();
   return new Promise((resolve) => {
     const u = new SpeechSynthesisUtterance(spoken);
+    applyMaleVoice(u);
     u.onend = () => resolve();
     u.onerror = () => resolve();
     window.speechSynthesis.resume();
@@ -411,6 +413,16 @@ export function Room({ t }: { t: Tokens }) {
     document.addEventListener("visibilitychange", onVis);
     return () => document.removeEventListener("visibilitychange", onVis);
   }, [session]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    window.speechSynthesis.getVoices();
+    const warm = () => {
+      window.speechSynthesis.getVoices();
+    };
+    window.speechSynthesis.addEventListener("voiceschanged", warm);
+    return () => window.speechSynthesis.removeEventListener("voiceschanged", warm);
+  }, []);
 
   const resetDeadManTimer = useCallback(() => {
     lastSpeechRef.current = Date.now();
