@@ -1197,3 +1197,11 @@ Engineer source landed under `docs/register/plates/travis-eng-*.png`.
 
 **Ask:** kickoff on 13? Drop V7? Empty + Leave on V1 same PNG?
 
+---
+
+## 2026-09-02 23:05 UTC — SA today: images ride V5/V7
+
+**Kind:** Audit addendum. Not a packet. **No images.**
+
+SA bind today had no Mission/Carbon/rooms face talk. One stated gap the 13 must still show: **images in the thread, in order** (flagship). Not built. Rides V5/V7. Still 13 plates. “Who was that for?” unused — no plate this pass.
+

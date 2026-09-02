@@ -60,6 +60,10 @@ From `origin/main` Room + hotfixes merged today:
 
 **Open, stated, not on main:** [PR #42](https://github.com/bywale-com/travis/pull/42) Hotfix 027 — Travis **status** as a quiet centered muted line (not a bubble). Ride **V5** as stated-to-plant.
 
+**Flagship, stated, not built:** images appear in the chat, in order. Store is still text turns. Ride **V5 / V7** as an image in the thread (stage, not a new PNG). SA 2026-09-02 review named this. Not a 14th plate.
+
+**Not this pass (SA today):** “Who was that for?” is stored and unused — no glass. Late-name dest is router law (006 ask), not a plate. Extra rooms / `Agent.create` SA still had as parked; envelope #57 is the later stating — V1–V4 hold.
+
 ---
 
 ## Today’s Engineer trail (034 → 057) — plate or not
