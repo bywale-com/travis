@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-02** · Hotfix 043 · [PR #56](https://github.com/bywale-com/travis/pull/56) — Returning to Voice brings Live back instead of silently staying on Web Speech, because `sameRoomEar` asked which ear you *have* and Voice + dest Travis only reads as live once Live is already connected.
 - **2026-09-02** · Hotfix 042 · [PR #55](https://github.com/bywale-com/travis/pull/55) — Travis is told it cannot see the repo, a diff, tests or CI, because 038 gave it engineering context for the first time and it immediately offered to review a diff and check CI with nine tools that can do neither.
 - **2026-09-02** · Hotfix 041 · [PR #55](https://github.com/bywale-com/travis/pull/55) — Travis writes one plain line saying what it is about to do before each tool runs, because Type sat blank for thirty seconds while Voice narrated itself and only one of them felt intelligent.
 - **2026-09-02** · Hotfix 040 · [PR #55](https://github.com/bywale-com/travis/pull/55) — Safe is now a written definition with tool classes, a fail-closed registry and asserted coverage, because every contract we had lived in a paragraph of English that nothing enforced.

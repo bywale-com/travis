@@ -47,10 +47,16 @@ export function sttAlreadySatisfies(
  * Talk and Voice dest Engineer (and dest Travis Talk) share Web Speech.
  * Switching those views must not abort the recognizer — Chrome will not
  * give the mic back until refresh.
+ *
+ * Hotfix 043 — compares the ear each state *wants*, not the one it has.
+ * `whichEar` only says "live" once Live is already connected, so on the way
+ * back into Voice it called dest Travis "stt" on both sides, matched them, and
+ * kept the recognizer instead of arming Live. Same circular read 036 removed
+ * from `armEar`; this was the second site.
  */
 export function sameRoomEar(from: EarState, to: EarState): boolean {
-  const a = whichEar(from);
-  const b = whichEar(to);
+  const a = wantedEar(from);
+  const b = wantedEar(to);
   return a === b && a === "stt";
 }
 
@@ -59,7 +65,7 @@ export function modeSwitchEarAction(opts: {
   to: EarState;
   recLive: boolean;
 }): ModeSwitchAction {
-  if (whichEar(opts.to) === "none") return "release";
+  if (wantedEar(opts.to) === "none") return "release";
   if (sameRoomEar(opts.from, opts.to) && opts.recLive) return "keep";
   return "arm";
 }
