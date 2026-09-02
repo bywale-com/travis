@@ -85,6 +85,39 @@ If Travis can spin up a seat mid-conversation, something happens on the glass. A
 
 ---
 
+## Revision — the plate count is bigger than the first pass said
+
+The first pass read “plates” as *what changes on the existing room face*. That was too small. Rooms as primitive adds a **whole level above the room** that has no glass at all today, and the founder’s parity law (below) turns several Travis-only effects into required controls.
+
+Engineer’s read of the plates now justified. PM owns the actual count and naming.
+
+| Candidate plate | Why it is its own plate |
+|---|---|
+| **Room index** | The list of rooms you can enter. There is no L1 today — the app opens straight into one room. New surface, new empty state, new ordering question (recent? active? named?). |
+| **Create a room** | A room now has an identity that outlives a session. Naming it, and choosing who is in it at birth, is a form we have never drawn. |
+| **Room roster** | Who is in this room, and add / remove. This is where the parity law lands hardest: if Travis can put an agent in a room, so must you. |
+| **Create an agent** | Model, repo, starting ref. `Cursor.models.list()` and `Cursor.repositories.list()` make these real pickers, not free text. A form, and the one place the product spends money on purpose. |
+| **Room face under N seats** | Revision, not a new plate, but real: via-pill, `@` menu, waiting-chip short codes, queue rows, thought-strip circles and per-seat tint all assume a cast of three. |
+| **Cost** (optional) | `getUsage` returns dollars per run. Whether this is a surface, a line in the roster, or spoken-only is a product call. |
+
+That is four or five new plates plus one substantial revision — not two.
+
+---
+
+## Founder law — nothing is Travis-only
+
+Stated 2026-09-02. Engineer reads it as three rules, and it is an input to every plate above.
+
+1. **Effect parity.** Any effect Travis can cause, the founder can cause by hand. Rationale is not symmetry for its own sake: Travis goes down, and an outage must not lock the founder out of their own room. It is also the only way to verify Travis — every fix tonight came from the founder reading the log and catching a claim that did not match.
+2. **Not surface parity.** Reachable by hand does not mean on the main glass. Rare effects live behind a door. Twelve loud actions on a phone is the failure this law could accidentally cause.
+3. **Labor is not an effect.** Travis condensing a 40k reply should not become a Summarize button. Parity there means the raw text is available, which it already is.
+
+And the inverse category, which PM should rule on: **manual-only**. Deleting an agent is irreversible and costs money to undo. Engineer’s recommendation is Travis proposes, founder executes — at least until trust is earned.
+
+Current parity gaps, for the record: `dispatch` (no manual “send without waiting”), `work_in_flight` (no consolidated view of what is running), and everything in the create/remove-agent family once it exists.
+
+---
+
 ## The one-line ask
 
-**Which of the four unplated shipped items need a plate, and is dynamic seat count in this pocket or the next one?** Everything else can wait for the packet.
+**How many plates, and is the room index in this pocket or the next one?** Engineer will not draw a face without them.
