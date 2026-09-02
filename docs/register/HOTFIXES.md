@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **040**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **044**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -50,3 +50,4 @@
 | 037 | [`HOTFIX-037-TRUTHFUL-TOOL-RECEIPTS.md`](./HOTFIX-037-TRUTHFUL-TOOL-RECEIPTS.md) | Tools tell Travis it blocked, how long, and what is in flight |
 | 038 | [`HOTFIX-038-TRAVIS-LOOKS-AT-ROOM.md`](./HOTFIX-038-TRAVIS-LOOKS-AT-ROOM.md) | Travis is handed a bounded room window and can read a seat's reply |
 | 039 | [`HOTFIX-039-DISPATCH-AND-LEAVE.md`](./HOTFIX-039-DISPATCH-AND-LEAVE.md) | dispatch_to_seat returns when the run starts, so fan-out and the queue are real |
+| 043 | [`HOTFIX-043-RETURN-TO-VOICE-LIVE.md`](./HOTFIX-043-RETURN-TO-VOICE-LIVE.md) | Coming back to Voice re-arms Live instead of keeping the recognizer |

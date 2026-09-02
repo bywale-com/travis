@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-02** · Hotfix 043 · [PR #56](https://github.com/bywale-com/travis/pull/56) — Returning to Voice brings Live back instead of silently staying on Web Speech, because `sameRoomEar` asked which ear you *have* and Voice + dest Travis only reads as live once Live is already connected.
 - **2026-09-02** · Hotfix 039 · [PR #53](https://github.com/bywale-com/travis/pull/53) — Travis can start a seat and keep talking instead of freezing until the run ends, because every send held its request open, which made fan-out serial and kept the queue permanently empty.
 - **2026-09-02** · Hotfix 038 · [PR #53](https://github.com/bywale-com/travis/pull/53) — Travis is handed a bounded slice of the room on every turn and can read what a seat actually said, because it had never once received a seat's words and every typed message started from nothing.
 - **2026-09-02** · Hotfix 037 · [PR #52](https://github.com/bywale-com/travis/pull/52) — Travis is told that a send blocked, for how long, and what is running right now, because `send_to_seat` returned a bare “Sent to SA.” after a 26s block and Travis reported two serialized sends as parallel.

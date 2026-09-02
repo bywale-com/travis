@@ -322,3 +322,75 @@ test("dest Travis in Talk wants STT, not Live", () => {
     "stt",
   );
 });
+
+/**
+ * Hotfix 043 — lived: fresh session in Voice, say "travis", Live comes up.
+ * Switch to Talk (or Type) and back to Voice and it never returns. The switch
+ * kept the recognizer because both sides read "stt", since `whichEar` only
+ * says "live" once Live is already connected.
+ */
+const travisTalk: EarState = {
+  viewMode: "log",
+  logSubmode: "talk",
+  destTravis: true,
+  liveUp: false,
+};
+
+const travisVoice: EarState = {
+  viewMode: "voice",
+  logSubmode: "talk",
+  destTravis: true,
+  liveUp: false,
+};
+
+test("coming back to Voice on dest Travis arms instead of keeping STT", () => {
+  assert.equal(sameRoomEar(travisTalk, travisVoice), false);
+  assert.equal(
+    modeSwitchEarAction({ from: travisTalk, to: travisVoice, recLive: true }),
+    "arm",
+  );
+});
+
+test("leaving Voice for Talk on dest Travis also re-arms", () => {
+  assert.equal(
+    modeSwitchEarAction({ from: travisVoice, to: travisTalk, recLive: true }),
+    "arm",
+  );
+});
+
+test("Type still releases the mic on dest Travis", () => {
+  assert.equal(
+    modeSwitchEarAction({
+      from: travisVoice,
+      to: { ...travisTalk, logSubmode: "type" },
+      recLive: true,
+    }),
+    "release",
+  );
+});
+
+/** 023 must survive: dest Engineer Talk↔Voice keeps the one recognizer. */
+test("dest Engineer still keeps its recognizer across Talk and Voice", () => {
+  assert.equal(sameRoomEar(engineerTalk, engineerVoice), true);
+  assert.equal(
+    modeSwitchEarAction({
+      from: engineerTalk,
+      to: engineerVoice,
+      recLive: true,
+    }),
+    "keep",
+  );
+  assert.equal(
+    modeSwitchEarAction({
+      from: engineerVoice,
+      to: engineerTalk,
+      recLive: true,
+    }),
+    "keep",
+  );
+});
+
+test("a Live session already up on dest Travis is not torn down by a no-op", () => {
+  const up: EarState = { ...travisVoice, liveUp: true };
+  assert.equal(sameRoomEar(up, up), false, "Voice + Travis wants live, not stt");
+});
