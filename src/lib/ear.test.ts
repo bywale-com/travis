@@ -3,7 +3,9 @@ import { test } from "node:test";
 import {
   modeSwitchEarAction,
   sameRoomEar,
+  sttAlreadySatisfies,
   sttOnEndAction,
+  wantedEar,
   whichEar,
   type EarState,
 } from "./ear";
@@ -246,4 +248,77 @@ test("old TTS onend (quit while speaking) leaves Talk deaf", () => {
   assert.equal(quitWhileSpeaking, "stop");
   assert.throws(() => rec.start());
   assert.equal(rec.live, false);
+});
+
+/**
+ * Hotfix 036 — lived: new session, Voice, say "travis". Chip flips, but the
+ * recognizer is still running from that very utterance, so the old guard
+ * ("already on STT, nothing to do") returned before anything tried Live.
+ */
+test("saying travis in Voice wants Live even while the recognizer is running", () => {
+  const travisVoice = {
+    viewMode: "voice" as const,
+    logSubmode: "talk" as const,
+    destTravis: true,
+  };
+  assert.equal(wantedEar(travisVoice), "live");
+  assert.equal(
+    sttAlreadySatisfies({ ...travisVoice, recLive: true }),
+    false,
+  );
+  assert.equal(
+    whichEar({ ...travisVoice, liveUp: false }),
+    "stt",
+    "the ear you have is still STT until Live connects",
+  );
+});
+
+test("dest Engineer on a live recognizer is already satisfied", () => {
+  assert.equal(
+    sttAlreadySatisfies({
+      viewMode: "voice",
+      logSubmode: "talk",
+      destTravis: false,
+      recLive: true,
+    }),
+    true,
+  );
+  assert.equal(
+    sttAlreadySatisfies({
+      viewMode: "log",
+      logSubmode: "talk",
+      destTravis: false,
+      recLive: true,
+    }),
+    true,
+  );
+});
+
+test("a dead recognizer never satisfies", () => {
+  assert.equal(
+    sttAlreadySatisfies({
+      viewMode: "log",
+      logSubmode: "talk",
+      destTravis: false,
+      recLive: false,
+    }),
+    false,
+  );
+});
+
+test("Type wants no ear, so a stray recognizer does not satisfy it", () => {
+  const typing = {
+    viewMode: "log" as const,
+    logSubmode: "type" as const,
+    destTravis: true,
+  };
+  assert.equal(wantedEar(typing), "none");
+  assert.equal(sttAlreadySatisfies({ ...typing, recLive: true }), false);
+});
+
+test("dest Travis in Talk wants STT, not Live", () => {
+  assert.equal(
+    wantedEar({ viewMode: "log", logSubmode: "talk", destTravis: true }),
+    "stt",
+  );
 });
