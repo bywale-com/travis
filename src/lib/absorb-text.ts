@@ -153,3 +153,20 @@ export function carryDraftAcrossRestart(
 ): string {
   return collapseSpeechStutter(absorbFinalTranscript(held, sessionFinals));
 }
+
+/**
+ * Hold what we already heard across a recognizer hitch.
+ *
+ * Empty next: silence restart / empty result list (021).
+ * Short next: Chrome `network` (and similar) often resets the result list
+ * to a leftover fragment. Replacing with that fragment wipes the draft.
+ * Stutter-fold next: collapse already ran — take the folded line.
+ */
+export function keepSpeechDraft(prev: string, next: string): string {
+  const p = prev.trim();
+  const n = next.trim();
+  if (!n) return p;
+  if (!p) return n;
+  if (collapseSpeechStutter(p).toLowerCase() === n.toLowerCase()) return n;
+  return absorbFinalTranscript(p, n);
+}

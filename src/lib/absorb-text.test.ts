@@ -5,6 +5,7 @@ import {
   absorbText,
   carryDraftAcrossRestart,
   collapseSpeechStutter,
+  keepSpeechDraft,
   mergeLiveTranscript,
 } from "./absorb-text";
 import { parseCallByName } from "./router";
@@ -75,10 +76,7 @@ test("collapseSpeechStutter folds a long restart with a short hitch", () => {
 test("carryDraftAcrossRestart folds a restarted passage after junk", () => {
   const a =
     "okay let's see what are some engineer what were some of the things we wanted to fix in this previous hotfix";
-  assert.equal(
-    carryDraftAcrossRestart(a, `exit again ${a}`),
-    a,
-  );
+  assert.equal(carryDraftAcrossRestart(a, `exit again ${a}`), a);
 });
 
 test("mergeLiveTranscript does not glue committed onto an overlapping interim", () => {
@@ -139,4 +137,23 @@ test("carryDraftAcrossRestart keeps a leading seat call across a silence restart
     ).seatKey,
     "engineer",
   );
+});
+
+test("keepSpeechDraft does not let an empty restart wipe a draft", () => {
+  assert.equal(keepSpeechDraft("look at the log", ""), "look at the log");
+  assert.equal(keepSpeechDraft("look at the log", "   "), "look at the log");
+  assert.equal(
+    keepSpeechDraft("look at the log", "look at the log now"),
+    "look at the log now",
+  );
+});
+
+test("keepSpeechDraft does not let a short network fragment wipe a draft", () => {
+  const held = "engineer look at this long thing I was saying";
+  assert.equal(keepSpeechDraft(held, "saying"), held);
+  assert.equal(keepSpeechDraft(held, "look"), `${held} look`);
+});
+
+test("keepSpeechDraft still takes a stutter fold of the same line", () => {
+  assert.equal(keepSpeechDraft("hello hello there", "hello there"), "hello there");
 });

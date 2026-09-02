@@ -3,9 +3,11 @@
 import {
   absorbFinalTranscript,
   carryDraftAcrossRestart,
+  keepSpeechDraft,
   mergeLiveTranscript,
 } from "@/lib/absorb-text";
 import { seatKeyToShort } from "@/lib/router";
+import { resumeSendSounds } from "@/lib/send-sounds";
 import type { SeatKey } from "@/server/db/schema";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
@@ -33,6 +35,7 @@ type SpeechRec = {
   onresult: ((ev: { results: ArrayLike<{ isFinal: boolean; 0?: { transcript?: string } }> }) => void) | null;
   onend: (() => void) | null;
   onerror: ((ev: { error: string }) => void) | null;
+  onstart: (() => void) | null;
   start: () => void;
   stop: () => void;
   abort: () => void;
@@ -78,8 +81,13 @@ export function LogComposer({
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const recRef = useRef<SpeechRec | null>(null);
   const heldRef = useRef("");
+  const lastHeardRef = useRef("");
   const committedRef = useRef("");
   const wantedRef = useRef(false);
+  const recognitionLiveRef = useRef(false);
+  const sttArmingRef = useRef(false);
+  const sttArmStartedRef = useRef(0);
+  const genRef = useRef(0);
 
   const fitField = useCallback(() => {
     const el = fieldRef.current;
@@ -116,14 +124,36 @@ export function LogComposer({
     fieldRef.current?.focus();
   }, []);
 
+  const persistHeldDraft = useCallback(() => {
+    const fromField = fieldRef.current?.value ?? "";
+    const fromRefs = mergeLiveTranscript(committedRef.current, "");
+    const merged = keepSpeechDraft(
+      lastHeardRef.current,
+      keepSpeechDraft(fromRefs, fromField),
+    );
+    if (!merged.trim()) return;
+    lastHeardRef.current = merged;
+    heldRef.current = merged;
+    committedRef.current = merged;
+    setText(merged);
+  }, []);
+
   const haltMic = useCallback(() => {
+    persistHeldDraft();
     wantedRef.current = false;
+    recognitionLiveRef.current = false;
+    sttArmingRef.current = false;
+    genRef.current += 1;
     const rec = recRef.current;
     recRef.current = null;
-    if (!rec) return;
+    if (!rec) {
+      setMicOn(false);
+      return;
+    }
     rec.onend = null;
     rec.onresult = null;
     rec.onerror = null;
+    rec.onstart = null;
     try {
       rec.abort();
     } catch {
@@ -134,13 +164,28 @@ export function LogComposer({
       }
     }
     setMicOn(false);
-  }, []);
+  }, [persistHeldDraft]);
 
   const startMic = useCallback(() => {
     const Ctor = getSpeechRecognition();
     if (!Ctor) return;
+    persistHeldDraft();
     haltMic();
     wantedRef.current = true;
+    sttArmingRef.current = true;
+    sttArmStartedRef.current = Date.now();
+    const gen = genRef.current;
+    let attempts = 0;
+    const attach = () => {
+    if (gen !== genRef.current) return;
+    if (!wantedRef.current) {
+      sttArmingRef.current = false;
+      return;
+    }
+    if (recognitionLiveRef.current && recRef.current) {
+      sttArmingRef.current = false;
+      return;
+    }
     const rec = new Ctor();
     rec.continuous = true;
     rec.interimResults = true;
@@ -156,32 +201,73 @@ export function LogComposer({
           interim += piece;
         }
       }
-      const committed = carryDraftAcrossRestart(heldRef.current, sessionCommitted);
+      const sessionMerged = mergeLiveTranscript(sessionCommitted, interim);
+      if (!sessionMerged.trim() && lastHeardRef.current.trim()) return;
+      const committed = keepSpeechDraft(
+        lastHeardRef.current,
+        carryDraftAcrossRestart(heldRef.current, sessionCommitted),
+      );
+      const next = keepSpeechDraft(
+        lastHeardRef.current,
+        mergeLiveTranscript(committed, interim),
+      );
+      if (!next.trim()) return;
       committedRef.current = committed;
-      setText(mergeLiveTranscript(committed, interim));
+      lastHeardRef.current = next;
+      heldRef.current = keepSpeechDraft(heldRef.current, committed);
+      setText(next);
+    };
+    rec.onstart = () => {
+      recognitionLiveRef.current = true;
+      sttArmingRef.current = false;
+      setMicOn(true);
     };
     rec.onend = () => {
-      const merged = mergeLiveTranscript(committedRef.current, "");
-      if (merged) {
-        heldRef.current = merged;
-        committedRef.current = merged;
-        setText(merged);
-      }
+      persistHeldDraft();
+      recognitionLiveRef.current = false;
       if (!wantedRef.current) return;
       window.setTimeout(() => {
         if (wantedRef.current) startMic();
-      }, 250);
+      }, 400);
+    };
+    rec.onerror = () => {
+      recognitionLiveRef.current = false;
+      sttArmingRef.current = false;
+      persistHeldDraft();
     };
     recRef.current = rec;
     try {
       rec.start();
-      setMicOn(true);
     } catch {
-      setMicOn(false);
+      recRef.current = null;
+      recognitionLiveRef.current = false;
+      if (attempts++ < 8) window.setTimeout(attach, 280 * attempts);
+      else sttArmingRef.current = false;
     }
-  }, [haltMic]);
+    };
+    window.setTimeout(attach, 400);
+  }, [haltMic, persistHeldDraft]);
 
-  useEffect(() => () => haltMic(), [haltMic]);
+  useEffect(() => {
+    const id = window.setTimeout(() => startMic(), 400);
+    return () => {
+      window.clearTimeout(id);
+      haltMic();
+    };
+  }, [haltMic, startMic]);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      if (!wantedRef.current) return;
+      if (recognitionLiveRef.current) return;
+      if (sttArmingRef.current) {
+        if (Date.now() - sttArmStartedRef.current < 2500) return;
+        sttArmingRef.current = false;
+      }
+      startMic();
+    }, 1600);
+    return () => window.clearInterval(id);
+  }, [startMic]);
 
   useLayoutEffect(() => {
     fitField();
@@ -214,18 +300,21 @@ export function LogComposer({
 
   const submit = async () => {
     haltMic();
+    resumeSendSounds();
     const chipSeatKeys = chips.map((c) => c.seatKey as SeatKey);
     const keptText = text;
     const keptChips = chips;
     setText("");
     setChips([]);
     heldRef.current = "";
+    lastHeardRef.current = "";
     committedRef.current = "";
     const ok = await onSend({ text: keptText, chipSeatKeys });
     if (ok === false) {
       setText(keptText);
       setChips(keptChips);
       heldRef.current = keptText;
+      lastHeardRef.current = keptText;
       committedRef.current = keptText;
     }
     fieldRef.current?.focus();
@@ -248,6 +337,9 @@ export function LogComposer({
 
   const onChange = (value: string) => {
     setText(value);
+    lastHeardRef.current = value;
+    heldRef.current = value;
+    committedRef.current = value;
     if (value.endsWith("@")) openMention();
   };
 

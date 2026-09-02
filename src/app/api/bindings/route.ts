@@ -1,13 +1,18 @@
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
+import { jsonRoute } from "@/server/api-error";
 import { db } from "@/server/db/client";
 import { ensureSeatBindings } from "@/server/db/ensure-bindings";
 import { agentBinding } from "@/server/db/schema";
 
-const SEAT_ORDER = ["pm", "sa", "engineer"] as const;
+import { sortRoomSeats } from "@/lib/seats";
 
 /** Room seats by title only — never cursor_agent_id. */
 export async function GET() {
+  return jsonRoute(readSeats);
+}
+
+async function readSeats() {
   await ensureSeatBindings();
   const rows = await db
     .select({
@@ -17,11 +22,7 @@ export async function GET() {
     .from(agentBinding)
     .where(eq(agentBinding.active, true));
 
-  rows.sort((a, b) => {
-    const ia = SEAT_ORDER.indexOf(a.seatKey as (typeof SEAT_ORDER)[number]);
-    const ib = SEAT_ORDER.indexOf(b.seatKey as (typeof SEAT_ORDER)[number]);
-    return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
-  });
+  const ordered = sortRoomSeats(rows);
 
-  return NextResponse.json({ seats: rows });
+  return NextResponse.json({ seats: ordered });
 }

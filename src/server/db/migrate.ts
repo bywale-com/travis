@@ -213,7 +213,18 @@ async function main() {
     ADD COLUMN IF NOT EXISTS client_ip text NOT NULL DEFAULT ''
   `;
 
-  console.log("travis schema + SCP-002 room + SCP-003 queue + SCP-004 log_submode + client_ip ready");
+  await sql`
+    ALTER TABLE travis.voice_session
+    ADD COLUMN IF NOT EXISTS travis_live_handle text
+  `;
+
+  await sql`
+    INSERT INTO travis.agent_binding (seat_key, label, cursor_agent_id, runtime, active)
+    SELECT 'travis', 'Travis', '', 'cloud', true
+    WHERE NOT EXISTS (SELECT 1 FROM travis.agent_binding WHERE seat_key = 'travis')
+  `;
+
+  console.log("travis schema + SCP-006 travis binding + live handle ready");
   await sql.end();
 }
 

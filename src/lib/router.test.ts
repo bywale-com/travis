@@ -90,4 +90,22 @@ test("seatKeyToShort matches plate chips", () => {
   assert.equal(seatKeyToShort("engineer"), "Eng");
   assert.equal(seatKeyToShort("pm"), "PM");
   assert.equal(seatKeyToShort("sa"), "SA");
+  assert.equal(seatKeyToShort("travis"), "Travis");
+});
+
+test("hey Travis is a vocative", () => {
+  const r = parseCallByName("hey Travis");
+  assert.equal(r.seatKey, "travis");
+});
+
+test("okay travis plus a prompt keeps the prompt", () => {
+  const r = parseCallByName("okay travis what's queued");
+  assert.equal(r.seatKey, "travis");
+  assert.equal(r.remainder, "what's queued");
+});
+
+test("bare Travis is switch-only", () => {
+  const r = parseCallByName("Travis");
+  assert.equal(r.seatKey, "travis");
+  assert.equal(r.remainder, "");
 });

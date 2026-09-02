@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **037**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -30,3 +30,21 @@
 | 013 | [`HOTFIX-013-SENTENCE-TTS.md`](./HOTFIX-013-SENTENCE-TTS.md) | Voice reads assistant sentences as they land, not one dump at done |
 | 014 | [`HOTFIX-014-IP-SESSION.md`](./HOTFIX-014-IP-SESSION.md) | Resume the live room by client IP; End still ends |
 | 015 | [`HOTFIX-015-STT-DUP.md`](./HOTFIX-015-STT-DUP.md) | Fold long STT restarts; do not re-read a sentence already queued |
+| 018 | [`HOTFIX-018-GEMINI-MODELS.md`](./HOTFIX-018-GEMINI-MODELS.md) | Pin Gemini 3.6 text + 3.1 Live; 2.5 404 for new keys |
+| 019 | [`HOTFIX-019-SPEECH-TEXT.md`](./HOTFIX-019-SPEECH-TEXT.md) | Fold STT restarts; absorb Live speech into one turn |
+| 020 | [`HOTFIX-020-STT-EAR.md`](./HOTFIX-020-STT-EAR.md) | Ear restarts after mode switch; I’m done on Talk dest Travis |
+| 021 | [`HOTFIX-021-STT-HOLD.md`](./HOTFIX-021-STT-HOLD.md) | Empty STT restart does not wipe the draft; Talk re-arms after Voice |
+| 022 | [`HOTFIX-022-MIC-MODES.md`](./HOTFIX-022-MIC-MODES.md) | Voice has an ear after refresh; Talk/Type/Voice release the mic |
+| 023 | [`HOTFIX-023-EAR-TTS.md`](./HOTFIX-023-EAR-TTS.md) | Dest Engineer Talk↔Voice keep one ear; TTS no longer leaves STT dead |
+| 024 | [`HOTFIX-024-DONE-PHRASE.md`](./HOTFIX-024-DONE-PHRASE.md) | I'm done sends when the phrase never finalizes; readback stops abandoning the ear |
+| 025 | [`HOTFIX-025-SEND-DURING-RUN.md`](./HOTFIX-025-SEND-DURING-RUN.md) | Revert 024's busy guard — a turn must reach the server while a seat works |
+| 026 | [`HOTFIX-026-JSON-ERRORS.md`](./HOTFIX-026-JSON-ERRORS.md) | Lazy DB connect + JSON error bodies so a failure names its own cause |
+| 028 | [`HOTFIX-028-STT-NETWORK-HOLD.md`](./HOTFIX-028-STT-NETWORK-HOLD.md) | Network STT hitch must not wipe the draft already heard |
+| 029 | [`HOTFIX-029-OPENAI-TRAVIS.md`](./HOTFIX-029-OPENAI-TRAVIS.md) | Dest Travis brain/mouth is OpenAI Realtime + text, not Gemini |
+| 030 | [`HOTFIX-030-QUEUE-SEND-SOUNDS.md`](./HOTFIX-030-QUEUE-SEND-SOUNDS.md) | Drain a stuck queue when Cursor is idle; hold live posts; swoosh on send, cue on queued |
+| 031 | [`HOTFIX-031-AUDIBLE-SEND-SOUNDS.md`](./HOTFIX-031-AUDIBLE-SEND-SOUNDS.md) | Send swoosh and queue cue actually play on the phone |
+| 032 | [`HOTFIX-032-HARVEST-DEAD-STREAM.md`](./HOTFIX-032-HARVEST-DEAD-STREAM.md) | When the Cursor SSE dies, pull the finished run into the log and drop “is still running” |
+| 033 | [`HOTFIX-033-TRAVIS-DRAFT-WIPE.md`](./HOTFIX-033-TRAVIS-DRAFT-WIPE.md) | Saying Travis in Talk must not wipe the draft |
+| 034 | [`HOTFIX-034-MALE-VOICE.md`](./HOTFIX-034-MALE-VOICE.md) | Male mouth when the engine has one — cedar on Live, named male on readback |
+| 035 | [`HOTFIX-035-THREAD-SCROLL-PIN.md`](./HOTFIX-035-THREAD-SCROLL-PIN.md) | The log holds still when you scroll up to read |
+| 036 | [`HOTFIX-036-VOCATIVE-LIVE-ARM.md`](./HOTFIX-036-VOCATIVE-LIVE-ARM.md) | Saying Travis in Voice actually hands the ear to Live |

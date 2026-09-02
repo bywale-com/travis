@@ -1,11 +1,19 @@
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { delay, isDeadStreamError } from "@/lib/cursor-busy";
 import { absorbText } from "@/lib/absorb-text";
+import { isTravisSeat } from "@/lib/seats";
 import { seatKeyToLabel } from "@/lib/router";
-import { shouldQueueForSeat, type QueueSnapshot } from "@/lib/queue-logic";
+import {
+  isDrainableSeat,
+  shouldHarvestStoredRun,
+  shouldQueueForSeat,
+  type QueueSnapshot,
+} from "@/lib/queue-logic";
 import {
   cancelCursorRun,
   discoverActiveRunId,
+  harvestFinishedRun,
+  probeCursorRun,
   streamCursorReply,
   type CursorStreamEvent,
 } from "@/server/cursor-port";
@@ -18,16 +26,20 @@ import {
   type VoiceTurn,
 } from "@/server/db/schema";
 import {
+  bindingsWithQueuedItems,
   claimLiveRun,
   enqueueUtterance,
   getLiveRun,
   getQueueHead,
   getQueuedItem,
+  liveRunsForSession,
   queueSnapshot,
   releaseLiveRunIfMatch,
   upsertLiveRun,
   deleteQueuedItem,
 } from "@/server/queue";
+
+const POST_PERSIST_MS = 400;
 
 export function sse(event: string, data: unknown): string {
   return `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
@@ -71,6 +83,29 @@ async function withSeqLock<T>(sessionId: string, fn: () => Promise<T>): Promise<
   }
 }
 
+const drainTails = new Map<string, Promise<unknown>>();
+
+async function withDrainLock<T>(
+  bindingId: string,
+  fn: () => Promise<T>,
+): Promise<T> {
+  const prev = drainTails.get(bindingId) ?? Promise.resolve();
+  let release!: (value: unknown) => void;
+  const next = new Promise((resolve) => {
+    release = resolve;
+  });
+  drainTails.set(
+    bindingId,
+    prev.then(() => next),
+  );
+  try {
+    await prev;
+    return await fn();
+  } finally {
+    release(undefined);
+  }
+}
+
 async function insertTurn(
   sessionId: string,
   values: {
@@ -101,6 +136,7 @@ async function insertTurn(
 export async function seatHasActiveRun(
   binding: AgentBinding,
 ): Promise<boolean> {
+  if (isTravisSeat(binding.seatKey)) return false;
   const live = await getLiveRun(binding.id);
   if (!live) return false;
   const active = await discoverActiveRunId(binding.cursorAgentId ?? "");
@@ -137,6 +173,9 @@ export async function enqueueOnSeat(params: {
   text: string;
   discoveredRunId?: string | null;
 }): Promise<QueueSnapshot> {
+  if (isTravisSeat(params.binding.seatKey)) {
+    throw new Error("Travis is never queued");
+  }
   await persistDiscoveredRun({
     bindingId: params.binding.id,
     sessionId: params.sessionId,
@@ -151,7 +190,7 @@ export async function enqueueOnSeat(params: {
   return queueSnapshot(params.sessionId);
 }
 
-type SendFn = (event: string, data: unknown) => void;
+export type SendFn = (event: string, data: unknown) => void;
 
 export async function insertUserTurn(
   sessionId: string,
@@ -164,6 +203,126 @@ export async function insertUserTurn(
     seatKey,
     speakable: true,
     text: prompt,
+  });
+}
+
+/**
+ * Grow one agent_post for this user turn + seat so a dropped SSE still
+ * leaves the chat log with what had already been said.
+ */
+export async function absorbStreamingAgentPost(params: {
+  sessionId: string;
+  userTurnId: string;
+  seatKey: SeatKey;
+  text: string;
+}): Promise<VoiceTurn> {
+  const incoming = params.text.trim();
+  return withSeqLock(params.sessionId, async () => {
+    const [existing] = await db
+      .select()
+      .from(voiceTurn)
+      .where(
+        and(
+          eq(voiceTurn.sessionId, params.sessionId),
+          eq(voiceTurn.kind, "agent_post"),
+          eq(voiceTurn.referenceTurnId, params.userTurnId),
+          eq(voiceTurn.seatKey, params.seatKey),
+        ),
+      )
+      .orderBy(desc(voiceTurn.seq))
+      .limit(1);
+    if (existing) {
+      if (existing.text === incoming) return existing;
+      const [row] = await db
+        .update(voiceTurn)
+        .set({ text: incoming })
+        .where(eq(voiceTurn.id, existing.id))
+        .returning();
+      return row;
+    }
+    const seq = await nextTurnSeq(params.sessionId);
+    const [row] = await db
+      .insert(voiceTurn)
+      .values({
+        sessionId: params.sessionId,
+        seq,
+        role: "assistant",
+        kind: "agent_post",
+        seatKey: params.seatKey,
+        referenceTurnId: params.userTurnId,
+        speakable: true,
+        text: incoming,
+      })
+      .returning();
+    return row;
+  });
+}
+
+export async function insertAgentPostTurn(
+  sessionId: string,
+  text: string,
+  seatKey: SeatKey,
+  referenceTurnId?: string | null,
+): Promise<VoiceTurn> {
+  return insertTurn(sessionId, {
+    role: "assistant",
+    kind: "agent_post",
+    seatKey,
+    referenceTurnId: referenceTurnId ?? undefined,
+    speakable: true,
+    text,
+  });
+}
+
+/** Live output is snapshots/deltas. One Travis post, not a row per chunk. */
+export async function absorbLiveTravisPost(
+  sessionId: string,
+  text: string,
+): Promise<VoiceTurn> {
+  const incoming = text.trim();
+  return withSeqLock(sessionId, async () => {
+    const [last] = await db
+      .select()
+      .from(voiceTurn)
+      .where(eq(voiceTurn.sessionId, sessionId))
+      .orderBy(desc(voiceTurn.seq))
+      .limit(1);
+    if (last?.kind === "agent_post" && last.seatKey === "travis") {
+      const { acc } = absorbText(last.text, incoming);
+      if (acc === last.text) return last;
+      const [row] = await db
+        .update(voiceTurn)
+        .set({ text: acc })
+        .where(eq(voiceTurn.id, last.id))
+        .returning();
+      return row;
+    }
+    const seq = await nextTurnSeq(sessionId);
+    const [row] = await db
+      .insert(voiceTurn)
+      .values({
+        sessionId,
+        seq,
+        role: "assistant",
+        kind: "agent_post",
+        seatKey: "travis",
+        speakable: true,
+        text: incoming,
+      })
+      .returning();
+    return row;
+  });
+}
+
+export async function insertStatusTurn(
+  sessionId: string,
+  text: string,
+): Promise<VoiceTurn> {
+  return insertTurn(sessionId, {
+    role: "status",
+    kind: "status",
+    speakable: false,
+    text,
   });
 }
 
@@ -183,19 +342,11 @@ export async function pipeOneSend(params: {
   userTurn?: VoiceTurn;
 }): Promise<{ ownedTerminal: boolean; queue?: QueueSnapshot }> {
   const { sessionId, binding, prompt, send } = params;
+  if (isTravisSeat(binding.seatKey)) {
+    throw new Error("Travis dest never uses the Cursor send path");
+  }
   const seatKey = (binding.seatKey ?? "pm") as SeatKey;
   const seatLabel = binding.label ?? seatKeyToLabel(seatKey);
-
-  const createdHere = !params.userTurn;
-  const userTurn =
-    params.userTurn ?? (await insertUserTurn(sessionId, prompt, seatKey));
-  send("matched", {
-    matched: true,
-    matchedPhrase: params.matchedPhrase,
-    userTurn,
-    activeSeatKey: seatKey,
-    activeLabel: seatLabel,
-  });
 
   const gen = params.gen ?? streamCursorReply({
     cursorAgentId: binding.cursorAgentId ?? "",
@@ -209,10 +360,6 @@ export async function pipeOneSend(params: {
 
   if (first.value.type === "busy") {
     await gen.return(undefined);
-    if (createdHere) {
-      await db.delete(voiceTurn).where(eq(voiceTurn.id, userTurn.id));
-      send("retract", { id: userTurn.id });
-    }
     const queue = await enqueueOnSeat({
       sessionId,
       binding,
@@ -223,9 +370,21 @@ export async function pipeOneSend(params: {
     return { ownedTerminal: false, queue };
   }
 
+  const userTurn =
+    params.userTurn ?? (await insertUserTurn(sessionId, prompt, seatKey));
+  send("matched", {
+    matched: true,
+    matchedPhrase: params.matchedPhrase,
+    userTurn,
+    activeSeatKey: seatKey,
+    activeLabel: seatLabel,
+  });
+
   let thoughtTurnId: string | null = null;
   let thoughtText = "";
   let postText = "";
+  let postTurn: VoiceTurn | null = null;
+  let lastPostPersist = 0;
   let liveRunId: string | null = null;
   const doneBox: {
     current: {
@@ -278,6 +437,20 @@ export async function pipeOneSend(params: {
       if (next.delta) {
         send("post_delta", { text: next.delta, seatKey, seatLabel });
       }
+      const now = Date.now();
+      if (
+        postText.trim() &&
+        (!postTurn || now - lastPostPersist >= POST_PERSIST_MS)
+      ) {
+        lastPostPersist = now;
+        postTurn = await absorbStreamingAgentPost({
+          sessionId,
+          userTurnId: userTurn.id,
+          seatKey,
+          text: postText,
+        });
+        send("post", { turn: postTurn });
+      }
     } else if (ev.type === "done") {
       if (ev.mode !== "error" && !postText.trim()) {
         postText = ev.assistantText;
@@ -329,19 +502,16 @@ export async function pipeOneSend(params: {
   const donePayload = doneBox.current;
   const cancelled = donePayload?.statusText === "cancelled";
   const bareError = donePayload?.mode === "error" && !postText.trim();
-  let postTurn: VoiceTurn | null = null;
   const finalPost = postText.trim()
     ? postText.trim()
     : cancelled || bareError
       ? ""
       : "Run finished (no assistant text).";
   if (finalPost) {
-    postTurn = await insertTurn(sessionId, {
-      role: "assistant",
-      kind: "agent_post",
+    postTurn = await absorbStreamingAgentPost({
+      sessionId,
+      userTurnId: userTurn.id,
       seatKey,
-      referenceTurnId: userTurn.id,
-      speakable: true,
       text: finalPost,
     });
   }
@@ -393,20 +563,113 @@ export async function drainHead(
   binding: AgentBinding,
   send: SendFn,
 ): Promise<void> {
-  for (;;) {
-    const stillLive = await getLiveRun(binding.id);
-    if (stillLive) return;
-    const head = await getQueueHead(sessionId, binding.id);
-    if (!head) return;
-    await deleteQueuedItem(sessionId, head.id);
-    send("queue", { queue: await queueSnapshot(sessionId) });
-    const result = await pipeOneSend({
-      sessionId,
-      binding,
-      prompt: head.text,
-      send,
+  await withDrainLock(binding.id, async () => {
+    for (;;) {
+      const stillLive = await getLiveRun(binding.id);
+      if (stillLive) return;
+      const head = await getQueueHead(sessionId, binding.id);
+      if (!head) return;
+      const claimed = await deleteQueuedItem(sessionId, head.id);
+      if (!claimed) continue;
+      send("queue", { queue: await queueSnapshot(sessionId) });
+      const result = await pipeOneSend({
+        sessionId,
+        binding,
+        prompt: head.text,
+        send,
+      });
+      if (!result.ownedTerminal) return;
+    }
+  });
+}
+
+/**
+ * If the SSE died before `done`, the Cursor run may still finish. Pull
+ * that run's assistant text into the log and drop the leftover live-run
+ * row. A newer follow-up on the same seat does not block this.
+ */
+export async function reapFinishedLiveRuns(sessionId: string): Promise<void> {
+  const rows = await liveRunsForSession(sessionId);
+  for (const { live, binding } of rows) {
+    if (isTravisSeat(binding.seatKey)) continue;
+    const harvested = await harvestFinishedRun({
+      agentId: binding.cursorAgentId ?? "",
+      runId: live.cursorRunId,
     });
-    if (!result.ownedTerminal) return;
+    if (!shouldHarvestStoredRun({ storedRunStatus: harvested.status })) {
+      continue;
+    }
+    const seatKey = (binding.seatKey ?? "pm") as SeatKey;
+    const finalPost = harvested.assistantText.trim()
+      ? harvested.assistantText.trim()
+      : "Run finished (no assistant text).";
+    if (live.userTurnId) {
+      await absorbStreamingAgentPost({
+        sessionId,
+        userTurnId: live.userTurnId,
+        seatKey,
+        text: finalPost,
+      });
+    } else {
+      await insertAgentPostTurn(sessionId, finalPost, seatKey);
+    }
+    await insertStatusTurn(sessionId, "finished");
+    await releaseLiveRunIfMatch(binding.id, live.cursorRunId);
+  }
+}
+
+/**
+ * Clear a leftover live-run row when Cursor is idle, and name seats whose
+ * waiting lines can send now. Does not drain — the phone opens an SSE for that.
+ */
+export async function inspectAndNudgeQueue(sessionId: string): Promise<{
+  queue: QueueSnapshot;
+  drainable: SeatKey[];
+}> {
+  await reapFinishedLiveRuns(sessionId);
+  const bindings = await bindingsWithQueuedItems(sessionId);
+  const drainable: SeatKey[] = [];
+  for (const binding of bindings) {
+    if (isTravisSeat(binding.seatKey)) continue;
+    const live = await getLiveRun(binding.id);
+    const probe = await probeCursorRun(binding.cursorAgentId ?? "");
+    if (probe.status !== "idle") continue;
+    if (live) await claimLiveRun(binding.id);
+    if (
+      isDrainableSeat({
+        hasQueue: true,
+        cursorHasActiveRun: false,
+      })
+    ) {
+      drainable.push((binding.seatKey ?? "pm") as SeatKey);
+    }
+  }
+  return { queue: await queueSnapshot(sessionId), drainable };
+}
+
+/** Send waiting lines for seats Cursor is no longer running. */
+export async function drainReadySeats(params: {
+  sessionId: string;
+  send: SendFn;
+}): Promise<void> {
+  const { drainable } = await inspectAndNudgeQueue(params.sessionId);
+  if (!drainable.length) {
+    params.send("queue", { queue: await queueSnapshot(params.sessionId) });
+    return;
+  }
+  const seen = new Set<string>();
+  for (const seatKey of drainable) {
+    if (seen.has(seatKey)) continue;
+    seen.add(seatKey);
+    const [binding] = await db
+      .select()
+      .from(agentBinding)
+      .where(eq(agentBinding.seatKey, seatKey))
+      .limit(1);
+    if (!binding) continue;
+    const probe = await probeCursorRun(binding.cursorAgentId ?? "");
+    if (probe.status !== "idle") continue;
+    await drainHead(params.sessionId, binding, params.send);
   }
 }
 
@@ -418,6 +681,9 @@ export async function sendOrEnqueue(params: {
   matchedPhrase?: string;
   userTurn?: VoiceTurn;
 }): Promise<"queued" | "sent"> {
+  if (isTravisSeat(params.binding.seatKey)) {
+    throw new Error("Travis dest never uses the Cursor send path");
+  }
   if (await seatHasActiveRun(params.binding)) {
     const queue = await enqueueOnSeat({
       sessionId: params.sessionId,
@@ -445,24 +711,28 @@ export async function sendOrEnqueueMany(params: {
   bindings: AgentBinding[];
   prompt: string;
   send: SendFn;
+  userTurn?: VoiceTurn;
 }): Promise<void> {
   const { sessionId, bindings, prompt, send } = params;
-  if (bindings.length === 0) return;
-  if (bindings.length === 1) {
+  const cursorOnly = bindings.filter((b) => !isTravisSeat(b.seatKey));
+  if (cursorOnly.length === 0) return;
+  if (cursorOnly.length === 1) {
     await sendOrEnqueue({
       sessionId,
-      binding: bindings[0],
+      binding: cursorOnly[0],
       prompt,
       send,
+      userTurn: params.userTurn,
     });
     return;
   }
 
-  const lead = bindings[0];
-  const last = bindings[bindings.length - 1];
+  const lead = cursorOnly[0];
+  const last = cursorOnly[cursorOnly.length - 1];
   const leadKey = (lead.seatKey ?? "pm") as SeatKey;
   const lastKey = (last.seatKey ?? "pm") as SeatKey;
-  const userTurn = await insertUserTurn(sessionId, prompt, leadKey);
+  const userTurn =
+    params.userTurn ?? (await insertUserTurn(sessionId, prompt, leadKey));
   send("matched", {
     matched: true,
     userTurn,
@@ -471,7 +741,7 @@ export async function sendOrEnqueueMany(params: {
   });
 
   await Promise.allSettled(
-    bindings.map((binding) =>
+    cursorOnly.map((binding) =>
       sendOrEnqueue({
         sessionId,
         binding,

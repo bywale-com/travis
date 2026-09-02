@@ -17,12 +17,17 @@ function normalizeTail(s: string): string {
     .toLowerCase();
 }
 
+/** Web Speech often expands I'm → I am. Same locked phrase. */
+function foldSttContractions(s: string): string {
+  return s.replace(/\bi am done\b/gi, "I'm done");
+}
+
 /** Prefer longer phrases first (caller should sort). */
 export function matchConductorPhrase(
   utterance: string,
   phrases: string[],
 ): PhraseMatch {
-  const trimmed = utterance.trim();
+  const trimmed = foldSttContractions(utterance.trim());
   if (!trimmed) {
     return { matched: false, cleanedText: "" };
   }
@@ -52,4 +57,60 @@ export function matchConductorPhrase(
   }
 
   return { matched: false, cleanedText: trimmed };
+}
+
+/**
+ * A turn can be gated twice for the same words — once live, once when the
+ * session settles. Suppress that repeat only, and only briefly. A run being
+ * in flight must never block the next turn: per-seat queueing decides that
+ * on the server (hotfix 007/009).
+ */
+export const SEND_DEDUPE_MS = 2500;
+
+export function isDuplicateSend(opts: {
+  text: string;
+  lastText: string;
+  lastAtMs: number;
+  nowMs: number;
+}): boolean {
+  const text = opts.text.trim();
+  if (!text) return false;
+  if (text !== opts.lastText.trim()) return false;
+  return opts.nowMs - opts.lastAtMs < SEND_DEDUPE_MS;
+}
+
+export type ConductorGate = { send: boolean; text: string };
+
+const NO_SEND: ConductorGate = { send: false, text: "" };
+
+/**
+ * Live gate while the recognizer is running. A phrase that only exists in
+ * interim text is not committed yet — the speaker may still be mid-sentence —
+ * so hold it. `conductorOnEnd` picks it up once the session settles.
+ */
+export function conductorGate(opts: {
+  committed: string;
+  interim: string;
+  full: string;
+  phrases: string[];
+}): ConductorGate {
+  if (!matchConductorPhrase(opts.full, opts.phrases).matched) return NO_SEND;
+  if (matchConductorPhrase(opts.committed, opts.phrases).matched) {
+    return { send: true, text: opts.committed };
+  }
+  if (!opts.interim.trim()) return { send: true, text: opts.full };
+  return NO_SEND;
+}
+
+/**
+ * The recognizer ended. Web Speech often never promotes the closing phrase to
+ * a final result, so the live gate held it and nothing sent. Whatever is on
+ * the draft now is settled — decide here or the turn is lost until refresh.
+ */
+export function conductorOnEnd(opts: {
+  text: string;
+  phrases: string[];
+}): ConductorGate {
+  if (!matchConductorPhrase(opts.text, opts.phrases).matched) return NO_SEND;
+  return { send: true, text: opts.text };
 }

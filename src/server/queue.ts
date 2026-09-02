@@ -24,6 +24,20 @@ export async function getLiveRun(
   return row ?? null;
 }
 
+export async function liveRunsForSession(
+  sessionId: string,
+): Promise<Array<{ live: SeatLiveRun; binding: AgentBinding }>> {
+  const rows = await db
+    .select({
+      live: seatLiveRun,
+      binding: agentBinding,
+    })
+    .from(seatLiveRun)
+    .innerJoin(agentBinding, eq(seatLiveRun.bindingId, agentBinding.id))
+    .where(eq(seatLiveRun.sessionId, sessionId));
+  return rows;
+}
+
 export async function upsertLiveRun(params: {
   bindingId: string;
   sessionId: string;
@@ -164,6 +178,28 @@ export async function getQueueHead(
     .orderBy(asc(queuedUtterance.seq))
     .limit(1);
   return row ?? null;
+}
+
+/** Distinct addressees that still have waiting lines in this session. */
+export async function bindingsWithQueuedItems(
+  sessionId: string,
+): Promise<AgentBinding[]> {
+  const rows = await db
+    .select({
+      binding: agentBinding,
+    })
+    .from(queuedUtterance)
+    .innerJoin(agentBinding, eq(queuedUtterance.bindingId, agentBinding.id))
+    .where(eq(queuedUtterance.sessionId, sessionId))
+    .orderBy(asc(queuedUtterance.seq));
+  const seen = new Set<string>();
+  const out: AgentBinding[] = [];
+  for (const row of rows) {
+    if (seen.has(row.binding.id)) continue;
+    seen.add(row.binding.id);
+    out.push(row.binding);
+  }
+  return out;
 }
 
 export async function queueSnapshot(

@@ -3,7 +3,9 @@ import { test } from "node:test";
 import {
   groupQueueSeats,
   headItem,
+  isDrainableSeat,
   queuedBlockLabel,
+  shouldHarvestStoredRun,
   shouldQueueForSeat,
   waitingChipLabel,
 } from "./queue-logic";
@@ -77,6 +79,31 @@ test("queue is per-seat and only when Cursor still has an active run", () => {
   );
   assert.equal(
     shouldQueueForSeat({ hasLiveRow: false, cursorHasActiveRun: false }),
+    false,
+  );
+});
+
+test("harvest the stored run once it is idle, even if a newer follow-up is live", () => {
+  assert.equal(shouldHarvestStoredRun({ storedRunStatus: "idle" }), true);
+  assert.equal(shouldHarvestStoredRun({ storedRunStatus: "active" }), false);
+  assert.equal(
+    shouldHarvestStoredRun({ storedRunStatus: "unknown" }),
+    false,
+    "unknown ≠ idle — do not invent a post",
+  );
+});
+
+test("drain when the seat has a queue and Cursor is idle", () => {
+  assert.equal(
+    isDrainableSeat({ hasQueue: true, cursorHasActiveRun: false }),
+    true,
+  );
+  assert.equal(
+    isDrainableSeat({ hasQueue: true, cursorHasActiveRun: true }),
+    false,
+  );
+  assert.equal(
+    isDrainableSeat({ hasQueue: false, cursorHasActiveRun: false }),
     false,
   );
 });
