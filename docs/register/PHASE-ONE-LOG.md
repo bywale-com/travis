@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-01 15:00 UTC — **Lived proof:** “for the engineer” landed on PM. Routing gap confirmed.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-02 21:57 UTC — **U1/U2 considering.** PR 57: four shipped items plated (two screens). Dynamic seats = next pocket.
 
 **How we maintain this log**
 
@@ -1070,4 +1070,27 @@ Must-not still holds: do not steal `the engineer talking` in the middle of a sen
 **Founder (preserved):** the engineer for the engineer testing sound on test testing swoosh sound on talk mode for the engineer
 
 **Landed here.** This bind is still PM. Confirms: **`for the engineer` does not switch.** Swoosh/Talk sound is Engineer glass if it failed — this chat cannot plant it.
+
+---
+
+## 2026-09-02 21:57 UTC — PR 57: plates for shipped glass (founder)
+
+**Kind:** Type B. Considering. Answer to Engineer envelope [#57](https://github.com/bywale-com/travis/pull/57). Not a packet.
+
+**Founder (preserved):** Based on PR 57 I suspect some plates need to be generated.
+
+**Ruled:**
+
+| Item | Plate |
+|------|--------|
+| Narration (receipt, not speech) | **U1** |
+| Queue in actual use | **U1** log + **U2** voice |
+| Jump to latest | **U1** (same screen) |
+| Travis Live is down — phone ear. | **U2** (same screen) |
+
+**Dynamic seats:** next pocket. Glass stays three. SA still owns the membership field. Enter/Leave, join/leave, cost, confirmation glass — not this round.
+
+**Landed:** [`UNPLATED-SHIPPED-FACE.md`](UNPLATED-SHIPPED-FACE.md) · [`plates/travis-u1-log-narration-queue.png`](plates/travis-u1-log-narration-queue.png) · [`plates/travis-u2-voice-ear-queue.png`](plates/travis-u2-voice-ear-queue.png).
+
+**Ask:** like U1/U2 enough to packet? Narration stays quieter than a Travis bubble?
 
