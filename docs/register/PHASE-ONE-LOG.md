@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-02 23:00 UTC — **Plate audit before kickoff.** 13 to print. Envelope #57 covered. V7 Type added for N-seat `@`. No images.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-02 23:10 UTC — **13 still.** Engineer half-day confirms. Leave on the room header. Dispatch rides V6. Kickoff open.
 
 **How we maintain this log**
 
@@ -1204,4 +1204,12 @@ Engineer source landed under `docs/register/plates/travis-eng-*.png`.
 **Kind:** Audit addendum. Not a packet. **No images.**
 
 SA bind today had no Mission/Carbon/rooms face talk. One stated gap the 13 must still show: **images in the thread, in order** (flagship). Not built. Rides V5/V7. Still 13 plates. “Who was that for?” unused — no plate this pass.
+
+---
+
+## 2026-09-02 23:10 UTC — Engineer half-day confirms 13
+
+**Kind:** Audit addendum. **No images.**
+
+Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tightenings, not new IDs: Leave is on the **room** header (V5/K2), V1 is where it lands; V5/V7 drawn **unbounded**; quiet don’t-wait rides **V6** (003 barge ≠ dispatch). Confirm / cost / delete / notify stay out.
 

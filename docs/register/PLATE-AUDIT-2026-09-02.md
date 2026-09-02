@@ -24,10 +24,10 @@ Plates show **what is on the phone now** plus **what we have already stated to p
 | Room face under N seats | **V5** (+ V5-C) | Via-pill, thought strip, queue, short codes. `@` menu is Type — see V7 below. |
 | Cost | **Out** | Spoken, or muted line on V4. Not a dashboard. |
 | work_in_flight | **V6** | Engineer named the gap, then left it off the candidate table. Keep. |
-| Manual dispatch | **Not a new button** | 003 barge is already “send without waiting” for a queued line. |
+| Manual dispatch | **Ride V6** | Travis `dispatch_to_seat` is planted; founder has no matching control. 003 barge is force-a-*queued*-line, not send-and-leave. Quiet “don’t wait” on the in-flight door — not a second hero on Voice. |
 | Delete agent | **Out** | Manual-only. Travis proposes; you execute. |
 | Narration / queue / Jump / phone ear | **Already U1/U2** | Must **ride** K0 + V5 + K2, not vanish. |
-| Leave vs End | **Ride V1** | Envelope asked. Not its own PNG. Quiet return to index ≠ End. |
+| Leave vs End | **Ride V5 / K2 header + V1 land** | Default **Leave** = detach; room and log stay. **End** is a separate loud wipe if we keep it. Not its own PNG. V1 is where Leave lands. |
 | Confirmation sheet | **Out** | Spoken (040). |
 | Notify-when-done | **Out** | 039 said not in the cut. Do not plate a notifier. |
 | Join/leave glass | **Ride V3** | |
@@ -114,8 +114,8 @@ Same merge. One add.
 6. **V2** create room
 7. **V3** roster
 8. **V4** create agent
-9. **V5** N-seat Talk log Mission (room name, narration receipt, Jump, queue, status line, thought strip)
-10. **V6** work in flight
+9. **V5** N-seat Talk log Mission — **unbounded** cast (not three-but-denser): room name, via-pill, short codes for new agents, thought strip, tints, narration receipt, Jump, queue, status line, image in thread. Header: Leave (quiet), End only if we keep wipe.
+10. **V6** work in flight — what’s running; quiet **don’t wait** (manual dispatch); you can Leave. No notify-on-land.
 11. **V1-C** index Carbon
 12. **V5-C** Talk log Carbon
 13. **V7** Type Mission — Talk\|Type, grown composer, unbounded `@`, format, narration receipt
