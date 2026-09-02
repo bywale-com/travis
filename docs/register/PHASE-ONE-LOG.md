@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-02 21:57 UTC — **U1/U2 considering.** PR 57: four shipped items plated (two screens). Dynamic seats = next pocket.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-02 22:35 UTC — **V-set text only.** Rooms + manual parity: six plates proposed, no images until green light. N seats this pocket. U1/U2 stay.
 
 **How we maintain this log**
 
@@ -1093,4 +1093,37 @@ Must-not still holds: do not steal `the engineer talking` in the middle of a sen
 **Landed:** [`UNPLATED-SHIPPED-FACE.md`](UNPLATED-SHIPPED-FACE.md) · [`plates/travis-u1-log-narration-queue.png`](plates/travis-u1-log-narration-queue.png) · [`plates/travis-u2-voice-ear-queue.png`](plates/travis-u2-voice-ear-queue.png).
 
 **Ask:** like U1/U2 enough to packet? Narration stays quieter than a Travis bubble?
+
+---
+
+## 2026-09-02 22:35 UTC — Rooms + manual: plate list in text (founder)
+
+**Kind:** Type B. Considering. **No images.** Answer to the revised Engineer envelope [#57](https://github.com/bywale-com/travis/pull/57). Not a packet.
+
+**Founder (preserved; STT):** The engineer underspeced the envelope. What we’re introducing on this new pass is a real change — rooms, and so many other things, so many additions. A couple more plates are definitely justified. Before you do that — we’re also trying to extend what we can do manually, not just leave certain things for Travis. These justify new plates. I want to see what you would generate in terms of plates first. Like, I’m gonna generate a plate about this, this, and that, and then another one about this, this, and that. I wanna see it in text form first before image, so I can give you the green light for the image.
+
+**Ruled (this stamp — text plan only):**
+
+The first envelope asked about four shipped hotfix lines. That was under the room. This pass is the level above + nothing-is-Travis-only (effect parity, not surface parity; labor is not an effect).
+
+**U1/U2 stay.** They still answer the four shipped items. **L1 already is the index** — recut as V1, don’t invent a third land.
+
+**This pocket (six, if green-lit):**
+
+| ID | Screen | What’s on it |
+|----|--------|----------------|
+| **V1** | Room index (recut L1) | Rooms that exist · last-used quiet selected · quiet door to create |
+| **V2** | Create a room | Name · who is in at birth · one loud Create |
+| **V3** | Roster (door) | Who is in · add/remove by hand · not always-on on Voice |
+| **V4** | Create an agent | Model / repo / starting-ref pickers · the spend · no forever-delete |
+| **V5** | N-seat Talk log | More than three · via-pill · thought strip · narration receipt may ride |
+| **V6** | Work in flight (door) | What’s running · you can leave · no second barge button |
+
+**Reverses** 21:57 “dynamic seats = next pocket.” N seats are in, because this *is* the rooms change.
+
+**Not this pass unless you insist:** cost as its own screen · confirmation sheet · Summarize · delete-agent trash · T-set as of-record · Voice+Type on one PNG. Optional **V5b** (Type + unbounded `@`) only if you ask.
+
+**Landed (text):** [`V-ROOMS-MANUAL-PROPOSAL.md`](V-ROOMS-MANUAL-PROPOSAL.md).
+
+**Ask:** green-light which to print? Recut L1→V1 or new file? C look or T-set? Leave vs End this pocket? V5b this pass?
 
