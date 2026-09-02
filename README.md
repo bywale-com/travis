@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-02** · Hotfix 036 · [PR #51](https://github.com/bywale-com/travis/pull/51) — Saying “Travis” in Voice hands the ear to Live instead of silently staying on Web Speech, because `armEar` read the dest from a ref React had not re-rendered yet and then bailed on a guard that asked `whichEar` — which cannot answer “want Live” until Live is already up.
 - **2026-09-02** · Hotfix 035 · [PR #50](https://github.com/bywale-com/travis/pull/50) — Scrolling up in the log stays put while turns keep landing, because the thread followed the newest turn on every poll and every streamed token with no check for where you were reading.
 - **2026-09-02** · Hotfix 034 · [PR #49](https://github.com/bywale-com/travis/pull/49) — Travis and seat readback use a male voice when the engine has one, because Live was pinned to marin and the phone default was usually female.
 - **2026-09-01** · Hotfix 033 · [PR #48](https://github.com/bywale-com/travis/pull/48) — Saying Travis in Talk keeps what you already said, because the vocative-off-Live path always cleared the draft and treated a trailing name as switch-only.

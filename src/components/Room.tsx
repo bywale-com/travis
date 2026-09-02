@@ -19,6 +19,7 @@ import {
   sttOnEndAction,
   sttShouldKeepWaiting,
   whichEar,
+  sttAlreadySatisfies,
   STT_ONEND_RETRY_MS,
   type EarState,
 } from "@/lib/ear";
@@ -1161,14 +1162,19 @@ export function Room({ t }: { t: Tokens }) {
             .then((r) => r.json())
             .then((data: { destTravis?: boolean; activeLabel?: string; activeSeatKey?: string }) => {
               if (data.activeLabel) {
+                const activeLabel = String(data.activeLabel);
+                const activeSeatKey = String(data.activeSeatKey ?? "travis");
+                // armEar below reads the ref this same tick, before React
+                // re-renders and line ~261 syncs it from state.
+                if (sessionRef.current) {
+                  sessionRef.current = {
+                    ...sessionRef.current,
+                    activeLabel,
+                    activeSeatKey,
+                  };
+                }
                 setSession((s) =>
-                  s
-                    ? {
-                        ...s,
-                        activeLabel: String(data.activeLabel),
-                        activeSeatKey: String(data.activeSeatKey ?? "travis"),
-                      }
-                    : s,
+                  s ? { ...s, activeLabel, activeSeatKey } : s,
                 );
               }
               if (keep) {
@@ -1335,7 +1341,14 @@ export function Room({ t }: { t: Tokens }) {
       liveUp: Boolean(liveRef.current),
     });
 
-    if (want === "stt" && recognitionLiveRef.current && recognitionRef.current) {
+    if (
+      sttAlreadySatisfies({
+        viewMode: viewModeRef.current,
+        logSubmode: logSubmodeRef.current,
+        destTravis,
+        recLive: Boolean(recognitionLiveRef.current && recognitionRef.current),
+      })
+    ) {
       return;
     }
 
@@ -1362,6 +1375,7 @@ export function Room({ t }: { t: Tokens }) {
       const ok = await connectLive(sid);
       if (gen !== armEarGenRef.current) return;
       if (ok) return;
+      setSubtitle("Travis Live is down — phone ear. Say “I’m done”.");
     }
 
     startRecognitionRef.current();

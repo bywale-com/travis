@@ -22,6 +22,28 @@ export function whichEar(opts: EarState): EarKind {
 }
 
 /**
+ * Hotfix 036 — the ear we should be arming, ignoring whether Live happens to
+ * be connected yet. `whichEar` reports the ear you have; asking it what to arm
+ * is circular, because Voice + dest Travis always reads "stt" until Live is
+ * already up, and nothing ever brings Live up.
+ */
+export function wantedEar(opts: Omit<EarState, "liveUp">): EarKind {
+  if (opts.viewMode === "log" && opts.logSubmode === "type") return "none";
+  if (opts.viewMode === "voice" && opts.destTravis) return "live";
+  return "stt";
+}
+
+/**
+ * A running recognizer is reason to leave the mic alone only when STT is the
+ * ear we wanted. In Voice + dest Travis it is a fallback to be replaced.
+ */
+export function sttAlreadySatisfies(
+  opts: Omit<EarState, "liveUp"> & { recLive: boolean },
+): boolean {
+  return opts.recLive && wantedEar(opts) === "stt";
+}
+
+/**
  * Talk and Voice dest Engineer (and dest Travis Talk) share Web Speech.
  * Switching those views must not abort the recognizer — Chrome will not
  * give the mic back until refresh.

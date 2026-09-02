@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **036**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **037**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -46,3 +46,4 @@
 | 033 | [`HOTFIX-033-TRAVIS-DRAFT-WIPE.md`](./HOTFIX-033-TRAVIS-DRAFT-WIPE.md) | Saying Travis in Talk must not wipe the draft |
 | 034 | [`HOTFIX-034-MALE-VOICE.md`](./HOTFIX-034-MALE-VOICE.md) | Male mouth when the engine has one — cedar on Live, named male on readback |
 | 035 | [`HOTFIX-035-THREAD-SCROLL-PIN.md`](./HOTFIX-035-THREAD-SCROLL-PIN.md) | The log holds still when you scroll up to read |
+| 036 | [`HOTFIX-036-VOCATIVE-LIVE-ARM.md`](./HOTFIX-036-VOCATIVE-LIVE-ARM.md) | Saying Travis in Voice actually hands the ear to Live |
