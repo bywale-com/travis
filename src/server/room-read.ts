@@ -62,6 +62,35 @@ export async function lastSeatPost(
   return row?.text ?? null;
 }
 
+/**
+ * Hotfix 040 — the same line to the same seat, seconds apart, is a mistake.
+ * The room log is the record of what already went out, so no new store is
+ * needed to notice it. Returns how long ago, or null.
+ */
+export async function recentDuplicateSend(params: {
+  sessionId: string;
+  seatKey: string;
+  text: string;
+  windowMs: number;
+}): Promise<number | null> {
+  const [row] = await db
+    .select({ text: voiceTurn.text, createdAt: voiceTurn.createdAt })
+    .from(voiceTurn)
+    .where(
+      and(
+        eq(voiceTurn.sessionId, params.sessionId),
+        eq(voiceTurn.seatKey, params.seatKey),
+        eq(voiceTurn.kind, "user"),
+        eq(voiceTurn.text, params.text),
+      ),
+    )
+    .orderBy(desc(voiceTurn.seq))
+    .limit(1);
+  if (!row) return null;
+  const ageMs = Date.now() - new Date(row.createdAt).getTime();
+  return ageMs <= params.windowMs ? Math.max(1, Math.round(ageMs / 1000)) : null;
+}
+
 export async function runningNotes(sessionId: string) {
   const runs = await liveRunsForSession(sessionId);
   const now = Date.now();

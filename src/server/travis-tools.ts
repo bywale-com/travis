@@ -18,7 +18,18 @@ import { bargeQueuedItem, sendOrEnqueue } from "@/server/seat-pipe";
 import { dispatchReceipt, inFlightReport, sendReceipt } from "@/lib/tool-receipt";
 import { dispatchToSeat } from "@/server/dispatch";
 import { READ_CAP, shouldSummarize, type ReadForm } from "@/lib/room-context";
-import { lastSeatPost } from "@/server/room-read";
+import {
+  dedupeWindowFor,
+  duplicateRefusal,
+  guardToolCall,
+} from "@/lib/tool-policy";
+import { narrateToolCall } from "@/lib/tool-narration";
+import {
+  lastSeatPost,
+  recentDuplicateSend,
+  runningNotes,
+} from "@/server/room-read";
+import { insertAgentPostTurn } from "@/server/seat-pipe";
 import { summarizeSeatReply } from "@/server/travis-summarize";
 
 export const TRAVIS_TOOL_DECLS = [
@@ -103,8 +114,12 @@ export const TRAVIS_TOOL_DECLS = [
   },
   {
     name: "end_session",
-    description: "End this room.",
-    parameters: { type: "object", properties: {} },
+    description:
+      "End this room. This cannot be undone. Call it once with no confirm to be told what it will do, tell the founder, and only call again with confirm true after they have said yes to ending the room.",
+    parameters: {
+      type: "object",
+      properties: { confirm: { type: "boolean" } },
+    },
   },
 ];
 
@@ -120,12 +135,41 @@ async function bindingForCursorSeat(seat: string) {
   return row ?? null;
 }
 
+async function guardDuplicate(
+  sessionId: string,
+  toolName: string,
+  seat: string,
+  text: string,
+): Promise<ToolResult | null> {
+  const windowMs = dedupeWindowFor(toolName);
+  if (!windowMs) return null;
+  const seconds = await recentDuplicateSend({
+    sessionId,
+    seatKey: seat,
+    text,
+    windowMs,
+  }).catch(() => null);
+  if (seconds == null) return null;
+  return {
+    ok: false,
+    text: duplicateRefusal(seatKeyToLabel(seat as SeatKey), seconds),
+  };
+}
+
 export async function runTravisTool(params: {
   sessionId: string;
   name: string;
   args: Record<string, unknown>;
 }): Promise<ToolResult> {
   const { sessionId, name, args } = params;
+
+  const verdict = guardToolCall(name, args);
+  if (!verdict.allow) return { ok: false, text: verdict.reason };
+
+  const narration = narrateToolCall(name, args);
+  if (narration) {
+    await insertAgentPostTurn(sessionId, narration, "travis").catch(() => {});
+  }
 
   if (name === "list_seats") {
     const rows = await db
@@ -158,6 +202,8 @@ export async function runTravisTool(params: {
     }
     const binding = await bindingForCursorSeat(seat);
     if (!binding) return { ok: false, text: `No ${seat} binding.` };
+    const dupe = await guardDuplicate(sessionId, "send_to_seat", seat, text);
+    if (dupe) return dupe;
     const seatLabel = binding.label ?? seatKeyToLabel(seat as SeatKey);
     const startedAt = Date.now();
     let errored = false;
@@ -204,6 +250,8 @@ export async function runTravisTool(params: {
     }
     const binding = await bindingForCursorSeat(seat);
     if (!binding) return { ok: false, text: `No ${seat} binding.` };
+    const dupe = await guardDuplicate(sessionId, "dispatch_to_seat", seat, text);
+    if (dupe) return dupe;
     const outcome = await dispatchToSeat({ sessionId, binding, prompt: text });
     return {
       ok: outcome.status !== "error",
@@ -274,7 +322,19 @@ export async function runTravisTool(params: {
     if (!binding) return { ok: false, text: `No ${seat} binding.` };
     const snap = await queueSnapshot(sessionId);
     const head = snap.seats.find((s) => s.seatKey === seat)?.items[0];
-    if (!head) return { ok: true, text: "Nothing waiting on that seat." };
+    if (!head) {
+      // "Nothing waiting" answered a different question than the one asked
+      // whenever that seat was mid-run. Say which it is.
+      const running = await runningNotes(sessionId);
+      const live = running.find((r) => r.seatLabel === seatKeyToLabel(seat as SeatKey));
+      if (live) {
+        return {
+          ok: true,
+          text: `Nothing is waiting on ${live.seatLabel} — it is running a job right now (${Math.round(live.elapsedMs / 1000)}s in). Barge only moves waiting lines; it cannot stop a run.`,
+        };
+      }
+      return { ok: true, text: "Nothing waiting on that seat, and nothing running." };
+    }
     if (action === "delete") {
       await deleteQueuedItem(sessionId, head.id);
       return { ok: true, text: "Dropped the waiting line." };

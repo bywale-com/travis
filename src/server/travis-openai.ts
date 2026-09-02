@@ -149,5 +149,8 @@ export async function generateTravisText(params: {
       tools,
     };
   }
-  return "";
+  // Hotfix 040 — this used to return "", which the reply path rendered as a
+  // bare "…". A silent give-up after real work started is the worst answer
+  // available; say what happened.
+  return "I ran out of tool steps on that one, so I stopped there. Anything I already started is still running — ask me what is in flight.";
 }
