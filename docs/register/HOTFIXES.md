@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **034**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **036**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -44,3 +44,5 @@
 | 031 | [`HOTFIX-031-AUDIBLE-SEND-SOUNDS.md`](./HOTFIX-031-AUDIBLE-SEND-SOUNDS.md) | Send swoosh and queue cue actually play on the phone |
 | 032 | [`HOTFIX-032-HARVEST-DEAD-STREAM.md`](./HOTFIX-032-HARVEST-DEAD-STREAM.md) | When the Cursor SSE dies, pull the finished run into the log and drop “is still running” |
 | 033 | [`HOTFIX-033-TRAVIS-DRAFT-WIPE.md`](./HOTFIX-033-TRAVIS-DRAFT-WIPE.md) | Saying Travis in Talk must not wipe the draft |
+| 034 | [`HOTFIX-034-MALE-VOICE.md`](./HOTFIX-034-MALE-VOICE.md) | Male mouth when the engine has one — cedar on Live, named male on readback |
+| 035 | [`HOTFIX-035-THREAD-SCROLL-PIN.md`](./HOTFIX-035-THREAD-SCROLL-PIN.md) | The log holds still when you scroll up to read |

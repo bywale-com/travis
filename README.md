@@ -4,6 +4,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-02** · Hotfix 035 · [PR #50](https://github.com/bywale-com/travis/pull/50) — Scrolling up in the log stays put while turns keep landing, because the thread followed the newest turn on every poll and every streamed token with no check for where you were reading.
+- **2026-09-02** · Hotfix 034 · [PR #49](https://github.com/bywale-com/travis/pull/49) — Travis and seat readback use a male voice when the engine has one, because Live was pinned to marin and the phone default was usually female.
 - **2026-09-01** · Hotfix 033 · [PR #48](https://github.com/bywale-com/travis/pull/48) — Saying Travis in Talk keeps what you already said, because the vocative-off-Live path always cleared the draft and treated a trailing name as switch-only.
 - **2026-09-01** · Hotfix 032 · [PR #47](https://github.com/bywale-com/travis/pull/47) — When a seat finishes in Cursor after Travis’s stream dies, the log still gets the post and stops saying they are running, because the serverless SSE ended before any `post_delta` and the leftover live-run never harvested that run.
 - **2026-09-01** · Hotfix 031 · [PR #46](https://github.com/bywale-com/travis/pull/46) — You hear a whoosh when a turn sends and two notes when it queues, because 030’s Web Audio ran after the SSE and the phone muted it.
