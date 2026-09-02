@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **044**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **045**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -54,3 +54,4 @@
 | 041 | [`HOTFIX-041-TOOL-NARRATION.md`](./HOTFIX-041-TOOL-NARRATION.md) | Travis says what it is about to do, in the log, never aloud |
 | 042 | [`HOTFIX-042-CAPABILITY-BOUNDARY.md`](./HOTFIX-042-CAPABILITY-BOUNDARY.md) | Travis is told it cannot see the repo, a diff, tests or CI |
 | 043 | [`HOTFIX-043-RETURN-TO-VOICE-LIVE.md`](./HOTFIX-043-RETURN-TO-VOICE-LIVE.md) | Coming back to Voice re-arms Live instead of keeping the recognizer |
+| 044 | [`HOTFIX-044-VISUAL-LAW.md`](./HOTFIX-044-VISUAL-LAW.md) | Mission/Carbon tokens, Orbitron wordmark, unbounded seat marks, receipt and error kinds |

@@ -2,7 +2,10 @@
 
 :root {
   --travis-font: "Segoe UI", "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
-  --travis-accent: #E07A3D;
+  /* Orbitron, and only where the TRAVIS logo appears. Never body copy. */
+  --travis-logo: var(--travis-wordmark), "Eurostile Extended", "Michroma",
+    ui-sans-serif, system-ui, sans-serif;
+  --travis-accent: #7B2233;
 }
 
 html,

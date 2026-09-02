@@ -263,13 +263,15 @@ export async function insertAgentPostTurn(
   text: string,
   seatKey: SeatKey,
   referenceTurnId?: string | null,
+  /** 041 narration is a receipt, not speech. It shows, it is never read. */
+  speakable = true,
 ): Promise<VoiceTurn> {
   return insertTurn(sessionId, {
     role: "assistant",
     kind: "agent_post",
     seatKey,
     referenceTurnId: referenceTurnId ?? undefined,
-    speakable: true,
+    speakable,
     text,
   });
 }

@@ -33,6 +33,7 @@ import { AgentPostBody } from "@/components/AgentPostBody";
 import { LogComposer, type RoomSeat } from "@/components/LogComposer";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
+import { TYPE } from "@/theme/scale";
 import type { SeatKey } from "@/server/db/schema";
 import { Button, Tag } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -1636,14 +1637,15 @@ export function Room({ t }: { t: Tokens }) {
       >
         <h1
           style={{
-            fontSize: 44,
-            fontWeight: 400,
-            fontFamily: "var(--travis-serif), Georgia, serif",
+            fontSize: TYPE.display,
+            fontWeight: 800,
+            fontFamily: "var(--travis-logo)",
+            letterSpacing: "0.14em",
             margin: 0,
             color: t.textPrimary,
           }}
         >
-          Travis
+          TRAVIS
         </h1>
         <p style={{ color: t.textSecondary, marginTop: 8, textAlign: "center", maxWidth: 280 }}>
           One room — talk with Travis. Agents post in the log; Travis reads.
@@ -1803,7 +1805,7 @@ export function Room({ t }: { t: Tokens }) {
                     }}
                     aria-label={`${seatKeyToShort(key)} thought`}
                   >
-                    <SeatMark seatKey={key} size={38} glow={!!active} />
+                    <SeatMark seatKey={key} label={roomSeats.find((s) => s.seatKey === key)?.label} t={t} size={38} glow={!!active} />
                   </button>
                 );
               })}
@@ -1993,6 +1995,8 @@ export function Room({ t }: { t: Tokens }) {
           >
             {turns
               .filter((turn) => {
+                // A run that errored is the one status worth showing.
+                if (turn.kind === "status") return /error/i.test(turn.text);
                 if (
                   turn.kind !== "user" &&
                   turn.kind !== "agent_post" &&
@@ -2012,6 +2016,46 @@ export function Room({ t }: { t: Tokens }) {
                 return true;
               })
               .map((turn) => {
+                // 041 narration: a tool acting, not Travis talking. Quiet
+                // line, no bubble, no seat mark.
+                if (
+                  turn.kind === "agent_post" &&
+                  turn.seatKey === "travis" &&
+                  turn.speakable === false
+                ) {
+                  return (
+                    <div
+                      key={turn.id}
+                      style={{
+                        alignSelf: "flex-start",
+                        maxWidth: "92%",
+                        color: t.receiptText,
+                        fontSize: TYPE.meta,
+                        fontStyle: "italic",
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {turn.text}
+                    </div>
+                  );
+                }
+
+                if (turn.kind === "status") {
+                  return (
+                    <div
+                      key={turn.id}
+                      style={{
+                        alignSelf: "center",
+                        color: t.dangerQuiet,
+                        fontSize: TYPE.meta,
+                        letterSpacing: 0.2,
+                      }}
+                    >
+                      {`${seatKeyToShort(turn.seatKey)} · run error`}
+                    </div>
+                  );
+                }
+
                 const isUser = turn.kind === "user";
                 const isPrompt = turn.kind === "travis_prompt";
                 const seat = turn.seatKey ?? (isPrompt ? "" : "pm");
@@ -2035,6 +2079,13 @@ export function Room({ t }: { t: Tokens }) {
                     {!isUser && (
                       <SeatMark
                         seatKey={isPrompt ? "travis" : seat || "pm"}
+                        label={
+                          roomSeats.find(
+                            (s) =>
+                              s.seatKey === (isPrompt ? "travis" : seat || "pm"),
+                          )?.label
+                        }
+                        t={t}
                         size={28}
                       />
                     )}
@@ -2158,6 +2209,16 @@ export function Room({ t }: { t: Tokens }) {
               >
                 <SeatMark
                   seatKey={sk === "_" ? (streamingSeat ?? session.activeSeatKey) : sk}
+                  label={
+                    roomSeats.find(
+                      (s) =>
+                        s.seatKey ===
+                        (sk === "_"
+                          ? (streamingSeat ?? session.activeSeatKey)
+                          : sk),
+                    )?.label
+                  }
+                  t={t}
                   size={28}
                   glow
                 />
