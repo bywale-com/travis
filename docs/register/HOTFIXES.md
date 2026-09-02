@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **037**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **038**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -47,3 +47,4 @@
 | 034 | [`HOTFIX-034-MALE-VOICE.md`](./HOTFIX-034-MALE-VOICE.md) | Male mouth when the engine has one — cedar on Live, named male on readback |
 | 035 | [`HOTFIX-035-THREAD-SCROLL-PIN.md`](./HOTFIX-035-THREAD-SCROLL-PIN.md) | The log holds still when you scroll up to read |
 | 036 | [`HOTFIX-036-VOCATIVE-LIVE-ARM.md`](./HOTFIX-036-VOCATIVE-LIVE-ARM.md) | Saying Travis in Voice actually hands the ear to Live |
+| 037 | [`HOTFIX-037-TRUTHFUL-TOOL-RECEIPTS.md`](./HOTFIX-037-TRUTHFUL-TOOL-RECEIPTS.md) | Tools tell Travis it blocked, how long, and what is in flight |
