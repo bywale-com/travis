@@ -15,7 +15,11 @@ import {
   queueSnapshot,
 } from "@/server/queue";
 import { bargeQueuedItem, sendOrEnqueue } from "@/server/seat-pipe";
-import { inFlightReport, sendReceipt } from "@/lib/tool-receipt";
+import { dispatchReceipt, inFlightReport, sendReceipt } from "@/lib/tool-receipt";
+import { dispatchToSeat } from "@/server/dispatch";
+import { READ_CAP, shouldSummarize, type ReadForm } from "@/lib/room-context";
+import { lastSeatPost } from "@/server/room-read";
+import { summarizeSeatReply } from "@/server/travis-summarize";
 
 export const TRAVIS_TOOL_DECLS = [
   {
@@ -41,6 +45,32 @@ export const TRAVIS_TOOL_DECLS = [
     name: "queue_snapshot",
     description: "Who is waiting on which Cursor seat.",
     parameters: { type: "object", properties: {} },
+  },
+  {
+    name: "dispatch_to_seat",
+    description:
+      "Start a line on PM, SA, or Engineer and return immediately without waiting for the run to finish. Use this whenever the founder wants several things sent, does not want you to wait, or wants you to stay available while a seat works. Nothing comes back from the seat here — call read_seat_reply once work_in_flight shows it finished. A seat runs one job at a time, so a second dispatch to the same seat queues behind the first.",
+    parameters: {
+      type: "object",
+      properties: {
+        seat: { type: "string", enum: ["pm", "sa", "engineer"] },
+        text: { type: "string" },
+      },
+      required: ["seat", "text"],
+    },
+  },
+  {
+    name: "read_seat_reply",
+    description:
+      "Read what PM, SA, or Engineer last said in this room. This is the only way you can see a seat's words — send_to_seat never returns them. Leave form off to get the gist of a long reply and the text of a short one; pass full to insist on the text.",
+    parameters: {
+      type: "object",
+      properties: {
+        seat: { type: "string", enum: ["pm", "sa", "engineer"] },
+        form: { type: "string", enum: ["auto", "gist", "full"] },
+      },
+      required: ["seat"],
+    },
   },
   {
     name: "work_in_flight",
@@ -166,6 +196,51 @@ export async function runTravisTool(params: {
     };
   }
 
+  if (name === "dispatch_to_seat") {
+    const seat = String(args.seat ?? "");
+    const text = String(args.text ?? "").trim();
+    if (!isCursorSeat(seat) || !text) {
+      return { ok: false, text: "Need a Cursor seat and some text." };
+    }
+    const binding = await bindingForCursorSeat(seat);
+    if (!binding) return { ok: false, text: `No ${seat} binding.` };
+    const outcome = await dispatchToSeat({ sessionId, binding, prompt: text });
+    return {
+      ok: outcome.status !== "error",
+      text: dispatchReceipt(outcome),
+      sentToEngineer: seat === "engineer",
+    };
+  }
+
+  if (name === "read_seat_reply") {
+    const seat = String(args.seat ?? "");
+    if (!isCursorSeat(seat)) return { ok: false, text: "Need a Cursor seat." };
+    const label = seatKeyToLabel(seat as SeatKey);
+    const body = await lastSeatPost(sessionId, seat);
+    if (!body?.trim()) {
+      return { ok: true, text: `${label} has not replied in this room yet.` };
+    }
+    const form = (["auto", "gist", "full"] as const).includes(
+      args.form as ReadForm,
+    )
+      ? (args.form as ReadForm)
+      : "auto";
+    if (!shouldSummarize(body.length, form)) {
+      return { ok: true, text: `${label} said: ${body.slice(0, READ_CAP)}` };
+    }
+    const gist = await summarizeSeatReply(body).catch(() => "");
+    if (!gist) {
+      return {
+        ok: true,
+        text: `${label} said (first ${READ_CAP} of ${body.length} characters): ${body.slice(0, READ_CAP)}`,
+      };
+    }
+    return {
+      ok: true,
+      text: `${label} said, in short (${body.length} characters in the log): ${gist}`,
+    };
+  }
+
   if (name === "work_in_flight") {
     const [runs, snap] = await Promise.all([
       liveRunsForSession(sessionId),
@@ -256,7 +331,15 @@ export const TRAVIS_SYSTEM = `You are Travis. You are in this room with the foun
 
 Answer the founder. Use tools when they ask you to send a line to a seat, glance the queue, barge/drop a waiting line, switch Voice/Log, or end the room.
 
-Report what the tools actually told you. send_to_seat blocks until that seat finishes, so several sends in one turn go one after the other — do not describe them as parallel or simultaneous. If you are asked what you are doing or why something is slow, call work_in_flight instead of guessing.
+You are shown a short room-state block with recent turns and what is running. Treat it as already true — do not ask the founder to repeat something that is in it. Seat replies appear there only as receipts; call read_seat_reply when you need what a seat actually said.
+
+Report what the tools actually told you.
+
+Two ways to send. send_to_seat blocks until that seat finishes and is right when the founder asked one thing and wants the answer in the same breath. dispatch_to_seat returns straight away and is right for everything else — several sends, "don't wait", or any time you should stay available while a seat works. Prefer dispatch when the founder is talking to you out loud.
+
+Several send_to_seat calls in one turn go one after the other; never describe them as parallel or simultaneous. A seat runs one job at a time, so two lines to the same seat are always sequential no matter which tool you use — say so plainly instead of promising parallelism you cannot deliver. Different seats do run at the same time when dispatched.
+
+If you are asked what you are doing or why something is slow, call work_in_flight instead of guessing.
 
 send_to_seat does not change who they are talking to. They stay with you.
 

@@ -16,6 +16,7 @@ import {
   TRAVIS_TOOL_DECLS,
   runTravisTool,
 } from "@/server/travis-tools";
+import { roomContextFor } from "@/server/room-read";
 
 export { TRAVIS_LIVE_MODEL, TRAVIS_TEXT_MODEL };
 
@@ -52,11 +53,14 @@ export async function mintLiveToken(sessionId: string): Promise<{
 } | null> {
   const key = openaiKey();
   if (!key) return null;
+  // Live grows its own conversation, but it starts blank on every connect —
+  // including a reconnect after a drop. Seed it with the room.
+  const room = await roomContextFor(sessionId).catch(() => "");
   const res = await openaiFetch(
     "/v1/realtime/client_secrets",
     {
       session: realtimeSessionConfig({
-        instructions: TRAVIS_SYSTEM,
+        instructions: room ? `${TRAVIS_SYSTEM}\n\n${room}` : TRAVIS_SYSTEM,
         tools: TRAVIS_TOOL_DECLS,
       }),
     },
@@ -91,10 +95,14 @@ export async function generateTravisText(params: {
   const key = openaiKey();
   if (!key) return "";
   const tools = toRealtimeTools(TRAVIS_TOOL_DECLS);
+  // Talk has no conversation of its own: every message is a first message.
+  // The window is the only thing standing between it and confabulation. It
+  // goes in `input`, not `instructions`, so the cached prefix stays stable.
+  const room = await roomContextFor(params.sessionId).catch(() => "");
   let body: Record<string, unknown> = {
     model: TRAVIS_TEXT_MODEL,
     instructions: TRAVIS_SYSTEM,
-    input: params.prompt,
+    input: room ? `${room}\n\n${params.prompt}` : params.prompt,
     tools,
     reasoning: { effort: "low" },
   };

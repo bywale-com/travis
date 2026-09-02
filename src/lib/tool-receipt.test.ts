@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  dispatchReceipt,
   elapsedPhrase,
   inFlightReport,
   sendReceipt,
@@ -95,5 +96,37 @@ test("in-flight is honest about an idle room", () => {
   assert.equal(
     inFlightReport([], [{ seatLabel: "PM", count: 0 }]),
     "Nothing running. Nothing waiting.",
+  );
+});
+
+/** Hotfix 039 — dispatch must not imply an answer came back. */
+test("a started dispatch says nothing came back yet", () => {
+  const text = dispatchReceipt({ status: "started", seatLabel: "Engineer" });
+  assert.match(text, /Engineer is now running it/);
+  assert.match(text, /Nothing came back yet/);
+  assert.equal(/finished|replied/.test(text), false);
+});
+
+test("a queued dispatch names the depth and says it has not gone", () => {
+  assert.match(
+    dispatchReceipt({ status: "queued", seatLabel: "SA", waitingAhead: 1 }),
+    /behind 1 already waiting/,
+  );
+  assert.match(
+    dispatchReceipt({ status: "queued", seatLabel: "SA", waitingAhead: 0 }),
+    /busy right now/,
+  );
+});
+
+test("an unwired seat is not reported as running", () => {
+  const text = dispatchReceipt({ status: "stand-in", seatLabel: "PM" });
+  assert.match(text, /not wired/);
+  assert.equal(/running it/.test(text), false);
+});
+
+test("a failed dispatch carries the reason", () => {
+  assert.match(
+    dispatchReceipt({ status: "error", seatLabel: "PM", error: "boom" }),
+    /Could not start PM: boom/,
   );
 });
