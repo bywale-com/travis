@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-02 22:40 UTC — **White/red = T-set Paper.** Modes same pass as V. No new images yet.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-02 22:50 UTC — **Mission + Carbon.** Two modes. T-set red/white renamed Mission. Engineer Carbon kept. Neon and Engineer Paper parked. Text restatement; no new images.
 
 **How we maintain this log**
 
@@ -1152,4 +1152,26 @@ C3/C4 are the other light look — cream / terracotta Ant, serif Travis. Of reco
 **Ruled this stamp:** V plates, if printed, use **T-set Paper**. Modes in the same pass. Do not print six × three. Voice in Ink/Volt already exists (T3/T4). Extra only if the new rooms screens need to exist in all three: V1 + V5 in Ink and Volt.
 
 **Ask:** confirm these T plates are the white/red you meant? Print V in Paper, and also V1+V5 in Ink/Volt?
+
+---
+
+## 2026-09-02 22:50 UTC — Mission + Carbon: merge restatement (founder)
+
+**Kind:** Type B. Considering. **No new images.** Founder merged T-set with Engineer plates they attached.
+
+**Founder (preserved; STT cleaned):** The engineer generated these as well. Here is the merge between the T-set plates and the engineer plates. T-set color replaces the engineer’s Paper — theirs is blue and white; ours is red and white. Three modes: use your Paper; I don’t care about neon — keep two modes for now. Paper I’m changing to **Mission** because red and white screams mission. **Carbon** is the dark mode with the orange. The T-set logo font is Travis’s font for the logo; replicate that across the plates. Body copy you already share a similar sans — Montserrat / Poppins / whatever, that’s fine. The engineer generated a whole design board — icons, shapes, type, size. Across modes the only thing that changes is font color / tokens. Everything else stays the same: icons, placements, plates. Use your Travis logo font, rename Paper to Mission. Keep engineer Paper (blue/white) as unused. Two modes: Mission and Carbon. Restate back exactly what you’re doing, how, and what plates you’re generating — in text.
+
+**Ruled (this stamp — restatement only):**
+
+Two modes: **Mission** (T-set Paper, renamed) · **Carbon** (Engineer dark + orange). Neon / Volt parked. Engineer Paper (blue/white) parked — not a mode.
+
+One geometry. Tokens only across modes. TRAVIS wordmark = T-set wide grotesque. Kit / icons / type scale / 4pt spacing = Engineer Kit 03.
+
+**Would generate (12):** K0 kit · K1 mode door (two characters) · K2 voice states Mission · K3 voice states Carbon · V1–V6 Mission · V1-C + V5-C Carbon.
+
+Engineer source landed under `docs/register/plates/travis-eng-*.png`.
+
+**Landed (text):** [`MISSION-CARBON-MERGE.md`](MISSION-CARBON-MERGE.md).
+
+**Ask:** this restatement — yes? Print 12, drop any, or add Type twins?
 

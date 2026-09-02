@@ -1,7 +1,7 @@
 # Rooms + manual parity — plate proposal (text only)
 
 **Status:** Considering. **No new V images yet.** Founder asked to see the set in text before a green light to print.  
-**Look if printed:** **T-set — Paper first** (bone page · carbon · oxblood). That is the white-and-red Travis they asked for. Modes **Paper / Ink / Volt** in the same pass. Does **not** recut C3/C4 (cream/terracotta, of record for 003).  
+**Look if printed:** superseded by [`MISSION-CARBON-MERGE.md`](./MISSION-CARBON-MERGE.md) — **Mission** (T-set red/white, renamed) + **Carbon** (Engineer dark + orange). Two modes. Neon and Engineer Paper parked. Does **not** recut C3/C4.  
 **Where the white-and-red mocks already are:** [`TRAVIS-SYSTEM-FACE.md`](./TRAVIS-SYSTEM-FACE.md) · T0–T6 under `docs/register/plates/travis-t*.png` · living glass [PR #15](https://github.com/bywale-com/travis/pull/15) (not on `main`).  
 **Does not replace:** U1/U2 (shipped hotfix glass, C look). Those stay.  
 **Reverses:** U1/U2 “dynamic seats = next pocket.” This pass is the rooms change. N seats come in.  
