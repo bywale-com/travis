@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-02 22:50 UTC — **Mission + Carbon.** Two modes. T-set red/white renamed Mission. Engineer Carbon kept. Neon and Engineer Paper parked. Text restatement; no new images.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-02 23:00 UTC — **Plate audit before kickoff.** 13 to print. Envelope #57 covered. V7 Type added for N-seat `@`. No images.
 
 **How we maintain this log**
 
@@ -1174,4 +1174,26 @@ Engineer source landed under `docs/register/plates/travis-eng-*.png`.
 **Landed (text):** [`MISSION-CARBON-MERGE.md`](MISSION-CARBON-MERGE.md).
 
 **Ask:** this restatement — yes? Print 12, drop any, or add Type twins?
+
+---
+
+## 2026-09-02 23:00 UTC — Plate audit before kickoff (founder)
+
+**Kind:** Type B research. **No images.** Founder: subscribe to the 12, but cross-check planted + stated + PR 57 + Engineer’s recent half-day first.
+
+**Founder (preserved):** Ensure what you’re generating, in terms of components, is up-to-date on what exists right now, because you’re generating plates that contain what exists right now, but also what is to be planted — it has to be something we’ve already stated. I subscribe to these plates. Don’t leave anything out, especially the recent envelope in PR 57. Do that first. Cross-check. Look through the engineer’s recent transcripts, most recent to halfway through today. Then come back and I’ll give you the kickoff.
+
+**Looked at:** [#57](https://github.com/bywale-com/travis/pull/57) envelope · `origin/main` HOTFIX 034–043 · planted Room chrome · Engineer bind events today (034 → 057) · SA bind had no face PR today.
+
+**Ruled:**
+
+- Envelope six + work_in_flight stay. Cost / confirm / delete / Neon stay out.
+- Manual dispatch is **003 barge**, not a new button. Notify-on-land is **out** (039).
+- **Add V7 Type, Mission** — N-seat `@` is on the envelope and is Type.
+- Rides, not new PNGs: room name on V5 header · empty index + Leave≠End on V1 · narration never aloud (041) · Jump (035) · phone ear (036) · 027 status muted line (open PR, stated) · kit kinds updated.
+- 034 no voice picker. 042 no capability badge.
+
+**Landed:** [`PLATE-AUDIT-2026-09-02.md`](PLATE-AUDIT-2026-09-02.md). Print list is **13**.
+
+**Ask:** kickoff on 13? Drop V7? Empty + Leave on V1 same PNG?
 

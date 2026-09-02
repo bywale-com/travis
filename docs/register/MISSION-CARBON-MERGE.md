@@ -102,17 +102,18 @@ Same six as the V list. Printed in **Mission**. Recut into this system — not C
 
 Not all six × two. Voice already has K2/K3. Index + log prove the rooms level exists in both characters.
 
-### Optional (only if you say so)
+### Type (added after the #57 audit)
 
-**V7 — Type, Mission** and **V7-C — Type, Carbon** — Engineer’s Type chrome (Talk\|Type, `@` chips) in both tokens. D3 already locked Type law; these would only restyle it. I would not print them unless you ask.
+**V7 — Type, Mission.**  
+Unbounded `@` is on the envelope’s N-seat list. That is Type, not Talk. D3 is four titles. One Mission Type plate: Talk\|Type, grown composer, `@` that scrolls, format, narration receipt. Engineer Carbon Type already exists as source — no V7-C unless you ask.
 
 ---
 
 ## Count
 
-**12 plates** if you green-light the set: K0 · K1 · K2 · K3 · V1–V6 · V1-C · V5-C.
+**13 plates** after audit: K0 · K1 · K2 · K3 · V1–V6 · V1-C · V5-C · **V7**.
 
-**14** if Type rides.
+See [`PLATE-AUDIT-2026-09-02.md`](./PLATE-AUDIT-2026-09-02.md) for rides (room name, Jump, phone ear, 027 status, Leave ≠ End).
 
 ---
 
