@@ -52,7 +52,7 @@ test("realtimeSessionConfig pins audio out and tools", () => {
   });
   assert.equal(cfg.type, "realtime");
   assert.equal(cfg.model.startsWith("gpt-realtime"), true);
-  assert.equal(cfg.audio.output.voice, "marin");
+  assert.equal(cfg.audio.output.voice, "cedar");
   assert.equal(cfg.tools[0].name, "end_session");
 });
 
