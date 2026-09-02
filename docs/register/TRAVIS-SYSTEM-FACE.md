@@ -62,3 +62,4 @@ Voice is plated in all three modes so the modes are real. Land + log only in Pap
 - Like T0–T6 enough to become the look of record (packet), or recut which screens?
 - Default mode: Paper?
 - Graphik-class: keep the width, pick an open grotesque later — SA/Engineer don’t hard-code a paid font.
+- **2026-09-02:** Founder asked where the white-and-red mocks are — this set (Paper column). Modes may ride the V rooms plates in the same pass. See [`V-ROOMS-MANUAL-PROPOSAL.md`](./V-ROOMS-MANUAL-PROPOSAL.md).

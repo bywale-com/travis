@@ -1,8 +1,9 @@
 # Rooms + manual parity — plate proposal (text only)
 
-**Status:** Considering. **No images yet.** Founder asked to see the set in text before a green light to print.  
-**Look if printed:** planted cream / terracotta (C), unless you say use the T-set. Does **not** recut C3/C4.  
-**Does not replace:** U1/U2 (shipped hotfix glass). Those stay.  
+**Status:** Considering. **No new V images yet.** Founder asked to see the set in text before a green light to print.  
+**Look if printed:** **T-set — Paper first** (bone page · carbon · oxblood). That is the white-and-red Travis they asked for. Modes **Paper / Ink / Volt** in the same pass. Does **not** recut C3/C4 (cream/terracotta, of record for 003).  
+**Where the white-and-red mocks already are:** [`TRAVIS-SYSTEM-FACE.md`](./TRAVIS-SYSTEM-FACE.md) · T0–T6 under `docs/register/plates/travis-t*.png` · living glass [PR #15](https://github.com/bywale-com/travis/pull/15) (not on `main`).  
+**Does not replace:** U1/U2 (shipped hotfix glass, C look). Those stay.  
 **Reverses:** U1/U2 “dynamic seats = next pocket.” This pass is the rooms change. N seats come in.  
 **Log:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md)  
 **Envelope:** Engineer [#57](https://github.com/bywale-com/travis/pull/57) — first pass too small; revision named the level above the room + nothing-is-Travis-only.
@@ -117,9 +118,33 @@ Each is its own screen. Consolidate only what is legal on that screen. Do not fa
 
 ---
 
+## Look + modes (same pass)
+
+The white-and-red mocks are **Paper** in the T-set, not the C cream/terracotta.
+
+| ID | File | What it is |
+|----|------|------------|
+| **T0** | [`plates/travis-t0-system-three-modes.png`](./plates/travis-t0-system-three-modes.png) | System board — Paper (white/red) · Ink · Volt |
+| **T1** | [`plates/travis-t1-land-paper.png`](./plates/travis-t1-land-paper.png) | First land · Paper |
+| **T2** | [`plates/travis-t2-voice-paper.png`](./plates/travis-t2-voice-paper.png) | Voice · Paper — the loud white/red one |
+| **T3** | [`plates/travis-t3-voice-ink.png`](./plates/travis-t3-voice-ink.png) | Voice · Ink |
+| **T4** | [`plates/travis-t4-voice-volt.png`](./plates/travis-t4-voice-volt.png) | Voice · Volt |
+| **T5** | [`plates/travis-t5-log-talk-paper.png`](./plates/travis-t5-log-talk-paper.png) | Log Talk · Paper |
+| **T6** | [`plates/travis-t6-log-type-paper.png`](./plates/travis-t6-log-type-paper.png) | Log Type · Paper |
+
+FACE: [`TRAVIS-SYSTEM-FACE.md`](./TRAVIS-SYSTEM-FACE.md). Stamp 2026-08-31 17:48. Still considering — not of record.
+
+**If we print V in this look:** V1–V6 in **Paper**. Do not print all six × three modes (eighteen). Same save as T-set: Voice already exists in Ink (T3) and Volt (T4). Extra only if you want the *new* rooms level in all three: **V1** (index) and **V5** (N-seat log) in Ink and Volt — four more, not eighteen.
+
+C3/C4 stay the 003 look of record. Different temperature (cream / orange Ant). Do not recut.
+
+---
+
 ## Count
 
-**Six to print** if you green-light the set: V1 (recut L1) · V2 · V3 · V4 · V5 · V6.
+**Six in Paper** if you green-light the set: V1 (recut L1) · V2 · V3 · V4 · V5 · V6.
+
+**Plus four** if modes ride the new rooms screens: V1-ink · V1-volt · V5-ink · V5-volt.
 
 Engineer listed index / create-room / roster / create-agent / N-seat revision / optional cost. I’m adding **work in flight**, folding cost and confirm out, and treating N-seats as a real plate this pocket — not a note.
 
@@ -129,6 +154,7 @@ Engineer listed index / create-room / roster / create-agent / N-seat revision / 
 
 1. Print all six, drop any, or add V5b?
 2. Recut **L1 → V1**, or keep L1 and print a new file?
-3. Look: **C** (planted) or **T-set** (considering redesign)?
-4. Leave vs End — this pocket on V1, or later?
-5. N-seat Type `@` (V5b) this pass or reuse D3 until the menu is lived?
+3. **Look locked to T-set Paper?** (white/red) — yes unless you say you meant C.
+4. Modes: Paper only for V, or also V1 + V5 in Ink and Volt?
+5. Leave vs End — this pocket on V1, or later?
+6. N-seat Type `@` (V5b) this pass or reuse D3 until the menu is lived?

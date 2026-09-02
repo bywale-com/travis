@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-02 22:35 UTC — **V-set text only.** Rooms + manual parity: six plates proposed, no images until green light. N seats this pocket. U1/U2 stay.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-02 22:40 UTC — **White/red = T-set Paper.** Modes same pass as V. No new images yet.
 
 **How we maintain this log**
 
@@ -1126,4 +1126,30 @@ The first envelope asked about four shipped hotfix lines. That was under the roo
 **Landed (text):** [`V-ROOMS-MANUAL-PROPOSAL.md`](V-ROOMS-MANUAL-PROPOSAL.md).
 
 **Ask:** green-light which to print? Recut L1→V1 or new file? C look or T-set? Leave vs End this pocket? V5b this pass?
+
+---
+
+## 2026-09-02 22:40 UTC — White/red mocks are T-set Paper (founder)
+
+**Kind:** Type B. Considering. Founder correction of where the look lives. Not a packet. **No new images.**
+
+**Founder (preserved):** I think at the same time we work on the modes. I was a huge fan of the white and red travis mocks, where are they, I can't find them.
+
+**Where they are:** T-set, not C. Bone page + oxblood. Wide grotesque **TRAVIS**. [PR #15](https://github.com/bywale-com/travis/pull/15) · [`TRAVIS-SYSTEM-FACE.md`](TRAVIS-SYSTEM-FACE.md) · stamp 2026-08-31 17:48. Not on `main`.
+
+| File | Screen |
+|------|--------|
+| [`plates/travis-t0-system-three-modes.png`](plates/travis-t0-system-three-modes.png) | System board — Paper is the white/red column |
+| [`plates/travis-t1-land-paper.png`](plates/travis-t1-land-paper.png) | Land · Paper |
+| [`plates/travis-t2-voice-paper.png`](plates/travis-t2-voice-paper.png) | Voice · Paper |
+| [`plates/travis-t3-voice-ink.png`](plates/travis-t3-voice-ink.png) | Voice · Ink |
+| [`plates/travis-t4-voice-volt.png`](plates/travis-t4-voice-volt.png) | Voice · Volt |
+| [`plates/travis-t5-log-talk-paper.png`](plates/travis-t5-log-talk-paper.png) | Log Talk · Paper |
+| [`plates/travis-t6-log-type-paper.png`](plates/travis-t6-log-type-paper.png) | Log Type · Paper |
+
+C3/C4 are the other light look — cream / terracotta Ant, serif Travis. Of record for 003. Different temperature. If they meant those: `plates/travis-c3-mode-b-queue-engineer.png` · `travis-c4-mode-a-queue-glance.png`.
+
+**Ruled this stamp:** V plates, if printed, use **T-set Paper**. Modes in the same pass. Do not print six × three. Voice in Ink/Volt already exists (T3/T4). Extra only if the new rooms screens need to exist in all three: V1 + V5 in Ink and Volt.
+
+**Ask:** confirm these T plates are the white/red you meant? Print V in Paper, and also V1+V5 in Ink/Volt?
 
