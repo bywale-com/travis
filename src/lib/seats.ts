@@ -34,23 +34,37 @@ export function sortRoomSeats<T extends { seatKey: string | null }>(
 
 /** "hey travis" / remainder equals the vocative — switch only, do not send. */
 export function isVocativeOnlyCall(
-  utterance: string,
+  _utterance: string,
   remainder: string,
   seatKey: SeatKey,
 ): boolean {
   const rest = remainder.trim();
   if (!rest) return true;
-  const u = utterance.trim().toLowerCase();
-  const r = rest.toLowerCase();
-  if (r === u) return true;
   const names: Record<SeatKey, string> = {
     pm: "pm|p\\.m\\.?",
     sa: "sa|systems analyst",
     engineer: "engineer|eng",
     travis: "travis",
   };
+  const name = names[seatKey];
+  if (new RegExp(`^(${name})\\s*[.?!]*$`, "i").test(rest)) return true;
   return new RegExp(
-    `^(hey|hi|hello|okay|ok|yo)\\s+${names[seatKey]}\\s*[.?!]*$`,
+    `^(hey|hi|hello|okay|ok|yo)\\s+${name}\\s*[.?!]*$`,
     "i",
   ).test(rest);
+}
+
+/**
+ * Work to keep in the Talk draft after a Travis dest switch.
+ * Vocative-only → empty. Trailing "… travis" keeps the words before the name.
+ */
+export function keepWorkAfterTravisCall(
+  utterance: string,
+  remainder: string,
+): string {
+  if (isVocativeOnlyCall(utterance, remainder, "travis")) return "";
+  const u = utterance.trim();
+  const r = remainder.trim();
+  if (r && r.toLowerCase() !== u.toLowerCase()) return r;
+  return u.replace(/[\s,;:—-]*travis\s*[.?!]*$/i, "").trim();
 }

@@ -21,7 +21,7 @@ import {
   type EarState,
 } from "@/lib/ear";
 import { readJson } from "@/lib/http";
-import { isTravisSeat } from "@/lib/seats";
+import { isTravisSeat, keepWorkAfterTravisCall } from "@/lib/seats";
 import { playQueuedCue, playSendSwoosh, releaseSendSounds, resumeSendSounds } from "@/lib/send-sounds";
 import { startTravisLive, type TravisLiveSession } from "@/lib/travis-live-client";
 import type { QueueSeatDto } from "@/lib/queue-logic";
@@ -1098,14 +1098,21 @@ export function Room({ t }: { t: Tokens }) {
         return;
       }
 
-      const called = parseCallByName(committed || full);
-      if (called.seatKey === "travis" && !finalizingRef.current) {
+      const called = committed.trim()
+        ? parseCallByName(committed)
+        : { seatKey: null, remainder: "" };
+      if (
+        called.seatKey === "travis" &&
+        !finalizingRef.current &&
+        !destTravis
+      ) {
         const sid = sessionIdRef.current;
+        const keep = keepWorkAfterTravisCall(committed, called.remainder);
         if (sid) {
           void fetch(`/api/session/${sid}/address`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ utterance: committed || full }),
+            body: JSON.stringify({ utterance: committed }),
           })
             .then((r) => r.json())
             .then((data: { destTravis?: boolean; activeLabel?: string; activeSeatKey?: string }) => {
@@ -1120,7 +1127,15 @@ export function Room({ t }: { t: Tokens }) {
                     : s,
                 );
               }
-              clearDraft();
+              if (keep) {
+                heldDraftRef.current = keep;
+                lastHeardRef.current = keep;
+                committedRef.current = keep;
+                interimRef.current = "";
+                setDraft(keep);
+              } else {
+                clearDraft();
+              }
               if (data.destTravis && viewModeRef.current === "voice") {
                 void armEarRef.current();
               } else if (liveRef.current) {
