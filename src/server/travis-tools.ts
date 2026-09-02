@@ -9,8 +9,13 @@ import { seatKeyToLabel } from "@/lib/router";
 import { db } from "@/server/db/client";
 import { agentBinding, voiceSession } from "@/server/db/schema";
 import type { SeatKey } from "@/server/db/schema";
-import { deleteQueuedItem, queueSnapshot } from "@/server/queue";
+import {
+  deleteQueuedItem,
+  liveRunsForSession,
+  queueSnapshot,
+} from "@/server/queue";
 import { bargeQueuedItem, sendOrEnqueue } from "@/server/seat-pipe";
+import { inFlightReport, sendReceipt } from "@/lib/tool-receipt";
 
 export const TRAVIS_TOOL_DECLS = [
   {
@@ -22,7 +27,7 @@ export const TRAVIS_TOOL_DECLS = [
   {
     name: "send_to_seat",
     description:
-      "Send a line to PM, SA, or Engineer on the existing Cursor pipe. Does not change who you are talking to (stays Travis).",
+      "Send a line to PM, SA, or Engineer on the existing Cursor pipe. Does not change who you are talking to (stays Travis). This call blocks until that seat's Cursor run finishes, so two calls in one turn go one after the other — never at the same time. If the seat is already running, the line is queued instead and is not sent yet.",
     parameters: {
       type: "object",
       properties: {
@@ -35,6 +40,12 @@ export const TRAVIS_TOOL_DECLS = [
   {
     name: "queue_snapshot",
     description: "Who is waiting on which Cursor seat.",
+    parameters: { type: "object", properties: {} },
+  },
+  {
+    name: "work_in_flight",
+    description:
+      "What is running right now on each Cursor seat and how long it has been going, plus what is waiting behind it. Use this instead of guessing when asked what you are doing or why something is slow.",
     parameters: { type: "object", properties: {} },
   },
   {
@@ -117,23 +128,64 @@ export async function runTravisTool(params: {
     }
     const binding = await bindingForCursorSeat(seat);
     if (!binding) return { ok: false, text: `No ${seat} binding.` };
-    const chunks: string[] = [];
-    await sendOrEnqueue({
+    const seatLabel = binding.label ?? seatKeyToLabel(seat as SeatKey);
+    const startedAt = Date.now();
+    let errored = false;
+    let replyChars = 0;
+    const outcome = await sendOrEnqueue({
       sessionId,
       binding,
       prompt: text,
       send: (event, data) => {
-        if (event === "queued") chunks.push("queued");
-        if (event === "done") chunks.push("sent");
-        void data;
+        if (event !== "done") return;
+        const d = data as {
+          mode?: string;
+          postTurn?: { text?: string } | null;
+        };
+        if (d.mode === "error") errored = true;
+        replyChars = d.postTurn?.text?.length ?? 0;
       },
     });
+    let waitingAhead = 0;
+    if (outcome === "queued") {
+      const snap = await queueSnapshot(sessionId);
+      const row = snap.seats.find((s) => s.seatKey === seat);
+      waitingAhead = Math.max(0, (row?.items.length ?? 1) - 1);
+    }
     return {
       ok: true,
-      text: chunks.includes("queued")
-        ? `Queued for ${seatKeyToLabel(seat as SeatKey)}.`
-        : `Sent to ${seatKeyToLabel(seat as SeatKey)}.`,
+      text: sendReceipt({
+        seatLabel,
+        queued: outcome === "queued",
+        waitingAhead,
+        elapsedMs: Date.now() - startedAt,
+        errored,
+        replyChars,
+      }),
       sentToEngineer: seat === "engineer",
+    };
+  }
+
+  if (name === "work_in_flight") {
+    const [runs, snap] = await Promise.all([
+      liveRunsForSession(sessionId),
+      queueSnapshot(sessionId),
+    ]);
+    const now = Date.now();
+    return {
+      ok: true,
+      text: inFlightReport(
+        runs.map((r) => ({
+          seatLabel:
+            r.binding.label ??
+            seatKeyToLabel((r.binding.seatKey ?? "pm") as SeatKey),
+          elapsedMs: Math.max(0, now - new Date(r.live.startedAt).getTime()),
+        })),
+        snap.seats.map((s) => ({
+          seatLabel: s.short,
+          count: s.items.length,
+        })),
+      ),
     };
   }
 
@@ -203,6 +255,8 @@ export async function runTravisTool(params: {
 export const TRAVIS_SYSTEM = `You are Travis. You are in this room with the founder and three Cursor seats: PM, SA, and Engineer. You are your own agent — not those seats.
 
 Answer the founder. Use tools when they ask you to send a line to a seat, glance the queue, barge/drop a waiting line, switch Voice/Log, or end the room.
+
+Report what the tools actually told you. send_to_seat blocks until that seat finishes, so several sends in one turn go one after the other — do not describe them as parallel or simultaneous. If you are asked what you are doing or why something is slow, call work_in_flight instead of guessing.
 
 send_to_seat does not change who they are talking to. They stay with you.
 
