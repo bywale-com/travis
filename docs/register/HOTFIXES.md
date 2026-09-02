@@ -50,4 +50,7 @@
 | 037 | [`HOTFIX-037-TRUTHFUL-TOOL-RECEIPTS.md`](./HOTFIX-037-TRUTHFUL-TOOL-RECEIPTS.md) | Tools tell Travis it blocked, how long, and what is in flight |
 | 038 | [`HOTFIX-038-TRAVIS-LOOKS-AT-ROOM.md`](./HOTFIX-038-TRAVIS-LOOKS-AT-ROOM.md) | Travis is handed a bounded room window and can read a seat's reply |
 | 039 | [`HOTFIX-039-DISPATCH-AND-LEAVE.md`](./HOTFIX-039-DISPATCH-AND-LEAVE.md) | dispatch_to_seat returns when the run starts, so fan-out and the queue are real |
+| 040 | [`HOTFIX-040-TOOL-POLICY.md`](./HOTFIX-040-TOOL-POLICY.md) | A written definition of safe: tool classes, fail-closed, asserted coverage |
+| 041 | [`HOTFIX-041-TOOL-NARRATION.md`](./HOTFIX-041-TOOL-NARRATION.md) | Travis says what it is about to do, in the log, never aloud |
+| 042 | [`HOTFIX-042-CAPABILITY-BOUNDARY.md`](./HOTFIX-042-CAPABILITY-BOUNDARY.md) | Travis is told it cannot see the repo, a diff, tests or CI |
 | 043 | [`HOTFIX-043-RETURN-TO-VOICE-LIVE.md`](./HOTFIX-043-RETURN-TO-VOICE-LIVE.md) | Coming back to Voice re-arms Live instead of keeping the recognizer |
