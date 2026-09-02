@@ -16,6 +16,9 @@ import {
 } from "@/server/queue";
 import { bargeQueuedItem, sendOrEnqueue } from "@/server/seat-pipe";
 import { inFlightReport, sendReceipt } from "@/lib/tool-receipt";
+import { READ_CAP, shouldSummarize, type ReadForm } from "@/lib/room-context";
+import { lastSeatPost } from "@/server/room-read";
+import { summarizeSeatReply } from "@/server/travis-summarize";
 
 export const TRAVIS_TOOL_DECLS = [
   {
@@ -41,6 +44,19 @@ export const TRAVIS_TOOL_DECLS = [
     name: "queue_snapshot",
     description: "Who is waiting on which Cursor seat.",
     parameters: { type: "object", properties: {} },
+  },
+  {
+    name: "read_seat_reply",
+    description:
+      "Read what PM, SA, or Engineer last said in this room. This is the only way you can see a seat's words — send_to_seat never returns them. Leave form off to get the gist of a long reply and the text of a short one; pass full to insist on the text.",
+    parameters: {
+      type: "object",
+      properties: {
+        seat: { type: "string", enum: ["pm", "sa", "engineer"] },
+        form: { type: "string", enum: ["auto", "gist", "full"] },
+      },
+      required: ["seat"],
+    },
   },
   {
     name: "work_in_flight",
@@ -166,6 +182,35 @@ export async function runTravisTool(params: {
     };
   }
 
+  if (name === "read_seat_reply") {
+    const seat = String(args.seat ?? "");
+    if (!isCursorSeat(seat)) return { ok: false, text: "Need a Cursor seat." };
+    const label = seatKeyToLabel(seat as SeatKey);
+    const body = await lastSeatPost(sessionId, seat);
+    if (!body?.trim()) {
+      return { ok: true, text: `${label} has not replied in this room yet.` };
+    }
+    const form = (["auto", "gist", "full"] as const).includes(
+      args.form as ReadForm,
+    )
+      ? (args.form as ReadForm)
+      : "auto";
+    if (!shouldSummarize(body.length, form)) {
+      return { ok: true, text: `${label} said: ${body.slice(0, READ_CAP)}` };
+    }
+    const gist = await summarizeSeatReply(body).catch(() => "");
+    if (!gist) {
+      return {
+        ok: true,
+        text: `${label} said (first ${READ_CAP} of ${body.length} characters): ${body.slice(0, READ_CAP)}`,
+      };
+    }
+    return {
+      ok: true,
+      text: `${label} said, in short (${body.length} characters in the log): ${gist}`,
+    };
+  }
+
   if (name === "work_in_flight") {
     const [runs, snap] = await Promise.all([
       liveRunsForSession(sessionId),
@@ -255,6 +300,8 @@ export async function runTravisTool(params: {
 export const TRAVIS_SYSTEM = `You are Travis. You are in this room with the founder and three Cursor seats: PM, SA, and Engineer. You are your own agent — not those seats.
 
 Answer the founder. Use tools when they ask you to send a line to a seat, glance the queue, barge/drop a waiting line, switch Voice/Log, or end the room.
+
+You are shown a short room-state block with recent turns and what is running. Treat it as already true — do not ask the founder to repeat something that is in it. Seat replies appear there only as receipts; call read_seat_reply when you need what a seat actually said.
 
 Report what the tools actually told you. send_to_seat blocks until that seat finishes, so several sends in one turn go one after the other — do not describe them as parallel or simultaneous. If you are asked what you are doing or why something is slow, call work_in_flight instead of guessing.
 

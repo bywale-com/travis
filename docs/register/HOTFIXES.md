@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **038**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **039**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -48,3 +48,4 @@
 | 035 | [`HOTFIX-035-THREAD-SCROLL-PIN.md`](./HOTFIX-035-THREAD-SCROLL-PIN.md) | The log holds still when you scroll up to read |
 | 036 | [`HOTFIX-036-VOCATIVE-LIVE-ARM.md`](./HOTFIX-036-VOCATIVE-LIVE-ARM.md) | Saying Travis in Voice actually hands the ear to Live |
 | 037 | [`HOTFIX-037-TRUTHFUL-TOOL-RECEIPTS.md`](./HOTFIX-037-TRUTHFUL-TOOL-RECEIPTS.md) | Tools tell Travis it blocked, how long, and what is in flight |
+| 038 | [`HOTFIX-038-TRAVIS-LOOKS-AT-ROOM.md`](./HOTFIX-038-TRAVIS-LOOKS-AT-ROOM.md) | Travis is handed a bounded room window and can read a seat's reply |
