@@ -183,4 +183,4 @@ Change `M` or leave Live up while working and this moves first. Text dest almost
 | Pin `gpt-realtime-2.1-mini` | ~⅓ Live audio — product/quality call, not this stamp |
 | Two Voice tabs | Two Live bills |
 
-No cost dashboard. No sound table. Optional spoken “what did this room cost” is still **Cursor** `getUsage` plus this OpenAI math — two invoices.
+On-demand **Cost** door (considering): [`COST-PANEL-SPEC.md`](./COST-PANEL-SPEC.md). Not a dashboard. Same two invoices: Cursor `getUsage` plus this OpenAI math. Spoken total uses the same number.

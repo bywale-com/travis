@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 02:25 UTC — **Output types spec (considering).** Wave 1 = images in order. Not a packet. No store mint.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 02:30 UTC — **Cost panel (considering).** On-demand door, not a dashboard. Estimates vs confirmed. No store mint.
 
 **How we maintain this log**
 
@@ -1258,4 +1258,18 @@ Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tighten
 **Ruled (this stamp — considering):** Receive-only richness. User send stays plain. Wave 0 = links (005). Wave 1 = images in thread order + Voice beat “there’s an image” (flagship; 001 nest). Files / code block / Cursor handle later, only if the stream emits them. Board/Fieldtop held. Turns are versions. Room-scoped; no share product. SA ascribes arrival + persistence before Engineer cuts.
 
 **Ask:** lock Wave 1 as the next packet, or hold behind rooms / 006? Voice beat wording? Board stays held?
+
+---
+
+## 2026-09-03 02:30 UTC — Cost panel door (founder; considering)
+
+**Kind:** Type B. Considering. **Not a packet.** Reopens “cost = spoken only.” Still not a dashboard.
+
+**Founder (preserved):** Wants a cost view beyond rough estimates: a modal or compartment they can open to see running cost for a day, a room, or similar scope. Propose UX, metrics, refresh, permissions, defaults. Note we may not always have exact billing; suggest how to present estimates vs confirmed charges.
+
+**Landed:** [`COST-PANEL-SPEC.md`](COST-PANEL-SPEC.md).
+
+**Ruled (this stamp — considering):** Quiet **Cost** door. Sheet, one loud total. Default **this room · today**. Hero is `about $X` if any line is estimate; `$X` only when the whole total is confirmed. Unknown ≠ `$0`. Fetch on open; 60s refresh only while open and something is in flight. Founder only. No ticker on the orb. SA ascribes ports. No store mint.
+
+**Ask:** like the door? Default scope? Lock after SA, or hold?
 
