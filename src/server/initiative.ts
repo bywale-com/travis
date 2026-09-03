@@ -5,7 +5,7 @@
  * Requests stays kind=user.
  */
 
-import { and, asc, desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq, sql } from "drizzle-orm";
 import {
   canonicalPosts,
   deriveNext,
@@ -22,6 +22,53 @@ import {
   type InitiativeSource,
   type InitiativeStatus,
 } from "@/server/db/schema";
+
+let initiativeStoreReady = false;
+
+/** Same isolate-once DDL as 045 membership. Live DB had no 008 columns. */
+export async function ensureInitiativeStore(): Promise<void> {
+  if (initiativeStoreReady) return;
+  await db.execute(sql`
+    CREATE TABLE IF NOT EXISTS travis.initiative (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      session_id uuid NOT NULL REFERENCES travis.voice_session(id),
+      founding_turn_id uuid NOT NULL REFERENCES travis.voice_turn(id),
+      source text NOT NULL,
+      status text NOT NULL DEFAULT 'open',
+      created_at timestamptz NOT NULL DEFAULT now(),
+      done_at timestamptz,
+      CONSTRAINT initiative_source_chk
+        CHECK (source IN ('via_travis', 'hold')),
+      CONSTRAINT initiative_status_chk
+        CHECK (status IN ('open', 'done')),
+      CONSTRAINT initiative_done_at_chk
+        CHECK (
+          (status = 'open' AND done_at IS NULL)
+          OR (status = 'done' AND done_at IS NOT NULL)
+        ),
+      CONSTRAINT initiative_founding_uniq UNIQUE (founding_turn_id)
+    )
+  `);
+  await db.execute(sql`
+    CREATE INDEX IF NOT EXISTS initiative_open_by_session
+      ON travis.initiative (session_id)
+      WHERE status = 'open'
+  `);
+  await db.execute(sql`
+    ALTER TABLE travis.voice_turn
+      ADD COLUMN IF NOT EXISTS initiative_id uuid REFERENCES travis.initiative(id)
+  `);
+  await db.execute(sql`
+    CREATE INDEX IF NOT EXISTS voice_turn_initiative_idx
+      ON travis.voice_turn (initiative_id)
+      WHERE initiative_id IS NOT NULL
+  `);
+  await db.execute(sql`
+    ALTER TABLE travis.queued_utterance
+      ADD COLUMN IF NOT EXISTS initiative_id uuid REFERENCES travis.initiative(id)
+  `);
+  initiativeStoreReady = true;
+}
 
 export class InitiativeError extends Error {
   constructor(
@@ -117,6 +164,7 @@ export async function initiativeIdForTurn(
 export async function ensureViaTravis(
   sessionId: string,
 ): Promise<Initiative | null> {
+  await ensureInitiativeStore();
   const founding = await latestTravisUserTurn(sessionId);
   if (!founding) return null;
   if (founding.initiativeId) {
@@ -130,6 +178,7 @@ export async function ensureOnPassOn(
   sessionId: string,
   passOnTurnId: string,
 ): Promise<Initiative> {
+  await ensureInitiativeStore();
   const prior = await ensureViaTravis(sessionId);
   if (prior) {
     await stampTurn(passOnTurnId, prior.id);
@@ -215,6 +264,7 @@ export async function holdInitiative(
   sessionId: string,
   foundingTurnId: string,
 ): Promise<Initiative> {
+  await ensureInitiativeStore();
   await requireOpenSession(sessionId);
   const [turn] = await db
     .select()
@@ -237,6 +287,7 @@ export async function markInitiativeDone(
   sessionId: string,
   initiativeId: string,
 ): Promise<Initiative> {
+  await ensureInitiativeStore();
   const row = await getInitiative(initiativeId);
   if (!row || row.sessionId !== sessionId) {
     throw new InitiativeError("Initiative not found", 404);
@@ -304,6 +355,7 @@ export async function listInitiatives(
   sessionId: string,
   status: InitiativeStatus | "all" = "open",
 ): Promise<InitiativeListItem[]> {
+  await ensureInitiativeStore();
   const rows =
     status === "all"
       ? await db
@@ -367,6 +419,7 @@ export async function readInitiative(
   sessionId: string,
   initiativeId: string,
 ): Promise<InitiativeRead> {
+  await ensureInitiativeStore();
   const row = await getInitiative(initiativeId);
   if (!row || row.sessionId !== sessionId) {
     throw new InitiativeError("Initiative not found", 404);

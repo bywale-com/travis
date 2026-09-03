@@ -4,6 +4,7 @@ import {
   type QueueSnapshot,
 } from "@/lib/queue-logic";
 import { db } from "@/server/db/client";
+import { ensureInitiativeStore } from "@/server/initiative";
 import {
   agentBinding,
   queuedUtterance,
@@ -116,6 +117,7 @@ export async function enqueueUtterance(params: {
   text: string;
   initiativeId?: string | null;
 }): Promise<QueuedUtterance> {
+  await ensureInitiativeStore();
   const seq = await nextQueueSeq(params.sessionId, params.binding.id);
   const [row] = await db
     .insert(queuedUtterance)
