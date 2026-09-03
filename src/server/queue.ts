@@ -114,6 +114,7 @@ export async function enqueueUtterance(params: {
   sessionId: string;
   binding: AgentBinding;
   text: string;
+  initiativeId?: string | null;
 }): Promise<QueuedUtterance> {
   const seq = await nextQueueSeq(params.sessionId, params.binding.id);
   const [row] = await db
@@ -124,6 +125,7 @@ export async function enqueueUtterance(params: {
       seatKey: params.binding.seatKey ?? "pm",
       seq,
       text: params.text,
+      initiativeId: params.initiativeId ?? undefined,
     })
     .returning();
   return row;

@@ -117,6 +117,7 @@ async function insertTurn(
     text: string;
     thoughtStatus?: string | null;
     referenceTurnId?: string | null;
+    initiativeId?: string | null;
   },
 ): Promise<VoiceTurn> {
   return withSeqLock(sessionId, async () => {
@@ -173,6 +174,7 @@ export async function enqueueOnSeat(params: {
   binding: AgentBinding;
   text: string;
   discoveredRunId?: string | null;
+  initiativeId?: string | null;
 }): Promise<QueueSnapshot> {
   if (isTravisSeat(params.binding.seatKey)) {
     throw new Error("Travis is never queued");
@@ -188,6 +190,7 @@ export async function enqueueOnSeat(params: {
     sessionId: params.sessionId,
     binding: params.binding,
     text: params.text,
+    initiativeId: params.initiativeId,
   });
   return queueSnapshot(params.sessionId);
 }
@@ -198,6 +201,7 @@ export async function insertUserTurn(
   sessionId: string,
   prompt: string,
   seatKey: SeatKey,
+  initiativeId?: string | null,
 ): Promise<VoiceTurn> {
   return insertTurn(sessionId, {
     role: "user",
@@ -205,6 +209,7 @@ export async function insertUserTurn(
     seatKey,
     speakable: true,
     text: prompt,
+    initiativeId: initiativeId ?? undefined,
   });
 }
 
@@ -233,11 +238,19 @@ export async function absorbStreamingAgentPost(params: {
       )
       .orderBy(desc(voiceTurn.seq))
       .limit(1);
+    const [answered] = await db
+      .select({ initiativeId: voiceTurn.initiativeId })
+      .from(voiceTurn)
+      .where(eq(voiceTurn.id, params.userTurnId))
+      .limit(1);
+    const initiativeId = answered?.initiativeId ?? undefined;
     if (existing) {
-      if (existing.text === incoming) return existing;
+      if (existing.text === incoming && existing.initiativeId === (initiativeId ?? null)) {
+        return existing;
+      }
       const [row] = await db
         .update(voiceTurn)
-        .set({ text: incoming })
+        .set({ text: incoming, initiativeId: initiativeId ?? existing.initiativeId })
         .where(eq(voiceTurn.id, existing.id))
         .returning();
       return row;
@@ -254,6 +267,7 @@ export async function absorbStreamingAgentPost(params: {
         referenceTurnId: params.userTurnId,
         speakable: true,
         text: incoming,
+        initiativeId,
       })
       .returning();
     return row;
@@ -268,6 +282,15 @@ export async function insertAgentPostTurn(
   /** 041 narration is a receipt, not speech. It shows, it is never read. */
   speakable = true,
 ): Promise<VoiceTurn> {
+  let initiativeId: string | undefined;
+  if (referenceTurnId) {
+    const [answered] = await db
+      .select({ initiativeId: voiceTurn.initiativeId })
+      .from(voiceTurn)
+      .where(eq(voiceTurn.id, referenceTurnId))
+      .limit(1);
+    initiativeId = answered?.initiativeId ?? undefined;
+  }
   return insertTurn(sessionId, {
     role: "assistant",
     kind: "agent_post",
@@ -275,6 +298,7 @@ export async function insertAgentPostTurn(
     referenceTurnId: referenceTurnId ?? undefined,
     speakable,
     text,
+    initiativeId,
   });
 }
 
@@ -344,6 +368,7 @@ export async function pipeOneSend(params: {
   gen?: AsyncGenerator<CursorStreamEvent>;
   /** Fan-out shares one user turn across dests. */
   userTurn?: VoiceTurn;
+  initiativeId?: string | null;
 }): Promise<{ ownedTerminal: boolean; queue?: QueueSnapshot }> {
   const { sessionId, binding, prompt, send } = params;
   if (isTravisSeat(binding.seatKey)) {
@@ -372,13 +397,15 @@ export async function pipeOneSend(params: {
       binding,
       text: prompt,
       discoveredRunId: first.value.discoveredRunId,
+      initiativeId: params.initiativeId,
     });
     send("queued", { queue });
     return { ownedTerminal: false, queue };
   }
 
   const userTurn =
-    params.userTurn ?? (await insertUserTurn(sessionId, prompt, seatKey));
+    params.userTurn ??
+    (await insertUserTurn(sessionId, prompt, seatKey, params.initiativeId));
   send("matched", {
     matched: true,
     matchedPhrase: params.matchedPhrase,
@@ -585,6 +612,7 @@ export async function drainHead(
         binding,
         prompt: head.text,
         send,
+        initiativeId: head.initiativeId,
       });
       if (!result.ownedTerminal) return;
     }
@@ -688,6 +716,7 @@ export async function sendOrEnqueue(params: {
   send: SendFn;
   matchedPhrase?: string;
   userTurn?: VoiceTurn;
+  initiativeId?: string | null;
 }): Promise<"queued" | "sent"> {
   if (isTravisSeat(params.binding.seatKey)) {
     throw new Error("Travis dest never uses the Cursor send path");
@@ -698,6 +727,7 @@ export async function sendOrEnqueue(params: {
       sessionId: params.sessionId,
       binding: params.binding,
       text: params.prompt,
+      initiativeId: params.initiativeId,
     });
     params.send("queued", { queue });
     return "queued";
@@ -801,6 +831,7 @@ export async function bargeQueuedItem(params: {
     binding,
     prompt: item.text,
     send: params.send,
+    initiativeId: item.initiativeId,
   });
   if (result.ownedTerminal) {
     await drainHead(params.sessionId, binding, params.send);

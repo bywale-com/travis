@@ -46,6 +46,15 @@ test("instant lookups stay silent", () => {
   assert.equal(narrateToolCall("list_seats", {}), null);
   assert.equal(narrateToolCall("set_view", { viewMode: "log" }), null);
   assert.equal(narrateToolCall("search_room", { q: "voice" }), null);
+  assert.equal(narrateToolCall("list_initiatives", {}), null);
+  assert.equal(narrateToolCall("read_initiative", { id: "x" }), null);
+});
+
+test("marking done is announced", () => {
+  assert.equal(
+    narrateToolCall("mark_initiative_done", { id: "x" }),
+    "Marking that initiative done.",
+  );
 });
 
 test("an unknown seat does not produce a broken sentence", () => {

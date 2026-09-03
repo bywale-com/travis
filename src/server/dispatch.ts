@@ -35,8 +35,9 @@ export async function dispatchToSeat(params: {
   sessionId: string;
   binding: AgentBinding;
   prompt: string;
+  initiativeId?: string | null;
 }): Promise<DispatchOutcome> {
-  const { sessionId, binding, prompt } = params;
+  const { sessionId, binding, prompt, initiativeId } = params;
   if (isTravisSeat(binding.seatKey)) {
     throw new Error("Travis dest never uses the Cursor send path");
   }
@@ -45,7 +46,12 @@ export async function dispatchToSeat(params: {
   const seatLabel = binding.label ?? seatKeyToLabel(seatKey);
 
   if (await seatHasActiveRun(binding)) {
-    const queue = await enqueueOnSeat({ sessionId, binding, text: prompt });
+    const queue = await enqueueOnSeat({
+      sessionId,
+      binding,
+      text: prompt,
+      initiativeId,
+    });
     const ahead = queue.seats.find((s) => s.seatKey === seatKey)?.items.length;
     return { status: "queued", waitingAhead: Math.max(0, (ahead ?? 1) - 1), seatLabel };
   }
@@ -73,7 +79,12 @@ export async function dispatchToSeat(params: {
     }
 
     if (event?.type === "run_started") {
-      const userTurn = await insertUserTurn(sessionId, prompt, seatKey);
+      const userTurn = await insertUserTurn(
+        sessionId,
+        prompt,
+        seatKey,
+        initiativeId,
+      );
       await upsertLiveRun({
         bindingId: binding.id,
         sessionId,
@@ -89,6 +100,7 @@ export async function dispatchToSeat(params: {
         binding,
         text: prompt,
         discoveredRunId: event.discoveredRunId,
+        initiativeId,
       });
       const ahead = queue.seats.find((s) => s.seatKey === seatKey)?.items.length;
       return {
@@ -99,7 +111,7 @@ export async function dispatchToSeat(params: {
     }
 
     if (event?.type === "done" && event.mode === "stand-in") {
-      await insertUserTurn(sessionId, prompt, seatKey);
+      await insertUserTurn(sessionId, prompt, seatKey, initiativeId);
       await insertStatusTurn(sessionId, "stand-in");
       return { status: "stand-in", seatLabel };
     }

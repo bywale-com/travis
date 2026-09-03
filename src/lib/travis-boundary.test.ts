@@ -28,6 +28,9 @@ test("no tool actually grants a view of the code", () => {
   for (const forbidden of ["read_file", "read_diff", "run_tests", "read_ci"]) {
     assert.equal(names.includes(forbidden), false);
   }
-  assert.equal(names.length, 10);
+  assert.equal(names.length, 13);
   assert.equal(names.includes("search_room"), true);
+  assert.equal(names.includes("list_initiatives"), true);
+  assert.equal(names.includes("read_initiative"), true);
+  assert.equal(names.includes("mark_initiative_done"), true);
 });

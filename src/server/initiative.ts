@@ -1,0 +1,427 @@
+/**
+ * SCP-008 — initiative store. Engineer pastes; no leftover analysis.
+ *
+ * Via-Travis only on Travis pass-on. Hold is HTTP. Done is a write.
+ * Requests stays kind=user.
+ */
+
+import { and, asc, desc, eq } from "drizzle-orm";
+import {
+  canonicalPosts,
+  deriveNext,
+  litSeatKeys,
+} from "@/lib/initiative";
+import { isCursorSeat } from "@/lib/seats";
+import { db } from "@/server/db/client";
+import {
+  initiative,
+  queuedUtterance,
+  voiceSession,
+  voiceTurn,
+  type Initiative,
+  type InitiativeSource,
+  type InitiativeStatus,
+} from "@/server/db/schema";
+
+export class InitiativeError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+  ) {
+    super(message);
+    this.name = "InitiativeError";
+  }
+}
+
+export const HOLD_FEED_PREFIX =
+  "The founder promoted this line to an initiative. Orchestrate it to done.\n\n";
+
+async function getInitiative(id: string): Promise<Initiative | null> {
+  const [row] = await db
+    .select()
+    .from(initiative)
+    .where(eq(initiative.id, id))
+    .limit(1);
+  return row ?? null;
+}
+
+export async function latestTravisUserTurn(sessionId: string) {
+  const [row] = await db
+    .select()
+    .from(voiceTurn)
+    .where(
+      and(
+        eq(voiceTurn.sessionId, sessionId),
+        eq(voiceTurn.kind, "user"),
+        eq(voiceTurn.seatKey, "travis"),
+      ),
+    )
+    .orderBy(desc(voiceTurn.seq))
+    .limit(1);
+  return row ?? null;
+}
+
+async function insertOpen(
+  sessionId: string,
+  foundingTurnId: string,
+  source: InitiativeSource,
+): Promise<Initiative> {
+  const [row] = await db
+    .insert(initiative)
+    .values({
+      sessionId,
+      foundingTurnId,
+      source,
+      status: "open",
+    })
+    .returning();
+  await stampTurn(foundingTurnId, row.id);
+  return row;
+}
+
+export async function stampTurn(
+  turnId: string,
+  initiativeId: string,
+): Promise<void> {
+  await db
+    .update(voiceTurn)
+    .set({ initiativeId })
+    .where(eq(voiceTurn.id, turnId));
+}
+
+export async function stampQueued(
+  queuedId: string,
+  initiativeId: string,
+): Promise<void> {
+  await db
+    .update(queuedUtterance)
+    .set({ initiativeId })
+    .where(eq(queuedUtterance.id, queuedId));
+}
+
+export async function initiativeIdForTurn(
+  turnId: string,
+): Promise<string | null> {
+  const [row] = await db
+    .select({ initiativeId: voiceTurn.initiativeId })
+    .from(voiceTurn)
+    .where(eq(voiceTurn.id, turnId))
+    .limit(1);
+  return row?.initiativeId ?? null;
+}
+
+/**
+ * Latest founder→Travis line, or null if Travis is passing on
+ * without one (founding becomes the pass-on row).
+ */
+export async function ensureViaTravis(
+  sessionId: string,
+): Promise<Initiative | null> {
+  const founding = await latestTravisUserTurn(sessionId);
+  if (!founding) return null;
+  if (founding.initiativeId) {
+    return getInitiative(founding.initiativeId);
+  }
+  return insertOpen(sessionId, founding.id, "via_travis");
+}
+
+/** No Travis founding line — the pass-on user row is the ticket. */
+export async function ensureOnPassOn(
+  sessionId: string,
+  passOnTurnId: string,
+): Promise<Initiative> {
+  const prior = await ensureViaTravis(sessionId);
+  if (prior) {
+    await stampTurn(passOnTurnId, prior.id);
+    return prior;
+  }
+  const [existing] = await db
+    .select()
+    .from(voiceTurn)
+    .where(eq(voiceTurn.id, passOnTurnId))
+    .limit(1);
+  if (existing?.initiativeId) {
+    const row = await getInitiative(existing.initiativeId);
+    if (row) return row;
+  }
+  return insertOpen(sessionId, passOnTurnId, "via_travis");
+}
+
+export async function stampPassOn(
+  sessionId: string,
+  params: { userTurnId?: string | null; queuedId?: string | null },
+): Promise<Initiative | null> {
+  let row = await ensureViaTravis(sessionId);
+  if (!row && params.userTurnId) {
+    row = await ensureOnPassOn(sessionId, params.userTurnId);
+  }
+  if (!row) return null;
+  if (params.userTurnId) await stampTurn(params.userTurnId, row.id);
+  if (params.queuedId) await stampQueued(params.queuedId, row.id);
+  return row;
+}
+
+/** After a Travis send/dispatch: stamp the dest user row and any waiting line. */
+export async function stampLatestPassOn(
+  sessionId: string,
+  seatKey: string,
+  text: string,
+): Promise<Initiative | null> {
+  const [user] = await db
+    .select()
+    .from(voiceTurn)
+    .where(
+      and(
+        eq(voiceTurn.sessionId, sessionId),
+        eq(voiceTurn.kind, "user"),
+        eq(voiceTurn.seatKey, seatKey),
+        eq(voiceTurn.text, text),
+      ),
+    )
+    .orderBy(desc(voiceTurn.seq))
+    .limit(1);
+  const [queued] = await db
+    .select()
+    .from(queuedUtterance)
+    .where(
+      and(
+        eq(queuedUtterance.sessionId, sessionId),
+        eq(queuedUtterance.seatKey, seatKey),
+        eq(queuedUtterance.text, text),
+      ),
+    )
+    .orderBy(desc(queuedUtterance.seq))
+    .limit(1);
+  return stampPassOn(sessionId, {
+    userTurnId: user?.id,
+    queuedId: queued?.id,
+  });
+}
+
+async function requireOpenSession(sessionId: string) {
+  const [session] = await db
+    .select()
+    .from(voiceSession)
+    .where(eq(voiceSession.id, sessionId))
+    .limit(1);
+  if (!session) throw new InitiativeError("Session not found", 404);
+  if (session.status === "ended") {
+    throw new InitiativeError("Session ended", 400);
+  }
+  return session;
+}
+
+export async function holdInitiative(
+  sessionId: string,
+  foundingTurnId: string,
+): Promise<Initiative> {
+  await requireOpenSession(sessionId);
+  const [turn] = await db
+    .select()
+    .from(voiceTurn)
+    .where(eq(voiceTurn.id, foundingTurnId))
+    .limit(1);
+  if (!turn || turn.sessionId !== sessionId) {
+    throw new InitiativeError("Turn not found", 404);
+  }
+  if (turn.kind !== "user") {
+    throw new InitiativeError("Only a founder line can become an initiative", 400);
+  }
+  if (turn.initiativeId) {
+    throw new InitiativeError("Already on a ticket", 409);
+  }
+  return insertOpen(sessionId, turn.id, "hold");
+}
+
+export async function markInitiativeDone(
+  sessionId: string,
+  initiativeId: string,
+): Promise<Initiative> {
+  const row = await getInitiative(initiativeId);
+  if (!row || row.sessionId !== sessionId) {
+    throw new InitiativeError("Initiative not found", 404);
+  }
+  if (row.status === "done") {
+    throw new InitiativeError("Already done", 409);
+  }
+  const [updated] = await db
+    .update(initiative)
+    .set({ status: "done", doneAt: new Date() })
+    .where(eq(initiative.id, initiativeId))
+    .returning();
+  return updated;
+}
+
+type TicketTurn = {
+  id: string;
+  seq: number;
+  kind: string;
+  seatKey: string | null;
+  text: string;
+  createdAt: Date;
+  referenceTurnId: string | null;
+};
+
+async function turnsForInitiative(initiativeId: string): Promise<TicketTurn[]> {
+  return db
+    .select({
+      id: voiceTurn.id,
+      seq: voiceTurn.seq,
+      kind: voiceTurn.kind,
+      seatKey: voiceTurn.seatKey,
+      text: voiceTurn.text,
+      createdAt: voiceTurn.createdAt,
+      referenceTurnId: voiceTurn.referenceTurnId,
+    })
+    .from(voiceTurn)
+    .where(eq(voiceTurn.initiativeId, initiativeId))
+    .orderBy(asc(voiceTurn.seq));
+}
+
+function nextOf(
+  row: Initiative,
+  turns: TicketTurn[],
+): "travis" | "pm" | "sa" | "engineer" | null {
+  return deriveNext({
+    status: row.status as InitiativeStatus,
+    legs: turns.filter((t) => t.kind === "user"),
+    posts: turns.filter((t) => t.kind === "agent_post"),
+  });
+}
+
+export type InitiativeListItem = {
+  id: string;
+  foundingText: string;
+  status: string;
+  createdAt: Date;
+  doneAt: Date | null;
+  source: string;
+  litSeatKeys: string[];
+  next: ReturnType<typeof deriveNext>;
+};
+
+export async function listInitiatives(
+  sessionId: string,
+  status: InitiativeStatus | "all" = "open",
+): Promise<InitiativeListItem[]> {
+  const rows =
+    status === "all"
+      ? await db
+          .select()
+          .from(initiative)
+          .where(eq(initiative.sessionId, sessionId))
+          .orderBy(desc(initiative.createdAt))
+      : await db
+          .select()
+          .from(initiative)
+          .where(
+            and(
+              eq(initiative.sessionId, sessionId),
+              eq(initiative.status, status),
+            ),
+          )
+          .orderBy(desc(initiative.createdAt));
+
+  const out: InitiativeListItem[] = [];
+  for (const row of rows) {
+    const turns = await turnsForInitiative(row.id);
+    const [founding] = turns.filter((t) => t.id === row.foundingTurnId);
+    const posts = turns.filter((t) => t.kind === "agent_post");
+    out.push({
+      id: row.id,
+      foundingText: founding?.text ?? "",
+      status: row.status,
+      createdAt: row.createdAt,
+      doneAt: row.doneAt,
+      source: row.source,
+      litSeatKeys: litSeatKeys(posts),
+      next: nextOf(row, turns),
+    });
+  }
+  return out;
+}
+
+export type InitiativeRead = {
+  id: string;
+  status: string;
+  source: string;
+  createdAt: Date;
+  doneAt: Date | null;
+  founding: {
+    id: string;
+    text: string;
+    seatKey: string | null;
+    createdAt: Date;
+  } | null;
+  posts: Array<{
+    id: string;
+    seatKey: string | null;
+    text: string;
+    createdAt: Date;
+  }>;
+  next: ReturnType<typeof deriveNext>;
+  attachments: [];
+};
+
+export async function readInitiative(
+  sessionId: string,
+  initiativeId: string,
+): Promise<InitiativeRead> {
+  const row = await getInitiative(initiativeId);
+  if (!row || row.sessionId !== sessionId) {
+    throw new InitiativeError("Initiative not found", 404);
+  }
+  const turns = await turnsForInitiative(row.id);
+  const founding = turns.find((t) => t.id === row.foundingTurnId) ?? null;
+  const posts = canonicalPosts(
+    turns.filter((t) => t.kind === "agent_post" && isCursorSeat(t.seatKey)),
+  );
+  return {
+    id: row.id,
+    status: row.status,
+    source: row.source,
+    createdAt: row.createdAt,
+    doneAt: row.doneAt,
+    founding: founding
+      ? {
+          id: founding.id,
+          text: founding.text,
+          seatKey: founding.seatKey,
+          createdAt: founding.createdAt,
+        }
+      : null,
+    posts: posts.map((p) => ({
+      id: p.id,
+      seatKey: p.seatKey,
+      text: p.text,
+      createdAt: p.createdAt,
+    })),
+    next: nextOf(row, turns),
+    attachments: [],
+  };
+}
+
+export function formatInitiativeList(items: InitiativeListItem[]): string {
+  if (!items.length) return "No initiatives in this room.";
+  const lines = items.map((item) => {
+    const next = item.next ? ` · next ${item.next}` : "";
+    const lit = item.litSeatKeys.length
+      ? ` · ${item.litSeatKeys.join(",")}`
+      : "";
+    const clip =
+      item.foundingText.replace(/\s+/g, " ").trim().slice(0, 80) || "(no text)";
+    return `${item.status}: ${clip}${lit}${next}`;
+  });
+  return `${items.length} initiative${items.length === 1 ? "" : "s"}.\n${lines.join("\n")}`;
+}
+
+export function formatInitiativeRead(ticket: InitiativeRead): string {
+  const next = ticket.next ? `Next: ${ticket.next}.` : "Done.";
+  const founding = ticket.founding?.text.replace(/\s+/g, " ").trim() ?? "";
+  const posts = ticket.posts.length
+    ? ticket.posts
+        .map((p) => `${p.seatKey ?? "?"}: ${p.text.replace(/\s+/g, " ").trim().slice(0, 180)}`)
+        .join("\n")
+    : "No seat posts yet.";
+  return `${ticket.status}. ${founding}\n${posts}\n${next}`;
+}
