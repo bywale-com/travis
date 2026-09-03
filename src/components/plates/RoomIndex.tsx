@@ -22,6 +22,7 @@ export function RoomIndex({
   rooms,
   selectedId,
   busy,
+  loading,
   error,
   onSelect,
   onEnter,
@@ -36,6 +37,7 @@ export function RoomIndex({
   rooms: RoomRow[];
   selectedId: string | null;
   busy?: boolean;
+  loading?: boolean;
   error?: string | null;
   onSelect: (id: string) => void;
   onEnter: (id: string) => void;
@@ -97,7 +99,7 @@ export function RoomIndex({
                 marginTop: 48,
               }}
             >
-              No rooms yet.
+              {loading ? "Loading rooms…" : "No rooms yet."}
             </p>
           ) : (
             rooms.map((room) => {
@@ -260,7 +262,7 @@ export function RoomIndex({
               textDecoration: "none",
             }}
           >
-            Enter
+            {busy && selectedId ? "Entering…" : "Enter"}
           </button>
           <button
             type="button"

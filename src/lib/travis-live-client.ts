@@ -189,7 +189,6 @@ export async function startTravisLive(opts: {
         }
         if (action.op === "travis_delta") {
           travisAcc = absorbText(travisAcc, action.text).acc;
-          opts.onTravisText(travisAcc);
           continue;
         }
         if (action.op === "travis_flush") {

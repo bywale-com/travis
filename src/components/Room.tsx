@@ -280,6 +280,7 @@ export function Room({
   const [door, setDoor] = useState<Door>(null);
   const [holdTurn, setHoldTurn] = useState<Turn | null>(null);
   const [backlogRows, setBacklogRows] = useState<BacklogRow[]>([]);
+  const [backlogLoading, setBacklogLoading] = useState(false);
   const [selectedBacklogId, setSelectedBacklogId] = useState<string | null>(
     null,
   );
@@ -293,6 +294,7 @@ export function Room({
   const [runningNow, setRunningNow] = useState<RunningNow[]>([]);
   const [agentReturn, setAgentReturn] = useState<"create" | "roster">("create");
   const [newIds, setNewIds] = useState<string[]>([]);
+  const [roomsLoading, setRoomsLoading] = useState(true);
 
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const committedRef = useRef("");
@@ -822,12 +824,15 @@ export function Room({
   const loadBacklog = useCallback(async () => {
     const sid = sessionIdRef.current;
     if (!sid) return;
+    setBacklogLoading(true);
     try {
       const res = await fetch(`/api/session/${sid}/initiatives?status=all`);
       const data = await readJson<{ initiatives?: BacklogRow[] }>(res);
       setBacklogRows(Array.isArray(data.initiatives) ? data.initiatives : []);
     } catch {
       setBacklogRows([]);
+    } finally {
+      setBacklogLoading(false);
     }
   }, []);
 
@@ -1805,6 +1810,8 @@ export function Room({
         await Promise.all([loadRooms(), loadCatalog()]);
       } catch (e) {
         if (!cancelled) setError(e instanceof Error ? e.message : String(e));
+      } finally {
+        if (!cancelled) setRoomsLoading(false);
       }
     })();
     return () => {
@@ -2033,6 +2040,7 @@ export function Room({
         rooms={rooms}
         selectedId={selectedRoomId}
         busy={busy}
+        loading={roomsLoading}
         error={error}
         onSelect={setSelectedRoomId}
         onEnter={(id) => void enterRoom(id)}
@@ -2110,8 +2118,8 @@ export function Room({
             <button
               type="button"
               onClick={() => {
-                void loadBacklog();
                 setDoor("backlog");
+                void loadBacklog();
               }}
               style={{
                 border: "none",
@@ -2595,8 +2603,8 @@ export function Room({
                         aria-label="Open ticket"
                         onClick={(e) => {
                           e.stopPropagation();
-                          void loadBacklog();
                           setDoor("backlog");
+                          void loadBacklog();
                           void openTicket(turn.initiativeId!);
                         }}
                         style={{
@@ -2923,6 +2931,7 @@ export function Room({
           t={t}
           rows={backlogRows}
           selectedId={selectedBacklogId}
+          loading={backlogLoading}
           onSelect={setSelectedBacklogId}
           onOpen={(id) => void openTicket(id)}
           onClose={() => {
