@@ -178,12 +178,29 @@ function playShot(url: string): void {
   }
 }
 
-export function playSendSwoosh(): void {
+export type SendSoundSurface = "voice" | "talk" | "type";
+
+/** Voice is the ear. Talk/Type keep the send/queue shots. No PM toggle. */
+export function sendSoundSurfaceFromView(
+  viewMode: "voice" | "log",
+  logSubmode?: "talk" | "type",
+): SendSoundSurface {
+  if (viewMode !== "log") return "voice";
+  return logSubmode === "type" ? "type" : "talk";
+}
+
+export function shouldPlaySendSound(surface: SendSoundSurface): boolean {
+  return surface !== "voice";
+}
+
+export function playSendSwoosh(surface: SendSoundSurface = "talk"): void {
+  if (!shouldPlaySendSound(surface)) return;
   ensurePlayers();
   playShot(swooshUrl);
 }
 
-export function playQueuedCue(): void {
+export function playQueuedCue(surface: SendSoundSurface = "talk"): void {
+  if (!shouldPlaySendSound(surface)) return;
   ensurePlayers();
   playShot(cueUrl);
 }
