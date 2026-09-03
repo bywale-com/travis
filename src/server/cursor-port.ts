@@ -38,6 +38,82 @@ function apiKey(): string {
   return process.env.CURSOR_API_KEY?.trim() ?? "";
 }
 
+const CURSOR_API = "https://api.cursor.com";
+
+function cursorBasicAuth(key: string): string {
+  return `Basic ${Buffer.from(`${key}:`).toString("base64")}`;
+}
+
+export type CursorArtifactItem = {
+  path: string;
+  sizeBytes: number | null;
+  updatedAt: string | null;
+};
+
+/** Agent-scoped folder. Filter by this run's startedAt before hanging. */
+export async function listCursorArtifacts(
+  agentId: string,
+): Promise<CursorArtifactItem[]> {
+  const key = apiKey();
+  const id = agentId.trim();
+  if (!id || !isCloudAgentId(id) || !key) return [];
+  try {
+    const res = await fetch(`${CURSOR_API}/v1/agents/${encodeURIComponent(id)}/artifacts`, {
+      headers: { Authorization: cursorBasicAuth(key) },
+    });
+    if (!res.ok) return [];
+    const body = (await res.json()) as { items?: unknown };
+    if (!Array.isArray(body.items)) return [];
+    const out: CursorArtifactItem[] = [];
+    for (const raw of body.items) {
+      if (!raw || typeof raw !== "object") continue;
+      const item = raw as {
+        path?: unknown;
+        sizeBytes?: unknown;
+        updatedAt?: unknown;
+      };
+      if (typeof item.path !== "string" || !item.path.trim()) continue;
+      out.push({
+        path: item.path.trim(),
+        sizeBytes: typeof item.sizeBytes === "number" ? item.sizeBytes : null,
+        updatedAt: typeof item.updatedAt === "string" ? item.updatedAt : null,
+      });
+    }
+    return out;
+  } catch (err) {
+    console.error("[travis] list artifacts failed:", err);
+    return [];
+  }
+}
+
+/** Fetch bytes through the 15-minute URL. Never return that URL. */
+export async function downloadCursorArtifact(params: {
+  agentId: string;
+  path: string;
+}): Promise<Uint8Array | null> {
+  const key = apiKey();
+  const id = params.agentId.trim();
+  const path = params.path.trim();
+  if (!id || !isCloudAgentId(id) || !key || !path) return null;
+  try {
+    const signed = await fetch(
+      `${CURSOR_API}/v1/agents/${encodeURIComponent(id)}/artifacts/download?path=${encodeURIComponent(path)}`,
+      { headers: { Authorization: cursorBasicAuth(key) } },
+    );
+    if (!signed.ok) return null;
+    const meta = (await signed.json()) as { url?: unknown };
+    if (typeof meta.url !== "string" || !meta.url.startsWith("https://")) {
+      return null;
+    }
+    const file = await fetch(meta.url);
+    if (!file.ok) return null;
+    return new Uint8Array(await file.arrayBuffer());
+  } catch (err) {
+    console.error("[travis] download artifact failed:", err);
+    return null;
+  }
+}
+
 function textFromAssistantMessage(content: unknown): string {
   if (!Array.isArray(content)) return "";
   let out = "";

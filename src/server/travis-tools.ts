@@ -133,7 +133,7 @@ export const TRAVIS_TOOL_DECLS = [
   {
     name: "read_initiative",
     description:
-      "Read one initiative: founding line, each seat's canonical post, and whose turn is next.",
+      "Read one initiative: founding line, each seat's canonical post, files that landed, and whose turn is next.",
     parameters: {
       type: "object",
       properties: { id: { type: "string" } },

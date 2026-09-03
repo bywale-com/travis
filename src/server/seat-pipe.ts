@@ -17,6 +17,7 @@ import {
   streamCursorReply,
   type CursorStreamEvent,
 } from "@/server/cursor-port";
+import { harvestTurnArtifacts } from "@/server/artifacts";
 import { db } from "@/server/db/client";
 import { ensureInitiativeStore } from "@/server/initiative";
 import { isOpenMember, requireOpenMember } from "@/server/room-membership";
@@ -422,6 +423,7 @@ export async function pipeOneSend(params: {
   let postTurn: VoiceTurn | null = null;
   let lastPostPersist = 0;
   let liveRunId: string | null = null;
+  let runStartedAt: Date | null = null;
   const doneBox: {
     current: {
       mode: string;
@@ -440,6 +442,8 @@ export async function pipeOneSend(params: {
         cursorRunId: ev.runId,
         userTurnId: userTurn.id,
       });
+      const live = await getLiveRun(binding.id);
+      runStartedAt = live?.startedAt ?? new Date();
       return;
     }
     if (ev.type === "busy") {
@@ -552,6 +556,12 @@ export async function pipeOneSend(params: {
     });
   }
 
+  await harvestTurnArtifacts({
+    post: postTurn,
+    binding,
+    startedAt: runStartedAt,
+  });
+
   const statusText = donePayload?.statusText ?? "finished";
   const statusTurn = await insertTurn(sessionId, {
     role: "status",
@@ -641,16 +651,19 @@ export async function reapFinishedLiveRuns(sessionId: string): Promise<void> {
     const finalPost = harvested.assistantText.trim()
       ? harvested.assistantText.trim()
       : "Run finished (no assistant text).";
-    if (live.userTurnId) {
-      await absorbStreamingAgentPost({
-        sessionId,
-        userTurnId: live.userTurnId,
-        seatKey,
-        text: finalPost,
-      });
-    } else {
-      await insertAgentPostTurn(sessionId, finalPost, seatKey);
-    }
+    const post = live.userTurnId
+      ? await absorbStreamingAgentPost({
+          sessionId,
+          userTurnId: live.userTurnId,
+          seatKey,
+          text: finalPost,
+        })
+      : await insertAgentPostTurn(sessionId, finalPost, seatKey);
+    await harvestTurnArtifacts({
+      post,
+      binding,
+      startedAt: live.startedAt,
+    });
     await insertStatusTurn(sessionId, "finished");
     await releaseLiveRunIfMatch(binding.id, live.cursorRunId);
   }

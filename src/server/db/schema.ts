@@ -147,6 +147,28 @@ export const initiative = travis.table("initiative", {
   doneAt: timestamp("done_at", { withTimezone: true }),
 });
 
+/** SCP-009 — files/images hung on a stamped agent_post. Bytes stay at Cursor. */
+export const turnArtifact = travis.table("turn_artifact", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  turnId: uuid("turn_id")
+    .notNull()
+    .references(() => voiceTurn.id),
+  sessionId: uuid("session_id")
+    .notNull()
+    .references(() => voiceSession.id),
+  bindingId: uuid("binding_id")
+    .notNull()
+    .references(() => agentBinding.id),
+  kind: text("kind").notNull(),
+  path: text("path").notNull(),
+  filename: text("filename").notNull(),
+  sizeBytes: integer("size_bytes"),
+  cursorUpdatedAt: timestamp("cursor_updated_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
 export type AgentBinding = typeof agentBinding.$inferSelect;
 export type VoiceSession = typeof voiceSession.$inferSelect;
 export type VoiceTurn = typeof voiceTurn.$inferSelect;
@@ -158,6 +180,8 @@ export type MembershipRole = "member" | "facilitator";
 export type Initiative = typeof initiative.$inferSelect;
 export type InitiativeSource = "via_travis" | "hold";
 export type InitiativeStatus = "open" | "done";
+export type TurnArtifact = typeof turnArtifact.$inferSelect;
+export type ArtifactKind = "image" | "file";
 
 export type TurnKind =
   | "user"

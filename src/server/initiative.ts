@@ -6,6 +6,7 @@
  */
 
 import { and, asc, desc, eq, sql } from "drizzle-orm";
+import { formatLandedFiles } from "@/lib/artifact-kind";
 import {
   catalogNeedleHits,
   clipInitiativeTitle,
@@ -15,6 +16,7 @@ import {
   canonicalPosts,
   deriveNext,
   litSeatKeys,
+  type InitiativeAttachment,
 } from "@/lib/initiative";
 import {
   parseRequestWhen,
@@ -22,6 +24,7 @@ import {
   requestWindowStart,
   type RequestWhen,
 } from "@/lib/request-log";
+import { attachmentsForInitiative } from "@/server/artifacts";
 import { isCursorSeat } from "@/lib/seats";
 import { db } from "@/server/db/client";
 import {
@@ -549,7 +552,7 @@ export type InitiativeRead = {
     createdAt: Date;
   }>;
   next: ReturnType<typeof deriveNext>;
-  attachments: [];
+  attachments: InitiativeAttachment[];
 };
 
 export async function readInitiative(
@@ -588,7 +591,7 @@ export async function readInitiative(
       createdAt: p.createdAt,
     })),
     next: nextOf(row, turns),
-    attachments: [],
+    attachments: await attachmentsForInitiative(row.id),
   };
 }
 
@@ -614,5 +617,8 @@ export function formatInitiativeRead(ticket: InitiativeRead): string {
         .map((p) => `${p.seatKey ?? "?"}: ${p.text.replace(/\s+/g, " ").trim().slice(0, 180)}`)
         .join("\n")
     : "No seat posts yet.";
-  return `${title}\n${ticket.status}. ${founding}\n${posts}\n${next}`;
+  const files = formatLandedFiles(ticket.attachments);
+  return files
+    ? `${title}\n${ticket.status}. ${founding}\n${posts}\n${files}\n${next}`
+    : `${title}\n${ticket.status}. ${founding}\n${posts}\n${next}`;
 }
