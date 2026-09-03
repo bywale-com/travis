@@ -53,11 +53,13 @@ export function narrateToolCall(
       return args.action === "send"
         ? `Pushing ${seat(args)}'s waiting line through now.`
         : `Dropping ${seat(args)}'s waiting line.`;
+    case "mark_initiative_done":
+      return "Marking that initiative done.";
     case "end_session":
       return "Ending the room.";
     default:
-      // list_seats, queue_snapshot, work_in_flight, search_room, set_view — instant, and
-      // the answer says more than the announcement would.
+      // list_seats, queue_snapshot, work_in_flight, search_room,
+      // list_initiatives, read_initiative, set_view — instant.
       return null;
   }
 }

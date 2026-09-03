@@ -23,6 +23,7 @@ export async function GET(
       kind: t.kind,
       seatKey: t.seatKey,
       referenceTurnId: t.referenceTurnId,
+      initiativeId: t.initiativeId,
       speakable: t.speakable,
       thoughtStatus: t.thoughtStatus,
       text: t.text,

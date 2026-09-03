@@ -56,6 +56,7 @@ import { TYPE } from "@/theme/scale";
 import type { SeatKey } from "@/server/db/schema";
 import { Button } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 type Turn = {
   id: string;
@@ -66,6 +67,7 @@ type Turn = {
   referenceTurnId?: string | null;
   speakable?: boolean;
   thoughtStatus?: string | null;
+  initiativeId?: string | null;
   text: string;
   createdAt?: string;
 };
@@ -270,6 +272,7 @@ export function Room({
   const [threadPinned, setThreadPinned] = useState(true);
   const [plate, setPlate] = useState<PlateFace>("index");
   const [door, setDoor] = useState<Door>(null);
+  const [holdTurn, setHoldTurn] = useState<Turn | null>(null);
   const [rooms, setRooms] = useState<RoomRow[]>([]);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const [catalog, setCatalog] = useState<CatalogSeat[]>([]);
@@ -311,6 +314,7 @@ export function Room({
   const notifiedNewRef = useRef<Set<string>>(new Set());
   const wakeNewTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const drainingRef = useRef(false);
+  const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const consumeAgentStreamRef = useRef<
     (sid: string, res: Response, tempUserId?: string) => Promise<void>
   >(async () => {});
@@ -800,6 +804,33 @@ export function Room({
     [applyQueue, haltRecognition, refreshQueue, refreshTurns, scheduleListenRestart],
   );
   consumeAgentStreamRef.current = consumeAgentStream;
+
+  const promoteInitiative = useCallback(
+    async (turn: Turn) => {
+      const sid = sessionIdRef.current;
+      if (!sid || turn.initiativeId) return;
+      setHoldTurn(null);
+      try {
+        const res = await fetch(`/api/session/${sid}/initiatives`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ foundingTurnId: turn.id }),
+        });
+        const ct = res.headers.get("content-type") ?? "";
+        if (ct.includes("text/event-stream")) {
+          await consumeAgentStream(sid, res);
+        } else if (!res.ok) {
+          const data = (await res.json().catch(() => ({}))) as { error?: string };
+          setError(data.error ?? "Could not make an initiative");
+        }
+        await refreshTurns(sid);
+        await refreshSession(sid);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : String(e));
+      }
+    },
+    [consumeAgentStream, refreshSession, refreshTurns],
+  );
 
   const connectLive = useCallback(
     async (sid: string): Promise<boolean> => {
@@ -2346,6 +2377,7 @@ export function Room({
                 const isUser = turn.kind === "user";
                 const isPrompt = turn.kind === "travis_prompt";
                 const seat = turn.seatKey ?? (isPrompt ? "" : "pm");
+                const marked = isUser && Boolean(turn.initiativeId);
 
                 const refTurn = turn.referenceTurnId
                   ? turns.find((x) => x.id === turn.referenceTurnId)
@@ -2394,11 +2426,56 @@ export function Room({
                       alignSelf: isUser ? "flex-end" : "flex-start",
                       maxWidth: "92%",
                       display: "flex",
-                      flexDirection: isUser ? "column" : "row",
+                      flexDirection: isUser ? "row" : "row",
                       alignItems: isUser ? "flex-end" : "flex-start",
                       gap: 8,
                     }}
+                    onContextMenu={
+                      isUser && !turn.initiativeId
+                        ? (e) => {
+                            e.preventDefault();
+                            setHoldTurn(turn);
+                          }
+                        : undefined
+                    }
+                    onTouchStart={
+                      isUser && !turn.initiativeId
+                        ? () => {
+                            if (holdTimerRef.current) clearTimeout(holdTimerRef.current);
+                            holdTimerRef.current = setTimeout(() => {
+                              setHoldTurn(turn);
+                            }, 450);
+                          }
+                        : undefined
+                    }
+                    onTouchEnd={
+                      isUser
+                        ? () => {
+                            if (holdTimerRef.current) clearTimeout(holdTimerRef.current);
+                          }
+                        : undefined
+                    }
+                    onTouchCancel={
+                      isUser
+                        ? () => {
+                            if (holdTimerRef.current) clearTimeout(holdTimerRef.current);
+                          }
+                        : undefined
+                    }
                   >
+                    {isUser && marked ? (
+                      <span
+                        aria-label="Initiative"
+                        style={{
+                          width: 16,
+                          height: 16,
+                          marginBottom: 6,
+                          borderRadius: "50%",
+                          border: `1.5px solid ${t.accent}`,
+                          flexShrink: 0,
+                        }}
+                      />
+                    ) : null}
                     {!isUser && (
                       <SeatMark
                         seatKey={isPrompt ? "travis" : seat || "pm"}
@@ -2729,6 +2806,57 @@ export function Room({
           }}
         />
       ) : null}
+
+      {holdTurn && typeof document !== "undefined"
+        ? createPortal(
+            <div
+              style={{
+                position: "fixed",
+                inset: 0,
+                zIndex: 40,
+                background: "rgba(28,25,23,0.28)",
+                display: "flex",
+                alignItems: "flex-end",
+                justifyContent: "center",
+              }}
+              onClick={() => setHoldTurn(null)}
+            >
+              <div
+                role="dialog"
+                aria-label="Initiative"
+                style={{
+                  width: "100%",
+                  maxWidth: 480,
+                  background: t.bgElevated,
+                  borderTopLeftRadius: 16,
+                  borderTopRightRadius: 16,
+                  padding: "20px 20px 28px",
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  onClick={() => void promoteInitiative(holdTurn)}
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    border: "none",
+                    background: "transparent",
+                    color: t.accent,
+                    fontSize: TYPE.body,
+                    fontWeight: 600,
+                    textAlign: "left",
+                    padding: "12px 0",
+                    cursor: "pointer",
+                  }}
+                >
+                  Initiative
+                </button>
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
     </div>
   );
 }

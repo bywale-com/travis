@@ -68,6 +68,8 @@ export const voiceTurn = travis.table("voice_turn", {
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
+  /** SCP-008 — founding user, pass-on user, answering agent_post. FK is SQL. */
+  initiativeId: uuid("initiative_id"),
 });
 
 export const turnConductorPhrase = travis.table("turn_conductor_phrase", {
@@ -91,6 +93,8 @@ export const queuedUtterance = travis.table("queued_utterance", {
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
+  /** SCP-008 — drain stamps the same ticket. FK is SQL. */
+  initiativeId: uuid("initiative_id"),
 });
 
 /** At most one live Cursor run Travis knows about per binding. */
@@ -123,6 +127,24 @@ export const roomMembership = travis.table("room_membership", {
   leftAt: timestamp("left_at", { withTimezone: true }),
 });
 
+/** SCP-008 — one ticket. Founding line is founding_turn_id. */
+export const initiative = travis.table("initiative", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  sessionId: uuid("session_id")
+    .notNull()
+    .references(() => voiceSession.id),
+  foundingTurnId: uuid("founding_turn_id")
+    .notNull()
+    .unique()
+    .references(() => voiceTurn.id),
+  source: text("source").notNull(),
+  status: text("status").notNull().default("open"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  doneAt: timestamp("done_at", { withTimezone: true }),
+});
+
 export type AgentBinding = typeof agentBinding.$inferSelect;
 export type VoiceSession = typeof voiceSession.$inferSelect;
 export type VoiceTurn = typeof voiceTurn.$inferSelect;
@@ -131,6 +153,9 @@ export type QueuedUtterance = typeof queuedUtterance.$inferSelect;
 export type SeatLiveRun = typeof seatLiveRun.$inferSelect;
 export type RoomMembership = typeof roomMembership.$inferSelect;
 export type MembershipRole = "member" | "facilitator";
+export type Initiative = typeof initiative.$inferSelect;
+export type InitiativeSource = "via_travis" | "hold";
+export type InitiativeStatus = "open" | "done";
 
 export type TurnKind =
   | "user"

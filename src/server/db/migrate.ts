@@ -1,5 +1,5 @@
 /**
- * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership.
+ * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership + SCP-008 backlog.
  */
 import { config } from "dotenv";
 import postgres from "postgres";
@@ -296,7 +296,51 @@ async function main() {
       )
   `;
 
-  console.log("travis schema + SCP-007 room membership ready");
+  await sql`
+    CREATE TABLE IF NOT EXISTS travis.initiative (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      session_id uuid NOT NULL REFERENCES travis.voice_session(id),
+      founding_turn_id uuid NOT NULL REFERENCES travis.voice_turn(id),
+      source text NOT NULL,
+      status text NOT NULL DEFAULT 'open',
+      created_at timestamptz NOT NULL DEFAULT now(),
+      done_at timestamptz,
+      CONSTRAINT initiative_source_chk
+        CHECK (source IN ('via_travis', 'hold')),
+      CONSTRAINT initiative_status_chk
+        CHECK (status IN ('open', 'done')),
+      CONSTRAINT initiative_done_at_chk
+        CHECK (
+          (status = 'open' AND done_at IS NULL)
+          OR (status = 'done' AND done_at IS NOT NULL)
+        ),
+      CONSTRAINT initiative_founding_uniq UNIQUE (founding_turn_id)
+    )
+  `;
+
+  await sql`
+    CREATE INDEX IF NOT EXISTS initiative_open_by_session
+      ON travis.initiative (session_id)
+      WHERE status = 'open'
+  `;
+
+  await sql`
+    ALTER TABLE travis.voice_turn
+      ADD COLUMN IF NOT EXISTS initiative_id uuid REFERENCES travis.initiative(id)
+  `;
+
+  await sql`
+    CREATE INDEX IF NOT EXISTS voice_turn_initiative_idx
+      ON travis.voice_turn (initiative_id)
+      WHERE initiative_id IS NOT NULL
+  `;
+
+  await sql`
+    ALTER TABLE travis.queued_utterance
+      ADD COLUMN IF NOT EXISTS initiative_id uuid REFERENCES travis.initiative(id)
+  `;
+
+  console.log("travis schema + SCP-008 backlog ready");
   await sql.end();
 }
 

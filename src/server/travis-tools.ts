@@ -39,6 +39,17 @@ import {
   requireOpenMember,
   roomSeats,
 } from "@/server/room-membership";
+import {
+  ensureViaTravis,
+  formatInitiativeList,
+  formatInitiativeRead,
+  InitiativeError,
+  listInitiatives,
+  markInitiativeDone,
+  readInitiative,
+  stampLatestPassOn,
+} from "@/server/initiative";
+import type { InitiativeStatus } from "@/server/db/schema";
 
 export const TRAVIS_TOOL_DECLS = [
   {
@@ -103,6 +114,37 @@ export const TRAVIS_TOOL_DECLS = [
         when: { type: "string", enum: ["today", "week", "all"] },
         limit: { type: "number" },
       },
+    },
+  },
+  {
+    name: "list_initiatives",
+    description:
+      "List this room's backlog — initiatives you are orchestrating, not every request. Default is open. Pass status done or all to see closed ones.",
+    parameters: {
+      type: "object",
+      properties: {
+        status: { type: "string", enum: ["open", "done", "all"] },
+      },
+    },
+  },
+  {
+    name: "read_initiative",
+    description:
+      "Read one initiative: founding line, each seat's canonical post, and whose turn is next.",
+    parameters: {
+      type: "object",
+      properties: { id: { type: "string" } },
+      required: ["id"],
+    },
+  },
+  {
+    name: "mark_initiative_done",
+    description:
+      "Mark an initiative done. The pipe finished. A seat post does not close it — only this or the founder.",
+    parameters: {
+      type: "object",
+      properties: { id: { type: "string" } },
+      required: ["id"],
     },
   },
   {
@@ -228,6 +270,7 @@ export async function runTravisTool(params: {
     }
     const dupe = await guardDuplicate(sessionId, "send_to_seat", seat, text);
     if (dupe) return dupe;
+    const prior = await ensureViaTravis(sessionId);
     const seatLabel = binding.label ?? seatKeyToLabel(seat as SeatKey);
     const startedAt = Date.now();
     let errored = false;
@@ -236,6 +279,7 @@ export async function runTravisTool(params: {
       sessionId,
       binding,
       prompt: text,
+      initiativeId: prior?.id,
       send: (event, data) => {
         if (event !== "done") return;
         const d = data as {
@@ -252,6 +296,7 @@ export async function runTravisTool(params: {
       const row = snap.seats.find((s) => s.seatKey === seat);
       waitingAhead = Math.max(0, (row?.items.length ?? 1) - 1);
     }
+    await stampLatestPassOn(sessionId, seat, text).catch(() => {});
     return {
       ok: true,
       text: sendReceipt({
@@ -282,7 +327,16 @@ export async function runTravisTool(params: {
     }
     const dupe = await guardDuplicate(sessionId, "dispatch_to_seat", seat, text);
     if (dupe) return dupe;
-    const outcome = await dispatchToSeat({ sessionId, binding, prompt: text });
+    const prior = await ensureViaTravis(sessionId);
+    const outcome = await dispatchToSeat({
+      sessionId,
+      binding,
+      prompt: text,
+      initiativeId: prior?.id,
+    });
+    if (outcome.status !== "error") {
+      await stampLatestPassOn(sessionId, seat, text).catch(() => {});
+    }
     return {
       ok: outcome.status !== "error",
       text: dispatchReceipt(outcome),
@@ -317,6 +371,38 @@ export async function runTravisTool(params: {
       ok: true,
       text: `${label} said, in short (${body.length} characters in the log): ${gist}`,
     };
+  }
+
+  if (name === "list_initiatives") {
+    const status = ["open", "done", "all"].includes(String(args.status ?? ""))
+      ? (String(args.status) as InitiativeStatus | "all")
+      : "open";
+    const items = await listInitiatives(sessionId, status);
+    return { ok: true, text: formatInitiativeList(items) };
+  }
+
+  if (name === "read_initiative") {
+    const id = String(args.id ?? "").trim();
+    if (!id) return { ok: false, text: "Need an initiative id." };
+    try {
+      const ticket = await readInitiative(sessionId, id);
+      return { ok: true, text: formatInitiativeRead(ticket) };
+    } catch (err) {
+      if (err instanceof InitiativeError) return { ok: false, text: err.message };
+      throw err;
+    }
+  }
+
+  if (name === "mark_initiative_done") {
+    const id = String(args.id ?? "").trim();
+    if (!id) return { ok: false, text: "Need an initiative id." };
+    try {
+      await markInitiativeDone(sessionId, id);
+      return { ok: true, text: "Initiative marked done." };
+    } catch (err) {
+      if (err instanceof InitiativeError) return { ok: false, text: err.message };
+      throw err;
+    }
   }
 
   if (name === "search_room") {
@@ -429,6 +515,8 @@ Answer the founder. Use tools when they ask you to send a line to a seat, glance
 What you cannot do: you cannot see the repository, a diff, a branch, a test run, or CI. You have no view of the code and no way to check whether anything passed. If the founder asks for a code review, a test check, a migration risk assessment, a rollout plan, or anything else that needs the repo, say plainly that you cannot see it and offer to send it to the Engineer, SA or PM. Never describe a review, a check, or an analysis you are not able to perform. The room and the tools listed above are your entire view of the world — reading about work in the room log is not the same as being able to do it.
 
 You are shown a short room-state block with recent turns and what is running. Treat it as already true — do not ask the founder to repeat something that is in it. Seat replies appear there only as receipts; call read_seat_reply when you need what a seat actually said. The window is not the whole room. When they ask what was requested, what is in motion, or what you already routed to a seat, call search_room. That log has UTC timestamps and stays in this room. “Requests today” → when today. “Last 10” → limit 10. “Everyone this week” → when week, no seat. Do not invent a list — call the tool.
+
+The backlog is separate. search_room is every line. Initiatives are only what you passed on, or what they promoted with Hold. list_initiatives / read_initiative / mark_initiative_done for that pipe. A seat finishing does not mark it done — you or they do.
 
 Report what the tools actually told you.
 
