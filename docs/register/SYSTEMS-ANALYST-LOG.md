@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 00:21 UTC — **SCP-007 signed.** Room = `voice_session`. Mint `room_membership`. Engineer SQL signed; new-room and dest runtime amended. Packet: [`SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md`](./SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md). Numbers 003–006 remapped (planted; files not on `main`). Engineer pastes; no leftover analysis.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 20:53 UTC — **SCP-013 signed.** Two models, one Backlog pile. Mint `travis.motion` + `motion_step` + dumb runner. Do not overload `initiative`. Packet: [`SYSTEMS-CHANGE-PACKET-013-MOTION.md`](./SYSTEMS-CHANGE-PACKET-013-MOTION.md).
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -301,3 +301,27 @@ SCP-001 seed field updated.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md`](./SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md)
 
 **Handoff:** Engineer pastes the signed SQL + Drizzle, switches `roomSeats()`, writes the runtime in the packet. No leftover analysis.
+
+---
+
+## 2026-09-03 20:53 UTC — SCP-013 In motion (envelope pickup)
+
+**Kind:** Envelope pickup. Engineer [`ENVELOPE-TRAVIS-ORCHESTRATE.md`](./ENVELOPE-TRAVIS-ORCHESTRATE.md) (PR #94) + [`PLATES-IN-MOTION.md`](./PLATES-IN-MOTION.md) (PR #95). PM parked — founder: deprecated seat this pass. Founder signed the look, recut the home: In motion lives **in Backlog**, three views.
+
+**Locks:** The turn is not the work. He stays available. Two kinds of work, one pile. Voice count = Travis processes only. No second index.
+
+**Ascribed:**
+
+1. **Sibling store**, not an initiative status. `travis.motion` + `travis.motion_step`. Tickets stay `initiative`.
+2. A step is one of **his** tools + frozen args. Seat send is **not** a step (no one’s input).
+3. Runner is request-scoped. Wake: `file_plan`, live/tool, generateTravisText, send, queue drain. No cron.
+4. Barge does not delete the plan.
+5. Caps: 100 open / room, 20 steps, 2 executing. Extra `send_to_seat` in one batch refused.
+6. P1 = count `waiting|running`. In motion view = motions including `failed`. Not initiative rows (P2 PNG’s Engineer row is the old draw; recut wins).
+7. Hygiene: print initiative `id` on list/read so rename steps can be honest.
+
+**Refused:** planner, tool debugger, digest plate, second index, `initiative.status=in_motion`, V6-as-processes, daemon, POSIX, seated.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-013-MOTION.md`](./SYSTEMS-CHANGE-PACKET-013-MOTION.md)
+
+**Handoff:** Engineer pastes tables, runner, Backlog `view`, P1, `file_plan`. Founder lands SQL.
