@@ -6,6 +6,7 @@ import {
   filterRequests,
   formatStamp,
   requestDestLabel,
+  type RequestWhen,
 } from "@/lib/request-log";
 import { relativeTime } from "@/lib/relative-time";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
@@ -33,9 +34,10 @@ export function RequestLogDoor({
   onOpenTurn: (id: string) => void;
 }) {
   const [q, setQ] = useState("");
+  const [when, setWhen] = useState<RequestWhen>("all");
   const rows = useMemo(
-    () => filterRequests(items, { q }),
-    [items, q],
+    () => filterRequests(items, { q, when }),
+    [items, q, when],
   );
 
   return (
@@ -109,6 +111,37 @@ export function RequestLogDoor({
             fontFamily: "inherit",
           }}
         />
+        <div
+          style={{
+            display: "flex",
+            gap: 16,
+            fontSize: TYPE.meta,
+          }}
+        >
+          {([
+            ["all", "All"],
+            ["today", "Today"],
+            ["week", "Week"],
+          ] as const).map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setWhen(key)}
+              style={{
+                border: "none",
+                background: "transparent",
+                padding: 0,
+                cursor: "pointer",
+                fontFamily: "inherit",
+                fontSize: TYPE.meta,
+                color: when === key ? t.textPrimary : t.textMuted,
+                fontWeight: when === key ? 650 : 400,
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
         {rows.length === 0 ? (
           <p style={{ color: t.textMuted, fontSize: TYPE.meta, margin: 0 }}>
             {items.length === 0

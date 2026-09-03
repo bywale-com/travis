@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **049**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **050**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -59,3 +59,4 @@
 | 046 | [`HOTFIX-046-VOICE-SEND-SOUNDS.md`](./HOTFIX-046-VOICE-SEND-SOUNDS.md) | Voice stays quiet on send/queue; Talk and Type still play the shots |
 | 047 | [`HOTFIX-047-READBACK-VOICE.md`](./HOTFIX-047-READBACK-VOICE.md) | Rank network/natural Google readback; lift rate; no Cloud TTS port |
 | 048 | [`HOTFIX-048-REQUEST-LOG.md`](./HOTFIX-048-REQUEST-LOG.md) | Same-room request log Travis can search; founder door; no new table |
+| 049 | [`HOTFIX-049-SEARCH-GRAIN.md`](./HOTFIX-049-SEARCH-GRAIN.md) | search_room last-N / today / last 7 days; same door words |

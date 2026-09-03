@@ -15,9 +15,13 @@ import {
 import {
   REQUEST_LOG_LIMIT,
   REQUEST_SCAN,
+  clampRequestLimit,
   formatRequestLog,
+  requestInWindow,
   requestMatches,
+  requestWindowStart,
   type RequestRow,
+  type RequestWhen,
 } from "@/lib/request-log";
 import { db } from "@/server/db/client";
 import { voiceTurn } from "@/server/db/schema";
@@ -123,7 +127,7 @@ export async function countRequests(sessionId: string): Promise<number> {
 /** Newest first. Bounded at the database. Search is a filter, not a new store. */
 export async function searchRequests(
   sessionId: string,
-  opts: { q?: string; seat?: string; limit?: number } = {},
+  opts: { q?: string; seat?: string; when?: RequestWhen; limit?: number } = {},
 ): Promise<{ rows: RequestRow[]; total: number }> {
   const scanned = await db
     .select({
@@ -138,19 +142,28 @@ export async function searchRequests(
     .orderBy(desc(voiceTurn.seq))
     .limit(REQUEST_SCAN);
 
-  const matched = scanned.filter((r) =>
-    requestMatches(r.text, opts.q ?? "", r.seatKey, opts.seat),
+  const since = requestWindowStart(opts.when ?? "all");
+  const matched = scanned.filter(
+    (r) =>
+      requestMatches(r.text, opts.q ?? "", r.seatKey, opts.seat) &&
+      requestInWindow(r.createdAt, since),
   );
-  const limit = opts.limit ?? REQUEST_LOG_LIMIT;
+  const limit = clampRequestLimit(opts.limit ?? REQUEST_LOG_LIMIT);
   return { rows: matched.slice(0, limit), total: matched.length };
 }
 
 export async function searchRoomText(
   sessionId: string,
-  opts: { q?: string; seat?: string } = {},
+  opts: { q?: string; seat?: string; when?: RequestWhen; limit?: number } = {},
 ): Promise<string> {
   const { rows, total } = await searchRequests(sessionId, opts);
-  return formatRequestLog({ rows, total, q: opts.q, seat: opts.seat });
+  return formatRequestLog({
+    rows,
+    total,
+    q: opts.q,
+    seat: opts.seat,
+    when: opts.when,
+  });
 }
 
 export async function roomContextFor(sessionId: string): Promise<string> {
