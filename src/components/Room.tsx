@@ -11,7 +11,7 @@ import {
 import { conductorGate, conductorOnEnd, isDuplicateSend } from "@/lib/conductor";
 import { speakableAgentPost } from "@/lib/agent-post";
 import { flushSpeakBuffer, pullClosedSentences } from "@/lib/speak-sentences";
-import { applyMaleVoice } from "@/lib/speak-voice";
+import { applyReadbackVoice } from "@/lib/speak-voice";
 import { isPinnedToBottom } from "@/lib/thread-scroll";
 import { parseCallByName, parseDeadManResponse, seatKeyToShort } from "@/lib/router";
 import {
@@ -157,7 +157,7 @@ function queueUtterance(text: string): Promise<void> {
   if (!spoken) return Promise.resolve();
   return new Promise((resolve) => {
     const u = new SpeechSynthesisUtterance(spoken);
-    applyMaleVoice(u);
+    applyReadbackVoice(u);
     u.onend = () => resolve();
     u.onerror = () => resolve();
     window.speechSynthesis.resume();

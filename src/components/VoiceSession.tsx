@@ -1,7 +1,7 @@
 "use client";
 
 import { matchConductorPhrase } from "@/lib/conductor";
-import { applyMaleVoice } from "@/lib/speak-voice";
+import { applyReadbackVoice } from "@/lib/speak-voice";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -185,7 +185,7 @@ export function VoiceSession({ t }: { t: Tokens }) {
                 body: JSON.stringify({ status: "speaking" }),
               });
               const u = new SpeechSynthesisUtterance(assistant.text);
-              applyMaleVoice(u);
+              applyReadbackVoice(u);
               await new Promise<void>((resolve) => {
                 u.onend = () => resolve();
                 u.onerror = () => resolve();
@@ -560,7 +560,7 @@ export function VoiceSession({ t }: { t: Tokens }) {
                     if (!window.speechSynthesis) return;
                     window.speechSynthesis.cancel();
                     const u = new SpeechSynthesisUtterance(turn.text);
-                    applyMaleVoice(u);
+                    applyReadbackVoice(u);
                     window.speechSynthesis.speak(u);
                   }}
                   style={{
