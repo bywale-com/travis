@@ -18,6 +18,7 @@ import {
   type CursorStreamEvent,
 } from "@/server/cursor-port";
 import { db } from "@/server/db/client";
+import { ensureInitiativeStore } from "@/server/initiative";
 import { isOpenMember, requireOpenMember } from "@/server/room-membership";
 import {
   agentBinding,
@@ -120,6 +121,7 @@ async function insertTurn(
     initiativeId?: string | null;
   },
 ): Promise<VoiceTurn> {
+  await ensureInitiativeStore();
   return withSeqLock(sessionId, async () => {
     const seq = await nextTurnSeq(sessionId);
     const [row] = await db
