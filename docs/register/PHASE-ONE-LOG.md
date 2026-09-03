@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 02:30 UTC — **Cost panel (considering).** On-demand door, not a dashboard. Estimates vs confirmed. No store mint.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 02:35 UTC — **Hear queue (considering).** Seat posts don’t steal the ear. Notify + rundown gist. Not a packet.
 
 **How we maintain this log**
 
@@ -1272,4 +1272,18 @@ Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tighten
 **Ruled (this stamp — considering):** Quiet **Cost** door. Sheet, one loud total. Default **this room · today**. Hero is `about $X` if any line is estimate; `$X` only when the whole total is confirmed. Unknown ≠ `$0`. Fetch on open; 60s refresh only while open and something is in flight. Founder only. No ticker on the orb. SA ascribes ports. No store mint.
 
 **Ask:** like the door? Default scope? Lock after SA, or hold?
+
+---
+
+## 2026-09-03 02:35 UTC — Hear queue + rundown (founder; considering)
+
+**Kind:** Type B. Considering. **Not a packet.** Revises 002 “read as it lands” in Voice. Not 003 (your waiting lines). Not V6 (running).
+
+**Founder (preserved):** Seat responses route directly to Google TTS and speak over the conversation, with no queueing, notification, or summarization flow. Propose UX: agent response queue, notification when a seat finishes, and a rundown mode where Travis summarizes by default and can read verbatim excerpts on request. Include controls for voice vs log, and how the user selects which seat to hear next.
+
+**Landed:** [`HEAR-QUEUE-SPEC.md`](HEAR-QUEUE-SPEC.md).
+
+**Ruled (this stamp — considering):** Land **quiet**. Notify beat + `Eng ready` chip. Hear-queue sheet. **Hear / Next / Skip.** Next = oldest ready, or call a name. Rundown **gist** by default; verbatim on request; full post always in the log. No Summarize button. Seat TTS never overlaps Live. Stop/wait/say-again stay facilitator of the read (14:56).
+
+**Ask:** notify beat every time, or chip-only when Live is down? FIFO Next? Lock after SA?
 
