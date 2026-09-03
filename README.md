@@ -4,7 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
-- **2026-09-03** · Hotfix 063 · [PR #101](https://github.com/bywale-com/travis/pull/101) — Engineer writes a complete brief, hands one seat, and stops, because this seat kept the job when the grain was PM or SA.
+- **2026-09-03** · Hotfix 063 · [PR #101](https://github.com/bywale-com/travis/pull/101) — Engineer Current lives in `ENGINEER-HANDOFF.md` so a new bind picks up, because orientation still said docs stand-up only.
 - **2026-09-03** · Hotfix 062 · [PR #98](https://github.com/bywale-com/travis/pull/98) — Hung images and files appear on the Log post, because 009 stored them and the ticket door showed them but the thread stayed text.
 - **2026-09-03** · SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) — Travis files a plan out of the turn and a runner advances it in Backlog, because the chat turn was the orchestrator and a barge killed the work.
 - **2026-09-03** · SCP-012 · [PR #93](https://github.com/bywale-com/travis/pull/93) — Travis houses protocols and templates as `os_node` rows, because the next empty work repo will not have `docs/seats`.
@@ -66,7 +66,7 @@ v1 surfaces *everything* readable from the assistant stream (no judgment yet). T
 |------|------|-------|
 | **Product Manager** | Product interpretation, Type A/B, founder wording, face outcomes | [`docs/register/PHASE-ONE-LOG.md`](docs/register/PHASE-ONE-LOG.md) |
 | **Systems Analyst** | Machine: Story, Requirements, tables, ports, change packets | [`docs/register/SYSTEMS-ANALYST-LOG.md`](docs/register/SYSTEMS-ANALYST-LOG.md) |
-| **Engineer** | Wire the specified face + machine | git + PRs · [`AGENTS.md`](AGENTS.md) |
+| **Engineer** | Wire the specified face + machine | git + PRs · [`AGENTS.md`](AGENTS.md) · [`docs/register/ENGINEER-HANDOFF.md`](docs/register/ENGINEER-HANDOFF.md) |
 
 Detailed seat READMEs: [`docs/seats/`](docs/seats/).
 
@@ -109,6 +109,6 @@ docs/
   seats/                 # detailed PM / SA / Engineer READMEs
   method/                # portable Om Coda method
   build-foundation/      # portable build pack + PROJECT-BRIEF
-  register/              # product thesis + PM/SA logs + packets
+  register/              # product thesis + PM/SA logs + packets + ENGINEER-HANDOFF
 AGENTS.md                # Engineer always-on
 ```

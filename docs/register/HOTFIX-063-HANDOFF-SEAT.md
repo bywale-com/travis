@@ -1,31 +1,33 @@
-# Hotfix 063 — Handoff seat
+# Hotfix 063 — Engineer handoff
 
 **Number:** `063` — next engineer hotfix is `064`. Never reuse. Index: [`HOTFIXES.md`](./HOTFIXES.md).  
-**Seat:** Engineer (founder: update yourself to be able to handoff seat).  
+**Seat:** Engineer (founder: update so a new Engineer picks up where this one stopped).  
 **When:** 2026-09-03  
-**PR title shape:** `Hotfix 063 — handoff seat`
+**PR title shape:** `Hotfix 063 — Engineer handoff`
 
 ---
 
 ## Why
 
-The Engineer Cloud Agent could name a missing PM or SA grain and wait, or ask the founder to seat them. It had no ritual for writing the brief, handing one seat, and stopping. Lived: this seat kept the job instead of handing it.
+PM and SA have successor files. The Engineer trail was git + PRs only. Orientation still said “docs stand-up only.” A new bind would start from a stale brief and a Cloud Agent transcript.
+
+First cut of this PR misread the ask as a dispatch-to-PM/SA ritual. Founder corrected.
 
 ## Cut
 
-- `AGENTS.md` standing law + [`docs/seats/ENGINEER.md`](../seats/ENGINEER.md) § Handoff seat: name the seat, write a complete brief, hand it, stop. One hop. This Cloud Agent prints the brief; Travis `dispatch_to_seat`s in a room.
-- Engineer paste / identity name the same stop.
-- PM and SA seat READMEs: a landed brief is a job. Do not become the next seat.
-- `TRAVIS_SYSTEM`: a brief that belongs to another seat is dispatched whole, one hop, stay.
+- [`ENGINEER-HANDOFF.md`](./ENGINEER-HANDOFF.md) — Current: where we stopped, planted, leftover, locks, successor paste.
+- `ENGINEER.md` § Handoff the seat — leave / take over. Rewrite the handoff file when you stop.
+- `AGENTS.md`, `docs/README.md` What’s live, `PROJECT-BRIEF.md` — point at that file. No more “docs stand-up only.”
 
 ## Must-not
 
-- Do not mint a handoff table.
-- Do not grow the create-agent one-line stub (012 / envelope).
-- Do not auto-seed `os_node` from seat files (012).
-- Do not plant PM→SA→Engineer auto-wake (PACKET-001).
 - Do not append the PM or SA logs.
+- Do not mint a handoff table.
+- Do not grow the create-agent stub.
+- Do not auto-seed `os_node`.
+- Do not plant PM→SA→Engineer auto-wake.
+- Do not change `TRAVIS_SYSTEM` for this cut.
 
 ## Verify
 
-`npm test`. Boundary asserts the one-hop lines. Create-agent prompt is still the one-line stub.
+`npm test`. A new Engineer who reads only `ENGINEER-HANDOFF.md` + `AGENTS.md` knows the last plant is 062, the next hotfix is 064, and 012 / 013 / 062 are not to be restarted.

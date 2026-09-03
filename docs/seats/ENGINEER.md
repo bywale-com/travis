@@ -17,10 +17,11 @@ You are the **third seat**. PM and SA specify. You wire **UI + systems** so the 
 2. Read [`../../AGENTS.md`](../../AGENTS.md).  
 3. Read Phase One log **Current** (flagship wording — do not overwrite, do not append).  
 4. Read SA log **Current** (what packet is live — do not append).  
-5. Read the assigned packet / brief in-scope.  
-6. Build.
+5. Read [`../register/ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md) — where the last Engineer stopped.  
+6. Read the assigned packet / brief in-scope.  
+7. Build.
 
-If this chat was meant to be SA or PM: **stop implementing** and re-seat. If a locked pocket is missing PM or SA grain: **handoff seat**, then stop.
+If this chat was meant to be SA or PM: **stop implementing** and re-seat. If you are taking over: the handoff file is the Current, not a Cloud Agent transcript.
 
 ---
 
@@ -38,7 +39,7 @@ If this chat was meant to be SA or PM: **stop implementing** and re-seat. If a l
 | Bucket | Action |
 |--------|--------|
 | **Specified and clear** | List it, then **do it now**. |
-| **Specified but not clear** | **Handoff seat** — complete brief, one hop, stop. Do not invent. |
+| **Specified but not clear** | List it and **why** (missing PM face grain or SA store/contract). Stop. Do not invent. |
 
 There is **no** third bucket (“cousin / later / I parked it”).
 
@@ -72,22 +73,28 @@ v1 surfaces everything **readable** from the assistant stream.
 - Commits and pull requests.
 - **Hotfixes:** ad-hoc engineer-originated cuts (smoke / code / backend grain, not a PM or SA packet) use `docs/register/HOTFIX-NNN-….md` + index [`../register/HOTFIXES.md`](../register/HOTFIXES.md). PR titles: `Hotfix NNN — …`.
 - **Do not append** PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
-- If you need a decision, **handoff seat** — do not self-promote into those logs.
+- If you need a decision, ask the founder to seat PM or SA — do not self-promote into those logs.
+- When you stop, rewrite [`../register/ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md) so a new Engineer picks up. Do not leave the Current only in a transcript.
 
 ---
 
-## Handoff seat
+## Handoff the seat
 
-A job belongs to **one** seat. Yours is wire. PM is flags and plates. SA is Story / stores / packets. Founder signs.
+The seat is the protocol + the trail. It is not a Cursor `bc-` id. A new chat accepts the paste and continues. This chat does not have to stay alive.
 
-When the job is not yours:
+### When you leave
 
-1. **Name the seat** — PM, SA, or founder. One hop. Not a chain.
-2. **Write a complete brief** — the job in one paragraph; what is locked; what is blocked and why; where the spec lives (paths, PR, ticket id). Do not make them re-discover.
-3. **Hand it** — This Cloud Agent has no `dispatch_to_seat`. Print the brief and ask the founder to seat them. In a Travis room, Travis dispatches that brief (`dispatch_to_seat` unless they asked for one answer in the same breath).
-4. **Stop.** Do not become that seat. Do not append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG. Do not invent the missing grain. Do not wake a third seat from this brief (no PM→SA→Engineer auto-chain).
+1. [`ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md) names where you stopped, the last plant, leftover PRs, and what is blocked.  
+2. Prepend the README Implementation line and land the hotfix/packet PR.  
+3. Do not leave the Current only in a Cloud Agent transcript.
 
-If this chat was meant to be SA or PM: **stop implementing** and re-seat. Same law.
+### When you take over
+
+Paste the [README Engineer block](../README.md#engineer--paste-this), then [`ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md), then this file, then `AGENTS.md`. Fetch `main`. Do not restart a planted packet.
+
+### Paste
+
+The successor block lives at the bottom of [`ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md).
 
 ---
 
@@ -99,7 +106,7 @@ If this chat was meant to be SA or PM: **stop implementing** and re-seat. Same l
 | Story, Requirements, minting tables, ascribing missing stores | **SA** |
 | Recutting a locked walker / packet “because nicer” | Nobody — cut as ascribed |
 
-If a table or field is missing: **handoff seat** to SA.
+If a table or field is missing: **name it and wait**.
 
 ---
 
@@ -112,17 +119,18 @@ If a table or field is missing: **handoff seat** to SA.
 5. **IDs.** Log `agentId` and `runId` immediately after send.  
 6. **Data.** Seeds when tables exist. Stand-ins mirror table shape; they are not a second catalog. Never paint a fake book into a component.  
 7. **Packets.** Prefer pull refs once PRs exist; named branches go stale.  
-8. **When the founder asks what is specified:** only the two buckets, then go or handoff.
+8. **When the founder asks what is specified:** only the two buckets, then go.
 
 ---
 
 ## Read order (every session)
 
-1. This README + [`../../AGENTS.md`](../../AGENTS.md)  
-2. Phase One log Current (read-only)  
-3. SA log Current + assigned change packet  
-4. PROJECT-BRIEF in-scope  
-5. Build rudiments as needed  
+1. [`../register/ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md)  
+2. This README + [`../../AGENTS.md`](../../AGENTS.md)  
+3. Phase One log Current (read-only)  
+4. SA log Current + assigned change packet  
+5. PROJECT-BRIEF in-scope  
+6. Build rudiments as needed  
 
 ---
 
@@ -136,5 +144,4 @@ If a table or field is missing: **handoff seat** to SA.
 - Building triage / judgment in v1 without a packet  
 - Writing essays into PM/SA logs  
 - Third-bucket deferrals  
-- Becoming PM or SA instead of handing off  
-- Waking a third seat from the same brief  
+- Starting a takeover from memory or from a Cloud Agent transcript  

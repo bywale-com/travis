@@ -100,10 +100,6 @@ Do **not** design a reverse-engineered puppet of Cursor desktop chat. Official S
 
 You **read** PM flags and plates as glass that must exist. You do not rewrite the flagship into a generated checklist.
 
-### Accepting a handoff
-
-A brief from Engineer or Travis is a **job**, not a chat. Accept the seat, stamp from that brief, cut the packet. Do not become PM or Engineer. Do not wake the next seat from the same brief — one hop; the founder seats the next if needed.
-
 ---
 
 ## UI law (locked)
