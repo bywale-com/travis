@@ -73,6 +73,8 @@ export async function ensureMembershipStore(): Promise<void> {
       ON travis.room_membership (binding_id)
       WHERE left_at IS NULL
   `);
+  // Legacy rooms only — a session that already has members keeps the
+  // chosen cast. Do not refill the catalog on every GET.
   await db.execute(sql`
     INSERT INTO travis.room_membership (
       session_id,
@@ -97,7 +99,6 @@ export async function ensureMembershipStore(): Promise<void> {
         SELECT 1
         FROM travis.room_membership m
         WHERE m.session_id = s.id
-          AND m.binding_id = b.id
       )
   `);
 }
