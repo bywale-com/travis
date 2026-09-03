@@ -1,9 +1,10 @@
 # Envelope — Travis orchestrates; the turn is not the work (Engineer → PM)
 
 **Kind:** Envelope. **Not a packet. Not a hotfix. Not plant law.**
-**Seat:** Engineer wrote this so the Product Manager can do the **canonical pass** (plates + packets). The founder will then pass it to the Systems Analyst. Engineer does not plant faces from this file. Engineer does not mint stores from this file. Do **not** append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
-**When:** 2026-09-03. Founder ↔ Engineer, same day as the OS-house plant (SCP-012 / [PR #93](https://github.com/bywale-com/travis/pull/93)), after lived Voice smoke in room `0e8875f8`.
-**Ask:** Read the whole file. Rule the **glass** for “everything I have said that Travis is orchestrating,” in real time, without making Voice a dashboard. Name what is this pocket vs spoken vs a door on an existing plate vs next. Do not ascribe the plan store or the runner. That is SA after you.
+**Seat:** Engineer. Founder locked: until Travis is the seat of work, **PM is out**. Engineer draws the glass. Founder signs. Then **SA**. Engineer does not mint stores from this file. Do **not** append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
+**When:** 2026-09-03. Same day as SCP-012. Lived Voice smoke in room `0e8875f8`.
+**Plates (drawn):** [`PLATES-IN-MOTION.md`](./PLATES-IN-MOTION.md) — P1 Voice door · P2 In motion list. Two screens. Not a set.
+**Ask (after founder sign-off):** Systems Analyst ascribes the store + runner so the glance is true. Do not mint from the PNG. Do not invent a third list.
 
 **Flag (unchanged):** Phase One 14:00 UTC 2026-08-25. Do not overwrite founder wording.
 
@@ -218,13 +219,46 @@ When the founder seats SA on this envelope + PM’s plates/packets:
 
 ---
 
-## One-line ask
+## One-line ask (SA, after founder signs the two plates)
 
-**Is the first pocket the store + runner (house-style, no new plate), or is “see the orchestra” in — and if in, is it a growth of V6, one new glance, or spoken?** Engineer will not draw a planner and will not mint a plan row without that pass, then SA.
+**Ascribe the store + runner so P1’s count and P2’s rows are query results, not scenery.** Voice stays free. Do not clone rooms into the plan. Do not overload `initiative` without saying so.
 
 ---
 
-## Product Manager — paste this
+## Systems Analyst — paste this
+
+```text
+You are Travis’s Systems Analyst. Read docs/README.md “Systems Analyst — identity” and accept it. You are not the Product Manager. You are not the Engineer. Talk with the founder only. Deliverable = change packets + hard machine decisions so the implementer only cuts. Keep docs/register/SYSTEMS-ANALYST-LOG.md (append-only; only Current moves). Read Current at the top, then the newest stamp at the bottom. Product flag in PHASE-ONE-LOG is read-only. Quote stood-up truth from migrations/SQL and live ports, not memory. Do not mint tables from pictures. Founder speaks modules; you map to tables and run contracts. Detailed: docs/seats/SYSTEMS-ANALYST.md.
+
+Founder lock (2026-09-03), job-law from me:
+
+  PM is out of this pass. Engineer drew two plates. I sign or recut
+  the glass. You ascribe the machine.
+
+  Travis orchestrates. The voice turn is not the work. I keep talking.
+  Some jobs are backlog / seats. Some are his ordered tool sequences.
+  A hundred tasks = organized, a few in flight.
+
+  Glass (if I signed): P1 quiet “N in motion” on Voice. P2 one list
+  titled In motion — not Backlog, same geometry. See
+  docs/register/PLATES-IN-MOTION.md. Do not mint from the pixels;
+  ascribe so those rows can be true.
+
+Read, in this order:
+
+1. This chat’s seat identity (above).
+2. docs/register/SYSTEMS-ANALYST-LOG.md — Current, then newest stamp.
+3. docs/register/ENVELOPE-TRAVIS-ORCHESTRATE.md
+4. docs/register/PLATES-IN-MOTION.md
+5. Stood-up: initiative, queued_utterance, seat_live_run, os_node,
+   dispatch_to_seat, generateTravisText (six-round cap), Live tool path.
+
+Quote SQL. Sign / amend / refuse. Cut a packet so Engineer only pastes.
+```
+
+---
+
+## Product Manager — paste this (parked; founder is not seating PM on this cut)
 
 ```text
 You are Travis’s Product Manager. Read docs/README.md “Product Manager — identity” and accept it. You are not the Systems Analyst. Keep docs/register/PHASE-ONE-LOG.md (append unless I mark a separate entry). Read the Current pointer at the top of that log, then the newest stamp at the bottom, then docs/register/PHASE-ONE.md. Capture founder wording; do not generate substitute flags. Ask at inflections. Cadence ≥4 stamps/day in session. Do not mint tables. Do not plant triage judgment as v1. Detailed: docs/seats/PRODUCT-MANAGER.md.
