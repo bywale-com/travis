@@ -50,6 +50,28 @@ export function preferredOperator<T extends { email: string }>(
   return operators[0] ?? null;
 }
 
+/**
+ * v1 is one person. Seeded inboxes share one room pile.
+ * A login that is not on the seed list stays on its own rooms.
+ */
+export function operatorRoomScope<T extends { id: string; email: string }>(
+  actor: T,
+  operators: T[],
+  seedEmails: string[],
+): { ownerId: string; viewerIds: string[] } {
+  const actorEmail = normalizeOperatorEmail(actor.email);
+  const seeds = seedEmails.map(normalizeOperatorEmail);
+  if (!seeds.includes(actorEmail)) {
+    return { ownerId: actor.id, viewerIds: [actor.id] };
+  }
+  const inSeed = operators.filter((row) =>
+    seeds.includes(normalizeOperatorEmail(row.email)),
+  );
+  const owner = preferredOperator(inSeed, seeds) ?? actor;
+  const viewerIds = inSeed.map((row) => row.id);
+  return { ownerId: owner.id, viewerIds: viewerIds.length ? viewerIds : [actor.id] };
+}
+
 export function operatorLinkPath(token: string): string {
   return `/enter/${encodeURIComponent(token)}`;
 }

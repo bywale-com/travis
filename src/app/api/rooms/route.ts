@@ -9,7 +9,7 @@ import {
   sessionJson,
 } from "@/server/room-membership";
 import { clientIpFromHeaders } from "@/server/client-ip";
-import { requireOperator } from "@/server/operator";
+import { requireOperator, roomScopeForOperator } from "@/server/operator";
 
 type CreateBody = {
   title?: string;
@@ -22,7 +22,8 @@ export async function GET(req: Request) {
     await ensureMembershipStore();
     // Auth gates the index; IP stays telemetry.
     const operator = await requireOperator(req);
-    const rooms = await listRoomsForOperator(operator.id);
+    const scope = await roomScopeForOperator(operator);
+    const rooms = await listRoomsForOperator(scope.viewerIds);
     return NextResponse.json({ rooms });
   });
 }
@@ -34,13 +35,14 @@ export async function POST(req: Request) {
     await ensureMembershipStore();
     const ip = clientIpFromHeaders(req.headers);
     const operator = await requireOperator(req);
+    const scope = await roomScopeForOperator(operator);
     const body = (await req.json().catch(() => ({}))) as CreateBody;
     const bindingIds = Array.isArray(body.bindingIds) ? body.bindingIds : [];
     try {
       const session = await createExplicitRoom({
         title: typeof body.title === "string" ? body.title : "",
         clientIp: ip,
-        operatorId: operator.id,
+        operatorId: scope.ownerId,
         bindingIds,
       });
       return NextResponse.json({ session: await sessionJson(session) });

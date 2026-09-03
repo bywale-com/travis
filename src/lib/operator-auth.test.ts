@@ -6,6 +6,7 @@ import {
   normalizeOperatorEmail,
   operatorLinkPath,
   operatorLinkText,
+  operatorRoomScope,
   preferredOperator,
   seedOperatorEmails,
   tokenFromCookieHeader,
@@ -40,6 +41,20 @@ test("backfill prefers the env-seeded inbox over the oldest row", () => {
     "b",
   );
   assert.equal(preferredOperator([oldest, gmail], [])?.id, "a");
+});
+
+test("seeded inboxes share the preferred operator's rooms", () => {
+  const apex = { id: "a", email: "wale@apexintro.com" };
+  const gmail = { id: "b", email: "truthist00@gmail.com" };
+  const seeds = ["truthist00@gmail.com", "wale@apexintro.com"];
+  assert.deepEqual(operatorRoomScope(apex, [apex, gmail], seeds), {
+    ownerId: "b",
+    viewerIds: ["a", "b"],
+  });
+  assert.deepEqual(operatorRoomScope(gmail, [apex, gmail], seeds), {
+    ownerId: "b",
+    viewerIds: ["a", "b"],
+  });
 });
 
 test("the personal path is the enter URL", () => {
