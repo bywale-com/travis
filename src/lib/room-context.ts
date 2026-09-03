@@ -1,3 +1,5 @@
+import { requestLogPointer } from "@/lib/request-log";
+
 /**
  * Hotfix 038 — the slice of the room Travis is handed without asking.
  *
@@ -85,6 +87,7 @@ export function trimToCap(lines: string[], cap = WINDOW_CHAR_CAP): string[] {
 export function buildRoomContext(params: {
   turns: Array<ContextTurn & { seatLabel: string }>;
   running?: RunningNote[];
+  requestCount?: number;
   charCap?: number;
 }): string {
   const lines = params.turns
@@ -93,6 +96,7 @@ export function buildRoomContext(params: {
     .map((t) => describeTurn(t, t.seatLabel));
 
   const body = trimToCap(lines, params.charCap ?? WINDOW_CHAR_CAP);
+  const pointer = requestLogPointer(params.requestCount ?? 0);
 
   const parts: string[] = [];
   if (params.running?.length) {
@@ -105,6 +109,7 @@ export function buildRoomContext(params: {
         .join(", ")}.`,
     );
   }
+  if (pointer) parts.push(pointer);
   if (body.length) {
     parts.push(`Recent room log, oldest first:\n${body.join("\n")}`);
   }

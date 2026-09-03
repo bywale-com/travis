@@ -41,6 +41,7 @@ export const TOOL_POLICY: Record<string, ToolPolicy> = {
   queue_snapshot: { cls: "read" },
   work_in_flight: { cls: "read" },
   read_seat_reply: { cls: "read" },
+  search_room: { cls: "read" },
   set_view: { cls: "write" },
   send_to_seat: { cls: "write", dedupeWindowMs: 45_000 },
   dispatch_to_seat: { cls: "write", dedupeWindowMs: 45_000 },

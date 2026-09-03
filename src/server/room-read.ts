@@ -5,13 +5,20 @@
  * with room age.
  */
 
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { seatKeyToLabel } from "@/lib/router";
 import {
   WINDOW_TURNS,
   buildRoomContext,
   type ContextTurn,
 } from "@/lib/room-context";
+import {
+  REQUEST_LOG_LIMIT,
+  REQUEST_SCAN,
+  formatRequestLog,
+  requestMatches,
+  type RequestRow,
+} from "@/lib/request-log";
 import { db } from "@/server/db/client";
 import { voiceTurn } from "@/server/db/schema";
 import type { SeatKey } from "@/server/db/schema";
@@ -105,10 +112,52 @@ export async function runningNotes(sessionId: string) {
  * The window handed to Travis unasked, on every Talk request and at Live
  * connect. Empty string when there is nothing to say.
  */
+export async function countRequests(sessionId: string): Promise<number> {
+  const [row] = await db
+    .select({ n: sql<number>`count(*)::int` })
+    .from(voiceTurn)
+    .where(and(eq(voiceTurn.sessionId, sessionId), eq(voiceTurn.kind, "user")));
+  return Number(row?.n ?? 0);
+}
+
+/** Newest first. Bounded at the database. Search is a filter, not a new store. */
+export async function searchRequests(
+  sessionId: string,
+  opts: { q?: string; seat?: string; limit?: number } = {},
+): Promise<{ rows: RequestRow[]; total: number }> {
+  const scanned = await db
+    .select({
+      id: voiceTurn.id,
+      seq: voiceTurn.seq,
+      seatKey: voiceTurn.seatKey,
+      text: voiceTurn.text,
+      createdAt: voiceTurn.createdAt,
+    })
+    .from(voiceTurn)
+    .where(and(eq(voiceTurn.sessionId, sessionId), eq(voiceTurn.kind, "user")))
+    .orderBy(desc(voiceTurn.seq))
+    .limit(REQUEST_SCAN);
+
+  const matched = scanned.filter((r) =>
+    requestMatches(r.text, opts.q ?? "", r.seatKey, opts.seat),
+  );
+  const limit = opts.limit ?? REQUEST_LOG_LIMIT;
+  return { rows: matched.slice(0, limit), total: matched.length };
+}
+
+export async function searchRoomText(
+  sessionId: string,
+  opts: { q?: string; seat?: string } = {},
+): Promise<string> {
+  const { rows, total } = await searchRequests(sessionId, opts);
+  return formatRequestLog({ rows, total, q: opts.q, seat: opts.seat });
+}
+
 export async function roomContextFor(sessionId: string): Promise<string> {
-  const [turns, running] = await Promise.all([
+  const [turns, running, requestCount] = await Promise.all([
     recentTurns(sessionId),
     runningNotes(sessionId),
+    countRequests(sessionId),
   ]);
-  return buildRoomContext({ turns, running });
+  return buildRoomContext({ turns, running, requestCount });
 }

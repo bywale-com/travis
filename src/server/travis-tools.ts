@@ -28,6 +28,7 @@ import {
   lastSeatPost,
   recentDuplicateSend,
   runningNotes,
+  searchRoomText,
 } from "@/server/room-read";
 import { insertAgentPostTurn } from "@/server/seat-pipe";
 import { summarizeSeatReply } from "@/server/travis-summarize";
@@ -87,6 +88,18 @@ export const TRAVIS_TOOL_DECLS = [
         form: { type: "string", enum: ["auto", "gist", "full"] },
       },
       required: ["seat"],
+    },
+  },
+  {
+    name: "search_room",
+    description:
+      "Search this room's request log — every line the founder or you sent, with timestamps, not just the short window you are shown. Leave q off to list the newest. Pass seat to only see what went to PM, SA, Engineer, or Travis.",
+    parameters: {
+      type: "object",
+      properties: {
+        q: { type: "string" },
+        seat: { type: "string", enum: ["pm", "sa", "engineer", "travis"] },
+      },
     },
   },
   {
@@ -303,6 +316,15 @@ export async function runTravisTool(params: {
     };
   }
 
+  if (name === "search_room") {
+    const q = typeof args.q === "string" ? args.q : "";
+    const seat = ["pm", "sa", "engineer", "travis"].includes(String(args.seat ?? ""))
+      ? String(args.seat)
+      : undefined;
+    const text = await searchRoomText(sessionId, { q, seat });
+    return { ok: true, text };
+  }
+
   if (name === "work_in_flight") {
     const [runs, snap] = await Promise.all([
       liveRunsForSession(sessionId),
@@ -401,7 +423,7 @@ Answer the founder. Use tools when they ask you to send a line to a seat, glance
 
 What you cannot do: you cannot see the repository, a diff, a branch, a test run, or CI. You have no view of the code and no way to check whether anything passed. If the founder asks for a code review, a test check, a migration risk assessment, a rollout plan, or anything else that needs the repo, say plainly that you cannot see it and offer to send it to the Engineer, SA or PM. Never describe a review, a check, or an analysis you are not able to perform. The room and the tools listed above are your entire view of the world — reading about work in the room log is not the same as being able to do it.
 
-You are shown a short room-state block with recent turns and what is running. Treat it as already true — do not ask the founder to repeat something that is in it. Seat replies appear there only as receipts; call read_seat_reply when you need what a seat actually said.
+You are shown a short room-state block with recent turns and what is running. Treat it as already true — do not ask the founder to repeat something that is in it. Seat replies appear there only as receipts; call read_seat_reply when you need what a seat actually said. The window is not the whole room. When they ask what was requested, what is in motion, or what you already routed to a seat, call search_room. That log has timestamps and stays in this room.
 
 Report what the tools actually told you.
 

@@ -24,6 +24,7 @@ import {
   type EarState,
 } from "@/lib/ear";
 import { readJson } from "@/lib/http";
+import { isRequestTurn } from "@/lib/request-log";
 import { isTravisSeat, keepWorkAfterTravisCall } from "@/lib/seats";
 import {
   playQueuedCue,
@@ -40,6 +41,7 @@ import { LogComposer, type RoomSeat } from "@/components/LogComposer";
 import { CreateAgent, type CreatedAgent } from "@/components/plates/CreateAgent";
 import { CreateRoom, type CatalogSeat } from "@/components/plates/CreateRoom";
 import { InFlightDoor, type RunningNow } from "@/components/plates/InFlightDoor";
+import { RequestLogDoor } from "@/components/plates/RequestLogDoor";
 import { RoomIndex, type RoomRow } from "@/components/plates/RoomIndex";
 import { RosterDoor, type RosterMember } from "@/components/plates/RosterDoor";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
@@ -76,7 +78,7 @@ type Session = {
 };
 
 type PlateFace = "index" | "create" | "create-agent" | "room";
-type Door = null | "roster" | "inflight";
+type Door = null | "roster" | "inflight" | "requests";
 
 function asRoomSeats(raw: unknown): RoomSeat[] {
   if (!Array.isArray(raw)) return [];
@@ -1925,6 +1927,20 @@ export function Room({
           </span>
           <button
             type="button"
+            onClick={() => setDoor("requests")}
+            style={{
+              border: "none",
+              background: "transparent",
+              color: t.textSecondary,
+              fontSize: 13,
+              padding: 0,
+              cursor: "pointer",
+            }}
+          >
+            Requests
+          </button>
+          <button
+            type="button"
             onClick={() => leaveRoom()}
             style={{
               border: "none",
@@ -2300,6 +2316,7 @@ export function Room({
                 return (
                   <div
                     key={turn.id}
+                    id={`turn-${turn.id}`}
                     style={{
                       alignSelf: isUser ? "flex-end" : "flex-start",
                       maxWidth: "92%",
@@ -2577,6 +2594,39 @@ export function Room({
           }}
           onToggleAdd={() => setRosterAdding((v) => !v)}
           onEnd={() => void closeRoom(session.id)}
+        />
+      ) : null}
+
+      {door === "requests" ? (
+        <RequestLogDoor
+          t={t}
+          items={turns
+            .filter((turn) => isRequestTurn(turn.kind))
+            .slice()
+            .reverse()
+            .map((turn) => ({
+              id: turn.id,
+              seq: turn.seq,
+              seatKey: turn.seatKey ?? null,
+              text: turn.text,
+              createdAt: turn.createdAt,
+            }))}
+          onClose={() => setDoor(null)}
+          onOpenTurn={(id) => {
+            setDoor(null);
+            const go = () => {
+              document
+                .getElementById(`turn-${id}`)
+                ?.scrollIntoView({ block: "center", behavior: "smooth" });
+            };
+            if (viewModeRef.current !== "log") {
+              void switchViewMode("log").then(() => {
+                window.setTimeout(go, 80);
+              });
+              return;
+            }
+            window.setTimeout(go, 0);
+          }}
         />
       ) : null}
 
