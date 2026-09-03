@@ -14,6 +14,8 @@ import type { InitiativeStatus } from "@/server/db/schema";
 import { parseRequestWhen } from "@/lib/request-log";
 import { db } from "@/server/db/client";
 import { eq } from "drizzle-orm";
+import { AuthError } from "@/server/api-error";
+import { requireOwnedSession } from "@/server/operator";
 
 type PostBody = { foundingTurnId?: string };
 
@@ -23,6 +25,7 @@ export async function GET(
 ) {
   return jsonRoute(async () => {
     const { id: sessionId } = await ctx.params;
+    await requireOwnedSession(req, sessionId);
     const params = new URL(req.url).searchParams;
     const statusRaw = params.get("status") ?? "open";
     const status = ["open", "done", "all"].includes(statusRaw)
@@ -40,6 +43,14 @@ export async function POST(
   ctx: { params: Promise<{ id: string }> },
 ) {
   const { id: sessionId } = await ctx.params;
+  try {
+    await requireOwnedSession(req, sessionId);
+  } catch (err) {
+    if (err instanceof AuthError) {
+      return NextResponse.json({ error: err.message }, { status: err.status });
+    }
+    throw err;
+  }
   const body = (await req.json()) as PostBody;
   const foundingTurnId = String(body.foundingTurnId ?? "").trim();
   if (!foundingTurnId) {

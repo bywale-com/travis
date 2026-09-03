@@ -6,15 +6,17 @@ import {
   readInitiative,
   renameInitiative,
 } from "@/server/initiative";
+import { requireOwnedSession } from "@/server/operator";
 
 type PatchBody = { status?: string; title?: string };
 
 export async function GET(
-  _req: Request,
+  req: Request,
   ctx: { params: Promise<{ id: string; initiativeId: string }> },
 ) {
   return jsonRoute(async () => {
     const { id: sessionId, initiativeId } = await ctx.params;
+    await requireOwnedSession(req, sessionId);
     try {
       const ticket = await readInitiative(sessionId, initiativeId);
       return NextResponse.json({ initiative: ticket });
@@ -33,6 +35,7 @@ export async function PATCH(
 ) {
   return jsonRoute(async () => {
     const { id: sessionId, initiativeId } = await ctx.params;
+    await requireOwnedSession(req, sessionId);
     const body = (await req.json()) as PatchBody;
     const hasTitle = typeof body.title === "string";
     const hasDone = body.status === "done";

@@ -193,6 +193,7 @@ async function activeBindings(): Promise<AgentBinding[]> {
 
 export async function createStandInRoom(opts: {
   clientIp: string;
+  operatorId: string;
   preferBinding: AgentBinding;
 }): Promise<VoiceSession> {
   const catalog = await activeBindings();
@@ -218,6 +219,7 @@ export async function createStandInRoom(opts: {
         routerState: "normal",
         status: "listening",
         clientIp: opts.clientIp,
+        operatorId: opts.operatorId,
       })
       .returning();
     await tx.insert(roomMembership).values(
@@ -234,6 +236,7 @@ export async function createStandInRoom(opts: {
 export async function createExplicitRoom(opts: {
   title?: string;
   clientIp: string;
+  operatorId: string;
   bindingIds: string[];
 }): Promise<VoiceSession> {
   const travis = await travisBinding();
@@ -273,6 +276,7 @@ export async function createExplicitRoom(opts: {
         routerState: "normal",
         status: "listening",
         clientIp: opts.clientIp,
+        operatorId: opts.operatorId,
       })
       .returning();
     await tx.insert(roomMembership).values(
@@ -430,6 +434,39 @@ export async function listRoomsForIp(ip: string): Promise<
     .select()
     .from(voiceSession)
     .where(eq(voiceSession.clientIp, ip))
+    .orderBy(sql`${voiceSession.createdAt} desc`);
+
+  const out = [];
+  for (const s of sessions) {
+    const members = await openMembers(s.id);
+    out.push({
+      id: s.id,
+      title: s.title,
+      status: s.status,
+      createdAt: s.createdAt,
+      endedAt: s.endedAt,
+      members: members.map((m) => ({ seatKey: m.seatKey, label: m.label })),
+    });
+  }
+  return out;
+}
+
+export async function listRoomsForOperator(
+  operatorId: string,
+): Promise<
+  Array<{
+    id: string;
+    title: string;
+    status: string;
+    createdAt: Date;
+    endedAt: Date | null;
+    members: Array<{ seatKey: string | null; label: string }>;
+  }>
+> {
+  const sessions = await db
+    .select()
+    .from(voiceSession)
+    .where(eq(voiceSession.operatorId, operatorId))
     .orderBy(sql`${voiceSession.createdAt} desc`);
 
   const out = [];

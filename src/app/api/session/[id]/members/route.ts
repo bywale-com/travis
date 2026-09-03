@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { jsonRoute } from "@/server/api-error";
 import { addMember, MembershipError, roomSeats } from "@/server/room-membership";
+import { requireOwnedSession } from "@/server/operator";
 
 type Body = { bindingId?: string };
 
@@ -10,6 +11,7 @@ export async function POST(
 ) {
   return jsonRoute(async () => {
     const { id: sessionId } = await ctx.params;
+    await requireOwnedSession(req, sessionId);
     const body = (await req.json()) as Body;
     const bindingId = String(body.bindingId ?? "").trim();
     if (!bindingId) {

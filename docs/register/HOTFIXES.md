@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **053**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **054**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -62,3 +62,4 @@
 | 049 | [`HOTFIX-049-SEARCH-GRAIN.md`](./HOTFIX-049-SEARCH-GRAIN.md) | search_room last-N / today / last 7 days; same door words |
 | 051 | [`HOTFIX-051-NEW-WAKE.md`](./HOTFIX-051-NEW-WAKE.md) | Seat land is New; Travis wakes; no Google body read |
 | 052 | [`HOTFIX-052-INITIATIVE-STORE.md`](./HOTFIX-052-INITIATIVE-STORE.md) | 008 columns land on first send; no manual db:push |
+| 053 | [`HOTFIX-053-OPERATOR-AUTH.md`](./HOTFIX-053-OPERATOR-AUTH.md) | Allowlisted email + durable personal login link; rooms leave IP |

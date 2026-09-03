@@ -13,6 +13,8 @@ import {
 } from "@/server/seat-pipe";
 import { collapseSpeechStutter } from "@/lib/absorb-text";
 import { openBindingForSeat } from "@/server/room-membership";
+import { AuthError } from "@/server/api-error";
+import { requireOwnedSession } from "@/server/operator";
 
 type Body = {
   role?: "user" | "travis";
@@ -25,6 +27,14 @@ export async function POST(
   ctx: { params: Promise<{ id: string }> },
 ) {
   const { id: sessionId } = await ctx.params;
+  try {
+    await requireOwnedSession(req, sessionId);
+  } catch (err) {
+    if (err instanceof AuthError) {
+      return NextResponse.json({ error: err.message }, { status: err.status });
+    }
+    throw err;
+  }
   const body = (await req.json()) as Body;
   const text = String(body.text ?? "").trim();
   const [session] = await db

@@ -40,8 +40,10 @@ export const voiceSession = travis.table("voice_session", {
   logSubmode: text("log_submode").notNull().default("talk"),
   routerState: text("router_state").notNull().default("normal"),
   status: text("status").notNull().default("listening"),
-  /** Stand-in identity until a real user. Empty = do not resume. */
+  /** Telemetry only. Do not key list or resume to this. */
   clientIp: text("client_ip").notNull().default(""),
+  /** Operator who owns the room. Null only on rows not yet backfilled. */
+  operatorId: uuid("operator_id"),
   /** Gemini Live resume handle. Empty on open. Clear on End. */
   travisLiveHandle: text("travis_live_handle"),
   createdAt: timestamp("created_at", { withTimezone: true })
@@ -169,7 +171,19 @@ export const turnArtifact = travis.table("turn_artifact", {
     .defaultNow(),
 });
 
+/** Allowlisted operator — email that already has an account. No signup. */
+export const operator = travis.table("operator", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  email: text("email").notNull().unique(),
+  /** Durable personal enter token. Resend emails this same secret. */
+  loginToken: text("login_token").notNull().unique(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
 export type AgentBinding = typeof agentBinding.$inferSelect;
+export type Operator = typeof operator.$inferSelect;
 export type VoiceSession = typeof voiceSession.$inferSelect;
 export type VoiceTurn = typeof voiceTurn.$inferSelect;
 export type TurnConductorPhrase = typeof turnConductorPhrase.$inferSelect;

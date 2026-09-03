@@ -18,6 +18,8 @@ import type { SeatKey } from "@/server/db/schema";
 import { noteTravisUnwired } from "@/server/travis-dest";
 import { MembershipError, openBindingForSeat, requireOpenMember } from "@/server/room-membership";
 import { pipeTravisText } from "@/server/travis-reply";
+import { AuthError } from "@/server/api-error";
+import { requireOwnedSession } from "@/server/operator";
 import {
   enqueueOnSeat,
   seatHasActiveRun,
@@ -49,6 +51,14 @@ export async function POST(
   ctx: { params: Promise<{ id: string }> },
 ) {
   const { id: sessionId } = await ctx.params;
+  try {
+    await requireOwnedSession(req, sessionId);
+  } catch (err) {
+    if (err instanceof AuthError) {
+      return Response.json({ error: err.message }, { status: err.status });
+    }
+    throw err;
+  }
   const body = (await req.json()) as Body;
   const utterance = body.utterance ?? "";
 
