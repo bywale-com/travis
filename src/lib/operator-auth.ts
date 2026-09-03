@@ -35,6 +35,21 @@ export function seedOperatorEmails(env: {
   return out;
 }
 
+/** First env-seeded operator, else the oldest row. Used only to backfill null rooms. */
+export function preferredOperator<T extends { email: string }>(
+  operators: T[],
+  seedEmails: string[],
+): T | null {
+  const byEmail = new Map(
+    operators.map((row) => [normalizeOperatorEmail(row.email), row] as const),
+  );
+  for (const email of seedEmails) {
+    const hit = byEmail.get(normalizeOperatorEmail(email));
+    if (hit) return hit;
+  }
+  return operators[0] ?? null;
+}
+
 export function operatorLinkPath(token: string): string {
   return `/enter/${encodeURIComponent(token)}`;
 }
