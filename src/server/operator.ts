@@ -9,6 +9,7 @@ import {
   OPERATOR_COOKIE_MAX_AGE,
   isOperatorEmail,
   normalizeOperatorEmail,
+  preferredOperator,
   operatorLinkPath,
   seedOperatorEmails,
   tokenFromCookieHeader,
@@ -67,15 +68,21 @@ async function seedOperatorsFromEnv(): Promise<void> {
 }
 
 async function backfillRoomOwners(): Promise<void> {
-  const [first] = await db
-    .select({ id: operator.id })
+  const rows = await db
+    .select({ id: operator.id, email: operator.email })
     .from(operator)
-    .orderBy(operator.createdAt)
-    .limit(1);
-  if (!first) return;
+    .orderBy(operator.createdAt);
+  const owner = preferredOperator(
+    rows,
+    seedOperatorEmails({
+      TRAVIS_OPERATOR_EMAIL: process.env.TRAVIS_OPERATOR_EMAIL,
+      TEST_EMAIL_TO: process.env.TEST_EMAIL_TO,
+    }),
+  );
+  if (!owner) return;
   await db
     .update(voiceSession)
-    .set({ operatorId: first.id })
+    .set({ operatorId: owner.id })
     .where(isNull(voiceSession.operatorId));
 }
 

@@ -6,6 +6,7 @@ import {
   normalizeOperatorEmail,
   operatorLinkPath,
   operatorLinkText,
+  preferredOperator,
   seedOperatorEmails,
   tokenFromCookieHeader,
 } from "./operator-auth";
@@ -29,6 +30,16 @@ test("seed reads a comma list and TEST_EMAIL_TO, no dupes", () => {
     }),
     ["wale@apex.com", "other@apex.com"],
   );
+});
+
+test("backfill prefers the env-seeded inbox over the oldest row", () => {
+  const oldest = { id: "a", email: "wale@apexintro.com" };
+  const gmail = { id: "b", email: "truthist00@gmail.com" };
+  assert.equal(
+    preferredOperator([oldest, gmail], ["truthist00@gmail.com"])?.id,
+    "b",
+  );
+  assert.equal(preferredOperator([oldest, gmail], [])?.id, "a");
 });
 
 test("the personal path is the enter URL", () => {
