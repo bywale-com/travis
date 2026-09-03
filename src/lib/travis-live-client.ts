@@ -189,12 +189,13 @@ export async function startTravisLive(opts: {
         }
         if (action.op === "travis_delta") {
           travisAcc = absorbText(travisAcc, action.text).acc;
-          void persist("travis", travisAcc);
+          opts.onTravisText(travisAcc);
           continue;
         }
         if (action.op === "travis_flush") {
-          if (travisAcc.trim()) void persist("travis", travisAcc);
+          const said = collapseSpeechStutter(travisAcc);
           travisAcc = "";
+          if (said) void persist("travis", said);
           continue;
         }
         if (action.op === "tools") void runTools(action.calls);

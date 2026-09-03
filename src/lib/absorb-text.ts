@@ -2,6 +2,30 @@
  * Stream + STT assembly — snapshots vs deltas, speech stutter.
  */
 
+/**
+ * Live Travis posts one spoken response at a time. A growing snapshot of
+ * the same utterance updates the row. A new utterance that does not share
+ * a prefix must not glue onto the last one — that is how 12k stutter
+ * posts got written in the busiest room.
+ */
+export function nextLiveTravisText(
+  prev: string,
+  incoming: string,
+): { mode: "update" | "insert"; text: string } {
+  const a = prev.trim();
+  const b = incoming.trim();
+  if (!b) return { mode: "update", text: a };
+  if (!a) return { mode: "insert", text: b };
+  if (b === a || a.startsWith(b)) return { mode: "update", text: a };
+  if (b.startsWith(a)) return { mode: "update", text: b };
+  const folded = collapseSpeechStutter(absorbFinalTranscript(a, b));
+  if (folded.toLowerCase() === b.toLowerCase()) return { mode: "update", text: b };
+  if (folded.length + 24 < a.length + b.length) {
+    return { mode: "update", text: folded };
+  }
+  return { mode: "insert", text: b };
+}
+
 export function absorbText(
   acc: string,
   incoming: string,

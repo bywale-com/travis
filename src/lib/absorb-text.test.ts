@@ -7,8 +7,26 @@ import {
   collapseSpeechStutter,
   keepSpeechDraft,
   mergeLiveTranscript,
+  nextLiveTravisText,
 } from "./absorb-text";
 import { parseCallByName } from "./router";
+
+test("a new Live utterance does not glue onto the last Travis post", () => {
+  const prev =
+    "Short answer: yes, I can rename a backlog entry, meaning an initiative, but only when you explicitly ask me to rename a specific one.";
+  const next = nextLiveTravisText(prev, "Let me think this through and be precise.");
+  assert.equal(next.mode, "insert");
+  assert.equal(next.text, "Let me think this through and be precise.");
+});
+
+test("a growing Live snapshot updates the same Travis post", () => {
+  const next = nextLiveTravisText(
+    "Usually it’s elevated when it stops being",
+    "Usually it’s elevated when it stops being a quick, one-off request",
+  );
+  assert.equal(next.mode, "update");
+  assert.match(next.text, /one-off request/);
+});
 
 test("absorbText treats snapshots as replace, not concatenate", () => {
   let acc = "";
