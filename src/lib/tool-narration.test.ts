@@ -59,6 +59,10 @@ test("marking done is announced", () => {
     narrateToolCall("rename_initiative", { id: "x", title: "Artifact door" }),
     "Renaming that initiative.",
   );
+  assert.equal(
+    narrateToolCall("rename_room", { title: "Gang's all here" }),
+    "Renaming the room.",
+  );
 });
 
 test("an unknown seat does not produce a broken sentence", () => {

@@ -7,6 +7,7 @@ import {
   destOnCreate,
   membershipRoleFor,
 } from "@/lib/room-membership";
+import { clipRoomTitle } from "@/lib/room-title";
 import { db } from "@/server/db/client";
 import {
   agentBinding,
@@ -268,7 +269,7 @@ export async function createExplicitRoom(opts: {
     const [session] = await tx
       .insert(voiceSession)
       .values({
-        title: opts.title ?? "",
+        title: clipRoomTitle(opts.title ?? ""),
         bindingId: dest.id,
         defaultBindingId: dest.id,
         activeBindingId: dest.id,
@@ -418,6 +419,19 @@ export async function endRoom(sessionId: string): Promise<VoiceSession | null> {
       and(eq(roomMembership.sessionId, sessionId), isNull(roomMembership.leftAt)),
     );
   return session;
+}
+
+export async function renameRoom(
+  sessionId: string,
+  rawTitle: string,
+): Promise<VoiceSession | null> {
+  const title = clipRoomTitle(rawTitle);
+  const [updated] = await db
+    .update(voiceSession)
+    .set({ title })
+    .where(eq(voiceSession.id, sessionId))
+    .returning();
+  return updated ?? null;
 }
 
 export async function listRoomsForIp(ip: string): Promise<

@@ -36,6 +36,7 @@ import { summarizeSeatReply } from "@/server/travis-summarize";
 import {
   endRoom,
   MembershipError,
+  renameRoom,
   requireOpenMember,
   roomSeats,
 } from "@/server/room-membership";
@@ -161,6 +162,18 @@ export const TRAVIS_TOOL_DECLS = [
         title: { type: "string" },
       },
       required: ["id", "title"],
+    },
+  },
+  {
+    name: "rename_room",
+    description:
+      "Rename this room. Same write as the founder. Empty title is Untitled. Only this room — you cannot see or rename other rooms. Only when they ask. Do not invent a name.",
+    parameters: {
+      type: "object",
+      properties: {
+        title: { type: "string" },
+      },
+      required: ["title"],
     },
   },
   {
@@ -436,6 +449,14 @@ export async function runTravisTool(params: {
     }
   }
 
+  if (name === "rename_room") {
+    const title = typeof args.title === "string" ? args.title : "";
+    const row = await renameRoom(sessionId, title);
+    if (!row) return { ok: false, text: "Room not found." };
+    const name = row.title.trim() || "Untitled";
+    return { ok: true, text: `Room renamed to ${name}.` };
+  }
+
   if (name === "search_room") {
     const q = typeof args.q === "string" ? args.q : "";
     const seat = ["pm", "sa", "engineer", "travis"].includes(String(args.seat ?? ""))
@@ -548,6 +569,8 @@ What you cannot do: you cannot see the repository, a diff, a branch, a test run,
 You are shown a short room-state block with recent turns and what is running. Treat it as already true — do not ask the founder to repeat something that is in it. Seat replies appear there only as receipts; call read_seat_reply when you need what a seat actually said. The window is not the whole room. When they ask what was requested, what is in motion, or what you already routed to a seat, call search_room. That log has UTC timestamps and stays in this room. “Requests today” → when today. “Last 10” → limit 10. “Everyone this week” → when week, no seat. Do not invent a list — call the tool.
 
 The backlog is separate. search_room is every line. Initiatives are only what you passed on, or what they promoted with Hold. list_initiatives / read_initiative / rename_initiative / mark_initiative_done for that pipe. “This week” → list_initiatives when week. “The artifact one” → list_initiatives q. A miss is an empty list — do not invent a ticket. You do not name a ticket when you mint it. rename_initiative only when they ask to rename. A seat finishing does not mark it done — you or they do.
+
+rename_room names this room. Only when they ask. Do not invent a name for an untitled room. You cannot list or rename other rooms.
 
 Report what the tools actually told you.
 

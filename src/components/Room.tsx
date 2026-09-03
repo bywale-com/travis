@@ -1668,6 +1668,31 @@ export function Room({
     }
   };
 
+  const renameRoomTitle = async (id: string, title: string) => {
+    setError(null);
+    try {
+      const res = await fetch(`/api/session/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title }),
+      });
+      const data = await readJson<{ session?: Session; error?: string }>(res);
+      if (!res.ok) throw new Error(data.error ?? "Rename failed");
+      if (data.session && sessionIdRef.current === id) {
+        setSession((s) =>
+          s ? { ...s, title: data.session?.title ?? title } : s,
+        );
+      }
+      setRooms((rows) =>
+        rows.map((row) =>
+          row.id === id ? { ...row, title: data.session?.title ?? title } : row,
+        ),
+      );
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    }
+  };
+
   const enterRoom = async (id: string) => {
     setError(null);
     setBusy(true);
@@ -2023,6 +2048,7 @@ export function Room({
           const id = selectedRoomId;
           if (id) void closeRoom(id);
         }}
+        onRename={(id, title) => void renameRoomTitle(id, title)}
         onCharacter={() => onCharacter?.()}
         onIntegrations={() => setPlate("integrations")}
       />
@@ -2854,6 +2880,7 @@ export function Room({
             setPlate("create-agent");
           }}
           onToggleAdd={() => setRosterAdding((v) => !v)}
+          onRename={(title) => void renameRoomTitle(session.id, title)}
           onEnd={() => void closeRoom(session.id)}
         />
       ) : null}

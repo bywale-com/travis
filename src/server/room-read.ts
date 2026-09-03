@@ -24,7 +24,7 @@ import {
   type RequestWhen,
 } from "@/lib/request-log";
 import { db } from "@/server/db/client";
-import { voiceTurn } from "@/server/db/schema";
+import { voiceSession, voiceTurn } from "@/server/db/schema";
 import type { SeatKey } from "@/server/db/schema";
 import { liveRunsForSession } from "@/server/queue";
 
@@ -167,10 +167,21 @@ export async function searchRoomText(
 }
 
 export async function roomContextFor(sessionId: string): Promise<string> {
-  const [turns, running, requestCount] = await Promise.all([
+  const [turns, running, requestCount, session] = await Promise.all([
     recentTurns(sessionId),
     runningNotes(sessionId),
     countRequests(sessionId),
+    db
+      .select({ title: voiceSession.title })
+      .from(voiceSession)
+      .where(eq(voiceSession.id, sessionId))
+      .limit(1)
+      .then((rows) => rows[0] ?? null),
   ]);
-  return buildRoomContext({ turns, running, requestCount });
+  return buildRoomContext({
+    turns,
+    running,
+    requestCount,
+    roomTitle: session?.title,
+  });
 }

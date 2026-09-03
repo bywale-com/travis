@@ -29,6 +29,7 @@ test("coverage reports what exists by class", () => {
   assert.equal(byClass.read.includes("list_initiatives"), true);
   assert.equal(byClass.write.includes("mark_initiative_done"), true);
   assert.equal(byClass.write.includes("rename_initiative"), true);
+  assert.equal(byClass.write.includes("rename_room"), true);
 });
 
 test("the policy has no entries for tools that do not exist", () => {

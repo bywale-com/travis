@@ -88,6 +88,7 @@ export function buildRoomContext(params: {
   turns: Array<ContextTurn & { seatLabel: string }>;
   running?: RunningNote[];
   requestCount?: number;
+  roomTitle?: string;
   charCap?: number;
 }): string {
   const lines = params.turns
@@ -97,8 +98,18 @@ export function buildRoomContext(params: {
 
   const body = trimToCap(lines, params.charCap ?? WINDOW_CHAR_CAP);
   const pointer = requestLogPointer(params.requestCount ?? 0);
+  const named = (params.roomTitle ?? "").trim();
 
   const parts: string[] = [];
+  if (named) {
+    parts.push(`This room is titled ${named}.`);
+  } else if (
+    body.length ||
+    pointer ||
+    (params.running?.length ?? 0) > 0
+  ) {
+    parts.push("This room is untitled.");
+  }
   if (params.running?.length) {
     parts.push(
       `Running right now: ${params.running

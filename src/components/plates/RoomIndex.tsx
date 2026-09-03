@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { SeatMark } from "@/components/QueueChrome";
 import { relativeTime } from "@/lib/relative-time";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
@@ -27,6 +28,7 @@ export function RoomIndex({
   onNew,
   onLeave,
   onEnd,
+  onRename,
   onCharacter,
   onIntegrations,
 }: {
@@ -40,9 +42,25 @@ export function RoomIndex({
   onNew: () => void;
   onLeave: () => void;
   onEnd: () => void;
+  onRename: (id: string, title: string) => void;
   onCharacter: () => void;
   onIntegrations?: () => void;
 }) {
+  const [renaming, setRenaming] = useState(false);
+  const [draft, setDraft] = useState("");
+  const selected = rooms.find((r) => r.id === selectedId) ?? null;
+
+  useEffect(() => {
+    setRenaming(false);
+    setDraft(selected?.title ?? "");
+  }, [selectedId, selected?.title]);
+
+  const commitRename = () => {
+    if (!selectedId) return;
+    onRename(selectedId, draft);
+    setRenaming(false);
+  };
+
   return (
     <SurfaceBoundary id="room-index" label="Room index" order={1}>
       <div style={plateShell(t)}>
@@ -110,9 +128,40 @@ export function RoomIndex({
                       gap: 12,
                     }}
                   >
-                    <span style={{ fontSize: TYPE.body, fontWeight: 600 }}>
-                      {room.title.trim() || "Untitled"}
-                    </span>
+                    {renaming && on ? (
+                      <input
+                        autoFocus
+                        value={draft}
+                        onChange={(e) => setDraft(e.target.value)}
+                        onClick={(e) => e.stopPropagation()}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            commitRename();
+                          }
+                          if (e.key === "Escape") setRenaming(false);
+                        }}
+                        onBlur={commitRename}
+                        placeholder="Untitled"
+                        style={{
+                          flex: 1,
+                          minWidth: 0,
+                          border: "none",
+                          borderBottom: `1px solid ${t.border}`,
+                          background: "transparent",
+                          color: t.textPrimary,
+                          fontSize: TYPE.body,
+                          fontWeight: 600,
+                          fontFamily: "inherit",
+                          outline: "none",
+                          padding: "0 0 2px",
+                        }}
+                      />
+                    ) : (
+                      <span style={{ fontSize: TYPE.body, fontWeight: 600 }}>
+                        {room.title.trim() || "Untitled"}
+                      </span>
+                    )}
                     <span style={{ fontSize: TYPE.meta, color: t.textMuted }}>
                       {relativeTime(room.createdAt)}
                     </span>
@@ -184,6 +233,22 @@ export function RoomIndex({
             style={{ ...quietLink(t), color: t.textSecondary, textDecoration: "none" }}
           >
             Leave
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (!selected) return;
+              setDraft(selected.title);
+              setRenaming(true);
+            }}
+            disabled={!selectedId || busy}
+            style={{
+              ...quietLink(t),
+              color: selectedId ? t.textSecondary : t.textMuted,
+              textDecoration: "none",
+            }}
+          >
+            Rename
           </button>
           <button
             type="button"

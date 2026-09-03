@@ -112,6 +112,16 @@ test("an empty room produces no window at all", () => {
   assert.equal(buildRoomContext({ turns: [] }), "");
 });
 
+test("a named room is announced in the window", () => {
+  const out = buildRoomContext({
+    turns: [
+      { kind: "user", seatKey: "travis", seatLabel: "Travis", text: "hi" },
+    ],
+    roomTitle: "Gang's all here",
+  });
+  assert.match(out, /This room is titled Gang's all here/);
+});
+
 test("the request-log pointer is how Travis learns the organ exists", () => {
   const out = buildRoomContext({ turns: [], requestCount: 12 });
   assert.match(out, /12 requests in the request log/);

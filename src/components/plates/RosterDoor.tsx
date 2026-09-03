@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { SeatMark } from "@/components/QueueChrome";
 import { isTravisSeat } from "@/lib/seats";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
@@ -27,6 +28,7 @@ export function RosterDoor({
   onCreateAgent,
   onToggleAdd,
   onEnd,
+  onRename,
 }: {
   t: Tokens;
   roomTitle: string;
@@ -40,11 +42,19 @@ export function RosterDoor({
   onCreateAgent: () => void;
   onToggleAdd: () => void;
   onEnd?: () => void;
+  onRename?: (title: string) => void;
 }) {
   const inIds = new Set(members.map((m) => m.id).filter(Boolean) as string[]);
   const inKeys = new Set(
     members.map((m) => m.seatKey).filter(Boolean) as string[],
   );
+  const [renaming, setRenaming] = useState(false);
+  const [draft, setDraft] = useState(roomTitle);
+  useEffect(() => {
+    setDraft(roomTitle);
+    setRenaming(false);
+  }, [roomTitle]);
+
   const addable = catalog.filter((c) => {
     if (c.id && inIds.has(c.id)) return false;
     if (c.seatKey && inKeys.has(c.seatKey)) return false;
@@ -85,9 +95,57 @@ export function RosterDoor({
           }}
         >
           <h2 style={{ margin: 0, fontSize: TYPE.title }}>In this room</h2>
-          <span style={{ fontSize: TYPE.meta, color: t.textMuted }}>
-            {roomTitle.trim() || "Untitled"}
-          </span>
+          {renaming && onRename ? (
+            <input
+              autoFocus
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  onRename(draft);
+                  setRenaming(false);
+                }
+                if (e.key === "Escape") setRenaming(false);
+              }}
+              onBlur={() => {
+                onRename(draft);
+                setRenaming(false);
+              }}
+              placeholder="Untitled"
+              style={{
+                maxWidth: "52%",
+                border: "none",
+                borderBottom: `1px solid ${t.border}`,
+                background: "transparent",
+                color: t.textPrimary,
+                fontSize: TYPE.meta,
+                fontFamily: "inherit",
+                outline: "none",
+                textAlign: "right",
+              }}
+            />
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                if (!onRename) return;
+                setDraft(roomTitle);
+                setRenaming(true);
+              }}
+              style={{
+                border: "none",
+                background: "none",
+                padding: 0,
+                fontSize: TYPE.meta,
+                color: t.textMuted,
+                cursor: onRename ? "pointer" : "default",
+                fontFamily: "inherit",
+              }}
+            >
+              {roomTitle.trim() || "Untitled"}
+            </button>
+          )}
         </div>
         <button
           type="button"
