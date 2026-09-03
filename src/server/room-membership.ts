@@ -34,7 +34,10 @@ export type OpenMember = {
   joinedAt: Date;
 };
 
+let membershipStoreReady = false;
+
 export async function ensureMembershipStore(): Promise<void> {
+  if (membershipStoreReady) return;
   await db.execute(sql`
     ALTER TABLE travis.voice_session
       ADD COLUMN IF NOT EXISTS title text NOT NULL DEFAULT ''
@@ -101,6 +104,7 @@ export async function ensureMembershipStore(): Promise<void> {
         WHERE m.session_id = s.id
       )
   `);
+  membershipStoreReady = true;
 }
 
 export async function openMembers(sessionId: string): Promise<OpenMember[]> {
