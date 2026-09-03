@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-02 23:10 UTC — **13 still.** Engineer half-day confirms. Leave on the room header. Dispatch rides V6. Kickoff open.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 02:10 UTC — **006 locked.** Voice: no send/queue sounds. Talk/Type unchanged. First-order critical. Engineer plants now.
 
 **How we maintain this log**
 
@@ -1212,4 +1212,22 @@ SA bind today had no Mission/Carbon/rooms face talk. One stated gap the 13 must 
 **Kind:** Audit addendum. **No images.**
 
 Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tightenings, not new IDs: Leave is on the **room** header (V5/K2), V1 is where it lands; V5/V7 drawn **unbounded**; quiet don’t-wait rides **V6** (003 barge ≠ dispatch). Confirm / cost / delete / notify stay out.
+
+---
+
+## 2026-09-03 02:10 UTC — 006 locked: Voice send/queue quiet (founder)
+
+**Kind:** Type B. **Locked packet.** First-order critical. Not a plate.
+
+**Founder (preserved):** We need a product change: in Voice mode, suppress or disable notification sounds that play when a message is sent or queued. In Talk/Type modes keep existing behavior. Capture acceptance criteria, edge cases, and any UX notes (like optional toggle) and confirm priority as a first-order critical task.
+
+**Locked:** [`PM-PACKET-006-VOICE-SEND-QUIET.md`](PM-PACKET-006-VOICE-SEND-QUIET.md). Living glass: [PR #15](https://github.com/bywale-com/travis/pull/15).
+
+**Law:** Voice — no swoosh, no queue cue. Talk/Type — 031 unchanged. Decide at **play time** from current view. Visual queue stays. No mute-all. No toggle this pocket (later door only). No sound table.
+
+**Priority:** first-order. Engineer plants now. Do not wait on Mission plates. SA: no new store.
+
+**Numbering:** late-name addressing stays a named gap; it is not 006. Next packet is **007**.
+
+**Ask:** Engineer cut. Founder: toggle later, or never?
 

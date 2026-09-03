@@ -1,6 +1,6 @@
 # PM packet 005 — Log text format (receive + composer grow)
 
-**Number:** `005` — next PM packet is `006`. Never reuse. Index: [`PM-PACKETS.md`](./PM-PACKETS.md).  
+**Number:** `005` — next PM packet is `007` (006 is Voice send quiet). Never reuse. Index: [`PM-PACKETS.md`](./PM-PACKETS.md).  
 **Seat:** Product Manager. **SA** ascribes render vs store, speakable text vs formatted display, composer cap. **Engineer** plants glass from the photo + this packet (after SA).  
 **When:** Locked 2026-08-27 — founder: like **E1** enough to packet.  
 **Photo:** [`plates/travis-e1-log-format.png`](./plates/travis-e1-log-format.png) · FACE [`LOG-FORMAT-FACE.md`](./LOG-FORMAT-FACE.md).  
