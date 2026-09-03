@@ -171,6 +171,38 @@ export const turnArtifact = travis.table("turn_artifact", {
     .defaultNow(),
 });
 
+/** SCP-013 — Travis process. Ordered tool sequence. Not a ticket. */
+export const motion = travis.table("motion", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  sessionId: uuid("session_id")
+    .notNull()
+    .references(() => voiceSession.id),
+  title: text("title").notNull(),
+  status: text("status").notNull(),
+  foundingTurnId: uuid("founding_turn_id").references(() => voiceTurn.id),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  doneAt: timestamp("done_at", { withTimezone: true }),
+});
+
+export const motionStep = travis.table("motion_step", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  motionId: uuid("motion_id")
+    .notNull()
+    .references(() => motion.id),
+  seq: integer("seq").notNull(),
+  tool: text("tool").notNull(),
+  args: text("args").notNull(),
+  status: text("status").notNull(),
+  resultText: text("result_text").notNull().default(""),
+  startedAt: timestamp("started_at", { withTimezone: true }),
+  doneAt: timestamp("done_at", { withTimezone: true }),
+});
+
 /** SCP-012 — OS house. Protocols and templates. No session_id. */
 export const osNode = travis.table("os_node", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -215,6 +247,8 @@ export type TurnArtifact = typeof turnArtifact.$inferSelect;
 export type ArtifactKind = "image" | "file";
 export type OsNode = typeof osNode.$inferSelect;
 export type OsNodeKind = "dir" | "file";
+export type Motion = typeof motion.$inferSelect;
+export type MotionStep = typeof motionStep.$inferSelect;
 
 export type TurnKind =
   | "user"

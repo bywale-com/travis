@@ -603,7 +603,7 @@ export function formatInitiativeList(items: InitiativeListItem[]): string {
       ? ` · ${item.litSeatKeys.join(",")}`
       : "";
     const title = item.title.trim() || "(no title)";
-    return `${item.status}: ${title}${lit}${next}`;
+    return `${item.status}: ${item.id} ${title}${lit}${next}`;
   });
   return `${items.length} initiative${items.length === 1 ? "" : "s"}.\n${lines.join("\n")}`;
 }
@@ -619,6 +619,6 @@ export function formatInitiativeRead(ticket: InitiativeRead): string {
     : "No seat posts yet.";
   const files = formatLandedFiles(ticket.attachments);
   return files
-    ? `${title}\n${ticket.status}. ${founding}\n${posts}\n${files}\n${next}`
-    : `${title}\n${ticket.status}. ${founding}\n${posts}\n${next}`;
+    ? `${ticket.id}\n${title}\n${ticket.status}. ${founding}\n${posts}\n${files}\n${next}`
+    : `${ticket.id}\n${title}\n${ticket.status}. ${founding}\n${posts}\n${next}`;
 }

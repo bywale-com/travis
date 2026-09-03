@@ -9,6 +9,7 @@ import {
 } from "@/lib/room-membership";
 import { orderRoomsByLastAt, packRoomRows } from "@/lib/room-list";
 import { clipRoomTitle } from "@/lib/room-title";
+import { countOpenMotions } from "@/server/motion";
 import { db } from "@/server/db/client";
 import {
   agentBinding,
@@ -554,5 +555,6 @@ export async function sessionJson(session: VoiceSession) {
     defaultLabel: (defaultBinding ?? active).label,
     createdAt: session.createdAt,
     seats: await roomSeats(session.id),
+    motionCount: await countOpenMotions(session.id).catch(() => 0),
   };
 }

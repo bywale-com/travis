@@ -48,7 +48,12 @@ import { CreateAgent, type CreatedAgent } from "@/components/plates/CreateAgent"
 import { IntegrationStatusScreen } from "@/components/plates/IntegrationStatus";
 import { CreateRoom, type CatalogSeat } from "@/components/plates/CreateRoom";
 import { InFlightDoor, type RunningNow } from "@/components/plates/InFlightDoor";
-import { BacklogIndex, type BacklogRow } from "@/components/plates/BacklogIndex";
+import {
+  BacklogIndex,
+  type BacklogItem,
+  type BacklogInitiativeRow,
+} from "@/components/plates/BacklogIndex";
+import type { BacklogView } from "@/lib/motion";
 import {
   BacklogTicket,
   type BacklogTicketData,
@@ -89,6 +94,7 @@ type Session = {
   activeLabel: string;
   defaultLabel: string;
   seats?: RoomSeat[];
+  motionCount?: number;
 };
 
 type PlateFace = "index" | "create" | "create-agent" | "room" | "integrations";
@@ -279,7 +285,9 @@ export function Room({
   const [plate, setPlate] = useState<PlateFace>("index");
   const [door, setDoor] = useState<Door>(null);
   const [holdTurn, setHoldTurn] = useState<Turn | null>(null);
-  const [backlogRows, setBacklogRows] = useState<BacklogRow[]>([]);
+  const [backlogRows, setBacklogRows] = useState<BacklogItem[]>([]);
+  const [backlogView, setBacklogView] = useState<BacklogView>("all");
+  const [motionCount, setMotionCount] = useState(0);
   const [backlogLoading, setBacklogLoading] = useState(false);
   const [selectedBacklogId, setSelectedBacklogId] = useState<string | null>(
     null,
@@ -399,6 +407,9 @@ export function Room({
       logSubmodeRef.current = sub;
       if (Array.isArray(data.session.seats)) {
         setRoomSeats(asRoomSeats(data.session.seats));
+      }
+      if (typeof data.session.motionCount === "number") {
+        setMotionCount(data.session.motionCount);
       }
     }
   }, []);
@@ -821,20 +832,41 @@ export function Room({
   );
   consumeAgentStreamRef.current = consumeAgentStream;
 
-  const loadBacklog = useCallback(async () => {
+  const loadBacklog = useCallback(async (view: BacklogView = backlogView) => {
     const sid = sessionIdRef.current;
     if (!sid) return;
+    setBacklogView(view);
     setBacklogLoading(true);
     try {
-      const res = await fetch(`/api/session/${sid}/initiatives?status=all`);
-      const data = await readJson<{ initiatives?: BacklogRow[] }>(res);
-      setBacklogRows(Array.isArray(data.initiatives) ? data.initiatives : []);
+      const res = await fetch(
+        `/api/session/${sid}/initiatives?view=${view}&status=all`,
+      );
+      const data = await readJson<{
+        items?: BacklogItem[];
+        initiatives?: BacklogInitiativeRow[];
+        motionCount?: number;
+      }>(res);
+      if (Array.isArray(data.items)) {
+        setBacklogRows(data.items);
+      } else if (Array.isArray(data.initiatives)) {
+        setBacklogRows(
+          data.initiatives.map((row) => ({
+            ...row,
+            kind: "initiative" as const,
+          })),
+        );
+      } else {
+        setBacklogRows([]);
+      }
+      if (typeof data.motionCount === "number") {
+        setMotionCount(data.motionCount);
+      }
     } catch {
       setBacklogRows([]);
     } finally {
       setBacklogLoading(false);
     }
-  }, []);
+  }, [backlogView]);
 
   const openTicket = useCallback(async (initiativeId: string) => {
     const sid = sessionIdRef.current;
@@ -2115,11 +2147,31 @@ export function Room({
               marginLeft: "auto",
             }}
           >
+            {motionCount > 0 ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setDoor("backlog");
+                  void loadBacklog("in_motion");
+                }}
+                style={{
+                  border: "none",
+                  background: "transparent",
+                  color: t.accent,
+                  fontSize: 13,
+                  padding: 0,
+                  cursor: "pointer",
+                  fontWeight: 600,
+                }}
+              >
+                {motionCount} in motion
+              </button>
+            ) : null}
             <button
               type="button"
               onClick={() => {
                 setDoor("backlog");
-                void loadBacklog();
+                void loadBacklog("all");
               }}
               style={{
                 border: "none",
@@ -2930,8 +2982,12 @@ export function Room({
         <BacklogIndex
           t={t}
           rows={backlogRows}
+          view={backlogView}
           selectedId={selectedBacklogId}
           loading={backlogLoading}
+          onView={(next) => {
+            void loadBacklog(next);
+          }}
           onSelect={setSelectedBacklogId}
           onOpen={(id) => void openTicket(id)}
           onClose={() => {

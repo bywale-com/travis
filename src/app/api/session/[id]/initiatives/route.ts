@@ -4,14 +4,15 @@ import {
   HOLD_FEED_PREFIX,
   InitiativeError,
   holdInitiative,
-  listInitiatives,
 } from "@/server/initiative";
 import { bindingForSeat, setActiveBinding } from "@/server/travis-dest";
 import { pipeTravisText } from "@/server/travis-reply";
 import { sse, sseHeaders } from "@/server/seat-pipe";
 import { voiceTurn } from "@/server/db/schema";
 import type { InitiativeStatus } from "@/server/db/schema";
+import { parseBacklogView } from "@/lib/motion";
 import { parseRequestWhen } from "@/lib/request-log";
+import { listBacklog } from "@/server/motion";
 import { db } from "@/server/db/client";
 import { eq } from "drizzle-orm";
 import { AuthError } from "@/server/api-error";
@@ -27,14 +28,20 @@ export async function GET(
     const { id: sessionId } = await ctx.params;
     await requireOwnedSession(req, sessionId);
     const params = new URL(req.url).searchParams;
+    const view = parseBacklogView(params.get("view"));
     const statusRaw = params.get("status") ?? "open";
     const status = ["open", "done", "all"].includes(statusRaw)
       ? (statusRaw as InitiativeStatus | "all")
       : "open";
     const when = parseRequestWhen(params.get("when") ?? "all");
     const q = params.get("q") ?? "";
-    const items = await listInitiatives(sessionId, { status, when, q });
-    return NextResponse.json({ initiatives: items });
+    const pile = await listBacklog(sessionId, { view, status, when, q });
+    const initiatives = pile.items.filter((item) => item.kind === "initiative");
+    return NextResponse.json({
+      items: pile.items,
+      initiatives,
+      motionCount: pile.motionCount,
+    });
   });
 }
 
