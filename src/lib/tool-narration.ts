@@ -47,8 +47,6 @@ export function narrateToolCall(
         ? `Sending “${line}” to ${seat(args)} and waiting for the answer.`
         : `Sending that to ${seat(args)} and waiting for the answer.`;
     }
-    case "read_seat_reply":
-      return `Reading what ${seat(args)} said.`;
     case "barge_or_drop":
       return args.action === "send"
         ? `Pushing ${seat(args)}'s waiting line through now.`
@@ -63,7 +61,7 @@ export function narrateToolCall(
       return "Ending the room.";
     default:
       // list_seats, queue_snapshot, work_in_flight, search_room,
-      // list_initiatives, read_initiative, set_view — instant.
+      // list_initiatives, read_initiative, read_seat_reply, set_view — instant.
       return null;
   }
 }

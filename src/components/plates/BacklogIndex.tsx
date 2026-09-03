@@ -25,6 +25,7 @@ export function BacklogIndex({
   t,
   rows,
   selectedId,
+  loading,
   onSelect,
   onOpen,
   onClose,
@@ -33,6 +34,7 @@ export function BacklogIndex({
   t: Tokens;
   rows: BacklogRow[];
   selectedId: string | null;
+  loading?: boolean;
   onSelect: (id: string) => void;
   onOpen: (id: string) => void;
   onClose: () => void;
@@ -95,7 +97,9 @@ export function BacklogIndex({
                 marginTop: 48,
               }}
             >
-              Nothing Travis is orchestrating yet.
+              {loading
+                ? "Loading…"
+                : "Nothing Travis is orchestrating yet."}
             </p>
           ) : (
             rows.map((row) => {

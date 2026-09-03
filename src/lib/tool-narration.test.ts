@@ -26,10 +26,7 @@ test("a long line is clipped so the narration stays one line", () => {
 });
 
 test("reads and barges announce themselves", () => {
-  assert.equal(
-    narrateToolCall("read_seat_reply", { seat: "engineer" }),
-    "Reading what the Engineer said.",
-  );
+  assert.equal(narrateToolCall("read_seat_reply", { seat: "engineer" }), null);
   assert.equal(
     narrateToolCall("barge_or_drop", { seat: "pm", action: "delete" }),
     "Dropping the PM's waiting line.",
@@ -48,6 +45,7 @@ test("instant lookups stay silent", () => {
   assert.equal(narrateToolCall("search_room", { q: "voice" }), null);
   assert.equal(narrateToolCall("list_initiatives", {}), null);
   assert.equal(narrateToolCall("read_initiative", { id: "x" }), null);
+  assert.equal(narrateToolCall("read_seat_reply", { seat: "sa" }), null);
 });
 
 test("marking done is announced", () => {
@@ -67,7 +65,7 @@ test("marking done is announced", () => {
 
 test("an unknown seat does not produce a broken sentence", () => {
   assert.equal(
-    narrateToolCall("read_seat_reply", { seat: "nobody" }),
-    "Reading what that seat said.",
+    narrateToolCall("barge_or_drop", { seat: "nobody", action: "send" }),
+    "Pushing that seat's waiting line through now.",
   );
 });

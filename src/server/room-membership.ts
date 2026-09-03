@@ -7,6 +7,7 @@ import {
   destOnCreate,
   membershipRoleFor,
 } from "@/lib/room-membership";
+import { packRoomRows } from "@/lib/room-list";
 import { clipRoomTitle } from "@/lib/room-title";
 import { db } from "@/server/db/client";
 import {
@@ -434,6 +435,31 @@ export async function renameRoom(
   return updated ?? null;
 }
 
+async function membersForSessions(sessionIds: string[]) {
+  if (!sessionIds.length) return [];
+  const rows = await db
+    .select({
+      sessionId: roomMembership.sessionId,
+      seatKey: agentBinding.seatKey,
+      label: agentBinding.label,
+      joinedAt: roomMembership.joinedAt,
+    })
+    .from(roomMembership)
+    .innerJoin(agentBinding, eq(roomMembership.bindingId, agentBinding.id))
+    .where(
+      and(
+        inArray(roomMembership.sessionId, sessionIds),
+        isNull(roomMembership.leftAt),
+      ),
+    )
+    .orderBy(asc(roomMembership.joinedAt), asc(agentBinding.seatKey));
+  return rows.map((r) => ({
+    sessionId: r.sessionId,
+    seatKey: r.seatKey,
+    label: r.label,
+  }));
+}
+
 export async function listRoomsForIp(ip: string): Promise<
   Array<{
     id: string;
@@ -449,20 +475,8 @@ export async function listRoomsForIp(ip: string): Promise<
     .from(voiceSession)
     .where(eq(voiceSession.clientIp, ip))
     .orderBy(sql`${voiceSession.createdAt} desc`);
-
-  const out = [];
-  for (const s of sessions) {
-    const members = await openMembers(s.id);
-    out.push({
-      id: s.id,
-      title: s.title,
-      status: s.status,
-      createdAt: s.createdAt,
-      endedAt: s.endedAt,
-      members: members.map((m) => ({ seatKey: m.seatKey, label: m.label })),
-    });
-  }
-  return out;
+  const members = await membersForSessions(sessions.map((s) => s.id));
+  return packRoomRows(sessions, members);
 }
 
 export async function listRoomsForOperator(
@@ -484,20 +498,8 @@ export async function listRoomsForOperator(
     .from(voiceSession)
     .where(inArray(voiceSession.operatorId, ids))
     .orderBy(sql`${voiceSession.createdAt} desc`);
-
-  const out = [];
-  for (const s of sessions) {
-    const members = await openMembers(s.id);
-    out.push({
-      id: s.id,
-      title: s.title,
-      status: s.status,
-      createdAt: s.createdAt,
-      endedAt: s.endedAt,
-      members: members.map((m) => ({ seatKey: m.seatKey, label: m.label })),
-    });
-  }
-  return out;
+  const members = await membersForSessions(sessions.map((s) => s.id));
+  return packRoomRows(sessions, members);
 }
 
 export async function sessionJson(session: VoiceSession) {

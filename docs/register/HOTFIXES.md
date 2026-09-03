@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **060**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **061**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -69,3 +69,4 @@
 | 057 | [`HOTFIX-057-BACKLOG-PLATES.md`](./HOTFIX-057-BACKLOG-PLATES.md) | Backlog index, ticket Messages/Artifacts, hold sheet, mark as a door |
 | 058 | [`HOTFIX-058-RENAME-ROOM.md`](./HOTFIX-058-RENAME-ROOM.md) | Founder and Travis can rename a room; same title field |
 | 059 | [`HOTFIX-059-TRAVIS-LIVE-GLUE.md`](./HOTFIX-059-TRAVIS-LIVE-GLUE.md) | Live Travis posts one utterance; window keeps the last line |
+| 060 | [`HOTFIX-060-ROOMS-FEEL-FAST.md`](./HOTFIX-060-ROOMS-FEEL-FAST.md) | One query for the room index; loading copy; no per-delta turn refetch |
