@@ -12,7 +12,8 @@
 
 B2 is superseded. **Not Requests.** Mission only.
 
-**Store (signed):** SCP-008 `travis.initiative` + `initiative_id` on turns. Artifacts remain **001 silence** — B7 is glass, not a minted table.
+**Store (signed):** SCP-008 `travis.initiative` + `initiative_id` on turns. Artifacts remain **001 / 008 I silence** — B7 is glass, not a minted table.  
+**Envelope (not a packet):** [`ENVELOPE-ARTIFACTS.md`](./ENVELOPE-ARTIFACTS.md) — SA ascribes mint / extend / silence. Engineer does not plant from this face.
 
 ---
 
@@ -59,7 +60,7 @@ The ticket log is `WHERE initiative_id = this`. Concurrent work stays in its own
 
 **B7 Artifacts** — the same facts, no bubbles. A list in landing order. Who made it is the seat word on the right.
 
-008 already returns `attachments: []`. B7 does not mint a store. Artifact grain is still **SA**.
+008 already returns `attachments: []`. B7 does not mint a store. Artifact grain is the envelope — SA cuts **009** or names the silence again.
 
 ## Must-not
 
