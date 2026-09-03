@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 00:21 UTC — **SCP-007 signed.** Room = `voice_session`. Mint `room_membership`. Engineer SQL signed; new-room and dest runtime amended. Packet: [`SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md`](./SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md). Numbers 003–006 remapped (planted; files not on `main`). Engineer pastes; no leftover analysis.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 15:57 UTC — **SCP-011 signed.** Cursor + GitHub integration (I1–I5). Fix `Agent.create` SDK call shape. New typed routes `/api/integrations/status` + `/api/integrations/options`. No new tables. Packet: [`SYSTEMS-CHANGE-PACKET-011-INTEGRATIONS.md`](./SYSTEMS-CHANGE-PACKET-011-INTEGRATIONS.md).
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -301,3 +301,29 @@ SCP-001 seed field updated.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md`](./SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md)
 
 **Handoff:** Engineer pastes the signed SQL + Drizzle, switches `roomSeats()`, writes the runtime in the packet. No leftover analysis.
+
+---
+
+## 2026-09-03 15:57 UTC — SCP-011 Cursor + GitHub integration (I1–I5)
+
+**Kind:** Envelope pickup. Engineer cut `ENVELOPE-INTEGRATIONS.md` naming five plates. SA ascribed the machine.
+
+**Decisions:**
+
+1. **No new tables.** This packet is runtime + route + SDK call fixes only. Founder does not land SQL.
+2. **`Cursor.me()` → `SDKUser`:** fields are `apiKeyName`, `userEmail` (optional), `userId` (optional), `createdAt`. **No `plan` field.** I1 shows `apiKeyName` as the plan label.
+3. **`Cursor.models.list()` → `SDKModel[]`:** `{ id, displayName, variants? }`. Default model = first with any `variants[].isDefault === true`. Fallback: `composer-2.5`, then first item.
+4. **`Cursor.repositories.list()` → `SDKRepository[]`:** only `{ url }`. No `private`, `language`, or org name from the SDK. Org derived from `url.split("/")[1]`. Repo name from `url.split("/").pop()`. **No GitHub REST enrichment** — drop `Private · TypeScript` subtitles from I2 rows.
+5. **GitHub connection = Cursor key scope.** No separate `GITHUB_TOKEN`. Empty list = not connected (State B, I5). No OAuth flow — operator instruction text only.
+6. **`Agent.create` bug on main:** passes `model` as raw string and `repository` as top-level key — neither is an SDK field. Fix: `model: { id }`, `cloud.repos: [{ url, startingRef? }]`. `ref` is `startingRef` on the repo entry, not top-level.
+7. **New route `GET /api/integrations/status`:** key check + `Cursor.me()` + model count + repo count. Returns typed `IntegrationStatus` union. Drives I1 and I5.
+8. **New route `GET /api/integrations/options`:** returns `{ models: ModelOption[], repositories: RepoOption[], defaultModelId }` (typed structs, not flat strings). Drives I2 + I3 pickers.
+9. **Old `/api/agents/options`:** remove or redirect. It returned flat `string[]` with broken `namesFrom` logic.
+10. **Recently used repos** (I2 RECENTLY USED section): session-local `useState` only. Not stored.
+11. **I4 Create Agent:** MODEL defaults to `defaultModelId` on load. REPOSITORY no default. STARTING REF free-text. Create disabled until NAME is non-empty.
+
+**Refused:** GitHub REST enrichment · separate GITHUB_TOKEN · in-app credential/OAuth · plan tier field · recently-used DB store · agent delete from app · billing in I1 · multi-operator.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-011-INTEGRATIONS.md`](./SYSTEMS-CHANGE-PACKET-011-INTEGRATIONS.md)
+
+**Handoff:** Engineer fixes `createAgentBinding` SDK call first (live bug), then builds status + options routes, then wires I1–I5. No new tables.
