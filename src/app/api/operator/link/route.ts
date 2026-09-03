@@ -8,8 +8,18 @@ export async function POST(req: Request) {
       email?: unknown;
     };
     const email = typeof body.email === "string" ? body.email : "";
-    await requestOperatorLink(req, email);
-    // Magic link UX: always return the same success copy.
+    const result = await requestOperatorLink(req, email);
+    if (result.outcome === "send_failed") {
+      return NextResponse.json(
+        {
+          ok: false,
+          error:
+            "We couldn't send the login email right now. Check Resend is wired on Vercel, then try again.",
+        },
+        { status: 503 },
+      );
+    }
+    // Unknown email gets the same quiet success as a sent link.
     return NextResponse.json({ ok: true });
   });
 }
