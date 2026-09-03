@@ -4,6 +4,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-03** · SCP-007 · [PR #61](https://github.com/bywale-com/travis/pull/61) — Room membership is a Travis store: roster, dest, End, create, add and remove read the relation, because seats were every active binding worldwide.
+- **2026-09-02** · Plates · [PR #57](https://github.com/bywale-com/travis/pull/57) — Thirteen printed plates for rooms as primitive and the Mission/Carbon merge.
 - **2026-09-02** · Hotfix 044 · [PR #58](https://github.com/bywale-com/travis/pull/58) — The plates' visual law lands in code: Mission/Carbon tokens, Orbitron for the wordmark only, a type scale that takes no mode, seat marks that work for a fifth agent, and narration and run errors as their own message kinds.
 - **2026-09-02** · Hotfix 043 · [PR #56](https://github.com/bywale-com/travis/pull/56) — Returning to Voice brings Live back instead of silently staying on Web Speech, because `sameRoomEar` asked which ear you *have* and Voice + dest Travis only reads as live once Live is already connected.
 - **2026-09-02** · Hotfix 042 · [PR #55](https://github.com/bywale-com/travis/pull/55) — Travis is told it cannot see the repo, a diff, tests or CI, because 038 gave it engineering context for the first time and it immediately offered to review a diff and check CI with nine tools that can do neither.
