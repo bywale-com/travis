@@ -3,12 +3,13 @@
  * Do not key rooms to IP. Do not mint a signup.
  */
 import { randomBytes } from "node:crypto";
-import { eq, isNull, sql } from "drizzle-orm";
+import { and, eq, inArray, isNull, sql } from "drizzle-orm";
 import {
   OPERATOR_COOKIE,
   OPERATOR_COOKIE_MAX_AGE,
   isOperatorEmail,
   normalizeOperatorEmail,
+  operatorRoomScope,
   preferredOperator,
   operatorLinkPath,
   seedOperatorEmails,
@@ -121,11 +122,31 @@ export async function requireOperator(req: Request): Promise<Operator> {
   return row;
 }
 
+export async function roomScopeForOperator(op: Operator): Promise<{
+  ownerId: string;
+  viewerIds: string[];
+}> {
+  await ensureOperatorStore();
+  const rows = await db
+    .select({ id: operator.id, email: operator.email })
+    .from(operator)
+    .orderBy(operator.createdAt);
+  return operatorRoomScope(
+    op,
+    rows,
+    seedOperatorEmails({
+      TRAVIS_OPERATOR_EMAIL: process.env.TRAVIS_OPERATOR_EMAIL,
+      TEST_EMAIL_TO: process.env.TEST_EMAIL_TO,
+    }),
+  );
+}
+
 export async function requireOwnedSession(
   req: Request,
   sessionId: string,
 ): Promise<{ operator: Operator; sessionId: string }> {
   const op = await requireOperator(req);
+  const scope = await roomScopeForOperator(op);
   const [row] = await db
     .select({ id: voiceSession.id })
     .from(voiceSession)
@@ -136,7 +157,10 @@ export async function requireOwnedSession(
     .select({ id: voiceSession.id })
     .from(voiceSession)
     .where(
-      sql`${voiceSession.id} = ${sessionId} AND ${voiceSession.operatorId} = ${op.id}`,
+      and(
+        eq(voiceSession.id, sessionId),
+        inArray(voiceSession.operatorId, scope.viewerIds),
+      ),
     )
     .limit(1);
   if (!owned) throw new AuthError("Session not found", 404);

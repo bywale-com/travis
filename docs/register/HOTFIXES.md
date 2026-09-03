@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **056**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **057**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -65,3 +65,4 @@
 | 053 | [`HOTFIX-053-OPERATOR-AUTH.md`](./HOTFIX-053-OPERATOR-AUTH.md) | Allowlisted email + durable personal login link; rooms leave IP |
 | 054 | [`HOTFIX-054-MAGIC-LINK-MAIL.md`](./HOTFIX-054-MAGIC-LINK-MAIL.md) | Magic link logs + honest 503 when Resend fails; quiet ok for unknown email |
 | 055 | [`HOTFIX-055-ROOM-OWNER.md`](./HOTFIX-055-ROOM-OWNER.md) | Existing rooms hang on truthist00@gmail.com, not the oldest operator |
+| 056 | [`HOTFIX-056-SHARED-OPERATOR-ROOMS.md`](./HOTFIX-056-SHARED-OPERATOR-ROOMS.md) | Seeded inboxes share one room pile |

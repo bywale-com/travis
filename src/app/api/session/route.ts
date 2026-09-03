@@ -1,4 +1,4 @@
-import { and, desc, eq, ne, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, ne, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { jsonRoute } from "@/server/api-error";
 import { clientIpFromHeaders } from "@/server/client-ip";
@@ -11,7 +11,11 @@ import {
   MembershipError,
   sessionJson,
 } from "@/server/room-membership";
-import { requireOperator, requireOwnedSession } from "@/server/operator";
+import {
+  requireOperator,
+  requireOwnedSession,
+  roomScopeForOperator,
+} from "@/server/operator";
 
 async function getPmBinding() {
   const [pm] = await db
@@ -41,13 +45,15 @@ async function ensureTravisLiveColumn() {
   );
 }
 
-async function liveSessionForOperator(operatorId: string) {
+async function liveSessionForOperator(operatorIds: string | string[]) {
+  const ids = Array.isArray(operatorIds) ? operatorIds : [operatorIds];
+  if (!ids.length) return null;
   const [row] = await db
     .select()
     .from(voiceSession)
     .where(
       and(
-        eq(voiceSession.operatorId, operatorId),
+        inArray(voiceSession.operatorId, ids),
         ne(voiceSession.status, "ended"),
       ),
     )
@@ -72,8 +78,9 @@ async function openOrResume(req: Request) {
   await prepareSessionStore();
   const ip = clientIpFromHeaders(req.headers);
   const operator = await requireOperator(req);
+  const scope = await roomScopeForOperator(operator);
 
-  const existing = await liveSessionForOperator(operator.id);
+  const existing = await liveSessionForOperator(scope.viewerIds);
   if (existing) {
     const payload = await sessionJson(existing);
     if (payload) return NextResponse.json({ session: payload, resumed: true });
@@ -90,7 +97,7 @@ async function openOrResume(req: Request) {
   try {
     const session = await createStandInRoom({
       clientIp: ip,
-      operatorId: operator.id,
+      operatorId: scope.ownerId,
       preferBinding: binding,
     });
     const payload = await sessionJson(session);
@@ -124,7 +131,8 @@ async function readSession(req: Request) {
 
   await prepareSessionStore();
   const operator = await requireOperator(req);
-  const existing = await liveSessionForOperator(operator.id);
+  const scope = await roomScopeForOperator(operator);
+  const existing = await liveSessionForOperator(scope.viewerIds);
   if (!existing) {
     return NextResponse.json({ session: null });
   }

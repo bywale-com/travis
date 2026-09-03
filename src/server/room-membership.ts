@@ -1,7 +1,7 @@
 /**
  * SCP-007 — room membership writes and reads. Packet grain only.
  */
-import { and, asc, eq, isNull, sql } from "drizzle-orm";
+import { and, asc, eq, inArray, isNull, sql } from "drizzle-orm";
 import {
   destAfterRemove,
   destOnCreate,
@@ -452,7 +452,7 @@ export async function listRoomsForIp(ip: string): Promise<
 }
 
 export async function listRoomsForOperator(
-  operatorId: string,
+  operatorId: string | string[],
 ): Promise<
   Array<{
     id: string;
@@ -463,10 +463,12 @@ export async function listRoomsForOperator(
     members: Array<{ seatKey: string | null; label: string }>;
   }>
 > {
+  const ids = Array.isArray(operatorId) ? operatorId : [operatorId];
+  if (!ids.length) return [];
   const sessions = await db
     .select()
     .from(voiceSession)
-    .where(eq(voiceSession.operatorId, operatorId))
+    .where(inArray(voiceSession.operatorId, ids))
     .orderBy(sql`${voiceSession.createdAt} desc`);
 
   const out = [];
