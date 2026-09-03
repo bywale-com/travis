@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
 import { jsonRoute } from "@/server/api-error";
-import { clientIpFromHeaders } from "@/server/client-ip";
 import { ensureSeatBindings } from "@/server/db/ensure-bindings";
 import {
   createExplicitRoom,
   ensureMembershipStore,
-  listRoomsForIp,
+  listRoomsForOperator,
   MembershipError,
   sessionJson,
 } from "@/server/room-membership";
+import { clientIpFromHeaders } from "@/server/client-ip";
+import { requireOperator } from "@/server/operator";
 
 type CreateBody = {
   title?: string;
@@ -19,8 +20,9 @@ export async function GET(req: Request) {
   return jsonRoute(async () => {
     await ensureSeatBindings();
     await ensureMembershipStore();
-    const ip = clientIpFromHeaders(req.headers);
-    const rooms = await listRoomsForIp(ip);
+    // Auth gates the index; IP stays telemetry.
+    const operator = await requireOperator(req);
+    const rooms = await listRoomsForOperator(operator.id);
     return NextResponse.json({ rooms });
   });
 }
@@ -31,12 +33,14 @@ export async function POST(req: Request) {
     await ensureSeatBindings();
     await ensureMembershipStore();
     const ip = clientIpFromHeaders(req.headers);
+    const operator = await requireOperator(req);
     const body = (await req.json().catch(() => ({}))) as CreateBody;
     const bindingIds = Array.isArray(body.bindingIds) ? body.bindingIds : [];
     try {
       const session = await createExplicitRoom({
         title: typeof body.title === "string" ? body.title : "",
         clientIp: ip,
+        operatorId: operator.id,
         bindingIds,
       });
       return NextResponse.json({ session: await sessionJson(session) });

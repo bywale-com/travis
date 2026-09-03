@@ -2,13 +2,23 @@ import { desc, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/server/db/client";
 import { voiceSession, voiceTurn } from "@/server/db/schema";
+import { AuthError } from "@/server/api-error";
+import { requireOwnedSession } from "@/server/operator";
 
 /** Faceless dead-man trigger — inserts travis_prompt, awaits user response. */
 export async function POST(
-  _req: Request,
+  req: Request,
   ctx: { params: Promise<{ id: string }> },
 ) {
   const { id: sessionId } = await ctx.params;
+  try {
+    await requireOwnedSession(req, sessionId);
+  } catch (err) {
+    if (err instanceof AuthError) {
+      return NextResponse.json({ error: err.message }, { status: err.status });
+    }
+    throw err;
+  }
 
   const [session] = await db
     .select()

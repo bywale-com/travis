@@ -11,6 +11,7 @@ import {
   MembershipError,
   sessionJson,
 } from "@/server/room-membership";
+import { requireOperator, requireOwnedSession } from "@/server/operator";
 
 async function getPmBinding() {
   const [pm] = await db
@@ -40,32 +41,19 @@ async function ensureTravisLiveColumn() {
   );
 }
 
-async function liveSessionForIp(ip: string) {
-  if (ip) {
-    const [row] = await db
-      .select()
-      .from(voiceSession)
-      .where(and(eq(voiceSession.clientIp, ip), ne(voiceSession.status, "ended")))
-      .orderBy(desc(voiceSession.createdAt))
-      .limit(1);
-    if (row) return row;
-  }
-
-  const empties = await db
+async function liveSessionForOperator(operatorId: string) {
+  const [row] = await db
     .select()
     .from(voiceSession)
-    .where(and(eq(voiceSession.clientIp, ""), ne(voiceSession.status, "ended")))
+    .where(
+      and(
+        eq(voiceSession.operatorId, operatorId),
+        ne(voiceSession.status, "ended"),
+      ),
+    )
     .orderBy(desc(voiceSession.createdAt))
-    .limit(2);
-  if (empties.length === 1 && ip) {
-    const [stamped] = await db
-      .update(voiceSession)
-      .set({ clientIp: ip })
-      .where(eq(voiceSession.id, empties[0].id))
-      .returning();
-    return stamped ?? empties[0];
-  }
-  return null;
+    .limit(1);
+  return row ?? null;
 }
 
 async function prepareSessionStore() {
@@ -83,8 +71,9 @@ export async function POST(req: Request) {
 async function openOrResume(req: Request) {
   await prepareSessionStore();
   const ip = clientIpFromHeaders(req.headers);
+  const operator = await requireOperator(req);
 
-  const existing = await liveSessionForIp(ip);
+  const existing = await liveSessionForOperator(operator.id);
   if (existing) {
     const payload = await sessionJson(existing);
     if (payload) return NextResponse.json({ session: payload, resumed: true });
@@ -101,6 +90,7 @@ async function openOrResume(req: Request) {
   try {
     const session = await createStandInRoom({
       clientIp: ip,
+      operatorId: operator.id,
       preferBinding: binding,
     });
     const payload = await sessionJson(session);
@@ -122,22 +112,19 @@ async function readSession(req: Request) {
   const id = searchParams.get("id");
 
   if (id) {
+    await requireOwnedSession(req, id);
     const [row] = await db
       .select()
       .from(voiceSession)
       .where(eq(voiceSession.id, id))
       .limit(1);
 
-    if (!row) {
-      return NextResponse.json({ error: "Session not found" }, { status: 404 });
-    }
-
     return NextResponse.json({ session: await sessionJson(row) });
   }
 
   await prepareSessionStore();
-  const ip = clientIpFromHeaders(req.headers);
-  const existing = await liveSessionForIp(ip);
+  const operator = await requireOperator(req);
+  const existing = await liveSessionForOperator(operator.id);
   if (!existing) {
     return NextResponse.json({ session: null });
   }

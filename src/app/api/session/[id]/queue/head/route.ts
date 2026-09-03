@@ -9,6 +9,8 @@ import {
   sse,
   sseHeaders,
 } from "@/server/seat-pipe";
+import { AuthError } from "@/server/api-error";
+import { requireOwnedSession } from "@/server/operator";
 
 type Body = { seatKey: SeatKey; action: "send" | "delete" };
 
@@ -18,6 +20,14 @@ export async function POST(
 ) {
   const { id: sessionId } = await ctx.params;
   const body = (await req.json()) as Body;
+  try {
+    await requireOwnedSession(req, sessionId);
+  } catch (err) {
+    if (err instanceof AuthError) {
+      return Response.json({ error: err.message }, { status: err.status });
+    }
+    throw err;
+  }
   const [session] = await db
     .select()
     .from(voiceSession)

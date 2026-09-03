@@ -2,13 +2,23 @@ import { eq } from "drizzle-orm";
 import { db } from "@/server/db/client";
 import { voiceSession } from "@/server/db/schema";
 import { drainReadySeats, sse, sseHeaders } from "@/server/seat-pipe";
+import { AuthError } from "@/server/api-error";
+import { requireOwnedSession } from "@/server/operator";
 
 /** Drain waiting lines for seats whose Cursor run is idle. */
 export async function POST(
-  _req: Request,
+  req: Request,
   ctx: { params: Promise<{ id: string }> },
 ) {
   const { id: sessionId } = await ctx.params;
+  try {
+    await requireOwnedSession(req, sessionId);
+  } catch (err) {
+    if (err instanceof AuthError) {
+      return Response.json({ error: err.message }, { status: err.status });
+    }
+    throw err;
+  }
   const [session] = await db
     .select()
     .from(voiceSession)

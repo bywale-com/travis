@@ -7,7 +7,9 @@ import { db } from "@/server/db/client";
 import { agentBinding, voiceSession } from "@/server/db/schema";
 import type { AgentBinding, SeatKey } from "@/server/db/schema";
 import { noteTravisUnwired } from "@/server/travis-dest";
+import { AuthError } from "@/server/api-error";
 import { MembershipError, requireOpenMember } from "@/server/room-membership";
+import { requireOwnedSession } from "@/server/operator";
 import { pipeTravisText } from "@/server/travis-reply";
 import {
   insertUserTurn,
@@ -44,6 +46,14 @@ export async function POST(
   ctx: { params: Promise<{ id: string }> },
 ) {
   const { id: sessionId } = await ctx.params;
+  try {
+    await requireOwnedSession(req, sessionId);
+  } catch (err) {
+    if (err instanceof AuthError) {
+      return Response.json({ error: err.message }, { status: err.status });
+    }
+    throw err;
+  }
   const body = (await req.json()) as Body;
   const decided = resolveTypedSend({
     chipSeatKeys: uniqueSeatKeys(body.chipSeatKeys ?? []),

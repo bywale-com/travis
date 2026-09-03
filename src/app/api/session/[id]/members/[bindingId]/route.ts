@@ -5,13 +5,15 @@ import {
   removeMember,
   roomSeats,
 } from "@/server/room-membership";
+import { requireOwnedSession } from "@/server/operator";
 
 export async function DELETE(
-  _req: Request,
+  req: Request,
   ctx: { params: Promise<{ id: string; bindingId: string }> },
 ) {
   return jsonRoute(async () => {
     const { id: sessionId, bindingId } = await ctx.params;
+    await requireOwnedSession(req, sessionId);
     try {
       await removeMember(sessionId, bindingId);
       return NextResponse.json({ seats: await roomSeats(sessionId) });

@@ -4,6 +4,7 @@ import { jsonRoute } from "@/server/api-error";
 import { db } from "@/server/db/client";
 import { agentBinding, voiceSession } from "@/server/db/schema";
 import { endRoom, sessionJson } from "@/server/room-membership";
+import { requireOwnedSession } from "@/server/operator";
 
 type PatchBody = {
   status?: "listening" | "paused" | "ending" | "ended" | "speaking";
@@ -16,8 +17,10 @@ export async function PATCH(
   ctx: { params: Promise<{ id: string }> },
 ) {
   return jsonRoute(async () => {
-  const { id } = await ctx.params;
+    const { id } = await ctx.params;
   const body = (await req.json()) as PatchBody;
+
+    await requireOwnedSession(req, id);
 
   if (!body.status && !body.viewMode && !body.logSubmode) {
     return NextResponse.json(
