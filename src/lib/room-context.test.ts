@@ -112,6 +112,12 @@ test("an empty room produces no window at all", () => {
   assert.equal(buildRoomContext({ turns: [] }), "");
 });
 
+test("the request-log pointer is how Travis learns the organ exists", () => {
+  const out = buildRoomContext({ turns: [], requestCount: 12 });
+  assert.match(out, /12 requests in the request log/);
+  assert.match(out, /search_room/);
+});
+
 test("running seats show even when nothing has been logged", () => {
   const out = buildRoomContext({
     turns: [],

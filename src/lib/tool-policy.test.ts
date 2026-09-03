@@ -25,6 +25,7 @@ test("coverage reports what exists by class", () => {
   assert.equal(byClass.destructive.includes("barge_or_drop"), true);
   assert.equal(byClass.write.includes("dispatch_to_seat"), true);
   assert.equal(byClass.read.includes("read_seat_reply"), true);
+  assert.equal(byClass.read.includes("search_room"), true);
 });
 
 test("the policy has no entries for tools that do not exist", () => {

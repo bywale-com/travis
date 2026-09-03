@@ -45,6 +45,7 @@ test("instant lookups stay silent", () => {
   assert.equal(narrateToolCall("queue_snapshot", {}), null);
   assert.equal(narrateToolCall("list_seats", {}), null);
   assert.equal(narrateToolCall("set_view", { viewMode: "log" }), null);
+  assert.equal(narrateToolCall("search_room", { q: "voice" }), null);
 });
 
 test("an unknown seat does not produce a broken sentence", () => {

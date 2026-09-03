@@ -56,7 +56,7 @@ export function narrateToolCall(
     case "end_session":
       return "Ending the room.";
     default:
-      // list_seats, queue_snapshot, work_in_flight, set_view — instant, and
+      // list_seats, queue_snapshot, work_in_flight, search_room, set_view — instant, and
       // the answer says more than the announcement would.
       return null;
   }
