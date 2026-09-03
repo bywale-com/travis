@@ -63,4 +63,5 @@
 | 051 | [`HOTFIX-051-NEW-WAKE.md`](./HOTFIX-051-NEW-WAKE.md) | Seat land is New; Travis wakes; no Google body read |
 | 052 | [`HOTFIX-052-INITIATIVE-STORE.md`](./HOTFIX-052-INITIATIVE-STORE.md) | 008 columns land on first send; no manual db:push |
 | 053 | [`HOTFIX-053-OPERATOR-AUTH.md`](./HOTFIX-053-OPERATOR-AUTH.md) | Allowlisted email + durable personal login link; rooms leave IP |
+| 054 | [`HOTFIX-054-MAGIC-LINK-MAIL.md`](./HOTFIX-054-MAGIC-LINK-MAIL.md) | Magic link logs + honest 503 when Resend fails; quiet ok for unknown email |
 | 055 | [`HOTFIX-055-ROOM-OWNER.md`](./HOTFIX-055-ROOM-OWNER.md) | Existing rooms hang on truthist00@gmail.com, not the oldest operator |

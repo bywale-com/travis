@@ -30,7 +30,9 @@ export function LoginDoor() {
       });
       const data = await readJson<{ ok?: boolean; error?: string }>(res);
       if (!res.ok) throw new Error(data.error ?? "Request failed");
-      setStatus("Check your email — open the personal Travis link.");
+      setStatus(
+        "If that email is on the allowlist, check your inbox — open the personal Travis link.",
+      );
     } catch (e) {
       setStatus(e instanceof Error ? e.message : String(e));
     } finally {
