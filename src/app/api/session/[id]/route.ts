@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/server/db/client";
 import { agentBinding, voiceSession } from "@/server/db/schema";
+import { endRoom, sessionJson } from "@/server/room-membership";
 
 type PatchBody = {
   status?: "listening" | "paused" | "ending" | "ended" | "speaking";
@@ -23,8 +24,15 @@ export async function PATCH(
     );
   }
 
-  const endedAt = body.status === "ended" ? new Date() : undefined;
-  const clearLive = body.status === "ended";
+  if (body.status === "ended") {
+    const session = await endRoom(id);
+    if (!session) {
+      return NextResponse.json({ error: "Session not found" }, { status: 404 });
+    }
+    const payload = await sessionJson(session);
+    return NextResponse.json({ session: payload ?? session });
+  }
+
   const logSubmode =
     body.logSubmode === "type" || body.logSubmode === "talk"
       ? body.logSubmode
@@ -36,8 +44,6 @@ export async function PATCH(
       ...(body.status ? { status: body.status } : {}),
       ...(body.viewMode ? { viewMode: body.viewMode } : {}),
       ...(logSubmode ? { logSubmode } : {}),
-      ...(endedAt ? { endedAt } : {}),
-      ...(clearLive ? { travisLiveHandle: null } : {}),
     })
     .where(eq(voiceSession.id, id))
     .returning();

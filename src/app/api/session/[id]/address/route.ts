@@ -11,6 +11,7 @@ import {
 import { db } from "@/server/db/client";
 import { voiceSession } from "@/server/db/schema";
 import type { SeatKey } from "@/server/db/schema";
+import { MembershipError, openBindingForSeat } from "@/server/room-membership";
 
 type Body = { seatKey?: SeatKey; utterance?: string };
 
@@ -40,11 +41,20 @@ export async function POST(
     return NextResponse.json({ error: "No dest" }, { status: 400 });
   }
 
-  const binding = await bindingForSeat(seatKey);
+  const binding =
+    (await openBindingForSeat(sessionId, seatKey)) ??
+    (await bindingForSeat(seatKey));
   if (!binding) {
     return NextResponse.json({ error: "Unknown dest" }, { status: 400 });
   }
-  await setActiveBinding(sessionId, binding.id);
+  try {
+    await setActiveBinding(sessionId, binding.id);
+  } catch (err) {
+    if (err instanceof MembershipError) {
+      return NextResponse.json({ error: err.message }, { status: err.status });
+    }
+    throw err;
+  }
   if (isTravisSeat(seatKey)) await noteTravisUnwired(sessionId);
 
   return NextResponse.json({

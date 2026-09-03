@@ -1394,11 +1394,6 @@ export function Room({ t }: { t: Tokens }) {
       setLogSubmode(sub);
       logSubmodeRef.current = sub;
       setRoomSeats(s.seats ?? []);
-      if (!s.seats?.length) {
-        const bindRes = await fetch("/api/bindings");
-        const bindData = await readJson<{ seats?: RoomSeat[] }>(bindRes);
-        if (Array.isArray(bindData.seats)) setRoomSeats(bindData.seats);
-      }
       clearDraft();
       if (resume) {
         await refreshTurns(s.id);

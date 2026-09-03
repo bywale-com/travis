@@ -7,6 +7,7 @@ import { db } from "@/server/db/client";
 import { agentBinding, voiceSession } from "@/server/db/schema";
 import type { AgentBinding, SeatKey } from "@/server/db/schema";
 import { noteTravisUnwired } from "@/server/travis-dest";
+import { MembershipError, requireOpenMember } from "@/server/room-membership";
 import { pipeTravisText } from "@/server/travis-reply";
 import {
   insertUserTurn,
@@ -77,6 +78,17 @@ export async function POST(
     }
   }
 
+  try {
+    for (const dest of destBindings) {
+      await requireOpenMember(sessionId, dest.id);
+    }
+  } catch (err) {
+    if (err instanceof MembershipError) {
+      return Response.json({ error: err.message }, { status: err.status });
+    }
+    throw err;
+  }
+
   const sticky = destBindings[destBindings.length - 1];
   if (sticky) {
     await setActiveBinding(sessionId, sticky.id);
@@ -95,6 +107,16 @@ export async function POST(
 
   if (!active) {
     return Response.json({ error: "No active binding" }, { status: 400 });
+  }
+  if (!destBindings.length) {
+    try {
+      await requireOpenMember(sessionId, active.id);
+    } catch (err) {
+      if (err instanceof MembershipError) {
+        return Response.json({ error: err.message }, { status: err.status });
+      }
+      throw err;
+    }
   }
 
   const seatKey = (active.seatKey ?? "pm") as SeatKey;

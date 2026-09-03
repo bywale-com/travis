@@ -48,6 +48,7 @@ export const voiceSession = travis.table("voice_session", {
     .notNull()
     .defaultNow(),
   endedAt: timestamp("ended_at", { withTimezone: true }),
+  title: text("title").notNull().default(""),
 });
 
 export const voiceTurn = travis.table("voice_turn", {
@@ -107,12 +108,29 @@ export const seatLiveRun = travis.table("seat_live_run", {
     .defaultNow(),
 });
 
+export const roomMembership = travis.table("room_membership", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  sessionId: uuid("session_id")
+    .notNull()
+    .references(() => voiceSession.id),
+  bindingId: uuid("binding_id")
+    .notNull()
+    .references(() => agentBinding.id),
+  role: text("role").notNull().default("member"),
+  joinedAt: timestamp("joined_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  leftAt: timestamp("left_at", { withTimezone: true }),
+});
+
 export type AgentBinding = typeof agentBinding.$inferSelect;
 export type VoiceSession = typeof voiceSession.$inferSelect;
 export type VoiceTurn = typeof voiceTurn.$inferSelect;
 export type TurnConductorPhrase = typeof turnConductorPhrase.$inferSelect;
 export type QueuedUtterance = typeof queuedUtterance.$inferSelect;
 export type SeatLiveRun = typeof seatLiveRun.$inferSelect;
+export type RoomMembership = typeof roomMembership.$inferSelect;
+export type MembershipRole = "member" | "facilitator";
 
 export type TurnKind =
   | "user"

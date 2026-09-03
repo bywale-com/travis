@@ -1,5 +1,5 @@
 /**
- * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue.
+ * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership.
  */
 import { config } from "dotenv";
 import postgres from "postgres";
@@ -224,7 +224,79 @@ async function main() {
     WHERE NOT EXISTS (SELECT 1 FROM travis.agent_binding WHERE seat_key = 'travis')
   `;
 
-  console.log("travis schema + SCP-006 travis binding + live handle ready");
+  await sql`
+    ALTER TABLE travis.voice_session
+      ADD COLUMN IF NOT EXISTS title text NOT NULL DEFAULT ''
+  `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS travis.room_membership (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      session_id uuid NOT NULL REFERENCES travis.voice_session(id),
+      binding_id uuid NOT NULL REFERENCES travis.agent_binding(id),
+      role text NOT NULL DEFAULT 'member',
+      joined_at timestamptz NOT NULL DEFAULT now(),
+      left_at timestamptz,
+      CONSTRAINT room_membership_role_chk
+        CHECK (role IN ('member', 'facilitator')),
+      CONSTRAINT room_membership_left_after_join_chk
+        CHECK (left_at IS NULL OR left_at >= joined_at)
+    )
+  `;
+
+  await sql`
+    CREATE UNIQUE INDEX IF NOT EXISTS room_membership_open_uniq
+      ON travis.room_membership (session_id, binding_id)
+      WHERE left_at IS NULL
+  `;
+
+  await sql`
+    CREATE UNIQUE INDEX IF NOT EXISTS room_membership_one_open_facilitator
+      ON travis.room_membership (session_id)
+      WHERE left_at IS NULL AND role = 'facilitator'
+  `;
+
+  await sql`
+    CREATE INDEX IF NOT EXISTS room_membership_open_by_session
+      ON travis.room_membership (session_id)
+      WHERE left_at IS NULL
+  `;
+
+  await sql`
+    CREATE INDEX IF NOT EXISTS room_membership_open_by_binding
+      ON travis.room_membership (binding_id)
+      WHERE left_at IS NULL
+  `;
+
+  await sql`
+    INSERT INTO travis.room_membership (
+      session_id,
+      binding_id,
+      role,
+      joined_at,
+      left_at
+    )
+    SELECT
+      s.id,
+      b.id,
+      CASE
+        WHEN b.seat_key = 'travis' THEN 'facilitator'
+        ELSE 'member'
+      END,
+      s.created_at,
+      s.ended_at
+    FROM travis.voice_session s
+    CROSS JOIN travis.agent_binding b
+    WHERE b.active = true
+      AND NOT EXISTS (
+        SELECT 1
+        FROM travis.room_membership m
+        WHERE m.session_id = s.id
+          AND m.binding_id = b.id
+      )
+  `;
+
+  console.log("travis schema + SCP-007 room membership ready");
   await sql.end();
 }
 

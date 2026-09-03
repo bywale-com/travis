@@ -31,6 +31,12 @@ import {
 } from "@/server/room-read";
 import { insertAgentPostTurn } from "@/server/seat-pipe";
 import { summarizeSeatReply } from "@/server/travis-summarize";
+import {
+  endRoom,
+  MembershipError,
+  requireOpenMember,
+  roomSeats,
+} from "@/server/room-membership";
 
 export const TRAVIS_TOOL_DECLS = [
   {
@@ -172,13 +178,7 @@ export async function runTravisTool(params: {
   }
 
   if (name === "list_seats") {
-    const rows = await db
-      .select({
-        seatKey: agentBinding.seatKey,
-        label: agentBinding.label,
-      })
-      .from(agentBinding)
-      .where(eq(agentBinding.active, true));
+    const rows = await roomSeats(sessionId);
     return {
       ok: true,
       text: rows.map((r) => r.label).join(", ") || "No seats.",
@@ -202,6 +202,12 @@ export async function runTravisTool(params: {
     }
     const binding = await bindingForCursorSeat(seat);
     if (!binding) return { ok: false, text: `No ${seat} binding.` };
+    try {
+      await requireOpenMember(sessionId, binding.id);
+    } catch (err) {
+      if (err instanceof MembershipError) return { ok: false, text: err.message };
+      throw err;
+    }
     const dupe = await guardDuplicate(sessionId, "send_to_seat", seat, text);
     if (dupe) return dupe;
     const seatLabel = binding.label ?? seatKeyToLabel(seat as SeatKey);
@@ -250,6 +256,12 @@ export async function runTravisTool(params: {
     }
     const binding = await bindingForCursorSeat(seat);
     if (!binding) return { ok: false, text: `No ${seat} binding.` };
+    try {
+      await requireOpenMember(sessionId, binding.id);
+    } catch (err) {
+      if (err instanceof MembershipError) return { ok: false, text: err.message };
+      throw err;
+    }
     const dupe = await guardDuplicate(sessionId, "dispatch_to_seat", seat, text);
     if (dupe) return dupe;
     const outcome = await dispatchToSeat({ sessionId, binding, prompt: text });
@@ -373,14 +385,8 @@ export async function runTravisTool(params: {
   }
 
   if (name === "end_session") {
-    await db
-      .update(voiceSession)
-      .set({
-        status: "ended",
-        endedAt: new Date(),
-        travisLiveHandle: null,
-      })
-      .where(eq(voiceSession.id, sessionId));
+    const session = await endRoom(sessionId);
+    if (!session) return { ok: false, text: "Session not found." };
     return { ok: true, text: "Room ended." };
   }
 

@@ -4,6 +4,7 @@ import { insertStatusTurn } from "@/server/seat-pipe";
 import { db } from "@/server/db/client";
 import { agentBinding, voiceSession, voiceTurn } from "@/server/db/schema";
 import type { SeatKey } from "@/server/db/schema";
+import { requireOpenMember } from "@/server/room-membership";
 
 export async function bindingForSeat(seatKey: SeatKey) {
   const [row] = await db
@@ -15,6 +16,7 @@ export async function bindingForSeat(seatKey: SeatKey) {
 }
 
 export async function setActiveBinding(sessionId: string, bindingId: string) {
+  await requireOpenMember(sessionId, bindingId);
   await db
     .update(voiceSession)
     .set({ activeBindingId: bindingId, bindingId })
