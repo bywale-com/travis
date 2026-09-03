@@ -7,6 +7,8 @@ import {
   playSendSwoosh,
   releaseSendSounds,
   resumeSendSounds,
+  sendSoundSurfaceFromView,
+  shouldPlaySendSound,
   swooshSamples,
 } from "./send-sounds";
 
@@ -26,6 +28,17 @@ test("swoosh WAV is a real descending burst, not silence", () => {
   const wav = new Uint8Array(encodeWav(samples, 22050));
   assert.equal(String.fromCharCode(wav[0], wav[1], wav[2], wav[3]), "RIFF");
   assert.equal(String.fromCharCode(wav[8], wav[9], wav[10], wav[11]), "WAVE");
+});
+
+test("Voice suppresses send and queue shots; Talk and Type do not", () => {
+  assert.equal(shouldPlaySendSound("voice"), false);
+  assert.equal(shouldPlaySendSound("talk"), true);
+  assert.equal(shouldPlaySendSound("type"), true);
+  assert.equal(sendSoundSurfaceFromView("voice", "type"), "voice");
+  assert.equal(sendSoundSurfaceFromView("log", "talk"), "talk");
+  assert.equal(sendSoundSurfaceFromView("log", "type"), "type");
+  playSendSwoosh("voice");
+  playQueuedCue("voice");
 });
 
 test("cue WAV is two notes, distinct from the swoosh length", () => {

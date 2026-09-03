@@ -25,7 +25,13 @@ import {
 } from "@/lib/ear";
 import { readJson } from "@/lib/http";
 import { isTravisSeat, keepWorkAfterTravisCall } from "@/lib/seats";
-import { playQueuedCue, playSendSwoosh, releaseSendSounds, resumeSendSounds } from "@/lib/send-sounds";
+import {
+  playQueuedCue,
+  playSendSwoosh,
+  releaseSendSounds,
+  resumeSendSounds,
+  sendSoundSurfaceFromView,
+} from "@/lib/send-sounds";
 import { startTravisLive, type TravisLiveSession } from "@/lib/travis-live-client";
 import type { QueueSeatDto } from "@/lib/queue-logic";
 import { QueueChips, QueueLog, SeatMark } from "@/components/QueueChrome";
@@ -299,6 +305,9 @@ export function Room({
 
   viewModeRef.current = viewMode;
   logSubmodeRef.current = logSubmode;
+
+  const sendSoundSurface = () =>
+    sendSoundSurfaceFromView(viewModeRef.current, logSubmodeRef.current);
   busyRef.current = busy;
   presenceRef.current = presence;
   sessionRef.current = session;
@@ -683,7 +692,7 @@ export function Room({
         if (event === "queued") {
           if (!heardQueued) {
             heardQueued = true;
-            playQueuedCue();
+            playQueuedCue(sendSoundSurface());
           }
           sawTerminal = true;
           if (tempUserId) {
@@ -709,7 +718,7 @@ export function Room({
         if (event === "matched") {
           if (!heardSent && !heardQueued) {
             heardSent = true;
-            playSendSwoosh();
+            playSendSwoosh(sendSoundSurface());
           }
           const userTurn = data.userTurn as Turn | undefined;
           if (userTurn) {
@@ -862,7 +871,7 @@ export function Room({
             void refreshTurns(sid);
           },
           onUserText: () => {
-            playSendSwoosh();
+            playSendSwoosh("voice");
             void refreshTurns(sid);
           },
           onTravisText: () => {
@@ -957,7 +966,7 @@ export function Room({
         if (!ct.includes("text/event-stream")) {
           const data = await res.json();
           if (data.queued) {
-            playQueuedCue();
+            playQueuedCue(sendSoundSurface());
             applyQueue(data.queue as { seats?: QueueSeatDto[] } | undefined);
             clearDraft();
             if (data.activeLabel) {
