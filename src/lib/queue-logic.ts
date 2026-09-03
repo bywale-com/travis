@@ -1,4 +1,3 @@
-import { seatKeyToShort } from "./router";
 import { seatShortLabel } from "./seat-mark";
 
 export type QueueItemDto = {
@@ -118,7 +117,7 @@ export function groupQueueSeats(
     seats.push({
       seatKey,
       label: labels[seatKey] ?? seatKey,
-      short: seatKeyToShort(seatKey),
+      short: seatShortLabel(seatKey, labels[seatKey] ?? seatKey),
       items,
     });
   }

@@ -1,16 +1,12 @@
 "use client";
 
-import { Room } from "@/components/Room";
-import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
-import { AntShell } from "@/theme/AntShell";
-import { light } from "@/theme/tokens";
+import { TravisApp } from "@/components/TravisApp";
+import { CharacterProvider } from "@/theme/character";
 
 export default function HomePage() {
   return (
-    <AntShell t={light}>
-      <SurfaceBoundary id="room" label="Room" order={1}>
-        <Room t={light} />
-      </SurfaceBoundary>
-    </AntShell>
+    <CharacterProvider>
+      <TravisApp />
+    </CharacterProvider>
   );
 }

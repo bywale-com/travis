@@ -91,6 +91,7 @@ test("seatKeyToShort matches plate chips", () => {
   assert.equal(seatKeyToShort("pm"), "PM");
   assert.equal(seatKeyToShort("sa"), "SA");
   assert.equal(seatKeyToShort("travis"), "Travis");
+  assert.equal(seatKeyToShort("auth-engineer", "Auth Engineer"), "Auth Engin…");
 });
 
 test("hey Travis is a vocative", () => {

@@ -64,6 +64,22 @@ test("groupQueueSeats omits empty seats and keeps per-seat order", () => {
   assert.equal(snap.seats.find((s) => s.seatKey === "sa"), undefined);
 });
 
+test("a fifth agent keeps its label on the chip short", () => {
+  const snap = groupQueueSeats(
+    [
+      {
+        id: "a",
+        seatKey: "auth-engineer",
+        seq: 1,
+        text: "look",
+        createdAt: "2026-09-03T00:00:00.000Z",
+      },
+    ],
+    { "auth-engineer": "Auth Engineer" },
+  );
+  assert.equal(snap.seats[0]?.short, "Auth Engin…");
+});
+
 test("queue is per-seat and only when Cursor still has an active run", () => {
   assert.equal(
     shouldQueueForSeat({ hasLiveRow: true, cursorHasActiveRun: true }),

@@ -16,6 +16,7 @@ async function readSeats() {
   await ensureSeatBindings();
   const rows = await db
     .select({
+      id: agentBinding.id,
       seatKey: agentBinding.seatKey,
       label: agentBinding.label,
     })
