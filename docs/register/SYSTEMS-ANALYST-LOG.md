@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 00:21 UTC — **SCP-007 signed.** Room = `voice_session`. Mint `room_membership`. Engineer SQL signed; new-room and dest runtime amended. Packet: [`SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md`](./SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md). Numbers 003–006 remapped (planted; files not on `main`). Engineer pastes; no leftover analysis.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 05:32 UTC — **SCP-008 signed.** Mint `travis.initiative` + `initiative_id` on turns/queue. Requests stays `kind=user`. Artifacts and heard stay silence. Packet: [`SYSTEMS-CHANGE-PACKET-008-BACKLOG.md`](./SYSTEMS-CHANGE-PACKET-008-BACKLOG.md). Engineer pastes; no leftover analysis.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -301,3 +301,30 @@ SCP-001 seed field updated.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md`](./SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md)
 
 **Handoff:** Engineer pastes the signed SQL + Drizzle, switches `roomSeats()`, writes the runtime in the packet. No leftover analysis.
+
+---
+
+## 2026-09-03 05:32 UTC — SCP-008 backlog / initiative signed
+
+**Kind:** Table mint + named silences. Engineer envelope [`ENVELOPE-BACKLOG.md`](./ENVELOPE-BACKLOG.md) on PR #71. Job-law from the founder, not Engineer or PM.
+
+**Seat:** Systems Analyst. Talk with the founder only.
+
+**Founder excerpts (lock):**
+
+> Backlog is what I give Travis to orchestrate — initiative to done. Requests is every line I typed. That door stays. Direct-to-seat is personal and is not the backlog.
+
+> A seat reply lands on that ticket and ends their turn. I need a mark on the chat line itself. I can hold a line I sent and turn it into an initiative.
+
+**Quoted stood-up truth (`origin/main`):**
+
+- `voice_turn` — no ticket fk. `reference_turn_id` is per-send.
+- Dispatch `insertUserTurn(session, prompt, destSeat)` — second `kind=user` row that looks like the founder.
+- 048 Requests = `kind=user`. `search_room` reads it. 048 refused a backlog table for that pocket; this Story is tighter and now bears a staple.
+- 001 artifacts still silence. 051 heard still silence. 007 room = `voice_session.id`.
+
+**A–N:** mint `initiative` (A, B, C, E, F, G, H, J, L, M). Derive whose-turn (D). Silence artifacts (I) and heard (K). Packet **008** (N).
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-008-BACKLOG.md`](./SYSTEMS-CHANGE-PACKET-008-BACKLOG.md)
+
+**Handoff:** Engineer pastes SQL + Drizzle, stamps pass-on only, wires Hold / list / read / done. Requests unchanged. No leftover analysis.
