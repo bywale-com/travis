@@ -2,6 +2,7 @@ import { asc, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/server/db/client";
 import { voiceTurn } from "@/server/db/schema";
+import { attachmentsForTurns } from "@/server/artifacts";
 import { jsonRoute } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
 
@@ -19,6 +20,7 @@ export async function GET(
       .from(voiceTurn)
       .where(eq(voiceTurn.sessionId, id))
       .orderBy(asc(voiceTurn.seq));
+    const hung = await attachmentsForTurns(id);
 
     return NextResponse.json({
       turns: turns.map((t) => ({
@@ -33,6 +35,7 @@ export async function GET(
         thoughtStatus: t.thoughtStatus,
         text: t.text,
         createdAt: t.createdAt,
+        attachments: hung.get(t.id) ?? [],
       })),
     });
   });

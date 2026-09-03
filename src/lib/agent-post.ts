@@ -5,7 +5,33 @@
 
 export type PostInline =
   | { type: "text"; text: string }
-  | { type: "code"; text: string };
+  | { type: "code"; text: string }
+  | { type: "link"; href: string; text: string };
+
+const URL_IN_TEXT = /https?:\/\/[^\s<>"'`]+/g;
+
+function trimUrl(raw: string): { href: string; trail: string } {
+  const core = raw.replace(/[),.;!?]+$/g, "");
+  return { href: core, trail: raw.slice(core.length) };
+}
+
+function splitLinks(text: string): PostInline[] {
+  const out: PostInline[] = [];
+  URL_IN_TEXT.lastIndex = 0;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = URL_IN_TEXT.exec(text))) {
+    if (m.index > last) {
+      out.push({ type: "text", text: text.slice(last, m.index) });
+    }
+    const { href, trail } = trimUrl(m[0]);
+    if (href) out.push({ type: "link", href, text: href });
+    if (trail) out.push({ type: "text", text: trail });
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) out.push({ type: "text", text: text.slice(last) });
+  return out.length ? out : [{ type: "text", text: "" }];
+}
 
 export type PostBlock =
   | { type: "heading"; inlines: PostInline[] }
@@ -23,13 +49,11 @@ export function parseInline(src: string): PostInline[] {
   let last = 0;
   let m: RegExpExecArray | null;
   while ((m = re.exec(src))) {
-    if (m.index > last) {
-      out.push({ type: "text", text: src.slice(last, m.index) });
-    }
+    if (m.index > last) out.push(...splitLinks(src.slice(last, m.index)));
     out.push({ type: "code", text: m[1] });
     last = m.index + m[0].length;
   }
-  if (last < src.length) out.push({ type: "text", text: src.slice(last) });
+  if (last < src.length) out.push(...splitLinks(src.slice(last)));
   return out.length ? out : [{ type: "text", text: "" }];
 }
 
@@ -119,7 +143,9 @@ export function parseAgentPost(src: string): PostBlock[] {
 }
 
 function inlinesToSpeak(inlines: PostInline[]): string {
-  return inlines.map((piece) => piece.text).join("");
+  return inlines
+    .map((piece) => (piece.type === "link" ? piece.text : piece.text))
+    .join("");
 }
 
 /** Strip markup punctuation so TTS does not read hashes, ticks, or list marks. */
