@@ -14,6 +14,7 @@ export type RoomRow = {
   status: string;
   createdAt: string | Date;
   endedAt: string | Date | null;
+  lastAt?: string | Date;
   members: Array<{ seatKey: string | null; label: string }>;
 };
 
@@ -165,7 +166,7 @@ export function RoomIndex({
                       </span>
                     )}
                     <span style={{ fontSize: TYPE.meta, color: t.textMuted }}>
-                      {relativeTime(room.createdAt)}
+                      {relativeTime(room.lastAt ?? room.createdAt)}
                     </span>
                   </div>
                   <div

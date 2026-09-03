@@ -7,13 +7,14 @@ import {
   destOnCreate,
   membershipRoleFor,
 } from "@/lib/room-membership";
-import { packRoomRows } from "@/lib/room-list";
+import { orderRoomsByLastAt, packRoomRows } from "@/lib/room-list";
 import { clipRoomTitle } from "@/lib/room-title";
 import { db } from "@/server/db/client";
 import {
   agentBinding,
   roomMembership,
   voiceSession,
+  voiceTurn,
   type AgentBinding,
   type VoiceSession,
 } from "@/server/db/schema";
@@ -460,6 +461,23 @@ async function membersForSessions(sessionIds: string[]) {
   }));
 }
 
+async function lastAtForSessions(sessionIds: string[]): Promise<Map<string, Date>> {
+  const out = new Map<string, Date>();
+  if (!sessionIds.length) return out;
+  const rows = await db
+    .select({
+      sessionId: voiceTurn.sessionId,
+      lastAt: sql<Date>`max(${voiceTurn.createdAt})`,
+    })
+    .from(voiceTurn)
+    .where(inArray(voiceTurn.sessionId, sessionIds))
+    .groupBy(voiceTurn.sessionId);
+  for (const r of rows) {
+    if (r.lastAt) out.set(r.sessionId, new Date(r.lastAt));
+  }
+  return out;
+}
+
 export async function listRoomsForIp(ip: string): Promise<
   Array<{
     id: string;
@@ -467,16 +485,20 @@ export async function listRoomsForIp(ip: string): Promise<
     status: string;
     createdAt: Date;
     endedAt: Date | null;
+    lastAt: Date;
     members: Array<{ seatKey: string | null; label: string }>;
   }>
 > {
   const sessions = await db
     .select()
     .from(voiceSession)
-    .where(eq(voiceSession.clientIp, ip))
-    .orderBy(sql`${voiceSession.createdAt} desc`);
-  const members = await membersForSessions(sessions.map((s) => s.id));
-  return packRoomRows(sessions, members);
+    .where(eq(voiceSession.clientIp, ip));
+  const ids = sessions.map((s) => s.id);
+  const [members, lastAt] = await Promise.all([
+    membersForSessions(ids),
+    lastAtForSessions(ids),
+  ]);
+  return packRoomRows(orderRoomsByLastAt(sessions, lastAt), members);
 }
 
 export async function listRoomsForOperator(
@@ -488,6 +510,7 @@ export async function listRoomsForOperator(
     status: string;
     createdAt: Date;
     endedAt: Date | null;
+    lastAt: Date;
     members: Array<{ seatKey: string | null; label: string }>;
   }>
 > {
@@ -496,10 +519,13 @@ export async function listRoomsForOperator(
   const sessions = await db
     .select()
     .from(voiceSession)
-    .where(inArray(voiceSession.operatorId, ids))
-    .orderBy(sql`${voiceSession.createdAt} desc`);
-  const members = await membersForSessions(sessions.map((s) => s.id));
-  return packRoomRows(sessions, members);
+    .where(inArray(voiceSession.operatorId, ids));
+  const sessionIds = sessions.map((s) => s.id);
+  const [members, lastAt] = await Promise.all([
+    membersForSessions(sessionIds),
+    lastAtForSessions(sessionIds),
+  ]);
+  return packRoomRows(orderRoomsByLastAt(sessions, lastAt), members);
 }
 
 export async function sessionJson(session: VoiceSession) {
