@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-26 19:12 UTC — **Agent id corrected:** `bc-da5db04b-db60-414e-b0c3-c8ed337d45d4` in SCP-001 `agent_binding` seed. Prior 19:10 id had a missing digit.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 00:21 UTC — **SCP-007 signed.** Room = `voice_session`. Mint `room_membership`. Engineer SQL signed; new-room and dest runtime amended. Packet: [`SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md`](./SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md). Numbers 003–006 remapped (planted; files not on `main`). Engineer pastes; no leftover analysis.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -245,3 +245,59 @@ You do **not** need to paste an id into this chat for SCP-001 to start: Cursor p
 **Supersedes:** `…c8ed337d5d4` from 19:10.
 
 SCP-001 seed field updated.
+
+---
+
+## 2026-09-03 00:21 UTC — SCP-007 room membership signed
+
+**Kind:** Table mint + runtime lock. Founder job-law 2026-09-02. Engineer drafted SQL; they have not run it and have not added it to `migrate.ts`.
+
+**Seat:** Systems Analyst. Talk with the founder only. Not PM. Not Engineer.
+
+**Founder excerpts (lock):**
+
+> Room membership lives in our schema — a relation between a room and an agent, carrying a role and a joined-at. Not Cursor metadata.
+
+> Rooms are now the primitive. Agents are unbounded. Anything Travis can do, I must also be able to do by hand (effect parity, not surface parity).
+
+**Quoted stood-up truth (`origin/main` HEAD `b2d127b`):**
+
+- `travis.agent_binding` — global, unique `seat_key`. Four migrate rows: `pm`, `sa`, `engineer`, `travis`.
+- `travis.voice_session` — today’s room. No `title`. Dest FKs: `binding_id`, `default_binding_id`, `active_binding_id`.
+- Roster: `roomSeats()` in `src/app/api/session/route.ts` selects every `agent_binding` where `active = true`.
+- Resume: `liveSessionForIp` — latest `status <> 'ended'` for `client_ip` (Hotfix 014).
+- `travis.seat_live_run` PK = `binding_id` (one live Cursor run per agent, all sessions).
+- `travis.queued_utterance` already `(session_id, binding_id, seq)`.
+- SCP-002 minted session + bindings + turn kinds. Did not mint membership or title.
+- Official packets on `main` disk: 001, 002 only.
+
+**A–H:**
+
+| | Decision |
+|--|--|
+| A | **SIGN** — no second room table; `voice_session.title` empty-legal |
+| B | **SIGN** — `room_membership` SQL as drafted |
+| C | **SIGN** — Travis facilitator; refuse remove of open facilitator |
+| D | **SIGN backfill** for existing sessions. **AMEND** new rooms: chosen + Travis, not catalog cross-join. After plant, roster = open memberships |
+| E | **SIGN** — `seat_key` globally unique; create-agent columns out |
+| F | **SIGN** keep dest FKs and `seat_live_run`. **AMEND** dest must be an open member. Name follow-on: two rooms cannot both run one Engineer |
+| G | **SIGN silence** — no founder presence / Leave field. End closes session + all open memberships. Leave writes nothing |
+| H | **STRIKE / REMAP** — this packet is **007**, not 003 |
+
+**Remap (packet number ≠ plant order on `main`):**
+
+| # | What | On `main` disk? |
+|--|--|--|
+| 001 | Voice turn | yes |
+| 002 | Room (modes, seats, dest FKs) | yes |
+| 003 | Queue / barge | planted; packet file not on `main` |
+| 004 | Talk / Type composer | planted; packet file not on `main` |
+| 005 | Log format | planted; packet file not on `main` |
+| 006 | Travis agent | planted; packet file not on `main` |
+| 007 | Room membership | **this cut** |
+
+**Glass:** read V1–V4 on the rooms-envelope branch. Do not mint from pictures. This packet houses title + membership + create / add / remove / End. V4 create-agent waits.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md`](./SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md)
+
+**Handoff:** Engineer pastes the signed SQL + Drizzle, switches `roomSeats()`, writes the runtime in the packet. No leftover analysis.
