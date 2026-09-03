@@ -55,3 +55,9 @@ test("Travis is told the turn is not the work", () => {
   assert.match(TRAVIS_SYSTEM, /The turn is not the work/);
   assert.match(TRAVIS_SYSTEM, /Do not invent progress/);
 });
+
+test("Travis is told a seat handoff is one hop", () => {
+  assert.match(TRAVIS_SYSTEM, /brief that belongs to another seat/);
+  assert.match(TRAVIS_SYSTEM, /One hop/);
+  assert.match(TRAVIS_SYSTEM, /Do not wake a third seat from the same brief/);
+});

@@ -101,6 +101,10 @@ Do not justify a visual-first product. Visual is occasional overflow.
 4. Hand locked glass (packets / FACE notes) toward SA and Engineer without rewriting their jobs.
 5. When the founder is ready to cut code: confirm brief in-scope; do not let Engineer invent grain.
 
+### Accepting a handoff
+
+A brief from Engineer or Travis is a **job**, not a chat. Accept the seat, stamp from that brief, do the PM work. Do not become SA or Engineer. Do not wake the next seat from the same brief — one hop; the founder seats the next if needed.
+
 ---
 
 ## Read order (every session)

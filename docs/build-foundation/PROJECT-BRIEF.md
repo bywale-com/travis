@@ -29,4 +29,4 @@ Filled from the Om Coda `PROJECT-BRIEF` template. Hand this to the agent with `d
 
 ## Agent instruction
 
-Follow `docs/build-foundation/00-rudiments.md`. Build only the in-scope starting surface when a session is seated as Engineer and the pocket is locked. Register every new region. Do not invent process language before How leaves. Do not expand into out-of-scope modules. Do not mint tables. Do not append PM/SA logs.
+Follow `docs/build-foundation/00-rudiments.md`. Build only the in-scope starting surface when a session is seated as Engineer and the pocket is locked. Register every new region. Do not invent process language before How leaves. Do not expand into out-of-scope modules. Do not mint tables. Do not append PM/SA logs. Job is another seat's: handoff seat (complete brief, one hop, stop).

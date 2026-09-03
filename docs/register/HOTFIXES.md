@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **063**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **064**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -72,3 +72,4 @@
 | 060 | [`HOTFIX-060-ROOMS-FEEL-FAST.md`](./HOTFIX-060-ROOMS-FEEL-FAST.md) | One query for the room index; loading copy; no per-delta turn refetch |
 | 061 | [`HOTFIX-061-ROOMS-BY-LAST.md`](./HOTFIX-061-ROOMS-BY-LAST.md) | Index ordered by last turn, not created |
 | 062 | [`HOTFIX-062-THREAD-ARTIFACTS.md`](./HOTFIX-062-THREAD-ARTIFACTS.md) | Hung images and files appear on the Log post, not only the ticket door |
+| 063 | [`HOTFIX-063-HANDOFF-SEAT.md`](./HOTFIX-063-HANDOFF-SEAT.md) | Engineer writes a complete brief, hands one seat, stops |
