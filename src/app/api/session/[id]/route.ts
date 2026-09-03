@@ -3,13 +3,14 @@ import { NextResponse } from "next/server";
 import { jsonRoute } from "@/server/api-error";
 import { db } from "@/server/db/client";
 import { agentBinding, voiceSession } from "@/server/db/schema";
-import { endRoom, sessionJson } from "@/server/room-membership";
+import { endRoom, renameRoom, sessionJson } from "@/server/room-membership";
 import { requireOwnedSession } from "@/server/operator";
 
 type PatchBody = {
   status?: "listening" | "paused" | "ending" | "ended" | "speaking";
   viewMode?: "voice" | "log";
   logSubmode?: "talk" | "type";
+  title?: string;
 };
 
 export async function PATCH(
@@ -22,11 +23,27 @@ export async function PATCH(
 
     await requireOwnedSession(req, id);
 
-  if (!body.status && !body.viewMode && !body.logSubmode) {
+  if (
+    !body.status &&
+    !body.viewMode &&
+    !body.logSubmode &&
+    typeof body.title !== "string"
+  ) {
     return NextResponse.json(
-      { error: "status, viewMode, or logSubmode required" },
+      { error: "status, viewMode, logSubmode, or title required" },
       { status: 400 },
     );
+  }
+
+  if (typeof body.title === "string") {
+    const renamed = await renameRoom(id, body.title);
+    if (!renamed) {
+      return NextResponse.json({ error: "Session not found" }, { status: 404 });
+    }
+    if (!body.status && !body.viewMode && !body.logSubmode) {
+      const payload = await sessionJson(renamed);
+      return NextResponse.json({ session: payload ?? renamed });
+    }
   }
 
   if (body.status === "ended") {

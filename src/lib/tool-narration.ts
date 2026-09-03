@@ -57,6 +57,8 @@ export function narrateToolCall(
       return "Marking that initiative done.";
     case "rename_initiative":
       return "Renaming that initiative.";
+    case "rename_room":
+      return "Renaming the room.";
     case "end_session":
       return "Ending the room.";
     default:
