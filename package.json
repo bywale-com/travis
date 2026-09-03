@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "tsx --test src/lib/*.test.ts",
+    "test": "tsx --test src/lib/*.test.ts src/server/db/*.test.ts",
     "db:push": "tsx --env-file=.env.local src/server/db/migrate.ts",
     "db:seed": "tsx --env-file=.env.local src/server/db/seed.ts"
   },

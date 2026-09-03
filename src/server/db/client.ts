@@ -1,5 +1,6 @@
 import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
+import { postgresPoolOptions } from "./pool";
 import * as schema from "./schema";
 
 type Db = PostgresJsDatabase<typeof schema>;
@@ -19,7 +20,7 @@ function connect(): Db {
       "DATABASE_URL is not set on this deployment — add it in the Vercel project environment.",
     );
   }
-  connected = drizzle(postgres(url, { prepare: false, max: 5 }), { schema });
+  connected = drizzle(postgres(url, postgresPoolOptions()), { schema });
   return connected;
 }
 
