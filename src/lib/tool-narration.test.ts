@@ -44,6 +44,9 @@ test("instant lookups stay silent", () => {
   assert.equal(narrateToolCall("set_view", { viewMode: "log" }), null);
   assert.equal(narrateToolCall("search_room", { q: "voice" }), null);
   assert.equal(narrateToolCall("list_initiatives", {}), null);
+  assert.equal(narrateToolCall("list_os", { path: "/" }), null);
+  assert.equal(narrateToolCall("read_os", { path: "/protocols/pm.md" }), null);
+  assert.equal(narrateToolCall("write_os", { path: "/protocols/pm.md" }), null);
   assert.equal(narrateToolCall("read_initiative", { id: "x" }), null);
   assert.equal(narrateToolCall("read_seat_reply", { seat: "sa" }), null);
 });

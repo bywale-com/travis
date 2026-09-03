@@ -52,6 +52,14 @@ import {
   stampLatestPassOn,
 } from "@/server/initiative";
 import type { InitiativeStatus } from "@/server/db/schema";
+import {
+  OsHouseError,
+  formatOsList,
+  formatOsWrite,
+  listOs,
+  readOs,
+  writeOsAsTravis,
+} from "@/server/os-house";
 
 export const TRAVIS_TOOL_DECLS = [
   {
@@ -203,6 +211,38 @@ export const TRAVIS_TOOL_DECLS = [
         viewMode: { type: "string", enum: ["voice", "log"] },
         logSubmode: { type: "string", enum: ["talk", "type"] },
       },
+    },
+  },
+  {
+    name: "list_os",
+    description:
+      "List a folder in Travis's house — protocols and templates, not rooms and not a work repo. Default path is /. Reading this house is not unfolding a template into a repo.",
+    parameters: {
+      type: "object",
+      properties: { path: { type: "string" } },
+    },
+  },
+  {
+    name: "read_os",
+    description:
+      "Read one file in Travis's house (a protocol or template file). Not a work-repo file. Not a room log. If the path is a folder, use list_os.",
+    parameters: {
+      type: "object",
+      properties: { path: { type: "string" } },
+      required: ["path"],
+    },
+  },
+  {
+    name: "write_os",
+    description:
+      "File text into Travis's house — a protocol or template path. Overwrite is allowed. Does not write into a work repo. Does not change the room. Empty body is refused.",
+    parameters: {
+      type: "object",
+      properties: {
+        path: { type: "string" },
+        body: { type: "string" },
+      },
+      required: ["path", "body"],
     },
   },
   {
@@ -551,6 +591,41 @@ export async function runTravisTool(params: {
     };
   }
 
+  if (name === "list_os") {
+    try {
+      const list = await listOs(
+        typeof args.path === "string" ? args.path : "/",
+      );
+      return { ok: true, text: formatOsList(list) };
+    } catch (err) {
+      if (err instanceof OsHouseError) return { ok: false, text: err.message };
+      throw err;
+    }
+  }
+
+  if (name === "read_os") {
+    try {
+      const file = await readOs(String(args.path ?? ""));
+      return { ok: true, text: file.body };
+    } catch (err) {
+      if (err instanceof OsHouseError) return { ok: false, text: err.message };
+      throw err;
+    }
+  }
+
+  if (name === "write_os") {
+    try {
+      const filed = await writeOsAsTravis(
+        String(args.path ?? ""),
+        args.body,
+      );
+      return { ok: true, text: formatOsWrite(filed.path) };
+    } catch (err) {
+      if (err instanceof OsHouseError) return { ok: false, text: err.message };
+      throw err;
+    }
+  }
+
   if (name === "end_session") {
     const session = await endRoom(sessionId);
     if (!session) return { ok: false, text: "Session not found." };
@@ -562,9 +637,9 @@ export async function runTravisTool(params: {
 
 export const TRAVIS_SYSTEM = `You are Travis. You are in this room with the founder and three Cursor seats: PM, SA, and Engineer. You are your own agent — not those seats.
 
-Answer the founder. Use tools when they ask you to send a line to a seat, glance the queue, barge/drop a waiting line, switch Voice/Log, or end the room.
+Answer the founder. Use tools when they ask you to send a line to a seat, glance the queue, barge/drop a waiting line, switch Voice/Log, file something into your house, or end the room.
 
-What you cannot do: you cannot see the repository, a diff, a branch, a test run, or CI. You have no view of the code and no way to check whether anything passed. If the founder asks for a code review, a test check, a migration risk assessment, a rollout plan, or anything else that needs the repo, say plainly that you cannot see it and offer to send it to the Engineer, SA or PM. Never describe a review, a check, or an analysis you are not able to perform. The room and the tools listed above are your entire view of the world — reading about work in the room log is not the same as being able to do it.
+You own a house that is not this room and not a work repo: list_os, read_os, write_os. It holds protocols and templates (paths like /protocols and /templates). Opening a folder there does not leave this room. Reading a protocol is not unfolding it into a repo. You still cannot see a work repository, a diff, a branch, a test run, or CI. You have no view of the code and no way to check whether anything passed. If the founder asks for a code review, a test check, a migration risk assessment, a rollout plan, or anything else that needs the repo, say plainly that you cannot see it and offer to send it to the Engineer, SA or PM. Never describe a review, a check, or an analysis you are not able to perform. The room and the tools listed above are your entire view of the world — reading about work in the room log is not the same as being able to do it.
 
 You are shown a short room-state block with recent turns and what is running. Treat it as already true — do not ask the founder to repeat something that is in it. Seat replies appear there only as receipts; call read_seat_reply when you need what a seat actually said. The window is not the whole room. When they ask what was requested, what is in motion, or what you already routed to a seat, call search_room. That log has UTC timestamps and stays in this room. “Requests today” → when today. “Last 10” → limit 10. “Everyone this week” → when week, no seat. Do not invent a list — call the tool.
 

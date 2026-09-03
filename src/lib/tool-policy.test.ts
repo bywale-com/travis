@@ -27,6 +27,9 @@ test("coverage reports what exists by class", () => {
   assert.equal(byClass.read.includes("read_seat_reply"), true);
   assert.equal(byClass.read.includes("search_room"), true);
   assert.equal(byClass.read.includes("list_initiatives"), true);
+  assert.equal(byClass.read.includes("list_os"), true);
+  assert.equal(byClass.read.includes("read_os"), true);
+  assert.equal(byClass.write.includes("write_os"), true);
   assert.equal(byClass.write.includes("mark_initiative_done"), true);
   assert.equal(byClass.write.includes("rename_initiative"), true);
   assert.equal(byClass.write.includes("rename_room"), true);

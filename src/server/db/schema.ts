@@ -171,6 +171,23 @@ export const turnArtifact = travis.table("turn_artifact", {
     .defaultNow(),
 });
 
+/** SCP-012 — OS house. Protocols and templates. No session_id. */
+export const osNode = travis.table("os_node", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  parentId: uuid("parent_id"),
+  path: text("path").notNull().unique(),
+  name: text("name").notNull(),
+  kind: text("kind").notNull(),
+  body: text("body").notNull().default(""),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  writerBindingId: uuid("writer_binding_id").references(() => agentBinding.id),
+});
+
 /** Allowlisted operator — email that already has an account. No signup. */
 export const operator = travis.table("operator", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -196,6 +213,8 @@ export type InitiativeSource = "via_travis" | "hold";
 export type InitiativeStatus = "open" | "done";
 export type TurnArtifact = typeof turnArtifact.$inferSelect;
 export type ArtifactKind = "image" | "file";
+export type OsNode = typeof osNode.$inferSelect;
+export type OsNodeKind = "dir" | "file";
 
 export type TurnKind =
   | "user"
