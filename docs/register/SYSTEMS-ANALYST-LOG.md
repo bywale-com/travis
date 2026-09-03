@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 00:21 UTC — **SCP-007 signed.** Room = `voice_session`. Mint `room_membership`. Engineer SQL signed; new-room and dest runtime amended. Packet: [`SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md`](./SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md). Numbers 003–006 remapped (planted; files not on `main`). Engineer pastes; no leftover analysis.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 19:51 UTC — **SCP-012 signed.** House-now = `travis.os_node` (protocols + templates). Seated / POSIX / integrations table refused. Packet: [`SYSTEMS-CHANGE-PACKET-012-OS-HOUSE.md`](./SYSTEMS-CHANGE-PACKET-012-OS-HOUSE.md).
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -301,3 +301,30 @@ SCP-001 seed field updated.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md`](./SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md)
 
 **Handoff:** Engineer pastes the signed SQL + Drizzle, switches `roomSeats()`, writes the runtime in the packet. No leftover analysis.
+
+---
+
+## 2026-09-03 19:51 UTC — SCP-012 OS house (envelope pickup)
+
+**Kind:** Envelope pickup. Engineer [`ENVELOPE-TRAVIS-OS-TREE.md`](./ENVELOPE-TRAVIS-OS-TREE.md) (PR #91). PM chat-ruled **no new plate** if this pocket is house-the-files (no stamp, no packet). Founder seated SA: “just your pass left.”
+
+**Locks from the envelope (founder wording, not alignment):** Room first. Create ≠ role. Three moments stay separate. Travis is system-wide. Emulate Cursor’s unified-FS *property*, not folder=chat. Pointers, not copies. Cwd is the room. House now, POSIX later. Empty work repo is fine.
+
+**Ascribed:**
+
+1. Tree = **rows that look like folders** (`travis.os_node`). Not a Travis git repo. Not S3. POSIX-later may dump the same rows.
+2. Protocols and templates = **same store**. File vs dir. Convention `/protocols`, `/templates`.
+3. Agent folder and room folder **already exist** (`agent_binding`, `voice_session`). Do not clone them into `os_node` (that is the three-disks failure).
+4. Writers = founder HTTP + Travis `write_os`. Dest seats have no Travis tools. Seat posts text; Travis files it.
+5. cwd unchanged (`sessionId`). House tools do not change dest.
+
+**Refused (specified but not clear, or next pocket):**
+
+- Seated link — founder has not orchestrated the third moment. No `protocol_id`. No `seat_key` / `role` overload.
+- Integrations table — 011 + env. PM: door on I1 or spoken.
+- Cross-room look — spoken/later. `search_room` stays this room. 042 work-repo wall stands.
+- POSIX / unfold / computer use / dedicated server / Browse OS plate.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-012-OS-HOUSE.md`](./SYSTEMS-CHANGE-PACKET-012-OS-HOUSE.md)
+
+**Handoff:** Engineer mints the table, path helper, three tools, GET/PUT `/api/os`, 040 lines, 042 house sentence. Founder lands `CREATE TABLE`. Do not attach a protocol to an agent.
