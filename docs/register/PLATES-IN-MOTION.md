@@ -1,35 +1,43 @@
-# Plates — In motion (Engineer → founder sign-off → SA)
+# Plates — In motion lives in Backlog (Engineer → founder → SA)
 
-**Kind:** Printed plates. **Not a packet. Not planted.**
-**When:** 2026-09-03. Founder: PM is out until Travis is the seat; Engineer draws; founder signs; envelope goes to SA.
+**Kind:** Printed plates + founder recut. **Not a packet. Not planted.**
+**When:** 2026-09-03. Founder signed the *look*, then recut the *home*.
 **Envelope:** [`ENVELOPE-TRAVIS-ORCHESTRATE.md`](./ENVELOPE-TRAVIS-ORCHESTRATE.md)
-**Count:** 2. Mission only. Phone.
 
-The job: glance what he has accepted to run, without leaving Voice unless you look.
+## Founder lock (this recut)
 
-| ID | File | Surface |
-|----|------|---------|
-| **P1** | [`plates/travis-p1-voice-in-motion.png`](./plates/travis-p1-voice-in-motion.png) | Voice. Quiet **2 in motion** — the door. Not a badge. |
-| **P2** | [`plates/travis-p2-in-motion-list.png`](./plates/travis-p2-in-motion-list.png) | The glance. Same shell as Backlog. Title **In motion**. One list. |
+There is **no second list**. In motion is **inside Backlog**.
 
-## What is on the glass (so SA does not mint from vibes)
+Backlog has **three views**:
 
-**P1** — still Voice. Orb. Listening. Talk | Type | Voice. The only new control is the oxblood text **2 in motion**. Zero in motion = the link is gone (quiet until invited). Completes, no third PNG.
+| View | What it is |
+|------|------------|
+| **All** | Both kinds of row |
+| **In motion** | Travis’s processes. No one’s input. It will complete. Step *n* of *m*. |
+| **Initiatives** | Tickets. Seats. Circles. Next someone. |
 
-**P2** — not Backlog. Same geometry (TRAVIS · Close · title · hairline rows · selected wash). Different job.
+**P1’s “N in motion”** counts **only** the Travis processes — not every initiative. Initiatives and in motion are two models in one pile.
 
-| Row | Kind | Right meta | Under |
-|-----|------|------------|--------|
-| Rename the two garbage titles | His sequence | step 2 of 2 | Travis · renaming |
-| Pass the auth note to Engineer | Seat run | 3m | Engineer · running |
-| File PM seat protocol | Waiting step | waiting | next: write the file |
+When you are **not in Voice**, you open **Backlog** (the door that already exists on the room). That was the missing “where does it live?” — it lives there. Not a new app.
 
-No RUNNING / WAITING section bars. No tool names. No planner. No JSON.
+P2 is the **In motion view** of Backlog (same geometry, that row language). Do not reprint. Title on the shell stays **Backlog**; the view is the filter. Completes: All / Initiatives are the same list with the other row kind — no extra PNG.
 
-## Deliberately not drawn
+## Drawn
 
-Empty (the door vanishes; the list can say a muted line — completes). Carbon twin. A ticket vs a plan as two tabs. Cancel. Completion digest.
+| ID | File | What it still shows |
+|----|------|---------------------|
+| **P1** | [`plates/travis-p1-voice-in-motion.png`](./plates/travis-p1-voice-in-motion.png) | Voice. Quiet **2 in motion** — count of Travis processes. Opens Backlog on the In motion view. Gone when zero. |
+| **P2** | [`plates/travis-p2-in-motion-list.png`](./plates/travis-p2-in-motion-list.png) | That view. Step 2 of 2 · running · waiting. Not initiative circles. |
+
+## Two row kinds (one list)
+
+| Kind | Right meta | Under | Whose hands |
+|------|------------|--------|-------------|
+| **In motion** | step 2 of 2 / waiting | Travis · renaming | Nobody. A process. |
+| **Initiative** | next Engineer / done | Seat marks | A seat, or Hold. |
+
+All shows both. The view is quiet text, not three equal bars.
 
 ## Sign-off
 
-Founder likes or recuts. Then SA ascribes the store + runner against this glass + the envelope. Engineer does not mint from the PNG.
+**Look signed. Home recut:** Backlog · All / In motion / Initiatives. Voice count = in motion only. SA ascribes two models in one pile (do not invent a second index). Engineer does not mint from the PNG.

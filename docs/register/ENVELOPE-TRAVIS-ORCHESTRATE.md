@@ -3,8 +3,8 @@
 **Kind:** Envelope. **Not a packet. Not a hotfix. Not plant law.**
 **Seat:** Engineer. Founder locked: until Travis is the seat of work, **PM is out**. Engineer draws the glass. Founder signs. Then **SA**. Engineer does not mint stores from this file. Do **not** append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
 **When:** 2026-09-03. Same day as SCP-012. Lived Voice smoke in room `0e8875f8`.
-**Plates (drawn):** [`PLATES-IN-MOTION.md`](./PLATES-IN-MOTION.md) — P1 Voice door · P2 In motion list. Two screens. Not a set.
-**Ask (after founder sign-off):** Systems Analyst ascribes the store + runner so the glance is true. Do not mint from the PNG. Do not invent a third list.
+**Plates:** [`PLATES-IN-MOTION.md`](./PLATES-IN-MOTION.md) — P1 Voice count · P2 is the In motion **view of Backlog**. Founder recut: **no second list.** Backlog views = All / In motion / Initiatives. Voice “N in motion” = Travis processes only.
+**Ask:** Systems Analyst ascribes **two models in one pile** + the runner. Do not mint a second index. Do not mint from the PNG.
 
 **Flag (unchanged):** Phase One 14:00 UTC 2026-08-25. Do not overwrite founder wording.
 
@@ -219,9 +219,9 @@ When the founder seats SA on this envelope + PM’s plates/packets:
 
 ---
 
-## One-line ask (SA, after founder signs the two plates)
+## One-line ask (SA)
 
-**Ascribe the store + runner so P1’s count and P2’s rows are query results, not scenery.** Voice stays free. Do not clone rooms into the plan. Do not overload `initiative` without saying so.
+**Ascribe two models in one Backlog pile + a runner so P1’s count and the In motion view are query results.** Voice stays free. Do not mint a second index. Do not silently overload `initiative` without saying so.
 
 ---
 
@@ -239,10 +239,12 @@ Founder lock (2026-09-03), job-law from me:
   Some jobs are backlog / seats. Some are his ordered tool sequences.
   A hundred tasks = organized, a few in flight.
 
-  Glass (if I signed): P1 quiet “N in motion” on Voice. P2 one list
-  titled In motion — not Backlog, same geometry. See
-  docs/register/PLATES-IN-MOTION.md. Do not mint from the pixels;
-  ascribe so those rows can be true.
+  Glass (signed look, recut home): In motion lives IN Backlog.
+  Three views: All / In motion / Initiatives. In motion = Travis
+  processes (no one’s input; step n of m). Initiatives = tickets
+  (circles, next a seat). Voice “N in motion” counts only Travis
+  processes. Not in Voice → existing Backlog door. See
+  docs/register/PLATES-IN-MOTION.md. Do not mint a second index.
 
 Read, in this order:
 
