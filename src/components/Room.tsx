@@ -45,6 +45,7 @@ import { QueueChips, QueueLog, SeatMark } from "@/components/QueueChrome";
 import { AgentPostBody } from "@/components/AgentPostBody";
 import { LogComposer, type RoomSeat } from "@/components/LogComposer";
 import { CreateAgent, type CreatedAgent } from "@/components/plates/CreateAgent";
+import { IntegrationStatusScreen } from "@/components/plates/IntegrationStatus";
 import { CreateRoom, type CatalogSeat } from "@/components/plates/CreateRoom";
 import { InFlightDoor, type RunningNow } from "@/components/plates/InFlightDoor";
 import { RequestLogDoor } from "@/components/plates/RequestLogDoor";
@@ -85,7 +86,7 @@ type Session = {
   seats?: RoomSeat[];
 };
 
-type PlateFace = "index" | "create" | "create-agent" | "room";
+type PlateFace = "index" | "create" | "create-agent" | "room" | "integrations";
 type Door = null | "roster" | "inflight" | "requests";
 
 function asRoomSeats(raw: unknown): RoomSeat[] {
@@ -1929,6 +1930,15 @@ export function Room({
     );
   }
 
+  if (plate === "integrations") {
+    return (
+      <IntegrationStatusScreen
+        t={t}
+        onBack={() => setPlate(session ? "room" : "index")}
+      />
+    );
+  }
+
   if (!session || plate === "index") {
     return (
       <RoomIndex
@@ -1952,6 +1962,7 @@ export function Room({
           if (id) void closeRoom(id);
         }}
         onCharacter={() => onCharacter?.()}
+        onIntegrations={() => setPlate("integrations")}
       />
     );
   }

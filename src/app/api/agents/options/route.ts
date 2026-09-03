@@ -1,10 +1,6 @@
-import { NextResponse } from "next/server";
-import { jsonRoute } from "@/server/api-error";
-import { listCreateOptions } from "@/server/create-agent";
+import { permanentRedirect } from "next/navigation";
 
+/** Redirect to the canonical integrations options route. */
 export async function GET() {
-  return jsonRoute(async () => {
-    const options = await listCreateOptions();
-    return NextResponse.json(options);
-  });
+  return permanentRedirect("/api/integrations/options");
 }
