@@ -17,4 +17,5 @@
 | 004 | `PM-PACKET-004-LOG-COMPOSER.md` | [#15](https://github.com/bywale-com/travis/pull/15) |
 | 005 | `PM-PACKET-005-LOG-FORMAT.md` | [#15](https://github.com/bywale-com/travis/pull/15) |
 | 006 | `PM-PACKET-006-VOICE-SEND-QUIET.md` | [#15](https://github.com/bywale-com/travis/pull/15) |
+| 007 | `PM-PACKET-007-HEAR-QUEUE.md` | [#15](https://github.com/bywale-com/travis/pull/15) |
 

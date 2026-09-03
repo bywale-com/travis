@@ -1,6 +1,6 @@
 # PM packet 006 — Voice is quiet on send and queue
 
-**Number:** `006` — next PM packet is `007`. Never reuse. Index: [`PM-PACKETS.md`](./PM-PACKETS.md).  
+**Number:** `006` — next PM packet is `008` (007 is hear-queue). Never reuse. Index: [`PM-PACKETS.md`](./PM-PACKETS.md).  
 **Seat:** Product Manager. **Engineer** plants. **SA:** no new store — 030/031 already forbade a sound table.  
 **When:** Locked 2026-09-03 — founder: Voice must not play send/queue notification sounds. Talk/Type unchanged. First-order critical.  
 **Photo:** none. Behavior. Do **not** recut C3/C4 or U2.  
