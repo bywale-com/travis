@@ -10,6 +10,8 @@
 
 B2 is superseded by B5. **Not Requests.** Requests is every founder line. That door stays. Mission only.
 
+**SA envelope:** [`ENVELOPE-BACKLOG.md`](./ENVELOPE-BACKLOG.md) — walk only. Engineer does not mint from this face.
+
 ---
 
 ## Founder wording
