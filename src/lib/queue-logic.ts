@@ -1,4 +1,5 @@
 import { seatKeyToShort } from "./router";
+import { seatShortLabel } from "./seat-mark";
 
 export type QueueItemDto = {
   id: string;
@@ -21,12 +22,19 @@ export type QueueSnapshot = {
 
 const SEAT_ORDER = ["pm", "sa", "engineer"] as const;
 
-export function waitingChipLabel(count: number, seatKey: string): string {
-  return `${count} waiting · ${seatKeyToShort(seatKey)}`;
+export function waitingChipLabel(
+  count: number,
+  seatKey: string,
+  label?: string | null,
+): string {
+  return `${count} waiting · ${seatShortLabel(seatKey, label)}`;
 }
 
-export function queuedBlockLabel(seatKey: string): string {
-  return `Queued · ${seatKeyToShort(seatKey)}`;
+export function queuedBlockLabel(
+  seatKey: string,
+  label?: string | null,
+): string {
+  return `Queued · ${seatShortLabel(seatKey, label)}`;
 }
 
 /**

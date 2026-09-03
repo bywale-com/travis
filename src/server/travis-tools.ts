@@ -174,7 +174,9 @@ export async function runTravisTool(params: {
 
   const narration = narrateToolCall(name, args);
   if (narration) {
-    await insertAgentPostTurn(sessionId, narration, "travis").catch(() => {});
+    await insertAgentPostTurn(sessionId, narration, "travis", null, false).catch(
+      () => {},
+    );
   }
 
   if (name === "list_seats") {

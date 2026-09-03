@@ -6,28 +6,26 @@ import {
   waitingChipLabel,
   type QueueSeatDto,
 } from "@/lib/queue-logic";
-import { seatKeyToShort } from "@/lib/router";
+import { seatInitials, seatTintIndex } from "@/lib/seat-mark";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
 
-const SEAT_COLORS: Record<string, string> = {
-  pm: "#8A9A8E",
-  sa: "#E07A3D",
-  engineer: "#7E96B5",
-};
-
 export function SeatMark({
   seatKey,
+  label,
+  t,
   size = 28,
   glow = false,
 }: {
   seatKey: string;
+  label?: string | null;
+  t: Tokens;
   size?: number;
   glow?: boolean;
 }) {
-  const isTravis = seatKey === "travis" || !seatKey;
-  const color = isTravis ? "#6B5E52" : (SEAT_COLORS[seatKey] ?? "#A39486");
-  const mark = isTravis ? "T" : seatKeyToShort(seatKey);
+  // No hardcoded cast. A fifth agent gets a stable mark and tint for free.
+  const color = t.seatTints[seatTintIndex(seatKey, t.seatTints.length)];
+  const mark = seatInitials(seatKey, label);
   return (
     <span
       style={{
@@ -35,7 +33,7 @@ export function SeatMark({
         height: size,
         borderRadius: "50%",
         background: color,
-        color: "#FFFCF8",
+        color: t.seatInk,
         fontSize: size < 32 ? 10 : 11,
         fontWeight: 600,
         display: "inline-flex",
@@ -110,9 +108,9 @@ export function QueueChips({
               fontSize: 14,
             }}
           >
-            <SeatMark seatKey={seat.seatKey} size={28} />
+            <SeatMark seatKey={seat.seatKey} label={seat.label} t={t} size={28} />
             <span style={{ flex: 1, minWidth: 0 }}>
-              {waitingChipLabel(seat.items.length, seat.seatKey)}
+              {waitingChipLabel(seat.items.length, seat.seatKey, seat.label)}
             </span>
             <IconBtn
               label={`Force send ${seat.short}`}
@@ -160,7 +158,7 @@ export function QueueLog({
               textAlign: "right",
             }}
           >
-            {queuedBlockLabel(seat.seatKey)}
+            {queuedBlockLabel(seat.seatKey, seat.label)}
           </p>
           {seat.items.map((item) => (
             <div
