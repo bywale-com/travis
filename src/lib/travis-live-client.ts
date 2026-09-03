@@ -10,6 +10,8 @@ import {
 
 export type TravisLiveSession = {
   stop: () => Promise<void>;
+  /** One short beat. Not a seat body. */
+  notify: (line: string) => void;
 };
 
 export async function startTravisLive(opts: {
@@ -48,6 +50,7 @@ export async function startTravisLive(opts: {
   let userAcc = "";
   let travisAcc = "";
   let userFlush: ReturnType<typeof setTimeout> | null = null;
+  let pendingNotify: string | null = null;
   let stopFn: () => Promise<void> = async () => {};
 
   const persist = async (role: "user" | "travis", text: string) => {
@@ -89,6 +92,26 @@ export async function startTravisLive(opts: {
   const sendEvent = (obj: unknown) => {
     if (closed || dc?.readyState !== "open") return;
     dc.send(JSON.stringify(obj));
+  };
+
+  const sendNotify = (line: string) => {
+    const said = line.trim();
+    if (!said) return;
+    sendEvent({
+      type: "response.create",
+      response: {
+        instructions: `Say only this, then stop: ${said} Do not read any seat post. Do not call tools.`,
+      },
+    });
+  };
+
+  const notify = (line: string) => {
+    if (closed) return;
+    if (dc?.readyState === "open") {
+      sendNotify(line);
+      return;
+    }
+    pendingNotify = line;
   };
 
   const runTools = async (
@@ -133,6 +156,10 @@ export async function startTravisLive(opts: {
           tools: tokenData.tools ?? [],
         }),
       });
+      if (pendingNotify) {
+        sendNotify(pendingNotify);
+        pendingNotify = null;
+      }
     });
     dc.addEventListener("message", (e) => {
       if (closed) return;
@@ -238,7 +265,7 @@ export async function startTravisLive(opts: {
         opts.onClose?.();
       }
     });
-    return { stop };
+    return { stop, notify };
   } catch (err) {
     closed = true;
     try {

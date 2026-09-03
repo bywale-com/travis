@@ -30,7 +30,7 @@
 | **Log** | A hairline **New** cut. Above = already seen. Below = not yet. |
 | **Two plates.** | N1 Voice. N2 Log. No third door. |
 
-007 R0 (no barge, one mouth) is still the plant. These plates name the signal.
+**Planted** as Hotfix 051. Session-local New. Heard that survives refresh is still SA.
 
 ---
 
