@@ -11,6 +11,7 @@ import { pipeTravisText } from "@/server/travis-reply";
 import { sse, sseHeaders } from "@/server/seat-pipe";
 import { voiceTurn } from "@/server/db/schema";
 import type { InitiativeStatus } from "@/server/db/schema";
+import { parseRequestWhen } from "@/lib/request-log";
 import { db } from "@/server/db/client";
 import { eq } from "drizzle-orm";
 
@@ -22,11 +23,14 @@ export async function GET(
 ) {
   return jsonRoute(async () => {
     const { id: sessionId } = await ctx.params;
-    const statusRaw = new URL(req.url).searchParams.get("status") ?? "open";
+    const params = new URL(req.url).searchParams;
+    const statusRaw = params.get("status") ?? "open";
     const status = ["open", "done", "all"].includes(statusRaw)
       ? (statusRaw as InitiativeStatus | "all")
       : "open";
-    const items = await listInitiatives(sessionId, status);
+    const when = parseRequestWhen(params.get("when") ?? "all");
+    const q = params.get("q") ?? "";
+    const items = await listInitiatives(sessionId, { status, when, q });
     return NextResponse.json({ initiatives: items });
   });
 }

@@ -45,6 +45,7 @@ export const TOOL_POLICY: Record<string, ToolPolicy> = {
   list_initiatives: { cls: "read" },
   read_initiative: { cls: "read" },
   mark_initiative_done: { cls: "write" },
+  rename_initiative: { cls: "write" },
   set_view: { cls: "write" },
   send_to_seat: { cls: "write", dedupeWindowMs: 45_000 },
   dispatch_to_seat: { cls: "write", dedupeWindowMs: 45_000 },
