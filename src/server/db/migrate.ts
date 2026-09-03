@@ -1,5 +1,5 @@
 /**
- * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership + SCP-008 backlog + SCP-009 artifacts + SCP-010 title.
+ * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership + SCP-008 backlog + SCP-009 artifacts + SCP-010 title + SCP-012 OS house.
  */
 import { config } from "dotenv";
 import postgres from "postgres";
@@ -373,7 +373,48 @@ async function main() {
       ADD COLUMN IF NOT EXISTS title text NOT NULL DEFAULT ''
   `;
 
-  console.log("travis schema + SCP-009 artifacts + SCP-010 title ready");
+  await sql`
+    CREATE TABLE IF NOT EXISTS travis.os_node (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      parent_id uuid REFERENCES travis.os_node(id),
+      path text NOT NULL UNIQUE,
+      name text NOT NULL,
+      kind text NOT NULL,
+      body text NOT NULL DEFAULT '',
+      created_at timestamptz NOT NULL DEFAULT now(),
+      updated_at timestamptz NOT NULL DEFAULT now(),
+      writer_binding_id uuid REFERENCES travis.agent_binding(id),
+      CONSTRAINT os_node_kind_chk CHECK (kind IN ('dir', 'file')),
+      CONSTRAINT os_node_dir_body_chk CHECK (
+        (kind = 'dir' AND body = '') OR kind = 'file'
+      )
+    )
+  `;
+
+  await sql`
+    CREATE INDEX IF NOT EXISTS os_node_parent_idx
+      ON travis.os_node (parent_id)
+  `;
+
+  await sql`
+    INSERT INTO travis.os_node (path, name, kind, parent_id)
+    VALUES ('/', '', 'dir', NULL)
+    ON CONFLICT (path) DO NOTHING
+  `;
+  await sql`
+    INSERT INTO travis.os_node (path, name, kind, parent_id)
+    SELECT '/protocols', 'protocols', 'dir', id
+    FROM travis.os_node WHERE path = '/'
+    ON CONFLICT (path) DO NOTHING
+  `;
+  await sql`
+    INSERT INTO travis.os_node (path, name, kind, parent_id)
+    SELECT '/templates', 'templates', 'dir', id
+    FROM travis.os_node WHERE path = '/'
+    ON CONFLICT (path) DO NOTHING
+  `;
+
+  console.log("travis schema + SCP-009 artifacts + SCP-010 title + SCP-012 OS house ready");
   await sql.end();
 }
 

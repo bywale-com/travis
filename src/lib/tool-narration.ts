@@ -61,7 +61,8 @@ export function narrateToolCall(
       return "Ending the room.";
     default:
       // list_seats, queue_snapshot, work_in_flight, search_room,
-      // list_initiatives, read_initiative, read_seat_reply, set_view — instant.
+      // list_os, read_os, write_os, list_initiatives, read_initiative,
+      // read_seat_reply, set_view — instant.
       return null;
   }
 }
