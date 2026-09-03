@@ -6,6 +6,10 @@
  */
 
 import { and, desc, eq, sql } from "drizzle-orm";
+import {
+  collectBeatSends,
+  type BeatSend,
+} from "@/lib/dispatch-cap";
 import { seatKeyToLabel } from "@/lib/router";
 import {
   WINDOW_TURNS,
@@ -100,6 +104,24 @@ export async function recentDuplicateSend(params: {
   if (!row) return null;
   const ageMs = Date.now() - new Date(row.createdAt).getTime();
   return ageMs <= params.windowMs ? Math.max(1, Math.round(ageMs / 1000)) : null;
+}
+
+/** Dest kicks since the last founder→Travis line. No new store. */
+export async function beatSendsSinceFounder(
+  sessionId: string,
+): Promise<BeatSend[]> {
+  const rows = await db
+    .select({
+      kind: voiceTurn.kind,
+      seatKey: voiceTurn.seatKey,
+      text: voiceTurn.text,
+      createdAt: voiceTurn.createdAt,
+    })
+    .from(voiceTurn)
+    .where(eq(voiceTurn.sessionId, sessionId))
+    .orderBy(desc(voiceTurn.seq))
+    .limit(40);
+  return collectBeatSends(rows);
 }
 
 export async function runningNotes(sessionId: string) {

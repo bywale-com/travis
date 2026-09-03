@@ -15,6 +15,7 @@ import {
   queueSnapshot,
 } from "@/server/queue";
 import { bargeQueuedItem, sendOrEnqueue } from "@/server/seat-pipe";
+import { guardBeatDispatch } from "@/lib/dispatch-cap";
 import { dispatchReceipt, inFlightReport, sendReceipt } from "@/lib/tool-receipt";
 import { dispatchToSeat } from "@/server/dispatch";
 import { clampRequestLimit, parseRequestWhen } from "@/lib/request-log";
@@ -26,6 +27,7 @@ import {
 } from "@/lib/tool-policy";
 import { narrateToolCall } from "@/lib/tool-narration";
 import {
+  beatSendsSinceFounder,
   lastSeatPost,
   recentDuplicateSend,
   runningNotes,
@@ -68,7 +70,7 @@ export const TRAVIS_TOOL_DECLS = [
   {
     name: "dispatch_to_seat",
     description:
-      "Start a line on PM, SA, or Engineer and return immediately without waiting for the run to finish. Use this whenever the founder wants several things sent, does not want you to wait, or wants you to stay available while a seat works. Nothing comes back from the seat here — call read_seat_reply once work_in_flight shows it finished. A seat runs one job at a time, so a second dispatch to the same seat queues behind the first.",
+      "Start a line on PM, SA, or Engineer and return immediately without waiting for the run to finish. Use this when you should stay available while a seat works. Prefer one seat. Two seats only when the founder named two different jobs. Never the same ask to a second seat. Never a third dest in one beat. Nothing comes back from the seat here — call read_seat_reply once work_in_flight shows it finished. A seat runs one job at a time, so a second dispatch to the same seat queues behind the first.",
     parameters: {
       type: "object",
       properties: {
@@ -178,6 +180,17 @@ async function guardDuplicate(
   };
 }
 
+async function guardFanOut(
+  sessionId: string,
+  seat: string,
+  text: string,
+): Promise<ToolResult | null> {
+  const already = await beatSendsSinceFounder(sessionId).catch(() => []);
+  const verdict = guardBeatDispatch(already, { seat, text });
+  if (verdict.allow) return null;
+  return { ok: false, text: verdict.reason };
+}
+
 export async function runTravisTool(params: {
   sessionId: string;
   name: string;
@@ -187,6 +200,15 @@ export async function runTravisTool(params: {
 
   const verdict = guardToolCall(name, args);
   if (!verdict.allow) return { ok: false, text: verdict.reason };
+
+  if (name === "send_to_seat" || name === "dispatch_to_seat") {
+    const seat = String(args.seat ?? "");
+    const text = String(args.text ?? "").trim();
+    if (isCursorSeat(seat) && text) {
+      const fan = await guardFanOut(sessionId, seat, text);
+      if (fan) return fan;
+    }
+  }
 
   const narration = narrateToolCall(name, args);
   if (narration) {
@@ -226,6 +248,8 @@ export async function runTravisTool(params: {
       if (err instanceof MembershipError) return { ok: false, text: err.message };
       throw err;
     }
+    const fan = await guardFanOut(sessionId, seat, text);
+    if (fan) return fan;
     const dupe = await guardDuplicate(sessionId, "send_to_seat", seat, text);
     if (dupe) return dupe;
     const seatLabel = binding.label ?? seatKeyToLabel(seat as SeatKey);
@@ -280,6 +304,8 @@ export async function runTravisTool(params: {
       if (err instanceof MembershipError) return { ok: false, text: err.message };
       throw err;
     }
+    const fan = await guardFanOut(sessionId, seat, text);
+    if (fan) return fan;
     const dupe = await guardDuplicate(sessionId, "dispatch_to_seat", seat, text);
     if (dupe) return dupe;
     const outcome = await dispatchToSeat({ sessionId, binding, prompt: text });
@@ -432,9 +458,11 @@ You are shown a short room-state block with recent turns and what is running. Tr
 
 Report what the tools actually told you.
 
-Two ways to send. send_to_seat blocks until that seat finishes and is right when the founder asked one thing and wants the answer in the same breath. dispatch_to_seat returns straight away and is right for everything else — several sends, "don't wait", or any time you should stay available while a seat works. Prefer dispatch when the founder is talking to you out loud.
+Two ways to send. send_to_seat blocks until that seat finishes and is right when the founder asked one thing and wants the answer in the same breath. dispatch_to_seat returns straight away and is right when you should stay available while a seat works. Prefer dispatch when the founder is talking to you out loud.
 
-Several send_to_seat calls in one turn go one after the other; never describe them as parallel or simultaneous. A seat runs one job at a time, so two lines to the same seat are always sequential no matter which tool you use — say so plainly instead of promising parallelism you cannot deliver. Different seats do run at the same time when dispatched.
+Route one seat at a time. Two seats in one beat only when the founder named two different jobs — for example PM locks the face and SA ascribes the store. Never three. Never “everyone.” Never the same initiative to two seats; that makes silos. If they did not name a seat, pick the one whose job it is and stay with them. The tools refuse a third dest and a copy of the same line to a second seat; say so and wait.
+
+Several send_to_seat calls in one turn go one after the other; never describe them as parallel or simultaneous. A seat runs one job at a time, so two lines to the same seat are always sequential no matter which tool you use — say so plainly instead of promising parallelism you cannot deliver.
 
 If you are asked what you are doing or why something is slow, call work_in_flight instead of guessing.
 

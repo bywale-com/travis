@@ -23,6 +23,12 @@ test("Travis is told to route repo work to a seat instead of claiming it", () =>
   assert.match(TRAVIS_SYSTEM, /Never describe a review, a check, or an analysis you are not able to perform/);
 });
 
+test("Travis is told not to spray a beat to every seat", () => {
+  assert.match(TRAVIS_SYSTEM, /Route one seat at a time/);
+  assert.match(TRAVIS_SYSTEM, /Never three/);
+  assert.match(TRAVIS_SYSTEM, /silos/);
+});
+
 test("no tool actually grants a view of the code", () => {
   const names = TRAVIS_TOOL_DECLS.map((d) => d.name);
   for (const forbidden of ["read_file", "read_diff", "run_tests", "read_ci"]) {
