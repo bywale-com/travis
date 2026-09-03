@@ -10,7 +10,6 @@ import {
 } from "@/lib/absorb-text";
 import { conductorGate, conductorOnEnd, isDuplicateSend } from "@/lib/conductor";
 import { speakableAgentPost } from "@/lib/agent-post";
-import { flushSpeakBuffer, pullClosedSentences } from "@/lib/speak-sentences";
 import { applyReadbackVoice } from "@/lib/speak-voice";
 import { isPinnedToBottom } from "@/lib/thread-scroll";
 import { parseCallByName, parseDeadManResponse, seatKeyToShort } from "@/lib/router";
@@ -25,6 +24,13 @@ import {
 } from "@/lib/ear";
 import { readJson } from "@/lib/http";
 import { isRequestTurn } from "@/lib/request-log";
+import {
+  collectNewReports,
+  newCutTurnId,
+  newReportBeat,
+  newReportChip,
+  newReportSeats,
+} from "@/lib/new-report";
 import { isTravisSeat, keepWorkAfterTravisCall } from "@/lib/seats";
 import {
   playQueuedCue,
@@ -272,6 +278,7 @@ export function Room({
   const [rosterAdding, setRosterAdding] = useState(false);
   const [runningNow, setRunningNow] = useState<RunningNow[]>([]);
   const [agentReturn, setAgentReturn] = useState<"create" | "roster">("create");
+  const [newIds, setNewIds] = useState<string[]>([]);
 
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const committedRef = useRef("");
@@ -300,6 +307,9 @@ export function Room({
   const listenRestartGenRef = useRef(0);
   const inflightRef = useRef(0);
   const liveRef = useRef<TravisLiveSession | null>(null);
+  const newBaselineSeqRef = useRef<number | null>(null);
+  const notifiedNewRef = useRef<Set<string>>(new Set());
+  const wakeNewTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const drainingRef = useRef(false);
   const consumeAgentStreamRef = useRef<
     (sid: string, res: Response, tempUserId?: string) => Promise<void>
@@ -307,6 +317,8 @@ export function Room({
 
   viewModeRef.current = viewMode;
   logSubmodeRef.current = logSubmode;
+  const newIdsRef = useRef<string[]>([]);
+  newIdsRef.current = newIds;
 
   const sendSoundSurface = () =>
     sendSoundSurfaceFromView(viewModeRef.current, logSubmodeRef.current);
@@ -650,43 +662,9 @@ export function Room({
       let buffer = "";
       const postBySeat: Record<string, string> = {};
       let seatLabel = "PM";
-      const speakUnits: Record<string, number> = {};
-      let speakChain = Promise.resolve();
-      let voiceReadStarted = false;
-      let spokenSpeakable = "";
       let heardQueued = false;
       let heardSent = false;
       let sawTerminal = false;
-
-      const enqueueVoice = (raw: string) => {
-        if (viewModeRef.current !== "voice") return;
-        let said = speakableAgentPost(raw).trim();
-        if (!said) return;
-        if (spokenSpeakable) {
-          if (said === spokenSpeakable || spokenSpeakable.startsWith(said)) {
-            return;
-          }
-          if (said.startsWith(spokenSpeakable)) {
-            said = said.slice(spokenSpeakable.length).trim();
-            if (!said) return;
-          }
-        }
-        if (!voiceReadStarted) {
-          voiceReadStarted = true;
-          setPresence("speaking");
-          haltRecognition();
-          setSubtitle(`${seatLabel} says…`);
-          void fetch(`/api/session/${sid}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status: "speaking" }),
-          });
-          const intro = `${seatLabel} says.`;
-          speakChain = speakChain.then(() => queueUtterance(intro));
-        }
-        spokenSpeakable = spokenSpeakable ? `${spokenSpeakable} ${said}` : said;
-        speakChain = speakChain.then(() => queueUtterance(said));
-      };
 
       const handleEvent = async (event: string, raw: string) => {
         const data = JSON.parse(raw) as Record<string, unknown>;
@@ -777,54 +755,18 @@ export function Room({
           if (chunk) {
             postBySeat[sk] = absorbText(postBySeat[sk] ?? "", chunk).acc;
             setStreamingPosts({ ...postBySeat });
-            const { closed } = pullClosedSentences(postBySeat[sk]);
-            const already = speakUnits[sk] ?? 0;
-            for (let i = already; i < closed.length; i++) {
-              enqueueVoice(closed[i]);
-            }
-            speakUnits[sk] = Math.max(already, closed.length);
           }
         } else if (event === "status") {
           setLiveStatus(String(data.text ?? "running"));
         } else if (event === "done") {
           sawTerminal = true;
           const sk = String(data.seatKey ?? "_");
-          const acc = postBySeat[sk] ?? "";
           delete postBySeat[sk];
           setStreamingPosts({ ...postBySeat });
           setLiveStatus(null);
           setStreamingSeat(null);
           await refreshTurns(sid);
           await refreshQueue(sid);
-          const postTurn = data.postTurn as Turn | undefined;
-          const postText = postTurn?.text ?? acc;
-          const spoken = speakableAgentPost(postText);
-          const label = String(data.seatLabel ?? seatLabel);
-          const units = flushSpeakBuffer(postText);
-          const already = speakUnits[sk] ?? 0;
-          for (let i = already; i < units.length; i++) {
-            enqueueVoice(units[i]);
-          }
-          speakUnits[sk] = Math.max(already, units.length);
-
-          if (voiceReadStarted) {
-            const line = `${label} says… ${spoken.slice(0, 120)}${spoken.length > 120 ? "…" : ""}`;
-            setSubtitle(line);
-            await speakChain;
-            await waitForSpeechIdle();
-            await delay(500);
-            presenceRef.current = "listening";
-            setPresence("listening");
-            setSubtitle("Listening…");
-            if (listeningWantedRef.current) {
-              await fetch(`/api/session/${sid}`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ status: "listening" }),
-              });
-              scheduleListenRestart();
-            }
-          }
         } else if (event === "error") {
           const msg = String(data.error ?? "Stream error");
           if (!/agent_busy/i.test(msg)) setError(msg);
@@ -919,6 +861,82 @@ export function Room({
       stopLive,
     ],
   );
+
+  const routeNewToTravis = useCallback(
+    async (beat: string) => {
+      const sid = sessionIdRef.current;
+      if (!sid || !beat.trim()) return;
+      if (viewModeRef.current !== "voice") return;
+
+      if (!isTravisSeat(sessionRef.current?.activeSeatKey)) {
+        try {
+          const res = await fetch(`/api/session/${sid}/address`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ seatKey: "travis" }),
+          });
+          const data = (await res.json()) as {
+            activeLabel?: string;
+            activeSeatKey?: string;
+          };
+          if (data.activeLabel) {
+            const activeLabel = String(data.activeLabel);
+            const activeSeatKey = String(data.activeSeatKey ?? "travis");
+            if (sessionRef.current) {
+              sessionRef.current = {
+                ...sessionRef.current,
+                activeLabel,
+                activeSeatKey,
+              };
+            }
+            setSession((s) =>
+              s ? { ...s, activeLabel, activeSeatKey } : s,
+            );
+          }
+        } catch {
+          return;
+        }
+      }
+
+      const up = liveRef.current ? true : await connectLive(sid);
+      if (!up) {
+        setSubtitle(beat);
+        return;
+      }
+      liveRef.current?.notify(beat);
+    },
+    [connectLive],
+  );
+
+  useEffect(() => {
+    if (!turns.length) return;
+    if (newBaselineSeqRef.current == null) {
+      newBaselineSeqRef.current = Math.max(
+        0,
+        ...turns.map((t) => t.seq ?? 0),
+      );
+      return;
+    }
+    const fresh = collectNewReports(turns, newBaselineSeqRef.current).filter(
+      (t) => !notifiedNewRef.current.has(t.id),
+    );
+    if (!fresh.length) return;
+    for (const t of fresh) notifiedNewRef.current.add(t.id);
+    setNewIds((prev) => {
+      const next = [...prev];
+      for (const t of fresh) {
+        if (!next.includes(t.id)) next.push(t.id);
+      }
+      newIdsRef.current = next;
+      return next;
+    });
+    if (wakeNewTimerRef.current) clearTimeout(wakeNewTimerRef.current);
+    wakeNewTimerRef.current = setTimeout(() => {
+      const pending = turns.filter((t) => newIdsRef.current.includes(t.id));
+      const beat = newReportBeat(newReportSeats(pending.length ? pending : fresh));
+      void routeNewToTravis(beat);
+    }, 400);
+  }, [turns, routeNewToTravis]);
 
   const finalizeUtterance = useCallback(
     async (utterance: string) => {
@@ -1709,6 +1727,10 @@ export function Room({
       destTravis: isTravisSeat(session.activeSeatKey),
       liveUp: Boolean(liveRef.current),
     };
+    if (viewModeRef.current === "log" && mode === "voice") {
+      setNewIds([]);
+      newIdsRef.current = [];
+    }
     setViewMode(mode);
     viewModeRef.current = mode;
     await fetch(`/api/session/${session.id}`, {
@@ -1791,6 +1813,28 @@ export function Room({
       : subtitle && presence !== "speaking"
         ? subtitle
         : "";
+  const threadTurns = turns.filter((turn) => {
+    if (turn.kind === "status") return /error/i.test(turn.text);
+    if (
+      turn.kind !== "user" &&
+      turn.kind !== "agent_post" &&
+      turn.kind !== "travis_prompt"
+    ) {
+      return false;
+    }
+    if (turn.kind !== "agent_post") return true;
+    const live = streamingPosts[turn.seatKey ?? "_"];
+    if (!live) return true;
+    const lastUser = [...turns].reverse().find((t) => t.kind === "user");
+    if (lastUser && turn.referenceTurnId === lastUser.id) {
+      return false;
+    }
+    return true;
+  });
+  const newCutId = newCutTurnId(
+    threadTurns.map((t) => t.id),
+    new Set(newIds),
+  );
 
   const shellStyle = {
     minHeight: "100dvh",
@@ -2148,19 +2192,35 @@ export function Room({
             >
               {listenLine}
             </p>
-            {runningLabel ? (
-              <p
-                style={{
-                  textAlign: "center",
-                  color: t.textMuted,
-                  fontSize: 13,
-                  margin: "8px 28px 0",
-                  lineHeight: 1.4,
-                }}
-              >
-                {runningLabel}
-              </p>
-            ) : null}
+            {(() => {
+              const chip = newReportChip(
+                newReportSeats(turns.filter((t) => newIds.includes(t.id))),
+              );
+              return chip ? (
+                <p
+                  style={{
+                    textAlign: "center",
+                    color: t.textMuted,
+                    fontSize: TYPE.meta,
+                    margin: "8px 28px 0",
+                  }}
+                >
+                  {chip}
+                </p>
+              ) : runningLabel ? (
+                <p
+                  style={{
+                    textAlign: "center",
+                    color: t.textMuted,
+                    fontSize: 13,
+                    margin: "8px 28px 0",
+                    lineHeight: 1.4,
+                  }}
+                >
+                  {runningLabel}
+                </p>
+              ) : null;
+            })()}
             {draft ? (
               <div
                 style={{
@@ -2242,29 +2302,7 @@ export function Room({
               gap: 14,
             }}
           >
-            {turns
-              .filter((turn) => {
-                // A run that errored is the one status worth showing.
-                if (turn.kind === "status") return /error/i.test(turn.text);
-                if (
-                  turn.kind !== "user" &&
-                  turn.kind !== "agent_post" &&
-                  turn.kind !== "travis_prompt"
-                ) {
-                  return false;
-                }
-                if (turn.kind !== "agent_post") return true;
-                const live = streamingPosts[turn.seatKey ?? "_"];
-                if (!live) return true;
-                const lastUser = [...turns]
-                  .reverse()
-                  .find((t) => t.kind === "user");
-                if (lastUser && turn.referenceTurnId === lastUser.id) {
-                  return false;
-                }
-                return true;
-              })
-              .map((turn) => {
+            {threadTurns.map((turn) => {
                 // 041 narration: a tool acting, not Travis talking. Quiet
                 // line, no bubble, no seat mark.
                 if (
@@ -2316,6 +2354,41 @@ export function Room({
                 return (
                   <div
                     key={turn.id}
+                    style={{
+                      alignSelf: "stretch",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 10,
+                    }}
+                  >
+                    {turn.id === newCutId ? (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 10,
+                          color: t.textMuted,
+                          fontSize: TYPE.meta,
+                        }}
+                      >
+                        <span
+                          style={{
+                            flex: 1,
+                            height: 1,
+                            background: t.border,
+                          }}
+                        />
+                        New
+                        <span
+                          style={{
+                            flex: 1,
+                            height: 1,
+                            background: t.border,
+                          }}
+                        />
+                      </div>
+                    ) : null}
+                  <div
                     id={`turn-${turn.id}`}
                     style={{
                       alignSelf: isUser ? "flex-end" : "flex-start",
@@ -2426,6 +2499,7 @@ export function Room({
                         )}
                       </div>
                     </div>
+                  </div>
                   </div>
                 );
               })}
