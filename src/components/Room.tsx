@@ -48,6 +48,11 @@ import { CreateAgent, type CreatedAgent } from "@/components/plates/CreateAgent"
 import { IntegrationStatusScreen } from "@/components/plates/IntegrationStatus";
 import { CreateRoom, type CatalogSeat } from "@/components/plates/CreateRoom";
 import { InFlightDoor, type RunningNow } from "@/components/plates/InFlightDoor";
+import { BacklogIndex, type BacklogRow } from "@/components/plates/BacklogIndex";
+import {
+  BacklogTicket,
+  type BacklogTicketData,
+} from "@/components/plates/BacklogTicket";
 import { RequestLogDoor } from "@/components/plates/RequestLogDoor";
 import { RoomIndex, type RoomRow } from "@/components/plates/RoomIndex";
 import { RosterDoor, type RosterMember } from "@/components/plates/RosterDoor";
@@ -87,7 +92,7 @@ type Session = {
 };
 
 type PlateFace = "index" | "create" | "create-agent" | "room" | "integrations";
-type Door = null | "roster" | "inflight" | "requests";
+type Door = null | "roster" | "inflight" | "requests" | "backlog";
 
 function asRoomSeats(raw: unknown): RoomSeat[] {
   if (!Array.isArray(raw)) return [];
@@ -274,6 +279,11 @@ export function Room({
   const [plate, setPlate] = useState<PlateFace>("index");
   const [door, setDoor] = useState<Door>(null);
   const [holdTurn, setHoldTurn] = useState<Turn | null>(null);
+  const [backlogRows, setBacklogRows] = useState<BacklogRow[]>([]);
+  const [selectedBacklogId, setSelectedBacklogId] = useState<string | null>(
+    null,
+  );
+  const [ticket, setTicket] = useState<BacklogTicketData | null>(null);
   const [rooms, setRooms] = useState<RoomRow[]>([]);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const [catalog, setCatalog] = useState<CatalogSeat[]>([]);
@@ -319,6 +329,9 @@ export function Room({
   const consumeAgentStreamRef = useRef<
     (sid: string, res: Response, tempUserId?: string) => Promise<void>
   >(async () => {});
+  const switchViewModeRef = useRef<(mode: ViewMode) => Promise<void>>(
+    async () => {},
+  );
 
   viewModeRef.current = viewMode;
   logSubmodeRef.current = logSubmode;
@@ -806,6 +819,53 @@ export function Room({
   );
   consumeAgentStreamRef.current = consumeAgentStream;
 
+  const loadBacklog = useCallback(async () => {
+    const sid = sessionIdRef.current;
+    if (!sid) return;
+    try {
+      const res = await fetch(`/api/session/${sid}/initiatives?status=all`);
+      const data = await readJson<{ initiatives?: BacklogRow[] }>(res);
+      setBacklogRows(Array.isArray(data.initiatives) ? data.initiatives : []);
+    } catch {
+      setBacklogRows([]);
+    }
+  }, []);
+
+  const openTicket = useCallback(async (initiativeId: string) => {
+    const sid = sessionIdRef.current;
+    if (!sid || !initiativeId) return;
+    try {
+      const res = await fetch(
+        `/api/session/${sid}/initiatives/${initiativeId}`,
+      );
+      const data = await readJson<{ initiative?: BacklogTicketData }>(res);
+      if (data.initiative) {
+        setSelectedBacklogId(initiativeId);
+        setTicket(data.initiative);
+      }
+    } catch {
+      /* keep last ticket */
+    }
+  }, []);
+
+  const openTurnInLog = useCallback((turnId: string) => {
+    if (!turnId) return;
+    const go = () => {
+      document
+        .getElementById(`turn-${turnId}`)
+        ?.scrollIntoView({ block: "center", behavior: "smooth" });
+    };
+    setTicket(null);
+    setDoor(null);
+    if (viewModeRef.current !== "log") {
+      void switchViewModeRef.current("log").then(() => {
+        window.setTimeout(go, 80);
+      });
+      return;
+    }
+    window.setTimeout(go, 0);
+  }, []);
+
   const promoteInitiative = useCallback(
     async (turn: Turn) => {
       const sid = sessionIdRef.current;
@@ -826,11 +886,12 @@ export function Room({
         }
         await refreshTurns(sid);
         await refreshSession(sid);
+        await loadBacklog();
       } catch (e) {
         setError(e instanceof Error ? e.message : String(e));
       }
     },
-    [consumeAgentStream, refreshSession, refreshTurns],
+    [consumeAgentStream, loadBacklog, refreshSession, refreshTurns],
   );
 
   const connectLive = useCallback(
@@ -1798,6 +1859,7 @@ export function Room({
     }
     await armEar();
   };
+  switchViewModeRef.current = switchViewMode;
 
   const setLogInput = async (mode: LogSubmode) => {
     if (!session) return;
@@ -2011,34 +2073,60 @@ export function Room({
           <span style={{ color: t.textMuted, fontSize: TYPE.meta }}>
             via {session.activeLabel || viaShort}
           </span>
-          <button
-            type="button"
-            onClick={() => setDoor("requests")}
+          <span
             style={{
-              border: "none",
-              background: "transparent",
-              color: t.textSecondary,
-              fontSize: 13,
-              padding: 0,
-              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+              marginLeft: "auto",
             }}
           >
-            Requests
-          </button>
-          <button
-            type="button"
-            onClick={() => leaveRoom()}
-            style={{
-              border: "none",
-              background: "transparent",
-              color: t.textSecondary,
-              fontSize: 13,
-              padding: 0,
-              cursor: "pointer",
-            }}
-          >
-            Leave
-          </button>
+            <button
+              type="button"
+              onClick={() => {
+                void loadBacklog();
+                setDoor("backlog");
+              }}
+              style={{
+                border: "none",
+                background: "transparent",
+                color: t.textSecondary,
+                fontSize: 13,
+                padding: 0,
+                cursor: "pointer",
+              }}
+            >
+              Backlog
+            </button>
+            <button
+              type="button"
+              onClick={() => setDoor("requests")}
+              style={{
+                border: "none",
+                background: "transparent",
+                color: t.textSecondary,
+                fontSize: 13,
+                padding: 0,
+                cursor: "pointer",
+              }}
+            >
+              Requests
+            </button>
+            <button
+              type="button"
+              onClick={() => leaveRoom()}
+              style={{
+                border: "none",
+                background: "transparent",
+                color: t.textSecondary,
+                fontSize: 13,
+                padding: 0,
+                cursor: "pointer",
+              }}
+            >
+              Leave
+            </button>
+          </span>
         </header>
         <div
           style={{
@@ -2475,15 +2563,26 @@ export function Room({
                     }
                   >
                     {isUser && marked ? (
-                      <span
-                        aria-label="Initiative"
+                      <button
+                        type="button"
+                        title="On the backlog"
+                        aria-label="Open ticket"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          void loadBacklog();
+                          setDoor("backlog");
+                          void openTicket(turn.initiativeId!);
+                        }}
                         style={{
                           width: 16,
                           height: 16,
                           marginBottom: 6,
+                          padding: 0,
                           borderRadius: "50%",
                           border: `1.5px solid ${t.accent}`,
+                          background: "transparent",
                           flexShrink: 0,
+                          cursor: "pointer",
                         }}
                       />
                     ) : null}
@@ -2792,6 +2891,33 @@ export function Room({
         />
       ) : null}
 
+      {door === "backlog" ? (
+        <BacklogIndex
+          t={t}
+          rows={backlogRows}
+          selectedId={selectedBacklogId}
+          onSelect={setSelectedBacklogId}
+          onOpen={(id) => void openTicket(id)}
+          onClose={() => {
+            setDoor(null);
+            setTicket(null);
+          }}
+          onRequests={() => {
+            setTicket(null);
+            setDoor("requests");
+          }}
+        />
+      ) : null}
+
+      {ticket ? (
+        <BacklogTicket
+          t={t}
+          ticket={ticket}
+          onBack={() => setTicket(null)}
+          onOpenLog={openTurnInLog}
+        />
+      ) : null}
+
       {door === "inflight" ? (
         <InFlightDoor
           t={t}
@@ -2834,17 +2960,69 @@ export function Room({
             >
               <div
                 role="dialog"
-                aria-label="Initiative"
+                aria-label="Hold"
                 style={{
                   width: "100%",
                   maxWidth: 480,
                   background: t.bgElevated,
                   borderTopLeftRadius: 16,
                   borderTopRightRadius: 16,
-                  padding: "20px 20px 28px",
+                  padding: "12px 20px 28px",
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
+                <div
+                  style={{
+                    width: 36,
+                    height: 4,
+                    borderRadius: 999,
+                    background: t.border,
+                    margin: "0 auto 12px",
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    void navigator.clipboard?.writeText(holdTurn.text);
+                    setHoldTurn(null);
+                  }}
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    border: "none",
+                    background: "transparent",
+                    color: t.textPrimary,
+                    fontSize: TYPE.body,
+                    fontWeight: 500,
+                    textAlign: "left",
+                    padding: "12px 0",
+                    cursor: "pointer",
+                  }}
+                >
+                  Copy
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const id = holdTurn.id;
+                    setHoldTurn(null);
+                    openTurnInLog(id);
+                  }}
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    border: "none",
+                    background: "transparent",
+                    color: t.textPrimary,
+                    fontSize: TYPE.body,
+                    fontWeight: 500,
+                    textAlign: "left",
+                    padding: "12px 0",
+                    cursor: "pointer",
+                  }}
+                >
+                  Open in log
+                </button>
                 <button
                   type="button"
                   onClick={() => void promoteInitiative(holdTurn)}
@@ -2855,7 +3033,7 @@ export function Room({
                     background: "transparent",
                     color: t.accent,
                     fontSize: TYPE.body,
-                    fontWeight: 600,
+                    fontWeight: 700,
                     textAlign: "left",
                     padding: "12px 0",
                     cursor: "pointer",
@@ -2863,6 +3041,17 @@ export function Room({
                 >
                   Initiative
                 </button>
+                <p
+                  style={{
+                    margin: "8px 0 0",
+                    color: t.textMuted,
+                    fontSize: TYPE.meta,
+                    fontStyle: "italic",
+                    textAlign: "center",
+                  }}
+                >
+                  Writes a ticket. Hands it to Travis.
+                </p>
               </div>
             </div>,
             document.body,
