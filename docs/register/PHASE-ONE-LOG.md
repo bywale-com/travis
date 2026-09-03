@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 02:20 UTC — **OpenAI cost model.** Plug-in assumptions. No billing access here. Live is the meter.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 02:25 UTC — **Output types spec (considering).** Wave 1 = images in order. Not a packet. No store mint.
 
 **How we maintain this log**
 
@@ -1244,4 +1244,18 @@ Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tighten
 **Ruled:** OpenAI = dest Travis only (Live `gpt-realtime-2.1` + text/gist `gpt-5.6-luna`). Seats are Cursor. Live is the expensive meter. Window already capped (14 turns / 2600 chars). No billing access in this seat — plug-in only. No cost dashboard.
 
 **Ask:** fill S, M, R from a real evening on the OpenAI usage page and replace the illustration.
+
+---
+
+## 2026-09-03 02:25 UTC — Output types beyond text (founder; considering)
+
+**Kind:** Type B + pipe. Considering. **Not a packet.** Do not mint a store.
+
+**Founder (preserved):** Spec support for multiple output types beyond text in Travis, similar to richer Cursor outputs (images, links, structured artifacts). Propose supported types, Voice vs log, interaction, permissions and sharing, versioning, incremental rollout, success metrics and risks.
+
+**Landed:** [`OUTPUT-TYPES-SPEC.md`](OUTPUT-TYPES-SPEC.md).
+
+**Ruled (this stamp — considering):** Receive-only richness. User send stays plain. Wave 0 = links (005). Wave 1 = images in thread order + Voice beat “there’s an image” (flagship; 001 nest). Files / code block / Cursor handle later, only if the stream emits them. Board/Fieldtop held. Turns are versions. Room-scoped; no share product. SA ascribes arrival + persistence before Engineer cuts.
+
+**Ask:** lock Wave 1 as the next packet, or hold behind rooms / 006? Voice beat wording? Board stays held?
 
