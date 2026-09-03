@@ -1,5 +1,5 @@
 /**
- * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership + SCP-008 backlog.
+ * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership + SCP-008 backlog + SCP-009 artifacts.
  */
 import { config } from "dotenv";
 import postgres from "postgres";
@@ -340,7 +340,35 @@ async function main() {
       ADD COLUMN IF NOT EXISTS initiative_id uuid REFERENCES travis.initiative(id)
   `;
 
-  console.log("travis schema + SCP-008 backlog ready");
+  await sql`
+    CREATE TABLE IF NOT EXISTS travis.turn_artifact (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      turn_id uuid NOT NULL REFERENCES travis.voice_turn(id),
+      session_id uuid NOT NULL REFERENCES travis.voice_session(id),
+      binding_id uuid NOT NULL REFERENCES travis.agent_binding(id),
+      kind text NOT NULL,
+      path text NOT NULL,
+      filename text NOT NULL,
+      size_bytes integer,
+      cursor_updated_at timestamptz,
+      created_at timestamptz NOT NULL DEFAULT now(),
+      CONSTRAINT turn_artifact_kind_chk
+        CHECK (kind IN ('image', 'file')),
+      CONSTRAINT turn_artifact_turn_path_uniq UNIQUE (turn_id, path)
+    )
+  `;
+
+  await sql`
+    CREATE INDEX IF NOT EXISTS turn_artifact_session_created_idx
+      ON travis.turn_artifact (session_id, created_at)
+  `;
+
+  await sql`
+    CREATE INDEX IF NOT EXISTS turn_artifact_turn_idx
+      ON travis.turn_artifact (turn_id)
+  `;
+
+  console.log("travis schema + SCP-009 artifacts ready");
   await sql.end();
 }
 

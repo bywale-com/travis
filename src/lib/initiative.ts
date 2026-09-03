@@ -51,6 +51,16 @@ export function litSeatKeys(posts: InitiativePost[]): string[] {
 }
 
 /** Latest agent_post per cursor seat — the ticket's canonical lines. */
+export type InitiativeAttachment = {
+  id: string;
+  turnId: string;
+  kind: "image" | "file";
+  filename: string;
+  sizeBytes: number | null;
+  createdAt: Date;
+  seatKey: string | null;
+};
+
 export function canonicalPosts<T extends InitiativePost & { seq: number }>(
   posts: T[],
 ): T[] {
