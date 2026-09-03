@@ -4,7 +4,7 @@
 **Seat:** Systems Analyst. Engineer pastes this. No leftover analysis.  
 **When:** 2026-09-03  
 **Decision:** **Two models, one Backlog pile.** Mint `travis.motion` + `travis.motion_step` for Travis’s own ordered tool sequences. Do **not** overload `initiative`. Do **not** mint a second index. Grow the existing Backlog door with `view=all|in_motion|initiatives`. Add a **dumb runner** that is not the voice turn. P1 count = open motions only.  
-**Founder lock:** The turn is not the work. He stays available. Many organized, few in flight. In motion lives **in Backlog**. In motion = Travis processes (no one’s input; step *n* of *m*; it will complete). Initiatives = tickets (seats, circles, Next). Voice “N in motion” counts **only** processes. Gone when zero. Not in Voice → existing Backlog door.  
+**Founder lock:** The turn is not the work. He stays available. A hundred can be executing — SA does **not** invent a product cap. In motion lives **in Backlog**. In motion = Travis processes (no one’s input; step *n* of *m*; it will complete). Initiatives = tickets (seats, circles, Next). Voice “N in motion” counts **only** processes. Gone when zero. Not in Voice → existing Backlog door.  
 **Glass (read, then ascribe — do not mint scenery):** [`PLATES-IN-MOTION.md`](./PLATES-IN-MOTION.md) · P1 Voice quiet `N in motion` · P2 is the **In motion view** (same list geometry). Shell title stays **Backlog**; the view is the filter. Completes All / Initiatives — no extra PNG. The P2 PNG’s middle “Engineer · running” row is **initiative-shaped**; the recut says In motion does **not** show those. Follow the recut, not that row.  
 **Envelope:** [`ENVELOPE-TRAVIS-ORCHESTRATE.md`](./ENVELOPE-TRAVIS-ORCHESTRATE.md)  
 **Trail:** [`SYSTEMS-ANALYST-LOG.md`](./SYSTEMS-ANALYST-LOG.md)
@@ -25,7 +25,7 @@ Brittleness is not JSON tools. The chat turn is the orchestrator. His plan lives
 | 2 | What is a step? | One of **his** tools + frozen args. Order = `seq`. Not a seat send. Not “wait for a seat post.” |
 | 3 | What wakes the next step? | **Same request, then next HTTP.** After `file_plan` and after every claimed step, the runner continues. Also `runMotionRunner(sessionId)` at live/tool, Talk/Type generate, send, queue drain. No cron. No daemon. No dedicated orchestrator server. |
 | 4 | Barge / new utterance | Does **not** delete or pause a motion. The plan is rows. dest stays Travis. |
-| 5 | Cap | Max **100** open motions per room. Max **20** steps per motion. Max **2** steps **executing** per room at once. More than **one** `send_to_seat` in the same model tool-batch → extras **refused** (tell him to `dispatch_to_seat` or file a motion — do not start ten blocking sends). |
+| 5 | Cap | **None.** Founder: do not care for caps; a hundred executing is fine. Do not refuse the 101st motion, the 21st step, or a third running step. `seat_live_run` is still one live Cursor run per binding — that is stood-up, not a ceiling this packet minted. A request may die (Vercel); leftover `pending` wakes on the next HTTP. That is physics, not a cap. |
 | 6 | 040 | `file_plan` = **write**. `list_backlog` = **read**. Step execution is the runner, not a Travis tool class. |
 | 7 | 042 | A motion cannot include a repo/diff/CI tool — those tools do not exist. Allowlist below. Stands. |
 | 8 | `seat_key` / `role` | **No overload.** |
@@ -68,7 +68,7 @@ export function formatInitiativeList(items: InitiativeListItem[]): string {
 
 **`file_plan` tool** `{ title?: string, steps: [{ tool, args }] }`
 - `title` empty → harness clip of the founding user line (same 40-char clip as 010). Refuse empty clip + empty title (400).
-- `steps` length 1..20.
+- `steps` length ≥ 1. No max.
 - Each `tool` on the **motion allowlist** (below). Args frozen at insert (JSON text).
 - Insert `motion` (`status=waiting`) + steps (`pending`, `seq` 1-based). Then `runMotionRunner(sessionId)` **in this request**.
 - Return `{ id, title, stepCount }` so he can say it is filed — do not wait for all steps to finish before returning to the model (runner may still finish them in-process).
@@ -80,13 +80,14 @@ export function formatInitiativeList(items: InitiativeListItem[]): string {
 **Refuse as a step:** `send_to_seat`, `dispatch_to_seat`, `barge_or_drop`, `end_session`, `set_view`, `file_plan`. Seat work stays `initiative` + dispatch. A process has **no one’s input**.
 
 **Runner** `runMotionRunner(sessionId)`
-- Claim the next `pending` step whose process is `waiting|running`, by `UPDATE … WHERE status='pending' RETURNING` (no double-fire).
-- Per room, at most **2** steps with `status=running` at a time. If at cap, leave others pending (`motion.status=waiting`).
+- Claim every next `pending` step that is legal to start: for each open motion, the lowest `seq` still `pending` (order inside a motion; not a count cap). `UPDATE … WHERE status='pending' RETURNING` so two wakes cannot double-fire the same step.
+- Many motions → many current steps. Run them. No room-wide executing ceiling.
 - Execute via `runTravisTool` with the frozen args. Store `result_text` (the tool’s `text`).
-- Step ok → `done`. If that was the last step → `motion.status=done`, `done_at=now()`. Else next seq stays pending; motion `running` if another step is executing, else `waiting`.
-- Step fail → step `failed`, motion `failed`. Do not start later seqs.
+- Step ok → `done`. If that was the last step → `motion.status=done`, `done_at=now()`. Else next seq stays pending; motion `running` if a step is executing, else `waiting`.
+- Step fail → step `failed`, motion `failed`. Do not start later seqs on that motion. Other motions keep going.
 - Never throw out to Voice. Failures live on the row.
 - Safe to call when there is nothing to do.
+- If the isolate dies mid-batch, leftover `pending` stays. Next wake continues. Do not invent a max-in-flight to “be safe.”
 
 **Wake** (every one of these calls the runner; do not invent a worker):
 
@@ -143,6 +144,7 @@ P1: `motionCount` = count of motions in (`waiting`,`running`) — **not failed, 
 - Three equal view bars. Quiet text filter (plate lock).
 - Auto-seed demo motions.
 - Mint from the P2 PNG’s Engineer row onto the In motion view.
+- A product cap on open motions, steps per motion, or executing steps.
 
 ---
 
@@ -263,10 +265,10 @@ file_plan
   return id to the model       -- conversation continues
 
 runMotionRunner
-  claim pending (cap 2 running / room)
-  runTravisTool(frozen args)
+  claim every motion's next pending seq
+  run them (no executing ceiling)
   write result; advance or fail
-  loop while a step can be claimed
+  leftover pending if the request dies → next HTTP
 
 barge / new Live response
   does not DELETE motion
@@ -298,6 +300,7 @@ Relative “3m” on an **initiative** row stays `created_at` presentation (048 
 | Second index / planner / digest plate | **Refused** |
 | Cron / daemon | **Refused** |
 | V6 = processes | **Refused** |
+| Product caps (open / steps / executing) | **Refused** |
 | 042 wall | **Unchanged** |
 
 ---
@@ -308,7 +311,7 @@ Relative “3m” on an **initiative** row stays `created_at` presentation (048 
 2. Barge “how is that coming?” mid-run → plan still there. `list_backlog view=in_motion` matches the glance. He does not invent.
 3. P1 shows `2 in motion` only when two motions are waiting/running. Failed does not add to the Voice count; it **does** appear in the In motion view. Zero waiting+running → link gone.
 4. `view=in_motion` has no seat circles / no “next Engineer.” `view=initiatives` has no `step n of m`. `view=all` has both kinds.
-5. Ten `send_to_seat` in one Talk loop: first may run; rest refused. `file_plan` with `send_to_seat` as a step → 400, no row.
+5. `file_plan` with `send_to_seat` as a step → 400, no row. A hundred motions with a current step all run; the 101st file is accepted. No refuse-for-count.
 6. `formatInitiativeList` includes id. `rename_initiative` with that id works without guessing.
 7. Killing the Live connection does not DELETE motions. Next send/tool/drain advances leftover `pending` steps.
 8. `tool-policy` coverage includes `file_plan` and `list_backlog`.
@@ -326,4 +329,4 @@ Relative “3m” on an **initiative** row stays `created_at` presentation (048 
 
 ## Engineer handoff
 
-Mint the two tables, ensure-once, `file_plan`, runner + five wake sites, Backlog `view`, P1 count, `list_backlog`, 040 lines, 042/SYSTEM sentence, print initiative id. Plant P1/P2 from [`PLATES-IN-MOTION.md`](./PLATES-IN-MOTION.md): Voice link → Backlog `view=in_motion`. Do not put initiative rows on that view. Founder lands `CREATE TABLE`. Do not append SA or PM logs.
+Mint the two tables, ensure-once, `file_plan`, runner + five wake sites, Backlog `view`, P1 count, `list_backlog`, 040 lines, 042/SYSTEM sentence, print initiative id. Plant P1/P2 from [`PLATES-IN-MOTION.md`](./PLATES-IN-MOTION.md): Voice link → Backlog `view=in_motion`. Do not put initiative rows on that view. **Do not plant a cap.** Founder lands `CREATE TABLE`. Do not append SA or PM logs.

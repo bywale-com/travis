@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 20:53 UTC — **SCP-013 signed.** Two models, one Backlog pile. Mint `travis.motion` + `motion_step` + dumb runner. Do not overload `initiative`. Packet: [`SYSTEMS-CHANGE-PACKET-013-MOTION.md`](./SYSTEMS-CHANGE-PACKET-013-MOTION.md).
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 21:00 UTC — **SCP-013 caps struck.** Founder: no product caps; a hundred executing is fine. Packet amended in place: [`SYSTEMS-CHANGE-PACKET-013-MOTION.md`](./SYSTEMS-CHANGE-PACKET-013-MOTION.md).
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -325,3 +325,15 @@ SCP-001 seed field updated.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-013-MOTION.md`](./SYSTEMS-CHANGE-PACKET-013-MOTION.md)
 
 **Handoff:** Engineer pastes tables, runner, Backlog `view`, P1, `file_plan`. Founder lands SQL.
+
+---
+
+## 2026-09-03 21:00 UTC — SCP-013 founder correction (no caps)
+
+**Kind:** Founder correction. Do not edit the 20:53 stamp.
+
+**Founder (preserved):** does not care for caps. “Two executing at once” is not the law. He was going to say **100 executing at once**. The numbers I wrote were easily fifty times too small. Do not invent a product ceiling.
+
+**Amend:** question 5 in [`SYSTEMS-CHANGE-PACKET-013-MOTION.md`](./SYSTEMS-CHANGE-PACKET-013-MOTION.md) is now **None**. No max open motions. No max steps. No executing ceiling. Order inside a motion (`seq`) stays — that is order, not a count. `seat_live_run` one-per-binding stays stood-up. Request death → leftover `pending` on next HTTP is physics.
+
+**Must-not added:** invent a product cap “to be safe.”
