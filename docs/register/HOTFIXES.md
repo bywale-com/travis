@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **059**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **060**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -68,3 +68,4 @@
 | 056 | [`HOTFIX-056-SHARED-OPERATOR-ROOMS.md`](./HOTFIX-056-SHARED-OPERATOR-ROOMS.md) | Seeded inboxes share one room pile |
 | 057 | [`HOTFIX-057-BACKLOG-PLATES.md`](./HOTFIX-057-BACKLOG-PLATES.md) | Backlog index, ticket Messages/Artifacts, hold sheet, mark as a door |
 | 058 | [`HOTFIX-058-RENAME-ROOM.md`](./HOTFIX-058-RENAME-ROOM.md) | Founder and Travis can rename a room; same title field |
+| 059 | [`HOTFIX-059-TRAVIS-LIVE-GLUE.md`](./HOTFIX-059-TRAVIS-LIVE-GLUE.md) | Live Travis posts one utterance; window keeps the last line |

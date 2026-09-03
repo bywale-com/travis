@@ -112,6 +112,33 @@ test("an empty room produces no window at all", () => {
   assert.equal(buildRoomContext({ turns: [] }), "");
 });
 
+test("only the latest Travis line stays in the window", () => {
+  const out = buildRoomContext({
+    turns: [
+      {
+        kind: "agent_post",
+        seatKey: "travis",
+        seatLabel: "Travis",
+        text: "Usually it’s elevated when it stops being a one-off.",
+      },
+      {
+        kind: "user",
+        seatKey: "travis",
+        seatLabel: "Travis",
+        text: "How does something get into the backlog?",
+      },
+      {
+        kind: "agent_post",
+        seatKey: "travis",
+        seatLabel: "Travis",
+        text: "Hold a line, or I pass it to a seat.",
+      },
+    ],
+  });
+  assert.match(out, /Hold a line/);
+  assert.equal(out.includes("Usually it’s elevated"), false);
+});
+
 test("a named room is announced in the window", () => {
   const out = buildRoomContext({
     turns: [

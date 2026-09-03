@@ -1,6 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
 import { delay, isDeadStreamError } from "@/lib/cursor-busy";
-import { absorbText } from "@/lib/absorb-text";
+import { absorbText, nextLiveTravisText } from "@/lib/absorb-text";
 import { isTravisSeat } from "@/lib/seats";
 import { seatKeyToLabel } from "@/lib/router";
 import {
@@ -319,14 +319,16 @@ export async function absorbLiveTravisPost(
       .orderBy(desc(voiceTurn.seq))
       .limit(1);
     if (last?.kind === "agent_post" && last.seatKey === "travis") {
-      const { acc } = absorbText(last.text, incoming);
-      if (acc === last.text) return last;
-      const [row] = await db
-        .update(voiceTurn)
-        .set({ text: acc })
-        .where(eq(voiceTurn.id, last.id))
-        .returning();
-      return row;
+      const next = nextLiveTravisText(last.text, incoming);
+      if (next.mode === "update") {
+        if (next.text === last.text) return last;
+        const [row] = await db
+          .update(voiceTurn)
+          .set({ text: next.text })
+          .where(eq(voiceTurn.id, last.id))
+          .returning();
+        return row;
+      }
     }
     const seq = await nextTurnSeq(sessionId);
     const [row] = await db

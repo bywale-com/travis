@@ -91,8 +91,20 @@ export function buildRoomContext(params: {
   roomTitle?: string;
   charCap?: number;
 }): string {
-  const lines = params.turns
-    .filter(isContextWorthy)
+  const worthy = params.turns.filter(isContextWorthy);
+  let lastTravis = -1;
+  for (let i = 0; i < worthy.length; i++) {
+    if (worthy[i].kind === "agent_post" && worthy[i].seatKey === "travis") {
+      lastTravis = i;
+    }
+  }
+  const lines = worthy
+    .filter((t, i) => {
+      if (t.kind === "agent_post" && t.seatKey === "travis") {
+        return i === lastTravis;
+      }
+      return true;
+    })
     .slice(-WINDOW_TURNS)
     .map((t) => describeTurn(t, t.seatLabel));
 
