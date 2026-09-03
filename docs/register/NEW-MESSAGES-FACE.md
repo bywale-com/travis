@@ -12,6 +12,8 @@
 
 > Since we're queuing now, where Travis says the message, it only says new messages… new things that he needs to tell me. Once I've seen it — gone into the log — then it's no longer new. There should be that signal even in the chat of what is new, past a certain point. In Voice, when I'm in Travis, what is new should show what's queued to report. I don't think I need more than two plates.
 
+> What if I'm not on Travis and there is something new in chat? I'm in Voice, but maybe I haven't initiated Travis. I think we're moving away totally from Google text-to-speech. New chats trigger Travis to wake, to say something is new. They are not automatically read out. I'm first notified that there's something new, from a specific seat, because it routes to Travis. Then I can ask Travis to tell me.
+
 ---
 
 ## Law
@@ -20,9 +22,13 @@
 |---|---|
 | **New** | Unheard seat posts. The report queue. What Travis still owes you. |
 | **Seen** | You opened Log and the posts sat in view. They leave New. They stay in the thread. |
-| **Voice** | Dest Travis. Chip is the queue: `2 new · Eng, SA`. Travis does not read the bodies. One short beat when the ear is free (“Engineer finished”), then silence. |
-| **Log** | A hairline **New** cut. Above = already seen. Below = not yet. No dashed card. No second barge button. |
-| **Two plates.** | N1 Voice. N2 Log. No sheet. No Carbon twin. No third door. |
+| **Notify** | Travis’s mouth only. One short beat: something new, from which seat. Never the body. |
+| **Then ask** | You query Travis for the gist or the words. Nothing reads itself. |
+| **Dest is a seat** | Same path. New still wakes Travis. It does not Google-read the seat. |
+| **Google TTS** | Out for this. Seat bodies are not a second mouth. |
+| **Voice chip** | `2 new · Eng, SA` — the report queue, also when dest is not Travis. |
+| **Log** | A hairline **New** cut. Above = already seen. Below = not yet. |
+| **Two plates.** | N1 Voice. N2 Log. No third door. |
 
 007 R0 (no barge, one mouth) is still the plant. These plates name the signal.
 
@@ -34,3 +40,4 @@
 - Do not recut U1 / U2 / C3 / C4 (those are your send-queue).
 - Do not mint a table from the pictures. Heard/seen stays SA for R1.
 - Do not draw Hear / Next / Skip on these two. That sheet is 007 R2.
+- Do not start `speechSynthesis` on a seat post. Do not keep Google as a second mouth.
