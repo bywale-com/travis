@@ -4,9 +4,10 @@ import {
   InitiativeError,
   markInitiativeDone,
   readInitiative,
+  renameInitiative,
 } from "@/server/initiative";
 
-type PatchBody = { status?: string };
+type PatchBody = { status?: string; title?: string };
 
 export async function GET(
   _req: Request,
@@ -33,11 +34,25 @@ export async function PATCH(
   return jsonRoute(async () => {
     const { id: sessionId, initiativeId } = await ctx.params;
     const body = (await req.json()) as PatchBody;
-    if (body.status !== "done") {
+    const hasTitle = typeof body.title === "string";
+    const hasDone = body.status === "done";
+    if (!hasTitle && !hasDone) {
+      return NextResponse.json(
+        { error: "title or status done required" },
+        { status: 400 },
+      );
+    }
+    if (body.status != null && body.status !== "done") {
       return NextResponse.json({ error: "status must be done" }, { status: 400 });
     }
     try {
-      const row = await markInitiativeDone(sessionId, initiativeId);
+      let row;
+      if (hasTitle) {
+        row = await renameInitiative(sessionId, initiativeId, body.title ?? "");
+      }
+      if (hasDone) {
+        row = await markInitiativeDone(sessionId, initiativeId);
+      }
       return NextResponse.json({ initiative: row });
     } catch (err) {
       if (err instanceof InitiativeError) {

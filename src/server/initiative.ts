@@ -8,11 +8,22 @@
 import { and, asc, desc, eq, sql } from "drizzle-orm";
 import { formatLandedFiles } from "@/lib/artifact-kind";
 import {
+  catalogNeedleHits,
+  clipInitiativeTitle,
+  pathBasename,
+} from "@/lib/initiative-title";
+import {
   canonicalPosts,
   deriveNext,
   litSeatKeys,
   type InitiativeAttachment,
 } from "@/lib/initiative";
+import {
+  parseRequestWhen,
+  requestInWindow,
+  requestWindowStart,
+  type RequestWhen,
+} from "@/lib/request-log";
 import { attachmentsForInitiative } from "@/server/artifacts";
 import { isCursorSeat } from "@/lib/seats";
 import { db } from "@/server/db/client";
@@ -40,6 +51,7 @@ export async function ensureInitiativeStore(): Promise<void> {
       status text NOT NULL DEFAULT 'open',
       created_at timestamptz NOT NULL DEFAULT now(),
       done_at timestamptz,
+      title text NOT NULL DEFAULT '',
       CONSTRAINT initiative_source_chk
         CHECK (source IN ('via_travis', 'hold')),
       CONSTRAINT initiative_status_chk
@@ -70,7 +82,35 @@ export async function ensureInitiativeStore(): Promise<void> {
     ALTER TABLE travis.queued_utterance
       ADD COLUMN IF NOT EXISTS initiative_id uuid REFERENCES travis.initiative(id)
   `);
+  await db.execute(sql`
+    ALTER TABLE travis.initiative
+      ADD COLUMN IF NOT EXISTS title text NOT NULL DEFAULT ''
+  `);
+  await backfillEmptyTitles();
   initiativeStoreReady = true;
+}
+
+async function backfillEmptyTitles(): Promise<void> {
+  const empties = await db
+    .select({
+      id: initiative.id,
+      foundingTurnId: initiative.foundingTurnId,
+    })
+    .from(initiative)
+    .where(eq(initiative.title, ""));
+  for (const row of empties) {
+    const [founding] = await db
+      .select({ text: voiceTurn.text })
+      .from(voiceTurn)
+      .where(eq(voiceTurn.id, row.foundingTurnId))
+      .limit(1);
+    const title = clipInitiativeTitle(founding?.text ?? "");
+    if (!title) continue;
+    await db
+      .update(initiative)
+      .set({ title })
+      .where(eq(initiative.id, row.id));
+  }
 }
 
 export class InitiativeError extends Error {
@@ -116,6 +156,11 @@ async function insertOpen(
   foundingTurnId: string,
   source: InitiativeSource,
 ): Promise<Initiative> {
+  const [founding] = await db
+    .select({ text: voiceTurn.text })
+    .from(voiceTurn)
+    .where(eq(voiceTurn.id, foundingTurnId))
+    .limit(1);
   const [row] = await db
     .insert(initiative)
     .values({
@@ -123,6 +168,7 @@ async function insertOpen(
       foundingTurnId,
       source,
       status: "open",
+      title: clipInitiativeTitle(founding?.text ?? ""),
     })
     .returning();
   await stampTurn(foundingTurnId, row.id);
@@ -286,6 +332,32 @@ export async function holdInitiative(
   return insertOpen(sessionId, turn.id, "hold");
 }
 
+export async function renameInitiative(
+  sessionId: string,
+  initiativeId: string,
+  rawTitle: string,
+): Promise<Initiative> {
+  await ensureInitiativeStore();
+  const row = await getInitiative(initiativeId);
+  if (!row || row.sessionId !== sessionId) {
+    throw new InitiativeError("Initiative not found", 404);
+  }
+  const trimmed = String(rawTitle ?? "").trim();
+  if (!trimmed) {
+    throw new InitiativeError("Title required", 400);
+  }
+  const title = clipInitiativeTitle(trimmed);
+  if (!title) {
+    throw new InitiativeError("Title required", 400);
+  }
+  const [updated] = await db
+    .update(initiative)
+    .set({ title })
+    .where(eq(initiative.id, initiativeId))
+    .returning();
+  return updated;
+}
+
 export async function markInitiativeDone(
   sessionId: string,
   initiativeId: string,
@@ -345,6 +417,7 @@ function nextOf(
 
 export type InitiativeListItem = {
   id: string;
+  title: string;
   foundingText: string;
   status: string;
   createdAt: Date;
@@ -354,11 +427,54 @@ export type InitiativeListItem = {
   next: ReturnType<typeof deriveNext>;
 };
 
+export type ListInitiativesOpts = {
+  status?: InitiativeStatus | "all";
+  when?: RequestWhen;
+  q?: string;
+};
+
+async function artifactNamesForInitiative(
+  initiativeId: string,
+): Promise<string[]> {
+  try {
+    const raw = await db.execute(sql`
+      SELECT a.filename, a.path
+      FROM travis.turn_artifact a
+      INNER JOIN travis.voice_turn t ON t.id = a.turn_id
+      WHERE t.initiative_id = ${initiativeId}::uuid
+    `);
+    const list = (
+      Array.isArray(raw)
+        ? raw
+        : raw && typeof raw === "object" && Array.isArray((raw as { rows?: unknown }).rows)
+          ? (raw as { rows: unknown[] }).rows
+          : []
+    ) as Array<{ filename?: string; path?: string }>;
+    const names: string[] = [];
+    for (const row of list) {
+      if (typeof row.filename === "string" && row.filename.trim()) {
+        names.push(row.filename);
+      }
+      if (typeof row.path === "string" && row.path.trim()) {
+        names.push(pathBasename(row.path));
+      }
+    }
+    return names;
+  } catch {
+    return [];
+  }
+}
+
 export async function listInitiatives(
   sessionId: string,
-  status: InitiativeStatus | "all" = "open",
+  opts: ListInitiativesOpts | InitiativeStatus | "all" = {},
 ): Promise<InitiativeListItem[]> {
   await ensureInitiativeStore();
+  const parsed: ListInitiativesOpts =
+    typeof opts === "string" ? { status: opts } : opts;
+  const status = parsed.status ?? "open";
+  const when = parseRequestWhen(parsed.when ?? "all");
+  const q = typeof parsed.q === "string" ? parsed.q : "";
   const rows =
     status === "all"
       ? await db
@@ -379,11 +495,31 @@ export async function listInitiatives(
 
   const out: InitiativeListItem[] = [];
   for (const row of rows) {
+    if (!requestInWindow(row.createdAt, requestWindowStart(when))) {
+      continue;
+    }
     const turns = await turnsForInitiative(row.id);
     const [founding] = turns.filter((t) => t.id === row.foundingTurnId);
     const posts = turns.filter((t) => t.kind === "agent_post");
+    if (q.trim()) {
+      const messages = turns
+        .filter((t) => t.kind === "user" || t.kind === "agent_post")
+        .map((t) => t.text);
+      const files = await artifactNamesForInitiative(row.id);
+      if (
+        !catalogNeedleHits(q, [
+          row.title,
+          founding?.text ?? "",
+          ...messages,
+          ...files,
+        ])
+      ) {
+        continue;
+      }
+    }
     out.push({
       id: row.id,
+      title: row.title,
       foundingText: founding?.text ?? "",
       status: row.status,
       createdAt: row.createdAt,
@@ -398,6 +534,7 @@ export async function listInitiatives(
 
 export type InitiativeRead = {
   id: string;
+  title: string;
   status: string;
   source: string;
   createdAt: Date;
@@ -434,6 +571,7 @@ export async function readInitiative(
   );
   return {
     id: row.id,
+    title: row.title,
     status: row.status,
     source: row.source,
     createdAt: row.createdAt,
@@ -464,15 +602,15 @@ export function formatInitiativeList(items: InitiativeListItem[]): string {
     const lit = item.litSeatKeys.length
       ? ` · ${item.litSeatKeys.join(",")}`
       : "";
-    const clip =
-      item.foundingText.replace(/\s+/g, " ").trim().slice(0, 80) || "(no text)";
-    return `${item.status}: ${clip}${lit}${next}`;
+    const title = item.title.trim() || "(no title)";
+    return `${item.status}: ${title}${lit}${next}`;
   });
   return `${items.length} initiative${items.length === 1 ? "" : "s"}.\n${lines.join("\n")}`;
 }
 
 export function formatInitiativeRead(ticket: InitiativeRead): string {
   const next = ticket.next ? `Next: ${ticket.next}.` : "Done.";
+  const title = ticket.title.trim() || "(no title)";
   const founding = ticket.founding?.text.replace(/\s+/g, " ").trim() ?? "";
   const posts = ticket.posts.length
     ? ticket.posts
@@ -481,6 +619,6 @@ export function formatInitiativeRead(ticket: InitiativeRead): string {
     : "No seat posts yet.";
   const files = formatLandedFiles(ticket.attachments);
   return files
-    ? `${ticket.status}. ${founding}\n${posts}\n${files}\n${next}`
-    : `${ticket.status}. ${founding}\n${posts}\n${next}`;
+    ? `${title}\n${ticket.status}. ${founding}\n${posts}\n${files}\n${next}`
+    : `${title}\n${ticket.status}. ${founding}\n${posts}\n${next}`;
 }

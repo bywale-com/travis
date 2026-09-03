@@ -139,6 +139,8 @@ export const initiative = travis.table("initiative", {
     .references(() => voiceTurn.id),
   source: text("source").notNull(),
   status: text("status").notNull().default("open"),
+  /** SCP-010 — catalog name. First write = harness clip. */
+  title: text("title").notNull().default(""),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
