@@ -3,7 +3,7 @@
 **Number:** `010` — next systems packet is `011`. Never reuse a number.  
 **Seat:** Systems Analyst. Engineer pastes this. No leftover analysis.  
 **When:** 2026-09-03  
-**Decision:** **Extend** `travis.initiative` with `title`. First write = **harness clip** of the founding line (not Travis, not you). Rename is a second write you (or Travis via the same HTTP) can make. **Grow** `list_initiatives` with `when` + `q`. Do not recut Requests. Do not remint 008/009.  
+**Decision:** **Extend** `travis.initiative` with `title`. First write = **harness clip** of the founding line (not Travis, not you). Rename is a second write you (or Travis via the same HTTP) can make. **Grow** `list_initiatives` with `when` + `q`. `q` hits title, founding line, stamped Messages, and artifact filenames. Do not recut Requests. Do not remint 008/009.  
 **Founder lock:** the index is a catalog. The founding line stays the founding line. Travis does not invent a ticket because a search missed.  
 **Glass (read, then ascribe — do not mint scenery):** B1 index rows are short names (`Hear queue / New`, `Search grain`, `Output types`, `Voice send quiet`). B6 ticket header is the **same** name, not the founding sentence. Relative time (`2m`, `1h`, `today`, `yesterday`) is **presentation** of `created_at`. Footer: *Not the request log.*  
 **Stood-up:** live DB now has empty `initiative` + `turn_artifact` (founder landed SQL). 009 harvest/proxy waits on PR [#77](https://github.com/bywale-com/travis/pull/77). `list_initiatives` clips founding text at **80** in `formatInitiativeList`. Rooms already have `voice_session.title` (typed, empty legal).  
@@ -26,7 +26,7 @@ An initiative is already a row. The catalog cannot be “the first 80 characters
 | 3 | Travis names it when he mints via_travis. | **STRIKE for mint.** The agent is the pipe, not the author of the catalog. |
 | 4 | You name it (Hold / rename). Empty until then. | **SIGN rename.** **STRIKE empty-until-named** as the only path — via-Travis would leave B1 blank. Hold does **not** ask for a name (B4 is one word). |
 
-Rename is `PATCH title`. “This week” is `created_at` + the same `today` / `week` / `all` grain as Requests. Find-by-words is `q` on **title** (fallback founding text if title is still `''`). Miss → empty list. **Do not mint a ticket from a miss.**
+Rename is `PATCH title`. “This week” is `created_at` + the same `today` / `week` / `all` grain as Requests. Find-by-words is **one `q`** on the same list — title, founding line, stamped Messages (`kind=user` + `agent_post` with that `initiative_id`), artifact `filename`. Thoughts stay out. Miss → empty list. **Do not mint a ticket from a miss.**
 
 ---
 
@@ -72,7 +72,13 @@ export function formatInitiativeList(items: InitiativeListItem[]): string {
 - On `ensureInitiative` (via_travis) and Hold: set `title = clipInitiativeTitle(founding.text)` if the new row’s title is `''`. Do **not** overwrite a title that was already set.
 - Clip law (put in `src/lib/initiative-title.ts`, test it): flatten whitespace; take the first sentence (`.?!` or newline); cap **40** characters; break on the last space before the cap if that space is after character 12; no trailing space. Empty founding → `''`.
 - `PATCH /api/sessions/:id/initiatives/:initiativeId` already does `status=done`. Accept `{ title?: string }` too. Trim; apply the same 40-char clip to the submitted string (so a paragraph paste cannot blow the catalog). Empty string after trim **refuses** (400) — do not blank a name by accident. 404 wrong room.
-- `list_initiatives` / `GET` list: add `when?: today|week|all` (reuse `parseRequestWhen` / `requestInWindow` on `created_at`, UTC) and `q?: string`. `q` matches `title` case-insensitive; if `title` is `''`, also match founding text. Default `when=all`, `status=open` unchanged.
+- `list_initiatives` / `GET` list: add `when?: today|week|all` (reuse `parseRequestWhen` / `requestInWindow` on `created_at`, UTC) and `q?: string`. Default `when=all`, `status=open` unchanged.  
+  **`q` (case-insensitive substring) matches if any of these hit:**  
+  1. `initiative.title`  
+  2. founding turn `text`  
+  3. any stamped `voice_turn` on that id with `kind` in (`user`, `agent_post`) — the ticket Messages, including pass-on legs and seat posts  
+  4. any `turn_artifact.filename` (and `path` basename) hung on those turns  
+  If `turn_artifact` is not stood up yet (009 still merging), skip (4) — do not 500. Thoughts (`agent_thought`) never match. `status` / `travis_prompt` never match.
 - List/read JSON and `formatInitiativeList` print **`title`**, not an 80-char founding dump. Founding line stays on `read_initiative.founding`.
 - Travis tools: grow `list_initiatives` parameters (`when`, `q`). Add `rename_initiative` `{ id, title }` = the same PATCH. Do **not** have Travis set title inside pass-on.
 - `search_room` unchanged.
@@ -153,7 +159,9 @@ PATCH { title }
 PATCH { status: done }                    -- unchanged
 
 GET / list_initiatives
-  filter status, when(created_at UTC), q(title, else founding)
+  filter status, when(created_at UTC)
+  q → title OR founding.text OR stamped user/agent_post text
+      OR artifact filename on those turns
   miss → []  -- never INSERT
 
 rename_initiative tool → same PATCH
@@ -169,7 +177,7 @@ Relative time on B1 (`2m`, `today`) is glass over `created_at`. Do not store it.
 |------|-----|
 | `title` column + ensure-once | **Real** |
 | Clip helper | **Real** — tested |
-| List `when` + `q` | **Real** |
+| List `when` + `q` | **Real** — title, Messages, artifact names |
 | Rename HTTP + `rename_initiative` | **Real** — same write |
 | Travis names on mint | **Refused** |
 | `search_room` | **Unchanged** |
@@ -182,7 +190,7 @@ Relative time on B1 (`2m`, `today`) is glass over `created_at`. Do not store it.
 1. Via-Travis send → row has a ≤40-char title clipped from the founding line; founding text on read is the full sentence.
 2. Hold an Out line → same clip; no extra prompt asking for a name.
 3. PATCH title “Artifact door” → index and B6 header show that; founding line unchanged.
-4. `list_initiatives` `when=week` hides older; `q=artifact` hits the renamed row; `q=no-such` returns none and writes **zero** rows.
+4. `list_initiatives` `when=week` hides older; `q=artifact` hits a renamed title **or** a post/filename that contains that word; `q` on a seat post (“heard is silence”) hits that ticket; `q` on `HEAR-QUEUE-SPEC` hits if that file is hung; `q=no-such` returns none and writes **zero** rows.
 5. `search_room` still returns dest-seat personal lines that are not tickets.
 6. Rename tool and PATCH produce the same row. Pass-on does not call the model to name.
 
@@ -199,4 +207,4 @@ Relative time on B1 (`2m`, `today`) is glass over `created_at`. Do not store it.
 
 ## Engineer handoff
 
-Paste the column, the clip helper, list `when`/`q`, and rename. First title is harness. Travis does not name on mint. Requests stays Requests. Founder will land the `ALTER` on this database — still put `IF NOT EXISTS` in ensure-once. Do not append SA or PM logs.
+Paste the column, the clip helper, list `when`/`q` (title + stamped Messages + artifact filenames), and rename. First title is harness. Travis does not name on mint. Requests stays Requests. Founder will land the `ALTER` on this database — still put `IF NOT EXISTS` in ensure-once. Do not append SA or PM logs.

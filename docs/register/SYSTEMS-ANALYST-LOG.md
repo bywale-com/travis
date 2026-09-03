@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 13:42 UTC — **SCP-010 signed.** `initiative.title` — harness clips the founding line (40 chars); you rename. List gets `when` + `q`. Travis does not name on mint. Packet: [`SYSTEMS-CHANGE-PACKET-010-BACKLOG-TITLE.md`](./SYSTEMS-CHANGE-PACKET-010-BACKLOG-TITLE.md).
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 13:51 UTC — **SCP-010 `q` grown.** Same list: title, founding line, stamped Messages, artifact filenames. Miss still mints nothing. Packet: [`SYSTEMS-CHANGE-PACKET-010-BACKLOG-TITLE.md`](./SYSTEMS-CHANGE-PACKET-010-BACKLOG-TITLE.md).
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -319,3 +319,13 @@ SCP-001 seed field updated.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-010-BACKLOG-TITLE.md`](./SYSTEMS-CHANGE-PACKET-010-BACKLOG-TITLE.md)
 
 **Handoff:** Engineer pastes `title` + clip + list `when`/`q` + rename. Founder lands the ALTER on this database. No leftover analysis.
+
+---
+
+## 2026-09-03 13:51 UTC — SCP-010 `q` grown (founder)
+
+**Kind:** Founder: grow `q` so Travis can find a ticket by Messages or artifact name, not only title. Same packet, same PR. No new table.
+
+**Lock:** `list_initiatives` `q` matches title, founding text, stamped `user` / `agent_post`, `turn_artifact.filename`. Thoughts out. If 009 table is missing, skip filenames — do not fail. Miss → `[]`. `search_room` unchanged.
+
+**Packet:** [`SYSTEMS-CHANGE-PACKET-010-BACKLOG-TITLE.md`](./SYSTEMS-CHANGE-PACKET-010-BACKLOG-TITLE.md) updated in place.
