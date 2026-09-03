@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { parseAgentPost, speakableAgentPost } from "./agent-post";
+import { parseAgentPost, parseInline, speakableAgentPost } from "./agent-post";
 
 test("heading, list, inline code, paragraphs", () => {
   const blocks = parseAgentPost(
@@ -61,4 +61,15 @@ test("flat text stays one paragraph", () => {
   const blocks = parseAgentPost("just a line");
   assert.equal(blocks.length, 1);
   assert.equal(blocks[0]?.type, "paragraph");
+});
+
+test("http links stay text and split from punctuation", () => {
+  const bits = parseInline("see https://travis.example/shot.png.");
+  assert.equal(bits.some((p) => p.type === "link"), true);
+  const link = bits.find((p) => p.type === "link");
+  assert.equal(link && link.type === "link" ? link.href : "", "https://travis.example/shot.png");
+  assert.equal(bits.some((p) => p.type === "text" && p.text === "."), true);
+  const code = parseInline("keep `https://inside.example` as code");
+  assert.equal(code.some((p) => p.type === "link"), false);
+  assert.equal(code.some((p) => p.type === "code"), true);
 });

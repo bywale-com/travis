@@ -43,6 +43,7 @@ import { startTravisLive, type TravisLiveSession } from "@/lib/travis-live-clien
 import type { QueueSeatDto } from "@/lib/queue-logic";
 import { QueueChips, QueueLog, SeatMark } from "@/components/QueueChrome";
 import { AgentPostBody } from "@/components/AgentPostBody";
+import { TurnAttachments, type TurnFile } from "@/components/TurnAttachments";
 import { LogComposer, type RoomSeat } from "@/components/LogComposer";
 import { CreateAgent, type CreatedAgent } from "@/components/plates/CreateAgent";
 import { IntegrationStatusScreen } from "@/components/plates/IntegrationStatus";
@@ -81,6 +82,7 @@ type Turn = {
   initiativeId?: string | null;
   text: string;
   createdAt?: string;
+  attachments?: TurnFile[];
 };
 
 type Session = {
@@ -2735,6 +2737,12 @@ export function Room({
                         ) : (
                           turn.text
                         )}
+                        {turn.kind === "agent_post" ? (
+                          <TurnAttachments
+                            files={turn.attachments ?? []}
+                            t={t}
+                          />
+                        ) : null}
                         {!isUser && turn.kind === "agent_post" && (
                           <button
                             type="button"

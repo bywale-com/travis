@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-03** · Hotfix 062 · [PR #98](https://github.com/bywale-com/travis/pull/98) — Hung images and files appear on the Log post, because 009 stored them and the ticket door showed them but the thread stayed text.
 - **2026-09-03** · SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) — Travis files a plan out of the turn and a runner advances it in Backlog, because the chat turn was the orchestrator and a barge killed the work.
 - **2026-09-03** · SCP-012 · [PR #93](https://github.com/bywale-com/travis/pull/93) — Travis houses protocols and templates as `os_node` rows, because the next empty work repo will not have `docs/seats`.
 - **2026-09-03** · SCP-007 · [PR #61](https://github.com/bywale-com/travis/pull/61) — Room membership is a Travis store: roster, dest, End, create, add and remove read the relation, because seats were every active binding worldwide.

@@ -97,6 +97,45 @@ export async function harvestTurnArtifacts(params: {
   }
 }
 
+export type TurnAttachment = {
+  id: string;
+  turnId: string;
+  kind: "image" | "file";
+  filename: string;
+  sizeBytes: number | null;
+};
+
+export async function attachmentsForTurns(
+  sessionId: string,
+): Promise<Map<string, TurnAttachment[]>> {
+  await ensureArtifactStore();
+  const rows = await db
+    .select({
+      id: turnArtifact.id,
+      turnId: turnArtifact.turnId,
+      kind: turnArtifact.kind,
+      filename: turnArtifact.filename,
+      sizeBytes: turnArtifact.sizeBytes,
+    })
+    .from(turnArtifact)
+    .where(eq(turnArtifact.sessionId, sessionId))
+    .orderBy(asc(turnArtifact.createdAt));
+  const map = new Map<string, TurnAttachment[]>();
+  for (const row of rows) {
+    const item: TurnAttachment = {
+      id: row.id,
+      turnId: row.turnId,
+      kind: row.kind === "image" ? "image" : "file",
+      filename: row.filename,
+      sizeBytes: row.sizeBytes,
+    };
+    const list = map.get(row.turnId) ?? [];
+    list.push(item);
+    map.set(row.turnId, list);
+  }
+  return map;
+}
+
 export async function attachmentsForInitiative(
   initiativeId: string,
 ): Promise<InitiativeAttachment[]> {

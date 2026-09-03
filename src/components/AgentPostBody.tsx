@@ -31,6 +31,16 @@ function InlineRun({
           >
             {piece.text}
           </code>
+        ) : piece.type === "link" ? (
+          <a
+            key={i}
+            href={piece.href}
+            target="_blank"
+            rel="noreferrer"
+            style={{ color: t.accent, wordBreak: "break-all" }}
+          >
+            {piece.text}
+          </a>
         ) : (
           <span key={i}>{piece.text}</span>
         ),
