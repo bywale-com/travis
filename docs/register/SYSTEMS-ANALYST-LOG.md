@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 00:21 UTC — **SCP-007 signed.** Room = `voice_session`. Mint `room_membership`. Engineer SQL signed; new-room and dest runtime amended. Packet: [`SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md`](./SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md). Numbers 003–006 remapped (planted; files not on `main`). Engineer pastes; no leftover analysis.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 13:42 UTC — **SCP-010 signed.** `initiative.title` — harness clips the founding line (40 chars); you rename. List gets `when` + `q`. Travis does not name on mint. Packet: [`SYSTEMS-CHANGE-PACKET-010-BACKLOG-TITLE.md`](./SYSTEMS-CHANGE-PACKET-010-BACKLOG-TITLE.md).
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -301,3 +301,21 @@ SCP-001 seed field updated.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md`](./SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md)
 
 **Handoff:** Engineer pastes the signed SQL + Drizzle, switches `roomSeats()`, writes the runtime in the packet. No leftover analysis.
+
+---
+
+## 2026-09-03 13:42 UTC — SCP-010 backlog title + catalog query
+
+**Kind:** Field mint + list grain. Engineer named the gap; founder landed 008/009 tables on prod (zero rows). Job-law from the founder.
+
+**Seat:** Systems Analyst. Talk with the founder only.
+
+**Plate read (B1 / B6 — not scenery):** index and ticket header share a **short name** (`Hear queue / New`). That is not an 80-character founding sentence. Founding line still lives in the thread. Relative time on B1 is `created_at` presented. Footer: not the request log.
+
+**Who names:** harness clip on first write (option 2). Rename by you (option 4). Travis does **not** name on mint (option 3 struck). Empty-until-named struck — via-Travis would blank B1. Founding-line-as-title struck (option 1).
+
+**List:** `when` = today/week/all (048 UTC grain). `q` on title. Miss does not mint.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-010-BACKLOG-TITLE.md`](./SYSTEMS-CHANGE-PACKET-010-BACKLOG-TITLE.md)
+
+**Handoff:** Engineer pastes `title` + clip + list `when`/`q` + rename. Founder lands the ALTER on this database. No leftover analysis.

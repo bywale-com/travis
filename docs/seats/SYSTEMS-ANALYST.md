@@ -100,6 +100,17 @@ Do **not** design a reverse-engineered puppet of Cursor desktop chat. Official S
 
 You **read** PM flags and plates as glass that must exist. You do not rewrite the flagship into a generated checklist.
 
+### Plate as modular spec (do not wait for a caption)
+
+Engineer envelopes can lag the glass. **Look at the plate.** Ask: what on this picture is a **staple** (a thing that must be stored so two surfaces can agree), and what is chrome?
+
+- A short name on both the index and the ticket header is a **title field**, not a clip of the founding paragraph.
+- A time word (`2m`, `today`) with `created_at` already on the row is **presentation**, not a new column.
+- A footer that says “not the request log” is a **query boundary**, not a new table.
+- Teaching copy and Mission/Carbon paint are not nodes.
+
+Do not mint from scenery. Do not ignore a repeated catalog label because nobody wrote “add title” in prose. If the same fact must be renamed, listed, and opened, table-first already named it.
+
 ---
 
 ## UI law (locked)
