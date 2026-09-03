@@ -3,6 +3,7 @@
  */
 
 import type { SeatKey } from "@/server/db/schema";
+import { seatShortLabel } from "./seat-mark";
 
 const SEAT_ALIASES: Record<string, SeatKey> = {
   pm: "pm",
@@ -23,12 +24,12 @@ export function seatKeyToLabel(key: SeatKey): string {
   return "Engineer";
 }
 
-/** Plate chips use Eng, not the full table label. */
-export function seatKeyToShort(key: string | null | undefined): string {
-  if (key === "sa") return "SA";
-  if (key === "engineer") return "Eng";
-  if (key === "pm") return "PM";
-  return "Travis";
+/** Plate chips use Eng, not the full table label. Unknown seats use the label. */
+export function seatKeyToShort(
+  key: string | null | undefined,
+  label?: string | null,
+): string {
+  return seatShortLabel(key, label);
 }
 
 function seatFromToken(token: string): SeatKey | null {

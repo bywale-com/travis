@@ -1,5 +1,6 @@
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
+import { jsonRoute } from "@/server/api-error";
 import { db } from "@/server/db/client";
 import { agentBinding, voiceSession } from "@/server/db/schema";
 import { endRoom, sessionJson } from "@/server/room-membership";
@@ -14,6 +15,7 @@ export async function PATCH(
   req: Request,
   ctx: { params: Promise<{ id: string }> },
 ) {
+  return jsonRoute(async () => {
   const { id } = await ctx.params;
   const body = (await req.json()) as PatchBody;
 
@@ -65,5 +67,6 @@ export async function PATCH(
       activeSeatKey: active?.seatKey,
       logSubmode: session.logSubmode === "type" ? "type" : "talk",
     },
+  });
   });
 }

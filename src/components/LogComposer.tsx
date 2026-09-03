@@ -6,12 +6,13 @@ import {
   keepSpeechDraft,
   mergeLiveTranscript,
 } from "@/lib/absorb-text";
-import { seatKeyToShort } from "@/lib/router";
+import { wrapSelection } from "@/lib/composer-format";
 import { resumeSendSounds } from "@/lib/send-sounds";
 import type { SeatKey } from "@/server/db/schema";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
-import { AtSign, Mic, Send } from "lucide-react";
+import { SeatMark } from "@/components/QueueChrome";
+import { AtSign, Bold, Code, Italic, Mic, Send } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -22,7 +23,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
-export type RoomSeat = { seatKey: string; label: string };
+export type RoomSeat = { id?: string; seatKey: string; label: string };
 
 /** Grow with wrap up to 12 lines / 36vh, then scroll inside (005). */
 const COMPOSER_LINE_PX = 21;
@@ -343,6 +344,21 @@ export function LogComposer({
     if (value.endsWith("@")) openMention();
   };
 
+  const applyMark = (mark: "**" | "*" | "`") => {
+    const el = fieldRef.current;
+    const start = el?.selectionStart ?? text.length;
+    const end = el?.selectionEnd ?? text.length;
+    const next = wrapSelection(text, start, end, mark);
+    setText(next.text);
+    lastHeardRef.current = next.text;
+    heldRef.current = next.text;
+    committedRef.current = next.text;
+    window.requestAnimationFrame(() => {
+      el?.focus();
+      el?.setSelectionRange(next.start, next.end);
+    });
+  };
+
   const untagged = seats.filter(
     (seat) => !chips.some((c) => c.seatKey === seat.seatKey),
   );
@@ -365,7 +381,8 @@ export function LogComposer({
               borderRadius: 12,
               boxShadow: "0 8px 24px rgba(44,36,28,0.12)",
               zIndex: 80,
-              overflow: "hidden",
+              overflowY: "auto",
+              maxHeight: 280,
             }}
           >
             {untagged.length === 0 ? (
@@ -399,9 +416,12 @@ export function LogComposer({
                     cursor: "pointer",
                   }}
                 >
-                  <span style={{ color: t.accent, fontWeight: 600, minWidth: 36 }}>
-                    {seatKeyToShort(seat.seatKey)}
-                  </span>
+                  <SeatMark
+                    seatKey={seat.seatKey}
+                    label={seat.label}
+                    t={t}
+                    size={24}
+                  />
                   <span>{seat.label}</span>
                 </button>
               ))
@@ -468,7 +488,7 @@ export function LogComposer({
                 <button
                   key={chip.seatKey}
                   type="button"
-                  aria-label={`Remove @${seatKeyToShort(chip.seatKey)}`}
+                  aria-label={`Remove @${chip.label}`}
                   onClick={() => dropChip(chip.seatKey)}
                   style={{
                     background: t.accentSoft,
@@ -482,7 +502,7 @@ export function LogComposer({
                     cursor: "pointer",
                   }}
                 >
-                  @{seatKeyToShort(chip.seatKey)}
+                  @{chip.label}
                 </button>
               ))}
             </div>
@@ -492,7 +512,7 @@ export function LogComposer({
             value={text}
             disabled={disabled}
             rows={1}
-            placeholder={chips.length ? "Keep writing…" : "Message"}
+            placeholder={chips.length ? "Keep writing…" : "Message the room"}
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={onKeyDown}
             style={{
@@ -535,14 +555,73 @@ export function LogComposer({
           disabled={disabled}
           style={{
             border: "none",
-            background: "transparent",
-            color: t.accent,
-            padding: 4,
+            background: t.accent,
+            color: t.bgPrimary,
+            width: 36,
+            height: 36,
+            borderRadius: "50%",
+            padding: 0,
             display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             cursor: "pointer",
           }}
         >
-          <Send size={18} />
+          <Send size={16} />
+        </button>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          padding: "8px 8px 0",
+        }}
+      >
+        <button
+          type="button"
+          aria-label="Bold"
+          onClick={() => applyMark("**")}
+          disabled={disabled}
+          style={{
+            border: "none",
+            background: "transparent",
+            color: t.textMuted,
+            padding: 2,
+            cursor: "pointer",
+          }}
+        >
+          <Bold size={16} />
+        </button>
+        <button
+          type="button"
+          aria-label="Italic"
+          onClick={() => applyMark("*")}
+          disabled={disabled}
+          style={{
+            border: "none",
+            background: "transparent",
+            color: t.textMuted,
+            padding: 2,
+            cursor: "pointer",
+          }}
+        >
+          <Italic size={16} />
+        </button>
+        <button
+          type="button"
+          aria-label="Code"
+          onClick={() => applyMark("`")}
+          disabled={disabled}
+          style={{
+            border: "none",
+            background: "transparent",
+            color: t.textMuted,
+            padding: 2,
+            cursor: "pointer",
+          }}
+        >
+          <Code size={16} />
         </button>
       </div>
     </SurfaceBoundary>

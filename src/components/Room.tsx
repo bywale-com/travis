@@ -31,11 +31,16 @@ import type { QueueSeatDto } from "@/lib/queue-logic";
 import { QueueChips, QueueLog, SeatMark } from "@/components/QueueChrome";
 import { AgentPostBody } from "@/components/AgentPostBody";
 import { LogComposer, type RoomSeat } from "@/components/LogComposer";
+import { CreateAgent, type CreatedAgent } from "@/components/plates/CreateAgent";
+import { CreateRoom, type CatalogSeat } from "@/components/plates/CreateRoom";
+import { InFlightDoor, type RunningNow } from "@/components/plates/InFlightDoor";
+import { RoomIndex, type RoomRow } from "@/components/plates/RoomIndex";
+import { RosterDoor, type RosterMember } from "@/components/plates/RosterDoor";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
 import { TYPE } from "@/theme/scale";
 import type { SeatKey } from "@/server/db/schema";
-import { Button, Tag } from "antd";
+import { Button } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type Turn = {
@@ -53,6 +58,7 @@ type Turn = {
 
 type Session = {
   id: string;
+  title?: string;
   status: string;
   viewMode: "voice" | "log";
   logSubmode?: "talk" | "type";
@@ -62,6 +68,23 @@ type Session = {
   defaultLabel: string;
   seats?: RoomSeat[];
 };
+
+type PlateFace = "index" | "create" | "create-agent" | "room";
+type Door = null | "roster" | "inflight";
+
+function asRoomSeats(raw: unknown): RoomSeat[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((row) => {
+      const s = row as { id?: string; seatKey?: string | null; label?: string };
+      return {
+        id: typeof s.id === "string" ? s.id : undefined,
+        seatKey: String(s.seatKey ?? ""),
+        label: String(s.label ?? ""),
+      };
+    })
+    .filter((s) => s.seatKey || s.label);
+}
 
 type LogSubmode = "talk" | "type";
 
@@ -205,7 +228,13 @@ function QuietTextButton({
   );
 }
 
-export function Room({ t }: { t: Tokens }) {
+export function Room({
+  t,
+  onCharacter,
+}: {
+  t: Tokens;
+  onCharacter?: () => void;
+}) {
   const [session, setSession] = useState<Session | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("voice");
   const [turns, setTurns] = useState<Turn[]>([]);
@@ -225,6 +254,16 @@ export function Room({ t }: { t: Tokens }) {
   const [logSubmode, setLogSubmode] = useState<LogSubmode>("talk");
   const [roomSeats, setRoomSeats] = useState<RoomSeat[]>([]);
   const [threadPinned, setThreadPinned] = useState(true);
+  const [plate, setPlate] = useState<PlateFace>("index");
+  const [door, setDoor] = useState<Door>(null);
+  const [rooms, setRooms] = useState<RoomRow[]>([]);
+  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
+  const [catalog, setCatalog] = useState<CatalogSeat[]>([]);
+  const [createTitle, setCreateTitle] = useState("");
+  const [chosen, setChosen] = useState<Set<string>>(new Set());
+  const [rosterAdding, setRosterAdding] = useState(false);
+  const [runningNow, setRunningNow] = useState<RunningNow[]>([]);
+  const [agentReturn, setAgentReturn] = useState<"create" | "roster">("create");
 
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const committedRef = useRef("");
@@ -272,6 +311,7 @@ export function Room({ t }: { t: Tokens }) {
     const res = await fetch(`/api/session/${sessionId}/queue`);
     const data = await res.json();
     applyQueue(data.queue);
+    if (Array.isArray(data.running)) setRunningNow(data.running);
   }, [applyQueue]);
 
   const refreshTurns = useCallback(async (sessionId: string) => {
@@ -314,7 +354,9 @@ export function Room({ t }: { t: Tokens }) {
         data.session.logSubmode === "type" ? "type" : "talk";
       setLogSubmode(sub);
       logSubmodeRef.current = sub;
-      if (Array.isArray(data.session.seats)) setRoomSeats(data.session.seats);
+      if (Array.isArray(data.session.seats)) {
+        setRoomSeats(asRoomSeats(data.session.seats));
+      }
     }
   }, []);
 
@@ -339,9 +381,11 @@ export function Room({ t }: { t: Tokens }) {
         const data = (await res.json()) as {
           queue?: { seats?: QueueSeatDto[] };
           drainable?: string[];
+          running?: RunningNow[];
         };
         if (cancelled) return;
         applyQueue(data.queue);
+        if (Array.isArray(data.running)) setRunningNow(data.running);
         void refreshTurns(sid);
         const drainable = Array.isArray(data.drainable) ? data.drainable : [];
         if (!drainable.length || drainingRef.current) return;
@@ -1394,8 +1438,21 @@ export function Room({ t }: { t: Tokens }) {
       const sub: LogSubmode = s.logSubmode === "type" ? "type" : "talk";
       setLogSubmode(sub);
       logSubmodeRef.current = sub;
-      setRoomSeats(s.seats ?? []);
+      setRoomSeats(asRoomSeats(s.seats));
+      setPlate("room");
+      setDoor(null);
       clearDraft();
+      if (s.status === "ended") {
+        setPresence("ended");
+        setSubtitle("");
+        stopRecognition();
+        void stopLive();
+        if (resume) {
+          await refreshTurns(s.id);
+          await refreshQueue(s.id);
+        }
+        return;
+      }
       if (resume) {
         await refreshTurns(s.id);
         await refreshQueue(s.id);
@@ -1431,19 +1488,57 @@ export function Room({ t }: { t: Tokens }) {
     ],
   );
 
-  const openSession = async () => {
+  const loadRooms = useCallback(async () => {
+    const res = await fetch("/api/rooms");
+    const data = await readJson<{ rooms?: RoomRow[]; error?: string }>(res);
+    if (!res.ok) throw new Error(data.error ?? "Could not list rooms");
+    setRooms(Array.isArray(data.rooms) ? data.rooms : []);
+  }, []);
+
+  const loadCatalog = useCallback(async () => {
+    const res = await fetch("/api/bindings");
+    const data = await readJson<{ seats?: CatalogSeat[] }>(res);
+    setCatalog(Array.isArray(data.seats) ? data.seats : []);
+  }, []);
+
+  const teardownLocal = useCallback(() => {
+    stopRecognition();
+    void stopLive();
+    cancelSpeech();
+    setPresence("ended");
+    setSession(null);
+    sessionIdRef.current = null;
+    setSubtitle("");
+    setQueueSeats([]);
+    setRunningNow([]);
+    setDoor(null);
+    clearDraft();
+    releaseSendSounds();
+  }, [clearDraft, stopLive, stopRecognition]);
+
+  const leaveRoom = useCallback(() => {
+    teardownLocal();
+    setPlate("index");
+    void loadRooms().catch((e) => {
+      setError(e instanceof Error ? e.message : String(e));
+    });
+  }, [loadRooms, teardownLocal]);
+
+  const closeRoom = async (id: string) => {
     setError(null);
     setBusy(true);
-    resumeSendSounds();
     try {
-      const res = await fetch("/api/session", { method: "POST" });
-      const data = await readJson<{
-        session?: Session;
-        resumed?: boolean;
-        error?: string;
-      }>(res);
-      if (!res.ok) throw new Error(data.error ?? "Open failed");
-      await attachSession(data.session as Session, Boolean(data.resumed));
+      const res = await fetch(`/api/session/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "ended" }),
+      });
+      const data = await readJson<{ error?: string }>(res);
+      if (!res.ok) throw new Error(data.error ?? "End failed");
+      if (sessionIdRef.current === id) teardownLocal();
+      setPlate("index");
+      setSelectedRoomId(null);
+      await loadRooms();
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -1451,30 +1546,124 @@ export function Room({ t }: { t: Tokens }) {
     }
   };
 
+  const enterRoom = async (id: string) => {
+    setError(null);
+    setBusy(true);
+    resumeSendSounds();
+    try {
+      const res = await fetch(`/api/session?id=${id}`);
+      const data = await readJson<{ session?: Session; error?: string }>(res);
+      if (!res.ok || !data.session) throw new Error(data.error ?? "Enter failed");
+      await attachSession(data.session, true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const createRoom = async () => {
+    setError(null);
+    setBusy(true);
+    resumeSendSounds();
+    try {
+      const res = await fetch("/api/rooms", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: createTitle,
+          bindingIds: [...chosen],
+        }),
+      });
+      const data = await readJson<{ session?: Session; error?: string }>(res);
+      if (!res.ok || !data.session) throw new Error(data.error ?? "Create failed");
+      setCreateTitle("");
+      setChosen(new Set());
+      await attachSession(data.session, false);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const bindingIdFor = (member: RosterMember): string | undefined => {
+    if (member.id) return member.id;
+    return catalog.find((c) => c.seatKey === member.seatKey)?.id;
+  };
+
+  const addRosterMember = async (member: RosterMember) => {
+    const sid = sessionIdRef.current;
+    const bindingId = bindingIdFor(member);
+    if (!sid || !bindingId) return;
+    setError(null);
+    const res = await fetch(`/api/session/${sid}/members`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ bindingId }),
+    });
+    const data = await readJson<{ seats?: RoomSeat[]; error?: string }>(res);
+    if (!res.ok) {
+      setError(data.error ?? "Could not add");
+      return;
+    }
+    if (data.seats) setRoomSeats(asRoomSeats(data.seats));
+    await refreshSession(sid);
+  };
+
+  const removeRosterMember = async (member: RosterMember) => {
+    const sid = sessionIdRef.current;
+    const bindingId = bindingIdFor(member);
+    if (!sid || !bindingId) return;
+    setError(null);
+    const res = await fetch(`/api/session/${sid}/members/${bindingId}`, {
+      method: "DELETE",
+    });
+    const data = await readJson<{ seats?: RoomSeat[]; error?: string }>(res);
+    if (!res.ok) {
+      setError(data.error ?? "Could not remove");
+      return;
+    }
+    if (data.seats) setRoomSeats(asRoomSeats(data.seats));
+    await refreshSession(sid);
+  };
+
+  const onAgentCreated = async (agent: CreatedAgent) => {
+    setCatalog((prev) =>
+      prev.some((c) => c.id === agent.id)
+        ? prev
+        : [...prev, { id: agent.id, seatKey: agent.seatKey, label: agent.label }],
+    );
+    if (agentReturn === "create") {
+      setChosen((prev) => new Set(prev).add(agent.id));
+      setPlate("create");
+      return;
+    }
+    const sid = sessionIdRef.current;
+    if (sid) {
+      await addRosterMember({
+        id: agent.id,
+        seatKey: agent.seatKey,
+        label: agent.label,
+      });
+    }
+    setPlate("room");
+    setDoor("roster");
+  };
+
   useEffect(() => {
     let cancelled = false;
     void (async () => {
       try {
-        const res = await fetch("/api/session");
-        const data = await readJson<{ session?: Session; error?: string }>(res);
-        if (cancelled) return;
-        if (!res.ok || data.error) throw new Error(data.error ?? "Resume failed");
-        if (!data.session) return;
-        setBusy(true);
-        await attachSession(data.session, true);
+        await Promise.all([loadRooms(), loadCatalog()]);
       } catch (e) {
-        // Landing is the right place to stand, but say why we could not resume.
         if (!cancelled) setError(e instanceof Error ? e.message : String(e));
-      } finally {
-        if (!cancelled) setBusy(false);
       }
     })();
     return () => {
       cancelled = true;
     };
-    // Boot once per page load — do not re-bind when listen callbacks churn.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loadCatalog, loadRooms]);
 
   const togglePause = async () => {
     if (!session || presence === "ended" || presence === "speaking") return;
@@ -1566,32 +1755,13 @@ export function Room({ t }: { t: Tokens }) {
     }
   };
 
-  const endSession = async () => {
-    if (!session) return;
-    stopRecognition();
-    void stopLive();
-    cancelSpeech();
-    await fetch(`/api/session/${session.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: "ended" }),
-    });
-    setPresence("ended");
-    setSession(null);
-    sessionIdRef.current = null;
-    setSubtitle("");
-    setQueueSeats([]);
-    clearDraft();
-    releaseSendSounds();
-  };
-
   const activeThoughts = turns.filter(
     (t) =>
       t.kind === "agent_thought" &&
       (t.thoughtStatus === "streaming" || liveThoughts[t.id]),
   );
 
-  const viaShort = seatKeyToShort(session?.activeSeatKey);
+  const viaShort = seatKeyToShort(session?.activeSeatKey, session?.activeLabel);
   const listenLine =
     presence === "paused"
       ? "Paused — tap to resume"
@@ -1624,43 +1794,79 @@ export function Room({ t }: { t: Tokens }) {
     margin: "0 auto",
   };
 
-  if (!session) {
+  if (plate === "create") {
     return (
-      <div
-        style={{ ...shellStyle, alignItems: "center", justifyContent: "center", padding: 24 }}
-        onPointerDown={() => resumeSendSounds()}
-      >
-        <h1
-          style={{
-            fontSize: TYPE.display,
-            fontWeight: 800,
-            fontFamily: "var(--travis-logo)",
-            letterSpacing: "0.14em",
-            margin: 0,
-            color: t.textPrimary,
-          }}
-        >
-          TRAVIS
-        </h1>
-        <p style={{ color: t.textSecondary, marginTop: 8, textAlign: "center", maxWidth: 280 }}>
-          One room — talk with Travis. Agents post in the log; Travis reads.
-        </p>
-        <Button
-          type="primary"
-          disabled={busy}
-          onClick={() => void openSession()}
-          style={{
-            marginTop: 28,
-            height: 48,
-            padding: "0 28px",
-            borderRadius: 999,
-            fontSize: 16,
-          }}
-        >
-          {busy ? "Resuming…" : "Open session"}
-        </Button>
-        {error && <p style={{ color: t.dangerQuiet, marginTop: 16 }}>{error}</p>}
-      </div>
+      <CreateRoom
+        t={t}
+        title={createTitle}
+        catalog={catalog}
+        chosen={chosen}
+        busy={busy}
+        error={error}
+        onTitle={setCreateTitle}
+        onToggle={(id) => {
+          setChosen((prev) => {
+            const next = new Set(prev);
+            if (next.has(id)) next.delete(id);
+            else next.add(id);
+            return next;
+          });
+        }}
+        onCreate={() => void createRoom()}
+        onBack={() => {
+          setPlate("index");
+          setError(null);
+        }}
+        onCreateAgent={() => {
+          setAgentReturn("create");
+          setPlate("create-agent");
+        }}
+      />
+    );
+  }
+
+  if (plate === "create-agent") {
+    return (
+      <CreateAgent
+        t={t}
+        backLabel={
+          agentReturn === "roster"
+            ? session?.title?.trim() || "Room"
+            : "New room"
+        }
+        onBack={() => {
+          setPlate(agentReturn === "roster" && session ? "room" : "create");
+          if (agentReturn === "roster") setDoor("roster");
+        }}
+        onCreated={(agent) => void onAgentCreated(agent)}
+      />
+    );
+  }
+
+  if (!session || plate === "index") {
+    return (
+      <RoomIndex
+        t={t}
+        rooms={rooms}
+        selectedId={selectedRoomId}
+        busy={busy}
+        error={error}
+        onSelect={setSelectedRoomId}
+        onEnter={(id) => void enterRoom(id)}
+        onNew={() => {
+          setError(null);
+          setPlate("create");
+        }}
+        onLeave={() => {
+          if (session) leaveRoom();
+          else setSelectedRoomId(null);
+        }}
+        onEnd={() => {
+          const id = selectedRoomId;
+          if (id) void closeRoom(id);
+        }}
+        onCharacter={() => onCharacter?.()}
+      />
     );
   }
 
@@ -1682,21 +1888,46 @@ export function Room({ t }: { t: Tokens }) {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            gap: 12,
           }}
         >
-          <span
+          <button
+            type="button"
+            onClick={() => setDoor("roster")}
             style={{
-              fontFamily: "var(--travis-serif), Georgia, serif",
-              fontSize: 28,
-              fontWeight: 400,
-              letterSpacing: "-0.02em",
+              border: `1px solid ${t.border}`,
+              background: t.bgElevated,
+              color: t.textPrimary,
+              borderRadius: 999,
+              padding: "6px 12px",
+              fontSize: 13,
+              fontWeight: 600,
+              cursor: "pointer",
+              maxWidth: "46%",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
             }}
           >
-            Travis
+            {session.title?.trim() || "Untitled"}
+          </button>
+          <span style={{ color: t.textMuted, fontSize: TYPE.meta }}>
+            via {session.activeLabel || viaShort}
           </span>
-          <Button type="link" onClick={() => void endSession()} style={{ padding: 0 }}>
-            End session
-          </Button>
+          <button
+            type="button"
+            onClick={() => leaveRoom()}
+            style={{
+              border: "none",
+              background: "transparent",
+              color: t.textSecondary,
+              fontSize: 13,
+              padding: 0,
+              cursor: "pointer",
+            }}
+          >
+            Leave
+          </button>
         </header>
         <div
           style={{
@@ -1708,29 +1939,6 @@ export function Room({ t }: { t: Tokens }) {
             color: t.textSecondary,
           }}
         >
-          <Tag
-            style={{
-              margin: 0,
-              padding: "4px 12px",
-              background: t.bgElevated,
-              borderColor: t.border,
-              color: t.textSecondary,
-            }}
-          >
-            <span style={{ color: t.accent, marginRight: 6 }}>●</span>
-            Room · via {viaShort}
-          </Tag>
-          <Tag
-            style={{
-              margin: 0,
-              padding: "4px 12px",
-              background: t.accentSoft,
-              borderColor: "transparent",
-              color: t.accent,
-            }}
-          >
-            {viaShort} · live
-          </Tag>
           {viewMode === "log" && (
             <SurfaceBoundary
               id="log-submode-toggle"
@@ -1777,33 +1985,65 @@ export function Room({ t }: { t: Tokens }) {
                 minHeight: 52,
               }}
             >
-              {(["pm", "sa", "engineer"] as const).map((key, i) => {
-                const thought = activeThoughts.find((t) => t.seatKey === key);
+              {roomSeats.slice(0, 6).map((seat, i) => {
+                const key = seat.seatKey || seat.label;
+                const thought = activeThoughts.find((t) => t.seatKey === seat.seatKey);
                 const streaming = thought && liveThoughts[thought.id];
-                const active = thought?.thoughtStatus === "streaming" || !!streaming;
+                const working = runningNow.some((r) => r.seatKey === seat.seatKey);
+                const active =
+                  thought?.thoughtStatus === "streaming" || !!streaming || working;
                 const expanded = thought && expandedThoughtId === thought.id;
                 return (
                   <button
-                    key={key}
+                    key={`${seat.id ?? key}-${i}`}
                     type="button"
-                    onClick={() =>
-                      thought && setExpandedThoughtId(expanded ? null : thought.id)
-                    }
+                    onClick={() => {
+                      if (thought) {
+                        setExpandedThoughtId(expanded ? null : thought.id);
+                        return;
+                      }
+                      setDoor("roster");
+                    }}
                     style={{
                       border: "none",
                       background: "transparent",
                       padding: 0,
                       marginLeft: i > 0 ? -10 : 0,
-                      zIndex: 3 - i,
-                      cursor: thought ? "pointer" : "default",
-                      opacity: thought || session.activeSeatKey === key ? 1 : 0.45,
+                      zIndex: 6 - i,
+                      cursor: "pointer",
+                      opacity:
+                        thought || working || session.activeSeatKey === seat.seatKey
+                          ? 1
+                          : 0.45,
                     }}
-                    aria-label={`${seatKeyToShort(key)} thought`}
+                    aria-label={`${seatKeyToShort(seat.seatKey, seat.label)} thought`}
                   >
-                    <SeatMark seatKey={key} label={roomSeats.find((s) => s.seatKey === key)?.label} t={t} size={38} glow={!!active} />
+                    <SeatMark
+                      seatKey={key}
+                      label={seat.label}
+                      t={t}
+                      size={38}
+                      glow={!!active}
+                    />
                   </button>
                 );
               })}
+              {roomSeats.length > 6 ? (
+                <button
+                  type="button"
+                  onClick={() => setDoor("roster")}
+                  style={{
+                    border: "none",
+                    background: "transparent",
+                    color: t.textMuted,
+                    fontSize: TYPE.meta,
+                    marginLeft: 8,
+                    cursor: "pointer",
+                  }}
+                >
+                  +{roomSeats.length - 6}
+                </button>
+              ) : null}
             </div>
             {expandedThoughtId && (
               <div
@@ -1932,18 +2172,7 @@ export function Room({ t }: { t: Tokens }) {
             <QueueChips
               t={t}
               seats={queueSeats}
-              onSendHead={(seatKey) =>
-                void postQueueJson(`/api/session/${session.id}/queue/head`, {
-                  seatKey,
-                  action: "send",
-                })
-              }
-              onDeleteHead={(seatKey) =>
-                void postQueueJson(`/api/session/${session.id}/queue/head`, {
-                  seatKey,
-                  action: "delete",
-                })
-              }
+              onOpen={() => setDoor("inflight")}
             />
           )}
 
@@ -2318,6 +2547,55 @@ export function Room({ t }: { t: Tokens }) {
           {error}
         </p>
       )}
+
+      {door === "roster" ? (
+        <RosterDoor
+          t={t}
+          roomTitle={session.title ?? ""}
+          members={roomSeats}
+          catalog={catalog}
+          adding={rosterAdding}
+          onClose={() => {
+            setDoor(null);
+            setRosterAdding(false);
+          }}
+          onRemove={(m) => void removeRosterMember(m)}
+          onAdd={(m) => void addRosterMember(m)}
+          onCreateAgent={() => {
+            setAgentReturn("roster");
+            setDoor(null);
+            setPlate("create-agent");
+          }}
+          onToggleAdd={() => setRosterAdding((v) => !v)}
+          onEnd={() => void closeRoom(session.id)}
+        />
+      ) : null}
+
+      {door === "inflight" ? (
+        <InFlightDoor
+          t={t}
+          running={runningNow}
+          waiting={queueSeats}
+          onClose={() => setDoor(null)}
+          onSendItem={(id) =>
+            void postQueueJson(`/api/session/${session.id}/queue/${id}`, {
+              action: "send",
+            })
+          }
+          onDeleteItem={(id) =>
+            void postQueueJson(`/api/session/${session.id}/queue/${id}`, {
+              action: "delete",
+            })
+          }
+          onSendNext={() => {
+            const head = queueSeats[0]?.items[0];
+            if (!head) return;
+            void postQueueJson(`/api/session/${session.id}/queue/${head.id}`, {
+              action: "send",
+            });
+          }}
+        />
+      ) : null}
     </div>
   );
 }

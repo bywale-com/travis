@@ -61,7 +61,10 @@ function IconBtn({
     <Button
       type="text"
       aria-label={label}
-      onClick={onClick}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
       style={{ padding: 4, height: 28, width: 28 }}
     >
       {children}
@@ -73,13 +76,15 @@ function IconBtn({
 export function QueueChips({
   t,
   seats,
+  onOpen,
   onSendHead,
   onDeleteHead,
 }: {
   t: Tokens;
   seats: QueueSeatDto[];
-  onSendHead: (seatKey: string) => void;
-  onDeleteHead: (seatKey: string) => void;
+  onOpen?: () => void;
+  onSendHead?: (seatKey: string) => void;
+  onDeleteHead?: (seatKey: string) => void;
 }) {
   if (!seats.length) return null;
   return (
@@ -95,6 +100,16 @@ export function QueueChips({
         {seats.map((seat) => (
           <div
             key={seat.seatKey}
+            role={onOpen ? "button" : undefined}
+            tabIndex={onOpen ? 0 : undefined}
+            onClick={onOpen}
+            onKeyDown={(e) => {
+              if (!onOpen) return;
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onOpen();
+              }
+            }}
             style={{
               display: "flex",
               alignItems: "center",
@@ -102,28 +117,32 @@ export function QueueChips({
               padding: "10px 12px 10px 14px",
               borderRadius: 16,
               background: t.bgElevated,
-              border: `1px solid ${t.border}`,
-              boxShadow: "0 6px 20px rgba(44,36,28,0.06)",
-              color: t.textPrimary,
+              border: `1px solid ${t.accent}`,
+              color: t.accent,
               fontSize: 14,
+              cursor: onOpen ? "pointer" : "default",
             }}
           >
             <SeatMark seatKey={seat.seatKey} label={seat.label} t={t} size={28} />
             <span style={{ flex: 1, minWidth: 0 }}>
               {waitingChipLabel(seat.items.length, seat.seatKey, seat.label)}
             </span>
-            <IconBtn
-              label={`Force send ${seat.short}`}
-              onClick={() => onSendHead(seat.seatKey)}
-            >
-              <Send size={16} color={t.accent} />
-            </IconBtn>
-            <IconBtn
-              label={`Delete waiting ${seat.short}`}
-              onClick={() => onDeleteHead(seat.seatKey)}
-            >
-              <Trash2 size={16} color={t.textMuted} />
-            </IconBtn>
+            {onSendHead ? (
+              <IconBtn
+                label={`Force send ${seat.short}`}
+                onClick={() => onSendHead(seat.seatKey)}
+              >
+                <Send size={16} color={t.accent} />
+              </IconBtn>
+            ) : null}
+            {onDeleteHead ? (
+              <IconBtn
+                label={`Delete waiting ${seat.short}`}
+                onClick={() => onDeleteHead(seat.seatKey)}
+              >
+                <Trash2 size={16} color={t.textMuted} />
+              </IconBtn>
+            ) : null}
           </div>
         ))}
       </div>

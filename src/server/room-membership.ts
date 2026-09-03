@@ -73,6 +73,8 @@ export async function ensureMembershipStore(): Promise<void> {
       ON travis.room_membership (binding_id)
       WHERE left_at IS NULL
   `);
+  // Legacy rooms only — a session that already has members keeps the
+  // chosen cast. Do not refill the catalog on every GET.
   await db.execute(sql`
     INSERT INTO travis.room_membership (
       session_id,
@@ -97,7 +99,6 @@ export async function ensureMembershipStore(): Promise<void> {
         SELECT 1
         FROM travis.room_membership m
         WHERE m.session_id = s.id
-          AND m.binding_id = b.id
       )
   `);
 }
@@ -130,9 +131,13 @@ export async function openMembers(sessionId: string): Promise<OpenMember[]> {
 
 export async function roomSeats(
   sessionId: string,
-): Promise<Array<{ seatKey: string | null; label: string }>> {
+): Promise<Array<{ id: string; seatKey: string | null; label: string }>> {
   const members = await openMembers(sessionId);
-  return members.map((m) => ({ seatKey: m.seatKey, label: m.label }));
+  return members.map((m) => ({
+    id: m.binding.id,
+    seatKey: m.seatKey,
+    label: m.label,
+  }));
 }
 
 export async function isOpenMember(
@@ -414,7 +419,7 @@ export async function listRoomsForIp(ip: string): Promise<
     status: string;
     createdAt: Date;
     endedAt: Date | null;
-    members: string[];
+    members: Array<{ seatKey: string | null; label: string }>;
   }>
 > {
   const sessions = await db
@@ -432,7 +437,7 @@ export async function listRoomsForIp(ip: string): Promise<
       status: s.status,
       createdAt: s.createdAt,
       endedAt: s.endedAt,
-      members: members.map((m) => m.label),
+      members: members.map((m) => ({ seatKey: m.seatKey, label: m.label })),
     });
   }
   return out;
