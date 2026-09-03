@@ -6,6 +6,7 @@ export type RoomListSession = {
   status: string;
   createdAt: Date;
   endedAt: Date | null;
+  lastAt?: Date;
 };
 
 export type RoomListMember = {
@@ -30,6 +31,20 @@ export function packRoomRows(
     status: s.status,
     createdAt: s.createdAt,
     endedAt: s.endedAt,
+    lastAt: s.lastAt ?? s.createdAt,
     members: map.get(s.id) ?? [],
   }));
+}
+
+/** Newest conversation first. Empty rooms fall back to created. */
+export function orderRoomsByLastAt<T extends { id: string; createdAt: Date }>(
+  sessions: T[],
+  lastAtById: Map<string, Date>,
+): Array<T & { lastAt: Date }> {
+  return sessions
+    .map((s) => ({
+      ...s,
+      lastAt: lastAtById.get(s.id) ?? s.createdAt,
+    }))
+    .sort((a, b) => b.lastAt.getTime() - a.lastAt.getTime());
 }
