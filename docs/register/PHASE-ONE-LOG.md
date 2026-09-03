@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 02:35 UTC — **Hear queue (considering).** Seat posts don’t steal the ear. Notify + rundown gist. Not a packet.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 03:00 UTC — **Verified sight initiative.** 042 stays. Confirm Engineer via receipt/feed, not a Travis checkout.
 
 **How we maintain this log**
 
@@ -1286,4 +1286,18 @@ Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tighten
 **Ruled (this stamp — considering):** Land **quiet**. Notify beat + `Eng ready` chip. Hear-queue sheet. **Hear / Next / Skip.** Next = oldest ready, or call a name. Rundown **gist** by default; verbatim on request; full post always in the log. No Summarize button. Seat TTS never overlaps Live. Stop/wait/say-again stay facilitator of the read (14:56).
 
 **Ask:** notify beat every time, or chip-only when Live is down? FIFO Next? Lock after SA?
+
+---
+
+## 2026-09-03 03:00 UTC — Verified sight: confirm Engineer (founder)
+
+**Kind:** Type A initiative. **Not a packet.** Does not unwind 042.
+
+**Founder (preserved):** Travis cannot access the repo, diffs, branches, tests, or CI, and that makes it hard to confirm what the Engineer actually did. Capture as an initiative/problem statement and propose a path — e.g. visibility permissions, a read-only artifact feed, or a workflow that summarizes verified changes back to Travis. Coordinate with SA/Engineer as needed.
+
+**Landed:** [`VERIFY-SIGHT-INITIATIVE.md`](VERIFY-SIGHT-INITIATIVE.md).
+
+**Ruled (this stamp):** The hole is **confirm through Travis**, not “let Travis review.” 042 stays: no fact → refuse. Path: **A** receipt in the room (claimed vs confirmed) → **B** read-only PR/CI feed for the room’s repo → **C** bounded excerpt later. No Travis checkout. No orb badge. SA names ports; Engineer does not add `git`. Pastes for both seats are in the initiative. Founder tags them.
+
+**Ask:** tag SA for inventory? Wave A as convention-only if SA says no store?
 
