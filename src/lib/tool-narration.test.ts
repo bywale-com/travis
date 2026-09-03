@@ -48,6 +48,8 @@ test("instant lookups stay silent", () => {
   assert.equal(narrateToolCall("read_os", { path: "/protocols/pm.md" }), null);
   assert.equal(narrateToolCall("write_os", { path: "/protocols/pm.md" }), null);
   assert.equal(narrateToolCall("read_initiative", { id: "x" }), null);
+  assert.equal(narrateToolCall("list_backlog", { view: "in_motion" }), null);
+  assert.equal(narrateToolCall("file_plan", { steps: [] }), null);
   assert.equal(narrateToolCall("read_seat_reply", { seat: "sa" }), null);
 });
 

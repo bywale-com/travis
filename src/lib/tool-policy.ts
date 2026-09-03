@@ -47,6 +47,8 @@ export const TOOL_POLICY: Record<string, ToolPolicy> = {
   write_os: { cls: "write" },
   list_initiatives: { cls: "read" },
   read_initiative: { cls: "read" },
+  list_backlog: { cls: "read" },
+  file_plan: { cls: "write" },
   mark_initiative_done: { cls: "write" },
   rename_initiative: { cls: "write" },
   rename_room: { cls: "write" },

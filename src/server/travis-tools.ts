@@ -60,6 +60,14 @@ import {
   readOs,
   writeOsAsTravis,
 } from "@/server/os-house";
+import {
+  MotionError,
+  filePlan,
+  formatBacklogToolText,
+  formatFilePlanResult,
+  listBacklog,
+} from "@/server/motion";
+import { parseBacklogView } from "@/lib/motion";
 
 export const TRAVIS_TOOL_DECLS = [
   {
@@ -243,6 +251,40 @@ export const TRAVIS_TOOL_DECLS = [
         body: { type: "string" },
       },
       required: ["path", "body"],
+    },
+  },
+  {
+    name: "file_plan",
+    description:
+      "File an ordered sequence of your own tools as a Travis process and stay with the founder. The runner advances the steps after you return. Use this when several of your tools should run in a row (list then rename, two writes). Each step is one allowlisted tool plus frozen args. Cannot include send_to_seat, dispatch_to_seat, barge_or_drop, end_session, set_view, or file_plan. Title empty clips the latest user line.",
+    parameters: {
+      type: "object",
+      properties: {
+        title: { type: "string" },
+        steps: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              tool: { type: "string" },
+              args: { type: "object" },
+            },
+            required: ["tool"],
+          },
+        },
+      },
+      required: ["steps"],
+    },
+  },
+  {
+    name: "list_backlog",
+    description:
+      "Glance the backlog pile: Travis processes and tickets. view=all is both. view=in_motion is only processes still waiting, running, or failed. view=initiatives is only tickets. Use this when they ask how a plan is coming. Do not invent progress.",
+    parameters: {
+      type: "object",
+      properties: {
+        view: { type: "string", enum: ["all", "in_motion", "initiatives"] },
+      },
     },
   },
   {
@@ -626,6 +668,25 @@ export async function runTravisTool(params: {
     }
   }
 
+  if (name === "file_plan") {
+    try {
+      const filed = await filePlan(sessionId, {
+        title: typeof args.title === "string" ? args.title : "",
+        steps: args.steps,
+      });
+      return { ok: true, text: formatFilePlanResult(filed) };
+    } catch (err) {
+      if (err instanceof MotionError) return { ok: false, text: err.message };
+      throw err;
+    }
+  }
+
+  if (name === "list_backlog") {
+    const view = parseBacklogView(args.view);
+    const pile = await listBacklog(sessionId, { view, status: "all" });
+    return { ok: true, text: formatBacklogToolText(view, pile) };
+  }
+
   if (name === "end_session") {
     const session = await endRoom(sessionId);
     if (!session) return { ok: false, text: "Session not found." };
@@ -643,7 +704,9 @@ You own a house that is not this room and not a work repo: list_os, read_os, wri
 
 You are shown a short room-state block with recent turns and what is running. Treat it as already true — do not ask the founder to repeat something that is in it. Seat replies appear there only as receipts; call read_seat_reply when you need what a seat actually said. The window is not the whole room. When they ask what was requested, what is in motion, or what you already routed to a seat, call search_room. That log has UTC timestamps and stays in this room. “Requests today” → when today. “Last 10” → limit 10. “Everyone this week” → when week, no seat. Do not invent a list — call the tool.
 
-The backlog is separate. search_room is every line. Initiatives are only what you passed on, or what they promoted with Hold. list_initiatives / read_initiative / rename_initiative / mark_initiative_done for that pipe. “This week” → list_initiatives when week. “The artifact one” → list_initiatives q. A miss is an empty list — do not invent a ticket. You do not name a ticket when you mint it. rename_initiative only when they ask to rename. A seat finishing does not mark it done — you or they do.
+The backlog is separate. search_room is every line. Initiatives are only what you passed on, or what they promoted with Hold. list_initiatives / read_initiative / rename_initiative / mark_initiative_done for that pipe. “This week” → list_initiatives when week. “The artifact one” → list_initiatives q. A miss is an empty list — do not invent a ticket. You do not name a ticket when you mint it. rename_initiative only when they ask to rename. A seat finishing does not mark it done — you or they do. list_initiatives and read_initiative print each ticket's id — use that id on rename_initiative; do not guess.
+
+The turn is not the work. Several of your own tools in a row — list then rename, two writes, a glance then a write — file them with file_plan and stay with the founder. send_to_seat is one blocking hand, not a batch and not a plan step. Glance / “how is that coming?” → list_backlog. Do not invent progress. A filed plan keeps running after you have already answered.
 
 rename_room names this room. Only when they ask. Do not invent a name for an untitled room. You cannot list or rename other rooms.
 

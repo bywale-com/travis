@@ -20,6 +20,7 @@ import {
 import { harvestTurnArtifacts } from "@/server/artifacts";
 import { db } from "@/server/db/client";
 import { ensureInitiativeStore } from "@/server/initiative";
+import { runMotionRunner } from "@/server/motion";
 import { isOpenMember, requireOpenMember } from "@/server/room-membership";
 import {
   agentBinding,
@@ -631,6 +632,7 @@ export async function drainHead(
       if (!result.ownedTerminal) return;
     }
   });
+  await runMotionRunner(sessionId);
 }
 
 /**
@@ -724,6 +726,7 @@ export async function drainReadySeats(params: {
     if (probe.status !== "idle") continue;
     await drainHead(params.sessionId, binding, params.send);
   }
+  await runMotionRunner(params.sessionId);
 }
 
 export async function sendOrEnqueue(params: {

@@ -28,7 +28,7 @@ test("no tool actually grants a view of the code", () => {
   for (const forbidden of ["read_file", "read_diff", "run_tests", "read_ci"]) {
     assert.equal(names.includes(forbidden), false);
   }
-  assert.equal(names.length, 18);
+  assert.equal(names.length, 20);
   assert.equal(names.includes("search_room"), true);
   assert.equal(names.includes("list_os"), true);
   assert.equal(names.includes("read_os"), true);
@@ -38,6 +38,8 @@ test("no tool actually grants a view of the code", () => {
   assert.equal(names.includes("rename_initiative"), true);
   assert.equal(names.includes("rename_room"), true);
   assert.equal(names.includes("mark_initiative_done"), true);
+  assert.equal(names.includes("file_plan"), true);
+  assert.equal(names.includes("list_backlog"), true);
 });
 
 test("Travis is told he owns the house and that reading a protocol is not unfolding a repo", () => {
@@ -45,4 +47,11 @@ test("Travis is told he owns the house and that reading a protocol is not unfold
   assert.match(TRAVIS_SYSTEM, /read_os/);
   assert.match(TRAVIS_SYSTEM, /write_os/);
   assert.match(TRAVIS_SYSTEM, /Reading a protocol is not unfolding it into a repo/);
+});
+
+test("Travis is told the turn is not the work", () => {
+  assert.match(TRAVIS_SYSTEM, /file_plan/);
+  assert.match(TRAVIS_SYSTEM, /list_backlog/);
+  assert.match(TRAVIS_SYSTEM, /The turn is not the work/);
+  assert.match(TRAVIS_SYSTEM, /Do not invent progress/);
 });

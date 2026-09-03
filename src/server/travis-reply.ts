@@ -1,4 +1,5 @@
 import { generateTravisText, travisIsWired } from "@/server/travis-openai";
+import { runMotionRunner } from "@/server/motion";
 import {
   insertAgentPostTurn,
   insertStatusTurn,
@@ -71,6 +72,7 @@ export async function pipeTravisText(params: {
     "travis",
     userTurn.id,
   );
+  await runMotionRunner(sessionId);
   send("done", {
     matched: true,
     mode: "real",

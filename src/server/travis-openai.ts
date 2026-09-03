@@ -17,6 +17,7 @@ import {
   runTravisTool,
 } from "@/server/travis-tools";
 import { roomContextFor } from "@/server/room-read";
+import { runMotionRunner } from "@/server/motion";
 
 export { TRAVIS_LIVE_MODEL, TRAVIS_TEXT_MODEL };
 
@@ -93,7 +94,10 @@ export async function generateTravisText(params: {
   prompt: string;
 }): Promise<string> {
   const key = openaiKey();
-  if (!key) return "";
+  if (!key) {
+    await runMotionRunner(params.sessionId);
+    return "";
+  }
   const tools = toRealtimeTools(TRAVIS_TOOL_DECLS);
   // Talk has no conversation of its own: every message is a first message.
   // The window is the only thing standing between it and confabulation. It
@@ -107,50 +111,56 @@ export async function generateTravisText(params: {
     reasoning: { effort: "low" },
   };
 
-  for (let i = 0; i < 6; i++) {
-    const res = await openaiFetch("/v1/responses", body, {
-      sessionId: params.sessionId,
-    });
-    const data = (await res.json().catch(() => ({}))) as ResponsesBody;
-    if (!res.ok) {
-      throw new Error(openaiErrorMessage(data, res.status));
-    }
-    const calls = (data.output ?? []).filter(
-      (x) => x.type === "function_call" && x.name && x.call_id,
-    );
-    if (!calls.length) return responsesText(data);
-
-    const outputs = [];
-    for (const call of calls) {
-      let args: Record<string, unknown> = {};
-      try {
-        const parsed = JSON.parse(call.arguments || "{}") as unknown;
-        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
-          args = parsed as Record<string, unknown>;
-        }
-      } catch {
-        args = {};
-      }
-      const result = await runTravisTool({
+  try {
+    for (let i = 0; i < 6; i++) {
+      const res = await openaiFetch("/v1/responses", body, {
         sessionId: params.sessionId,
-        name: String(call.name),
-        args,
       });
-      outputs.push({
-        type: "function_call_output",
-        call_id: call.call_id,
-        output: result.text,
-      });
+      const data = (await res.json().catch(() => ({}))) as ResponsesBody;
+      if (!res.ok) {
+        throw new Error(openaiErrorMessage(data, res.status));
+      }
+      const calls = (data.output ?? []).filter(
+        (x) => x.type === "function_call" && x.name && x.call_id,
+      );
+      if (!calls.length) {
+        return responsesText(data);
+      }
+
+      const outputs = [];
+      for (const call of calls) {
+        let args: Record<string, unknown> = {};
+        try {
+          const parsed = JSON.parse(call.arguments || "{}") as unknown;
+          if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+            args = parsed as Record<string, unknown>;
+          }
+        } catch {
+          args = {};
+        }
+        const result = await runTravisTool({
+          sessionId: params.sessionId,
+          name: String(call.name),
+          args,
+        });
+        outputs.push({
+          type: "function_call_output",
+          call_id: call.call_id,
+          output: result.text,
+        });
+      }
+      body = {
+        model: TRAVIS_TEXT_MODEL,
+        previous_response_id: data.id,
+        input: outputs,
+        tools,
+      };
     }
-    body = {
-      model: TRAVIS_TEXT_MODEL,
-      previous_response_id: data.id,
-      input: outputs,
-      tools,
-    };
+    // Hotfix 040 — this used to return "", which the reply path rendered as a
+    // bare "…". A silent give-up after real work started is the worst answer
+    // available; say what happened.
+    return "I ran out of tool steps on that one, so I stopped there. Anything I already started is still running — ask me what is in flight.";
+  } finally {
+    await runMotionRunner(params.sessionId);
   }
-  // Hotfix 040 — this used to return "", which the reply path rendered as a
-  // bare "…". A silent give-up after real work started is the worst answer
-  // available; say what happened.
-  return "I ran out of tool steps on that one, so I stopped there. Anything I already started is still running — ask me what is in flight.";
 }

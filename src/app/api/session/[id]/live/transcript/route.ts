@@ -15,6 +15,7 @@ import { collapseSpeechStutter } from "@/lib/absorb-text";
 import { openBindingForSeat } from "@/server/room-membership";
 import { AuthError } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
+import { runMotionRunner } from "@/server/motion";
 
 type Body = {
   role?: "user" | "travis";
@@ -59,6 +60,7 @@ export async function POST(
 
   if (body.role === "travis") {
     const turn = await absorbLiveTravisPost(sessionId, text);
+    await runMotionRunner(sessionId);
     return NextResponse.json({ ok: true, turn });
   }
 
@@ -87,6 +89,7 @@ export async function POST(
       ? ""
       : remainder.trim();
     if (prompt && binding) {
+      await runMotionRunner(sessionId);
       const encoder = new TextEncoder();
       const stream = new ReadableStream({
         async start(controller) {
@@ -112,6 +115,7 @@ export async function POST(
       });
       return new Response(stream, { headers: sseHeaders() });
     }
+    await runMotionRunner(sessionId);
     return NextResponse.json({
       ok: true,
       turn: userTurn,
@@ -120,5 +124,6 @@ export async function POST(
     });
   }
 
+  await runMotionRunner(sessionId);
   return NextResponse.json({ ok: true, turn: userTurn });
 }

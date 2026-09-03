@@ -1,5 +1,5 @@
 /**
- * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership + SCP-008 backlog + SCP-009 artifacts + SCP-010 title + SCP-012 OS house.
+ * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership + SCP-008 backlog + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion.
  */
 import { config } from "dotenv";
 import postgres from "postgres";
@@ -414,7 +414,45 @@ async function main() {
     ON CONFLICT (path) DO NOTHING
   `;
 
-  console.log("travis schema + SCP-009 artifacts + SCP-010 title + SCP-012 OS house ready");
+  await sql`
+    CREATE TABLE IF NOT EXISTS travis.motion (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      session_id uuid NOT NULL REFERENCES travis.voice_session(id),
+      title text NOT NULL,
+      status text NOT NULL,
+      founding_turn_id uuid REFERENCES travis.voice_turn(id),
+      created_at timestamptz NOT NULL DEFAULT now(),
+      updated_at timestamptz NOT NULL DEFAULT now(),
+      done_at timestamptz,
+      CONSTRAINT motion_status_chk
+        CHECK (status IN ('waiting', 'running', 'done', 'failed'))
+    )
+  `;
+
+  await sql`
+    CREATE INDEX IF NOT EXISTS motion_open_by_session
+      ON travis.motion (session_id)
+      WHERE status IN ('waiting', 'running', 'failed')
+  `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS travis.motion_step (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      motion_id uuid NOT NULL REFERENCES travis.motion(id),
+      seq int NOT NULL,
+      tool text NOT NULL,
+      args text NOT NULL,
+      status text NOT NULL,
+      result_text text NOT NULL DEFAULT '',
+      started_at timestamptz,
+      done_at timestamptz,
+      CONSTRAINT motion_step_status_chk
+        CHECK (status IN ('pending', 'running', 'done', 'failed')),
+      CONSTRAINT motion_step_seq_uniq UNIQUE (motion_id, seq)
+    )
+  `;
+
+  console.log("travis schema + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion ready");
   await sql.end();
 }
 
