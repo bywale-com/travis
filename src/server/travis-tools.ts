@@ -47,6 +47,7 @@ import {
   listInitiatives,
   markInitiativeDone,
   readInitiative,
+  renameInitiative,
   stampLatestPassOn,
 } from "@/server/initiative";
 import type { InitiativeStatus } from "@/server/db/schema";
@@ -119,11 +120,13 @@ export const TRAVIS_TOOL_DECLS = [
   {
     name: "list_initiatives",
     description:
-      "List this room's backlog — initiatives you are orchestrating, not every request. Default is open. Pass status done or all to see closed ones.",
+      "List this room's backlog — initiatives you are orchestrating, not every request. Default is open. Pass status done or all to see closed ones. when=today is this UTC day; when=week is the last 7 days; omit when for all. q matches title, founding line, stamped messages, or artifact filenames. A miss is an empty list — do not invent a ticket.",
     parameters: {
       type: "object",
       properties: {
         status: { type: "string", enum: ["open", "done", "all"] },
+        when: { type: "string", enum: ["today", "week", "all"] },
+        q: { type: "string" },
       },
     },
   },
@@ -145,6 +148,19 @@ export const TRAVIS_TOOL_DECLS = [
       type: "object",
       properties: { id: { type: "string" } },
       required: ["id"],
+    },
+  },
+  {
+    name: "rename_initiative",
+    description:
+      "Rename one initiative in the catalog. Same write as the founder PATCH. Does not change the founding line. Do not name a ticket when you mint it — only when they ask to rename.",
+    parameters: {
+      type: "object",
+      properties: {
+        id: { type: "string" },
+        title: { type: "string" },
+      },
+      required: ["id", "title"],
     },
   },
   {
@@ -377,7 +393,9 @@ export async function runTravisTool(params: {
     const status = ["open", "done", "all"].includes(String(args.status ?? ""))
       ? (String(args.status) as InitiativeStatus | "all")
       : "open";
-    const items = await listInitiatives(sessionId, status);
+    const when = parseRequestWhen(args.when ?? "all");
+    const q = typeof args.q === "string" ? args.q : "";
+    const items = await listInitiatives(sessionId, { status, when, q });
     return { ok: true, text: formatInitiativeList(items) };
   }
 
@@ -399,6 +417,19 @@ export async function runTravisTool(params: {
     try {
       await markInitiativeDone(sessionId, id);
       return { ok: true, text: "Initiative marked done." };
+    } catch (err) {
+      if (err instanceof InitiativeError) return { ok: false, text: err.message };
+      throw err;
+    }
+  }
+
+  if (name === "rename_initiative") {
+    const id = String(args.id ?? "").trim();
+    const title = typeof args.title === "string" ? args.title : "";
+    if (!id) return { ok: false, text: "Need an initiative id." };
+    try {
+      const row = await renameInitiative(sessionId, id, title);
+      return { ok: true, text: `Renamed to ${row.title}.` };
     } catch (err) {
       if (err instanceof InitiativeError) return { ok: false, text: err.message };
       throw err;
@@ -516,7 +547,7 @@ What you cannot do: you cannot see the repository, a diff, a branch, a test run,
 
 You are shown a short room-state block with recent turns and what is running. Treat it as already true — do not ask the founder to repeat something that is in it. Seat replies appear there only as receipts; call read_seat_reply when you need what a seat actually said. The window is not the whole room. When they ask what was requested, what is in motion, or what you already routed to a seat, call search_room. That log has UTC timestamps and stays in this room. “Requests today” → when today. “Last 10” → limit 10. “Everyone this week” → when week, no seat. Do not invent a list — call the tool.
 
-The backlog is separate. search_room is every line. Initiatives are only what you passed on, or what they promoted with Hold. list_initiatives / read_initiative / mark_initiative_done for that pipe. A seat finishing does not mark it done — you or they do.
+The backlog is separate. search_room is every line. Initiatives are only what you passed on, or what they promoted with Hold. list_initiatives / read_initiative / rename_initiative / mark_initiative_done for that pipe. “This week” → list_initiatives when week. “The artifact one” → list_initiatives q. A miss is an empty list — do not invent a ticket. You do not name a ticket when you mint it. rename_initiative only when they ask to rename. A seat finishing does not mark it done — you or they do.
 
 Report what the tools actually told you.
 

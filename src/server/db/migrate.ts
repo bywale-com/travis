@@ -1,5 +1,5 @@
 /**
- * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership + SCP-008 backlog.
+ * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership + SCP-008 backlog + SCP-010 title.
  */
 import { config } from "dotenv";
 import postgres from "postgres";
@@ -340,7 +340,12 @@ async function main() {
       ADD COLUMN IF NOT EXISTS initiative_id uuid REFERENCES travis.initiative(id)
   `;
 
-  console.log("travis schema + SCP-008 backlog ready");
+  await sql`
+    ALTER TABLE travis.initiative
+      ADD COLUMN IF NOT EXISTS title text NOT NULL DEFAULT ''
+  `;
+
+  console.log("travis schema + SCP-010 title ready");
   await sql.end();
 }
 

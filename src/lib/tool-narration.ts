@@ -55,6 +55,8 @@ export function narrateToolCall(
         : `Dropping ${seat(args)}'s waiting line.`;
     case "mark_initiative_done":
       return "Marking that initiative done.";
+    case "rename_initiative":
+      return "Renaming that initiative.";
     case "end_session":
       return "Ending the room.";
     default:
