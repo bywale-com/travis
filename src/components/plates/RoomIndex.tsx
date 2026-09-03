@@ -28,6 +28,7 @@ export function RoomIndex({
   onLeave,
   onEnd,
   onCharacter,
+  onIntegrations,
 }: {
   t: Tokens;
   rooms: RoomRow[];
@@ -40,6 +41,7 @@ export function RoomIndex({
   onLeave: () => void;
   onEnd: () => void;
   onCharacter: () => void;
+  onIntegrations?: () => void;
 }) {
   return (
     <SurfaceBoundary id="room-index" label="Room index" order={1}>
@@ -208,20 +210,40 @@ export function RoomIndex({
             End room
           </button>
         </footer>
-        <button
-          type="button"
-          onClick={onCharacter}
+        <div
           style={{
-            ...quietLink(t),
-            color: t.textMuted,
-            fontSize: TYPE.meta,
-            textDecoration: "none",
+            display: "flex",
+            justifyContent: "space-between",
             padding: "0 20px 16px",
-            textAlign: "center",
           }}
         >
-          Mission · Carbon
-        </button>
+          <button
+            type="button"
+            onClick={onCharacter}
+            style={{
+              ...quietLink(t),
+              color: t.textMuted,
+              fontSize: TYPE.meta,
+              textDecoration: "none",
+            }}
+          >
+            Mission · Carbon
+          </button>
+          {onIntegrations ? (
+            <button
+              type="button"
+              onClick={onIntegrations}
+              style={{
+                ...quietLink(t),
+                color: t.textMuted,
+                fontSize: TYPE.meta,
+                textDecoration: "none",
+              }}
+            >
+              Cursor
+            </button>
+          ) : null}
+        </div>
       </div>
     </SurfaceBoundary>
   );

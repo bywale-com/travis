@@ -1,17 +1,23 @@
 "use client";
 
+/**
+ * SCP-011 — I4. Model + repo are selection rows opening real pickers.
+ * No free-text model/repo inputs. Rebuilt from plate.
+ */
 import { useEffect, useState, type CSSProperties } from "react";
 import { SeatMark } from "@/components/QueueChrome";
+import { ModelPicker } from "@/components/plates/ModelPicker";
+import { RepoPicker } from "@/components/plates/RepoPicker";
 import { readJson } from "@/lib/http";
 import { seatSlugFromLabel } from "@/lib/seat-slug";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import { TYPE } from "@/theme/scale";
 import type { Tokens } from "@/theme/tokens";
+import type { ModelOption, OptionsResponse, RepoOption } from "@/server/create-agent";
 import { plateShell, quietLink } from "./shell";
+import { ChevronRight } from "lucide-react";
 
 export type CreatedAgent = { id: string; seatKey: string; label: string };
-
-type Options = { models: string[]; repositories: string[] };
 
 function fieldLabel(t: Tokens): CSSProperties {
   return {
@@ -22,7 +28,7 @@ function fieldLabel(t: Tokens): CSSProperties {
   };
 }
 
-function underlineField(t: Tokens): CSSProperties {
+function underlineInput(t: Tokens): CSSProperties {
   return {
     width: "100%",
     border: "none",
@@ -33,50 +39,110 @@ function underlineField(t: Tokens): CSSProperties {
     padding: "8px 0",
     outline: "none",
     fontFamily: "inherit",
-    appearance: "none",
-    borderRadius: 0,
   };
+}
+
+function SelectionRow({
+  t,
+  primary,
+  secondary,
+  placeholder,
+  onClick,
+}: {
+  t: Tokens;
+  primary?: string;
+  secondary?: string;
+  placeholder: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      style={{
+        display: "flex",
+        width: "100%",
+        alignItems: "flex-start",
+        border: "none",
+        borderBottom: `1px solid ${t.border}`,
+        background: "transparent",
+        color: t.textPrimary,
+        padding: "8px 0",
+        cursor: "pointer",
+        fontFamily: "inherit",
+        gap: 4,
+      }}
+    >
+      <div style={{ flex: 1, textAlign: "left" }}>
+        {primary ? (
+          <>
+            <span style={{ display: "block", fontSize: TYPE.body, fontWeight: 600 }}>
+              {primary}
+            </span>
+            {secondary ? (
+              <span style={{ display: "block", fontSize: TYPE.meta, color: t.textMuted }}>
+                {secondary}
+              </span>
+            ) : null}
+          </>
+        ) : (
+          <span style={{ fontSize: TYPE.body, color: t.textMuted }}>{placeholder}</span>
+        )}
+      </div>
+      <ChevronRight size={16} color={t.textMuted} style={{ marginTop: 2, flexShrink: 0 }} />
+    </button>
+  );
 }
 
 export function CreateAgent({
   t,
   backLabel,
-  costLine,
   onBack,
   onCreated,
 }: {
   t: Tokens;
   backLabel: string;
-  costLine?: string | null;
   onBack: () => void;
   onCreated: (agent: CreatedAgent) => void;
 }) {
   const [name, setName] = useState("");
-  const [model, setModel] = useState("");
-  const [repository, setRepository] = useState("");
-  const [ref, setRef] = useState("main");
-  const [options, setOptions] = useState<Options>({ models: [], repositories: [] });
+  const [selectedModel, setSelectedModel] = useState<ModelOption | null>(null);
+  const [selectedRepo, setSelectedRepo] = useState<RepoOption | null>(null);
+  const [recentRepoUrl, setRecentRepoUrl] = useState<string | null>(null);
+  const [ref, setRef] = useState("");
+  const [options, setOptions] = useState<OptionsResponse>({
+    models: [],
+    repositories: [],
+    defaultModelId: null,
+  });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showModelPicker, setShowModelPicker] = useState(false);
+  const [showRepoPicker, setShowRepoPicker] = useState(false);
+
+  const slug = seatSlugFromLabel(name);
+  const markKey = slug || name.trim() || "agent";
 
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      const res = await fetch("/api/agents/options");
-      const data = await readJson<Options>(res);
-      if (cancelled) return;
-      setOptions({
-        models: Array.isArray(data.models) ? data.models : [],
-        repositories: Array.isArray(data.repositories) ? data.repositories : [],
-      });
+      try {
+        const res = await fetch("/api/integrations/options");
+        const data = await readJson<OptionsResponse>(res);
+        if (cancelled) return;
+        setOptions(data);
+        if (data.defaultModelId) {
+          const def = data.models.find((m) => m.id === data.defaultModelId) ?? null;
+          if (def) setSelectedModel(def);
+        }
+      } catch {
+        // leave empty
+      }
     })();
     return () => {
       cancelled = true;
     };
   }, []);
-
-  const slug = seatSlugFromLabel(name);
-  const markKey = slug || name.trim() || "agent";
 
   const submit = async () => {
     setBusy(true);
@@ -87,8 +153,8 @@ export function CreateAgent({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           label: name,
-          model: model.trim() || undefined,
-          repository: repository.trim() || undefined,
+          model: selectedModel?.id,
+          repository: selectedRepo?.url,
           ref: ref.trim() || undefined,
         }),
       });
@@ -115,13 +181,7 @@ export function CreateAgent({
           >
             ← {backLabel.trim() || "Back"}
           </button>
-          <h1
-            style={{
-              fontSize: TYPE.title,
-              margin: "12px 0 0",
-              fontWeight: 600,
-            }}
-          >
+          <h1 style={{ fontSize: TYPE.title, margin: "12px 0 0", fontWeight: 600 }}>
             Create an agent
           </h1>
         </header>
@@ -134,7 +194,7 @@ export function CreateAgent({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Agent name"
-                style={underlineField(t)}
+                style={underlineInput(t)}
               />
             </div>
             <div style={{ textAlign: "center", paddingBottom: 4 }}>
@@ -146,71 +206,37 @@ export function CreateAgent({
           </div>
 
           <p style={fieldLabel(t)}>MODEL</p>
-          {options.models.length ? (
-            <select
-              value={model}
-              onChange={(e) => setModel(e.target.value)}
-              style={underlineField(t)}
-            >
-              <option value="">Choose a model</option>
-              {options.models.map((item) => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <input
-              value={model}
-              onChange={(e) => setModel(e.target.value)}
-              placeholder="Model id"
-              style={underlineField(t)}
-            />
-          )}
+          <SelectionRow
+            t={t}
+            primary={selectedModel?.id}
+            secondary={selectedModel?.variantLabel || selectedModel?.displayName}
+            placeholder="Select model"
+            onClick={() => setShowModelPicker(true)}
+          />
 
           <p style={fieldLabel(t)}>REPOSITORY</p>
-          {options.repositories.length ? (
-            <select
-              value={repository}
-              onChange={(e) => setRepository(e.target.value)}
-              style={underlineField(t)}
-            >
-              <option value="">Choose a repository</option>
-              {options.repositories.map((item) => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <input
-              value={repository}
-              onChange={(e) => setRepository(e.target.value)}
-              placeholder="owner/repo"
-              style={underlineField(t)}
-            />
-          )}
+          <SelectionRow
+            t={t}
+            primary={selectedRepo?.name}
+            secondary={selectedRepo?.url}
+            placeholder="Select repository"
+            onClick={() => setShowRepoPicker(true)}
+          />
 
           <p style={fieldLabel(t)}>STARTING REF</p>
           <input
             value={ref}
             onChange={(e) => setRef(e.target.value)}
             placeholder="main"
-            style={underlineField(t)}
+            style={underlineInput(t)}
           />
-          <p style={{ margin: "8px 0 0", color: t.textMuted, fontSize: TYPE.meta }}>
-            branch, tag or commit
+          <p style={{ margin: "6px 0 0", color: t.textMuted, fontSize: TYPE.meta }}>
+            branch, tag, or commit
           </p>
 
-          {costLine ? (
-            <p style={{ margin: "28px 0 0", color: t.textMuted, fontSize: TYPE.meta }}>
-              {costLine}
-            </p>
-          ) : (
-            <p style={{ margin: "28px 0 0", color: t.textMuted, fontSize: TYPE.meta }}>
-              Runs are billed to your Cursor account.
-            </p>
-          )}
+          <p style={{ margin: "28px 0 0", color: t.textMuted, fontSize: TYPE.meta }}>
+            Runs are billed to your Cursor account.
+          </p>
         </div>
 
         {error ? (
@@ -252,6 +278,33 @@ export function CreateAgent({
           </p>
         </div>
       </div>
+
+      {showModelPicker ? (
+        <ModelPicker
+          t={t}
+          models={options.models}
+          defaultModelId={options.defaultModelId}
+          onSelect={(m) => {
+            setSelectedModel(m);
+            setShowModelPicker(false);
+          }}
+          onClose={() => setShowModelPicker(false)}
+        />
+      ) : null}
+
+      {showRepoPicker ? (
+        <RepoPicker
+          t={t}
+          repos={options.repositories}
+          recentUrl={recentRepoUrl}
+          onSelect={(r) => {
+            setSelectedRepo(r);
+            setRecentRepoUrl(r.url);
+            setShowRepoPicker(false);
+          }}
+          onClose={() => setShowRepoPicker(false)}
+        />
+      ) : null}
     </SurfaceBoundary>
   );
 }
