@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 02:10 UTC — **006 locked.** Voice: no send/queue sounds. Talk/Type unchanged. First-order critical. Engineer plants now.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 02:20 UTC — **OpenAI cost model.** Plug-in assumptions. No billing access here. Live is the meter.
 
 **How we maintain this log**
 
@@ -1230,4 +1230,18 @@ Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tighten
 **Numbering:** late-name addressing stays a named gap; it is not 006. Next packet is **007**.
 
 **Ask:** Engineer cut. Founder: toggle later, or never?
+
+---
+
+## 2026-09-03 02:20 UTC — OpenAI-side cost model (founder)
+
+**Kind:** Estimate aid. Not a packet. Not a face.
+
+**Founder (preserved):** Founder asked for the OpenAI-side cost. Outline the product usage assumptions needed for a cost estimate (requests per user, average prompt/response size, concurrency, etc.) and suggest a simple model they can plug numbers into. We don’t have billing access here.
+
+**Landed:** [`OPENAI-COST-MODEL.md`](OPENAI-COST-MODEL.md).
+
+**Ruled:** OpenAI = dest Travis only (Live `gpt-realtime-2.1` + text/gist `gpt-5.6-luna`). Seats are Cursor. Live is the expensive meter. Window already capped (14 turns / 2600 chars). No billing access in this seat — plug-in only. No cost dashboard.
+
+**Ask:** fill S, M, R from a real evening on the OpenAI usage page and replace the illustration.
 
