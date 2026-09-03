@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 03:05 UTC — **007 locked, first-order.** Seat posts notify and queue. Do not barge Google TTS. Engineer R0 now.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 23:06 UTC — **PM seat handed off.** New chat pastes [`PM-HANDOFF.md`](./PM-HANDOFF.md). This bind (`bc-1ac0762e`) is no longer the living PM.
 
 **How we maintain this log**
 
@@ -1300,4 +1300,42 @@ Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tighten
 **Ruled (this stamp):** The hole is **confirm through Travis**, not “let Travis review.” 042 stays: no fact → refuse. Path: **A** receipt in the room (claimed vs confirmed) → **B** read-only PR/CI feed for the room’s repo → **C** bounded excerpt later. No Travis checkout. No orb badge. SA names ports; Engineer does not add `git`. Pastes for both seats are in the initiative. Founder tags them.
 
 **Ask:** tag SA for inventory? Wave A as convention-only if SA says no store?
+
+---
+
+## 2026-09-03 03:05 UTC — 007 locked: hear-queue first-order (founder)
+
+**Kind:** Type B. **Locked packet.** First-order. Revises 002 land-and-read.
+
+**Founder (preserved):** Fix seat response barging into Google Voice. Ensure the plan prioritizes a mediation/queueing model where seat outputs notify Travis and are queued, with rules for urgency, ordering, and user notifications. Coordinate with Engineer and SA on design and rollout.
+
+**Locked:** [`PM-PACKET-007-HEAR-QUEUE.md`](PM-PACKET-007-HEAR-QUEUE.md) · FACE [`HEAR-QUEUE-SPEC.md`](HEAR-QUEUE-SPEC.md). Living glass: [PR #15](https://github.com/bywale-com/travis/pull/15).
+
+**Urgency:** ear-busy holds the beat · invited (“tell me when”) sorts first · else FIFO · no Travis-scored priority.  
+**Order:** invited then oldest ready; same seat oldest unheard; Next = head; name jumps.  
+**Notify:** chip always; spoken beat only when ear free; coalesce; never TTS the post body on land.
+
+**Rollout:** **R0 Engineer now** (kill barge, one mouth, chip, beat-when-free). R1 SA heard/ready. R2 sheet + gist. Ahead of plates / cost / output / verified sight.
+
+**Ask:** Engineer R0. Founder tags SA for R1.
+
+---
+
+## 2026-09-03 23:06 UTC — PM seat handoff (this bind)
+
+**Kind:** Seat handoff. Not a packet. Not a plate.
+
+**This chat** (`bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea`, Pm ID provision) **stops** as the living PM. Founder seats a new chat with the paste in [`PM-HANDOFF.md`](./PM-HANDOFF.md). Rebind the room’s PM `cursor_agent_id` off this id.
+
+**What this bind got wrong (do not resume):** treated #57 / 007 plates as the envelope; then passed “no new plate” on orchestrate. Founder: look at the envelope, print what needs a face, cut the packet.
+
+**What actually landed while this seat was lost:**
+
+- Envelope on `main` — [`ENVELOPE-TRAVIS-ORCHESTRATE.md`](./ENVELOPE-TRAVIS-ORCHESTRATE.md) · [PR #94](https://github.com/bywale-com/travis/pull/94)
+- Plates P1/P2 — [PR #95](https://github.com/bywale-com/travis/pull/95) · look signed; home = Backlog (All / In motion / Initiatives)
+- SCP-013 planted — [PR #97](https://github.com/bywale-com/travis/pull/97)
+
+**Still true:** flag 14:00. 007 locked on this PR (#15). `main`’s copy of this log is stale (Current still 002) — fetch this branch for 003–007. Seated (OS-tree) still open. Do not recut C3/C4.
+
+**Ask:** founder pastes the new PM. Engineer rebinds.
 
