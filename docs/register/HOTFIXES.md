@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **047**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **048**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -57,3 +57,4 @@
 | 044 | [`HOTFIX-044-VISUAL-LAW.md`](./HOTFIX-044-VISUAL-LAW.md) | Mission/Carbon tokens, Orbitron wordmark, unbounded seat marks, receipt and error kinds |
 | 045 | [`HOTFIX-045-DB-POOL.md`](./HOTFIX-045-DB-POOL.md) | One DB client per isolate; return it when idle; membership DDL once |
 | 046 | [`HOTFIX-046-VOICE-SEND-SOUNDS.md`](./HOTFIX-046-VOICE-SEND-SOUNDS.md) | Voice stays quiet on send/queue; Talk and Type still play the shots |
+| 047 | [`HOTFIX-047-READBACK-VOICE.md`](./HOTFIX-047-READBACK-VOICE.md) | Rank network/natural Google readback; lift rate; no Cloud TTS port |
