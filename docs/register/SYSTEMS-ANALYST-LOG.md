@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 00:21 UTC — **SCP-007 signed.** Room = `voice_session`. Mint `room_membership`. Engineer SQL signed; new-room and dest runtime amended. Packet: [`SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md`](./SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md). Numbers 003–006 remapped (planted; files not on `main`). Engineer pastes; no leftover analysis.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 12:44 UTC — **SCP-009 signed.** Mint `travis.turn_artifact` hung on the stamped `agent_post`. Cursor keeps bytes; we proxy. 008 initiative stands (planted, Hotfix 052). Heard stays silence. Packet: [`SYSTEMS-CHANGE-PACKET-009-ARTIFACTS.md`](./SYSTEMS-CHANGE-PACKET-009-ARTIFACTS.md). Engineer pastes; no leftover analysis.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -301,3 +301,30 @@ SCP-001 seed field updated.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md`](./SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md)
 
 **Handoff:** Engineer pastes the signed SQL + Drizzle, switches `roomSeats()`, writes the runtime in the packet. No leftover analysis.
+
+---
+
+## 2026-09-03 12:44 UTC — SCP-009 ticket artifacts signed
+
+**Kind:** Table mint. Engineer envelope [`ENVELOPE-ARTIFACTS.md`](./ENVELOPE-ARTIFACTS.md) on PR #75. Job-law from the founder. Re-opens 008 I only.
+
+**Seat:** Systems Analyst. Talk with the founder only. Not PM. Not Engineer.
+
+**Founder excerpts (lock):**
+
+> Inside a specific backlog entry not only do you have the relevant chats, segmented for that entry, with the artifacts listed in their order as they come. There should also be a modal for artifacts. Files and images.
+
+> I don’t think it’s something the agent does. I think it’s our code harness that arranges these things.
+
+**Quoted stood-up truth (`origin/main` `9ec612c`):**
+
+- 008 planted: `travis.initiative`, `voice_turn.initiative_id` (Hotfix 052). Packet file still on PR #72, not on `main`.
+- `readInitiative` returns `attachments: []` hardcoded.
+- `cursor-port.ts` text only; skips `tool_call`. No url column.
+- Live Cursor: `GET /v1/agents/{id}/artifacts` is **agent-scoped**; download URL **expires in 15 minutes**.
+
+**A–N:** mint `turn_artifact` hung on `agent_post` (A, B, C, D, E image|file). Pointer + proxy, not S3 URL, not `bytea` (F). Land-only (G). Out unstamped = no row (H). Grow `read_initiative` (I). Empty until a real diff (J). **009** (K). Do not remint initiative (L). Heard silence (M). This room (N). Links and founder upload named silence.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-009-ARTIFACTS.md`](./SYSTEMS-CHANGE-PACKET-009-ARTIFACTS.md)
+
+**Handoff:** Engineer pastes SQL + harvest-at-done + proxy. Replace `attachments: []`. No leftover analysis.
