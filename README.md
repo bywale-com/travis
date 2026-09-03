@@ -4,7 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
-- **2026-09-03** · SCP-012 · PR pending — Travis houses protocols and templates as `os_node` rows, because the next empty work repo will not have `docs/seats`.
+- **2026-09-03** · SCP-012 · [PR #93](https://github.com/bywale-com/travis/pull/93) — Travis houses protocols and templates as `os_node` rows, because the next empty work repo will not have `docs/seats`.
 - **2026-09-03** · SCP-007 · [PR #61](https://github.com/bywale-com/travis/pull/61) — Room membership is a Travis store: roster, dest, End, create, add and remove read the relation, because seats were every active binding worldwide.
 - **2026-09-02** · Plates · [PR #57](https://github.com/bywale-com/travis/pull/57) — Thirteen printed plates for rooms as primitive and the Mission/Carbon merge.
 - **2026-09-02** · Hotfix 044 · [PR #58](https://github.com/bywale-com/travis/pull/58) — The plates' visual law lands in code: Mission/Carbon tokens, Orbitron for the wordmark only, a type scale that takes no mode, seat marks that work for a fifth agent, and narration and run errors as their own message kinds.
