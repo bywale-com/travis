@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { parseCallByName } from "@/lib/router";
 import { isCursorSeat, isVocativeOnlyCall } from "@/lib/seats";
 import { db } from "@/server/db/client";
-import { agentBinding, voiceSession } from "@/server/db/schema";
+import { voiceSession } from "@/server/db/schema";
 import {
   absorbLiveTravisPost,
   insertUserTurn,
@@ -12,6 +12,7 @@ import {
   sseHeaders,
 } from "@/server/seat-pipe";
 import { collapseSpeechStutter } from "@/lib/absorb-text";
+import { openBindingForSeat } from "@/server/room-membership";
 
 type Body = {
   role?: "user" | "travis";
@@ -58,20 +59,20 @@ export async function POST(
   );
   const { seatKey, remainder } = parseCallByName(text);
   if (seatKey && isCursorSeat(seatKey)) {
-    const [binding] = await db
-      .select()
-      .from(agentBinding)
-      .where(eq(agentBinding.seatKey, seatKey))
-      .limit(1);
-    if (binding) {
-      await db
-        .update(voiceSession)
-        .set({
-          activeBindingId: binding.id,
-          bindingId: binding.id,
-        })
-        .where(eq(voiceSession.id, sessionId));
+    const binding = await openBindingForSeat(sessionId, seatKey);
+    if (!binding) {
+      return NextResponse.json(
+        { error: "Dest is not an open member of this room" },
+        { status: 400 },
+      );
     }
+    await db
+      .update(voiceSession)
+      .set({
+        activeBindingId: binding.id,
+        bindingId: binding.id,
+      })
+      .where(eq(voiceSession.id, sessionId));
     const prompt = isVocativeOnlyCall(text, remainder, seatKey)
       ? ""
       : remainder.trim();

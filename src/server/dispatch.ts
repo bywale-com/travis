@@ -23,6 +23,7 @@ import {
   seatHasActiveRun,
 } from "@/server/seat-pipe";
 import type { AgentBinding, SeatKey } from "@/server/db/schema";
+import { requireOpenMember } from "@/server/room-membership";
 
 export type DispatchOutcome =
   | { status: "started"; runId: string; seatLabel: string }
@@ -39,6 +40,7 @@ export async function dispatchToSeat(params: {
   if (isTravisSeat(binding.seatKey)) {
     throw new Error("Travis dest never uses the Cursor send path");
   }
+  await requireOpenMember(sessionId, binding.id);
   const seatKey = (binding.seatKey ?? "pm") as SeatKey;
   const seatLabel = binding.label ?? seatKeyToLabel(seatKey);
 

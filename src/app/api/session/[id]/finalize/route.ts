@@ -16,6 +16,7 @@ import {
 } from "@/server/db/schema";
 import type { SeatKey } from "@/server/db/schema";
 import { noteTravisUnwired } from "@/server/travis-dest";
+import { MembershipError, openBindingForSeat, requireOpenMember } from "@/server/room-membership";
 import { pipeTravisText } from "@/server/travis-reply";
 import {
   enqueueOnSeat,
@@ -91,7 +92,7 @@ export async function POST(
                   .limit(1)
               )[0]?.seatKey as SeatKey | undefined) ?? "pm"
             : "pm";
-      const binding = await bindingForSeat(targetKey);
+      const binding = await openBindingForSeat(sessionId, targetKey);
       if (parsed.action !== "stay" && binding) {
         await setActiveBinding(sessionId, binding.id);
         [session] = await db
@@ -135,7 +136,7 @@ export async function POST(
         needClarification: true,
       });
     }
-    const binding = await bindingForSeat(seatKey);
+    const binding = await openBindingForSeat(sessionId, seatKey);
     if (binding) await setActiveBinding(sessionId, binding.id);
     await db
       .update(voiceSession)
@@ -160,15 +161,19 @@ export async function POST(
   let prompt = collapseSpeechStutter(match.cleanedText.trim());
   const { seatKey: calledSeat, remainder } = parseCallByName(prompt);
   if (calledSeat) {
-    const binding = await bindingForSeat(calledSeat);
-    if (binding) {
-      await setActiveBinding(sessionId, binding.id);
-      [session] = await db
-        .select()
-        .from(voiceSession)
-        .where(eq(voiceSession.id, sessionId))
-        .limit(1);
+    const binding = await openBindingForSeat(sessionId, calledSeat);
+    if (!binding) {
+      return Response.json(
+        { error: "Dest is not an open member of this room" },
+        { status: 400 },
+      );
     }
+    await setActiveBinding(sessionId, binding.id);
+    [session] = await db
+      .select()
+      .from(voiceSession)
+      .where(eq(voiceSession.id, sessionId))
+      .limit(1);
     prompt = collapseSpeechStutter(remainder.trim());
   }
 
@@ -205,6 +210,17 @@ export async function POST(
 
   const seatKey = (binding.seatKey ?? "pm") as SeatKey;
   const seatLabel = binding.label ?? seatKeyToLabel(seatKey);
+
+  if (!isTravisSeat(seatKey)) {
+    try {
+      await requireOpenMember(sessionId, binding.id);
+    } catch (err) {
+      if (err instanceof MembershipError) {
+        return Response.json({ error: err.message }, { status: err.status });
+      }
+      throw err;
+    }
+  }
 
   if (isTravisSeat(seatKey)) {
     await noteTravisUnwired(sessionId);

@@ -18,6 +18,7 @@ import {
   type CursorStreamEvent,
 } from "@/server/cursor-port";
 import { db } from "@/server/db/client";
+import { isOpenMember, requireOpenMember } from "@/server/room-membership";
 import {
   agentBinding,
   voiceTurn,
@@ -176,6 +177,7 @@ export async function enqueueOnSeat(params: {
   if (isTravisSeat(params.binding.seatKey)) {
     throw new Error("Travis is never queued");
   }
+  await requireOpenMember(params.sessionId, params.binding.id);
   await persistDiscoveredRun({
     bindingId: params.binding.id,
     sessionId: params.sessionId,
@@ -344,6 +346,9 @@ export async function pipeOneSend(params: {
   const { sessionId, binding, prompt, send } = params;
   if (isTravisSeat(binding.seatKey)) {
     throw new Error("Travis dest never uses the Cursor send path");
+  }
+  if (!(await isOpenMember(sessionId, binding.id))) {
+    throw new Error("Dest is not an open member of this room");
   }
   const seatKey = (binding.seatKey ?? "pm") as SeatKey;
   const seatLabel = binding.label ?? seatKeyToLabel(seatKey);
@@ -563,6 +568,7 @@ export async function drainHead(
   binding: AgentBinding,
   send: SendFn,
 ): Promise<void> {
+  if (!(await isOpenMember(sessionId, binding.id))) return;
   await withDrainLock(binding.id, async () => {
     for (;;) {
       const stillLive = await getLiveRun(binding.id);
@@ -684,6 +690,7 @@ export async function sendOrEnqueue(params: {
   if (isTravisSeat(params.binding.seatKey)) {
     throw new Error("Travis dest never uses the Cursor send path");
   }
+  await requireOpenMember(params.sessionId, params.binding.id);
   if (await seatHasActiveRun(params.binding)) {
     const queue = await enqueueOnSeat({
       sessionId: params.sessionId,
@@ -765,6 +772,10 @@ export async function bargeQueuedItem(params: {
   }
   const binding = await bindingById(item.bindingId);
   if (!binding) return;
+  if (!(await isOpenMember(params.sessionId, binding.id))) {
+    params.send("queue", { queue: await queueSnapshot(params.sessionId) });
+    return;
+  }
 
   const claimed = await claimLiveRun(binding.id);
   const agentId = binding.cursorAgentId ?? "";
