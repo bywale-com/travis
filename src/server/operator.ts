@@ -170,13 +170,38 @@ export function publicOrigin(req: Request): string {
   return new URL(req.url).origin;
 }
 
-/** Same generic reply whether the email is on the list. Never mints. */
+export type OperatorLinkResult =
+  | { outcome: "unknown_email" }
+  | { outcome: "sent" }
+  | { outcome: "send_failed"; reason: "missing_key" | "resend_error" };
+
+function emailLogTag(raw: string): string {
+  const email = normalizeOperatorEmail(raw);
+  const at = email.indexOf("@");
+  if (at < 1) return "invalid";
+  return `***@${email.slice(at + 1)}`;
+}
+
+/** Same generic reply for unknown email. Never mints. */
 export async function requestOperatorLink(
   req: Request,
   rawEmail: string,
-): Promise<void> {
+): Promise<OperatorLinkResult> {
+  const tag = emailLogTag(rawEmail);
   const row = await operatorByEmail(rawEmail);
-  if (!row) return;
+  if (!row) {
+    console.info("[travis] operator link: no match", { email: tag });
+    return { outcome: "unknown_email" };
+  }
   const url = `${publicOrigin(req)}${operatorLinkPath(row.loginToken)}`;
-  await sendOperatorLinkMail({ to: row.email, url });
+  const mail = await sendOperatorLinkMail({ to: row.email, url });
+  if (!mail.ok) {
+    console.error("[travis] operator link: send failed", {
+      email: tag,
+      reason: mail.reason,
+    });
+    return { outcome: "send_failed", reason: mail.reason };
+  }
+  console.info("[travis] operator link: sent", { email: tag });
+  return { outcome: "sent" };
 }
