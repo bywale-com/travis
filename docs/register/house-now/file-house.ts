@@ -4,7 +4,7 @@
  */
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
-import { writeOsAsTravis } from "../../../src/server/os-house.ts";
+import { writeOsAsTravis } from "../../../src/server/os-house";
 
 const ROOT = new URL(".", import.meta.url).pathname.replace(/\/$/, "");
 
