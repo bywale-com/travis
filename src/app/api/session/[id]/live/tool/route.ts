@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { runTravisTool } from "@/server/travis-tools";
 import { runMotionRunner } from "@/server/motion";
+import { roomContextFor } from "@/server/room-read";
 import { insertAgentPostTurn } from "@/server/seat-pipe";
 import { db } from "@/server/db/client";
 import { voiceSession } from "@/server/db/schema";
@@ -45,5 +46,6 @@ export async function POST(
   }
 
   await runMotionRunner(sessionId);
-  return NextResponse.json({ ok: result.ok, text: result.text });
+  const here = await roomContextFor(sessionId).catch(() => "");
+  return NextResponse.json({ ok: result.ok, text: result.text, here });
 }

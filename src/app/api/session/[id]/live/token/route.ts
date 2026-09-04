@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { mintLiveToken, travisIsWired } from "@/server/travis-openai";
 import { TRAVIS_SYSTEM, TRAVIS_TOOL_DECLS } from "@/server/travis-tools";
+import { roomContextFor } from "@/server/room-read";
 import { db } from "@/server/db/client";
 import { voiceSession } from "@/server/db/schema";
 import { AuthError } from "@/server/api-error";
@@ -32,18 +33,21 @@ export async function POST(
     return NextResponse.json({ error: "Session ended" }, { status: 400 });
   }
 
+  const here = await roomContextFor(sessionId).catch(() => "");
+
   if (!travisIsWired()) {
     return NextResponse.json({
       wired: false,
       tools: TRAVIS_TOOL_DECLS,
       systemInstruction: TRAVIS_SYSTEM,
+      here,
     });
   }
 
   try {
     const minted = await mintLiveToken(sessionId);
     if (!minted) {
-      return NextResponse.json({ wired: false });
+      return NextResponse.json({ wired: false, here });
     }
     return NextResponse.json({
       wired: true,
@@ -52,6 +56,7 @@ export async function POST(
       handle: session.travisLiveHandle ?? "",
       tools: TRAVIS_TOOL_DECLS,
       systemInstruction: TRAVIS_SYSTEM,
+      here,
     });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);

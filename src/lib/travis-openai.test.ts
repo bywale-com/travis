@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   interpretRealtimeEvent,
+  liveInstructions,
   openaiErrorMessage,
   parseEphemeralSecret,
   realtimeSessionConfig,
@@ -37,6 +38,14 @@ test("toRealtimeTools keeps existing port names", () => {
   ]);
   assert.equal(tools[0].type, "function");
   assert.equal(tools[0].name, "list_seats");
+});
+
+test("liveInstructions keeps Here on the system; empty here is system only", () => {
+  assert.equal(liveInstructions("You are Travis.", ""), "You are Travis.");
+  assert.match(
+    liveInstructions("You are Travis.", "Here:\nDest Travis."),
+    /Here:\nDest Travis\./,
+  );
 });
 
 test("realtimeSessionConfig pins audio out and tools", () => {

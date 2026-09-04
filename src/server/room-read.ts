@@ -28,6 +28,9 @@ import { voiceSession, voiceTurn } from "@/server/db/schema";
 import type { SeatKey } from "@/server/db/schema";
 import { liveRunsForSession } from "@/server/queue";
 import { glanceOpenInitiatives } from "@/server/initiative";
+import { countOpenMotions } from "@/server/motion";
+import { openMembers } from "@/server/room-membership";
+import { agentBinding } from "@/server/db/schema";
 
 /** Newest first from the database, oldest first to the caller. */
 export async function recentTurns(
@@ -168,26 +171,55 @@ export async function searchRoomText(
 }
 
 export async function roomContextFor(sessionId: string): Promise<string> {
-  const [turns, running, requestCount, session, pile] = await Promise.all([
-    recentTurns(sessionId),
-    runningNotes(sessionId),
-    countRequests(sessionId),
-    db
-      .select({ title: voiceSession.title })
-      .from(voiceSession)
-      .where(eq(voiceSession.id, sessionId))
-      .limit(1)
-      .then((rows) => rows[0] ?? null),
-    glanceOpenInitiatives(sessionId).catch(() => ({
-      titles: [] as string[],
-      openCount: 0,
-    })),
-  ]);
+  const [turns, runs, requestCount, session, pile, members, motionCount] =
+    await Promise.all([
+      recentTurns(sessionId),
+      liveRunsForSession(sessionId).catch(() => []),
+      countRequests(sessionId),
+      db
+        .select({
+          title: voiceSession.title,
+          activeBindingId: voiceSession.activeBindingId,
+        })
+        .from(voiceSession)
+        .where(eq(voiceSession.id, sessionId))
+        .limit(1)
+        .then((rows) => rows[0] ?? null),
+      glanceOpenInitiatives(sessionId).catch(() => ({
+        titles: [] as string[],
+        openCount: 0,
+      })),
+      openMembers(sessionId).catch(() => []),
+      countOpenMotions(sessionId).catch(() => 0),
+    ]);
+  const now = Date.now();
+  const running = runs.map((r) => ({
+    seatLabel:
+      r.binding.label ?? seatKeyToLabel((r.binding.seatKey ?? "pm") as SeatKey),
+    elapsedMs: Math.max(0, now - new Date(r.live.startedAt).getTime()),
+  }));
+  const busyIds = new Set(runs.map((r) => r.binding.id));
+  const destLabel =
+    members.find((m) => m.binding.id === session?.activeBindingId)?.label ??
+    (session
+      ? await db
+          .select({ label: agentBinding.label })
+          .from(agentBinding)
+          .where(eq(agentBinding.id, session.activeBindingId))
+          .limit(1)
+          .then((rows) => rows[0]?.label)
+      : undefined);
   return buildRoomContext({
     turns,
     running,
     requestCount,
     roomTitle: session?.title,
+    destLabel,
+    members: members.map((m) => ({
+      label: m.label,
+      busy: busyIds.has(m.binding.id),
+    })),
+    motionCount,
     openTitles: pile.titles,
     openCount: pile.openCount,
   });

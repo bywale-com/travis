@@ -3,6 +3,7 @@
 import { absorbText, collapseSpeechStutter } from "@/lib/absorb-text";
 import {
   interpretRealtimeEvent,
+  liveInstructions,
   parseEphemeralSecret,
   realtimeSessionConfig,
   type ToolDecl,
@@ -32,6 +33,7 @@ export async function startTravisLive(opts: {
     model?: string;
     tools?: ToolDecl[];
     systemInstruction?: string;
+    here?: string;
     error?: string;
   };
   if (!tokenData.wired || !tokenData.token) {
@@ -52,6 +54,19 @@ export async function startTravisLive(opts: {
   let userFlush: ReturnType<typeof setTimeout> | null = null;
   let pendingNotify: string | null = null;
   let stopFn: () => Promise<void> = async () => {};
+  let sendEvent: (obj: unknown) => void = () => {};
+
+  const pushHere = (here: string) => {
+    const block = here.trim();
+    if (!block) return;
+    sendEvent({
+      type: "session.update",
+      session: realtimeSessionConfig({
+        instructions: liveInstructions(tokenData.systemInstruction ?? "", block),
+        tools: tokenData.tools ?? [],
+      }),
+    });
+  };
 
   const persist = async (role: "user" | "travis", text: string) => {
     const res = await fetch(`/api/session/${opts.sessionId}/live/transcript`, {
@@ -64,9 +79,10 @@ export async function startTravisLive(opts: {
       opts.onSeatStream(res);
       return { stopLive: true };
     }
-    const data = (await res.json()) as { stopLive?: boolean };
+    const data = (await res.json()) as { stopLive?: boolean; here?: string };
     if (role === "user") opts.onUserText(text);
     if (role === "travis") opts.onTravisText(text);
+    if (data.here) pushHere(data.here);
     return data;
   };
 
@@ -89,7 +105,7 @@ export async function startTravisLive(opts: {
   let dc: RTCDataChannel | null = null;
   let mic: MediaStream | null = null;
 
-  const sendEvent = (obj: unknown) => {
+  sendEvent = (obj: unknown) => {
     if (closed || dc?.readyState !== "open") return;
     dc.send(JSON.stringify(obj));
   };
@@ -123,7 +139,7 @@ export async function startTravisLive(opts: {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: call.name, args: call.args }),
       });
-      const json = (await toolRes.json()) as { text?: string };
+      const json = (await toolRes.json()) as { text?: string; here?: string };
       sendEvent({
         type: "conversation.item.create",
         item: {
@@ -132,6 +148,7 @@ export async function startTravisLive(opts: {
           output: json.text ?? "",
         },
       });
+      if (json.here) pushHere(json.here);
     }
     sendEvent({ type: "response.create" });
   };
@@ -152,7 +169,10 @@ export async function startTravisLive(opts: {
       sendEvent({
         type: "session.update",
         session: realtimeSessionConfig({
-          instructions: tokenData.systemInstruction ?? "",
+          instructions: liveInstructions(
+            tokenData.systemInstruction ?? "",
+            tokenData.here ?? "",
+          ),
           tools: tokenData.tools ?? [],
         }),
       });

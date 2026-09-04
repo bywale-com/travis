@@ -113,9 +113,21 @@ test("an empty room produces no window at all", () => {
   assert.equal(buildRoomContext({ turns: [] }), "");
 });
 
-test("only the latest Travis line stays in the window", () => {
+test("the last three Travis lines stay; older ones drop", () => {
   const out = buildRoomContext({
     turns: [
+      {
+        kind: "agent_post",
+        seatKey: "travis",
+        seatLabel: "Travis",
+        text: "Oldest claim — should drop.",
+      },
+      {
+        kind: "agent_post",
+        seatKey: "travis",
+        seatLabel: "Travis",
+        text: "Second-oldest claim — also drops.",
+      },
       {
         kind: "agent_post",
         seatKey: "travis",
@@ -137,7 +149,29 @@ test("only the latest Travis line stays in the window", () => {
     ],
   });
   assert.match(out, /Hold a line/);
-  assert.equal(out.includes("Usually it’s elevated"), false);
+  assert.match(out, /Usually it’s elevated/);
+  assert.match(out, /Second-oldest/);
+  assert.equal(out.includes("Oldest claim"), false);
+});
+
+test("Here names dest, roster, motion, and the open pile", () => {
+  const out = buildRoomContext({
+    turns: [],
+    destLabel: "Travis",
+    members: [
+      { label: "Travis", busy: false },
+      { label: "Pat", busy: true },
+    ],
+    motionCount: 2,
+    openTitles: ["That's fine."],
+    openCount: 1,
+  });
+  assert.match(out, /Here \(already true/);
+  assert.match(out, /Dest Travis/);
+  assert.match(out, /Travis idle/);
+  assert.match(out, /Pat busy/);
+  assert.match(out, /In motion: 2/);
+  assert.match(out, /That's fine\./);
 });
 
 test("a named room is announced in the window", () => {

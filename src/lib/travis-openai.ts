@@ -40,6 +40,12 @@ export function toRealtimeTools(decls: ToolDecl[]) {
   }));
 }
 
+/** Live session.update must keep Here. System alone wipes the room. */
+export function liveInstructions(system: string, here: string): string {
+  const block = here.trim();
+  return block ? `${system}\n\n${block}` : system;
+}
+
 export function realtimeSessionConfig(opts: {
   instructions: string;
   tools: ToolDecl[];

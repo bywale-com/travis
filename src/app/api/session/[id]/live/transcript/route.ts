@@ -16,6 +16,7 @@ import { openBindingForSeat } from "@/server/room-membership";
 import { AuthError } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
 import { runMotionRunner } from "@/server/motion";
+import { roomContextFor } from "@/server/room-read";
 
 type Body = {
   role?: "user" | "travis";
@@ -61,7 +62,8 @@ export async function POST(
   if (body.role === "travis") {
     const turn = await absorbLiveTravisPost(sessionId, text);
     await runMotionRunner(sessionId);
-    return NextResponse.json({ ok: true, turn });
+    const here = await roomContextFor(sessionId).catch(() => "");
+    return NextResponse.json({ ok: true, turn, here });
   }
 
   const userTurn = await insertUserTurn(
@@ -125,5 +127,6 @@ export async function POST(
   }
 
   await runMotionRunner(sessionId);
-  return NextResponse.json({ ok: true, turn: userTurn });
+  const here = await roomContextFor(sessionId).catch(() => "");
+  return NextResponse.json({ ok: true, turn: userTurn, here });
 }
