@@ -34,13 +34,11 @@ export function parseCursorUpdatedAt(raw: unknown): Date | null {
   return Number.isNaN(at.getTime()) ? null : at;
 }
 
-/** Hang only files this run touched. Missing times → skip (do not dump the folder). */
+/** Hang files this run touched. Ticket not required. Missing times → skip. */
 export function shouldHangArtifact(params: {
-  initiativeId?: string | null;
   startedAt?: Date | null;
   updatedAt?: Date | null;
 }): boolean {
-  if (!params.initiativeId) return false;
   if (!params.startedAt || !params.updatedAt) return false;
   return params.updatedAt.getTime() >= params.startedAt.getTime();
 }

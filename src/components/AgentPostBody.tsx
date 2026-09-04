@@ -41,6 +41,12 @@ function InlineRun({
           >
             {piece.text}
           </a>
+        ) : piece.type === "bold" ? (
+          <strong key={i} style={{ fontWeight: 650 }}>
+            {piece.text}
+          </strong>
+        ) : piece.type === "italic" ? (
+          <em key={i}>{piece.text}</em>
         ) : (
           <span key={i}>{piece.text}</span>
         ),

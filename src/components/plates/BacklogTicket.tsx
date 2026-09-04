@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { FileText, Image } from "lucide-react";
+import { AgentPostBody } from "@/components/AgentPostBody";
 import { SeatMark } from "@/components/QueueChrome";
 import { seatKeyToShort } from "@/lib/router";
 import { backlogStageKeys, backlogWithLine } from "@/lib/backlog-face";
@@ -214,7 +215,7 @@ export function BacklogTicket({
                         border: `1px solid ${t.border}`,
                       }}
                     >
-                      {post.text}
+                      <AgentPostBody text={post.text} t={t} />
                     </div>
                     {files.map((file) => (
                       <ArtifactQuiet key={file.id} t={t} file={file} />

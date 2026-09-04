@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-04** · Hotfix 064 · [PR #102](https://github.com/bywale-com/travis/pull/102) — Dest-seat files hang on the Log, bold/italic render, and thought lives on the roster circle, because Hold was not the door and the glowing mark had stolen Add/Create.
 - **2026-09-03** · Hotfix 063 · [PR #101](https://github.com/bywale-com/travis/pull/101) — Engineer Current lives in `ENGINEER-HANDOFF.md` so a new bind picks up, because orientation still said docs stand-up only.
 - **2026-09-03** · Hotfix 062 · [PR #98](https://github.com/bywale-com/travis/pull/98) — Hung images and files appear on the Log post, because 009 stored them and the ticket door showed them but the thread stayed text.
 - **2026-09-03** · SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) — Travis files a plan out of the turn and a runner advances it in Backlog, because the chat turn was the orchestrator and a barge killed the work.

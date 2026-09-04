@@ -63,7 +63,7 @@ export async function harvestTurnArtifacts(params: {
     await ensureArtifactStore();
     const post = params.post;
     if (!post || post.kind !== "agent_post") return;
-    if (!post.initiativeId || !params.startedAt) return;
+    if (!params.startedAt) return;
     const agentId = params.binding.cursorAgentId?.trim() ?? "";
     if (!agentId) return;
     const items = await listCursorArtifacts(agentId);
@@ -71,7 +71,6 @@ export async function harvestTurnArtifacts(params: {
       const updatedAt = parseCursorUpdatedAt(item.updatedAt);
       if (
         !shouldHangArtifact({
-          initiativeId: post.initiativeId,
           startedAt: params.startedAt,
           updatedAt,
         })

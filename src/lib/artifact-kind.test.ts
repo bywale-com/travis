@@ -31,21 +31,26 @@ test("content type follows the path", () => {
   assert.equal(artifactContentType("file", "artifacts/a.md"), "application/octet-stream");
 });
 
-test("out-of-ticket and missing window do not hang", () => {
+test("dest-seat hangs when the window is this run; missing times do not", () => {
   const started = new Date("2026-09-03T12:00:00Z");
   const late = new Date("2026-09-03T12:01:00Z");
   const early = new Date("2026-09-03T11:00:00Z");
   assert.equal(
     shouldHangArtifact({
-      initiativeId: null,
       startedAt: started,
       updatedAt: late,
     }),
-    false,
+    true,
   );
   assert.equal(
     shouldHangArtifact({
-      initiativeId: "t",
+      startedAt: started,
+      updatedAt: started,
+    }),
+    true,
+  );
+  assert.equal(
+    shouldHangArtifact({
       startedAt: null,
       updatedAt: late,
     }),
@@ -53,7 +58,6 @@ test("out-of-ticket and missing window do not hang", () => {
   );
   assert.equal(
     shouldHangArtifact({
-      initiativeId: "t",
       startedAt: started,
       updatedAt: null,
     }),
@@ -61,27 +65,10 @@ test("out-of-ticket and missing window do not hang", () => {
   );
   assert.equal(
     shouldHangArtifact({
-      initiativeId: "t",
       startedAt: started,
       updatedAt: early,
     }),
     false,
-  );
-  assert.equal(
-    shouldHangArtifact({
-      initiativeId: "t",
-      startedAt: started,
-      updatedAt: late,
-    }),
-    true,
-  );
-  assert.equal(
-    shouldHangArtifact({
-      initiativeId: "t",
-      startedAt: started,
-      updatedAt: started,
-    }),
-    true,
   );
 });
 

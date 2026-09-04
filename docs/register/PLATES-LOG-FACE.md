@@ -25,13 +25,12 @@ Founder named four gaps on the same walk. Two are look (plates). Two are law / r
 ### Specified and clear (wire after you sign the look)
 
 1. **Rich type (same store).** Grow `parseInline` for `**bold**` and `*italic*`. Use `AgentPostBody` on the ticket Messages door. No new table. TTS already strips marks via `speakableAgentPost` — extend it. Plate **L1**.
-2. **Thought door.** Tap a seat mark → that seat’s last thought (streaming **or** promoted). Roster stays the overflow `+N` / a named door — not the glowing mark. Plate **L3**.
+2. **Thought on the roster circle.** Roster stays. Title still opens it. Add / Create / Remove stay. The thinking seat’s circle glows; tap that circle to read the thought. Plate **L3**.
 
 ### Specified but not clear (do not invent)
 
-3. **Artifacts on dest-seat.** 009 must-not: no hang without a ticket. Changing that is **SA**. Until then: Hold the line (or send via Travis), then ask again. Do not write `turn_artifact` by hand.
-4. **Travis creates a seat.** Create / in-the-room / seated stay three moments. V4 already creates. A Travis `create_agent` tool is **SA** (and seated is still unchosen). Do not mint the tool.
-5. **Split beats.** `reference_turn_id` already exists. First post → the user line. Later posts → the last post of that seat. The missing grain is **what closes a beat** (new assistant message vs paragraph vs time). **SA** ascribes. Plate **L2** is the look only.
+3. **Travis Voice creates a seat.** The **Create an agent** screen is planted (roster + new room). Travis-in-Voice has no tool. That tool is **SA**.
+4. **Split beats.** Look signed (**L2**). What closes a beat is **SA**.
 
 ---
 
@@ -43,8 +42,8 @@ Carbon, phone, same room chrome. One job per plate.
 |----|------|-----|
 | **L1** | [`plates/travis-l1-log-rich-carbon.png`](./plates/travis-l1-log-rich-carbon.png) | Same Hold / pass-on post. Headings as weight. Lists as lists. Code as chips. Italic as italic. No `**` or `` ` ``. |
 | **L2** | [`plates/travis-l2-split-beats-carbon.png`](./plates/travis-l2-split-beats-carbon.png) | Three ENG bubbles. First quotes the founder line. Each next quotes the last ENG. |
-| **L3** | [`plates/travis-l3-thought-door-carbon.png`](./plates/travis-l3-thought-door-carbon.png) | Glowing ENG mark open. Thought sheet. Roster is not this tap. |
+| **L3** | [`plates/travis-l3-thought-door-carbon.png`](./plates/travis-l3-thought-door-carbon.png) | Roster intact. ENG circle glowing. Thought under that row. Create an agent still there. |
 
 ## Sign-off
 
-Look first. Then: Engineer plants L1 + L3 (hotfix). SA ascribes dest-seat hang, Travis-create, and the beat closer. Do not mint from the PNG.
+L1 + dest-seat hang + L3 roster thought plant in Hotfix 064. L2 look signed; beat closer still SA.
