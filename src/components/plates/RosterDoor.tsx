@@ -15,6 +15,12 @@ export type RosterMember = {
   status?: string;
 };
 
+export type RosterThought = {
+  id: string;
+  text: string;
+  glowing: boolean;
+};
+
 export function RosterDoor({
   t,
   roomTitle,
@@ -29,6 +35,9 @@ export function RosterDoor({
   onToggleAdd,
   onEnd,
   onRename,
+  thoughts,
+  openThoughtId,
+  onSeatMark,
 }: {
   t: Tokens;
   roomTitle: string;
@@ -43,6 +52,9 @@ export function RosterDoor({
   onToggleAdd: () => void;
   onEnd?: () => void;
   onRename?: (title: string) => void;
+  thoughts?: Record<string, RosterThought>;
+  openThoughtId?: string | null;
+  onSeatMark?: (thought: RosterThought) => void;
 }) {
   const inIds = new Set(members.map((m) => m.id).filter(Boolean) as string[]);
   const inKeys = new Set(
@@ -163,41 +175,76 @@ export function RosterDoor({
         <div style={{ marginTop: 16 }}>
           {members.map((m) => {
             const locked = isTravisSeat(m.seatKey);
+            const key = m.seatKey ?? m.label;
+            const thought = thoughts?.[key];
+            const open = thought && openThoughtId === thought.id;
             return (
-              <div
-                key={`${m.seatKey}-${m.label}`}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                  padding: "10px 0",
-                }}
-              >
-                <SeatMark
-                  seatKey={m.seatKey ?? m.label}
-                  label={m.label}
-                  t={t}
-                  size={28}
-                />
-                <span style={{ flex: 1 }}>
-                  <span style={{ display: "block", fontSize: TYPE.body }}>
-                    {m.label}
-                  </span>
-                  <span style={{ fontSize: TYPE.meta, color: t.textMuted }}>
-                    {locked ? "always here" : (m.status ?? "idle")}
-                  </span>
-                </span>
-                {locked ? (
-                  <span style={{ color: t.textMuted }}>—</span>
-                ) : (
+              <div key={`${m.seatKey}-${m.label}`} style={{ padding: "10px 0" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                  }}
+                >
                   <button
                     type="button"
-                    onClick={() => onRemove(m)}
-                    style={{ ...quietLink(t), fontSize: TYPE.meta }}
+                    onClick={() => thought && onSeatMark?.(thought)}
+                    disabled={!thought}
+                    aria-label={
+                      thought ? `${m.label} thought` : m.label
+                    }
+                    style={{
+                      border: "none",
+                      background: "transparent",
+                      padding: 0,
+                      cursor: thought ? "pointer" : "default",
+                    }}
                   >
-                    Remove
+                    <SeatMark
+                      seatKey={m.seatKey ?? m.label}
+                      label={m.label}
+                      t={t}
+                      size={28}
+                      glow={!!thought?.glowing}
+                    />
                   </button>
-                )}
+                  <span style={{ flex: 1 }}>
+                    <span style={{ display: "block", fontSize: TYPE.body }}>
+                      {m.label}
+                    </span>
+                    <span style={{ fontSize: TYPE.meta, color: t.textMuted }}>
+                      {locked
+                        ? "always here"
+                        : thought?.glowing
+                          ? "thinking"
+                          : (m.status ?? "idle")}
+                    </span>
+                  </span>
+                  {locked ? (
+                    <span style={{ color: t.textMuted }}>—</span>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => onRemove(m)}
+                      style={{ ...quietLink(t), fontSize: TYPE.meta }}
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+                {open ? (
+                  <p
+                    style={{
+                      margin: "8px 0 0 40px",
+                      fontSize: TYPE.meta,
+                      fontStyle: "italic",
+                      color: t.textSecondary,
+                    }}
+                  >
+                    {thought.text}
+                  </p>
+                ) : null}
               </div>
             );
           })}

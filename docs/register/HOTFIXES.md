@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **064**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **065**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -73,3 +73,4 @@
 | 061 | [`HOTFIX-061-ROOMS-BY-LAST.md`](./HOTFIX-061-ROOMS-BY-LAST.md) | Index ordered by last turn, not created |
 | 062 | [`HOTFIX-062-THREAD-ARTIFACTS.md`](./HOTFIX-062-THREAD-ARTIFACTS.md) | Hung images and files appear on the Log post, not only the ticket door |
 | 063 | [`HOTFIX-063-HANDOFF-SEAT.md`](./HOTFIX-063-HANDOFF-SEAT.md) | Engineer Current so a new bind picks up (`ENGINEER-HANDOFF.md`) |
+| 064 | [`HOTFIX-064-DEST-ARTIFACTS.md`](./HOTFIX-064-DEST-ARTIFACTS.md) | Dest-seat hang; rich type; thought on the roster circle |

@@ -2954,6 +2954,36 @@ export function Room({
           members={roomSeats}
           catalog={catalog}
           adding={rosterAdding}
+          thoughts={Object.fromEntries(
+            roomSeats.flatMap((seat) => {
+              const key = seat.seatKey;
+              if (!key) return [];
+              const thought = [...turns]
+                .reverse()
+                .find((t) => t.kind === "agent_thought" && t.seatKey === key);
+              if (!thought) return [];
+              const glowing =
+                thought.thoughtStatus === "streaming" ||
+                !!liveThoughts[thought.id] ||
+                runningNow.some((r) => r.seatKey === key);
+              return [
+                [
+                  key,
+                  {
+                    id: thought.id,
+                    text: liveThoughts[thought.id] || thought.text,
+                    glowing,
+                  },
+                ],
+              ];
+            }),
+          )}
+          openThoughtId={expandedThoughtId}
+          onSeatMark={(thought) =>
+            setExpandedThoughtId(
+              expandedThoughtId === thought.id ? null : thought.id,
+            )
+          }
           onClose={() => {
             setDoor(null);
             setRosterAdding(false);

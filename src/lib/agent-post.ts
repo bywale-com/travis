@@ -6,7 +6,9 @@
 export type PostInline =
   | { type: "text"; text: string }
   | { type: "code"; text: string }
-  | { type: "link"; href: string; text: string };
+  | { type: "link"; href: string; text: string }
+  | { type: "bold"; text: string }
+  | { type: "italic"; text: string };
 
 const URL_IN_TEXT = /https?:\/\/[^\s<>"'`]+/g;
 
@@ -43,17 +45,45 @@ const UL = /^[-*]\s+(.+)$/;
 const OL = /^\d+\.\s+(.+)$/;
 const BOLD_LINE = /^\*\*(.+)\*\*$/;
 
+function applyItalic(text: string): PostInline[] {
+  const out: PostInline[] = [];
+  const re = /\*([^*]+)\*/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    if (m.index > last) out.push(...splitLinks(text.slice(last, m.index)));
+    out.push({ type: "italic", text: m[1] });
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) out.push(...splitLinks(text.slice(last)));
+  return out.length ? out : [{ type: "text", text: "" }];
+}
+
+function applyBold(text: string): PostInline[] {
+  const out: PostInline[] = [];
+  const re = /\*\*(.+?)\*\*/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    if (m.index > last) out.push(...applyItalic(text.slice(last, m.index)));
+    out.push({ type: "bold", text: m[1] });
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) out.push(...applyItalic(text.slice(last)));
+  return out.length ? out : [{ type: "text", text: "" }];
+}
+
 export function parseInline(src: string): PostInline[] {
   const out: PostInline[] = [];
   const re = /`([^`]+)`/g;
   let last = 0;
   let m: RegExpExecArray | null;
   while ((m = re.exec(src))) {
-    if (m.index > last) out.push(...splitLinks(src.slice(last, m.index)));
+    if (m.index > last) out.push(...applyBold(src.slice(last, m.index)));
     out.push({ type: "code", text: m[1] });
     last = m.index + m[0].length;
   }
-  if (last < src.length) out.push(...splitLinks(src.slice(last)));
+  if (last < src.length) out.push(...applyBold(src.slice(last)));
   return out.length ? out : [{ type: "text", text: "" }];
 }
 
@@ -143,9 +173,7 @@ export function parseAgentPost(src: string): PostBlock[] {
 }
 
 function inlinesToSpeak(inlines: PostInline[]): string {
-  return inlines
-    .map((piece) => (piece.type === "link" ? piece.text : piece.text))
-    .join("");
+  return inlines.map((piece) => piece.text).join("");
 }
 
 /** Strip markup punctuation so TTS does not read hashes, ticks, or list marks. */

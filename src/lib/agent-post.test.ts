@@ -47,13 +47,16 @@ test("numbered list", () => {
 
 test("speakable strips hashes, ticks, and list marks", () => {
   const spoken = speakableAgentPost(
-    "## Bind path\n\n- keep `via` on the session\n\nDone.",
+    "## Bind path\n\n- keep `via` on the session\n\n**Hold** it. *Quote.*\n\nDone.",
   );
   assert.equal(spoken.includes("#"), false);
   assert.equal(spoken.includes("`"), false);
+  assert.equal(spoken.includes("*"), false);
   assert.equal(spoken.includes("- keep"), false);
   assert.match(spoken, /Bind path/);
   assert.match(spoken, /keep via on the session/);
+  assert.match(spoken, /Hold it/);
+  assert.match(spoken, /Quote/);
   assert.match(spoken, /Done/);
 });
 
@@ -61,6 +64,17 @@ test("flat text stays one paragraph", () => {
   const blocks = parseAgentPost("just a line");
   assert.equal(blocks.length, 1);
   assert.equal(blocks[0]?.type, "paragraph");
+});
+
+test("inline bold and italic drop the marks", () => {
+  const bits = parseInline(`keep **hold** and *quote* next to \`via\``);
+  assert.equal(bits.some((p) => p.type === "bold" && p.text === "hold"), true);
+  assert.equal(bits.some((p) => p.type === "italic" && p.text === "quote"), true);
+  assert.equal(bits.some((p) => p.type === "code" && p.text === "via"), true);
+  assert.equal(
+    bits.some((p) => p.type === "text" && p.text.includes("*")),
+    false,
+  );
 });
 
 test("http links stay text and split from punctuation", () => {

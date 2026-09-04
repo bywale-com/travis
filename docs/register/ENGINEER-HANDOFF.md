@@ -58,7 +58,7 @@ Create-agent prompt is still the one-line stub. Do not paste a seat block at cre
 - Tool calling is ChatGPT / ElevenLabs-shaped JSON. The chat turn is not the work — 013 runner is.
 - In motion **lives in Backlog**. Three views. Voice “N in motion” counts **only** Travis processes. **No product caps.**
 - Seat posts do **not** Google-read. New wakes Travis, names the seat, never the body (051).
-- Artifact kinds are `image` \| `file` only. Links and founder upload are **SA silence**. Out-of-ticket posts get nothing (009). 062 shows hung files on the Log.
+- Artifact kinds are `image` \| `file` only. Links and founder upload are **SA silence**. **064:** if it is visible in the Cursor chat, hang it on the Log post — ticket not required.
 - PM and SA have their own successor cuts: [PR #99](https://github.com/bywale-com/travis/pull/99) · [PR #100](https://github.com/bywale-com/travis/pull/100). Do not append their logs.
 
 ---
