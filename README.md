@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-04** · Envelope 022 · [PR #120](https://github.com/bywale-com/travis/pull/120) — Ports become a control and Travis fills the harness, because another `TRAVIS_*` token is the hardcoded path and I1 is still Cursor chrome.
 - **2026-09-04** · 021 worker · [PR #119](https://github.com/bywale-com/travis/pull/119) — Travis proves a job on the same box, says house and disk are two, and can unfold a house template into a new GitHub repo, because a one-shot run is not a worker and calling run_box again is not a loop.
 - **2026-09-04** · Envelope 021 · [PR #119](https://github.com/bywale-com/travis/pull/119) — Prove, keep, unfold, and hands split are the next shape, browser stays back, because the box is live and the founder wants the worker with rules, not more tools.
 - **2026-09-04** · 020 box · [PR #117](https://github.com/bywale-com/travis/pull/117) — Travis can run, read, and write on one Fly Sprite, pointer in env, because an error has to retry on the same machine and Vercel is not that machine.

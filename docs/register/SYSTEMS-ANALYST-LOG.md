@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-04 22:28 UTC — **SCP-021 signed.** Box is a worker with rules. House and disk are two. Unfold from `/templates/work-repo` + `TRAVIS_GITHUB_TOKEN`. 042 stands. Five back. Packet: [`SYSTEMS-CHANGE-PACKET-021-WORKER.md`](./SYSTEMS-CHANGE-PACKET-021-WORKER.md) on PR **#119**. Engineer plants prove on that PR.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-04 23:04 UTC — **SCP-022 signed.** Ports are a control. Mint `travis.port` (not `travis.integration`). Manifest in `/ports`. Paste authorize. Packet: [`SYSTEMS-CHANGE-PACKET-022-PORTS.md`](./SYSTEMS-CHANGE-PACKET-022-PORTS.md) on PR **#120**. Engineer plants host + connectors plate there.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -395,3 +395,22 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-021-WORKER.md`](./SYSTEMS-CHANGE-PACKET-021-WORKER.md)
 
 **Handoff:** Engineer plants prove on #119, then unfold (may be not-wired). Next packet number is **022**.
+
+---
+
+## 2026-09-04 23:04 UTC — SCP-022 ports (Engineer envelope on #120)
+
+**Kind:** Envelope pickup. [`ENVELOPE-TRAVIS-PORTS.md`](./ENVELOPE-TRAVIS-PORTS.md) (PR **#120**). Founder seated PM+Engineer for the glass. Packet on **this same PR**.
+
+**Ascribed:**
+
+1. Ports are a control. New vendor is a house manifest, not a PR to this repo.
+2. **Mint `travis.port`.** 012’s `travis.integration` name stays refused. No `session_id`. `DATABASE_URL` is not a port.
+3. **Host** = house `/ports/<slug>.json` + `listPorts()`. Refuse MCP / OAuth this packet. Generic use = inject secret as box exec env. Never tee.
+4. **Authorize** = paste. `GET /api/ports` / `POST /api/ports/:slug/authorize`. Secret never on the phone.
+5. Prebuilts: `cursor`, `github` (`TRAVIS_GITHUB_TOKEN`, his), `sprites`, `openai`, `resend`. Cursor’s GitHub scope stays inside `cursor`. Env is fallback.
+6. Glass: connectors plate **replaces** I1. V4 options stay. No marketplace.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-022-PORTS.md`](./SYSTEMS-CHANGE-PACKET-022-PORTS.md)
+
+**Handoff:** Engineer plants table, host, connectors plate on #120. Founder lands ALTER. Next packet number is **023**.
