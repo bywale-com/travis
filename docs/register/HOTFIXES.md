@@ -8,13 +8,14 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **066**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **067**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
 
 | # | File | Cut |
 |---|------|-----|
+| 066 | [`HOTFIX-066-PR-CLEANUP.md`](./HOTFIX-066-PR-CLEANUP.md) | One-PR trail in house + leftover docs; 003–007 on `main`; cousins close |
 | 001 | [`HOTFIX-001-ASSISTANT-STREAM.md`](./HOTFIX-001-ASSISTANT-STREAM.md) | Stream assistant text + running status (PM pipe parity) |
 | 002 | [`HOTFIX-002-ROOM-SMOKE.md`](./HOTFIX-002-ROOM-SMOKE.md) | Stream/STT dedupe, spoken call-by-name, plate look |
 | 003 | [`HOTFIX-003-SEAT-BINDINGS.md`](./HOTFIX-003-SEAT-BINDINGS.md) | Bind PM / SA / Engineer cloud agent ids |

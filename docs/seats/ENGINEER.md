@@ -118,7 +118,7 @@ If a table or field is missing: **name it and wait**.
 4. **Failures.** Startup `CursorAgentError` ≠ run `status === "error"`. Handle both.  
 5. **IDs.** Log `agentId` and `runId` immediately after send.  
 6. **Data.** Seeds when tables exist. Stand-ins mirror table shape; they are not a second catalog. Never paint a fake book into a component.  
-7. **Packets.** Prefer pull refs once PRs exist; named branches go stale. SA writes on **this** PR, not a cousin.  
+7. **Packets.** One PR. SA writes on **this** PR, not a cousin. Leftover named branches get closed.  
 8. **When the founder asks what is specified:** only the two buckets, then go.
 
 ---

@@ -122,7 +122,7 @@ When the founder will seat a **new** PM chat, this bind does the handoff — it 
 3. Stop. The founder pastes the block from the handoff file into the new chat.
 4. The old `bc-…` is no longer the room’s PM. Founder / Engineer rebinds. Do not leave the dead bind as the seat.
 
-A cold PM who only cloned `main` will miss 003–007 unless they fetch the living glass PR named in the handoff.
+**One PR:** packets land on the Engineer’s open initiative PR. There is no second “glass PR” to fetch. A cold PM who only cloned `main` is behind until that PR merges.
 
 ---
 

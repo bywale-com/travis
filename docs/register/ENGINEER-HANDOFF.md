@@ -1,8 +1,8 @@
-# Engineer seat handoff — 2026-09-03
+# Engineer seat handoff — 2026-09-04
 
-**This bind is done.** `bc-94804572-3a2f-4075-b290-a95c73730bd3` is **not** the living Engineer after the founder pastes the block below into a new chat.
+**This bind is living.** `bc-94804572-3a2f-4075-b290-a95c73730bd3` is the Engineer until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
-**Trail:** git + PRs. Do **not** append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
+**Trail:** git + PRs. **One PR per initiative.** Do **not** append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
 
 **Pickup file:** this page. Update it when you stop so the next Engineer does not start from a transcript.
 
@@ -10,23 +10,25 @@
 
 ## Where we stopped
 
-The pipe is planted. Last plant on `main` before this handoff: **Hotfix 062** — hung images and files on the Log post ([PR #98](https://github.com/bywale-com/travis/pull/98)).
+The pipe is planted. Last plants on `main` before this cut: **SCP-015** sit + disposable role dest ([PR #107](https://github.com/bywale-com/travis/pull/107)), **Hotfix 064** dest-seat artifacts ([PR #102](https://github.com/bywale-com/travis/pull/102)), **Hotfix 065** one PR per initiative ([PR #108](https://github.com/bywale-com/travis/pull/108)).
 
-This bind then misread “update yourself to be able to handoff seat” as a dispatch-to-PM/SA ritual ([PR #101](https://github.com/bywale-com/travis/pull/101) first cut). Founder corrected: **revise so a new Engineer picks up where this one stopped.** That is this file.
+This cut is **Hotfix 066** — house protocols and leftover docs carry the one-PR law; 003–007 PM trail and packets 002–007 land on `main`; leftover cousin PRs close.
 
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — next number **064** |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — next hotfix number **067** |
+| One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
 | Face | Phone-first Voice / Log / Backlog. Smoke there. |
-| Last plant | 062 · [`HOTFIX-062-THREAD-ARTIFACTS.md`](./HOTFIX-062-THREAD-ARTIFACTS.md) · [PR #98](https://github.com/bywale-com/travis/pull/98) |
-| Motion | SCP-013 · [`SYSTEMS-CHANGE-PACKET-013-MOTION.md`](./SYSTEMS-CHANGE-PACKET-013-MOTION.md) · [PR #97](https://github.com/bywale-com/travis/pull/97) |
-| House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) |
+| Last plant | 066 · [`HOTFIX-066-PR-CLEANUP.md`](./HOTFIX-066-PR-CLEANUP.md) |
+| Prior plants | 065 · [#108](https://github.com/bywale-com/travis/pull/108) · 015 · [#107](https://github.com/bywale-com/travis/pull/107) · 064 · [#102](https://github.com/bywale-com/travis/pull/102) · **Hotfix 062** · [#98](https://github.com/bywale-com/travis/pull/98) |
+| Motion | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) |
+| House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
 | Busy room (lived) | `0e8875f8-283b-4dae-bf54-76c82a05b6ef` (title “Travis”) |
 
-**Do not redo** 012, 013, or 062. They are on `main`.
+**Do not redo** 012, 013, 014, 015, 062, 064, or 065. They are on `main`.
 
 ---
 
@@ -36,16 +38,16 @@ Newest first. Full sentences live on the README Implementation trail.
 
 | Ref | PR | One line |
 |-----|----|----------|
+| 066 | this cut | One-PR trail everywhere; leftover PM log/packets on `main`; cousins close |
+| 065 | [#108](https://github.com/bywale-com/travis/pull/108) | One PR per initiative; initiative folders |
+| 015 | [#107](https://github.com/bywale-com/travis/pull/107) | Sit hangs protocol; role dest idle/spin, never enqueue |
+| 014 | [#104](https://github.com/bywale-com/travis/pull/104) | Split dest-seat beats + Voice `create_agent` |
+| 064 | [#102](https://github.com/bywale-com/travis/pull/102) | Dest-seat hang; rich type; thought on the roster circle |
 | 062 | [#98](https://github.com/bywale-com/travis/pull/98) | Hung `image` / `file` on the Log post |
 | 013 | [#97](https://github.com/bywale-com/travis/pull/97) | `motion` + runner; Backlog All / In motion / Initiatives |
 | 012 | [#93](https://github.com/bywale-com/travis/pull/93) | House `os_node` — `/protocols`, `/templates` |
-| 061 | [#90](https://github.com/bywale-com/travis/pull/90) | Rooms list by last turn |
-| 060–053 | [#89](https://github.com/bywale-com/travis/pull/89)–[#80](https://github.com/bywale-com/travis/pull/80) | Rooms feel, Live glue, rename, backlog plates, operator rooms/auth |
-| 011 | [#82](https://github.com/bywale-com/travis/pull/82) | Cursor + GitHub integration status/options |
-| 010–008 | [#79](https://github.com/bywale-com/travis/pull/79)–[#73](https://github.com/bywale-com/travis/pull/73) | Initiative store, title, `q`, hang files on the stamped post |
-| 051 | [#70](https://github.com/bywale-com/travis/pull/70) | New wakes Travis; no Google body read |
 
-Create-agent prompt is still the one-line stub. Do not paste a seat block at create (012 / envelope).
+Create-agent prompt is still the one-line stub. Do not paste a seat block at create.
 
 ---
 
@@ -53,25 +55,23 @@ Create-agent prompt is still the one-line stub. Do not paste a seat block at cre
 
 - Rooms list = last conversation first (061).
 - Backlog tickets are `open` \| `done` only. Next / Lit are derived.
-- Create / in-the-room / seated stay **three moments**. Seated is still not orchestrated.
+- Create / in-the-room / seated stay **three moments**. Sit is planted (015). Reuse idle; busy → next, not enqueue. `who` may still queue.
 - Travis is system-wide Om Coda / OS. House-now = `os_node`. POSIX later. No computer use.
-- Tool calling is ChatGPT / ElevenLabs-shaped JSON. The chat turn is not the work — 013 runner is.
-- In motion **lives in Backlog**. Three views. Voice “N in motion” counts **only** Travis processes. **No product caps.**
+- In motion **lives in Backlog**. Voice “N in motion” counts **only** Travis processes. **No product caps.**
 - Seat posts do **not** Google-read. New wakes Travis, names the seat, never the body (051).
-- Artifact kinds are `image` \| `file` only. Links and founder upload are **SA silence**. **064:** if it is visible in the Cursor chat, hang it on the Log post — ticket not required.
-- PM and SA have their own successor cuts: [PR #99](https://github.com/bywale-com/travis/pull/99) · [PR #100](https://github.com/bywale-com/travis/pull/100). Do not append their logs.
+- Artifact kinds are `image` \| `file` only. Links and founder upload are **SA silence**. If it is visible in the Cursor chat, hang it on the Log post.
+- **One PR per initiative.** Envelope / packet / pocket are roles of that PR. Hotfixes stay their own cuts and get merged.
+- Do not append PM or SA logs.
 
 ---
 
 ## Open / leftover (do not treat as the next plant)
 
-Stale packet branches. Prefer `main` + pull refs. Do not re-plant what already landed.
+Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 
-| PR | What it is |
-|----|------------|
-| [#95](https://github.com/bywale-com/travis/pull/95) | Plates — In motion glance (PNGs) |
-| [#96](https://github.com/bywale-com/travis/pull/96) · [#92](https://github.com/bywale-com/travis/pull/92) · [#76](https://github.com/bywale-com/travis/pull/76) | Leftover SA drafts of packets already on `main` |
-| [#101](https://github.com/bywale-com/travis/pull/101) | This handoff |
+| PR | What it was |
+|----|-------------|
+| #96 #92 #81 #78 #76 #75 #72 #71 #68 #42 #30 #29 #28 #27 #26 #20 #15 #8 #7 #4 | Cousins of work already on `main`, or trail this cut brought onto `main` |
 
 ---
 
@@ -79,20 +79,19 @@ Stale packet branches. Prefer `main` + pull refs. Do not re-plant what already l
 
 | Gap | Why it is blocked |
 |-----|-------------------|
-| Seated (agent → protocol) | Three moments stay separate. No `protocol_id`. Architecture not chosen. |
 | POSIX / unfold into a work repo | House-now is `os_node`. 042 stands. |
 | `link` / structured artifact kind · founder upload | SA named silence. |
 | Heard-survives-refresh · 007 R2 Hear / Next / Skip · urgency tiers | SA. |
-| Live image smoke for 062 | `turn_artifact` had **zero** rows when 062 landed. Needs one ticketed png in the Log before calling 062 lived. Ticket clip (title is wrong): `a5bca8b8-731f-40a0-9703-1b09b6306d90`. |
+| 015 lived smoke | Phone face: create Pat (must not be picked as PM), sit, idle send, busy→spin, `who` still queues. Do not auto-sit existing `pm`/`sa`/`engineer`/`travis` rows. |
 
 ---
 
 ## Next Engineer job
 
 1. Accept the seat from the paste below. Fetch `main`. Read **this file**, then [`ENGINEER.md`](../seats/ENGINEER.md), then `AGENTS.md`.
-2. Do not restart 012 / 013 / 062. Do not mint a store. Do not append PM or SA logs.
+2. Do not restart 012 / 013 / 014 / 015 / 062 / 064 / 065. Do not mint a store. Do not append PM or SA logs.
 3. Wait for the founder to name the next pocket. There is no parked “cousin” cut.
-4. When **you** stop: rewrite the **Current** lines at the top of this file (where we stopped, last plant, next hotfix number) so the next bind does not start from a transcript.
+4. When **you** stop: rewrite the **Current** lines at the top of this file (where we stopped, last plant, next hotfix number) so the next bind does not start from a transcript. Then you may write **This bind is done**.
 
 ---
 
@@ -107,8 +106,8 @@ Then, in order:
 1. docs/register/ENGINEER-HANDOFF.md — where we stopped, planted, leftover, locks.
 2. Root README.md Implementation trail (newest first).
 3. docs/seats/ENGINEER.md · AGENTS.md.
-4. docs/register/HOTFIX-062-THREAD-ARTIFACTS.md and SYSTEMS-CHANGE-PACKET-013-MOTION.md — last plants; do not redo.
+4. docs/register/initiatives/README.md — one PR per initiative.
 5. Smoke on https://travis-psi.vercel.app — Voice / Log / Backlog.
 
-Trail is git + PRs. Do not append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG. Ask me what pocket we are in.
+Trail is git + PRs. One PR per initiative. Do not append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG. Ask me what pocket we are in.
 ```

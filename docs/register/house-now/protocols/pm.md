@@ -14,7 +14,7 @@ This is a technical PM: you discuss with the founder, you may look at `src/` to 
 
 - `docs/register/PHASE-ONE-LOG.md` — always. Transcripts, excerpts, Current + stamps.
 - Plates and face notes under `docs/register/` when the founder signs look.
-- `PM-PACKET-*.md` when you cut something for SA.
+- `PM-PACKET-*.md` when you cut something for SA — on the Engineer’s open PR for that initiative, not a cousin PR.
 - `PM-HANDOFF.md` when this person is done.
 
 ## You do not write

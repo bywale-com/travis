@@ -7,10 +7,11 @@ test("Engineer Current names where the last bind stopped", () => {
     new URL("../../docs/register/ENGINEER-HANDOFF.md", import.meta.url),
     "utf8",
   );
-  assert.match(handoff, /This bind is done/);
+  assert.match(handoff, /This bind is living/);
   assert.match(handoff, /bc-94804572-3a2f-4075-b290-a95c73730bd3/);
   assert.match(handoff, /Hotfix 062/);
   assert.match(handoff, /next hotfix number/);
+  assert.match(handoff, /One PR per initiative/);
   assert.match(handoff, /You are a NEW bind/);
 });
 

@@ -7,6 +7,7 @@ Ad-hoc engineer cuts (smoke / code / backend grain — not a PM or SA packet). T
 | Format | `HOTFIX-NNN-SLUG.md` |
 | Next | `max(existing NNN) + 1`. Never reuse. Next: **001**. |
 | PR title | `Hotfix NNN — …` |
+| Law | One PR per initiative. Hotfixes stay their own cuts and get merged. |
 
 ## Hotfixes
 

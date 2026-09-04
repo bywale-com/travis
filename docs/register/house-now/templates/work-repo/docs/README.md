@@ -6,6 +6,6 @@ Three seats. Paste the short block, then this file.
 |------|------------------|
 | Product Manager | `docs/register/PHASE-ONE-LOG.md` |
 | Systems Analyst | `docs/register/SYSTEMS-ANALYST-LOG.md` |
-| Engineer | git + PRs · `ENGINEER-HANDOFF.md` · `HOTFIX-NNN` |
+| Engineer | git + PRs · one PR per initiative · `ENGINEER-HANDOFF.md` · `initiatives/` · `HOTFIX-NNN` |
 
 They do not swap jobs. Full process: `docs/seats/`. House copy of the same law: Travis `/protocols`.

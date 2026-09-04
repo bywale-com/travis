@@ -17,7 +17,7 @@ A seat is disposable. The log is not. If you do not write the trail, the next pe
 |------|--------|
 | PM | `docs/register/PHASE-ONE-LOG.md` |
 | SA | `docs/register/SYSTEMS-ANALYST-LOG.md` |
-| Engineer | git + PRs. Pickup `docs/register/ENGINEER-HANDOFF.md`. Hotfix receipts `docs/register/HOTFIX-NNN-*.md`. One sentence on repo-root `README.md` Implementation. Do not append PM or SA logs. |
+| Engineer | git + PRs. **One PR per initiative.** Pickup `docs/register/ENGINEER-HANDOFF.md`. Initiative folders `docs/register/initiatives/`. Hotfix receipts `docs/register/HOTFIX-NNN-*.md`. One sentence on repo-root `README.md` Implementation. Do not append PM or SA logs. |
 
 Thesis files (`PHASE-ONE.md`) are not the running log. Do not dump the day into the thesis.
 

@@ -4,20 +4,20 @@
 
 **Flag:** PHASE-ONE-LOG **14:00 UTC 2026-08-25** — do not overwrite.
 
+**One PR:** packets land on the Engineer’s open initiative PR. Do not open a cousin. Do not fetch leftover #4 / #15 / `pm/packets`.
+
 ---
 
 ## Where we stopped
 
-This seat lost the envelope, then passed “no new plate.” Founder cut that. The work did **not** wait here.
-
 | What | Where |
 |------|--------|
-| Envelope (work layer) | [`ENVELOPE-TRAVIS-ORCHESTRATE.md`](./ENVELOPE-TRAVIS-ORCHESTRATE.md) on **`main`** · [PR #94](https://github.com/bywale-com/travis/pull/94) |
-| Plates (signed look, home recut) | [`PLATES-IN-MOTION.md`](https://github.com/bywale-com/travis/blob/cursor/plates-in-motion-0bd3/docs/register/PLATES-IN-MOTION.md) · [PR #95](https://github.com/bywale-com/travis/pull/95) — P1 Voice `N in motion` · P2 Backlog In-motion view |
-| SA + plant | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) **on `main`** — `motion` + runner in Backlog |
-| Prior altitude | [`ENVELOPE-TRAVIS-OS-TREE.md`](./ENVELOPE-TRAVIS-OS-TREE.md) (house; seated still open) · rooms envelope (planted) |
-| 003–007 living glass / full PM log | [PR #15](https://github.com/bywale-com/travis/pull/15) · `cursor/plates-queue-prototype-ant-b9ea` — **this `main` log file is missing those stamps.** Fetch #15 for 003–007. |
-| 007 | Locked. Hear-queue. R0 Engineer / R1 SA. Do not recut C3/C4. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) on **`main`** — Current + 003–007 stamps |
+| Packets 001–007 | [`PM-PACKETS.md`](./PM-PACKETS.md) on **`main`** |
+| Envelope (work layer) | [`ENVELOPE-TRAVIS-ORCHESTRATE.md`](./ENVELOPE-TRAVIS-ORCHESTRATE.md) · [PR #94](https://github.com/bywale-com/travis/pull/94) |
+| Motion plant | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) — `motion` + runner in Backlog |
+| House | [`ENVELOPE-TRAVIS-OS-TREE.md`](./ENVELOPE-TRAVIS-OS-TREE.md) · sit planted as SCP-015 · [PR #107](https://github.com/bywale-com/travis/pull/107) |
+| 007 | Locked. Hear-queue. R0 Engineer / R1 SA. Do not recut C3/C4. Hear / Next / Skip still SA. |
 
 **Do not** follow any “no new plate / V6 grown only” FACE from the old bind. Home is **Backlog** (All / In motion / Initiatives). Voice count = Travis processes only.
 
@@ -25,11 +25,11 @@ This seat lost the envelope, then passed “no new plate.” Founder cut that. T
 
 ## Next PM job (if founder has not named a new pocket)
 
-1. Accept the seat. Fetch `main` **and** `origin/cursor/plates-queue-prototype-ant-b9ea` for the living log.  
-2. Read the envelope, then PR #95 FACE + P1/P2, then SCP-013 as planted truth.  
-3. Do **not** reprint P1/P2. Do **not** invent a second index.  
-4. Open PM work only if the founder names it (007 R1, seated, or a new pocket).  
-5. Rebind: the old `bc-…` must not stay the room’s PM once the new chat exists. Engineer / env — not a table mint in the SPA.
+1. Accept the seat. Fetch `main`. Read Current, then the newest stamp.
+2. Read the envelope, then SCP-013 as planted truth. Sit is planted (015). Do not collapse create / in-the-room / seated.
+3. Do **not** reprint P1/P2. Do **not** invent a second index.
+4. Open PM work only if the founder names it. Write on the Engineer’s open PR for that pocket.
+5. Rebind: the old `bc-…` must not stay the room’s PM once the new chat exists.
 
 ---
 
@@ -41,14 +41,13 @@ You are Travis’s Product Manager. Read docs/README.md “Product Manager — i
 You are a NEW bind. The last PM was bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea. They handed off. Read docs/register/PM-HANDOFF.md first.
 
 Then, in order:
-1. docs/register/PHASE-ONE-LOG.md — Current, then newest stamp.
-   Fetch origin/cursor/plates-queue-prototype-ant-b9ea — main’s copy of this log was stale through 002 until the handoff stamp.
+1. docs/register/PHASE-ONE-LOG.md — Current, then newest stamp. 003–007 are on main.
 2. docs/register/PHASE-ONE.md
-3. docs/register/ENVELOPE-TRAVIS-ORCHESTRATE.md (main)
-4. PR #95 PLATES-IN-MOTION.md + P1/P2 — look signed; home is Backlog.
+3. docs/register/PM-PACKETS.md — packets 001–007 on main. Do not fetch leftover PRs.
+4. docs/register/ENVELOPE-TRAVIS-ORCHESTRATE.md (main)
 5. docs/register/SYSTEMS-CHANGE-PACKET-013-MOTION.md — planted on main (PR #97).
-6. docs/register/ENVELOPE-TRAVIS-OS-TREE.md — seated still open; do not collapse into orchestrate.
-7. 007 is locked on PR #15 (hear-queue). Do not recut C3/C4.
+6. Sit is planted (015). Do not collapse create / in-the-room / seated.
+7. 007 is locked. Hear / Next / Skip is still SA. Do not recut C3/C4.
 
-Flag 14:00 UTC 2026-08-25 stands. Stamp this log that you accepted. Ask me what pocket we are in.
+One PR per initiative. Write on the Engineer’s open PR. Flag 14:00 UTC 2026-08-25 stands. Stamp this log that you accepted. Ask me what pocket we are in.
 ```
