@@ -53,6 +53,20 @@ test("instant lookups stay silent", () => {
   assert.equal(narrateToolCall("read_seat_reply", { seat: "sa" }), null);
 });
 
+test("creating an agent is announced by name", () => {
+  assert.equal(
+    narrateToolCall("create_agent", { label: "Eng 2" }),
+    "Creating Eng 2.",
+  );
+});
+
+test("sitting a person names who and the protocol", () => {
+  assert.equal(
+    narrateToolCall("sit_agent", { who: "pat", protocol: "pm" }),
+    "Seating pat on pm.",
+  );
+});
+
 test("marking done is announced", () => {
   assert.equal(
     narrateToolCall("mark_initiative_done", { id: "x" }),

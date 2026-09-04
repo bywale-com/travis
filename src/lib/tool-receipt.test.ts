@@ -130,3 +130,9 @@ test("a failed dispatch carries the reason", () => {
     /Could not start PM: boom/,
   );
 });
+
+test("a busy role dest does not claim it queued", () => {
+  const text = dispatchReceipt({ status: "busy", seatLabel: "Pat" });
+  assert.match(text, /does not queue/);
+  assert.doesNotMatch(text, /will go when/);
+});

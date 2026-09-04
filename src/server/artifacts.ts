@@ -3,7 +3,7 @@
  * Do not remint initiative. Do not store the 15-minute URL.
  */
 
-import { asc, eq, sql } from "drizzle-orm";
+import { and, asc, eq, sql } from "drizzle-orm";
 import {
   artifactFilename,
   artifactKindFromPath,
@@ -66,8 +66,19 @@ export async function harvestTurnArtifacts(params: {
     if (!post.initiativeId || !params.startedAt) return;
     const agentId = params.binding.cursorAgentId?.trim() ?? "";
     if (!agentId) return;
+    const hung = await db
+      .select({ path: turnArtifact.path })
+      .from(turnArtifact)
+      .where(
+        and(
+          eq(turnArtifact.sessionId, post.sessionId),
+          eq(turnArtifact.bindingId, params.binding.id),
+        ),
+      );
+    const hungPaths = new Set(hung.map((row) => row.path));
     const items = await listCursorArtifacts(agentId);
     for (const item of items) {
+      if (hungPaths.has(item.path)) continue;
       const updatedAt = parseCursorUpdatedAt(item.updatedAt);
       if (
         !shouldHangArtifact({
@@ -91,6 +102,7 @@ export async function harvestTurnArtifacts(params: {
           cursorUpdatedAt: updatedAt,
         })
         .onConflictDoNothing();
+      hungPaths.add(item.path);
     }
   } catch (err) {
     console.error("[travis] artifact harvest failed:", err);

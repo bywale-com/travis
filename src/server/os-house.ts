@@ -59,6 +59,12 @@ export async function ensureOsStore(): Promise<void> {
     FROM travis.os_node WHERE path = '/'
     ON CONFLICT (path) DO NOTHING
   `);
+  await db.execute(sql`
+    INSERT INTO travis.os_node (path, name, kind, parent_id)
+    SELECT '/logs', 'logs', 'dir', id
+    FROM travis.os_node WHERE path = '/'
+    ON CONFLICT (path) DO NOTHING
+  `);
   osStoreReady = true;
 }
 

@@ -4,6 +4,11 @@
  */
 
 import { absorbText } from "@/lib/absorb-text";
+import { alignStreamedBeats, nextDestSeatText } from "@/lib/beats";
+import {
+  assistantBeatsFromConversation,
+  textFromAssistantMessage,
+} from "@/lib/cursor-conversation";
 import {
   delay,
   isAgentBusyError,
@@ -17,6 +22,8 @@ export type CursorStreamEvent =
   | { type: "delta"; text: string }
   | { type: "thought_delta"; text: string }
   | { type: "post_delta"; text: string }
+  /** New dest-seat message — pipe closes the open beat */
+  | { type: "post_beat"; text: string }
   | { type: "run_started"; runId: string }
   | { type: "busy"; discoveredRunId: string | null }
   | {
@@ -114,54 +121,15 @@ export async function downloadCursorArtifact(params: {
   }
 }
 
-function textFromAssistantMessage(content: unknown): string {
-  if (!Array.isArray(content)) return "";
-  let out = "";
-  for (const block of content) {
-    if (
-      block &&
-      typeof block === "object" &&
-      (block as { type?: string }).type === "text" &&
-      typeof (block as { text?: string }).text === "string"
-    ) {
-      out += (block as { text: string }).text;
-    }
-  }
-  return out;
-}
-
-async function assistantTextFromConversation(run: {
+async function assistantBeatsFromRun(run: {
   conversation?: () => Promise<unknown>;
-}): Promise<string> {
-  if (typeof run.conversation !== "function") return "";
+}): Promise<string[]> {
+  if (typeof run.conversation !== "function") return [];
   try {
     const turns = await run.conversation();
-    if (!Array.isArray(turns)) return "";
-    const parts: string[] = [];
-    for (const turn of turns) {
-      const t = turn as {
-        turn?: {
-          steps?: Array<{
-            type?: string;
-            message?: { text?: string; content?: unknown };
-          }>;
-        };
-      };
-      for (const step of t.turn?.steps ?? []) {
-        if (step.type !== "assistantMessage") continue;
-        const msg = step.message;
-        if (!msg) continue;
-        if (typeof msg.text === "string" && msg.text.trim()) {
-          parts.push(msg.text.trim());
-          continue;
-        }
-        const fromBlocks = textFromAssistantMessage(msg.content);
-        if (fromBlocks.trim()) parts.push(fromBlocks.trim());
-      }
-    }
-    return parts.join("\n\n").trim();
+    return assistantBeatsFromConversation(turns);
   } catch {
-    return "";
+    return [];
   }
 }
 
@@ -212,12 +180,16 @@ export async function probeCursorRun(agentId: string): Promise<{
 export async function harvestFinishedRun(params: {
   agentId: string;
   runId: string;
-}): Promise<{ status: "active" | "idle" | "unknown"; assistantText: string }> {
+}): Promise<{
+  status: "active" | "idle" | "unknown";
+  assistantText: string;
+  beats: string[];
+}> {
   const key = apiKey();
   const agentId = params.agentId.trim();
   const runId = params.runId.trim();
   if (!agentId || !runId || !isCloudAgentId(agentId) || !key) {
-    return { status: "unknown", assistantText: "" };
+    return { status: "unknown", assistantText: "", beats: [] };
   }
   try {
     const { Agent } = await import("@cursor/sdk");
@@ -227,15 +199,25 @@ export async function harvestFinishedRun(params: {
       apiKey: key,
     });
     if (isActiveRunStatus(run.status)) {
-      return { status: "active", assistantText: "" };
+      return { status: "active", assistantText: "", beats: [] };
     }
-    let text = await assistantTextFromConversation(run);
-    if (!text.trim() && typeof run.result === "string") {
-      text = run.result.trim();
+    const beats = await assistantBeatsFromRun(run);
+    if (beats.length) {
+      return {
+        status: "idle",
+        assistantText: beats[beats.length - 1],
+        beats,
+      };
     }
-    return { status: "idle", assistantText: text.trim() };
+    const fallback =
+      typeof run.result === "string" ? run.result.trim() : "";
+    return {
+      status: "idle",
+      assistantText: fallback,
+      beats: fallback ? [fallback] : [],
+    };
   } catch {
-    return { status: "unknown", assistantText: "" };
+    return { status: "unknown", assistantText: "", beats: [] };
   }
 }
 
@@ -276,6 +258,7 @@ async function* streamRunEvents(
 
   let thoughtText = "";
   let postText = "";
+  const streamedBeats: string[] = [];
 
   if (typeof run.stream === "function") {
     for await (const event of run.stream()) {
@@ -303,10 +286,20 @@ async function* streamRunEvents(
       if (e.type === "assistant") {
         const chunk = textFromAssistantMessage(e.message?.content);
         if (chunk) {
-          const next = absorbText(postText, chunk);
-          if (next.delta) {
-            postText = next.acc;
+          const next = nextDestSeatText(postText, chunk);
+          if (next.mode === "insert" && postText.trim()) {
+            streamedBeats.push(next.text);
+            postText = next.text;
+            yield { type: "post_beat", text: next.text };
+          } else if (next.delta) {
+            if (!streamedBeats.length) streamedBeats.push(next.text);
+            else streamedBeats[streamedBeats.length - 1] = next.text;
+            postText = next.text;
             yield { type: "post_delta", text: next.delta };
+          } else {
+            if (!streamedBeats.length && next.text) streamedBeats.push(next.text);
+            else if (streamedBeats.length) streamedBeats[streamedBeats.length - 1] = next.text;
+            postText = next.text;
           }
         }
         continue;
@@ -320,15 +313,24 @@ async function* streamRunEvents(
 
   const result = await run.wait();
 
-  if (!postText.trim()) {
-    const fromConversation = await assistantTextFromConversation(run);
-    if (fromConversation) {
-      postText = fromConversation;
-      yield { type: "post_delta", text: fromConversation };
-    } else if (result.result?.trim()) {
-      postText = result.result.trim();
-      yield { type: "post_delta", text: postText };
-    }
+  const fromConversation = await assistantBeatsFromRun(run);
+  const aligned = alignStreamedBeats(streamedBeats, fromConversation);
+  if (aligned.growLast) {
+    postText = aligned.growLast;
+    yield { type: "post_delta", text: aligned.growLast };
+  }
+  for (const beat of aligned.extra) {
+    postText = beat;
+    yield streamedBeats.length
+      ? { type: "post_beat", text: beat }
+      : { type: "post_delta", text: beat };
+    streamedBeats.push(beat);
+  }
+  if (aligned.beats.length) {
+    postText = aligned.beats[aligned.beats.length - 1];
+  } else if (!postText.trim() && result.result?.trim()) {
+    postText = result.result.trim();
+    yield { type: "post_delta", text: postText };
   }
 
   if (result.status === "error") {
