@@ -4,7 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
-- **2026-09-04** · Hotfix 071 · this cut — A named ticket takes the addition, a failed leave is a receipt, and catalog SA can take the line if spin dies, because “bundle That’s fine.” minted a new title from the last spoken line and SA never received it.
+- **2026-09-04** · Hotfix 071 · [PR #116](https://github.com/bywale-com/travis/pull/116) — A named ticket takes the addition, a failed leave is a receipt, and catalog SA can take the line if spin dies, because “bundle That’s fine.” minted a new title from the last spoken line and SA never received it.
 - **2026-09-04** · Hotfix 070 · [PR #115](https://github.com/bywale-com/travis/pull/115) — Here names the latest ticket and whether a seat posted, a miss is not a cousin, and check-narration drops from the window, because Travis heard “SAE,” missed the title, and offered the Engineer ticket.
 - **2026-09-04** · Hotfix 069 · [PR #114](https://github.com/bywale-com/travis/pull/114) — A handoff is the receipt and an empty run means not waiting, and a ticket read is that ticket, because Travis announced a send to SA and then read yesterday’s essay as the answer.
 - **2026-09-04** · 016 Here · [PR #112](https://github.com/bywale-com/travis/pull/112) — Travis is handed dest, roster, motion, and the open pile, and Live keeps that block current, because the room was its environment and it was still blind.
