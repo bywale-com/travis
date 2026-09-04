@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-08-27 — **PM-PACKET-002 locked** on living PR [#4](https://github.com/bywale-com/travis/pull/4). Founder approved. **Next: SA** ascribe → change packet → Engineer. Merge hotfix separately.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 23:06 UTC — **PM seat handed off.** New chat pastes [`PM-HANDOFF.md`](./PM-HANDOFF.md). Bind `bc-1ac0762e` is no longer the living PM. 003–007 live on [PR #15](https://github.com/bywale-com/travis/pull/15).
 
 **How we maintain this log**
 
@@ -485,3 +485,18 @@ So: **maybe not still** — if “distinct from Cursor” means leave Cursor / i
 **Landed:** [`PM-PACKET-002-ROOM.md`](./PM-PACKET-002-ROOM.md) on living PM packets PR. [`ROOM-FACE.md`](./ROOM-FACE.md) + plates A1–A2 B1–B2.
 
 **Next:** SA runs packet SA paste → change packet → Engineer plants.
+
+---
+
+## 2026-09-03 23:06 UTC — PM seat handoff
+
+**Kind:** Seat handoff. Not a packet.
+
+**This `main` log was stale** (Current still 002). 003–007 and the living glass are on [PR #15](https://github.com/bywale-com/travis/pull/15). Fetch that branch to read them. Do not treat this file as the full trail.
+
+**Old bind** `bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea` **stops.** Founder seats a new PM with the paste in [`PM-HANDOFF.md`](./PM-HANDOFF.md). Rebind the room’s PM off that id.
+
+**Already landed (do not redo):** orchestrate envelope [PR #94](https://github.com/bywale-com/travis/pull/94) · plates P1/P2 [PR #95](https://github.com/bywale-com/travis/pull/95) · SCP-013 [PR #97](https://github.com/bywale-com/travis/pull/97). Home = Backlog. Seated still open.
+
+**Ask:** founder pastes the new PM. Engineer rebinds.
+
