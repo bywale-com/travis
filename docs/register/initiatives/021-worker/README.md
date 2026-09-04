@@ -3,6 +3,6 @@
 **PR:** [#119](https://github.com/bywale-com/travis/pull/119).  
 **Envelope:** [`../../ENVELOPE-TRAVIS-WORKER.md`](../../ENVELOPE-TRAVIS-WORKER.md)
 
-Founder: box is live; be conscientious; evolve the whole shape. Priority **1–4** (prove, keep, unfold, hands split). Five (browser) stays back. SA ascribes rules and ports. Packet **021** if they write one.
+Founder: box is live; be conscientious; evolve the whole shape. Priority **1–4** (prove, keep, unfold, hands split). Five (browser) stays back.
 
-Engineer does not plant prove from this folder until SA names the rules.
+**SA signed.** Packet: [`../../SYSTEMS-CHANGE-PACKET-021-WORKER.md`](../../SYSTEMS-CHANGE-PACKET-021-WORKER.md) — seated on this PR. Engineer plants prove from that packet.
