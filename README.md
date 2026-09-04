@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-04** · Hotfix 067 · [PR #110](https://github.com/bywale-com/travis/pull/110) — House refile stays out of `next build`, because a labor `.ts` import was failing production after 065.
 - **2026-09-04** · Hotfix 066 · [PR #109](https://github.com/bywale-com/travis/pull/109) — House protocols and leftover pickup files name one PR, and 003–007 land on `main`, because the law lived in one folder while seats still fetched cousin drafts.
 - **2026-09-04** · Hotfix 065 · [PR #108](https://github.com/bywale-com/travis/pull/108) — One PR per initiative and a short folder of what changed, because seats were minting cousin PRs and walking could not tell which object was the work.
 - **2026-09-04** · SCP-015 · [PR #107](https://github.com/bywale-com/travis/pull/107) — Sit hangs a person on a house protocol and role dest reuses idle or spins the next, because a busy seat was making the founder wait in a queue.
