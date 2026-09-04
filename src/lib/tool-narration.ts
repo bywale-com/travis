@@ -38,14 +38,14 @@ export function narrateToolCall(
     case "dispatch_to_seat": {
       const line = clip(String(args.text ?? ""));
       return line
-        ? `Starting ${seat(args)} on “${line}”.`
-        : `Starting ${seat(args)} on it.`;
+        ? `Calling ${seat(args)} with “${line}”.`
+        : `Calling ${seat(args)}.`;
     }
     case "send_to_seat": {
       const line = clip(String(args.text ?? ""));
       return line
-        ? `Sending “${line}” to ${seat(args)} and waiting for the answer.`
-        : `Sending that to ${seat(args)} and waiting for the answer.`;
+        ? `Calling ${seat(args)} with “${line}”.`
+        : `Calling ${seat(args)}.`;
     }
     case "barge_or_drop":
       return args.action === "send"

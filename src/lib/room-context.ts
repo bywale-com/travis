@@ -51,7 +51,7 @@ export type ContextTurn = {
 
 export type RunningNote = { seatLabel: string; elapsedMs: number };
 
-export type HereMember = { label: string; busy: boolean };
+export type HereMember = { label: string; busy: boolean; seated?: boolean };
 
 function clip(text: string, cap: number): string {
   const flat = text.replace(/\s+/g, " ").trim();
@@ -114,7 +114,12 @@ export function hereBlock(params: {
   if (members.length) {
     const shown = members
       .slice(0, ROSTER_GLANCE)
-      .map((m) => `${m.label.trim() || "?"} ${m.busy ? "busy" : "idle"}`);
+      .map((m) => {
+        const name = m.label.trim() || "?";
+        const busy = m.busy ? "busy" : "idle";
+        const sit = m.seated === false ? " · not seated" : "";
+        return `${name} ${busy}${sit}`;
+      });
     const more =
       members.length > ROSTER_GLANCE ? ` +${members.length - ROSTER_GLANCE}` : "";
     lines.push(`Roster: ${shown.join(" · ")}${more}.`);
@@ -203,6 +208,10 @@ export function buildRoomContext(params: {
             `${r.seatLabel} (${Math.max(1, Math.round(r.elapsedMs / 1000))}s so far)`,
         )
         .join(", ")}.`,
+    );
+  } else if (here || body.length || pointer) {
+    parts.push(
+      "No seat is running. A handoff is not in progress. Do not say you are waiting on a seat.",
     );
   }
   if (pointer) parts.push(pointer);

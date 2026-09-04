@@ -2,17 +2,17 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { narrateToolCall } from "./tool-narration";
 
-test("a dispatch says which seat and what it is starting", () => {
+test("a dispatch says it is calling, not that the run started", () => {
   assert.equal(
     narrateToolCall("dispatch_to_seat", { seat: "sa", text: "demomessages" }),
-    "Starting the SA on “demomessages”.",
+    "Calling the SA with “demomessages”.",
   );
 });
 
-test("a blocking send says it is going to wait", () => {
-  assert.match(
-    narrateToolCall("send_to_seat", { seat: "engineer", text: "look at x" }) ?? "",
-    /Sending “look at x” to the Engineer and waiting for the answer\./,
+test("a blocking send does not claim it is waiting on an answer", () => {
+  assert.equal(
+    narrateToolCall("send_to_seat", { seat: "engineer", text: "look at x" }),
+    "Calling the Engineer with “look at x”.",
   );
 });
 

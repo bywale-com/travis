@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 import { runTravisTool } from "@/server/travis-tools";
 import { runMotionRunner } from "@/server/motion";
 import { roomContextFor } from "@/server/room-read";
-import { insertAgentPostTurn } from "@/server/seat-pipe";
 import { db } from "@/server/db/client";
 import { voiceSession } from "@/server/db/schema";
 import { AuthError } from "@/server/api-error";
@@ -40,10 +39,6 @@ export async function POST(
     name,
     args: body.args ?? {},
   });
-
-  if (name === "send_to_seat" && result.ok) {
-    await insertAgentPostTurn(sessionId, result.text, "travis");
-  }
 
   await runMotionRunner(sessionId);
   const here = await roomContextFor(sessionId).catch(() => "");

@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-04** · Hotfix 069 · this cut — A handoff is the receipt and an empty run means not waiting, and a ticket read is that ticket, because Travis announced a send to SA and then read yesterday’s essay as the answer.
 - **2026-09-04** · 016 Here · [PR #112](https://github.com/bywale-com/travis/pull/112) — Travis is handed dest, roster, motion, and the open pile, and Live keeps that block current, because the room was its environment and it was still blind.
 - **2026-09-04** · Hotfix 068 · [PR #111](https://github.com/bywale-com/travis/pull/111) — Travis is handed the open backlog titles, because it said the pile was empty while the top ticket sat in the same room.
 - **2026-09-04** · Hotfix 067 · [PR #110](https://github.com/bywale-com/travis/pull/110) — House refile stays out of `next build`, because a labor `.ts` import was failing production after 065.

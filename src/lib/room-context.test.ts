@@ -154,6 +154,23 @@ test("the last three Travis lines stay; older ones drop", () => {
   assert.equal(out.includes("Oldest claim"), false);
 });
 
+test("Here names an unseated idle person and that no seat is running", () => {
+  const out = buildRoomContext({
+    turns: [],
+    destLabel: "Travis",
+    members: [
+      { label: "SA", busy: false, seated: false },
+      { label: "Pat", busy: true, seated: true },
+    ],
+    openTitles: ["That's fine."],
+    openCount: 1,
+  });
+  assert.match(out, /SA idle · not seated/);
+  assert.match(out, /Pat busy/);
+  assert.match(out, /No seat is running/);
+  assert.doesNotMatch(out, /Pat busy · not seated/);
+});
+
 test("Here names dest, roster, motion, and the open pile", () => {
   const out = buildRoomContext({
     turns: [],
