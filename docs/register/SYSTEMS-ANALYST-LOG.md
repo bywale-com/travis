@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 23:06 UTC — **Seat handoff ready.** Last machine cut: SCP-013 planted, caps struck. Successor: [`../seats/SYSTEMS-ANALYST.md`](../seats/SYSTEMS-ANALYST.md) § Handoff + this Current. Packet: [`SYSTEMS-CHANGE-PACKET-013-MOTION.md`](./SYSTEMS-CHANGE-PACKET-013-MOTION.md).
+**Current (read first, then the newest stamp at the bottom):** 2026-09-04 18:03 UTC — **SCP-015 signed.** Seated = `protocol_path` on the person. Busy → next, not enqueue. Packet: [`SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md`](./SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md).
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -343,3 +343,22 @@ Packet on `main` already has question 5 = **None**.
 **Law written into the seat (was only in a chat):** plates as staples; PM may be parked; do not invent caps; job-law from the founder only.
 
 **Successor starts:** README SA paste → § Handoff → this Current → newest stamp → 013 packet. Next number is **014**.
+
+---
+
+## 2026-09-04 18:03 UTC — SCP-015 disposable seats (Engineer envelope)
+
+**Kind:** Envelope pickup. [`ENVELOPE-DISPOSABLE-SEATS.md`](./ENVELOPE-DISPOSABLE-SEATS.md) (PR #105). PM parked. House files are labor in `os_node`; `house-now/` is the git receipt.
+
+**Ascribed:**
+
+1. Seated = `agent_binding.protocol_path` (house path). Empty at create. Locked paths: `/protocols/pm.md` \| `sa.md` \| `engineer.md`. Not `seat_key`. Not membership `role`. Not Travis.
+2. Idle = this room + that path + no `seat_live_run`. Oldest `joined_at`.
+3. Role dest: never enqueue. Next idle or spin + sit. Person dest (`who`): queue stays.
+4. Hand protocol = harness `read_os` WHERE + logging + protocol, then send to that binding. Create stub unchanged.
+5. Log: work-repo files as locked. No repo → `/logs/<role>.md`. No `seat_log` table.
+6. No remint 012–014. No migrate-seed. No cap. No role plate.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md`](./SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md)
+
+**Handoff:** Engineer plants the column, `sit_agent`, role route, harness hand. Plant 014 first if `create_agent` is not on `main`. Founder lands ALTER.
