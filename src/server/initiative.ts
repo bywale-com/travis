@@ -222,6 +222,31 @@ export async function ensureViaTravis(
   return insertOpen(sessionId, founding.id, "via_travis");
 }
 
+/**
+ * Lived 20:38 — “bundle That’s fine. and send” minted a new ticket from
+ * “Yes, that’s the exact one.” Pass id to hang the addition on the
+ * named ticket. Do not insertOpen.
+ */
+export async function ticketForHand(
+  sessionId: string,
+  initiativeId?: string,
+): Promise<Initiative | null> {
+  await ensureInitiativeStore();
+  const id = initiativeId?.trim();
+  if (id) {
+    const row = await getInitiative(id);
+    if (!row || row.sessionId !== sessionId) {
+      throw new InitiativeError("Initiative not found", 404);
+    }
+    const latest = await latestTravisUserTurn(sessionId);
+    if (latest && !latest.initiativeId) {
+      await stampTurn(latest.id, row.id);
+    }
+    return row;
+  }
+  return ensureViaTravis(sessionId);
+}
+
 /** No Travis founding line — the pass-on user row is the ticket. */
 export async function ensureOnPassOn(
   sessionId: string,

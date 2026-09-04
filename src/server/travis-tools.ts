@@ -54,7 +54,6 @@ import {
   sitAgent,
 } from "@/server/sit";
 import {
-  ensureViaTravis,
   formatInitiativeList,
   formatInitiativeRead,
   glanceOpenInitiatives,
@@ -64,6 +63,7 @@ import {
   readInitiative,
   renameInitiative,
   stampLatestPassOn,
+  ticketForHand,
 } from "@/server/initiative";
 import type { InitiativeStatus } from "@/server/db/schema";
 import {
@@ -93,13 +93,14 @@ export const TRAVIS_TOOL_DECLS = [
   {
     name: "send_to_seat",
     description:
-      "Send a line. seat=pm|sa|engineer with no who is a role dest: an idle seated person of that protocol, or spin a new one. Role dest never queues. who is a person dest (that slug only) — busy may queue. Does not change who you are talking to (stays Travis).",
+      "Send a line. seat=pm|sa|engineer with no who is a role dest: an idle seated person of that protocol, or spin a new one. Role dest never queues. who is a person dest (that slug only) — busy may queue. Pass id to hang this on an existing ticket — do not mint a new one from the last spoken line. Does not change who you are talking to (stays Travis).",
     parameters: {
       type: "object",
       properties: {
         seat: { type: "string", enum: ["pm", "sa", "engineer"] },
         who: { type: "string" },
         text: { type: "string" },
+        id: { type: "string" },
       },
       required: ["text"],
     },
@@ -112,13 +113,14 @@ export const TRAVIS_TOOL_DECLS = [
   {
     name: "dispatch_to_seat",
     description:
-      "Start a line and return immediately. seat without who is a role dest (idle seated, or spin — never queue). who is a person dest (busy may queue). Nothing comes back here — call read_seat_reply once work_in_flight shows it finished.",
+      "Start a line and return immediately. seat without who is a role dest (idle seated, or spin — never queue). who is a person dest (busy may queue). Pass id to hang this on an existing ticket — do not mint a new one from the last spoken line. Nothing comes back here — call read_seat_reply once work_in_flight shows it finished.",
     parameters: {
       type: "object",
       properties: {
         seat: { type: "string", enum: ["pm", "sa", "engineer"] },
         who: { type: "string" },
         text: { type: "string" },
+        id: { type: "string" },
       },
       required: ["text"],
     },
@@ -438,7 +440,15 @@ export async function runTravisTool(params: {
     const dupeKey = who || seat;
     const dupe = await guardDuplicate(sessionId, "send_to_seat", dupeKey, text);
     if (dupe) return postHandReceipt(sessionId, dupe);
-    const prior = await ensureViaTravis(sessionId);
+    let prior;
+    try {
+      prior = await ticketForHand(sessionId, String(args.id ?? ""));
+    } catch (err) {
+      if (err instanceof InitiativeError) {
+        return postHandReceipt(sessionId, { ok: false, text: err.message });
+      }
+      throw err;
+    }
     const startedAt = Date.now();
     let errored = false;
     let replyChars = 0;
@@ -453,44 +463,49 @@ export async function runTravisTool(params: {
     };
 
     if (kind === "person") {
-      const binding = await openMemberByWho(sessionId, who);
-      if (!binding) return { ok: false, text: `${who} is not an open member of this room.` };
-      if (binding.seatKey === "travis") {
-        return { ok: false, text: "Travis dest never uses the Cursor send path." };
+      try {
+        const binding = await openMemberByWho(sessionId, who);
+        if (!binding) return { ok: false, text: `${who} is not an open member of this room.` };
+        if (binding.seatKey === "travis") {
+          return { ok: false, text: "Travis dest never uses the Cursor send path." };
+        }
+        const seatLabel = binding.label ?? who;
+        const outcome = await sendOrEnqueue({
+          sessionId,
+          binding,
+          prompt: text,
+          initiativeId: prior?.id,
+          send: onSend,
+        });
+        let waitingAhead = 0;
+        if (outcome === "queued") {
+          const snap = await queueSnapshot(sessionId);
+          const row = snap.seats.find((s) => s.seatKey === binding.seatKey);
+          waitingAhead = Math.max(0, (row?.items.length ?? 1) - 1);
+        }
+        await stampLatestPassOn(sessionId, binding.seatKey ?? who, text).catch(
+          () => {},
+        );
+        return postHandReceipt(sessionId, {
+          ok: true,
+          text: sendReceipt({
+            seatLabel,
+            queued: outcome === "queued",
+            waitingAhead,
+            elapsedMs: Date.now() - startedAt,
+            errored,
+            replyChars,
+          }),
+          sentToEngineer: binding.protocolPath === "/protocols/engineer.md",
+        });
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        return postHandReceipt(sessionId, { ok: false, text: msg });
       }
-      const seatLabel = binding.label ?? who;
-      const outcome = await sendOrEnqueue({
-        sessionId,
-        binding,
-        prompt: text,
-        initiativeId: prior?.id,
-        send: onSend,
-      });
-      let waitingAhead = 0;
-      if (outcome === "queued") {
-        const snap = await queueSnapshot(sessionId);
-        const row = snap.seats.find((s) => s.seatKey === binding.seatKey);
-        waitingAhead = Math.max(0, (row?.items.length ?? 1) - 1);
-      }
-      await stampLatestPassOn(sessionId, binding.seatKey ?? who, text).catch(
-        () => {},
-      );
-      return postHandReceipt(sessionId, {
-        ok: true,
-        text: sendReceipt({
-          seatLabel,
-          queued: outcome === "queued",
-          waitingAhead,
-          elapsedMs: Date.now() - startedAt,
-          errored,
-          replyChars,
-        }),
-        sentToEngineer: binding.protocolPath === "/protocols/engineer.md",
-      });
     }
 
     try {
-      const { binding, outcome } = await sendToRoleDest({
+      const { binding, outcome, catalogFallback } = await sendToRoleDest({
         sessionId,
         role: seat as "pm" | "sa" | "engineer",
         text,
@@ -501,10 +516,13 @@ export async function runTravisTool(params: {
       await stampLatestPassOn(sessionId, binding.seatKey ?? seat, text).catch(
         () => {},
       );
+      const note = catalogFallback
+        ? ` Catalog ${seatLabel} is not seated — sent to that person so the line left.`
+        : "";
       return postHandReceipt(sessionId, {
         ok: outcome !== "busy",
         text:
-          outcome === "busy"
+          (outcome === "busy"
             ? `Could not find or spin an idle ${seatLabel}.`
             : sendReceipt({
                 seatLabel,
@@ -513,17 +531,12 @@ export async function runTravisTool(params: {
                 elapsedMs: Date.now() - startedAt,
                 errored,
                 replyChars,
-              }),
+              })) + note,
         sentToEngineer: seat === "engineer",
       });
     } catch (err) {
-      if (err instanceof SitError) {
-        return postHandReceipt(sessionId, { ok: false, text: err.message });
-      }
-      if (err instanceof MembershipError) {
-        return postHandReceipt(sessionId, { ok: false, text: err.message });
-      }
-      throw err;
+      const msg = err instanceof Error ? err.message : String(err);
+      return postHandReceipt(sessionId, { ok: false, text: msg });
     }
   }
 
@@ -541,34 +554,47 @@ export async function runTravisTool(params: {
     const dupeKey = who || seat;
     const dupe = await guardDuplicate(sessionId, "dispatch_to_seat", dupeKey, text);
     if (dupe) return postHandReceipt(sessionId, dupe);
-    const prior = await ensureViaTravis(sessionId);
+    let prior;
+    try {
+      prior = await ticketForHand(sessionId, String(args.id ?? ""));
+    } catch (err) {
+      if (err instanceof InitiativeError) {
+        return postHandReceipt(sessionId, { ok: false, text: err.message });
+      }
+      throw err;
+    }
 
     if (kind === "person") {
-      const binding = await openMemberByWho(sessionId, who);
-      if (!binding) return { ok: false, text: `${who} is not an open member of this room.` };
-      if (binding.seatKey === "travis") {
-        return { ok: false, text: "Travis dest never uses the Cursor send path." };
+      try {
+        const binding = await openMemberByWho(sessionId, who);
+        if (!binding) return { ok: false, text: `${who} is not an open member of this room.` };
+        if (binding.seatKey === "travis") {
+          return { ok: false, text: "Travis dest never uses the Cursor send path." };
+        }
+        const outcome = await dispatchToSeat({
+          sessionId,
+          binding,
+          prompt: text,
+          initiativeId: prior?.id,
+        });
+        if (outcome.status !== "error") {
+          await stampLatestPassOn(sessionId, binding.seatKey ?? who, text).catch(
+            () => {},
+          );
+        }
+        return postHandReceipt(sessionId, {
+          ok: outcome.status !== "error",
+          text: dispatchReceipt(outcome),
+          sentToEngineer: binding.protocolPath === "/protocols/engineer.md",
+        });
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        return postHandReceipt(sessionId, { ok: false, text: msg });
       }
-      const outcome = await dispatchToSeat({
-        sessionId,
-        binding,
-        prompt: text,
-        initiativeId: prior?.id,
-      });
-      if (outcome.status !== "error") {
-        await stampLatestPassOn(sessionId, binding.seatKey ?? who, text).catch(
-          () => {},
-        );
-      }
-      return postHandReceipt(sessionId, {
-        ok: outcome.status !== "error",
-        text: dispatchReceipt(outcome),
-        sentToEngineer: binding.protocolPath === "/protocols/engineer.md",
-      });
     }
 
     try {
-      const { binding, outcome } = await dispatchToRoleDest({
+      const { binding, outcome, catalogFallback } = await dispatchToRoleDest({
         sessionId,
         role: seat as "pm" | "sa" | "engineer",
         text,
@@ -579,19 +605,18 @@ export async function runTravisTool(params: {
           () => {},
         );
       }
+      const seatLabel = binding.label ?? seatKeyToLabel(seat as SeatKey);
+      const note = catalogFallback
+        ? ` Catalog ${seatLabel} is not seated — sent to that person so the line left.`
+        : "";
       return postHandReceipt(sessionId, {
         ok: outcome.status !== "error" && outcome.status !== "busy",
-        text: dispatchReceipt(outcome),
+        text: dispatchReceipt(outcome) + note,
         sentToEngineer: seat === "engineer",
       });
     } catch (err) {
-      if (err instanceof SitError) {
-        return postHandReceipt(sessionId, { ok: false, text: err.message });
-      }
-      if (err instanceof MembershipError) {
-        return postHandReceipt(sessionId, { ok: false, text: err.message });
-      }
-      throw err;
+      const msg = err instanceof Error ? err.message : String(err);
+      return postHandReceipt(sessionId, { ok: false, text: msg });
     }
   }
 
@@ -926,7 +951,7 @@ You can create a person with create_agent — a name, optional model and repo. S
 
 sit_agent hangs an open member on a protocol file (pm, sa, or engineer). That is the seated write. Re-sit overwrites and re-hands the protocol. You still cannot see a work repository after they sit.
 
-When the founder wants the PM, SA, or Engineer, send_to_seat or dispatch_to_seat with seat and no who. Route to an idle seated person of that protocol in this room. If they are busy, do not queue — sit the next one, or spin a new person, sit them, and send there. queued_utterance is only for a named person (who).
+When the founder wants the PM, SA, or Engineer, send_to_seat or dispatch_to_seat with seat and no who. Route to an idle seated person of that protocol in this room. If they are busy, do not queue — sit the next one, or spin a new person, sit them, and send there. queued_utterance is only for a named person (who). When they add to a named ticket or say resend that one, pass id. Do not mint a new initiative from “yes that’s the one.” The addition stamps onto that ticket. The send receipt is whether it left. If the receipt says it failed, say that — do not say they have it.
 
 rename_room names this room. Only when they ask. Do not invent a name for an untitled room. You cannot list or rename other rooms.
 
