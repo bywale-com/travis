@@ -22,7 +22,7 @@ This cut is **Hotfix 066** — house protocols and leftover docs carry the one-P
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
 | Face | Phone-first Voice / Log / Backlog. Smoke there. |
-| Last plant | **021** prove / keep / unfold · [#119](https://github.com/bywale-com/travis/pull/119). Open: envelope **022** ports signed · [#120](https://github.com/bywale-com/travis/pull/120). This cut: envelope **023** tightness · [`ENVELOPE-TRAVIS-TIGHTNESS.md`](./ENVELOPE-TRAVIS-TIGHTNESS.md) |
+| Last plant | **021** prove / keep / unfold · [#119](https://github.com/bywale-com/travis/pull/119). Open: **022** ports signed · [#120](https://github.com/bywale-com/travis/pull/120). This cut: envelope **023** tightness · [#123](https://github.com/bywale-com/travis/pull/123) |
 | Prior plants | 065 · [#108](https://github.com/bywale-com/travis/pull/108) · 015 · [#107](https://github.com/bywale-com/travis/pull/107) · 064 · [#102](https://github.com/bywale-com/travis/pull/102) · **Hotfix 062** · [#98](https://github.com/bywale-com/travis/pull/98) |
 | Motion | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) |
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
@@ -86,7 +86,9 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 
 | Gap | Why it is blocked |
 |-----|-------------------|
-| `TRAVIS_GITHUB_TOKEN` | Unfold is planted and receipts `not wired` until the founder sets the secret on Vercel. After this build. Not `GITHUB_TOKEN`. |
+| Tightness / dest gate | Envelope [`ENVELOPE-TRAVIS-TIGHTNESS.md`](./ENVELOPE-TRAVIS-TIGHTNESS.md). 021+022 do not stop mailing his own action. Gate is **SA 023**. |
+| Ports host + connectors plate | 022 signed on [#120](https://github.com/bywale-com/travis/pull/120). Do not remint `travis.port`. |
+| `TRAVIS_GITHUB_TOKEN` | Unfold receipts `not wired` until founder sets it, or 022 hangs it on port `github`. Not `GITHUB_TOKEN`. |
 | `link` / structured artifact kind · founder upload | SA named silence. |
 | Heard-survives-refresh · 007 R2 Hear / Next / Skip · urgency tiers | SA. |
 | 015 lived smoke | Phone face: create Pat (must not be picked as PM), sit, idle send, busy→spin, `who` still queues. Do not auto-sit existing `pm`/`sa`/`engineer`/`travis` rows. |

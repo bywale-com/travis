@@ -3,7 +3,7 @@
 **Kind:** Envelope. **Not a packet. Not a plant.**  
 **Seat:** Engineer. Founder: record the whole shape in **one** envelope so other eyes can walk it. Children live in Cursor. Protocol, management, supervisory tightness — **that is us.** The box and the ports are not enough if dest is still mail. Engineer does not mint a table from this file. Engineer does not plant a dest gate, a supervisor runner, or the connectors face from this file. Do not append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.  
 **When:** 2026-09-04 ~23:14 UTC. Lived room `0e8875f8` (title “Travis”).  
-**One PR:** this branch. Next packet number is **023** if you write one for dest / supervise. **022** already signed on [#120](https://github.com/bywale-com/travis/pull/120) — do not remint `travis.port`.
+**One PR:** [#123](https://github.com/bywale-com/travis/pull/123). Next packet number is **023** if you write one for dest / supervise. **022** already signed on [#120](https://github.com/bywale-com/travis/pull/120) — do not remint `travis.port`.
 
 **Flag (unchanged):** Phase One 14:00 UTC 2026-08-25.
 

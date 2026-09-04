@@ -33,7 +33,7 @@ A little context: what the pocket was, what changed, the PR. Point at the packet
 | 020 | [`020-box/`](./020-box/) | [#117](https://github.com/bywale-com/travis/pull/117) |
 | 021 | [`021-worker/`](./021-worker/) | [#119](https://github.com/bywale-com/travis/pull/119) |
 | 022 | [`022-ports/`](https://github.com/bywale-com/travis/tree/cursor/envelope-travis-ports-0bd3/docs/register/initiatives/022-ports) | [#120](https://github.com/bywale-com/travis/pull/120) (signed, not planted) |
-| 023 | [`023-tightness/`](./023-tightness/) | this branch — number after open |
+| 023 | [`023-tightness/`](./023-tightness/) | [#123](https://github.com/bywale-com/travis/pull/123) |
 
 ## Must-not
 
