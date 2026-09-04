@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-04 18:03 UTC — **SCP-015 signed.** Seated = `protocol_path` on the person. Busy → next, not enqueue. Packet: [`SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md`](./SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md).
+**Current (read first, then the newest stamp at the bottom):** 2026-09-04 19:47 UTC — **SCP-016 signed.** Here is the environment (pushed). Tools are depth. No new table. Packet: [`SYSTEMS-CHANGE-PACKET-016-HERE.md`](./SYSTEMS-CHANGE-PACKET-016-HERE.md). Plant already on `main` (PR **#112**).
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -377,3 +377,22 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md`](./SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md)
 
 **Handoff:** Engineer plants the column, `sit_agent`, role route, harness hand. Plant 014 first if `create_agent` is not on `main`. Founder lands ALTER.
+
+---
+
+## 2026-09-04 19:47 UTC — SCP-016 Here (Engineer envelope)
+
+**Kind:** Envelope pickup. [`ENVELOPE-TRAVIS-HERE.md`](./ENVELOPE-TRAVIS-HERE.md). Engineer already planted PR **#112** (`86423a6`) on `main`. This stamp **signs**. It does not remint.
+
+**Lived bug (preserved):** room `0e8875f8`, seq 542–561. Travis said the backlog was empty while five open tickets sat in the same room. That is a lie about the environment, not a tool miss.
+
+**Ascribed:**
+
+1. Here is the environment. One block, pushed, unasked — Dest · roster idle/busy · N in motion · open titles · last founder line · last few Travis lines. Same path as 038 / 048 / 068.
+2. Tools are **depth**. `list_initiatives` / `search_room` never contradict Here. A miss is no match, never “the room is empty.”
+3. **No new table.** Last founder line is a `voice_turn` (`kind=user`) in the 038 window. Glance bounds (`BACKLOG_GLANCE`, `TRAVIS_KEEP`, `ROSTER_GLANCE`) are what fits in Here, not product caps.
+4. Live stays current: `session.update` after token / transcript / tool.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-016-HERE.md`](./SYSTEMS-CHANGE-PACKET-016-HERE.md)
+
+**Handoff:** Nothing to plant. Next packet number is **017**.
