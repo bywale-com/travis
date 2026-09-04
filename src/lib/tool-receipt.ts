@@ -48,6 +48,7 @@ export function dispatchReceipt(
     | { status: "started"; seatLabel: string }
     | { status: "queued"; seatLabel: string; waitingAhead: number }
     | { status: "stand-in"; seatLabel: string }
+    | { status: "busy"; seatLabel: string }
     | { status: "error"; seatLabel: string; error: string },
 ): string {
   if (o.status === "started") {
@@ -60,6 +61,9 @@ export function dispatchReceipt(
   }
   if (o.status === "stand-in") {
     return `${o.seatLabel} is not wired to a Cursor agent, so nothing ran.`;
+  }
+  if (o.status === "busy") {
+    return `${o.seatLabel} is busy. Role dest does not queue — spin a next seat.`;
   }
   return `Could not start ${o.seatLabel}: ${o.error}`;
 }

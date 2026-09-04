@@ -346,6 +346,21 @@ Packet on `main` already has question 5 = **None**.
 
 ---
 
+## 2026-09-04 16:54 UTC — SCP-014 Log beats + Voice create (Engineer leftover)
+
+**Kind:** Engineer handoff pickup. [`PLATES-LOG-FACE.md`](./PLATES-LOG-FACE.md) + [`ENGINEER-HANDOFF.md`](./ENGINEER-HANDOFF.md). L1 / dest-seat hang / L3 are 064. Two leftovers named SA.
+
+**Ascribed:**
+
+1. **Beat closer** — dest-seat posts use `nextLiveTravisText` insert/update (059 law). Snapshot stays one row. New message inserts. `referenceTurnId`: beat 1 = user turn; later = previous `agent_post` of that seat. Artifacts hang on the **current** beat. Port must not re-glue at `conversation()`.
+2. **`create_agent`** — same write as V4. `join` default true (membership `member` in this room). No role. No protocol. No cap.
+
+**Refused:** `link` kind, seated, heard, reminting 064.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-014-LOG-BEATS.md`](./SYSTEMS-CHANGE-PACKET-014-LOG-BEATS.md)
+
+**Handoff:** Engineer pastes absorb/insert, quote chain, harvest-on-current-beat, `create_agent`. Do not remint 064.
+
 ## 2026-09-04 18:03 UTC — SCP-015 disposable seats (Engineer envelope)
 
 **Kind:** Envelope pickup. [`ENVELOPE-DISPOSABLE-SEATS.md`](./ENVELOPE-DISPOSABLE-SEATS.md) (PR #105). PM parked. House files are labor in `os_node`; `house-now/` is the git receipt.

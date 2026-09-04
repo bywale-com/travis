@@ -187,7 +187,7 @@ Do not mint these unless the founder seats them.
 | **Cancel-a-plan / digest plate** | 013 organizes. Report later. |
 | **Browse OS** | Labor is not an effect. |
 | **`link` kind / founder upload** | 009/064 are `image` \| `file` only. |
-| **Heard / Hear / Next / Skip** | Still silence. |
+| **Heard / Hear / Next / Skip** | Still SA silence. |
 
 ### Live packets (do not restart these)
 
@@ -198,7 +198,7 @@ Do not mint these unless the founder seats them.
 | 011 | Integrations status/options | Planted |
 | 012 | OS house `os_node` | Planted |
 | 013 | Motion + runner, **no product caps** | Planted |
-| 014 | Split beats + Voice `create_agent` | Signed / planting — do not remint |
+| 014 | Split beats + Voice `create_agent` | Planted — [`SYSTEMS-CHANGE-PACKET-014-LOG-BEATS.md`](../register/SYSTEMS-CHANGE-PACKET-014-LOG-BEATS.md). L1/L3/hang = 064. |
 | 015 | Disposable seats | **Signed** — [`SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md`](../register/SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md) |
 
 Next packet number is **016**. Never reuse a number.

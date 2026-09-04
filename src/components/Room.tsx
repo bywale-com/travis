@@ -8,6 +8,7 @@ import {
   keepSpeechDraft,
   mergeLiveTranscript,
 } from "@/lib/absorb-text";
+import { isOpenStreamingPost } from "@/lib/beats";
 import { conductorGate, conductorOnEnd, isDuplicateSend } from "@/lib/conductor";
 import { speakableAgentPost } from "@/lib/agent-post";
 import { applyReadbackVoice } from "@/lib/speak-voice";
@@ -276,6 +277,9 @@ export function Room({
   const [streamingPosts, setStreamingPosts] = useState<Record<string, string>>(
     {},
   );
+  const [streamingPostIds, setStreamingPostIds] = useState<
+    Record<string, string>
+  >({});
   const [streamingSeat, setStreamingSeat] = useState<string | null>(null);
   const [subtitle, setSubtitle] = useState("");
   const [expandedThoughtId, setExpandedThoughtId] = useState<string | null>(null);
@@ -779,7 +783,16 @@ export function Room({
               }
               return [...prev, turn];
             });
+            const sk = turn.seatKey ?? "_";
+            setStreamingPostIds((prev) => ({ ...prev, [sk]: turn.id }));
           }
+        } else if (event === "post_beat") {
+          const chunk = String(data.text ?? "");
+          const sk = String(data.seatKey ?? "_");
+          if (data.seatLabel) seatLabel = String(data.seatLabel);
+          if (data.seatKey) setStreamingSeat(String(data.seatKey));
+          postBySeat[sk] = chunk;
+          setStreamingPosts({ ...postBySeat });
         } else if (event === "post_delta") {
           const chunk = String(data.text ?? "");
           const sk = String(data.seatKey ?? "_");
@@ -796,6 +809,11 @@ export function Room({
           const sk = String(data.seatKey ?? "_");
           delete postBySeat[sk];
           setStreamingPosts({ ...postBySeat });
+          setStreamingPostIds((prev) => {
+            const next = { ...prev };
+            delete next[sk];
+            return next;
+          });
           setLiveStatus(null);
           setStreamingSeat(null);
           await refreshTurns(sid);
@@ -1985,11 +2003,11 @@ export function Room({
     if (turn.kind !== "agent_post") return true;
     const live = streamingPosts[turn.seatKey ?? "_"];
     if (!live) return true;
-    const lastUser = [...turns].reverse().find((t) => t.kind === "user");
-    if (lastUser && turn.referenceTurnId === lastUser.id) {
-      return false;
-    }
-    return true;
+    return !isOpenStreamingPost({
+      turnId: turn.id,
+      seatKey: turn.seatKey,
+      streamingPostIds,
+    });
   });
   const newCutId = newCutTurnId(
     threadTurns.map((t) => t.id),
