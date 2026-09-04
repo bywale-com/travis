@@ -189,6 +189,7 @@ Do not mint these unless the founder seats them.
 | **`link` kind / founder upload** | 009/064 are `image` \| `file` only. |
 | **Heard / Hear / Next / Skip** | Still SA silence. |
 | **Computer use / browser** | 021 five — back. `curl` from the box is not a browser. |
+| **MCP / OAuth / ElevenLabs** | 022 named silence. Paste + manifest this packet. |
 | **House dumped onto the Sprite** | 021 keep: they are two. |
 
 ### Live packets (do not restart these)
