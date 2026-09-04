@@ -20,6 +20,7 @@ test("seat sends and nested file_plan cannot be motion steps", () => {
     "set_view",
     "file_plan",
     "create_agent",
+    "sit_agent",
   ]) {
     assert.equal(isMotionStepRefused(tool), true, tool);
     assert.equal(isMotionStepAllowed(tool), false, tool);

@@ -35,6 +35,7 @@ test("coverage reports what exists by class", () => {
   assert.equal(byClass.write.includes("rename_room"), true);
   assert.equal(byClass.write.includes("file_plan"), true);
   assert.equal(byClass.write.includes("create_agent"), true);
+  assert.equal(byClass.write.includes("sit_agent"), true);
   assert.equal(byClass.read.includes("list_backlog"), true);
 });
 

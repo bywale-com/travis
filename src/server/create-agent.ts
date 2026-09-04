@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { nextUniqueSlug, seatSlugFromLabel } from "@/lib/seat-slug";
 import { db } from "@/server/db/client";
 import { agentBinding } from "@/server/db/schema";
+import { ensureSitStore } from "@/server/sit-store";
 
 function apiKey(): string {
   return process.env.CURSOR_API_KEY?.trim() ?? "";
@@ -217,6 +218,7 @@ export async function createAgentBinding(opts: {
 }): Promise<{ id: string; seatKey: string; label: string }> {
   const label = opts.label.trim();
   if (!label) throw new Error("Name the agent.");
+  await ensureSitStore();
   const rows = await db.select({ seatKey: agentBinding.seatKey }).from(agentBinding);
   const taken = new Set(rows.map((r) => r.seatKey));
   const seatKey = nextUniqueSlug(seatSlugFromLabel(label), taken);

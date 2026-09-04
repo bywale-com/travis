@@ -28,8 +28,9 @@ test("no tool actually grants a view of the code", () => {
   for (const forbidden of ["read_file", "read_diff", "run_tests", "read_ci"]) {
     assert.equal(names.includes(forbidden), false);
   }
-  assert.equal(names.length, 21);
+  assert.equal(names.length, 22);
   assert.equal(names.includes("create_agent"), true);
+  assert.equal(names.includes("sit_agent"), true);
   assert.equal(names.includes("search_room"), true);
   assert.equal(names.includes("list_os"), true);
   assert.equal(names.includes("read_os"), true);
@@ -61,4 +62,11 @@ test("Travis is told it can create a person and must not assign a role", () => {
   assert.match(TRAVIS_SYSTEM, /create_agent/);
   assert.match(TRAVIS_SYSTEM, /You do not assign a role/);
   assert.match(TRAVIS_SYSTEM, /You do not invent a Cursor id/);
+});
+
+test("Travis is told seats are disposable and sit hangs a protocol", () => {
+  assert.match(TRAVIS_SYSTEM, /sit_agent/);
+  assert.match(TRAVIS_SYSTEM, /disposable/);
+  assert.match(TRAVIS_SYSTEM, /do not queue/);
+  assert.match(TRAVIS_SYSTEM, /Create is not seated/);
 });

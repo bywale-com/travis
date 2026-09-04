@@ -29,6 +29,7 @@ export type DispatchOutcome =
   | { status: "started"; runId: string; seatLabel: string }
   | { status: "queued"; waitingAhead: number; seatLabel: string }
   | { status: "stand-in"; seatLabel: string }
+  | { status: "busy"; seatLabel: string }
   | { status: "error"; seatLabel: string; error: string };
 
 export async function dispatchToSeat(params: {
@@ -36,6 +37,8 @@ export async function dispatchToSeat(params: {
   binding: AgentBinding;
   prompt: string;
   initiativeId?: string | null;
+  /** SCP-015 role dest: never enqueue. Default true (person dest). */
+  enqueueIfBusy?: boolean;
 }): Promise<DispatchOutcome> {
   const { sessionId, binding, prompt, initiativeId } = params;
   if (isTravisSeat(binding.seatKey)) {
@@ -46,6 +49,9 @@ export async function dispatchToSeat(params: {
   const seatLabel = binding.label ?? seatKeyToLabel(seatKey);
 
   if (await seatHasActiveRun(binding)) {
+    if (params.enqueueIfBusy === false) {
+      return { status: "busy", seatLabel };
+    }
     const queue = await enqueueOnSeat({
       sessionId,
       binding,
@@ -95,6 +101,9 @@ export async function dispatchToSeat(params: {
     }
 
     if (event?.type === "busy") {
+      if (params.enqueueIfBusy === false) {
+        return { status: "busy", seatLabel };
+      }
       const queue = await enqueueOnSeat({
         sessionId,
         binding,

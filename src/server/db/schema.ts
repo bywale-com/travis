@@ -18,6 +18,8 @@ export const agentBinding = travis.table("agent_binding", {
   cursorAgentId: text("cursor_agent_id").notNull().default(""),
   runtime: text("runtime").notNull().default("cloud"),
   active: boolean("active").notNull().default(true),
+  /** SCP-015 — house path when seated. Empty = created, not seated. */
+  protocolPath: text("protocol_path").notNull().default(""),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),

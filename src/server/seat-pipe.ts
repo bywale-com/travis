@@ -390,7 +390,9 @@ export async function pipeOneSend(params: {
   /** Fan-out shares one user turn across dests. */
   userTurn?: VoiceTurn;
   initiativeId?: string | null;
-}): Promise<{ ownedTerminal: boolean; queue?: QueueSnapshot }> {
+  /** SCP-015 role dest: never enqueue. Default true (person dest). */
+  enqueueIfBusy?: boolean;
+}): Promise<{ ownedTerminal: boolean; queue?: QueueSnapshot; busy?: boolean }> {
   const { sessionId, binding, prompt, send } = params;
   if (isTravisSeat(binding.seatKey)) {
     throw new Error("Travis dest never uses the Cursor send path");
@@ -413,6 +415,9 @@ export async function pipeOneSend(params: {
 
   if (first.value.type === "busy") {
     await gen.return(undefined);
+    if (params.enqueueIfBusy === false) {
+      return { ownedTerminal: false, busy: true };
+    }
     const queue = await enqueueOnSeat({
       sessionId,
       binding,
@@ -774,12 +779,15 @@ export async function sendOrEnqueue(params: {
   matchedPhrase?: string;
   userTurn?: VoiceTurn;
   initiativeId?: string | null;
-}): Promise<"queued" | "sent"> {
+  /** SCP-015 role dest: never enqueue. Default true (person dest). */
+  enqueueIfBusy?: boolean;
+}): Promise<"queued" | "sent" | "busy"> {
   if (isTravisSeat(params.binding.seatKey)) {
     throw new Error("Travis dest never uses the Cursor send path");
   }
   await requireOpenMember(params.sessionId, params.binding.id);
   if (await seatHasActiveRun(params.binding)) {
+    if (params.enqueueIfBusy === false) return "busy";
     const queue = await enqueueOnSeat({
       sessionId: params.sessionId,
       binding: params.binding,
@@ -791,6 +799,7 @@ export async function sendOrEnqueue(params: {
   }
 
   const result = await pipeOneSend(params);
+  if (result.busy) return "busy";
   if (result.queue) return "queued";
   if (result.ownedTerminal) {
     await drainHead(params.sessionId, params.binding, params.send);
