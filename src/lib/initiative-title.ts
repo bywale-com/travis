@@ -49,3 +49,36 @@ export function pathBasename(path: string): string {
   const trimmed = String(path ?? "").trim().replace(/\\/g, "/");
   return trimmed.split("/").filter(Boolean).pop() ?? trimmed;
 }
+
+/**
+ * Lived 20:38 — “bundle That’s fine.” minted from “Yes, that’s the exact
+ * one.” because send forgot id. A title already in the send or in
+ * Travis’s last speech is that ticket. Last mention wins. Short titles
+ * stay out so “SA” / “Okay.” do not steal the hang.
+ */
+export const NAMED_TITLE_MIN = 8;
+
+export function namedTicketFromSpeech(
+  tickets: Array<{ id: string; title: string }>,
+  speeches: string[],
+): string | null {
+  const hay = speeches
+    .map((s) => String(s ?? "").toLowerCase())
+    .join("\n");
+  if (!hay.trim()) return null;
+  let best: { id: string; at: number; len: number } | null = null;
+  for (const ticket of tickets) {
+    const title = ticket.title.replace(/\s+/g, " ").trim();
+    if (title.length < NAMED_TITLE_MIN) continue;
+    const at = hay.lastIndexOf(title.toLowerCase());
+    if (at < 0) continue;
+    if (
+      !best ||
+      at > best.at ||
+      (at === best.at && title.length > best.len)
+    ) {
+      best = { id: ticket.id, at, len: title.length };
+    }
+  }
+  return best?.id ?? null;
+}

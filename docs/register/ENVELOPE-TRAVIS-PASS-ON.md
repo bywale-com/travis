@@ -26,7 +26,7 @@ Role dest with nobody seated calls `Agent.create`. A throw writes no person and,
 
 008 via_travis. 015 sit / role dest. 069 receipt. 070 glance.
 
-Engineer plant: `ticketForHand(id)` stamps the addition; throws are receipts; catalog idle fallback is not a sit.
+Engineer plant: `ticketForHand(id)` stamps the addition; a title in the send or in Travis’s last speech hangs there without `id`; throws are receipts; catalog idle fallback is not a sit.
 
 ---
 

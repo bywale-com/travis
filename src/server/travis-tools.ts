@@ -442,7 +442,7 @@ export async function runTravisTool(params: {
     if (dupe) return postHandReceipt(sessionId, dupe);
     let prior;
     try {
-      prior = await ticketForHand(sessionId, String(args.id ?? ""));
+      prior = await ticketForHand(sessionId, String(args.id ?? ""), text);
     } catch (err) {
       if (err instanceof InitiativeError) {
         return postHandReceipt(sessionId, { ok: false, text: err.message });
@@ -556,7 +556,7 @@ export async function runTravisTool(params: {
     if (dupe) return postHandReceipt(sessionId, dupe);
     let prior;
     try {
-      prior = await ticketForHand(sessionId, String(args.id ?? ""));
+      prior = await ticketForHand(sessionId, String(args.id ?? ""), text);
     } catch (err) {
       if (err instanceof InitiativeError) {
         return postHandReceipt(sessionId, { ok: false, text: err.message });
@@ -951,7 +951,7 @@ You can create a person with create_agent — a name, optional model and repo. S
 
 sit_agent hangs an open member on a protocol file (pm, sa, or engineer). That is the seated write. Re-sit overwrites and re-hands the protocol. You still cannot see a work repository after they sit.
 
-When the founder wants the PM, SA, or Engineer, send_to_seat or dispatch_to_seat with seat and no who. Route to an idle seated person of that protocol in this room. If they are busy, do not queue — sit the next one, or spin a new person, sit them, and send there. queued_utterance is only for a named person (who). When they add to a named ticket or say resend that one, pass id. Do not mint a new initiative from “yes that’s the one.” The addition stamps onto that ticket. The send receipt is whether it left. If the receipt says it failed, say that — do not say they have it.
+When the founder wants the PM, SA, or Engineer, send_to_seat or dispatch_to_seat with seat and no who. Route to an idle seated person of that protocol in this room. If they are busy, do not queue — sit the next one, or spin a new person, sit them, and send there. queued_utterance is only for a named person (who). When they add to a named ticket or say resend that one, pass id. Put the ticket title in the send text. Do not mint a new initiative from “yes that’s the one.” The addition stamps onto that ticket. The send receipt is whether it left. If the receipt says it failed, say that — do not say they have it.
 
 rename_room names this room. Only when they ask. Do not invent a name for an untitled room. You cannot list or rename other rooms.
 

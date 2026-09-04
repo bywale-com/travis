@@ -10,6 +10,7 @@ import { formatLandedFiles } from "@/lib/artifact-kind";
 import {
   catalogNeedleHits,
   clipInitiativeTitle,
+  namedTicketFromSpeech,
   pathBasename,
 } from "@/lib/initiative-title";
 import {
@@ -222,14 +223,54 @@ export async function ensureViaTravis(
   return insertOpen(sessionId, founding.id, "via_travis");
 }
 
+async function openTicketTitles(
+  sessionId: string,
+): Promise<Array<{ id: string; title: string }>> {
+  return db
+    .select({ id: initiative.id, title: initiative.title })
+    .from(initiative)
+    .where(
+      and(eq(initiative.sessionId, sessionId), eq(initiative.status, "open")),
+    );
+}
+
+async function recentTravisSpeech(sessionId: string): Promise<string[]> {
+  const rows = await db
+    .select({ text: voiceTurn.text })
+    .from(voiceTurn)
+    .where(
+      and(
+        eq(voiceTurn.sessionId, sessionId),
+        eq(voiceTurn.kind, "agent_post"),
+        eq(voiceTurn.seatKey, "travis"),
+      ),
+    )
+    .orderBy(desc(voiceTurn.seq))
+    .limit(12);
+  return rows.map((r) => r.text);
+}
+
+async function stampLatestOnto(
+  sessionId: string,
+  row: Initiative,
+): Promise<Initiative> {
+  const latest = await latestTravisUserTurn(sessionId);
+  if (latest && !latest.initiativeId) {
+    await stampTurn(latest.id, row.id);
+  }
+  return row;
+}
+
 /**
  * Lived 20:38 — “bundle That’s fine. and send” minted a new ticket from
- * “Yes, that’s the exact one.” Pass id to hang the addition on the
- * named ticket. Do not insertOpen.
+ * “Yes, that’s the exact one.” Pass id when you have it. If the send
+ * text or Travis’s last speech already names an open title, hang there.
+ * Do not insertOpen from confirmation chatter.
  */
 export async function ticketForHand(
   sessionId: string,
   initiativeId?: string,
+  sendText?: string,
 ): Promise<Initiative | null> {
   await ensureInitiativeStore();
   const id = initiativeId?.trim();
@@ -238,11 +279,17 @@ export async function ticketForHand(
     if (!row || row.sessionId !== sessionId) {
       throw new InitiativeError("Initiative not found", 404);
     }
-    const latest = await latestTravisUserTurn(sessionId);
-    if (latest && !latest.initiativeId) {
-      await stampTurn(latest.id, row.id);
+    return stampLatestOnto(sessionId, row);
+  }
+  const namedId = namedTicketFromSpeech(await openTicketTitles(sessionId), [
+    ...(sendText?.trim() ? [sendText] : []),
+    ...(await recentTravisSpeech(sessionId)),
+  ]);
+  if (namedId) {
+    const row = await getInitiative(namedId);
+    if (row && row.sessionId === sessionId) {
+      return stampLatestOnto(sessionId, row);
     }
-    return row;
   }
   return ensureViaTravis(sessionId);
 }

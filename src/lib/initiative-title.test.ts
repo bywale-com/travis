@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   catalogNeedleHits,
   clipInitiativeTitle,
+  namedTicketFromSpeech,
   pathBasename,
 } from "./initiative-title";
 
@@ -70,4 +71,48 @@ test("SAE and essay mean SA and hit systems analyst in the founding", () => {
 test("path basename is the file name", () => {
   assert.equal(pathBasename("artifacts/HEAR-QUEUE-SPEC.md"), "HEAR-QUEUE-SPEC.md");
   assert.equal(pathBasename("shot.png"), "shot.png");
+});
+
+test("send text that names That’s fine. hangs on that ticket, not the last line", () => {
+  const tickets = [
+    { id: "fine", title: "That's fine." },
+    { id: "yes", title: "Yes, that's the exact one." },
+  ];
+  assert.equal(
+    namedTicketFromSpeech(tickets, [
+      "Please take this initiative. Base request: 'That's fine.' Add delete.",
+    ]),
+    "fine",
+  );
+});
+
+test("the last named title in Travis speech is the ticket", () => {
+  const tickets = [
+    { id: "ok", title: "Okay, great." },
+    { id: "fine", title: "That's fine." },
+  ];
+  assert.equal(
+    namedTicketFromSpeech(tickets, [
+      "Okay, great. is older.",
+      "Yes — That's fine. is the one.",
+    ]),
+    "fine",
+  );
+});
+
+test("a short title does not steal the hang", () => {
+  assert.equal(
+    namedTicketFromSpeech([{ id: "sa", title: "SA" }], ["send this to SA"]),
+    null,
+  );
+});
+
+test("no named title means no hang", () => {
+  assert.equal(
+    namedTicketFromSpeech(
+      [{ id: "fine", title: "That's fine." }],
+      ["Yes, that's the exact one."],
+    ),
+    null,
+  );
 });

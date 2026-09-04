@@ -23,6 +23,7 @@ The founder still cannot see that SA received it — because they did not.
 ## Cut
 
 - `send_to_seat` / `dispatch_to_seat` take optional `id`. That ticket gets the addition. Do not `insertOpen` from “yes that’s the one.”
+- If `id` is missing, a title already in the send text or in Travis’s last speech is that ticket. Last mention wins.
 - A throw on send/dispatch/spin is posted as the receipt.
 - If spin fails, an idle catalog person of that role (same `seat_key`, has a Cursor id) can take the line. Receipt says they are not seated. Not a sit.
 
