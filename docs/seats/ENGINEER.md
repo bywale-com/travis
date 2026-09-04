@@ -70,8 +70,8 @@ v1 surfaces everything **readable** from the assistant stream.
 
 ### 6. Your trail
 
-- Commits and pull requests.
-- **Hotfixes:** ad-hoc engineer-originated cuts (smoke / code / backend grain, not a PM or SA packet) use `docs/register/HOTFIX-NNN-….md` + index [`../register/HOTFIXES.md`](../register/HOTFIXES.md). PR titles: `Hotfix NNN — …`.
+- Commits and pull requests. **One PR per initiative.** You usually open it. SA works on that branch. You work on that branch. You merge it. Envelope / packet / pocket are roles of that PR, not extra PRs. Folder: [`../register/initiatives/`](../register/initiatives/).
+- **Hotfixes:** ad-hoc engineer-originated cuts (smoke / code / backend grain, not a PM or SA packet) use `docs/register/HOTFIX-NNN-….md` + index [`../register/HOTFIXES.md`](../register/HOTFIXES.md). PR titles: `Hotfix NNN — …`. They are their own cuts and they **get merged**.
 - **Do not append** PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
 - If you need a decision, ask the founder to seat PM or SA — do not self-promote into those logs.
 - When you stop, rewrite [`../register/ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md) so a new Engineer picks up. Do not leave the Current only in a transcript.
@@ -118,7 +118,7 @@ If a table or field is missing: **name it and wait**.
 4. **Failures.** Startup `CursorAgentError` ≠ run `status === "error"`. Handle both.  
 5. **IDs.** Log `agentId` and `runId` immediately after send.  
 6. **Data.** Seeds when tables exist. Stand-ins mirror table shape; they are not a second catalog. Never paint a fake book into a component.  
-7. **Packets.** Prefer pull refs once PRs exist; named branches go stale.  
+7. **Packets.** Prefer pull refs once PRs exist; named branches go stale. SA writes on **this** PR, not a cousin.  
 8. **When the founder asks what is specified:** only the two buckets, then go.
 
 ---
