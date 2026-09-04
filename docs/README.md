@@ -137,6 +137,7 @@ You are the **third seat**. PM and SA specify. You wire **UI + systems** so the 
 | [`method/`](./method/) | Portable Om Coda operating doctrine | [`method/00-INDEX.md`](./method/00-INDEX.md) |
 | [`build-foundation/`](./build-foundation/) | Build method + rudiments + brief | [`build-foundation/README.md`](./build-foundation/README.md) |
 | [`register/`](./register/) | Product thesis + PM/SA trails | [`register/PHASE-ONE.md`](./register/PHASE-ONE.md) |
+| [`register/initiatives/`](./register/initiatives/) | One PR per pocket; short folder of what changed | [`register/initiatives/README.md`](./register/initiatives/README.md) |
 | [`seats/`](./seats/) | Detailed PM / SA / Engineer READMEs | this file’s paste blocks |
 
 ---

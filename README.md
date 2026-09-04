@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-04** · Hotfix 065 · [PR #108](https://github.com/bywale-com/travis/pull/108) — One PR per initiative and a short folder of what changed, because seats were minting cousin PRs and walking could not tell which object was the work.
 - **2026-09-04** · SCP-015 · [PR #107](https://github.com/bywale-com/travis/pull/107) — Sit hangs a person on a house protocol and role dest reuses idle or spins the next, because a busy seat was making the founder wait in a queue.
 - **2026-09-04** · Envelope · [PR #105](https://github.com/bywale-com/travis/pull/105) — Disposable-seat envelope for SA plus protocols and a work-repo template filed in the house, because a short agent is cheap only if the where and the log live outside the chat.
 - **2026-09-04** · SCP-014 · [PR #104](https://github.com/bywale-com/travis/pull/104) — Dest-seat iterative posts become separate Log beats and Travis Voice can create an agent the same way the screen does, because one growing bubble was the bug and Travis had no create tool.

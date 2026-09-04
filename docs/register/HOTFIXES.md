@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **065**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **066**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
@@ -74,3 +74,4 @@
 | 062 | [`HOTFIX-062-THREAD-ARTIFACTS.md`](./HOTFIX-062-THREAD-ARTIFACTS.md) | Hung images and files appear on the Log post, not only the ticket door |
 | 063 | [`HOTFIX-063-HANDOFF-SEAT.md`](./HOTFIX-063-HANDOFF-SEAT.md) | Engineer Current so a new bind picks up (`ENGINEER-HANDOFF.md`) |
 | 064 | [`HOTFIX-064-DEST-ARTIFACTS.md`](./HOTFIX-064-DEST-ARTIFACTS.md) | Dest-seat hang; rich type; thought on the roster circle |
+| 065 | [`HOTFIX-065-ONE-PR.md`](./HOTFIX-065-ONE-PR.md) | One PR per initiative; seats share it; initiative folders |

@@ -40,7 +40,7 @@ Faces are parallel. Faces do **not** invent the machine. Controls and panes **ex
 ### 2. Hard decisions + change packets
 
 - You make the hard machine decisions.
-- Deliverable = **change packet** the implementer can cut without leftover analysis.
+- Deliverable = **change packet** the implementer can cut without leftover analysis. Write it on the Engineer’s open PR for that initiative — do not open a second PR.
 - Packet ≠ migration number forever — keep an explicit remap table in the SA log when they diverge.
 - Do not stop at “don’t mint.” Either mint with Story bearing it, or **name the silence** and whether Story must be promoted first.
 
