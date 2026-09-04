@@ -16,6 +16,25 @@ test("root is legal", () => {
   });
 });
 
+test("disposable-seat house paths are legal", () => {
+  const paths = [
+    "/protocols/WHERE.md",
+    "/protocols/logging.md",
+    "/protocols/pm.md",
+    "/protocols/sa.md",
+    "/protocols/engineer.md",
+    "/protocols/travis.md",
+    "/templates/work-repo/TREE.md",
+    "/templates/work-repo/AGENTS.md",
+    "/templates/work-repo/docs/seats/pm.md",
+    "/templates/work-repo/docs/register/PHASE-ONE-LOG.md",
+    "/templates/work-repo/src/WHERE.md",
+  ];
+  for (const path of paths) {
+    assert.equal(parseOsPath(path).ok, true, path);
+  }
+});
+
 test("convention file path is legal", () => {
   const parsed = parseOsPath("/protocols/pm.md");
   assert.equal(parsed.ok, true);

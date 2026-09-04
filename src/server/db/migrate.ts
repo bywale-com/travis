@@ -1,5 +1,5 @@
 /**
- * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership + SCP-008 backlog + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion.
+ * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership + SCP-008 backlog + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion + SCP-015 sit.
  */
 import { config } from "dotenv";
 import postgres from "postgres";
@@ -32,6 +32,11 @@ async function main() {
   await sql`
     ALTER TABLE travis.agent_binding
     ADD COLUMN IF NOT EXISTS seat_key text
+  `;
+
+  await sql`
+    ALTER TABLE travis.agent_binding
+    ADD COLUMN IF NOT EXISTS protocol_path text NOT NULL DEFAULT ''
   `;
 
   await sql`
@@ -413,6 +418,12 @@ async function main() {
     FROM travis.os_node WHERE path = '/'
     ON CONFLICT (path) DO NOTHING
   `;
+  await sql`
+    INSERT INTO travis.os_node (path, name, kind, parent_id)
+    SELECT '/logs', 'logs', 'dir', id
+    FROM travis.os_node WHERE path = '/'
+    ON CONFLICT (path) DO NOTHING
+  `;
 
   await sql`
     CREATE TABLE IF NOT EXISTS travis.motion (
@@ -452,7 +463,7 @@ async function main() {
     )
   `;
 
-  console.log("travis schema + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion ready");
+  console.log("travis schema + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion + SCP-015 sit ready");
   await sql.end();
 }
 

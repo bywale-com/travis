@@ -59,6 +59,17 @@ export function narrateToolCall(
       return "Renaming the room.";
     case "end_session":
       return "Ending the room.";
+    case "create_agent": {
+      const label = clip(String(args.label ?? ""), 40);
+      return label ? `Creating ${label}.` : "Creating an agent.";
+    }
+    case "sit_agent": {
+      const who = clip(String(args.who ?? ""), 40);
+      const protocol = clip(String(args.protocol ?? ""), 24);
+      if (who && protocol) return `Seating ${who} on ${protocol}.`;
+      if (who) return `Seating ${who}.`;
+      return "Seating that person.";
+    }
     default:
       // list_seats, queue_snapshot, work_in_flight, search_room,
       // list_os, read_os, write_os, list_initiatives, read_initiative,
