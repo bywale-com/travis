@@ -182,7 +182,7 @@ Do not mint these unless the founder seats them.
 | Silence | Why |
 |---------|-----|
 | **POSIX / unfold** | **021 ascribed.** House template `/templates/work-repo` → box → GitHub. 042 stands for seated repos. |
-| **Integrations table** | 011 + env. No `GITHUB_TOKEN`. Unfold key is `TRAVIS_GITHUB_TOKEN`. |
+| **Integrations table** | **022 minted `travis.port`.** `travis.integration` stays refused. No `GITHUB_TOKEN`. |
 | **Cross-room look** | `search_room` is this room. Spoken / later. |
 | **Cancel-a-plan / digest plate** | 013 organizes. Report later. |
 | **Browse OS** | Labor is not an effect. |
@@ -203,9 +203,10 @@ Do not mint these unless the founder seats them.
 | 014 | Split beats + Voice `create_agent` | Planted — [`SYSTEMS-CHANGE-PACKET-014-LOG-BEATS.md`](../register/SYSTEMS-CHANGE-PACKET-014-LOG-BEATS.md). L1/L3/hang = 064. |
 | 015 | Disposable seats | Planted — [`SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md`](../register/SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md) |
 | 016–020 | Here / Hand / Glance / Pass-on / Box | Planted as engineer cuts. Do not remint. |
-| 021 | Prove, keep, unfold, hands split | **Signed** — [`SYSTEMS-CHANGE-PACKET-021-WORKER.md`](../register/SYSTEMS-CHANGE-PACKET-021-WORKER.md) on PR **#119**. Engineer plants prove there. |
+| 021 | Prove, keep, unfold, hands split | Planted — [`SYSTEMS-CHANGE-PACKET-021-WORKER.md`](../register/SYSTEMS-CHANGE-PACKET-021-WORKER.md) (PR **#119**). |
+| 022 | Ports as a control | **Signed** — [`SYSTEMS-CHANGE-PACKET-022-PORTS.md`](../register/SYSTEMS-CHANGE-PACKET-022-PORTS.md) on PR **#120**. Engineer plants host + connectors plate there. |
 
-Next packet number is **022**. Never reuse a number.
+Next packet number is **023**. Never reuse a number.
 
 ### Paste this into a new Systems Analyst chat
 
