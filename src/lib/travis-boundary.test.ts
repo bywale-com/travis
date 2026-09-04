@@ -80,4 +80,5 @@ test("Travis is told seats are disposable and sit hangs a protocol", () => {
   assert.match(TRAVIS_SYSTEM, /disposable/);
   assert.match(TRAVIS_SYSTEM, /do not queue/);
   assert.match(TRAVIS_SYSTEM, /Create is not seated/);
+  assert.match(TRAVIS_SYSTEM, /Do not mint a new initiative/);
 });
