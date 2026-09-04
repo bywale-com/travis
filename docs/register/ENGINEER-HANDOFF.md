@@ -22,13 +22,13 @@ This cut is **Hotfix 066** — house protocols and leftover docs carry the one-P
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
 | Face | Phone-first Voice / Log / Backlog. Smoke there. |
-| Last plant | **021** prove / keep / unfold · [#119](https://github.com/bywale-com/travis/pull/119). Prior: 020 box · [#117](https://github.com/bywale-com/travis/pull/117) |
+| Last plant | **021** prove / keep / unfold · [#119](https://github.com/bywale-com/travis/pull/119). Open: envelope **022** ports signed · [#120](https://github.com/bywale-com/travis/pull/120). This cut: envelope **023** tightness · [`ENVELOPE-TRAVIS-TIGHTNESS.md`](./ENVELOPE-TRAVIS-TIGHTNESS.md) |
 | Prior plants | 065 · [#108](https://github.com/bywale-com/travis/pull/108) · 015 · [#107](https://github.com/bywale-com/travis/pull/107) · 064 · [#102](https://github.com/bywale-com/travis/pull/102) · **Hotfix 062** · [#98](https://github.com/bywale-com/travis/pull/98) |
 | Motion | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) |
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
 | Busy room (lived) | `0e8875f8-283b-4dae-bf54-76c82a05b6ef` (title “Travis”) |
 
-**Do not redo** 012, 013, 014, 015, 016, 020 first slice, 021, 062, 064, 065, 068, 069, 070, or 071. Do not send **That’s fine.** from Engineer. Founder lands `TRAVIS_GITHUB_TOKEN` after this plant.
+**Do not redo** 012, 013, 014, 015, 016, 020 first slice, 021, 062, 064, 065, 068, 069, 070, or 071. Do not plant **022** except from the signed packet on #120. Do not plant dest until 023 names the gate. Do not send **That’s fine.** from Engineer.
 
 ---
 
