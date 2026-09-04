@@ -57,6 +57,16 @@ test("q hits any part; empty q matches all; miss matches none", () => {
   assert.equal(catalogNeedleHits("  ", parts), true);
 });
 
+test("SAE and essay mean SA and hit systems analyst in the founding", () => {
+  const parts = [
+    "That's fine.",
+    "it's probably the systems analyst that should handle this",
+  ];
+  assert.equal(catalogNeedleHits("SAE", parts), true);
+  assert.equal(catalogNeedleHits("the essay", parts), true);
+  assert.equal(catalogNeedleHits("SA", parts), true);
+});
+
 test("path basename is the file name", () => {
   assert.equal(pathBasename("artifacts/HEAR-QUEUE-SPEC.md"), "HEAR-QUEUE-SPEC.md");
   assert.equal(pathBasename("shot.png"), "shot.png");

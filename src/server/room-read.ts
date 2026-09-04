@@ -225,6 +225,7 @@ export async function roomContextFor(sessionId: string): Promise<string> {
       glanceOpenInitiatives(sessionId).catch(() => ({
         titles: [] as string[],
         openCount: 0,
+        items: [] as Array<{ title: string; posted: boolean }>,
       })),
       openMembers(sessionId).catch(() => []),
       countOpenMotions(sessionId).catch(() => 0),
@@ -261,6 +262,7 @@ export async function roomContextFor(sessionId: string): Promise<string> {
     })),
     motionCount,
     openTitles: pile.titles,
+    openItems: pile.items,
     openCount: pile.openCount,
   });
 }

@@ -27,6 +27,7 @@ test("a q miss names the open pile instead of emptying the room", () => {
   const miss = formatInitiativeList([], { q: "compare UI", openCount: 5 });
   assert.match(miss, /No initiatives matching “compare UI”/);
   assert.match(miss, /5 open in this room/);
+  assert.match(miss, /Do not substitute another ticket/);
   assert.equal(miss.includes("No initiatives in this room."), false);
 });
 
