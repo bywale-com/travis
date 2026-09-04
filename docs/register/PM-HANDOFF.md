@@ -1,6 +1,7 @@
-# PM seat handoff — 2026-09-03 23:06 UTC
+# PM seat handoff — 2026-09-04
 
-**This bind is done.** `bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea` (Pm ID provision) is **not** the living PM after the founder pastes the block below into a new chat.
+**Living PM:** `bc-e36b1259-1dac-5d2b-9d51-342716f0f021` — [Product Manager](https://cursor.com/agents/bc-e36b1259-1dac-5d2b-9d51-342716f0f021).  
+**Deprecated:** `bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea` (Pm ID provision). Do not send to it. Do not paste into it.
 
 **Flag:** PHASE-ONE-LOG **14:00 UTC 2026-08-25** — do not overwrite.
 
@@ -29,7 +30,7 @@
 2. Read the envelope, then SCP-013 as planted truth. Sit is planted (015). Do not collapse create / in-the-room / seated.
 3. Do **not** reprint P1/P2. Do **not** invent a second index.
 4. Open PM work only if the founder names it. Write on the Engineer’s open PR for that pocket.
-5. Rebind: the old `bc-…` must not stay the room’s PM once the new chat exists.
+5. Rebind is **072**. Room PM is the living id above.
 
 ---
 
