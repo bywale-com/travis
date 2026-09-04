@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 00:21 UTC — **SCP-007 signed.** Room = `voice_session`. Mint `room_membership`. Engineer SQL signed; new-room and dest runtime amended. Packet: [`SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md`](./SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md). Numbers 003–006 remapped (planted; files not on `main`). Engineer pastes; no leftover analysis.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-03 23:06 UTC — **Seat handoff ready.** Last machine cut: SCP-013 planted, caps struck. Successor: [`../seats/SYSTEMS-ANALYST.md`](../seats/SYSTEMS-ANALYST.md) § Handoff + this Current. Packet: [`SYSTEMS-CHANGE-PACKET-013-MOTION.md`](./SYSTEMS-CHANGE-PACKET-013-MOTION.md).
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -301,3 +301,45 @@ SCP-001 seed field updated.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md`](./SYSTEMS-CHANGE-PACKET-007-ROOM-MEMBERSHIP.md)
 
 **Handoff:** Engineer pastes the signed SQL + Drizzle, switches `roomSeats()`, writes the runtime in the packet. No leftover analysis.
+
+---
+
+## 2026-09-03 15:57 UTC — SCP-012 OS house (landed; stamp late to main)
+
+**Kind:** Witness. Packet planted via Engineer PR #93. SA packet file is on `main`.
+
+House-now = `travis.os_node` (rows that look like folders). `/`, `/protocols`, `/templates`. Writers = founder HTTP + Travis tools. Agent/room folders stay their tables. Seated / POSIX / integrations table refused.
+
+**Packet:** [`SYSTEMS-CHANGE-PACKET-012-OS-HOUSE.md`](./SYSTEMS-CHANGE-PACKET-012-OS-HOUSE.md)
+
+---
+
+## 2026-09-03 20:53 UTC — SCP-013 In motion (landed; stamp late to main)
+
+**Kind:** Witness. Packet planted via Engineer PR #97. Founder plates: [`PLATES-IN-MOTION.md`](./PLATES-IN-MOTION.md). PM parked this pass.
+
+Two models, one Backlog pile. `travis.motion` + `motion_step`. Not an initiative status. Runner is not the voice turn. P1 counts Travis processes only.
+
+**Packet:** [`SYSTEMS-CHANGE-PACKET-013-MOTION.md`](./SYSTEMS-CHANGE-PACKET-013-MOTION.md)
+
+---
+
+## 2026-09-03 21:00 UTC — SCP-013 founder correction (no caps)
+
+**Kind:** Founder correction.
+
+**Founder (preserved):** does not care for caps. “Two executing at once” is not the law. He was going to say **100 executing at once**. Do not invent a product ceiling.
+
+Packet on `main` already has question 5 = **None**.
+
+---
+
+## 2026-09-03 23:06 UTC — Seat handoff
+
+**Kind:** Seat law. Founder: update so this seat can be handed off.
+
+**Done:** Accept + Handoff in [`../seats/SYSTEMS-ANALYST.md`](../seats/SYSTEMS-ANALYST.md). README SA paste + identity match. `AGENTS.md` points takeovers at § Handoff. Current no longer stuck on 007.
+
+**Law written into the seat (was only in a chat):** plates as staples; PM may be parked; do not invent caps; job-law from the founder only.
+
+**Successor starts:** README SA paste → § Handoff → this Current → newest stamp → 013 packet. Next number is **014**.
