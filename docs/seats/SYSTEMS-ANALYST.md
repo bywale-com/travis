@@ -188,6 +188,9 @@ Do not mint these unless the founder seats them.
 | **Browse OS** | Labor is not an effect. |
 | **`link` kind / founder upload** | 009/064 are `image` \| `file` only. |
 | **Heard / Hear / Next / Skip** | Still SA silence. |
+| **Auto-sit catalog slugs** | 019: catalog fallback is not a sit. |
+| **Computer use** | Named silence (071 envelope). |
+| **Travis seeing Cursor PRs** | Named silence (071 envelope). |
 
 ### Live packets (do not restart these)
 
@@ -200,8 +203,12 @@ Do not mint these unless the founder seats them.
 | 013 | Motion + runner, **no product caps** | Planted |
 | 014 | Split beats + Voice `create_agent` | Planted — [`SYSTEMS-CHANGE-PACKET-014-LOG-BEATS.md`](../register/SYSTEMS-CHANGE-PACKET-014-LOG-BEATS.md). L1/L3/hang = 064. |
 | 015 | Disposable seats | Planted — [`SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md`](../register/SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md) |
+| 016 | Here | Planted (PR **#112**). Envelope not picked up this pass. |
+| 017 | Hand | Planted (069). Envelope not picked up this pass. |
+| 018 | Glance | Planted (070). Envelope not picked up this pass. |
+| 019 | Pass-on | **Signed** — [`SYSTEMS-CHANGE-PACKET-019-PASS-ON.md`](../register/SYSTEMS-CHANGE-PACKET-019-PASS-ON.md). Plant already on `main` (PR **#116**). Do not remint. |
 
-Next packet number is **016**. Never reuse a number.
+Next packet number is **020**. Never reuse a number. 016–018 are reserved by those plants; do not reuse them for a different grain.
 
 ### Paste this into a new Systems Analyst chat
 
