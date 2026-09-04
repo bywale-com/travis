@@ -3,7 +3,7 @@
 **Kind:** Envelope. **Not a packet. Not a plant.**  
 **Seat:** Engineer (founder also seated this bind PM+Engineer for the glass). Founder: integration-shaped keys must stop being one-off env lines. Travis writes **his harness**, not this product repo. Seats write **repos**. **SA ascribes the store and the host. SA signs the Story or names a silence.** Engineer does not mint a table from this file. Engineer does not plant a port registry, MCP host, or connectors face from this file. Do not append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.  
 **When:** 2026-09-04 ~22:54 UTC. Lived room `0e8875f8`. After **021** on `main` ([#119](https://github.com/bywale-com/travis/pull/119)): prove / keep / unfold planted. Unfold receipts `not wired` until `TRAVIS_GITHUB_TOKEN`.  
-**One PR:** this branch. Next packet number is **022** if you write one.
+**One PR:** [#120](https://github.com/bywale-com/travis/pull/120). Next packet number is **022** if you write one.
 
 **Flag (unchanged):** Phase One 14:00 UTC 2026-08-25.
 
