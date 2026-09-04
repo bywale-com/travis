@@ -27,7 +27,11 @@ import {
 } from "@/lib/tool-policy";
 import { narrateToolCall } from "@/lib/tool-narration";
 import {
-  lastSeatPost,
+  formatSeatReplyLead,
+  staleSeatReplyPrefix,
+} from "@/lib/seat-reply";
+import {
+  lastSeatReplyLook,
   recentDuplicateSend,
   runningNotes,
   searchRoomText,
@@ -122,11 +126,12 @@ export const TRAVIS_TOOL_DECLS = [
   {
     name: "read_seat_reply",
     description:
-      "Read what PM, SA, or Engineer last said in this room. This is the only way you can see a seat's words — send_to_seat never returns them. Leave form off to get the gist of a long reply and the text of a short one; pass full to insist on the text.",
+      "Read what PM, SA, or Engineer last said. Pass id when they asked about a ticket — without it this is the last room line, not that ticket. send_to_seat never returns the body. Leave form off to get the gist of a long reply and the text of a short one; pass full to insist on the text.",
     parameters: {
       type: "object",
       properties: {
         seat: { type: "string", enum: ["pm", "sa", "engineer"] },
+        id: { type: "string" },
         form: { type: "string", enum: ["auto", "gist", "full"] },
       },
       required: ["seat"],
@@ -341,6 +346,23 @@ export const TRAVIS_TOOL_DECLS = [
 
 type ToolResult = { ok: boolean; text: string; sentToEngineer?: boolean };
 
+/** 069 — the receipt is the send. Narration is not. */
+async function postHandReceipt(
+  sessionId: string,
+  result: ToolResult,
+): Promise<ToolResult> {
+  if (result.text.trim()) {
+    await insertAgentPostTurn(
+      sessionId,
+      result.text,
+      "travis",
+      null,
+      false,
+    ).catch(() => {});
+  }
+  return result;
+}
+
 async function bindingForCursorSeat(seat: string) {
   if (!isCursorSeat(seat)) return null;
   const [row] = await db
@@ -415,7 +437,7 @@ export async function runTravisTool(params: {
     }
     const dupeKey = who || seat;
     const dupe = await guardDuplicate(sessionId, "send_to_seat", dupeKey, text);
-    if (dupe) return dupe;
+    if (dupe) return postHandReceipt(sessionId, dupe);
     const prior = await ensureViaTravis(sessionId);
     const startedAt = Date.now();
     let errored = false;
@@ -453,7 +475,7 @@ export async function runTravisTool(params: {
       await stampLatestPassOn(sessionId, binding.seatKey ?? who, text).catch(
         () => {},
       );
-      return {
+      return postHandReceipt(sessionId, {
         ok: true,
         text: sendReceipt({
           seatLabel,
@@ -464,7 +486,7 @@ export async function runTravisTool(params: {
           replyChars,
         }),
         sentToEngineer: binding.protocolPath === "/protocols/engineer.md",
-      };
+      });
     }
 
     try {
@@ -479,7 +501,7 @@ export async function runTravisTool(params: {
       await stampLatestPassOn(sessionId, binding.seatKey ?? seat, text).catch(
         () => {},
       );
-      return {
+      return postHandReceipt(sessionId, {
         ok: outcome !== "busy",
         text:
           outcome === "busy"
@@ -493,10 +515,14 @@ export async function runTravisTool(params: {
                 replyChars,
               }),
         sentToEngineer: seat === "engineer",
-      };
+      });
     } catch (err) {
-      if (err instanceof SitError) return { ok: false, text: err.message };
-      if (err instanceof MembershipError) return { ok: false, text: err.message };
+      if (err instanceof SitError) {
+        return postHandReceipt(sessionId, { ok: false, text: err.message });
+      }
+      if (err instanceof MembershipError) {
+        return postHandReceipt(sessionId, { ok: false, text: err.message });
+      }
       throw err;
     }
   }
@@ -514,7 +540,7 @@ export async function runTravisTool(params: {
     }
     const dupeKey = who || seat;
     const dupe = await guardDuplicate(sessionId, "dispatch_to_seat", dupeKey, text);
-    if (dupe) return dupe;
+    if (dupe) return postHandReceipt(sessionId, dupe);
     const prior = await ensureViaTravis(sessionId);
 
     if (kind === "person") {
@@ -534,11 +560,11 @@ export async function runTravisTool(params: {
           () => {},
         );
       }
-      return {
+      return postHandReceipt(sessionId, {
         ok: outcome.status !== "error",
         text: dispatchReceipt(outcome),
         sentToEngineer: binding.protocolPath === "/protocols/engineer.md",
-      };
+      });
     }
 
     try {
@@ -553,14 +579,18 @@ export async function runTravisTool(params: {
           () => {},
         );
       }
-      return {
+      return postHandReceipt(sessionId, {
         ok: outcome.status !== "error" && outcome.status !== "busy",
         text: dispatchReceipt(outcome),
         sentToEngineer: seat === "engineer",
-      };
+      });
     } catch (err) {
-      if (err instanceof SitError) return { ok: false, text: err.message };
-      if (err instanceof MembershipError) return { ok: false, text: err.message };
+      if (err instanceof SitError) {
+        return postHandReceipt(sessionId, { ok: false, text: err.message });
+      }
+      if (err instanceof MembershipError) {
+        return postHandReceipt(sessionId, { ok: false, text: err.message });
+      }
       throw err;
     }
   }
@@ -569,28 +599,43 @@ export async function runTravisTool(params: {
     const seat = String(args.seat ?? "");
     if (!isCursorSeat(seat)) return { ok: false, text: "Need a Cursor seat." };
     const label = seatKeyToLabel(seat as SeatKey);
-    const body = await lastSeatPost(sessionId, seat);
-    if (!body?.trim()) {
-      return { ok: true, text: `${label} has not replied in this room yet.` };
-    }
+    const ticketId = String(args.id ?? "").trim() || undefined;
+    const look = await lastSeatReplyLook(sessionId, seat, ticketId);
+    const hasPost = Boolean(look.post?.trim());
+    const postOnTicket = Boolean(
+      ticketId && look.post?.trim() && look.postInitiativeId === ticketId,
+    );
+    const sentAfterPost =
+      look.lastSendSeq != null &&
+      (look.lastPostSeq == null || look.lastSendSeq > look.lastPostSeq);
+    const lead = formatSeatReplyLead({
+      label,
+      initiativeId: ticketId,
+      hasPost,
+      postOnTicket,
+      sentAfterPost,
+    });
+    if (lead) return { ok: true, text: lead };
+    const body = look.post ?? "";
     const form = (["auto", "gist", "full"] as const).includes(
       args.form as ReadForm,
     )
       ? (args.form as ReadForm)
       : "auto";
+    const prefix = ticketId ? `${label} said:` : staleSeatReplyPrefix(label);
     if (!shouldSummarize(body.length, form)) {
-      return { ok: true, text: `${label} said: ${body.slice(0, READ_CAP)}` };
+      return { ok: true, text: `${prefix} ${body.slice(0, READ_CAP)}` };
     }
     const gist = await summarizeSeatReply(body).catch(() => "");
     if (!gist) {
       return {
         ok: true,
-        text: `${label} said (first ${READ_CAP} of ${body.length} characters): ${body.slice(0, READ_CAP)}`,
+        text: `${prefix} (first ${READ_CAP} of ${body.length} characters): ${body.slice(0, READ_CAP)}`,
       };
     }
     return {
       ok: true,
-      text: `${label} said, in short (${body.length} characters in the log): ${gist}`,
+      text: `${prefix} in short (${body.length} characters in the log): ${gist}`,
     };
   }
 
@@ -871,11 +916,11 @@ Answer the founder. Use tools when they ask you to sit a person on a protocol, s
 
 You own a house that is not this room and not a work repo: list_os, read_os, write_os. It holds protocols and templates (paths like /protocols and /templates). Opening a folder there does not leave this room. Reading a protocol is not unfolding it into a repo. You still cannot see a work repository, a diff, a branch, a test run, or CI. You have no view of the code and no way to check whether anything passed. If the founder asks for a code review, a test check, a migration risk assessment, a rollout plan, or anything else that needs the repo, say plainly that you cannot see it and offer to send it to the Engineer, SA or PM. Never describe a review, a check, or an analysis you are not able to perform. The room and the tools listed above are your entire view of the world — reading about work in the room log is not the same as being able to do it.
 
-You are shown Here — dest, roster idle/busy, in motion, open backlog titles — plus a short log of recent turns and your last few lines. That block is the environment. Treat it as already true. Do not ask the founder to repeat it. Do not say the room, the backlog, or the roster is empty when Here names them. Seat replies appear only as receipts; call read_seat_reply when you need what a seat actually said. Tools are depth: they open one ticket, one request, one seat post. They must not contradict Here. A search miss is no match, not an empty pile. When they ask what was requested beyond Here, call search_room. That log has UTC timestamps. “Requests today” → when today. “Last 10” → limit 10. “Everyone this week” → when week, no seat. Do not invent a list — call the tool.
+You are shown Here — dest, roster idle/busy and seated or not, in motion, open backlog titles, and whether a seat is running — plus a short log of recent turns and your last few lines. That block is the environment. Treat it as already true. Do not ask the founder to repeat it. Do not say the room, the backlog, or the roster is empty when Here names them. If Here says no seat is running, a handoff is not in progress — do not say you are waiting on SA, PM, or Engineer. Seat replies appear only as receipts; call read_initiative when they asked about a ticket. read_seat_reply without id is the last room line, not that ticket. Tools are depth: they open one ticket, one request, one seat post. They must not contradict Here. A search miss is no match, not an empty pile. When they ask what was requested beyond Here, call search_room. That log has UTC timestamps. “Requests today” → when today. “Last 10” → limit 10. “Everyone this week” → when week, no seat. Do not invent a list — call the tool.
 
 The backlog is separate from the request log. search_room is every line. Initiatives are only what you passed on, or what they promoted with Hold. Here lists open titles when there are any — those tickets exist. list_initiatives / read_initiative / rename_initiative / mark_initiative_done open one ticket. “This week” → list_initiatives when week. “The artifact one” → list_initiatives q. A miss is no match, not “no initiatives.” You do not name a ticket when you mint it. rename_initiative only when they ask to rename. A seat finishing does not mark it done — you or they do. list_initiatives and read_initiative print each ticket's id — use that id on rename_initiative; do not guess.
 
-The turn is not the work. Several of your own tools in a row — list then rename, two writes, a glance then a write — file them with file_plan and stay with the founder. send_to_seat is one blocking hand, not a batch and not a plan step. Glance / “how is that coming?” → list_backlog. Do not invent progress. A filed plan keeps running after you have already answered.
+The turn is not the work. Several of your own tools in a row — list then rename, two writes, a glance then a write — file them with file_plan and stay with the founder. send_to_seat is one blocking hand, not a batch and not a plan step. Glance the pile → list_backlog. “How is that coming?” → work_in_flight. If it says nothing running, say that — do not invent a wait. Do not invent progress. A filed plan keeps running after you have already answered. The send receipt is what happened. “Calling the SA” is not a start.
 
 You can create a person with create_agent — a name, optional model and repo. Same write as the Create an agent screen. You do not assign a role. You do not invent a Cursor id. join defaults to this room as a member. join false is catalog only. Create is not seated.
 

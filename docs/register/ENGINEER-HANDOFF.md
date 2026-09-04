@@ -17,18 +17,18 @@ This cut is **Hotfix 066** — house protocols and leftover docs carry the one-P
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — next hotfix number **069** |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — next hotfix number **070** |
 | One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
 | Face | Phone-first Voice / Log / Backlog. Smoke there. |
-| Last plant | 016 Here · [`ENVELOPE-TRAVIS-HERE.md`](./ENVELOPE-TRAVIS-HERE.md) · 068 · [`HOTFIX-068-BACKLOG-WINDOW.md`](./HOTFIX-068-BACKLOG-WINDOW.md) |
+| Last plant | 069 hand · [`ENVELOPE-TRAVIS-HAND.md`](./ENVELOPE-TRAVIS-HAND.md) · [`HOTFIX-069-HAND-TRUTH.md`](./HOTFIX-069-HAND-TRUTH.md) · 016 · 068 |
 | Prior plants | 065 · [#108](https://github.com/bywale-com/travis/pull/108) · 015 · [#107](https://github.com/bywale-com/travis/pull/107) · 064 · [#102](https://github.com/bywale-com/travis/pull/102) · **Hotfix 062** · [#98](https://github.com/bywale-com/travis/pull/98) |
 | Motion | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) |
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
 | Busy room (lived) | `0e8875f8-283b-4dae-bf54-76c82a05b6ef` (title “Travis”) |
 
-**Do not redo** 012, 013, 014, 015, 062, 064, or 065. They are on `main`.
+**Do not redo** 012, 013, 014, 015, 016, 062, 064, 065, 068, or 069. They are on `main` or this cut. Do not send **That’s fine.** from Engineer.
 
 ---
 
@@ -38,7 +38,8 @@ Newest first. Full sentences live on the README Implementation trail.
 
 | Ref | PR | One line |
 |-----|----|----------|
-| 016 | this cut | Here block + Live refresh; tools are depth |
+| 069 | [#114](https://github.com/bywale-com/travis/pull/114) | Receipt is the send; ticket-scoped read; Here names no-run |
+| 016 | [#112](https://github.com/bywale-com/travis/pull/112) | Here block + Live refresh; tools are depth |
 | 068 | [#111](https://github.com/bywale-com/travis/pull/111) | Open backlog titles in the room window; a search miss is not empty |
 | 067 | [#110](https://github.com/bywale-com/travis/pull/110) | House labor script excluded from `next build` |
 | 066 | [#109](https://github.com/bywale-com/travis/pull/109) | One-PR trail everywhere; leftover PM log/packets on `main`; cousins close |

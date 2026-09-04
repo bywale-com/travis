@@ -645,7 +645,7 @@ export function formatInitiativeRead(ticket: InitiativeRead): string {
     ? ticket.posts
         .map((p) => `${p.seatKey ?? "?"}: ${p.text.replace(/\s+/g, " ").trim().slice(0, 180)}`)
         .join("\n")
-    : "No seat posts yet.";
+    : "No seat has posted on this ticket.";
   const files = formatLandedFiles(ticket.attachments);
   return files
     ? `${ticket.id}\n${title}\n${ticket.status}. ${founding}\n${posts}\n${files}\n${next}`

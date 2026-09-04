@@ -6,6 +6,7 @@
  */
 
 import { and, desc, eq, sql } from "drizzle-orm";
+import { isTravisSeat } from "@/lib/seats";
 import { seatKeyToLabel } from "@/lib/router";
 import {
   WINDOW_TURNS,
@@ -62,19 +63,55 @@ export async function lastSeatPost(
   sessionId: string,
   seatKey: string,
 ): Promise<string | null> {
-  const [row] = await db
-    .select({ text: voiceTurn.text })
+  const look = await lastSeatReplyLook(sessionId, seatKey);
+  return look.post;
+}
+
+/** Last post and last send for a slug — ticket-scoped when id is set. */
+export async function lastSeatReplyLook(
+  sessionId: string,
+  seatKey: string,
+  initiativeId?: string,
+): Promise<{
+  post: string | null;
+  postInitiativeId: string | null;
+  lastPostSeq: number | null;
+  lastSendSeq: number | null;
+}> {
+  const postWhere = [
+    eq(voiceTurn.sessionId, sessionId),
+    eq(voiceTurn.seatKey, seatKey),
+    eq(voiceTurn.kind, "agent_post"),
+  ];
+  if (initiativeId) postWhere.push(eq(voiceTurn.initiativeId, initiativeId));
+  const [post] = await db
+    .select({
+      text: voiceTurn.text,
+      seq: voiceTurn.seq,
+      initiativeId: voiceTurn.initiativeId,
+    })
+    .from(voiceTurn)
+    .where(and(...postWhere))
+    .orderBy(desc(voiceTurn.seq))
+    .limit(1);
+  const [sent] = await db
+    .select({ seq: voiceTurn.seq })
     .from(voiceTurn)
     .where(
       and(
         eq(voiceTurn.sessionId, sessionId),
         eq(voiceTurn.seatKey, seatKey),
-        eq(voiceTurn.kind, "agent_post"),
+        eq(voiceTurn.kind, "user"),
       ),
     )
     .orderBy(desc(voiceTurn.seq))
     .limit(1);
-  return row?.text ?? null;
+  return {
+    post: post?.text ?? null,
+    postInitiativeId: post?.initiativeId ?? null,
+    lastPostSeq: post?.seq ?? null,
+    lastSendSeq: sent?.seq ?? null,
+  };
 }
 
 /**
@@ -218,6 +255,9 @@ export async function roomContextFor(sessionId: string): Promise<string> {
     members: members.map((m) => ({
       label: m.label,
       busy: busyIds.has(m.binding.id),
+      seated: isTravisSeat(m.seatKey)
+        ? undefined
+        : Boolean((m.binding.protocolPath ?? "").trim()),
     })),
     motionCount,
     openTitles: pile.titles,
