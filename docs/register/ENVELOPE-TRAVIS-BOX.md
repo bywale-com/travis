@@ -3,7 +3,7 @@
 **Kind:** Envelope. **Not a packet. Not a plant.**  
 **Seat:** Engineer. Founder leaned to path two: Travis gets a computer so he can work himself out of an error, Tasklet-shaped, not one ticket at a time. **SA ascribes the store and the ports. SA signs the Story or names a silence.** Engineer does not mint a table. Engineer does not plant a VM from this file. Do not append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.  
 **When:** 2026-09-04 ~21:10 UTC. Lived room `0e8875f8`. After 069 / 070 / 071 (pass-on on `main`, [#116](https://github.com/bywale-com/travis/pull/116)).  
-**One PR:** this branch. Next packet number is **020** if you write one.
+**One PR:** [#117](https://github.com/bywale-com/travis/pull/117). Next packet number is **020** if you write one.
 
 **Flag (unchanged):** Phase One 14:00 UTC 2026-08-25.
 

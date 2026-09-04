@@ -22,7 +22,7 @@ This cut is **Hotfix 066** — house protocols and leftover docs carry the one-P
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
 | Face | Phone-first Voice / Log / Backlog. Smoke there. |
-| Last plant | 071 pass-on · [#116](https://github.com/bywale-com/travis/pull/116) on `main`. This cut: envelope **020** Travis gets a box · [`ENVELOPE-TRAVIS-BOX.md`](./ENVELOPE-TRAVIS-BOX.md) |
+| Last plant | 071 pass-on · [#116](https://github.com/bywale-com/travis/pull/116) on `main`. This cut: envelope **020** Travis gets a box · [#117](https://github.com/bywale-com/travis/pull/117) · [`ENVELOPE-TRAVIS-BOX.md`](./ENVELOPE-TRAVIS-BOX.md) |
 | Prior plants | 065 · [#108](https://github.com/bywale-com/travis/pull/108) · 015 · [#107](https://github.com/bywale-com/travis/pull/107) · 064 · [#102](https://github.com/bywale-com/travis/pull/102) · **Hotfix 062** · [#98](https://github.com/bywale-com/travis/pull/98) |
 | Motion | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) |
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
