@@ -43,6 +43,10 @@ let membershipStoreReady = false;
 export async function ensureMembershipStore(): Promise<void> {
   if (membershipStoreReady) return;
   await db.execute(sql`
+    ALTER TABLE travis.agent_binding
+      ADD COLUMN IF NOT EXISTS protocol_path text NOT NULL DEFAULT ''
+  `);
+  await db.execute(sql`
     ALTER TABLE travis.voice_session
       ADD COLUMN IF NOT EXISTS title text NOT NULL DEFAULT ''
   `);
