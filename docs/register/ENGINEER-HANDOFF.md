@@ -22,13 +22,13 @@ This cut is **Hotfix 066** — house protocols and leftover docs carry the one-P
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
 | Face | Phone-first Voice / Log / Backlog. Smoke there. |
-| Last plant | 020 box first slice · [#117](https://github.com/bywale-com/travis/pull/117) · [`ENVELOPE-TRAVIS-BOX.md`](./ENVELOPE-TRAVIS-BOX.md). 071 · [#116](https://github.com/bywale-com/travis/pull/116) |
+| Last plant | 020 box · [#117](https://github.com/bywale-com/travis/pull/117). This cut: envelope **021** prove/keep/unfold/split · [`ENVELOPE-TRAVIS-WORKER.md`](./ENVELOPE-TRAVIS-WORKER.md) |
 | Prior plants | 065 · [#108](https://github.com/bywale-com/travis/pull/108) · 015 · [#107](https://github.com/bywale-com/travis/pull/107) · 064 · [#102](https://github.com/bywale-com/travis/pull/102) · **Hotfix 062** · [#98](https://github.com/bywale-com/travis/pull/98) |
 | Motion | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) |
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
 | Busy room (lived) | `0e8875f8-283b-4dae-bf54-76c82a05b6ef` (title “Travis”) |
 
-**Do not redo** 012, 013, 014, 015, 016, 062, 064, 065, 068, 069, 070, or 071. First 020 slice is on [#117](https://github.com/bywale-com/travis/pull/117) — env pointer, Fly exec. Do not mint a box table. Do not send **That’s fine.** from Engineer.
+**Do not redo** 012, 013, 014, 015, 016, 020 first slice, 062, 064, 065, 068, 069, 070, or 071. Do not plant **021** prove until SA names the rules. Do not send **That’s fine.** from Engineer.
 
 ---
 
@@ -85,7 +85,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 
 | Gap | Why it is blocked |
 |-----|-------------------|
-| POSIX / Travis’s box | First slice on [#117](https://github.com/bywale-com/travis/pull/117): env pointer + Fly exec. SA still ascribes owner / disk / 042 if they packet. Token after. |
+| POSIX / worker 1–4 | Box first slice planted. Envelope [`ENVELOPE-TRAVIS-WORKER.md`](./ENVELOPE-TRAVIS-WORKER.md): prove, keep, unfold, hands split. Five back. SA packet **021**. Do not plant prove from Engineer until rules are named. |
 | `link` / structured artifact kind · founder upload | SA named silence. |
 | Heard-survives-refresh · 007 R2 Hear / Next / Skip · urgency tiers | SA. |
 | 015 lived smoke | Phone face: create Pat (must not be picked as PM), sit, idle send, busy→spin, `who` still queues. Do not auto-sit existing `pm`/`sa`/`engineer`/`travis` rows. |
