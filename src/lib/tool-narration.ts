@@ -73,6 +73,7 @@ export function narrateToolCall(
     default:
       // list_seats, queue_snapshot, work_in_flight, search_room,
       // list_os, read_os, write_os, run_box, read_box, write_box,
+      // prove_box, unfold_repo,
       // list_initiatives, read_initiative, list_backlog, file_plan,
       // read_seat_reply, set_view — instant.
       return null;

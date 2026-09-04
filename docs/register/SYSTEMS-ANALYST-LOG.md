@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-04 18:03 UTC — **SCP-015 signed.** Seated = `protocol_path` on the person. Busy → next, not enqueue. Packet: [`SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md`](./SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md).
+**Current (read first, then the newest stamp at the bottom):** 2026-09-04 22:28 UTC — **SCP-021 signed.** Box is a worker with rules. House and disk are two. Unfold from `/templates/work-repo` + `TRAVIS_GITHUB_TOKEN`. 042 stands. Five back. Packet: [`SYSTEMS-CHANGE-PACKET-021-WORKER.md`](./SYSTEMS-CHANGE-PACKET-021-WORKER.md) on PR **#119**. Engineer plants prove on that PR.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -377,3 +377,21 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md`](./SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md)
 
 **Handoff:** Engineer plants the column, `sit_agent`, role route, harness hand. Plant 014 first if `create_agent` is not on `main`. Founder lands ALTER.
+
+---
+
+## 2026-09-04 22:28 UTC — SCP-021 worker (Engineer envelope on #119)
+
+**Kind:** Envelope pickup. [`ENVELOPE-TRAVIS-WORKER.md`](./ENVELOPE-TRAVIS-WORKER.md) (PR **#119**). Founder: priority **1–4**; five stays back. Engineer did not plant the loop. Packet on **this same PR**.
+
+**Ascribed:**
+
+1. **Prove** — `prove_box` (`do` + `check`|`path`|`url`). Same Sprite. Max 3 cycles. Stop and name failure. No prove table. `run_box` stays one-shot. `write_box` gets one `test -e` + one retry. Model calling `run_box` again is not a loop.
+2. **Keep** — house (`os_node`) and box (Sprite disk) are **two**. Join is unfold copy only. Do not dump rows onto disk. No object storage. One Travis, one box, env pointer.
+3. **Unfold** — `unfold_repo`. Source `/templates/work-repo` in the house. Empty = fail (no migrate-seed). Key `TRAVIS_GITHUB_TOKEN` (not `GITHUB_TOKEN`). Private repo. Token never written to the disk. 042 does not move.
+4. **Hands** — box tools never Cursor send. No auto-sit. No computer use. `prove_box` on the motion allowlist; `unfold_repo` is not.
+5. **Five** stays named silence.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-021-WORKER.md`](./SYSTEMS-CHANGE-PACKET-021-WORKER.md)
+
+**Handoff:** Engineer plants prove on #119, then unfold (may be not-wired). Next packet number is **022**.

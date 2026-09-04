@@ -4,6 +4,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-04** · 021 worker · [PR #119](https://github.com/bywale-com/travis/pull/119) — Travis proves a job on the same box, says house and disk are two, and can unfold a house template into a new GitHub repo, because a one-shot run is not a worker and calling run_box again is not a loop.
+- **2026-09-04** · Envelope 021 · [PR #119](https://github.com/bywale-com/travis/pull/119) — Prove, keep, unfold, and hands split are the next shape, browser stays back, because the box is live and the founder wants the worker with rules, not more tools.
 - **2026-09-04** · 020 box · [PR #117](https://github.com/bywale-com/travis/pull/117) — Travis can run, read, and write on one Fly Sprite, pointer in env, because an error has to retry on the same machine and Vercel is not that machine.
 - **2026-09-04** · Hotfix 071 · [PR #116](https://github.com/bywale-com/travis/pull/116) — A named ticket takes the addition (by id, or by a title already in the send or in Travis’s last speech), a failed leave is a receipt, and catalog SA can take the line if spin dies, because “bundle That’s fine.” minted a new title from the last spoken line and SA never received it.
 - **2026-09-04** · Hotfix 070 · [PR #115](https://github.com/bywale-com/travis/pull/115) — Here names the latest ticket and whether a seat posted, a miss is not a cousin, and check-narration drops from the window, because Travis heard “SAE,” missed the title, and offered the Engineer ticket.

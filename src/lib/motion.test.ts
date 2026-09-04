@@ -21,6 +21,7 @@ test("seat sends and nested file_plan cannot be motion steps", () => {
     "file_plan",
     "create_agent",
     "sit_agent",
+    "unfold_repo",
   ]) {
     assert.equal(isMotionStepRefused(tool), true, tool);
     assert.equal(isMotionStepAllowed(tool), false, tool);
@@ -35,6 +36,7 @@ test("his house and catalog tools can be motion steps", () => {
     "write_os",
     "run_box",
     "write_box",
+    "prove_box",
     "list_backlog",
   ]) {
     assert.equal(isMotionStepAllowed(tool), true, tool);

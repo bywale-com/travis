@@ -2,7 +2,7 @@
  * SCP-012 — Travis OS house. Rows that look like folders.
  * Protocols and templates. No session_id. No seated link.
  */
-import { asc, eq, sql } from "drizzle-orm";
+import { and, asc, eq, like, sql } from "drizzle-orm";
 import { clipOsBody, parseOsPath, parentOsPath } from "@/lib/os-path";
 import { db } from "@/server/db/client";
 import { agentBinding, osNode } from "@/server/db/schema";
@@ -242,6 +242,29 @@ export async function writeOsAsTravis(path: string, body: unknown) {
     body,
     writerBindingId: await travisBindingId(),
   });
+}
+
+/** Files only, descendants of a house folder. Server helper — not a new tool. */
+export async function listOsFilesUnder(
+  dirRaw: string,
+): Promise<{ path: string; relative: string; body: string }[]> {
+  await ensureOsStore();
+  const parsed = parseOsPath(dirRaw);
+  if (!parsed.ok || parsed.path === "/") return [];
+  const prefix = parsed.path;
+  const rows = await db
+    .select({
+      path: osNode.path,
+      body: osNode.body,
+    })
+    .from(osNode)
+    .where(and(eq(osNode.kind, "file"), like(osNode.path, `${prefix}/%`)))
+    .orderBy(asc(osNode.path));
+  return rows.map((r) => ({
+    path: r.path,
+    relative: r.path.slice(prefix.length + 1),
+    body: r.body,
+  }));
 }
 
 export function formatOsList(list: OsList): string {

@@ -22,13 +22,13 @@ This cut is **Hotfix 066** — house protocols and leftover docs carry the one-P
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
 | Face | Phone-first Voice / Log / Backlog. Smoke there. |
-| Last plant | 020 box first slice · [#117](https://github.com/bywale-com/travis/pull/117) · [`ENVELOPE-TRAVIS-BOX.md`](./ENVELOPE-TRAVIS-BOX.md). 071 · [#116](https://github.com/bywale-com/travis/pull/116) |
+| Last plant | **021** prove / keep / unfold · [#119](https://github.com/bywale-com/travis/pull/119). Prior: 020 box · [#117](https://github.com/bywale-com/travis/pull/117) |
 | Prior plants | 065 · [#108](https://github.com/bywale-com/travis/pull/108) · 015 · [#107](https://github.com/bywale-com/travis/pull/107) · 064 · [#102](https://github.com/bywale-com/travis/pull/102) · **Hotfix 062** · [#98](https://github.com/bywale-com/travis/pull/98) |
 | Motion | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) |
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
 | Busy room (lived) | `0e8875f8-283b-4dae-bf54-76c82a05b6ef` (title “Travis”) |
 
-**Do not redo** 012, 013, 014, 015, 016, 062, 064, 065, 068, 069, 070, or 071. First 020 slice is on [#117](https://github.com/bywale-com/travis/pull/117) — env pointer, Fly exec. Do not mint a box table. Do not send **That’s fine.** from Engineer.
+**Do not redo** 012, 013, 014, 015, 016, 020 first slice, 021, 062, 064, 065, 068, 069, 070, or 071. Do not send **That’s fine.** from Engineer. Founder lands `TRAVIS_GITHUB_TOKEN` after this plant.
 
 ---
 
@@ -38,6 +38,7 @@ Newest first. Full sentences live on the README Implementation trail.
 
 | Ref | PR | One line |
 |-----|----|----------|
+| 021 | [#119](https://github.com/bywale-com/travis/pull/119) | Prove loop, house≠box, unfold to GitHub; five back |
 | 071 | [#116](https://github.com/bywale-com/travis/pull/116) | Named ticket gets the addition; failed send is a receipt; catalog fallback |
 | 070 | [#115](https://github.com/bywale-com/travis/pull/115) | Glance marks no seat post; miss ≠ cousin; check-narration drops |
 | 069 | [#114](https://github.com/bywale-com/travis/pull/114) | Receipt is the send; ticket-scoped read; Here names no-run |
@@ -85,7 +86,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 
 | Gap | Why it is blocked |
 |-----|-------------------|
-| POSIX / Travis’s box | First slice on [#117](https://github.com/bywale-com/travis/pull/117): env pointer + Fly exec. SA still ascribes owner / disk / 042 if they packet. Token after. |
+| `TRAVIS_GITHUB_TOKEN` | Unfold is planted and receipts `not wired` until the founder sets the secret on Vercel. After this build. Not `GITHUB_TOKEN`. |
 | `link` / structured artifact kind · founder upload | SA named silence. |
 | Heard-survives-refresh · 007 R2 Hear / Next / Skip · urgency tiers | SA. |
 | 015 lived smoke | Phone face: create Pat (must not be picked as PM), sit, idle send, busy→spin, `who` still queues. Do not auto-sit existing `pm`/`sa`/`engineer`/`travis` rows. |
