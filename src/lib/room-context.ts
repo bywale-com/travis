@@ -1,5 +1,8 @@
 import { requestLogPointer } from "@/lib/request-log";
 
+/** Titles shown unasked. Oldest drop; the top of the pile stays. */
+export const BACKLOG_GLANCE = 5;
+
 /**
  * Hotfix 038 — the slice of the room Travis is handed without asking.
  *
@@ -70,6 +73,24 @@ export function describeTurn(turn: ContextTurn, seatLabel: string): string {
 }
 
 /**
+ * Lived 19:11 — Travis said there were no initiatives while five sat in
+ * the pile, including the one just stamped at the top. A tool it must
+ * choose to call (and a search miss that reads as empty) cannot fix that.
+ */
+export function backlogPointer(
+  titles: string[],
+  openCount: number,
+  glance = BACKLOG_GLANCE,
+): string | null {
+  if (openCount <= 0) return null;
+  const shown = titles
+    .slice(0, glance)
+    .map((t) => t.replace(/\s+/g, " ").trim() || "(no title)");
+  const more = openCount > shown.length ? ` +${openCount - shown.length} more` : "";
+  return `Open backlog (${openCount}): ${shown.join(" · ")}${more}. Already true — do not say the pile is empty. Call list_initiatives or read_initiative for ids.`;
+}
+
+/**
  * Newest lines are the ones worth keeping, so trim from the oldest end.
  */
 export function trimToCap(lines: string[], cap = WINDOW_CHAR_CAP): string[] {
@@ -90,6 +111,8 @@ export function buildRoomContext(params: {
   requestCount?: number;
   roomTitle?: string;
   charCap?: number;
+  openTitles?: string[];
+  openCount?: number;
 }): string {
   const worthy = params.turns.filter(isContextWorthy);
   let lastTravis = -1;
@@ -110,6 +133,7 @@ export function buildRoomContext(params: {
 
   const body = trimToCap(lines, params.charCap ?? WINDOW_CHAR_CAP);
   const pointer = requestLogPointer(params.requestCount ?? 0);
+  const pile = backlogPointer(params.openTitles ?? [], params.openCount ?? 0);
   const named = (params.roomTitle ?? "").trim();
 
   const parts: string[] = [];
@@ -118,6 +142,7 @@ export function buildRoomContext(params: {
   } else if (
     body.length ||
     pointer ||
+    pile ||
     (params.running?.length ?? 0) > 0
   ) {
     parts.push("This room is untitled.");
@@ -132,6 +157,7 @@ export function buildRoomContext(params: {
         .join(", ")}.`,
     );
   }
+  if (pile) parts.push(pile);
   if (pointer) parts.push(pointer);
   if (body.length) {
     parts.push(`Recent room log, oldest first:\n${body.join("\n")}`);

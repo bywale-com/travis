@@ -595,8 +595,37 @@ export async function readInitiative(
   };
 }
 
-export function formatInitiativeList(items: InitiativeListItem[]): string {
-  if (!items.length) return "No initiatives in this room.";
+export async function glanceOpenInitiatives(
+  sessionId: string,
+): Promise<{ titles: string[]; openCount: number }> {
+  await ensureInitiativeStore();
+  const rows = await db
+    .select({ title: initiative.title })
+    .from(initiative)
+    .where(
+      and(eq(initiative.sessionId, sessionId), eq(initiative.status, "open")),
+    )
+    .orderBy(desc(initiative.createdAt));
+  return {
+    titles: rows.map((r) => r.title),
+    openCount: rows.length,
+  };
+}
+
+export function formatInitiativeList(
+  items: InitiativeListItem[],
+  opts: { q?: string; openCount?: number } = {},
+): string {
+  if (!items.length) {
+    const q = opts.q?.trim();
+    if (q) {
+      const n = opts.openCount ?? 0;
+      return n
+        ? `No initiatives matching “${q}”. ${n} open in this room.`
+        : `No initiatives matching “${q}”.`;
+    }
+    return "No initiatives in this room.";
+  }
   const lines = items.map((item) => {
     const next = item.next ? ` · next ${item.next}` : "";
     const lit = item.litSeatKeys.length
