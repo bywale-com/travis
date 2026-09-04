@@ -22,13 +22,13 @@ This cut is **Hotfix 066** — house protocols and leftover docs carry the one-P
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
 | Face | Phone-first Voice / Log / Backlog. Smoke there. |
-| Last plant | 071 pass-on · [`ENVELOPE-TRAVIS-PASS-ON.md`](./ENVELOPE-TRAVIS-PASS-ON.md) · [`HOTFIX-071-PASS-ON.md`](./HOTFIX-071-PASS-ON.md) · 070 · 069 |
+| Last plant | 071 pass-on · [#116](https://github.com/bywale-com/travis/pull/116) on `main`. This cut: envelope **020** Travis gets a box · [`ENVELOPE-TRAVIS-BOX.md`](./ENVELOPE-TRAVIS-BOX.md) |
 | Prior plants | 065 · [#108](https://github.com/bywale-com/travis/pull/108) · 015 · [#107](https://github.com/bywale-com/travis/pull/107) · 064 · [#102](https://github.com/bywale-com/travis/pull/102) · **Hotfix 062** · [#98](https://github.com/bywale-com/travis/pull/98) |
 | Motion | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) |
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
 | Busy room (lived) | `0e8875f8-283b-4dae-bf54-76c82a05b6ef` (title “Travis”) |
 
-**Do not redo** 012, 013, 014, 015, 016, 062, 064, 065, 068, 069, 070, or 071. Do not send **That’s fine.** from Engineer.
+**Do not redo** 012, 013, 014, 015, 016, 062, 064, 065, 068, 069, 070, or 071. Do not plant **020** until SA names the port. Do not send **That’s fine.** from Engineer.
 
 ---
 
@@ -85,7 +85,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 
 | Gap | Why it is blocked |
 |-----|-------------------|
-| POSIX / unfold into a work repo | House-now is `os_node`. 042 stands. |
+| POSIX / Travis’s box | Founder leaned to path two. Envelope [`ENVELOPE-TRAVIS-BOX.md`](./ENVELOPE-TRAVIS-BOX.md). SA ascribes port, pointer, disk, 042. Do not plant from Engineer. |
 | `link` / structured artifact kind · founder upload | SA named silence. |
 | Heard-survives-refresh · 007 R2 Hear / Next / Skip · urgency tiers | SA. |
 | 015 lived smoke | Phone face: create Pat (must not be picked as PM), sit, idle send, busy→spin, `who` still queues. Do not auto-sit existing `pm`/`sa`/`engineer`/`travis` rows. |
