@@ -28,7 +28,10 @@ test("no tool actually grants a view of the code", () => {
   for (const forbidden of ["read_file", "read_diff", "run_tests", "read_ci"]) {
     assert.equal(names.includes(forbidden), false);
   }
-  assert.equal(names.length, 22);
+  assert.equal(names.length, 25);
+  assert.equal(names.includes("run_box"), true);
+  assert.equal(names.includes("read_box"), true);
+  assert.equal(names.includes("write_box"), true);
   assert.equal(names.includes("create_agent"), true);
   assert.equal(names.includes("sit_agent"), true);
   assert.equal(names.includes("search_room"), true);
@@ -49,6 +52,14 @@ test("Travis is told he owns the house and that reading a protocol is not unfold
   assert.match(TRAVIS_SYSTEM, /read_os/);
   assert.match(TRAVIS_SYSTEM, /write_os/);
   assert.match(TRAVIS_SYSTEM, /Reading a protocol is not unfolding it into a repo/);
+});
+
+test("Travis is told the box is his computer and an error stays there", () => {
+  assert.match(TRAVIS_SYSTEM, /run_box/);
+  assert.match(TRAVIS_SYSTEM, /read_box/);
+  assert.match(TRAVIS_SYSTEM, /write_box/);
+  assert.match(TRAVIS_SYSTEM, /Same machine/);
+  assert.match(TRAVIS_SYSTEM, /do not mint a ticket/);
 });
 
 test("Travis is told the turn is not the work", () => {

@@ -101,4 +101,8 @@ No leftover analysis. Either:
 
 5. **Named silence (already, unless you pull it in):** computer use, auto-sit catalog slugs, Travis seeing Cursor PRs / dashboard, integrations table, dedicated orchestrator host.
 
-Do not remint 012. Do not open a second PR. Do not send **That’s fine.** from Engineer. Engineer plants only after 020 (or a signed Story with no packet) names the port and the grain.
+Do not remint 012. Do not open a second PR. Do not send **That’s fine.** from Engineer.
+
+**First slice (founder, 21:18–21:20):** Fly. Write / run / retry. Pointer in env. Keys after. Planted on this PR: `run_box` / `read_box` / `write_box` → `https://api.sprites.dev/v1`. `SPRITES_TOKEN` (aliases `SPRITE_TOKEN`, `FLY_API_TOKEN`). Name `TRAVIS_SPRITE_NAME` or `travis`. Creates the sprite on first use if missing. No table. No unfold. No GitHub. No computer use.
+
+SA packet **020** still welcome for owner / disk / 042. SCP-019 (#118) is pass-on sign-off — nothing to plant.
