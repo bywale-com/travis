@@ -6,7 +6,7 @@ This is the whole-repo map for `docs/`. Everything Travis is written down under 
 
 | Seat | Short paste | Full brief | Detailed README | Trail |
 |------|-------------|------------|-----------------|-------|
-| **Product Manager** | [§ Product Manager](#product-manager--paste-this) | same section | [`seats/PRODUCT-MANAGER.md`](./seats/PRODUCT-MANAGER.md) | [`register/PHASE-ONE-LOG.md`](./register/PHASE-ONE-LOG.md) |
+| **Product Manager** | [§ Product Manager](#product-manager--paste-this) | same section | [`seats/PRODUCT-MANAGER.md`](./seats/PRODUCT-MANAGER.md) | [`register/PHASE-ONE-LOG.md`](./register/PHASE-ONE-LOG.md) · living handoff [`register/PM-HANDOFF.md`](./register/PM-HANDOFF.md) |
 | **Systems Analyst** | [§ Systems Analyst](#systems-analyst--paste-this) | same section | [`seats/SYSTEMS-ANALYST.md`](./seats/SYSTEMS-ANALYST.md) | [`register/SYSTEMS-ANALYST-LOG.md`](./register/SYSTEMS-ANALYST-LOG.md) |
 | **Engineer** | [§ Engineer](#engineer--paste-this) | same section | [`seats/ENGINEER.md`](./seats/ENGINEER.md) | git + PRs (do not append the PM or SA logs). Always-on: repo-root [`AGENTS.md`](../AGENTS.md) |
 

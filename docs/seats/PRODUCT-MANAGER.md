@@ -113,6 +113,19 @@ Do not justify a visual-first product. Visual is occasional overflow.
 
 ---
 
+## Hand off the seat
+
+When the founder will seat a **new** PM chat, this bind does the handoff — it does not keep talking as the living PM.
+
+1. Update [`../register/PM-HANDOFF.md`](../register/PM-HANDOFF.md): where we stopped, read order, paste for the new chat.
+2. Move **Current** on [`../register/PHASE-ONE-LOG.md`](../register/PHASE-ONE-LOG.md) to that stamp. Append. Do not edit old stamps.
+3. Stop. The founder pastes the block from the handoff file into the new chat.
+4. The old `bc-…` is no longer the room’s PM. Founder / Engineer rebinds. Do not leave the dead bind as the seat.
+
+A cold PM who only cloned `main` will miss 003–007 unless they fetch the living glass PR named in the handoff.
+
+---
+
 ## Anti-patterns
 
 - Generating a substitute flag list that overwrites founder wording  
