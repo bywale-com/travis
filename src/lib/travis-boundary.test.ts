@@ -56,6 +56,8 @@ test("Travis is told the turn is not the work", () => {
   assert.match(TRAVIS_SYSTEM, /list_backlog/);
   assert.match(TRAVIS_SYSTEM, /The turn is not the work/);
   assert.match(TRAVIS_SYSTEM, /Do not invent progress/);
+  assert.match(TRAVIS_SYSTEM, /work_in_flight/);
+  assert.match(TRAVIS_SYSTEM, /not in progress/);
 });
 
 test("Travis is told it can create a person and must not assign a role", () => {
