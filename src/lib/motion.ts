@@ -20,6 +20,7 @@ export const MOTION_STEP_ALLOWLIST = [
   "run_box",
   "read_box",
   "write_box",
+  "prove_box",
   "list_backlog",
 ] as const;
 
@@ -34,6 +35,7 @@ export const MOTION_STEP_REFUSED = [
   "file_plan",
   "create_agent",
   "sit_agent",
+  "unfold_repo",
 ] as const;
 
 export type BacklogView = "all" | "in_motion" | "initiatives";

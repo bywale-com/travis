@@ -50,6 +50,8 @@ test("instant lookups stay silent", () => {
   assert.equal(narrateToolCall("run_box", { cmd: "ls" }), null);
   assert.equal(narrateToolCall("read_box", { path: "/tmp/a" }), null);
   assert.equal(narrateToolCall("write_box", { path: "/tmp/a", body: "x" }), null);
+  assert.equal(narrateToolCall("prove_box", { do: "true", path: "/tmp/a" }), null);
+  assert.equal(narrateToolCall("unfold_repo", { name: "seats-lab" }), null);
   assert.equal(narrateToolCall("read_initiative", { id: "x" }), null);
   assert.equal(narrateToolCall("list_backlog", { view: "in_motion" }), null);
   assert.equal(narrateToolCall("file_plan", { steps: [] }), null);

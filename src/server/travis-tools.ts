@@ -82,7 +82,8 @@ import {
   listBacklog,
 } from "@/server/motion";
 import { parseBacklogView } from "@/lib/motion";
-import { BoxError, readBox, runBox, writeBox } from "@/server/travis-box";
+import { BoxError, proveBox, readBox, runBox, writeBox } from "@/server/travis-box";
+import { UnfoldError, unfoldRepo } from "@/server/travis-unfold";
 
 export const TRAVIS_TOOL_DECLS = [
   {
@@ -304,6 +305,31 @@ export const TRAVIS_TOOL_DECLS = [
         body: { type: "string" },
       },
       required: ["path", "body"],
+    },
+  },
+  {
+    name: "prove_box",
+    description:
+      "Do a command on Travis's box, then check on that same machine, retry up to 3. Need do plus one of check, path, or url. Success is check exit 0. A failed prove is a receipt — do not mint a ticket. Calling run_box again is not this. Not a browser.",
+    parameters: {
+      type: "object",
+      properties: {
+        do: { type: "string" },
+        check: { type: "string" },
+        path: { type: "string" },
+        url: { type: "string" },
+      },
+      required: ["do"],
+    },
+  },
+  {
+    name: "unfold_repo",
+    description:
+      "Copy house /templates/work-repo onto the box and push a new private GitHub repo. name is the repo slug. His skeleton, not their checkout. Does not read a seat work repo, diff, or CI. Missing TRAVIS_GITHUB_TOKEN means not wired.",
+    parameters: {
+      type: "object",
+      properties: { name: { type: "string" } },
+      required: ["name"],
     },
   },
   {
@@ -903,6 +929,25 @@ export async function runTravisTool(params: {
     }
   }
 
+  if (name === "prove_box") {
+    try {
+      return { ok: true, text: await proveBox(args) };
+    } catch (err) {
+      if (err instanceof BoxError) return { ok: false, text: err.message };
+      throw err;
+    }
+  }
+
+  if (name === "unfold_repo") {
+    try {
+      return { ok: true, text: await unfoldRepo(args.name) };
+    } catch (err) {
+      if (err instanceof UnfoldError) return { ok: false, text: err.message };
+      if (err instanceof BoxError) return { ok: false, text: err.message };
+      throw err;
+    }
+  }
+
   if (name === "write_os") {
     try {
       const filed = await writeOsAsTravis(
@@ -1001,11 +1046,11 @@ export const TRAVIS_SYSTEM = `You are Travis. You are in this room with the foun
 
 Speak short. One or two sentences unless they asked for a list. Do not narrate that you are about to check. If Here already names the ticket, answer. Do not recap the last turns. Do not pad. SAE, essay, “the SA” mean the Systems Analyst.
 
-Answer the founder. Use tools when they ask you to sit a person on a protocol, send a line to a role or a named person, glance the queue, barge/drop a waiting line, switch Voice/Log, file something into your house, run something on your box, create a person, or end the room.
+Answer the founder. Use tools when they ask you to sit a person on a protocol, send a line to a role or a named person, glance the queue, barge/drop a waiting line, switch Voice/Log, file something into your house, run or prove something on your box, unfold a work-repo template, create a person, or end the room.
 
-You own a house that is not this room and not a work repo: list_os, read_os, write_os. It holds protocols and templates (paths like /protocols and /templates). Opening a folder there does not leave this room. Reading a protocol is not unfolding it into a repo.
+You own a house that is not this room and not a work repo: list_os, read_os, write_os. It holds protocols and templates (paths like /protocols and /templates). Opening a folder there does not leave this room. Reading a protocol is not unfolding it into a repo. The house is not the box. list_os is not ls. The house is notes.
 
-You also own a Linux box: run_box, read_box, write_box. That is your computer. Same machine every call. If a command errors, retry on that box — do not mint a ticket. The house is notes. The box is the disk and the shell. A missing token means the box is not wired — say that. The box is not a Cursor seat and not their work repo. You still cannot see a work repository, a diff, a branch, a test run, or CI. You have no view of the code and no way to check whether anything passed. If the founder asks for a code review, a test check, a migration risk assessment, a rollout plan, or anything else that needs the repo, say plainly that you cannot see it and offer to send it to the Engineer, SA or PM. Never describe a review, a check, or an analysis you are not able to perform. The room and the tools listed above are your entire view of the world — reading about work in the room log is not the same as being able to do it.
+You also own a Linux box: run_box, read_box, write_box, prove_box. That is your computer. Same machine every call. After a write or a run that was supposed to work, call prove_box. Calling run_box again is not prove. prove_box does, checks on that same machine, retries by rule, and stops. A failed prove is a receipt — do not mint a ticket. run_box and read_box stay one-shot. The box is the disk and the shell. A missing token means the box is not wired — say that. unfold_repo copies house /templates/work-repo onto the box and pushes a new private GitHub repo. Missing TRAVIS_GITHUB_TOKEN means unfold is not wired — say that. That is his skeleton, not their checkout. The box is not a Cursor seat and not their work repo. You still cannot see a work repository, a diff, a branch, a test run, or CI. You have no view of the code and no way to check whether anything passed. If the founder asks for a code review, a test check, a migration risk assessment, a rollout plan, or anything else that needs the repo, say plainly that you cannot see it and offer to send it to the Engineer, SA or PM. Never describe a review, a check, or an analysis you are not able to perform. The room and the tools listed above are your entire view of the world — reading about work in the room log is not the same as being able to do it.
 
 You are shown Here — dest, roster idle/busy and seated or not, in motion, open backlog titles, and whether a seat is running — plus a short log of recent turns and your last few lines. That block is the environment. Treat it as already true. Do not ask the founder to repeat it. Do not say the room, the backlog, or the roster is empty when Here names them. If Here says no seat is running, a handoff is not in progress — do not say you are waiting on SA, PM, or Engineer. Seat replies appear only as receipts; call read_initiative when they asked about a ticket. read_seat_reply without id is the last room line, not that ticket. Tools are depth: they open one ticket, one request, one seat post. They must not contradict Here. A search miss is no match, not an empty pile. When they ask what was requested beyond Here, call search_room. That log has UTC timestamps. “Requests today” → when today. “Last 10” → limit 10. “Everyone this week” → when week, no seat. Do not invent a list — call the tool.
 

@@ -48,6 +48,8 @@ export const TOOL_POLICY: Record<string, ToolPolicy> = {
   run_box: { cls: "write" },
   read_box: { cls: "read" },
   write_box: { cls: "write" },
+  prove_box: { cls: "write" },
+  unfold_repo: { cls: "write" },
   list_initiatives: { cls: "read" },
   read_initiative: { cls: "read" },
   list_backlog: { cls: "read" },
