@@ -16,17 +16,17 @@ Filled from the Om Coda `PROJECT-BRIEF` template. Hand this to the agent with `d
 
 ## Where we start
 
-- **First UI surface to build / extend:** Phone-first voice + chat thread (text + image bubbles) backed by a thin server that holds the Cursor API key and proxies agent runs / SSE.
-- **In-scope for this session (docs stand-up):** Seats, logs, method pack, build-foundation pack, this brief, remote repo. **No product UI plant until PM/SA lock a cut.**
-- **Out of scope for this session:** Triage/judgment layer; Fieldtop mount productization; desktop Cursor automation; full visual design system beyond rudiments stubs when UI starts.
+- **First UI surface:** Phone-first Voice / Log / Backlog — already planted. Production `https://travis-psi.vercel.app`.
+- **In-scope for a new Engineer:** Read [`docs/register/ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md) first. Build only the pocket the founder names. Do not restart 012 / 013 / 062.
+- **Out of scope until named:** Triage/judgment; seated orchestration; POSIX unfold; Fieldtop; desktop Cursor automation.
 
 ## Constraints
 
-- Stack / repo layout notes: TBD at plant time — prefer TypeScript; `@cursor/sdk` or Cloud Agents API; API keys server-side only; phone-first.
+- Stack: Next.js (`src/`), Vercel (`travis-psi`), Postgres schema `travis`, `@cursor/sdk` / Cloud Agents API. API keys server-side only. Phone-first.
 - Existing design references: Om Coda method + build-foundation (this repo). Product is not Tower.
 - Must stay on rudiments: tokens · icons · surface boundaries · How/flows when relevant.
 - Same seat law as Tower: PM / SA / Engineer; two buckets for Engineer; no third bucket.
 
 ## Agent instruction
 
-Follow `docs/build-foundation/00-rudiments.md`. Build only the in-scope starting surface when a session is seated as Engineer and the pocket is locked. Register every new region. Do not invent process language before How leaves. Do not expand into out-of-scope modules. Do not mint tables. Do not append PM/SA logs.
+Follow `docs/build-foundation/00-rudiments.md`. Take over from [`docs/register/ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md). Build only the pocket the founder names. Register every new region. Do not invent process language before How leaves. Do not expand into out-of-scope modules. Do not mint tables. Do not append PM/SA logs. When you stop, rewrite the handoff file.

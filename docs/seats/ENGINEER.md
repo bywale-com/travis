@@ -17,10 +17,11 @@ You are the **third seat**. PM and SA specify. You wire **UI + systems** so the 
 2. Read [`../../AGENTS.md`](../../AGENTS.md).  
 3. Read Phase One log **Current** (flagship wording — do not overwrite, do not append).  
 4. Read SA log **Current** (what packet is live — do not append).  
-5. Read the assigned packet / brief in-scope.  
-6. Build.
+5. Read [`../register/ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md) — where the last Engineer stopped.  
+6. Read the assigned packet / brief in-scope.  
+7. Build.
 
-If this chat was meant to be SA or PM: **stop implementing** and re-seat.
+If this chat was meant to be SA or PM: **stop implementing** and re-seat. If you are taking over: the handoff file is the Current, not a Cloud Agent transcript.
 
 ---
 
@@ -73,6 +74,27 @@ v1 surfaces everything **readable** from the assistant stream.
 - **Hotfixes:** ad-hoc engineer-originated cuts (smoke / code / backend grain, not a PM or SA packet) use `docs/register/HOTFIX-NNN-….md` + index [`../register/HOTFIXES.md`](../register/HOTFIXES.md). PR titles: `Hotfix NNN — …`.
 - **Do not append** PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
 - If you need a decision, ask the founder to seat PM or SA — do not self-promote into those logs.
+- When you stop, rewrite [`../register/ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md) so a new Engineer picks up. Do not leave the Current only in a transcript.
+
+---
+
+## Handoff the seat
+
+The seat is the protocol + the trail. It is not a Cursor `bc-` id. A new chat accepts the paste and continues. This chat does not have to stay alive.
+
+### When you leave
+
+1. [`ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md) names where you stopped, the last plant, leftover PRs, and what is blocked.  
+2. Prepend the README Implementation line and land the hotfix/packet PR.  
+3. Do not leave the Current only in a Cloud Agent transcript.
+
+### When you take over
+
+Paste the [README Engineer block](../README.md#engineer--paste-this), then [`ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md), then this file, then `AGENTS.md`. Fetch `main`. Do not restart a planted packet.
+
+### Paste
+
+The successor block lives at the bottom of [`ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md).
 
 ---
 
@@ -103,11 +125,12 @@ If a table or field is missing: **name it and wait**.
 
 ## Read order (every session)
 
-1. This README + [`../../AGENTS.md`](../../AGENTS.md)  
-2. Phase One log Current (read-only)  
-3. SA log Current + assigned change packet  
-4. PROJECT-BRIEF in-scope  
-5. Build rudiments as needed  
+1. [`../register/ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md)  
+2. This README + [`../../AGENTS.md`](../../AGENTS.md)  
+3. Phase One log Current (read-only)  
+4. SA log Current + assigned change packet  
+5. PROJECT-BRIEF in-scope  
+6. Build rudiments as needed  
 
 ---
 
@@ -121,3 +144,4 @@ If a table or field is missing: **name it and wait**.
 - Building triage / judgment in v1 without a packet  
 - Writing essays into PM/SA logs  
 - Third-bucket deferrals  
+- Starting a takeover from memory or from a Cloud Agent transcript  
