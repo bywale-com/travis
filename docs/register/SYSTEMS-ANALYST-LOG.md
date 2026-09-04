@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-04 18:03 UTC — **SCP-015 signed.** Seated = `protocol_path` on the person. Busy → next, not enqueue. Packet: [`SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md`](./SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md).
+**Current (read first, then the newest stamp at the bottom):** 2026-09-04 21:13 UTC — **SCP-019 signed.** Pass-on hangs on the named ticket. Failed leave is a receipt. Catalog fallback is not a sit. Packet: [`SYSTEMS-CHANGE-PACKET-019-PASS-ON.md`](./SYSTEMS-CHANGE-PACKET-019-PASS-ON.md). Plant already on `main` (PR **#116**). Founder: only the newest envelope (not 016 / 017 / 018).
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -377,3 +377,24 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md`](./SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md)
 
 **Handoff:** Engineer plants the column, `sit_agent`, role route, harness hand. Plant 014 first if `create_agent` is not on `main`. Founder lands ALTER.
+
+---
+
+## 2026-09-04 21:13 UTC — SCP-019 pass-on (newest Engineer envelope only)
+
+**Kind:** Envelope pickup. [`ENVELOPE-TRAVIS-PASS-ON.md`](./ENVELOPE-TRAVIS-PASS-ON.md). Engineer already planted PR **#116** (Hotfix 071). This stamp **signs**. It does not remint.
+
+**Founder lock this pass:** only the newest envelope. Did not pick up Here / Hand / Glance.
+
+**Lived bug (preserved):** room `0e8875f8`, seq 635–640. Bundle That’s fine. minted `Yes, that's the exact one.` SA was never sent. No receipt.
+
+**Ascribed:**
+
+1. Named ticket wins — `id`, or an open title already in the send or in Travis’s last speech (`NAMED_TITLE_MIN` 8, last mention). The addition stamps there. Last spoken confirmation is not a cousin.
+2. `ensureViaTravis` remains the 008 fallback when nothing is named. Not a new founding grain. `Agent.create` needs no port.
+3. A throw on leave is a receipt (`postHandReceipt`).
+4. Catalog fallback = idle same `seat_key` + Cursor id + no live run. Not a sit. Do not auto-sit catalog slugs.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-019-PASS-ON.md`](./SYSTEMS-CHANGE-PACKET-019-PASS-ON.md)
+
+**Handoff:** Nothing to plant. Next packet number is **020**. 016–018 stay unused as SA packets until the founder seats those envelopes.
