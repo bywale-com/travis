@@ -5,10 +5,35 @@ import {
   backlogPointer,
   buildRoomContext,
   describeTurn,
+  isCheckNarration,
   isContextWorthy,
   shouldSummarize,
   trimToCap,
 } from "./room-context";
+
+test("Travis check-narration is not the room", () => {
+  assert.equal(isCheckNarration("Let me check where that stands with the SA."), true);
+  assert.equal(
+    isCheckNarration("I’m going to open the likely candidate and confirm."),
+    true,
+  );
+  assert.equal(
+    isContextWorthy({
+      kind: "agent_post",
+      seatKey: "travis",
+      text: "Let me find the one that actually involves the SA.",
+    }),
+    false,
+  );
+  assert.equal(
+    isContextWorthy({
+      kind: "agent_post",
+      seatKey: "travis",
+      text: "No. There are no systems analyst posts on that initiative yet.",
+    }),
+    true,
+  );
+});
 
 test("thoughts never enter the window", () => {
   assert.equal(
@@ -216,6 +241,18 @@ test("open backlog titles are already true in the window", () => {
   assert.match(out, /Open backlog \(5\)/);
   assert.match(out, /That's fine\./);
   assert.match(out, /do not say the pile is empty/);
+  assert.match(out, /Latest: That's fine\./);
+  assert.match(out, /A miss is not another ticket/);
+});
+
+test("a ticket with no seat post is marked in Here", () => {
+  const out = buildRoomContext({
+    turns: [],
+    openItems: [{ title: "That's fine.", posted: false }],
+    openCount: 1,
+  });
+  assert.match(out, /That's fine\. \(no seat post\)/);
+  assert.match(out, /Latest: That's fine\. \(no seat post\)/);
 });
 
 test("a search miss is not an empty pile", () => {

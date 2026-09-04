@@ -8,13 +8,14 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **070**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **071**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
 
 | # | File | Cut |
 |---|------|-----|
+| 070 | [`HOTFIX-070-GLANCE-TRUTH.md`](./HOTFIX-070-GLANCE-TRUTH.md) | Check-narration drops from the window; glance marks no seat post; a miss is not a cousin |
 | 069 | [`HOTFIX-069-HAND-TRUTH.md`](./HOTFIX-069-HAND-TRUTH.md) | Receipt is the send; ticket-scoped SA read; Here names when no seat is running |
 | 068 | [`HOTFIX-068-BACKLOG-WINDOW.md`](./HOTFIX-068-BACKLOG-WINDOW.md) | Open backlog titles ride in the room window; a search miss is not an empty pile |
 | 067 | [`HOTFIX-067-HOUSE-BUILD.md`](./HOTFIX-067-HOUSE-BUILD.md) | House refile script is not part of `next build` |

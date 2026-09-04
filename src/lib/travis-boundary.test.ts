@@ -69,6 +69,8 @@ test("Travis is told it can create a person and must not assign a role", () => {
 test("Travis is told to speak short and not invent an empty backlog", () => {
   assert.match(TRAVIS_SYSTEM, /Speak short/);
   assert.match(TRAVIS_SYSTEM, /A miss is no match/);
+  assert.match(TRAVIS_SYSTEM, /not another ticket/);
+  assert.match(TRAVIS_SYSTEM, /SAE/);
   assert.match(TRAVIS_SYSTEM, /tools are depth/i);
   assert.match(TRAVIS_SYSTEM, /must not contradict Here/);
 });

@@ -58,10 +58,30 @@ function clip(text: string, cap: number): string {
   return flat.length <= cap ? flat : `${flat.slice(0, cap).trimEnd()}…`;
 }
 
+/**
+ * Lived 20:17 — eight “Let me check / I’m pulling” lines ate the window,
+ * so the ticket they were talking about fell off. Promises to look are
+ * not the room.
+ */
+export function isCheckNarration(text: string): boolean {
+  const t = text.replace(/\s+/g, " ").trim();
+  if (!t || t.length > 200) return false;
+  return /^(okay[,.]?\s+|alright[,.]?\s+|got it[,.]?\s+)?(let me|i(?:['\u2019]m| am) (?:going to|pulling|trying|opening|checking|looking)|i(?:['\u2019]ll| will) (?:pull|check|look|open|find|match))\b/i.test(
+    t,
+  );
+}
+
 /** Thoughts and routine status are noise Travis should never pay for. */
 export function isContextWorthy(turn: ContextTurn): boolean {
   if (turn.kind === "agent_thought") return false;
   if (turn.kind === "status") return /error/i.test(turn.text);
+  if (
+    turn.kind === "agent_post" &&
+    turn.seatKey === "travis" &&
+    isCheckNarration(turn.text)
+  ) {
+    return false;
+  }
   return Boolean(turn.text.trim());
 }
 
@@ -83,17 +103,27 @@ export function describeTurn(turn: ContextTurn, seatLabel: string): string {
  * the pile, including the one just stamped at the top. A tool it must
  * choose to call (and a search miss that reads as empty) cannot fix that.
  */
+export type GlanceItem = { title: string; posted?: boolean };
+
+export function formatGlanceTitle(item: string | GlanceItem): string {
+  const raw = typeof item === "string" ? item : item.title;
+  const title = raw.replace(/\s+/g, " ").trim() || "(no title)";
+  if (typeof item !== "string" && item.posted === false) {
+    return `${title} (no seat post)`;
+  }
+  return title;
+}
+
 export function backlogPointer(
-  titles: string[],
+  titles: Array<string | GlanceItem>,
   openCount: number,
   glance = BACKLOG_GLANCE,
 ): string | null {
   if (openCount <= 0) return null;
-  const shown = titles
-    .slice(0, glance)
-    .map((t) => t.replace(/\s+/g, " ").trim() || "(no title)");
+  const shown = titles.slice(0, glance).map(formatGlanceTitle);
   const more = openCount > shown.length ? ` +${openCount - shown.length} more` : "";
-  return `Open backlog (${openCount}): ${shown.join(" · ")}${more}. Already true — do not say the pile is empty. Call list_initiatives or read_initiative for ids.`;
+  const latest = shown[0] ? ` Latest: ${shown[0]}.` : "";
+  return `Open backlog (${openCount}): ${shown.join(" · ")}${more}.${latest} Already true — do not say the pile is empty. A miss is not another ticket. Call list_initiatives or read_initiative for ids.`;
 }
 
 /**
@@ -105,6 +135,7 @@ export function hereBlock(params: {
   members?: HereMember[];
   motionCount?: number;
   openTitles?: string[];
+  openItems?: GlanceItem[];
   openCount?: number;
 }): string | null {
   const lines: string[] = [];
@@ -126,7 +157,10 @@ export function hereBlock(params: {
   }
   const motion = params.motionCount ?? 0;
   if (motion > 0) lines.push(`In motion: ${motion}.`);
-  const pile = backlogPointer(params.openTitles ?? [], params.openCount ?? 0);
+  const pile = backlogPointer(
+    params.openItems?.length ? params.openItems : (params.openTitles ?? []),
+    params.openCount ?? 0,
+  );
   if (pile) lines.push(pile);
   if (!lines.length) return null;
   return `Here (already true — tools are depth, not the first look):\n${lines.join("\n")}`;
@@ -157,6 +191,7 @@ export function buildRoomContext(params: {
   motionCount?: number;
   charCap?: number;
   openTitles?: string[];
+  openItems?: GlanceItem[];
   openCount?: number;
 }): string {
   const worthy = params.turns.filter(isContextWorthy);
@@ -184,6 +219,7 @@ export function buildRoomContext(params: {
     members: params.members,
     motionCount: params.motionCount,
     openTitles: params.openTitles,
+    openItems: params.openItems,
     openCount: params.openCount,
   });
   const named = (params.roomTitle ?? "").trim();

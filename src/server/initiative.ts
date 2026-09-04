@@ -5,7 +5,7 @@
  * Requests stays kind=user.
  */
 
-import { and, asc, desc, eq, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
 import { formatLandedFiles } from "@/lib/artifact-kind";
 import {
   catalogNeedleHits,
@@ -597,18 +597,46 @@ export async function readInitiative(
 
 export async function glanceOpenInitiatives(
   sessionId: string,
-): Promise<{ titles: string[]; openCount: number }> {
+): Promise<{
+  titles: string[];
+  openCount: number;
+  items: Array<{ title: string; posted: boolean }>;
+}> {
   await ensureInitiativeStore();
   const rows = await db
-    .select({ title: initiative.title })
+    .select({ id: initiative.id, title: initiative.title })
     .from(initiative)
     .where(
       and(eq(initiative.sessionId, sessionId), eq(initiative.status, "open")),
     )
     .orderBy(desc(initiative.createdAt));
+  const ids = rows.map((r) => r.id);
+  const posted = new Set<string>();
+  if (ids.length) {
+    const posts = await db
+      .select({
+        initiativeId: voiceTurn.initiativeId,
+        seatKey: voiceTurn.seatKey,
+      })
+      .from(voiceTurn)
+      .where(
+        and(
+          inArray(voiceTurn.initiativeId, ids),
+          eq(voiceTurn.kind, "agent_post"),
+        ),
+      );
+    for (const p of posts) {
+      if (p.initiativeId && isCursorSeat(p.seatKey)) posted.add(p.initiativeId);
+    }
+  }
+  const items = rows.map((r) => ({
+    title: r.title,
+    posted: posted.has(r.id),
+  }));
   return {
-    titles: rows.map((r) => r.title),
+    titles: items.map((i) => i.title),
     openCount: rows.length,
+    items,
   };
 }
 
@@ -621,8 +649,8 @@ export function formatInitiativeList(
     if (q) {
       const n = opts.openCount ?? 0;
       return n
-        ? `No initiatives matching “${q}”. ${n} open in this room.`
-        : `No initiatives matching “${q}”.`;
+        ? `No initiatives matching “${q}”. Do not substitute another ticket. ${n} open in this room.`
+        : `No initiatives matching “${q}”. Do not substitute another ticket.`;
     }
     return "No initiatives in this room.";
   }
