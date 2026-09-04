@@ -59,6 +59,10 @@ export function narrateToolCall(
       return "Renaming the room.";
     case "end_session":
       return "Ending the room.";
+    case "create_agent": {
+      const label = clip(String(args.label ?? ""), 40);
+      return label ? `Creating ${label}.` : "Creating an agent.";
+    }
     default:
       // list_seats, queue_snapshot, work_in_flight, search_room,
       // list_os, read_os, write_os, list_initiatives, read_initiative,

@@ -34,12 +34,14 @@ import {
 import { insertAgentPostTurn } from "@/server/seat-pipe";
 import { summarizeSeatReply } from "@/server/travis-summarize";
 import {
+  addMember,
   endRoom,
   MembershipError,
   renameRoom,
   requireOpenMember,
   roomSeats,
 } from "@/server/room-membership";
+import { createAgentBinding } from "@/server/create-agent";
 import {
   ensureViaTravis,
   formatInitiativeList,
@@ -254,9 +256,25 @@ export const TRAVIS_TOOL_DECLS = [
     },
   },
   {
+    name: "create_agent",
+    description:
+      "Create a person in the catalog the same way the Create an agent screen does. Name them. Optional model, repository, and ref. join defaults true — they become a member of this room. join false is catalog only. You do not assign a role. You do not invent a Cursor id. Prompt stays the one-line stub. Not a seated protocol.",
+    parameters: {
+      type: "object",
+      properties: {
+        label: { type: "string" },
+        model: { type: "string" },
+        repository: { type: "string" },
+        ref: { type: "string" },
+        join: { type: "boolean" },
+      },
+      required: ["label"],
+    },
+  },
+  {
     name: "file_plan",
     description:
-      "File an ordered sequence of your own tools as a Travis process and stay with the founder. The runner advances the steps after you return. Use this when several of your tools should run in a row (list then rename, two writes). Each step is one allowlisted tool plus frozen args. Cannot include send_to_seat, dispatch_to_seat, barge_or_drop, end_session, set_view, or file_plan. Title empty clips the latest user line.",
+      "File an ordered sequence of your own tools as a Travis process and stay with the founder. The runner advances the steps after you return. Use this when several of your tools should run in a row (list then rename, two writes). Each step is one allowlisted tool plus frozen args. Cannot include send_to_seat, dispatch_to_seat, barge_or_drop, end_session, set_view, file_plan, or create_agent. Title empty clips the latest user line.",
     parameters: {
       type: "object",
       properties: {
@@ -681,6 +699,40 @@ export async function runTravisTool(params: {
     }
   }
 
+  if (name === "create_agent") {
+    const label = String(args.label ?? "").trim();
+    if (!label) return { ok: false, text: "Name the agent." };
+    const join = args.join === false || args.join === "false" ? false : true;
+    try {
+      const agent = await createAgentBinding({
+        label,
+        model: args.model ? String(args.model) : undefined,
+        repository: args.repository ? String(args.repository) : undefined,
+        ref: args.ref ? String(args.ref) : undefined,
+      });
+      if (join) {
+        try {
+          await addMember(sessionId, agent.id);
+        } catch (err) {
+          if (err instanceof MembershipError) {
+            return {
+              ok: true,
+              text: `Created ${agent.label}. They are not in this room — ${err.message}`,
+            };
+          }
+          throw err;
+        }
+        return { ok: true, text: `Created ${agent.label} in this room.` };
+      }
+      return { ok: true, text: `Created ${agent.label} in the catalog.` };
+    } catch (err) {
+      return {
+        ok: false,
+        text: err instanceof Error ? err.message : "Could not create the agent.",
+      };
+    }
+  }
+
   if (name === "list_backlog") {
     const view = parseBacklogView(args.view);
     const pile = await listBacklog(sessionId, { view, status: "all" });
@@ -698,7 +750,7 @@ export async function runTravisTool(params: {
 
 export const TRAVIS_SYSTEM = `You are Travis. You are in this room with the founder and three Cursor seats: PM, SA, and Engineer. You are your own agent — not those seats.
 
-Answer the founder. Use tools when they ask you to send a line to a seat, glance the queue, barge/drop a waiting line, switch Voice/Log, file something into your house, or end the room.
+Answer the founder. Use tools when they ask you to send a line to a seat, glance the queue, barge/drop a waiting line, switch Voice/Log, file something into your house, create a person, or end the room.
 
 You own a house that is not this room and not a work repo: list_os, read_os, write_os. It holds protocols and templates (paths like /protocols and /templates). Opening a folder there does not leave this room. Reading a protocol is not unfolding it into a repo. You still cannot see a work repository, a diff, a branch, a test run, or CI. You have no view of the code and no way to check whether anything passed. If the founder asks for a code review, a test check, a migration risk assessment, a rollout plan, or anything else that needs the repo, say plainly that you cannot see it and offer to send it to the Engineer, SA or PM. Never describe a review, a check, or an analysis you are not able to perform. The room and the tools listed above are your entire view of the world — reading about work in the room log is not the same as being able to do it.
 
@@ -707,6 +759,8 @@ You are shown a short room-state block with recent turns and what is running. Tr
 The backlog is separate. search_room is every line. Initiatives are only what you passed on, or what they promoted with Hold. list_initiatives / read_initiative / rename_initiative / mark_initiative_done for that pipe. “This week” → list_initiatives when week. “The artifact one” → list_initiatives q. A miss is an empty list — do not invent a ticket. You do not name a ticket when you mint it. rename_initiative only when they ask to rename. A seat finishing does not mark it done — you or they do. list_initiatives and read_initiative print each ticket's id — use that id on rename_initiative; do not guess.
 
 The turn is not the work. Several of your own tools in a row — list then rename, two writes, a glance then a write — file them with file_plan and stay with the founder. send_to_seat is one blocking hand, not a batch and not a plan step. Glance / “how is that coming?” → list_backlog. Do not invent progress. A filed plan keeps running after you have already answered.
+
+You can create a person with create_agent — a name, optional model and repo. Same write as the Create an agent screen. You do not assign a role. You do not invent a Cursor id. join defaults to this room as a member. join false is catalog only.
 
 rename_room names this room. Only when they ask. Do not invent a name for an untitled room. You cannot list or rename other rooms.
 

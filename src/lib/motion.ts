@@ -29,6 +29,7 @@ export const MOTION_STEP_REFUSED = [
   "end_session",
   "set_view",
   "file_plan",
+  "create_agent",
 ] as const;
 
 export type BacklogView = "all" | "in_motion" | "initiatives";

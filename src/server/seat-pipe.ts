@@ -1,6 +1,7 @@
 import { and, desc, eq } from "drizzle-orm";
 import { delay, isDeadStreamError } from "@/lib/cursor-busy";
 import { absorbText, nextLiveTravisText } from "@/lib/absorb-text";
+import { nextDestSeatText, nextSeatBeat, postIsInRunChain } from "@/lib/beats";
 import { isTravisSeat } from "@/lib/seats";
 import { seatKeyToLabel } from "@/lib/router";
 import {
@@ -218,8 +219,8 @@ export async function insertUserTurn(
 }
 
 /**
- * Grow one agent_post for this user turn + seat so a dropped SSE still
- * leaves the chat log with what had already been said.
+ * Dest-seat posts use the Live Travis closer. A growing snapshot updates
+ * the open beat. A new message inserts and quotes the previous post.
  */
 export async function absorbStreamingAgentPost(params: {
   sessionId: string;
@@ -229,33 +230,47 @@ export async function absorbStreamingAgentPost(params: {
 }): Promise<VoiceTurn> {
   const incoming = params.text.trim();
   return withSeqLock(params.sessionId, async () => {
-    const [existing] = await db
+    const posts = await db
       .select()
       .from(voiceTurn)
       .where(
         and(
           eq(voiceTurn.sessionId, params.sessionId),
           eq(voiceTurn.kind, "agent_post"),
-          eq(voiceTurn.referenceTurnId, params.userTurnId),
           eq(voiceTurn.seatKey, params.seatKey),
         ),
       )
-      .orderBy(desc(voiceTurn.seq))
-      .limit(1);
+      .orderBy(desc(voiceTurn.seq));
+    const byId = new Map(posts.map((p) => [p.id, p]));
+    const current =
+      posts.find((p) =>
+        postIsInRunChain(p, params.userTurnId, (id) => byId.get(id) ?? null),
+      ) ?? null;
     const [answered] = await db
       .select({ initiativeId: voiceTurn.initiativeId })
       .from(voiceTurn)
       .where(eq(voiceTurn.id, params.userTurnId))
       .limit(1);
     const initiativeId = answered?.initiativeId ?? undefined;
-    if (existing) {
-      if (existing.text === incoming && existing.initiativeId === (initiativeId ?? null)) {
-        return existing;
+    const next = nextSeatBeat({
+      current: current ? { id: current.id, text: current.text } : null,
+      incoming,
+      userTurnId: params.userTurnId,
+    });
+    if (next.mode === "update" && current) {
+      if (
+        current.text === next.text &&
+        current.initiativeId === (initiativeId ?? null)
+      ) {
+        return current;
       }
       const [row] = await db
         .update(voiceTurn)
-        .set({ text: incoming, initiativeId: initiativeId ?? existing.initiativeId })
-        .where(eq(voiceTurn.id, existing.id))
+        .set({
+          text: next.text,
+          initiativeId: initiativeId ?? current.initiativeId,
+        })
+        .where(eq(voiceTurn.id, current.id))
         .returning();
       return row;
     }
@@ -268,9 +283,9 @@ export async function absorbStreamingAgentPost(params: {
         role: "assistant",
         kind: "agent_post",
         seatKey: params.seatKey,
-        referenceTurnId: params.userTurnId,
+        referenceTurnId: next.referenceTurnId,
         speakable: true,
-        text: incoming,
+        text: next.text,
         initiativeId,
       })
       .returning();
@@ -474,16 +489,33 @@ export async function pipeOneSend(params: {
           .where(eq(voiceTurn.id, thoughtTurnId));
         send("thought_delta", { id: thoughtTurnId, text: thoughtText });
       }
-    } else if (ev.type === "post_delta" || ev.type === "delta") {
-      const next = absorbText(postText, ev.text);
-      postText = next.acc;
-      if (next.delta) {
+    } else if (
+      ev.type === "post_delta" ||
+      ev.type === "delta" ||
+      ev.type === "post_beat"
+    ) {
+      const next = nextDestSeatText(postText, ev.text);
+      const closed =
+        (next.mode === "insert" || ev.type === "post_beat") &&
+        Boolean(postText.trim()) &&
+        postTurn;
+      if (closed && postTurn && runStartedAt) {
+        await harvestTurnArtifacts({
+          post: postTurn,
+          binding,
+          startedAt: runStartedAt,
+        });
+      }
+      postText = next.text;
+      if (next.mode === "insert" && closed) {
+        send("post_beat", { text: next.text, seatKey, seatLabel });
+      } else if (next.delta) {
         send("post_delta", { text: next.delta, seatKey, seatLabel });
       }
       const now = Date.now();
       if (
         postText.trim() &&
-        (!postTurn || now - lastPostPersist >= POST_PERSIST_MS)
+        (closed || !postTurn || now - lastPostPersist >= POST_PERSIST_MS)
       ) {
         lastPostPersist = now;
         postTurn = await absorbStreamingAgentPost({
@@ -652,22 +684,27 @@ export async function reapFinishedLiveRuns(sessionId: string): Promise<void> {
       continue;
     }
     const seatKey = (binding.seatKey ?? "pm") as SeatKey;
-    const finalPost = harvested.assistantText.trim()
-      ? harvested.assistantText.trim()
-      : "Run finished (no assistant text).";
-    const post = live.userTurnId
-      ? await absorbStreamingAgentPost({
-          sessionId,
-          userTurnId: live.userTurnId,
-          seatKey,
-          text: finalPost,
-        })
-      : await insertAgentPostTurn(sessionId, finalPost, seatKey);
-    await harvestTurnArtifacts({
-      post,
-      binding,
-      startedAt: live.startedAt,
-    });
+    const beats = harvested.beats.length
+      ? harvested.beats
+      : harvested.assistantText.trim()
+        ? [harvested.assistantText.trim()]
+        : ["Run finished (no assistant text)."];
+    let post: VoiceTurn | null = null;
+    for (const beat of beats) {
+      post = live.userTurnId
+        ? await absorbStreamingAgentPost({
+            sessionId,
+            userTurnId: live.userTurnId,
+            seatKey,
+            text: beat,
+          })
+        : await insertAgentPostTurn(sessionId, beat, seatKey);
+      await harvestTurnArtifacts({
+        post,
+        binding,
+        startedAt: live.startedAt,
+      });
+    }
     await insertStatusTurn(sessionId, "finished");
     await releaseLiveRunIfMatch(binding.id, live.cursorRunId);
   }

@@ -28,7 +28,8 @@ test("no tool actually grants a view of the code", () => {
   for (const forbidden of ["read_file", "read_diff", "run_tests", "read_ci"]) {
     assert.equal(names.includes(forbidden), false);
   }
-  assert.equal(names.length, 20);
+  assert.equal(names.length, 21);
+  assert.equal(names.includes("create_agent"), true);
   assert.equal(names.includes("search_room"), true);
   assert.equal(names.includes("list_os"), true);
   assert.equal(names.includes("read_os"), true);
@@ -54,4 +55,10 @@ test("Travis is told the turn is not the work", () => {
   assert.match(TRAVIS_SYSTEM, /list_backlog/);
   assert.match(TRAVIS_SYSTEM, /The turn is not the work/);
   assert.match(TRAVIS_SYSTEM, /Do not invent progress/);
+});
+
+test("Travis is told it can create a person and must not assign a role", () => {
+  assert.match(TRAVIS_SYSTEM, /create_agent/);
+  assert.match(TRAVIS_SYSTEM, /You do not assign a role/);
+  assert.match(TRAVIS_SYSTEM, /You do not invent a Cursor id/);
 });
