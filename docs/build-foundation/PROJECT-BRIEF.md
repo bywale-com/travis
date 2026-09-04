@@ -17,8 +17,8 @@ Filled from the Om Coda `PROJECT-BRIEF` template. Hand this to the agent with `d
 ## Where we start
 
 - **First UI surface:** Phone-first Voice / Log / Backlog — already planted. Production `https://travis-psi.vercel.app`.
-- **In-scope for a new Engineer:** Read [`docs/register/ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md) first. Build only the pocket the founder names. Do not restart 012 / 013 / 062.
-- **Out of scope until named:** Triage/judgment; seated orchestration; POSIX unfold; Fieldtop; desktop Cursor automation.
+- **In-scope for a new Engineer:** Read [`docs/register/ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md) first. Build only the pocket the founder names. **One PR per initiative.** Do not restart 012 / 013 / 014 / 015 / 062 / 064 / 065.
+- **Out of scope until named:** Triage/judgment; POSIX unfold; Fieldtop; desktop Cursor automation. Seated sit + disposable role dest is planted (015).
 
 ## Constraints
 

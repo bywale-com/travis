@@ -10,3 +10,5 @@ Map:
 | `templates/work-repo/**` | `/templates/work-repo/**` |
 
 Refile: `npx tsx --env-file=.env.local docs/register/house-now/file-house.ts` (or `DATABASE_URL` in the environment).
+
+**One PR:** house protocols and work-repo templates are receipts of the same law as `docs/register/initiatives/README.md`. Packet / envelope / pocket are roles of one GitHub PR. Do not tell a seated agent to open a second PR.

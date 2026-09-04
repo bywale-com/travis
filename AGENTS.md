@@ -47,7 +47,7 @@ There is no third bucket called “cousin / later / I parked it.”
 | Seats | [`docs/README.md`](docs/README.md) · [`docs/seats/`](docs/seats/) |
 | Build law | [`docs/build-foundation/00-rudiments.md`](docs/build-foundation/00-rudiments.md) |
 
-Named packet branches go stale. Prefer pull refs once PRs exist.
+One PR per initiative. Engineer opens it. Other seats commit on that branch. Leftover cousin drafts get closed.
 
 ---
 

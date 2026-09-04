@@ -14,4 +14,4 @@ Nothing planted in this work repo yet.
 
 ## Paste — new Engineer
 
-You are the Engineer. Read `docs/README.md` § Engineer and `AGENTS.md`. Read this file first. Then `docs/seats/engineer.md`. Trail is git + PRs.
+You are the Engineer. Read `docs/README.md` § Engineer and `AGENTS.md`. Read this file first. Then `docs/seats/engineer.md`. Trail is git + PRs. One PR per initiative.

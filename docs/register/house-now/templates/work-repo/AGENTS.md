@@ -8,4 +8,4 @@ Specified-and-clear: build it. Specified-but-blocked on PM or SA: name why; do n
 
 Read `docs/README.md` § Engineer, then `docs/seats/engineer.md`, then `docs/register/ENGINEER-HANDOFF.md` if you are taking over.
 
-Trail is git + PRs. Do not append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
+Trail is git + PRs. **One PR per initiative.** Engineer opens it. SA works on that branch. Do not append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.

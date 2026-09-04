@@ -199,7 +199,7 @@ Do not mint these unless the founder seats them.
 | 012 | OS house `os_node` | Planted |
 | 013 | Motion + runner, **no product caps** | Planted |
 | 014 | Split beats + Voice `create_agent` | Planted — [`SYSTEMS-CHANGE-PACKET-014-LOG-BEATS.md`](../register/SYSTEMS-CHANGE-PACKET-014-LOG-BEATS.md). L1/L3/hang = 064. |
-| 015 | Disposable seats | **Signed** — [`SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md`](../register/SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md) |
+| 015 | Disposable seats | Planted — [`SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md`](../register/SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md) |
 
 Next packet number is **016**. Never reuse a number.
 

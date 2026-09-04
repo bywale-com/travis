@@ -17,12 +17,13 @@ docs/
     SYSTEMS-ANALYST-LOG.md         SA trail
     ENGINEER-HANDOFF.md            Engineer pickup
     HOTFIXES.md                    Hotfix index (next number)
+    initiatives/                   One folder per pocket — context + what changed
     PLATES-*.md                    Face glass when signed
     plates/                        PNG plates
-    PM-PACKET-*.md                 PM → SA
-    SYSTEMS-CHANGE-PACKET-NNN-*.md SA → Engineer
-    ENVELOPE-*.md                  Engineer → SA / PM (not plant law)
-    HOTFIX-NNN-*.md                Engineer receipts
+    PM-PACKET-*.md                 PM → SA (same PR as the pocket)
+    SYSTEMS-CHANGE-PACKET-NNN-*.md SA → Engineer (same PR as the pocket)
+    ENVELOPE-*.md                  Pass-on commits on that PR
+    HOTFIX-NNN-*.md                Engineer receipts — they get merged
   build-foundation/
     PROJECT-BRIEF.md               What to build next
     00-rudiments.md                Tokens, surfaces, How
