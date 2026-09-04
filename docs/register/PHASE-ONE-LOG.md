@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 23:06 UTC — **PM seat handed off.** New chat pastes [`PM-HANDOFF.md`](./PM-HANDOFF.md). Bind `bc-1ac0762e` is no longer the living PM. **003–007 stamps and packets 002–007 are on `main`** (Hotfix 066 brought leftover #4 / #15 onto this tree). Do not fetch those cousin PRs. The last stamp still names #15 as living — that was true when it was written; the trail is here now.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-04 22:57 UTC — **PM seat accepted.** Living PM is `bc-e36b1259-1dac-5d2b-9d51-342716f0f021`. Bind `bc-1ac0762e` is not the living PM. Flag 14:00 stands. Waiting on founder to name the pocket. 003–007 and packets 002–007 are on `main`. P1/P2 look signed; home is Backlog. SCP-013 planted. Seated (OS-tree) still open. Do not recut C3/C4.
 
 **How we maintain this log**
 
@@ -1338,4 +1338,22 @@ Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tighten
 **Still true:** flag 14:00. 007 locked on this PR (#15). `main`’s copy of this log is stale (Current still 002) — fetch this branch for 003–007. Seated (OS-tree) still open. Do not recut C3/C4.
 
 **Ask:** founder pastes the new PM. Engineer rebinds.
+
+---
+
+## 2026-09-04 22:57 UTC — PM seat accepted (this bind)
+
+**Kind:** Seat accept. Not a packet. Not a plate.
+
+**This chat** (`bc-e36b1259-1dac-5d2b-9d51-342716f0f021`, Product Manager) **is** the living PM. Previous bind `bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea` (Pm ID provision) is deprecated. Chat: https://cursor.com/agents/bc-e36b1259-1dac-5d2b-9d51-342716f0f021
+
+**Read this turn:** [`PM-HANDOFF.md`](./PM-HANDOFF.md) (on `main`; [PR #99](https://github.com/bywale-com/travis/pull/99) merged) · this log Current + newest · [`PHASE-ONE.md`](./PHASE-ONE.md) · [`ENVELOPE-TRAVIS-ORCHESTRATE.md`](./ENVELOPE-TRAVIS-ORCHESTRATE.md) · [`PLATES-IN-MOTION.md`](./PLATES-IN-MOTION.md) ([PR #95](https://github.com/bywale-com/travis/pull/95); look signed; home = Backlog) · [`SYSTEMS-CHANGE-PACKET-013-MOTION.md`](./SYSTEMS-CHANGE-PACKET-013-MOTION.md) ([PR #97](https://github.com/bywale-com/travis/pull/97), planted) · [`ENVELOPE-TRAVIS-OS-TREE.md`](./ENVELOPE-TRAVIS-OS-TREE.md) (seated still open; do not collapse into orchestrate).
+
+**Still true:** flag 14:00 UTC 2026-08-25. 007 locked. Hear / Next / Skip still SA. Do not recut C3/C4. Do not reprint P1/P2.
+
+`origin/cursor/plates-queue-prototype-ant-b9ea` is gone; 003–007 and the handoff are on `main`.
+
+**Not this turn:** no plates, no packet, no pocket invented.
+
+**Ask:** founder — what pocket am I in?
 
