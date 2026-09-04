@@ -17,12 +17,12 @@ This cut is **Hotfix 066** — house protocols and leftover docs carry the one-P
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — next hotfix number **067** |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — next hotfix number **068** |
 | One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
 | Face | Phone-first Voice / Log / Backlog. Smoke there. |
-| Last plant | 066 · [`HOTFIX-066-PR-CLEANUP.md`](./HOTFIX-066-PR-CLEANUP.md) |
+| Last plant | 067 · [`HOTFIX-067-HOUSE-BUILD.md`](./HOTFIX-067-HOUSE-BUILD.md) · 066 · [`HOTFIX-066-PR-CLEANUP.md`](./HOTFIX-066-PR-CLEANUP.md) |
 | Prior plants | 065 · [#108](https://github.com/bywale-com/travis/pull/108) · 015 · [#107](https://github.com/bywale-com/travis/pull/107) · 064 · [#102](https://github.com/bywale-com/travis/pull/102) · **Hotfix 062** · [#98](https://github.com/bywale-com/travis/pull/98) |
 | Motion | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) |
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
@@ -38,7 +38,8 @@ Newest first. Full sentences live on the README Implementation trail.
 
 | Ref | PR | One line |
 |-----|----|----------|
-| 066 | this cut | One-PR trail everywhere; leftover PM log/packets on `main`; cousins close |
+| 067 | this cut | House labor script excluded from `next build` |
+| 066 | [#109](https://github.com/bywale-com/travis/pull/109) | One-PR trail everywhere; leftover PM log/packets on `main`; cousins close |
 | 065 | [#108](https://github.com/bywale-com/travis/pull/108) | One PR per initiative; initiative folders |
 | 015 | [#107](https://github.com/bywale-com/travis/pull/107) | Sit hangs protocol; role dest idle/spin, never enqueue |
 | 014 | [#104](https://github.com/bywale-com/travis/pull/104) | Split dest-seat beats + Voice `create_agent` |

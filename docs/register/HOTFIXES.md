@@ -8,13 +8,14 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **067**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **068**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
 
 | # | File | Cut |
 |---|------|-----|
+| 067 | [`HOTFIX-067-HOUSE-BUILD.md`](./HOTFIX-067-HOUSE-BUILD.md) | House refile script is not part of `next build` |
 | 066 | [`HOTFIX-066-PR-CLEANUP.md`](./HOTFIX-066-PR-CLEANUP.md) | One-PR trail in house + leftover docs; 003–007 on `main`; cousins close |
 | 001 | [`HOTFIX-001-ASSISTANT-STREAM.md`](./HOTFIX-001-ASSISTANT-STREAM.md) | Stream assistant text + running status (PM pipe parity) |
 | 002 | [`HOTFIX-002-ROOM-SMOKE.md`](./HOTFIX-002-ROOM-SMOKE.md) | Stream/STT dedupe, spoken call-by-name, plate look |
