@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 23:06 UTC — **Seat handoff ready.** Last machine cut: SCP-013 planted, caps struck. Successor: [`../seats/SYSTEMS-ANALYST.md`](../seats/SYSTEMS-ANALYST.md) § Handoff + this Current. Packet: [`SYSTEMS-CHANGE-PACKET-013-MOTION.md`](./SYSTEMS-CHANGE-PACKET-013-MOTION.md).
+**Current (read first, then the newest stamp at the bottom):** 2026-09-04 16:54 UTC — **SCP-014 signed.** Beat closer = insert/update (L2). Voice `create_agent` = V4 write, no role. L1/L3/hang stay 064. Packet: [`SYSTEMS-CHANGE-PACKET-014-LOG-BEATS.md`](./SYSTEMS-CHANGE-PACKET-014-LOG-BEATS.md).
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -343,3 +343,20 @@ Packet on `main` already has question 5 = **None**.
 **Law written into the seat (was only in a chat):** plates as staples; PM may be parked; do not invent caps; job-law from the founder only.
 
 **Successor starts:** README SA paste → § Handoff → this Current → newest stamp → 013 packet. Next number is **014**.
+
+---
+
+## 2026-09-04 16:54 UTC — SCP-014 Log beats + Voice create (Engineer leftover)
+
+**Kind:** Engineer handoff pickup. [`PLATES-LOG-FACE.md`](./PLATES-LOG-FACE.md) + [`ENGINEER-HANDOFF.md`](./ENGINEER-HANDOFF.md). L1 / dest-seat hang / L3 are 064. Two leftovers named SA.
+
+**Ascribed:**
+
+1. **Beat closer** — dest-seat posts use `nextLiveTravisText` insert/update (059 law). Snapshot stays one row. New message inserts. `referenceTurnId`: beat 1 = user turn; later = previous `agent_post` of that seat. Artifacts hang on the **current** beat. Port must not re-glue at `conversation()`.
+2. **`create_agent`** — same write as V4. `join` default true (membership `member` in this room). No role. No protocol. No cap.
+
+**Refused:** `link` kind, seated, heard, reminting 064.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-014-LOG-BEATS.md`](./SYSTEMS-CHANGE-PACKET-014-LOG-BEATS.md)
+
+**Handoff:** Engineer pastes absorb/insert, quote chain, harvest-on-current-beat, `create_agent`. Do not remint 064.
