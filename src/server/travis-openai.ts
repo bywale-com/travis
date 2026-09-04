@@ -5,6 +5,7 @@
 
 import { TRAVIS_LIVE_MODEL, TRAVIS_TEXT_MODEL } from "@/lib/travis-models";
 import {
+  liveInstructions,
   openaiErrorMessage,
   parseEphemeralSecret,
   realtimeSessionConfig,
@@ -61,7 +62,7 @@ export async function mintLiveToken(sessionId: string): Promise<{
     "/v1/realtime/client_secrets",
     {
       session: realtimeSessionConfig({
-        instructions: room ? `${TRAVIS_SYSTEM}\n\n${room}` : TRAVIS_SYSTEM,
+        instructions: liveInstructions(TRAVIS_SYSTEM, room),
         tools: TRAVIS_TOOL_DECLS,
       }),
     },

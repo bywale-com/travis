@@ -22,7 +22,7 @@ This cut is **Hotfix 066** — house protocols and leftover docs carry the one-P
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
 | Face | Phone-first Voice / Log / Backlog. Smoke there. |
-| Last plant | 068 · [`HOTFIX-068-BACKLOG-WINDOW.md`](./HOTFIX-068-BACKLOG-WINDOW.md) · 067 · [`HOTFIX-067-HOUSE-BUILD.md`](./HOTFIX-067-HOUSE-BUILD.md) |
+| Last plant | 016 Here · [`ENVELOPE-TRAVIS-HERE.md`](./ENVELOPE-TRAVIS-HERE.md) · 068 · [`HOTFIX-068-BACKLOG-WINDOW.md`](./HOTFIX-068-BACKLOG-WINDOW.md) |
 | Prior plants | 065 · [#108](https://github.com/bywale-com/travis/pull/108) · 015 · [#107](https://github.com/bywale-com/travis/pull/107) · 064 · [#102](https://github.com/bywale-com/travis/pull/102) · **Hotfix 062** · [#98](https://github.com/bywale-com/travis/pull/98) |
 | Motion | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) |
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
@@ -38,7 +38,8 @@ Newest first. Full sentences live on the README Implementation trail.
 
 | Ref | PR | One line |
 |-----|----|----------|
-| 068 | this cut | Open backlog titles in the room window; a search miss is not empty |
+| 016 | this cut | Here block + Live refresh; tools are depth |
+| 068 | [#111](https://github.com/bywale-com/travis/pull/111) | Open backlog titles in the room window; a search miss is not empty |
 | 067 | [#110](https://github.com/bywale-com/travis/pull/110) | House labor script excluded from `next build` |
 | 066 | [#109](https://github.com/bywale-com/travis/pull/109) | One-PR trail everywhere; leftover PM log/packets on `main`; cousins close |
 | 065 | [#108](https://github.com/bywale-com/travis/pull/108) | One PR per initiative; initiative folders |

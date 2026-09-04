@@ -2,6 +2,10 @@ import { requestLogPointer } from "@/lib/request-log";
 
 /** Titles shown unasked. Oldest drop; the top of the pile stays. */
 export const BACKLOG_GLANCE = 5;
+/** Travis's own last claims. One line was amnesia. */
+export const TRAVIS_KEEP = 3;
+/** Open members named in Here. */
+export const ROSTER_GLANCE = 8;
 
 /**
  * Hotfix 038 — the slice of the room Travis is handed without asking.
@@ -47,6 +51,8 @@ export type ContextTurn = {
 
 export type RunningNote = { seatLabel: string; elapsedMs: number };
 
+export type HereMember = { label: string; busy: boolean };
+
 function clip(text: string, cap: number): string {
   const flat = text.replace(/\s+/g, " ").trim();
   return flat.length <= cap ? flat : `${flat.slice(0, cap).trimEnd()}…`;
@@ -91,6 +97,37 @@ export function backlogPointer(
 }
 
 /**
+ * The environment, unasked. Dest, roster, motion, backlog.
+ * Tools open one thing. They do not get to contradict this block.
+ */
+export function hereBlock(params: {
+  destLabel?: string;
+  members?: HereMember[];
+  motionCount?: number;
+  openTitles?: string[];
+  openCount?: number;
+}): string | null {
+  const lines: string[] = [];
+  const dest = (params.destLabel ?? "").trim();
+  if (dest) lines.push(`Dest ${dest}.`);
+  const members = params.members ?? [];
+  if (members.length) {
+    const shown = members
+      .slice(0, ROSTER_GLANCE)
+      .map((m) => `${m.label.trim() || "?"} ${m.busy ? "busy" : "idle"}`);
+    const more =
+      members.length > ROSTER_GLANCE ? ` +${members.length - ROSTER_GLANCE}` : "";
+    lines.push(`Roster: ${shown.join(" · ")}${more}.`);
+  }
+  const motion = params.motionCount ?? 0;
+  if (motion > 0) lines.push(`In motion: ${motion}.`);
+  const pile = backlogPointer(params.openTitles ?? [], params.openCount ?? 0);
+  if (pile) lines.push(pile);
+  if (!lines.length) return null;
+  return `Here (already true — tools are depth, not the first look):\n${lines.join("\n")}`;
+}
+
+/**
  * Newest lines are the ones worth keeping, so trim from the oldest end.
  */
 export function trimToCap(lines: string[], cap = WINDOW_CHAR_CAP): string[] {
@@ -110,21 +147,25 @@ export function buildRoomContext(params: {
   running?: RunningNote[];
   requestCount?: number;
   roomTitle?: string;
+  destLabel?: string;
+  members?: HereMember[];
+  motionCount?: number;
   charCap?: number;
   openTitles?: string[];
   openCount?: number;
 }): string {
   const worthy = params.turns.filter(isContextWorthy);
-  let lastTravis = -1;
+  const travisAt: number[] = [];
   for (let i = 0; i < worthy.length; i++) {
     if (worthy[i].kind === "agent_post" && worthy[i].seatKey === "travis") {
-      lastTravis = i;
+      travisAt.push(i);
     }
   }
+  const keepTravis = new Set(travisAt.slice(-TRAVIS_KEEP));
   const lines = worthy
     .filter((t, i) => {
       if (t.kind === "agent_post" && t.seatKey === "travis") {
-        return i === lastTravis;
+        return keepTravis.has(i);
       }
       return true;
     })
@@ -133,7 +174,13 @@ export function buildRoomContext(params: {
 
   const body = trimToCap(lines, params.charCap ?? WINDOW_CHAR_CAP);
   const pointer = requestLogPointer(params.requestCount ?? 0);
-  const pile = backlogPointer(params.openTitles ?? [], params.openCount ?? 0);
+  const here = hereBlock({
+    destLabel: params.destLabel,
+    members: params.members,
+    motionCount: params.motionCount,
+    openTitles: params.openTitles,
+    openCount: params.openCount,
+  });
   const named = (params.roomTitle ?? "").trim();
 
   const parts: string[] = [];
@@ -142,11 +189,12 @@ export function buildRoomContext(params: {
   } else if (
     body.length ||
     pointer ||
-    pile ||
+    here ||
     (params.running?.length ?? 0) > 0
   ) {
     parts.push("This room is untitled.");
   }
+  if (here) parts.push(here);
   if (params.running?.length) {
     parts.push(
       `Running right now: ${params.running
@@ -157,7 +205,6 @@ export function buildRoomContext(params: {
         .join(", ")}.`,
     );
   }
-  if (pile) parts.push(pile);
   if (pointer) parts.push(pointer);
   if (body.length) {
     parts.push(`Recent room log, oldest first:\n${body.join("\n")}`);
