@@ -64,6 +64,12 @@ test("Travis is told it can create a person and must not assign a role", () => {
   assert.match(TRAVIS_SYSTEM, /You do not invent a Cursor id/);
 });
 
+test("Travis is told to speak short and not invent an empty backlog", () => {
+  assert.match(TRAVIS_SYSTEM, /Speak short/);
+  assert.match(TRAVIS_SYSTEM, /Do not say the backlog is empty/);
+  assert.match(TRAVIS_SYSTEM, /A miss is no match/);
+});
+
 test("Travis is told seats are disposable and sit hangs a protocol", () => {
   assert.match(TRAVIS_SYSTEM, /sit_agent/);
   assert.match(TRAVIS_SYSTEM, /disposable/);

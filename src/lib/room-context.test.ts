@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   WINDOW_CHAR_CAP,
+  backlogPointer,
   buildRoomContext,
   describeTurn,
   isContextWorthy,
@@ -153,6 +154,25 @@ test("the request-log pointer is how Travis learns the organ exists", () => {
   const out = buildRoomContext({ turns: [], requestCount: 12 });
   assert.match(out, /12 requests in the request log/);
   assert.match(out, /search_room/);
+});
+
+test("open backlog titles are already true in the window", () => {
+  const out = buildRoomContext({
+    turns: [],
+    openTitles: ["That's fine.", "Directly pass request to Engineer"],
+    openCount: 5,
+  });
+  assert.match(out, /Open backlog \(5\)/);
+  assert.match(out, /That's fine\./);
+  assert.match(out, /do not say the pile is empty/);
+});
+
+test("a search miss is not an empty pile", () => {
+  assert.match(
+    backlogPointer(["That's fine."], 5) ?? "",
+    /Open backlog \(5\)/,
+  );
+  assert.equal(backlogPointer([], 0), null);
 });
 
 test("running seats show even when nothing has been logged", () => {

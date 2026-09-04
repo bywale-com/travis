@@ -27,6 +27,7 @@ import { db } from "@/server/db/client";
 import { voiceSession, voiceTurn } from "@/server/db/schema";
 import type { SeatKey } from "@/server/db/schema";
 import { liveRunsForSession } from "@/server/queue";
+import { glanceOpenInitiatives } from "@/server/initiative";
 
 /** Newest first from the database, oldest first to the caller. */
 export async function recentTurns(
@@ -167,7 +168,7 @@ export async function searchRoomText(
 }
 
 export async function roomContextFor(sessionId: string): Promise<string> {
-  const [turns, running, requestCount, session] = await Promise.all([
+  const [turns, running, requestCount, session, pile] = await Promise.all([
     recentTurns(sessionId),
     runningNotes(sessionId),
     countRequests(sessionId),
@@ -177,11 +178,17 @@ export async function roomContextFor(sessionId: string): Promise<string> {
       .where(eq(voiceSession.id, sessionId))
       .limit(1)
       .then((rows) => rows[0] ?? null),
+    glanceOpenInitiatives(sessionId).catch(() => ({
+      titles: [] as string[],
+      openCount: 0,
+    })),
   ]);
   return buildRoomContext({
     turns,
     running,
     requestCount,
     roomTitle: session?.title,
+    openTitles: pile.titles,
+    openCount: pile.openCount,
   });
 }

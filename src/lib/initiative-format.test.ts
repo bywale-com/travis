@@ -23,6 +23,13 @@ test("initiative list prints id so rename does not guess", () => {
   assert.match(text, /Garbage title/);
 });
 
+test("a q miss names the open pile instead of emptying the room", () => {
+  const miss = formatInitiativeList([], { q: "compare UI", openCount: 5 });
+  assert.match(miss, /No initiatives matching “compare UI”/);
+  assert.match(miss, /5 open in this room/);
+  assert.equal(miss.includes("No initiatives in this room."), false);
+});
+
 test("initiative read prints id", () => {
   const text = formatInitiativeRead({
     id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
