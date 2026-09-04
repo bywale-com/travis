@@ -33,6 +33,8 @@ test("his house and catalog tools can be motion steps", () => {
     "rename_initiative",
     "list_os",
     "write_os",
+    "run_box",
+    "write_box",
     "list_backlog",
   ]) {
     assert.equal(isMotionStepAllowed(tool), true, tool);

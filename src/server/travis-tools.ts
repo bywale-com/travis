@@ -82,6 +82,7 @@ import {
   listBacklog,
 } from "@/server/motion";
 import { parseBacklogView } from "@/lib/motion";
+import { BoxError, readBox, runBox, writeBox } from "@/server/travis-box";
 
 export const TRAVIS_TOOL_DECLS = [
   {
@@ -273,6 +274,39 @@ export const TRAVIS_TOOL_DECLS = [
     },
   },
   {
+    name: "run_box",
+    description:
+      "Run a command on Travis's Linux box (Fly Sprite). Same machine every time. An error stays on that box — retry here; do not mint a ticket. Not a Cursor seat. Not the house. Not their work repo.",
+    parameters: {
+      type: "object",
+      properties: { cmd: { type: "string" } },
+      required: ["cmd"],
+    },
+  },
+  {
+    name: "read_box",
+    description:
+      "Read a file on Travis's Linux box. Same disk as run_box. Not the house (use read_os). Not a work-repo file.",
+    parameters: {
+      type: "object",
+      properties: { path: { type: "string" } },
+      required: ["path"],
+    },
+  },
+  {
+    name: "write_box",
+    description:
+      "Write a file on Travis's Linux box. Overwrite is allowed. Same disk as run_box. Not the house (use write_os). Empty body is refused.",
+    parameters: {
+      type: "object",
+      properties: {
+        path: { type: "string" },
+        body: { type: "string" },
+      },
+      required: ["path", "body"],
+    },
+  },
+  {
     name: "create_agent",
     description:
       "Create a person in the catalog the same way the Create an agent screen does. Name them. Optional model, repository, and ref. join defaults true — they become a member of this room. join false is catalog only. You do not assign a role. You do not invent a Cursor id. Prompt stays the one-line stub. Not a seated protocol.",
@@ -304,7 +338,7 @@ export const TRAVIS_TOOL_DECLS = [
   {
     name: "file_plan",
     description:
-      "File an ordered sequence of your own tools as a Travis process and stay with the founder. The runner advances the steps after you return. Use this when several of your tools should run in a row (list then rename, two writes). Each step is one allowlisted tool plus frozen args. Cannot include send_to_seat, dispatch_to_seat, barge_or_drop, end_session, set_view, file_plan, create_agent, or sit_agent. Title empty clips the latest user line.",
+      "File an ordered sequence of your own tools as a Travis process and stay with the founder. The runner advances the steps after you return. Use this when several of your tools should run in a row (list then rename, two writes). Each step is one allowlisted tool plus frozen args. Cannot include send_to_seat, dispatch_to_seat, barge_or_drop, end_session, set_view, file_plan, create_agent, or sit_agent. Box tools are allowed. Title empty clips the latest user line.",
     parameters: {
       type: "object",
       properties: {
@@ -839,6 +873,36 @@ export async function runTravisTool(params: {
     }
   }
 
+  if (name === "run_box") {
+    try {
+      return { ok: true, text: await runBox(String(args.cmd ?? "")) };
+    } catch (err) {
+      if (err instanceof BoxError) return { ok: false, text: err.message };
+      throw err;
+    }
+  }
+
+  if (name === "read_box") {
+    try {
+      return { ok: true, text: await readBox(String(args.path ?? "")) };
+    } catch (err) {
+      if (err instanceof BoxError) return { ok: false, text: err.message };
+      throw err;
+    }
+  }
+
+  if (name === "write_box") {
+    try {
+      return {
+        ok: true,
+        text: await writeBox(String(args.path ?? ""), args.body),
+      };
+    } catch (err) {
+      if (err instanceof BoxError) return { ok: false, text: err.message };
+      throw err;
+    }
+  }
+
   if (name === "write_os") {
     try {
       const filed = await writeOsAsTravis(
@@ -937,9 +1001,11 @@ export const TRAVIS_SYSTEM = `You are Travis. You are in this room with the foun
 
 Speak short. One or two sentences unless they asked for a list. Do not narrate that you are about to check. If Here already names the ticket, answer. Do not recap the last turns. Do not pad. SAE, essay, “the SA” mean the Systems Analyst.
 
-Answer the founder. Use tools when they ask you to sit a person on a protocol, send a line to a role or a named person, glance the queue, barge/drop a waiting line, switch Voice/Log, file something into your house, create a person, or end the room.
+Answer the founder. Use tools when they ask you to sit a person on a protocol, send a line to a role or a named person, glance the queue, barge/drop a waiting line, switch Voice/Log, file something into your house, run something on your box, create a person, or end the room.
 
-You own a house that is not this room and not a work repo: list_os, read_os, write_os. It holds protocols and templates (paths like /protocols and /templates). Opening a folder there does not leave this room. Reading a protocol is not unfolding it into a repo. You still cannot see a work repository, a diff, a branch, a test run, or CI. You have no view of the code and no way to check whether anything passed. If the founder asks for a code review, a test check, a migration risk assessment, a rollout plan, or anything else that needs the repo, say plainly that you cannot see it and offer to send it to the Engineer, SA or PM. Never describe a review, a check, or an analysis you are not able to perform. The room and the tools listed above are your entire view of the world — reading about work in the room log is not the same as being able to do it.
+You own a house that is not this room and not a work repo: list_os, read_os, write_os. It holds protocols and templates (paths like /protocols and /templates). Opening a folder there does not leave this room. Reading a protocol is not unfolding it into a repo.
+
+You also own a Linux box: run_box, read_box, write_box. That is your computer. Same machine every call. If a command errors, retry on that box — do not mint a ticket. The house is notes. The box is the disk and the shell. A missing token means the box is not wired — say that. The box is not a Cursor seat and not their work repo. You still cannot see a work repository, a diff, a branch, a test run, or CI. You have no view of the code and no way to check whether anything passed. If the founder asks for a code review, a test check, a migration risk assessment, a rollout plan, or anything else that needs the repo, say plainly that you cannot see it and offer to send it to the Engineer, SA or PM. Never describe a review, a check, or an analysis you are not able to perform. The room and the tools listed above are your entire view of the world — reading about work in the room log is not the same as being able to do it.
 
 You are shown Here — dest, roster idle/busy and seated or not, in motion, open backlog titles, and whether a seat is running — plus a short log of recent turns and your last few lines. That block is the environment. Treat it as already true. Do not ask the founder to repeat it. Do not say the room, the backlog, or the roster is empty when Here names them. If Here says no seat is running, a handoff is not in progress — do not say you are waiting on SA, PM, or Engineer. Seat replies appear only as receipts; call read_initiative when they asked about a ticket. read_seat_reply without id is the last room line, not that ticket. Tools are depth: they open one ticket, one request, one seat post. They must not contradict Here. A search miss is no match, not an empty pile. When they ask what was requested beyond Here, call search_room. That log has UTC timestamps. “Requests today” → when today. “Last 10” → limit 10. “Everyone this week” → when week, no seat. Do not invent a list — call the tool.
 

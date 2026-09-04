@@ -30,6 +30,7 @@ A little context: what the pocket was, what changed, the PR. Point at the packet
 | 017 | [`017-hand/`](./017-hand/) | [#114](https://github.com/bywale-com/travis/pull/114) |
 | 018 | [`018-glance/`](./018-glance/) | [#115](https://github.com/bywale-com/travis/pull/115) |
 | 019 | [`019-pass-on/`](./019-pass-on/) | [#116](https://github.com/bywale-com/travis/pull/116) |
+| 020 | [`020-box/`](./020-box/) | [#117](https://github.com/bywale-com/travis/pull/117) |
 
 ## Must-not
 

@@ -17,6 +17,9 @@ export const MOTION_STEP_ALLOWLIST = [
   "list_os",
   "read_os",
   "write_os",
+  "run_box",
+  "read_box",
+  "write_box",
   "list_backlog",
 ] as const;
 
