@@ -6,13 +6,13 @@ BEGIN;
 UPDATE travis.agent_binding
 SET
   label = 'PM',
-  cursor_agent_id = 'bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea',
+  cursor_agent_id = 'bc-e36b1259-1dac-5d2b-9d51-342716f0f021',
   runtime = 'cloud',
   active = true
 WHERE seat_key = 'pm';
 
 INSERT INTO travis.agent_binding (seat_key, label, cursor_agent_id, runtime, active)
-SELECT 'pm', 'PM', 'bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea', 'cloud', true
+SELECT 'pm', 'PM', 'bc-e36b1259-1dac-5d2b-9d51-342716f0f021', 'cloud', true
 WHERE NOT EXISTS (SELECT 1 FROM travis.agent_binding WHERE seat_key = 'pm');
 
 UPDATE travis.agent_binding
