@@ -38,7 +38,7 @@ Newest first. Full sentences live on the README Implementation trail.
 
 | Ref | PR | One line |
 |-----|----|----------|
-| 070 | this cut | Glance marks no seat post; miss ≠ cousin; check-narration drops |
+| 070 | [#115](https://github.com/bywale-com/travis/pull/115) | Glance marks no seat post; miss ≠ cousin; check-narration drops |
 | 069 | [#114](https://github.com/bywale-com/travis/pull/114) | Receipt is the send; ticket-scoped read; Here names no-run |
 | 016 | [#112](https://github.com/bywale-com/travis/pull/112) | Here block + Live refresh; tools are depth |
 | 068 | [#111](https://github.com/bywale-com/travis/pull/111) | Open backlog titles in the room window; a search miss is not empty |

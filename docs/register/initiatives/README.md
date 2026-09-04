@@ -28,7 +28,7 @@ A little context: what the pocket was, what changed, the PR. Point at the packet
 | 015 | [`015-disposable-seats/`](./015-disposable-seats/) | [#107](https://github.com/bywale-com/travis/pull/107) |
 | 016 | [`016-here/`](./016-here/) | [#112](https://github.com/bywale-com/travis/pull/112) |
 | 017 | [`017-hand/`](./017-hand/) | [#114](https://github.com/bywale-com/travis/pull/114) |
-| 018 | [`018-glance/`](./018-glance/) | this cut |
+| 018 | [`018-glance/`](./018-glance/) | [#115](https://github.com/bywale-com/travis/pull/115) |
 
 ## Must-not
 
