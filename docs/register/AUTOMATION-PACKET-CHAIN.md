@@ -118,10 +118,22 @@ This is the beat that can run on a **already planted** PR (009 / 025 on #127). S
 
 ---
 
+## First measured sample — 009 (dirty)
+
+Window: packet file lands → `PM-LOOK` Pass. Count boots and wall, not dollars. Stamp: PHASE-ONE-LOG **18:29 UTC 2026-09-05**.
+
+**009 on #127:** 18 automation boots (9 A + 8 B + 1 C). Useful: SA `bc-90689f06` 176s · Engineer `bc-925e2ab1` 342s · C `bc-53c2a349` 438s (+ computerUse child 194s). Leak: 15 PR-pushed no-ops, last pair 17:13. Loops: 0. Verdict: Pass.
+
+After the label gate, A/B did not boot on later stamps. C fired once (trigger name was swapped; one boot, not a pile).
+
+A clean future packet = **3 boots** if no loop; **3 + 2×N** if it loops N times. Next new packet is that sample. Do not treat 009 as the clean number.
+
+---
+
 ## Must-not
 
 - Do not mint a cousin PR.
 - Do not run SA because plates, FACE, or the Phase One log moved.
 - Do not run Engineer because the PM stamped.
 - Do not treat this as Travis product chrome. This is Cursor Automations waking seats.
-- Do not remint 023. Next SA packet is **024** until SA writes a later number.
+- Do not remint 023 / 024 / 025. Next SA packet is **026**. Next PM packet is **010**.

@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 18:21 UTC — PM look 009 Pass. Emerged. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 18:29 UTC — 009 chain cost counted. Dirty first sample. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1944,3 +1944,30 @@ What's on the desk in this room?
 **Steps I could not do (human):** Vercel team SSO. Travis email link. Talk on a phone. The card above the 008 answer and above a new send.
 
 **Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-05 18:29 UTC — 009 chain cost (first sample)
+
+**Kind:** Measure. Not a dashboard. Not a store. Window from 18:08: packet file lands → `PM-LOOK` Pass. In: A + B + C + each `fail-look` B. Out: this bind, stamp no-ops, the human walk. Dollars not visible from this seat.
+
+**Window:** `472bf8b` 16:45:23 (lock 009) → C idle 18:22:37. Calendar **~97 min**. Most of that is the C trigger miss, not labor.
+
+**Automation boots in the window: 18** (9 A + 8 B + 1 C). Model `cursor-grok-4.6-high-fast`. Wall **28.8 min**.
+
+| Seat | Useful | Leak | Useful wall | Leak wall |
+|------|--------|------|-------------|-----------|
+| A | `bc-90689f06` signed 025 — 16:45:48–16:48:43 (**176s**) | 8 no-ops | 176s | 477s |
+| B | `bc-925e2ab1` planted 025 — 16:48:42–16:54:24 (**342s**) | 7 no-ops | 342s | 294s |
+| C | `bc-53c2a349` look — 18:15:20–18:22:37 (**438s**) | 0 | 438s | 0 |
+| C child | `bc-165d3bb2` computerUse — 18:17:59–18:21:13 (**194s**, internal, inside C) | — | — | — |
+
+**Loops:** 0. No `fail-look`. One Pass. Emerged.
+
+**Dirty:** 15 leak boots after the packet (PR-pushed, before the label gate). Last pair **17:13:13 / 17:13:15**. Then A/B silent. C is the only later automation boot.
+
+**Clean C:** 1 look + 1 computerUse child. Preview SSO wall. Did not type `Name the open initiatives.` Did not add `fail-look`.
+
+**Learn:** the extra cost was the old trigger, not a recut. Label swap delayed emerge (~1 h after plant; first `wake-pm-look` 18:04, live trigger was `pm-wake-look`, C 18:15) — one C, not a pile. Next new packet is the clean sample: **3 boots** if no loop; **3 + 2×N** if it loops.
+
+**Still human:** walk the same sheet on the #127 preview. Fix C `labelName` to `wake-pm-look`. Action is only on this branch until merge.
