@@ -10,9 +10,9 @@
 
 ## Where we stopped
 
-**023 is planted on [#123](https://github.com/bywale-com/travis/pull/123)** — thread truth, card hang B, dest gate, `travis.dest_job`, In flight heartbeat. Catalog fallback is struck. `send_to_seat` does not hold his mouth.
+**023 is on `main`** — merged [#123](https://github.com/bywale-com/travis/pull/123) 2026-09-05. Thread truth, card hang B, dest gate, `travis.dest_job` (table landed on the live DB), In flight heartbeat. Catalog fallback is struck. `send_to_seat` does not hold his mouth.
 
-Do **not** plant **022** here. Plant 022 from the signed packet on [#120](https://github.com/bywale-com/travis/pull/120) after 023 is on `main`. Do not send **That’s fine.**
+Next specified pocket: **022** ports from the signed packet on [#120](https://github.com/bywale-com/travis/pull/120). Do not remint `travis.port`. Do not send **That’s fine.**
 
 | What | Where |
 |------|--------|
@@ -22,7 +22,7 @@ Do **not** plant **022** here. Plant 022 from the signed packet on [#120](https:
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
 | Face | Phone-first Voice / Log / Backlog. Smoke there. |
-| Last plant | **023** tape / card / dest job · [#123](https://github.com/bywale-com/travis/pull/123) — planting on this PR. Open: **022** ports signed · [#120](https://github.com/bywale-com/travis/pull/120) — plant after 023 is on `main`. Prior: **021** · [#119](https://github.com/bywale-com/travis/pull/119). |
+| Last plant | **023** tape / card / dest job · [#123](https://github.com/bywale-com/travis/pull/123) — **on `main`**. Open: **022** ports signed · [#120](https://github.com/bywale-com/travis/pull/120). Prior: **021** · [#119](https://github.com/bywale-com/travis/pull/119). |
 | Prior plants | 065 · [#108](https://github.com/bywale-com/travis/pull/108) · 015 · [#107](https://github.com/bywale-com/travis/pull/107) · 064 · [#102](https://github.com/bywale-com/travis/pull/102) · **Hotfix 062** · [#98](https://github.com/bywale-com/travis/pull/98) |
 | Motion | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) |
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
@@ -101,7 +101,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 
 1. Accept the seat from the paste below. Fetch `main`. Read **this file**, then [`ENGINEER.md`](../seats/ENGINEER.md), then `AGENTS.md`.
 2. Do not restart 012 / 013 / 014 / 015 / 062 / 064 / 065. Do not mint a store. Do not append PM or SA logs.
-3. 023 is planted on #123. Next specified pocket after merge: **022** ports on #120. Do not remint `travis.port`. Do not send **That’s fine.**
+3. 023 is on `main` (#123). Next specified pocket: **022** ports on #120. Do not remint `travis.port`. Do not send **That’s fine.**
 4. When **you** stop: rewrite the **Current** lines at the top of this file (where we stopped, last plant, next hotfix number) so the next bind does not start from a transcript. Then you may write **This bind is done**.
 
 ---
