@@ -463,7 +463,27 @@ async function main() {
     )
   `;
 
-  console.log("travis schema + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion + SCP-015 sit ready");
+  await sql`
+    CREATE TABLE IF NOT EXISTS travis.dest_job (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      session_id uuid NOT NULL REFERENCES travis.voice_session(id),
+      binding_id uuid NOT NULL REFERENCES travis.agent_binding(id),
+      initiative_id uuid REFERENCES travis.initiative(id),
+      user_turn_id uuid REFERENCES travis.voice_turn(id),
+      parent_id uuid REFERENCES travis.dest_job(id),
+      payload jsonb NOT NULL,
+      idempotency_key text NOT NULL,
+      timeout_ms int NOT NULL DEFAULT 120000,
+      status text NOT NULL,
+      created_at timestamptz NOT NULL DEFAULT now(),
+      last_heartbeat_at timestamptz,
+      CONSTRAINT dest_job_status_chk
+        CHECK (status IN ('created', 'dispatched', 'in_progress', 'completed', 'failed', 'timed_out')),
+      CONSTRAINT dest_job_idem_uniq UNIQUE (session_id, idempotency_key)
+    )
+  `;
+
+  console.log("travis schema + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion + SCP-015 sit + SCP-023 dest_job ready");
   await sql.end();
 }
 

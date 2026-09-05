@@ -7,11 +7,13 @@ import { voiceSession } from "@/server/db/schema";
 import {
   absorbLiveTravisPost,
   insertUserTurn,
+  lastSpeakableTravisText,
   sendOrEnqueue,
   sse,
   sseHeaders,
 } from "@/server/seat-pipe";
 import { collapseSpeechStutter } from "@/lib/absorb-text";
+import { shouldDropHeardAsUser } from "@/lib/thread-truth";
 import { openBindingForSeat } from "@/server/room-membership";
 import { AuthError } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
@@ -66,11 +68,13 @@ export async function POST(
     return NextResponse.json({ ok: true, turn, here });
   }
 
-  const userTurn = await insertUserTurn(
-    sessionId,
-    collapseSpeechStutter(text),
-    "travis",
-  );
+  const heard = collapseSpeechStutter(text);
+  const hisLast = await lastSpeakableTravisText(sessionId).catch(() => "");
+  if (shouldDropHeardAsUser({ heard, hisLast, heIsSpeaking: false })) {
+    const here = await roomContextFor(sessionId).catch(() => "");
+    return NextResponse.json({ ok: true, dropped: true, here });
+  }
+  const userTurn = await insertUserTurn(sessionId, heard, "travis");
   const { seatKey, remainder } = parseCallByName(text);
   if (seatKey && isCursorSeat(seatKey)) {
     const binding = await openBindingForSeat(sessionId, seatKey);

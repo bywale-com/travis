@@ -200,40 +200,6 @@ export async function resolveRoleDest(params: {
   return spinSeatedRole({ sessionId: params.sessionId, role: parsed.role });
 }
 
-/**
- * Lived 20:38 — role dest spun, Cursor would not create, no receipt,
- * the line never left. Catalog slug of that role, idle, with a Cursor
- * id — not a sit. So the work can leave.
- */
-export async function idleCatalogRole(
-  sessionId: string,
-  role: SitProtocolRole,
-): Promise<AgentBinding | null> {
-  const members = await openMembers(sessionId);
-  for (const member of members) {
-    if (member.seatKey !== role) continue;
-    if (!(member.binding.cursorAgentId ?? "").trim()) continue;
-    if (await getLiveRun(member.binding.id)) continue;
-    return member.binding;
-  }
-  return null;
-}
-
-async function roleDestOrCatalog(params: {
-  sessionId: string;
-  role: SitProtocolRole;
-}): Promise<{ binding: AgentBinding; catalogFallback: boolean }> {
-  try {
-    return {
-      binding: await resolveRoleDest(params),
-      catalogFallback: false,
-    };
-  } catch (err) {
-    const catalog = await idleCatalogRole(params.sessionId, params.role);
-    if (catalog) return { binding: catalog, catalogFallback: true };
-    throw err;
-  }
-}
 
 export async function listSeatRoster(sessionId: string): Promise<string> {
   await ensureSitStore();
@@ -267,60 +233,6 @@ export async function isBindingBusy(binding: AgentBinding): Promise<boolean> {
   return seatHasActiveRun(binding);
 }
 
-type SendFn = (event: string, data: unknown) => void;
-
-export async function sendToRoleDest(params: {
-  sessionId: string;
-  role: SitProtocolRole;
-  text: string;
-  initiativeId?: string | null;
-  send: SendFn;
-}): Promise<{
-  binding: AgentBinding;
-  outcome: "sent" | "busy";
-  catalogFallback: boolean;
-}> {
-  let { binding: dest, catalogFallback } = await roleDestOrCatalog({
-    sessionId: params.sessionId,
-    role: params.role,
-  });
-  let outcome = await sendOrEnqueue({
-    sessionId: params.sessionId,
-    binding: dest,
-    prompt: params.text,
-    send: params.send,
-    initiativeId: params.initiativeId,
-    enqueueIfBusy: false,
-  });
-  if (outcome === "busy" || outcome === "queued") {
-    try {
-      dest = await spinSeatedRole({
-        sessionId: params.sessionId,
-        role: params.role,
-      });
-      catalogFallback = false;
-    } catch (err) {
-      const catalog = await idleCatalogRole(params.sessionId, params.role);
-      if (!catalog) throw err;
-      dest = catalog;
-      catalogFallback = true;
-    }
-    outcome = await sendOrEnqueue({
-      sessionId: params.sessionId,
-      binding: dest,
-      prompt: params.text,
-      send: params.send,
-      initiativeId: params.initiativeId,
-      enqueueIfBusy: false,
-    });
-  }
-  return {
-    binding: dest,
-    outcome: outcome === "sent" ? "sent" : "busy",
-    catalogFallback,
-  };
-}
-
 export async function dispatchToRoleDest(params: {
   sessionId: string;
   role: SitProtocolRole;
@@ -329,9 +241,8 @@ export async function dispatchToRoleDest(params: {
 }): Promise<{
   binding: AgentBinding;
   outcome: DispatchOutcome;
-  catalogFallback: boolean;
 }> {
-  let { binding: dest, catalogFallback } = await roleDestOrCatalog({
+  let dest = await resolveRoleDest({
     sessionId: params.sessionId,
     role: params.role,
   });
@@ -343,18 +254,10 @@ export async function dispatchToRoleDest(params: {
     enqueueIfBusy: false,
   });
   if (outcome.status === "busy" || outcome.status === "queued") {
-    try {
-      dest = await spinSeatedRole({
-        sessionId: params.sessionId,
-        role: params.role,
-      });
-      catalogFallback = false;
-    } catch (err) {
-      const catalog = await idleCatalogRole(params.sessionId, params.role);
-      if (!catalog) throw err;
-      dest = catalog;
-      catalogFallback = true;
-    }
+    dest = await spinSeatedRole({
+      sessionId: params.sessionId,
+      role: params.role,
+    });
     outcome = await dispatchToSeat({
       sessionId: params.sessionId,
       binding: dest,
@@ -363,5 +266,5 @@ export async function dispatchToRoleDest(params: {
       enqueueIfBusy: false,
     });
   }
-  return { binding: dest, outcome, catalogFallback };
+  return { binding: dest, outcome };
 }

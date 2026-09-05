@@ -10,9 +10,9 @@
 
 ## Where we stopped
 
-The pipe is planted. Last plants on `main` before this cut: **SCP-015** sit + disposable role dest ([PR #107](https://github.com/bywale-com/travis/pull/107)), **Hotfix 064** dest-seat artifacts ([PR #102](https://github.com/bywale-com/travis/pull/102)), **Hotfix 065** one PR per initiative ([PR #108](https://github.com/bywale-com/travis/pull/108)).
+**023 is planted on [#123](https://github.com/bywale-com/travis/pull/123)** — thread truth, card hang B, dest gate, `travis.dest_job`, In flight heartbeat. Catalog fallback is struck. `send_to_seat` does not hold his mouth.
 
-This cut is **Hotfix 066** — house protocols and leftover docs carry the one-PR law; 003–007 PM trail and packets 002–007 land on `main`; leftover cousin PRs close.
+Do **not** plant **022** here. Plant 022 from the signed packet on [#120](https://github.com/bywale-com/travis/pull/120) after 023 is on `main`. Do not send **That’s fine.**
 
 | What | Where |
 |------|--------|
@@ -22,13 +22,13 @@ This cut is **Hotfix 066** — house protocols and leftover docs carry the one-P
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
 | Face | Phone-first Voice / Log / Backlog. Smoke there. |
-| Last plant | **021** prove / keep / unfold · [#119](https://github.com/bywale-com/travis/pull/119). Open: **022** ports signed · [#120](https://github.com/bywale-com/travis/pull/120). This cut: envelope **023** tightness · [#123](https://github.com/bywale-com/travis/pull/123). Live-visuals write-back + S1–S5 plates on the same PR — look only, not a plant. |
+| Last plant | **023** tape / card / dest job · [#123](https://github.com/bywale-com/travis/pull/123) — planting on this PR. Open: **022** ports signed · [#120](https://github.com/bywale-com/travis/pull/120) — plant after 023 is on `main`. Prior: **021** · [#119](https://github.com/bywale-com/travis/pull/119). |
 | Prior plants | 065 · [#108](https://github.com/bywale-com/travis/pull/108) · 015 · [#107](https://github.com/bywale-com/travis/pull/107) · 064 · [#102](https://github.com/bywale-com/travis/pull/102) · **Hotfix 062** · [#98](https://github.com/bywale-com/travis/pull/98) |
 | Motion | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) |
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
 | Busy room (lived) | `0e8875f8-283b-4dae-bf54-76c82a05b6ef` (title “Travis”) |
 
-**Do not redo** 012, 013, 014, 015, 016, 020 first slice, 021, 062, 064, 065, 068, 069, 070, or 071. Do not plant **022** except from the signed packet on #120. Do not plant dest until 023 names the gate. Do not send **That’s fine.** from Engineer.
+**Do not redo** 012, 013, 014, 015, 016, 020 first slice, 021, 023, 062, 064, 065, 068, 069, 070, or 071. Do not plant **022** except from the signed packet on #120. Do not send **That’s fine.** from Engineer.
 
 ---
 
@@ -38,6 +38,7 @@ Newest first. Full sentences live on the README Implementation trail.
 
 | Ref | PR | One line |
 |-----|----|----------|
+| 023 | [#123](https://github.com/bywale-com/travis/pull/123) | Thread truth, motion card, dest gate + `dest_job`; catalog fallback dead |
 | 021 | [#119](https://github.com/bywale-com/travis/pull/119) | Prove loop, house≠box, unfold to GitHub; five back |
 | 071 | [#116](https://github.com/bywale-com/travis/pull/116) | Named ticket gets the addition; failed send is a receipt; catalog fallback |
 | 070 | [#115](https://github.com/bywale-com/travis/pull/115) | Glance marks no seat post; miss ≠ cousin; check-narration drops |
@@ -86,7 +87,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 
 | Gap | Why it is blocked |
 |-----|-------------------|
-| Tightness / dest gate | Envelope [`ENVELOPE-TRAVIS-TIGHTNESS.md`](./ENVELOPE-TRAVIS-TIGHTNESS.md). Draft packet [`SYSTEMS-CHANGE-PACKET-023-TAPE.md`](./SYSTEMS-CHANGE-PACKET-023-TAPE.md) — **not signed**. SA signs, then plant. |
+| Tightness / dest gate | **023 signed and planting on [#123](https://github.com/bywale-com/travis/pull/123).** Catalog fallback struck. `dest_job` minted. Do not remint. |
 | Live visuals (Gemini patterns) | Write-back [`ENGINEER-LIVE-VISUALS.md`](./ENGINEER-LIVE-VISUALS.md). Job table + `parent_id` + push bus not planted. Canvas store not ascribed. |
 | Ports host + connectors plate | 022 signed on [#120](https://github.com/bywale-com/travis/pull/120). Do not remint `travis.port`. |
 | `TRAVIS_GITHUB_TOKEN` | Unfold receipts `not wired` until founder sets it, or 022 hangs it on port `github`. Not `GITHUB_TOKEN`. |
@@ -100,7 +101,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 
 1. Accept the seat from the paste below. Fetch `main`. Read **this file**, then [`ENGINEER.md`](../seats/ENGINEER.md), then `AGENTS.md`.
 2. Do not restart 012 / 013 / 014 / 015 / 062 / 064 / 065. Do not mint a store. Do not append PM or SA logs.
-3. Wait for the founder to name the next pocket. There is no parked “cousin” cut.
+3. 023 is planted on #123. Next specified pocket after merge: **022** ports on #120. Do not remint `travis.port`. Do not send **That’s fine.**
 4. When **you** stop: rewrite the **Current** lines at the top of this file (where we stopped, last plant, next hotfix number) so the next bind does not start from a transcript. Then you may write **This bind is done**.
 
 ---

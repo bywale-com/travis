@@ -4,8 +4,11 @@ import {
   formatFiledPlan,
   formatMotionList,
   humanizeMotionTool,
+  isAutoFileableTool,
+  isInTurnAutoFile,
   isMotionStepAllowed,
   isMotionStepRefused,
+  motionCardCollapsed,
   motionStepN,
   motionUnder,
   parseBacklogView,
@@ -26,6 +29,31 @@ test("seat sends and nested file_plan cannot be motion steps", () => {
     assert.equal(isMotionStepRefused(tool), true, tool);
     assert.equal(isMotionStepAllowed(tool), false, tool);
   }
+});
+
+test("unfold can hang as a one-step card but not a planned tape step", () => {
+  assert.equal(isMotionStepRefused("unfold_repo"), true);
+  assert.equal(isAutoFileableTool("unfold_repo"), true);
+  assert.equal(isAutoFileableTool("write_os"), true);
+  assert.equal(isAutoFileableTool("send_to_seat"), false);
+  assert.equal(isInTurnAutoFile("write_os"), true);
+  assert.equal(isInTurnAutoFile("list_os"), false);
+});
+
+test("the log card is title plus step n of m", () => {
+  assert.equal(
+    motionCardCollapsed({
+      id: "m1",
+      foundingTurnId: "t1",
+      title: "Two house writes",
+      status: "running",
+      stepN: 2,
+      stepM: 2,
+      under: "Travis · Write Os",
+      steps: [],
+    }),
+    "Two house writes · 2 of 2",
+  );
 });
 
 test("his house and catalog tools can be motion steps", () => {

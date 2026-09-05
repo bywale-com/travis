@@ -21,7 +21,12 @@ import {
 import { harvestTurnArtifacts } from "@/server/artifacts";
 import { db } from "@/server/db/client";
 import { ensureInitiativeStore } from "@/server/initiative";
-import { runMotionRunner } from "@/server/motion";
+import { hangOrphanMotionsOn, runMotionRunner } from "@/server/motion";
+import {
+  finishDestJobsForBinding,
+  heartbeatOpenDestJobs,
+  timeOutStaleDestJobs,
+} from "@/server/dest-job";
 import { isOpenMember, requireOpenMember } from "@/server/room-membership";
 import {
   agentBinding,
@@ -310,7 +315,7 @@ export async function insertAgentPostTurn(
       .limit(1);
     initiativeId = answered?.initiativeId ?? undefined;
   }
-  return insertTurn(sessionId, {
+  const row = await insertTurn(sessionId, {
     role: "assistant",
     kind: "agent_post",
     seatKey,
@@ -319,6 +324,29 @@ export async function insertAgentPostTurn(
     text,
     initiativeId,
   });
+  if (speakable && seatKey === "travis") {
+    await hangOrphanMotionsOn(sessionId, row.id).catch(() => {});
+  }
+  return row;
+}
+
+export async function lastSpeakableTravisText(
+  sessionId: string,
+): Promise<string> {
+  const [row] = await db
+    .select({ text: voiceTurn.text })
+    .from(voiceTurn)
+    .where(
+      and(
+        eq(voiceTurn.sessionId, sessionId),
+        eq(voiceTurn.kind, "agent_post"),
+        eq(voiceTurn.seatKey, "travis"),
+        eq(voiceTurn.speakable, true),
+      ),
+    )
+    .orderBy(desc(voiceTurn.seq))
+    .limit(1);
+  return row?.text ?? "";
 }
 
 /** Live output is snapshots/deltas. One Travis post, not a row per chunk. */
@@ -327,7 +355,7 @@ export async function absorbLiveTravisPost(
   text: string,
 ): Promise<VoiceTurn> {
   const incoming = text.trim();
-  return withSeqLock(sessionId, async () => {
+  const posted = await withSeqLock(sessionId, async () => {
     const [last] = await db
       .select()
       .from(voiceTurn)
@@ -361,6 +389,10 @@ export async function absorbLiveTravisPost(
       .returning();
     return row;
   });
+  if (posted?.id) {
+    await hangOrphanMotionsOn(sessionId, posted.id).catch(() => {});
+  }
+  return posted;
 }
 
 export async function insertStatusTurn(
@@ -712,6 +744,12 @@ export async function reapFinishedLiveRuns(sessionId: string): Promise<void> {
     }
     await insertStatusTurn(sessionId, "finished");
     await releaseLiveRunIfMatch(binding.id, live.cursorRunId);
+    await finishDestJobsForBinding({
+      sessionId,
+      binding,
+      status: "completed",
+      done: "finished",
+    }).catch(() => {});
   }
 }
 
@@ -724,6 +762,12 @@ export async function inspectAndNudgeQueue(sessionId: string): Promise<{
   drainable: SeatKey[];
 }> {
   await reapFinishedLiveRuns(sessionId);
+  const live = await liveRunsForSession(sessionId);
+  await heartbeatOpenDestJobs(
+    sessionId,
+    live.map((r) => r.binding.id),
+  ).catch(() => {});
+  await timeOutStaleDestJobs(sessionId).catch(() => {});
   const bindings = await bindingsWithQueuedItems(sessionId);
   const drainable: SeatKey[] = [];
   for (const binding of bindings) {

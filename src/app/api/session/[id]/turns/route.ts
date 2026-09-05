@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/server/db/client";
 import { voiceTurn } from "@/server/db/schema";
 import { attachmentsForTurns } from "@/server/artifacts";
+import { listMotionCards } from "@/server/motion";
 import { jsonRoute } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
 
@@ -21,8 +22,10 @@ export async function GET(
       .where(eq(voiceTurn.sessionId, id))
       .orderBy(asc(voiceTurn.seq));
     const hung = await attachmentsForTurns(id);
+    const cards = await listMotionCards(id).catch(() => []);
 
     return NextResponse.json({
+      cards,
       turns: turns.map((t) => ({
         id: t.id,
         seq: t.seq,

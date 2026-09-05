@@ -1,7 +1,7 @@
 # SYSTEMS-CHANGE-PACKET-023 — Tape, card, dest job
 
 **Number:** `023` — next systems packet is `024`. Never reuse a number.  
-**Status:** **Signed.** Engineer drafted. SA closed the cuts. **Not planted.** Plant on **this PR** ([#123](https://github.com/bywale-com/travis/pull/123)) after this file.  
+**Status:** **Planted** on this PR ([#123](https://github.com/bywale-com/travis/pull/123)). Engineer drafted. SA closed the cuts.  
 **Seat:** Systems Analyst. Engineer pastes this. No leftover analysis.  
 **When:** 2026-09-05  
 **Envelope:** [`ENVELOPE-TRAVIS-TIGHTNESS.md`](./ENVELOPE-TRAVIS-TIGHTNESS.md)  

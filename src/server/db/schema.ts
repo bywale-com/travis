@@ -1,6 +1,7 @@
 import {
   boolean,
   integer,
+  jsonb,
   pgSchema,
   text,
   timestamp,
@@ -191,6 +192,28 @@ export const motion = travis.table("motion", {
   doneAt: timestamp("done_at", { withTimezone: true }),
 });
 
+/** SCP-023 — dest is a job he watches and takes back. */
+export const destJob = travis.table("dest_job", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  sessionId: uuid("session_id")
+    .notNull()
+    .references(() => voiceSession.id),
+  bindingId: uuid("binding_id")
+    .notNull()
+    .references(() => agentBinding.id),
+  initiativeId: uuid("initiative_id").references(() => initiative.id),
+  userTurnId: uuid("user_turn_id").references(() => voiceTurn.id),
+  parentId: uuid("parent_id"),
+  payload: jsonb("payload").$type<{ text: string; done?: string }>().notNull(),
+  idempotencyKey: text("idempotency_key").notNull(),
+  timeoutMs: integer("timeout_ms").notNull().default(120000),
+  status: text("status").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  lastHeartbeatAt: timestamp("last_heartbeat_at", { withTimezone: true }),
+});
+
 export const motionStep = travis.table("motion_step", {
   id: uuid("id").defaultRandom().primaryKey(),
   motionId: uuid("motion_id")
@@ -251,6 +274,14 @@ export type OsNode = typeof osNode.$inferSelect;
 export type OsNodeKind = "dir" | "file";
 export type Motion = typeof motion.$inferSelect;
 export type MotionStep = typeof motionStep.$inferSelect;
+export type DestJob = typeof destJob.$inferSelect;
+export type DestJobStatus =
+  | "created"
+  | "dispatched"
+  | "in_progress"
+  | "completed"
+  | "failed"
+  | "timed_out";
 
 export type TurnKind =
   | "user"

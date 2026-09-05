@@ -4,16 +4,20 @@ import type { CSSProperties } from "react";
 import { Send, X } from "lucide-react";
 import { SeatMark } from "@/components/QueueChrome";
 import type { QueueSeatDto } from "@/lib/queue-logic";
-import { elapsedLabel } from "@/lib/relative-time";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import { TYPE } from "@/theme/scale";
 import type { Tokens } from "@/theme/tokens";
 import { quietLink } from "./shell";
 
 export type RunningNow = {
+  jobId?: string;
   seatKey: string;
   label: string;
-  elapsedMs: number;
+  text?: string;
+  receipt?: string;
+  heartbeat?: "quiet" | "live" | "stale";
+  heartbeatLabel?: string;
+  elapsedMs?: number;
 };
 
 function ordinal(n: number): string {
@@ -32,6 +36,26 @@ function sectionLabel(t: Tokens): CSSProperties {
     color: t.textMuted,
     margin: "20px 0 8px",
   };
+}
+
+function LiveBracket({ t }: { t: Tokens }) {
+  return (
+    <svg
+      width="8"
+      height="36"
+      viewBox="0 0 8 36"
+      fill="none"
+      aria-hidden="true"
+      style={{ flexShrink: 0, marginRight: -2 }}
+    >
+      <path
+        d="M7 2 C1.5 8, 1.5 28, 7 34"
+        stroke={t.accent}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
 }
 
 export function InFlightDoor({
@@ -63,15 +87,28 @@ export function InFlightDoor({
       style={{
         position: "fixed",
         inset: 0,
-        background: `${t.bgPrimary}ee`,
         zIndex: 40,
         display: "flex",
         alignItems: "flex-end",
         justifyContent: "center",
       }}
     >
+      <button
+        type="button"
+        aria-label="Close in flight"
+        onClick={onClose}
+        style={{
+          position: "absolute",
+          inset: 0,
+          border: "none",
+          background: `${t.bgPrimary}ee`,
+          cursor: "pointer",
+        }}
+      />
       <div
         style={{
+          position: "relative",
+          zIndex: 1,
           width: "100%",
           maxWidth: 480,
           maxHeight: "86dvh",
@@ -102,18 +139,6 @@ export function InFlightDoor({
             you can leave this open
           </span>
         </div>
-        <button
-          type="button"
-          onClick={onClose}
-          style={{
-            ...quietLink(t),
-            color: t.textMuted,
-            fontSize: TYPE.meta,
-            marginTop: 4,
-          }}
-        >
-          Close
-        </button>
 
         <p style={sectionLabel(t)}>RUNNING NOW</p>
         {running.length === 0 ? (
@@ -123,29 +148,69 @@ export function InFlightDoor({
         ) : (
           running.map((row) => (
             <div
-              key={`${row.seatKey}-${row.elapsedMs}`}
+              key={row.jobId ?? `${row.seatKey}-${row.heartbeatLabel ?? ""}`}
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 12,
+                gap: 10,
                 padding: "10px 0",
                 borderBottom: `1px solid ${t.border}`,
               }}
             >
+              <LiveBracket t={t} />
               <SeatMark
                 seatKey={row.seatKey}
                 label={row.label}
                 t={t}
                 size={32}
-                glow
               />
               <span style={{ flex: 1, minWidth: 0 }}>
-                <span style={{ display: "block", fontSize: TYPE.body, fontWeight: 600 }}>
+                <span
+                  style={{
+                    display: "block",
+                    fontSize: TYPE.body,
+                    fontWeight: 600,
+                  }}
+                >
                   {row.label}
                 </span>
+                {row.text ? (
+                  <span
+                    style={{
+                      display: "block",
+                      fontSize: TYPE.meta,
+                      color: t.textMuted,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {row.text}
+                  </span>
+                ) : null}
+                {row.receipt ? (
+                  <span
+                    style={{
+                      display: "block",
+                      fontSize: TYPE.meta,
+                      color: t.receiptText,
+                    }}
+                  >
+                    {row.receipt}
+                  </span>
+                ) : null}
               </span>
-              <span style={{ color: t.accent, fontSize: TYPE.meta }}>
-                {elapsedLabel(row.elapsedMs)}
+              <span
+                style={{
+                  color:
+                    row.heartbeat === "stale" ? t.dangerQuiet : t.textMuted,
+                  fontSize: TYPE.meta,
+                  fontWeight: row.heartbeat === "stale" ? 600 : 400,
+                }}
+              >
+                {row.heartbeat === "quiet"
+                  ? ""
+                  : (row.heartbeatLabel ?? "")}
               </span>
             </div>
           ))
@@ -168,6 +233,7 @@ export function InFlightDoor({
                 borderBottom: `1px solid ${t.border}`,
               }}
             >
+              <span style={{ width: 8, flexShrink: 0, marginRight: -2 }} />
               <SeatMark seatKey={seat.seatKey} label={seat.label} t={t} size={32} />
               <span style={{ flex: 1, minWidth: 0 }}>
                 <span style={{ display: "block", fontSize: TYPE.body }}>
