@@ -13,6 +13,7 @@ import {
   motionStepN,
   motionUnder,
   parseBacklogView,
+  STALE_RUNNING_MS,
   type BacklogView,
   type MotionCard,
   type MotionCardStep,
@@ -486,6 +487,26 @@ function asClaimed(raw: unknown): ClaimedStep | null {
   };
 }
 
+/** Request died after claim. Leave it pending so the next wake retries. */
+async function reclaimStaleRunningSteps(motionId: string): Promise<number> {
+  const raw = await db.execute(sql`
+    UPDATE travis.motion_step
+    SET status = 'pending', started_at = NULL
+    WHERE motion_id = ${motionId}::uuid
+      AND status = 'running'
+      AND coalesce(result_text, '') = ''
+      AND started_at IS NOT NULL
+      AND started_at < now() - (${STALE_RUNNING_MS}::int * interval '1 millisecond')
+    RETURNING id
+  `);
+  const rows = Array.isArray(raw)
+    ? raw
+    : raw && typeof raw === "object" && Array.isArray((raw as { rows?: unknown }).rows)
+      ? (raw as { rows: unknown[] }).rows
+      : [];
+  return rows.length;
+}
+
 async function claimNextStep(motionId: string): Promise<ClaimedStep | null> {
   const raw = await db.execute(sql`
     UPDATE travis.motion_step
@@ -552,6 +573,7 @@ async function finishStep(
 }
 
 async function runOneMotion(sessionId: string, motionId: string): Promise<void> {
+  await reclaimStaleRunningSteps(motionId);
   await db
     .update(motion)
     .set({ status: "running", updatedAt: new Date() })
@@ -560,6 +582,7 @@ async function runOneMotion(sessionId: string, motionId: string): Promise<void> 
   for (;;) {
     const claimed = await claimNextStep(motionId);
     if (!claimed) {
+      if ((await reclaimStaleRunningSteps(motionId)) > 0) continue;
       const leftover = await db
         .select({ id: motionStep.id, status: motionStep.status })
         .from(motionStep)

@@ -8,10 +8,12 @@ import {
   isInTurnAutoFile,
   isMotionStepAllowed,
   isMotionStepRefused,
+  isStaleRunningStep,
   motionCardCollapsed,
   motionStepN,
   motionUnder,
   parseBacklogView,
+  STALE_RUNNING_MS,
 } from "./motion";
 
 test("seat sends and nested file_plan cannot be motion steps", () => {
@@ -69,6 +71,20 @@ test("his house and catalog tools can be motion steps", () => {
   ]) {
     assert.equal(isMotionStepAllowed(tool), true, tool);
   }
+});
+
+test("a running step with no start is not stale", () => {
+  assert.equal(isStaleRunningStep(null), false);
+  assert.equal(isStaleRunningStep(""), false);
+});
+
+test("a running step older than the stale window is dead", () => {
+  const now = 1_000_000;
+  assert.equal(isStaleRunningStep(new Date(now - STALE_RUNNING_MS), now), true);
+  assert.equal(
+    isStaleRunningStep(new Date(now - STALE_RUNNING_MS + 1), now),
+    false,
+  );
 });
 
 test("backlog view defaults to all", () => {

@@ -187,23 +187,22 @@ export function BacklogIndex({
               ),
             )
           )}
+          <footer style={{ padding: "16px 20px 28px", textAlign: "center" }}>
+            <button type="button" onClick={onRequests} style={quietLink(t)}>
+              Not the request log
+            </button>
+            <p
+              style={{
+                margin: "10px 0 0",
+                color: t.textMuted,
+                fontSize: TYPE.meta,
+                fontStyle: "italic",
+              }}
+            >
+              Only what you gave Travis. Direct-to-seat stays personal.
+            </p>
+          </footer>
         </div>
-
-        <footer style={{ padding: "16px 20px 28px", textAlign: "center" }}>
-          <button type="button" onClick={onRequests} style={quietLink(t)}>
-            Not the request log
-          </button>
-          <p
-            style={{
-              margin: "10px 0 0",
-              color: t.textMuted,
-              fontSize: TYPE.meta,
-              fontStyle: "italic",
-            }}
-          >
-            Only what you gave Travis. Direct-to-seat stays personal.
-          </p>
-        </footer>
       </div>
     </SurfaceBoundary>
   );
