@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 17:02 UTC — Spin-up is the bill. Label gate. **009** on [#127](https://github.com/bywale-com/travis/pull/127). Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 17:10 UTC — Seat health / context cap (vision). **009** on [#127](https://github.com/bywale-com/travis/pull/127). Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1841,3 +1841,22 @@ What's on the desk in this room?
 **Redesign (locked):** GitHub Action [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml) diffs this push and adds `wake-sa` / `wake-engineer`. Cursor triggers become **PR label changed** for those labels — not PR pushed. Human must switch the two automations. I cannot Save + Activate.
 
 **009 / 025** still on [#127](https://github.com/bywale-com/travis/pull/127). Do not remint.
+
+---
+
+## 2026-09-05 17:10 UTC — Seat health is a bar, not a dashboard (founder; vision)
+
+**Kind:** Vision. Not a packet. Do not mint a store. Do not plant.
+
+**Founder (preserved):** There is a max context any one seat can have. After that it is mathematically expensive — deprecate the chat and open a new Technical PM on the roster. Inspect each seat’s context easily. A bar: healthy / close / unhealthy. Travis passes to the best healthy seat, spins one if none are healthy, deprecates the unhealthy. Mostly Cursor-facing. Applies to every seat, not only PM.
+
+**Already on this trail — do not remint:**
+
+- Aug 26: interrupt-threshold and context-economics are the same layer. Separate chats are real because the transcript **is** the context.
+- **015 / D1–D5:** seats are disposable; reuse if free; busy → next, not enqueue; logging is the inheritance.
+- Tightness lived line: *“Go ahead and deprecate the existing PM seat and create a new PM.”* Dest-as-mail failed. Create + sit is his, or name the hole.
+- Sept 3: Live is the OpenAI meter. Seats are Cursor. No cost dashboard. `getUsage` is named, not planted.
+
+**New grain (held):** idle is not enough. A fat idle seat is the wrong dest. Health is a second filter before reuse. The number is not locked. The inspect port is not ascribed — Cursor may not hand the pipe a context-token count.
+
+**Not this:** a spend dashboard. A talent scout. Triage in v1. A cap on how many seats may exist (D9 stands).
