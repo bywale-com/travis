@@ -14,12 +14,12 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **12:02 UTC 2026-09-05** (Stream plates ST1–ST3). Flag **14:00**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **12:20 UTC 2026-09-05** (PM-PACKET-008 Stream locked). Flag **14:00**. |
 | Seat law | [`../README.md`](../README.md) § Product Manager · [`../seats/PRODUCT-MANAGER.md`](../seats/PRODUCT-MANAGER.md) · house [`house-now/protocols/pm.md`](./house-now/protocols/pm.md) |
 | Plates | [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) generate · [`PLATE-READ.md`](./PLATE-READ.md) read |
-| Packets 001–007 | [`PM-PACKETS.md`](./PM-PACKETS.md) on **`main`**. 007 locked. Hear / Next / Skip still SA. |
-| Last face lock | Request line (get in / clock / leave with your work / mouth is gated). Door not packeted until founder wants it on the glass. |
-| Engineer | Implements specced work only. Pickup [`ENGINEER-HANDOFF.md`](./ENGINEER-HANDOFF.md). Next specified pocket there: **022** on [#120](https://github.com/bywale-com/travis/pull/120). |
+| Packets 001–008 | [`PM-PACKETS.md`](./PM-PACKETS.md). 001–007 on **`main`**. **008** Stream on this PR — SA ascribes as **024**; Engineer plants after. 007 Hear / Next / Skip still SA. |
+| Last face lock | **008 Stream** — In this room → Stream compartment → card above completed Log line. Request line (get in / clock / leave with your work / mouth is gated) still stands. |
+| Engineer | Implements specced work only. Pickup [`ENGINEER-HANDOFF.md`](./ENGINEER-HANDOFF.md). **008** waits on SA **024**, then a new Stream plant PR. Prior open pocket: **022** on [#120](https://github.com/bywale-com/travis/pull/120). |
 
 **Do not** follow any “no new plate / V6 grown only” FACE from an old bind. Home is **Backlog** (All / In motion / Initiatives). Voice count = Travis processes only.
 
@@ -45,7 +45,7 @@ You are a NEW bind. The last PM was bc-25c5c6bf-006f-4252-9f25-49ab183835b2. The
 Then, in order:
 1. docs/register/PHASE-ONE-LOG.md — Current, then newest stamp.
 2. docs/register/PHASE-ONE.md
-3. docs/register/PM-PACKETS.md — packets 001–007 on main. 007 is locked. Hear / Next / Skip is still SA.
+3. docs/register/PM-PACKETS.md — packets 001–007 on main. 008 Stream on this PR (SA 024, then Engineer). 007 Hear / Next / Skip is still SA.
 4. Planted src/ when the pocket already exists.
 5. Sit is planted (015). Do not collapse create / in-the-room / seated.
 

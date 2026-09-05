@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 12:02 UTC — **Stream plates ST1–ST3 printed.** Look, middle of a state. Compartment title Stream. Not a packet. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 12:20 UTC — **PM-PACKET-008 Stream locked.** SA ascribes as 024. Engineer plants after. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1612,4 +1612,20 @@ Production-ready for a request line is smaller than production-ready as a compan
 **Honest:** no psi screenshot of those homes (login wall). First desk for Stream. Chrome from planted `src/` + login bone/oxblood.
 
 **Ask:** like the look? Recut ST2/ST3, or hold.
+
+---
+
+## 2026-09-05 12:20 UTC — PM-PACKET-008 Stream locked
+
+**Kind:** Packet lock. Founder: like the idea; create the packet so SA and Engineer can pick up.
+
+**Locked:** [`PM-PACKET-008-STREAM.md`](./PM-PACKET-008-STREAM.md) · FACE [`PLATES-STREAM.md`](./PLATES-STREAM.md) · plates ST1–ST3. Index [`PM-PACKETS.md`](./PM-PACKETS.md). Living glass: [PR #126](https://github.com/bywale-com/travis/pull/126).
+
+**Founder lock (do not overwrite):** Live work is not the Log tape. In this room working mark → Stream compartment (not a Room). Trigger pinned. Live order below. Done → card above the completed line; card = Stream contents. Applies to Travis. Initiatives are not this place.
+
+**SA:** ascribe as **024**. Stream as store/contract (live vs completed record); trigger hang; process events in order; live-leaves-to-card seam; silences (chunked box stdout, Find rename, initiative stamp). Do not remint 023. Land 024 on the Stream plant PR — not on #126.
+
+**Engineer:** wait for 024. Open the Stream initiative PR. Then plant the specified-and-clear face. Do not invent the store. Do not plant initiative curate. Do not recut 023. Do not plant on #126.
+
+**Parked:** initiative curate; process-primitive recut as closed store; Hear / Next / Skip (007); Travis capability gap.
 

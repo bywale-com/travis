@@ -14,5 +14,6 @@
 | 005 | [`PM-PACKET-005-LOG-FORMAT.md`](./PM-PACKET-005-LOG-FORMAT.md) | `main` |
 | 006 | [`PM-PACKET-006-VOICE-SEND-QUIET.md`](./PM-PACKET-006-VOICE-SEND-QUIET.md) | `main` |
 | 007 | [`PM-PACKET-007-HEAR-QUEUE.md`](./PM-PACKET-007-HEAR-QUEUE.md) | `main` — locked; Hear / Next / Skip still SA silence |
+| 008 | [`PM-PACKET-008-STREAM.md`](./PM-PACKET-008-STREAM.md) | [#126](https://github.com/bywale-com/travis/pull/126) — Stream locked; SA ascribes as **024** on the Stream plant PR; Engineer plants after |
 
 Next packet number follows the last cut. Do not reuse.

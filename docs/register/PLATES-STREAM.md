@@ -1,10 +1,12 @@
-# Plates — Stream (look, not a packet)
+# Plates — Stream
 
+**Status:** **PM-PACKET-008 locked.** FACE for the packet.  
+**Packet:** [`PM-PACKET-008-STREAM.md`](./PM-PACKET-008-STREAM.md)  
 **Seat:** Technical PM.  
-**When:** 2026-09-05  
+**When:** Printed 2026-09-05. Locked when the founder said create the packet.  
 **Kind:** Printed plates. Middle of a state. The look. Not a before/after set.  
 **Chrome rule:** [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md).  
-**Read:** [`PLATE-READ.md`](./PLATE-READ.md) when we packet.
+**Read:** [`PLATE-READ.md`](./PLATE-READ.md).
 
 **Honest:** travis-psi login wall. No photo of Voice / Log / In this room. Chrome locked from planted `src/` (Mission tokens, roster, Log header) + the login bone/oxblood. Stream itself is a **first desk**. Do not pretend these are screenshots of psi.
 
@@ -24,7 +26,9 @@ One plate per hole. Not three frames of the same idea.
 
 Bezel / blur behind the sheet. Loud Add button on ST1. The word **Term** as chrome on ST2 (primitive name, may recut). Invented composer if it crept back. Teaching captions. Fake GitHub diffs. A second Room. IDs are **ST** so they do not collide with S1–S5 or L1–L3.
 
-## Five buckets (draft — not a packet)
+## Five buckets
+
+Filled in [`PM-PACKET-008-STREAM.md`](./PM-PACKET-008-STREAM.md). Draft below is history; packet wins.
 
 | Bucket | Draft |
 |--------|--------|
@@ -33,5 +37,3 @@ Bezel / blur behind the sheet. Loud Add button on ST1. The word **Term** as chro
 | **3. Implied** | Glow means working. Card is tappable. Talk\|Type still the Log. |
 | **4. Completes** | Idle seat has no Stream. Empty Stream is not a furniture pane. |
 | **5. Out** | Initiative curate. Process primitive recut. Capability gap. |
-
-**Ask:** like the look enough to recut S2/S3, or packet.
