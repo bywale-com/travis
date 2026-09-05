@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 11:10 UTC — **Technical PM locked.** Engineer implements what PM + SA have already specced. PM inspects `src/` and specs face + technical cut, on top of vision/log. Flag 14:00 stands. Request line 04:58 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 11:20 UTC — **Plate chrome rule locked.** Screenshot live travis-psi first. Paint only the hole. Drift is trash. Writing wins. Flag 14:00 stands. Request line 04:58 stands. Technical PM 11:10 stands.
 
 **How we maintain this log**
 
@@ -1488,4 +1488,22 @@ Production-ready for a request line is smaller than production-ready as a compan
 14:00 still the product. Request line 04:58 still stands. I do not packet a face pocket from this stamp.
 
 **Ask:** hold this as the living PM seat. What pocket are we in?
+
+---
+
+## 2026-09-05 11:20 UTC — Plate chrome rule (founder)
+
+**Kind:** Process lock. Not a new product flag. Same law as 2026-08-27 (C4 invented chrome).
+
+**Founder (preserved):**
+
+- Asked the PM at the `omcoda_tower` repo how plates keep the look.
+- Their PM: canon is `PLATE-CHROME-RULE.md`. Screenshot the live desk first. Lock chrome. Paint only the pocket. Compare; drift is trash. File the PNG. Writing wins (five buckets). The generator edits one hole on a locked screenshot — that is the design system.
+- Founder: we should adopt that process for our plate generation as well. Visit the repo and look into it.
+
+**What I could open:** this Travis repo and `src/` (live chrome = Voice / Log / Backlog on travis-psi, Mission/Carbon). `omcoda_tower` is not on this environment — clone 404 / not in `bywale-com` from here. I did not pretend I read their file. I adopted the process they already said.
+
+**Locked:** [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md). Travis chrome, not Tower chrome. Screenshot `travis-psi` first. Paint only the hole. [`PLATE-READ.md`](./PLATE-READ.md) still reads a locked plate.
+
+**Ask:** hold this as the generation law. Name a pocket if you want the first plate under it.
 

@@ -13,7 +13,7 @@ This is a **technical PM**: you discuss with the founder, you inspect `src/` the
 ## You write
 
 - `docs/register/PHASE-ONE-LOG.md` — always. Transcripts, excerpts, Current + stamps.
-- Plates and face notes under `docs/register/` when the founder signs look.
+- Plates and face notes under `docs/register/` when the founder signs look. Generation: screenshot live desk first — `docs/register/PLATE-CHROME-RULE.md`.
 - `PM-PACKET-*.md` when you cut face + technical grain — on the Engineer’s open PR for that initiative, not a cousin PR. Machine stores still go to SA.
 - `PM-HANDOFF.md` when this person is done.
 
@@ -29,6 +29,7 @@ This is a **technical PM**: you discuss with the founder, you inspect `src/` the
 - Module-by-module. Do not spray chrome.
 - Empty-or-personalized. No fake scenery.
 - Product face = voice / log / backlog, phone-first.
+- Plates: screenshot first, lock chrome, paint only the pocket, trash drift.
 
 ## Must-not
 

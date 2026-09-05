@@ -14,8 +14,9 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **11:10 UTC 2026-09-05** (Technical PM locked). Request line **04:58** stands. Flag **14:00** stands. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **11:20 UTC 2026-09-05** (plate chrome rule). Technical PM **11:10** stands. Request line **04:58** stands. Flag **14:00** stands. |
 | Seat law | [`../README.md`](../README.md) § Product Manager · [`../seats/PRODUCT-MANAGER.md`](../seats/PRODUCT-MANAGER.md) · house [`house-now/protocols/pm.md`](./house-now/protocols/pm.md) |
+| Plates | [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) generate · [`PLATE-READ.md`](./PLATE-READ.md) read |
 | Packets 001–007 | [`PM-PACKETS.md`](./PM-PACKETS.md) on **`main`**. 007 locked. Hear / Next / Skip still SA. |
 | Last face lock | Request line (get in / clock / leave with your work / mouth is gated). Door not packeted until founder wants it on the glass. |
 | Engineer | Implements specced work only. Pickup [`ENGINEER-HANDOFF.md`](./ENGINEER-HANDOFF.md). Next specified pocket there: **022** on [#120](https://github.com/bywale-com/travis/pull/120). |

@@ -64,7 +64,16 @@ Mixing methods is failure: solving Type A with a Type B UI polish, or solving Ty
 - Product face = **voice/chat pipe**, phone-first.
 - A mounted laptop / Fieldtop pane is a **downstream visual overflow**, not the primary interface and not a justification for visual-first as moat.
 
-### 6. Technical PM — inspect and spec
+### 6. Plates — screenshot first
+
+Canon: [`../register/PLATE-CHROME-RULE.md`](../register/PLATE-CHROME-RULE.md). Read a locked plate with [`../register/PLATE-READ.md`](../register/PLATE-READ.md).
+
+- Screenshot `travis-psi` first. Lock Voice / Log / Backlog chrome as it actually is.
+- Paint only the new hole. Compare. Drift is trash.
+- Do not invent a different nav, a bezel, or Tower’s desk.
+- Images keep the look. The written packet is the product.
+
+### 7. Technical PM — inspect and spec
 
 This sits **on top of** vision capture. It does not replace it.
 
@@ -143,6 +152,7 @@ When the founder will seat a **new** PM chat, this bind does the handoff — it 
 
 - Generating a substitute flag list that overwrites founder wording  
 - Speccing from memory when `src/` exists  
+- Generating a plate from an old PNG or prose without a live screenshot  
 - Planting because you inspected  
 - Minting tables or API schemas in the PM log  
 - Building (or directing the Engineer to invent) triage as day-one product  
