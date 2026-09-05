@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 11:40 UTC — **Stream compartment named.** Live sits in In this room → working seat. Done stream is a card above the completed log line. Initiatives are curated completed logs, not live. Process primitives later. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 11:48 UTC — **Process stream: truthful live states.** Not a receipt. Grain matches what actually occurred. Shapes bounded by Travis tools. Ideas in this stamp — not locked. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1549,4 +1549,33 @@ Production-ready for a request line is smaller than production-ready as a compan
 **Do not from this stamp:** mint a compartment store, recut initiatives, plate Claude, packet, decide process primitives.
 
 **Ask:** hold this architecture? Claude card next, or keep talking.
+
+---
+
+## 2026-09-05 11:48 UTC — Process stream primitives (founder + ideas)
+
+**Kind:** Type B on process chrome. Mental model first. Ideas labeled alignment. Not locked. Not a packet. Not a plate yet.
+
+**Founder (preserved):**
+
+- One last thing, then we can generate plates.
+- There is a transition design to working: seeing code appear is streaming. Cursor does not have to show green/red diffs live — it could say “writing code” and dump GitHub later. The fact it *can* stream is the point. Doesn’t have to be accurate to the second. Want **truthful states in a live streaming visual**. Not a lie. Ascribe the correct transition visual to what actually occurred.
+- Processes are already bounded — anything Travis initiates has a shape (“what did we do yesterday”). How should the streaming visual look? stdout? request then response? Hear ideas. Streaming, not static.
+
+**Stood up (quote):** Tools are a closed set (`TRAVIS_TOOL_DECLS` / `TOOL_POLICY`). Box `run_box` is one-shot today — stdout arrives as a blob, not a byte stream. Motion card is collapsed title + tap `resultText`. Narration is a quiet italic line.
+
+**Agent ideas (not the lock) — four live primitives, not one look per tool:**
+
+| Primitive | For | Live (emitting) | Do not |
+|-----------|-----|-----------------|--------|
+| **Look** | search / list / read | Query stays; rows *arrive* | “12 hits · done” |
+| **Term** | run_box / prove | Command stays; lines *append* | “ran ls · done” |
+| **Write** | write_os / write_box | Path stays; body *fills* | “wrote file · done” |
+| **Hand** | send / dispatch / sit | Line *leaves* toward the dest mark | Fake their terminal in Travis’s compartment |
+
+`file_plan` is a **spine**: steps walk; the open step uses one of the four. Create/sit/rename/mark are short Hand or a pulse — still a state change, not a receipt.
+
+**Truth law:** stream the grain we actually have. If the box only returns start + a blob, show running *then* the blob landing — do not invent a Cursor diff. If later we get chunks, the same primitive grows. A lie is a loading spinner that hides a finished write, or a fake green/red we never received.
+
+**Ask:** hold the truth law + these four? Recut the set? Then we plate.
 
