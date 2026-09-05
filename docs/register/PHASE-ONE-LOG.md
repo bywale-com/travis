@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 18:04 UTC — `wake-pm-look` on #127. Waiting on C. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 18:08 UTC — Packet-chain cost = after the packet, until emerge. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1902,3 +1902,17 @@ What's on the desk in this room?
 **Did:** added `wake-pm-look` on [#127](https://github.com/bywale-com/travis/pull/127). Did not add `wake-sa` or `wake-engineer`. Re-added once when no boot showed.
 
 **Seen from this seat:** label is on the PR. No new automation run in this environment yet. Next: C Run History. If empty, the trigger string or Active toggle is off.
+
+---
+
+## 2026-09-05 18:08 UTC — Cost of the chain, not the packet (founder)
+
+**Kind:** Vision / measure. Not a dashboard. Not a store.
+
+**Founder (preserved):** After the packet exists — SA, Engineer, PM look, maybe loops — until it is ready for human eyes. Not what it cost to write the packet. Fewer calls already means less cost. Learn from the loops. Evaluate after C finishes.
+
+**Window:** packet file lands → `PM-LOOK` Verdict **Pass** (emerge).  
+**In:** A + B + C + each `fail-look` B.  
+**Out:** this PM bind, stamp no-ops, the human walk.
+
+**What we can count from here:** boots, which automation, duration, Pass/Fail. Dollars live on Cursor usage / `getUsage` per `bc-` — not visible from this seat. No cost dashboard (Sept 3 stands).

@@ -14,7 +14,7 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **18:04 UTC 2026-09-05** (`wake-pm-look` on #127). Flag **14:00**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **18:08 UTC 2026-09-05** (chain cost after the packet). Flag **14:00**. |
 | Seat law | [`../README.md`](../README.md) § Product Manager · [`../seats/PRODUCT-MANAGER.md`](../seats/PRODUCT-MANAGER.md) · house [`house-now/protocols/pm.md`](./house-now/protocols/pm.md) |
 | Plates | [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) generate · [`PLATE-READ.md`](./PLATE-READ.md) read |
 | Packets 001–009 | [`PM-PACKETS.md`](./PM-PACKETS.md). 001–007 on **`main`**. **008–009** on this PR. Every packet has a packet test, scoped to that packet. |
