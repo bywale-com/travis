@@ -45,6 +45,7 @@ def main() -> int:
         headers={
             "Authorization": f"Bearer {key}",
             "Content-Type": "application/json",
+            "User-Agent": "travis-house-emerge/1.0",
         },
         method="POST",
     )
