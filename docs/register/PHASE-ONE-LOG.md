@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 20:20 UTC — Re-push 074 so Action re-arms wake-engineer. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 23:48 UTC — Engineer never booted. Action tagged; Cursor did not see the bot. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2141,3 +2141,25 @@ This seat has no live `DATABASE_URL`. I cannot hang the row from here. The write
 **Yes.** The Action is the cut. Same label B already watches. No new automation. No Engineer seat change. No required re-paste.
 
 **The leftover (not a new job):** B’s prompt still has a 009 belt — stop unless this commit has an SA packet. A hotfix commit does not. If Engineer boots and stops in one sentence, that belt is why. `wake-engineer` already means pick up. Do not invent a hotfix Engineer.
+
+---
+
+## 2026-09-05 20:20 UTC — Re-push 074 so the tag fires again (founder)
+
+**Kind:** Process. Founder: push the hotfix so Engineer starts.
+
+`wake-engineer` was already on #130 from the first landing. Label-added does not fire twice. This push revises `HOTFIX-074` and the Action now drops the label then adds it, so B gets a fresh add.
+
+---
+
+## 2026-09-05 23:48 UTC — Why Engineer did not take 074
+
+**Kind:** Honest. Founder: why didn’t the Engineer take it?
+
+**The Action worked.** #130 got `wake-engineer` twice — 20:05 and 20:13 — both by `github-actions[bot]`. No `wake-sa`. B is **enabled** ([Travis — SA complete → Engineer](https://cursor.com/automations/e89c2975-a925-11f1-b532-320a589b8025)).
+
+**B never booted.** Last Engineer automation run was **17:13 UTC** (the 009 leak pair). Nothing after either tag. Not a no-op. Not the prompt belt. The agent did not start.
+
+**Why:** Cursor’s label trigger did not see a label added by the Actions bot. Same class of miss as a private automation that only fires when the owner adds the label, not a teammate — and a bot is not the owner. C (look) fired at 18:15 because a person/seat added `wake-pm-look`, not the Action.
+
+**To start 074:** on [#130](https://github.com/bywale-com/travis/pull/130), take `wake-engineer` off and put it back while logged in as the automation owner. That is the add B already watches. I cannot do that add from this seat (`gh` here is the Cursor install, not you).
