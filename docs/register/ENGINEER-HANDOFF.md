@@ -17,7 +17,7 @@ Next specified pocket: **022** ports from the signed packet on [#120](https://gi
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — next hotfix number **072** |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — next hotfix number **073** |
 | One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |

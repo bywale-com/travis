@@ -127,6 +127,22 @@ export function motionUnder(tool: string): string {
   return `Travis · ${humanizeMotionTool(tool)}`;
 }
 
+/**
+ * A step left `running` after the request died. Box exec is 20s;
+ * 60s means the runner is gone, not still working.
+ */
+export const STALE_RUNNING_MS = 60_000;
+
+export function isStaleRunningStep(
+  startedAt: Date | string | null | undefined,
+  nowMs = Date.now(),
+): boolean {
+  if (startedAt == null || startedAt === "") return false;
+  const t =
+    typeof startedAt === "string" ? new Date(startedAt).getTime() : startedAt.getTime();
+  return Number.isFinite(t) && nowMs - t >= STALE_RUNNING_MS;
+}
+
 /** Last done+1, or the running/failed seq. */
 export function motionStepN(params: {
   stepM: number;
