@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 18:00 UTC — Engineer second trigger is `fail-look`. **009 planted** on [#127](https://github.com/bywale-com/travis/pull/127). Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 18:04 UTC — `wake-pm-look` on #127. Waiting on C. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1892,3 +1892,13 @@ What's on the desk in this room?
 **Kind:** Correction. Founder: the loop label is `fail-look` — all small letters. Not a second `wake-engineer`.
 
 **B** has two Label-added triggers: `wake-engineer` (SA completed) and `fail-look` (PM look failed). Re-paste [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md).
+
+---
+
+## 2026-09-05 18:04 UTC — wake-pm-look on #127 (founder)
+
+**Kind:** Trigger. Founder: all automations in place; fire C.
+
+**Did:** added `wake-pm-look` on [#127](https://github.com/bywale-com/travis/pull/127). Did not add `wake-sa` or `wake-engineer`. Re-added once when no boot showed.
+
+**Seen from this seat:** label is on the PR. No new automation run in this environment yet. Next: C Run History. If empty, the trigger string or Active toggle is off.
