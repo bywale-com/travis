@@ -8,13 +8,14 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **073**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **074**. |
 | PR title | Prefer `Hotfix NNN — …` so the remote trail reads engineer-originated |
 
 ## Hotfixes
 
 | # | File | Cut |
 |---|------|-----|
+| 073 | [`HOTFIX-073-TECHNICAL-PM.md`](./HOTFIX-073-TECHNICAL-PM.md) | PM is technical: inspects `src/`, specs face + cut; Engineer only implements |
 | 072 | [`HOTFIX-072-STALE-MOTION.md`](./HOTFIX-072-STALE-MOTION.md) | Dead `running` box step is reclaimed; backlog footer is not a fake end |
 | 071 | [`HOTFIX-071-PASS-ON.md`](./HOTFIX-071-PASS-ON.md) | Named ticket gets the addition; a failed send is a receipt; catalog fallback if spin dies |
 | 070 | [`HOTFIX-070-GLANCE-TRUTH.md`](./HOTFIX-070-GLANCE-TRUTH.md) | Check-narration drops from the window; glance marks no seat post; a miss is not a cousin |

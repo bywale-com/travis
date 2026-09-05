@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 04:58 UTC — **Request line locked.** Get in / clock / leave with your work / mouth is gated. Not OSS. Flag 14:00 stands. Door not packeted until founder wants it on the glass.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 11:10 UTC — **Technical PM locked.** Engineer implements what PM + SA have already specced. PM inspects `src/` and specs face + technical cut, on top of vision/log. Flag 14:00 stands. Request line 04:58 stands.
 
 **How we maintain this log**
 
@@ -1461,4 +1461,31 @@ Production-ready for a request line is smaller than production-ready as a compan
 14:00 still the product. Canvas still later this week. Billing unnamed. SA ascribes grant + export when the door is cut. I do not mint it. I do not packet until you want it on the glass.
 
 **Ask:** hold. When you want the door, say packet.
+
+---
+
+## 2026-09-05 11:10 UTC — Technical PM (founder)
+
+**Kind:** Seat refinement. Not a new product flag. Type A for the seats, not for the pipe.
+
+**Founder (preserved):**
+
+- The Engineer role stays the Engineer role.
+- Adopt a lot of what the Engineer does into PM. In addition to what the PM already does, it should inspect the code — like the Engineer would. It is technical. It is the implementation specialist.
+- The Engineer is literally just to implement what the PM and the SA have already specced out.
+- The PM specs out both the technical side and the product side, UX, UI side.
+- On top of how the PM already logs and captures vision.
+- Modifying the PM role to be a technical PM role. Update that, then take that seat.
+
+**Locked (this stamp):**
+
+| Seat | Job |
+|------|-----|
+| **Technical PM** | Vision + log + Type A/B, **and** inspect `src/`, **and** spec product/UX/UI **and** the technical cut. Decides. Does not plant. Does not mint tables. |
+| **SA** | Machine: Story, Requirements, stores, contracts, change packets. Unchanged. |
+| **Engineer** | Implement what PM and SA have already specced. Does not invent the cut. |
+
+14:00 still the product. Request line 04:58 still stands. I do not packet a face pocket from this stamp.
+
+**Ask:** hold this as the living PM seat. What pocket are we in?
 
