@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 23:48 UTC — Engineer never booted. Action tagged; Cursor did not see the bot. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 23:50 UTC — No difference: hotfix and packet are the same Action tag. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2163,3 +2163,17 @@ This seat has no live `DATABASE_URL`. I cannot hang the row from here. The write
 **Why:** Cursor’s label trigger did not see a label added by the Actions bot. Same class of miss as a private automation that only fires when the owner adds the label, not a teammate — and a bot is not the owner. C (look) fired at 18:15 because a person/seat added `wake-pm-look`, not the Action.
 
 **To start 074:** on [#130](https://github.com/bywale-com/travis/pull/130), take `wake-engineer` off and put it back while logged in as the automation owner. That is the add B already watches. I cannot do that add from this seat (`gh` here is the Cursor install, not you).
+
+---
+
+## 2026-09-05 23:50 UTC — Do not click the label; same path as a packet (founder)
+
+**Kind:** Correction.
+
+**Founder (preserved):** Calm down. Don’t tell me to take wake-engineer off and put it back. I’m not the one who does that. The whole automation is: tag it hotfix, the Action adds wake-engineer — just like it adds wake-engineer when you create a packet. What is the difference?
+
+**There is no difference.** I was wrong to send him to the label. Hotfix and packet are the same cheap Action. Same `wake-engineer`. Same B.
+
+**The hole is the gate, not the hotfix.** After 17:10 we moved A/B off PR-pushed onto label-added so the Action could tag. We have never seen A or B boot from a label the Action added. 009’s Engineer boots were still PR-pushed. C at 18:15 was a person adding the look label. The next `PM-PACKET` would hit the same wall.
+
+Do not have the founder click. The Action is supposed to be the tagger. That add is not waking Cursor.
