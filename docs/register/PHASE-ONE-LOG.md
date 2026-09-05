@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 11:20 UTC — **Plate chrome rule locked.** Screenshot live travis-psi first. Paint only the hole. Drift is trash. Writing wins. Flag 14:00 stands. Request line 04:58 stands. Technical PM 11:10 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 11:28 UTC — **Live vs completed (named, not packeted).** Log is for finished turns. Live work needs another place. Process stream is still a receipt. Capability gap parked. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1506,4 +1506,24 @@ Production-ready for a request line is smaller than production-ready as a compan
 **Locked:** [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md). Travis chrome, not Tower chrome. Screenshot `travis-psi` first. Paint only the hole. [`PLATE-READ.md`](./PLATE-READ.md) still reads a locked plate.
 
 **Ask:** hold this as the generation law. Name a pocket if you want the first plate under it.
+
+---
+
+## 2026-09-05 11:28 UTC — Live vs completed (founder)
+
+**Kind:** Type A. Primitive named. Not a packet. Not a store. Capability gap parked.
+
+**Founder (preserved):**
+
+- Two things now that plate law is set. Capability gap on Travis side — later. First: visual process streaming. Call it streaming.
+- Thought experiment: a room with 100 agents plus Travis.
+- Today the order they speak is the order it visualizes. Common across seats including Travis: start with what they’re about to do; each later line is its own message, not an append; it references the previous. Process visuals land under the messages, also in sequence. At a hundred agents it almost doesn’t look like anything. Wrong primitive.
+- Chat log is reserved first for **completed** turns — the agent isn’t working on anything; you’re responding to work that’s done. Anything live needs to be in a different place. Stop here: do you understand.
+- Also: message streaming is kind of okay. Process-side streaming is still not streaming. It’s static. A receipt, not live.
+
+**Stood up (quote, not a fix):** Log is one time-ordered thread (`Room.tsx` `threadTurns`). New speech is usually a new `agent_post` (`beats.ts` insert, not append). Motion hangs under the founding Travis post (`foundingTurnId`). The card is collapsed title + tap-for `resultText` — a receipt. In-flight is a door, not the log’s live stream.
+
+**Do not from this stamp:** mint a live table, name the other place, recut 023, packet, plate.
+
+**Ask:** is this the hold — log = completed turns; live work elsewhere; process must actually stream? If yes I stay here until you name the other place or tell me to keep going.
 

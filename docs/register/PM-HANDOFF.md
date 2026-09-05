@@ -14,7 +14,7 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **11:20 UTC 2026-09-05** (plate chrome rule). Technical PM **11:10** stands. Request line **04:58** stands. Flag **14:00** stands. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **11:28 UTC 2026-09-05** (live vs completed, named). Plate chrome **11:20**. Technical PM **11:10**. Request line **04:58**. Flag **14:00**. |
 | Seat law | [`../README.md`](../README.md) § Product Manager · [`../seats/PRODUCT-MANAGER.md`](../seats/PRODUCT-MANAGER.md) · house [`house-now/protocols/pm.md`](./house-now/protocols/pm.md) |
 | Plates | [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) generate · [`PLATE-READ.md`](./PLATE-READ.md) read |
 | Packets 001–007 | [`PM-PACKETS.md`](./PM-PACKETS.md) on **`main`**. 007 locked. Hear / Next / Skip still SA. |
@@ -28,7 +28,7 @@
 ## Next PM job
 
 1. Accept the seat. Fetch `main` (or this PR if it is still open). Read Current, then the newest stamp.
-2. Inspect `src/` when the pocket is already planted. Quote code, not memory.
+2. Inspect `src/` when the pocket is already planted. Quote code, not memory. Plates: [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md).
 3. Open PM work only if the founder names the pocket. Write on the Engineer’s open PR.
 4. Do **not** reprint P1/P2. Do **not** invent a second index. Do **not** remint 007 C3/C4.
 5. When **you** stop: rewrite this file and move Current so the next bind does not start from a transcript.
