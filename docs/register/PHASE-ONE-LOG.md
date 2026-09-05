@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 12:20 UTC — **PM-PACKET-008 Stream locked.** SA ascribes as 024. Engineer plants after. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 12:28 UTC — **Packet-chain automations written.** Packet → SA → Engineer, same PR. Save + Activate is human / local `/automate`. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1628,4 +1628,36 @@ Production-ready for a request line is smaller than production-ready as a compan
 **Engineer:** wait for 024. Open the Stream initiative PR. Then plant the specified-and-clear face. Do not invent the store. Do not plant initiative curate. Do not recut 023. Do not plant on #126.
 
 **Parked:** initiative curate; process-primitive recut as closed store; Hear / Next / Skip (007); Travis capability gap.
+
+---
+
+## 2026-09-05 12:28 UTC — Packet-chain automations (founder)
+
+**Kind:** Process lock. The 19:44 parked seam, now asked.
+
+**Founder:** When it specifically packets, spin up SA to run the entire process protocol. When SA completes (backend), Engineer picks it up and builds. All inside the same PR the packet was placed in.
+
+**Correction:** 008 said SA/Engineer open a new Stream PR. That is wrong. **Same PR.** 024 and the plant stay on [#126](https://github.com/bywale-com/travis/pull/126).
+
+**Landed:** [`AUTOMATION-PACKET-CHAIN.md`](./AUTOMATION-PACKET-CHAIN.md) · prompts [`house-now/automations/packet-sa.prompt.md`](./house-now/automations/packet-sa.prompt.md) · [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md).
+
+**Honest:** a cloud agent cannot Save + Activate a Cursor Automation (no create API). Human or local `/automate` registers the two automations. Cursor has no “agent finished” trigger — SA’s push of the change packet is completion; that push wakes Engineer.
+
+**Ask:** Save + Activate A then B. After both are on, the next push to #126 wakes SA on 008.
+
+---
+
+## 2026-09-05 12:28 UTC — Packet-chain automations (founder)
+
+**Kind:** Process lock. The 19:44 parked seam, now asked.
+
+**Founder:** When it specifically packets, spin up SA to run the entire process protocol. When SA completes (backend), Engineer picks it up and builds. All inside the same PR the packet was placed in.
+
+**Correction:** 008 said SA/Engineer open a new Stream PR. That is wrong. **Same PR.** 024 and the plant stay on [#126](https://github.com/bywale-com/travis/pull/126).
+
+**Landed:** [`AUTOMATION-PACKET-CHAIN.md`](./AUTOMATION-PACKET-CHAIN.md) · prompts [`house-now/automations/packet-sa.prompt.md`](./house-now/automations/packet-sa.prompt.md) · [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md).
+
+**Honest:** a cloud agent cannot Save + Activate a Cursor Automation (no create API). Human or local `/automate` registers the two automations. Cursor has no “agent finished” trigger — SA’s push of the change packet is completion; that push wakes Engineer.
+
+**Ask:** Save + Activate A then B. After both are on, the next push to #126 wakes SA on 008.
 

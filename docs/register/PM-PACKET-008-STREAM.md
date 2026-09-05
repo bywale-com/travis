@@ -10,7 +10,7 @@
 **Next hotfix if Engineer plants without a packet:** **074**. This is not a hotfix.  
 **Not:** 007 Hear / Next / Skip · initiative curate · process-primitive recut as a closed store.
 
-**Where this lives:** PM 008 + plates lock on [PR #126](https://github.com/bywale-com/travis/pull/126) (this Technical PM bind). SA **024** and the Engineer plant are a **new Stream initiative PR** — Engineer opens it. Do not dump 024 onto #126. Do not mint a cousin to that plant PR.
+**Where this lives:** [PR #126](https://github.com/bywale-com/travis/pull/126) — the PR the packet was placed in. SA **024** and the Engineer plant stay here. Do not mint a cousin. Chain: [`AUTOMATION-PACKET-CHAIN.md`](./AUTOMATION-PACKET-CHAIN.md).
 
 ---
 
@@ -139,7 +139,7 @@ Ascribe:
 - silences (chunked box stdout, Find rename, initiative stamp)
 
 Do not mint the table in the SPA. Do not append PHASE-ONE-LOG. Do not plant src/.
-One PR: Engineer opens the Stream plant PR. Land 024 there. Do not dump 024 onto #126. Do not mint a cousin.
+Same PR the packet was placed in. Land 024 here. Do not mint a cousin.
 ```
 
 ---
@@ -165,5 +165,5 @@ Specified and clear (after 024):
 Must-not: mint tables; recut 023; plant initiative curate; invent browser; fake diffs; lock Term label; triage; third Room; collide S1–S5.
 
 Product face = Travis voice/chat. Smoke there.
-One PR per initiative: open the Stream plant PR. Do not plant on #126. Do not mint a cousin.
+Same PR the packet was placed in. Do not mint a cousin.
 ```

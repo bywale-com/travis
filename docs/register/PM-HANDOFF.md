@@ -14,12 +14,13 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **12:20 UTC 2026-09-05** (PM-PACKET-008 Stream locked). Flag **14:00**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **12:28 UTC 2026-09-05** (packet-chain automations). Flag **14:00**. |
 | Seat law | [`../README.md`](../README.md) § Product Manager · [`../seats/PRODUCT-MANAGER.md`](../seats/PRODUCT-MANAGER.md) · house [`house-now/protocols/pm.md`](./house-now/protocols/pm.md) |
 | Plates | [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) generate · [`PLATE-READ.md`](./PLATE-READ.md) read |
 | Packets 001–008 | [`PM-PACKETS.md`](./PM-PACKETS.md). 001–007 on **`main`**. **008** Stream on this PR — SA ascribes as **024**; Engineer plants after. 007 Hear / Next / Skip still SA. |
 | Last face lock | **008 Stream** — In this room → Stream compartment → card above completed Log line. Request line (get in / clock / leave with your work / mouth is gated) still stands. |
-| Engineer | Implements specced work only. Pickup [`ENGINEER-HANDOFF.md`](./ENGINEER-HANDOFF.md). **008** waits on SA **024**, then a new Stream plant PR. Prior open pocket: **022** on [#120](https://github.com/bywale-com/travis/pull/120). |
+| Engineer | Implements specced work only. Pickup [`ENGINEER-HANDOFF.md`](./ENGINEER-HANDOFF.md). **008** waits on SA **024** on **this same PR**. Prior open pocket: **022** on [#120](https://github.com/bywale-com/travis/pull/120). |
+| Packet chain | [`AUTOMATION-PACKET-CHAIN.md`](./AUTOMATION-PACKET-CHAIN.md) — packet → SA → Engineer, same PR. Prompts written; Save + Activate is human / local `/automate`. |
 
 **Do not** follow any “no new plate / V6 grown only” FACE from an old bind. Home is **Backlog** (All / In motion / Initiatives). Voice count = Travis processes only.
 
