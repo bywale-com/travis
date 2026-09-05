@@ -9,8 +9,8 @@ If this wake is a label **removed**, or `wake-pm-look` is not on the PR: **stop*
 Do **not** accept the seat. Do **not** read the Phase One log yet. Run this and nothing else:
 
 1. Confirm `wake-pm-look` is on this PR.
-2. List `docs/register/PM-PACKET-[0-9]*-*.md` on this PR (exclude `*-TEST.md`) and `docs/register/SYSTEMS-CHANGE-PACKET-*.md`.
-3. If there is no PM packet, or no change packet, or Engineer has not planted (`src/` and `ENGINEER-HANDOFF.md` do not match the change packet): **stop**. One sentence.
+2. List `docs/register/HOTFIX-[0-9]*-*.md` on this PR. If one exists and `src/` matches that hotfix: this is a **hotfix look**. Skip the PM-packet + SCP gate. Continue.
+3. Else list `docs/register/PM-PACKET-[0-9]*-*.md` on this PR (exclude `*-TEST.md`) and `docs/register/SYSTEMS-CHANGE-PACKET-*.md`. If there is no PM packet, or no change packet, or Engineer has not planted (`src/` and `ENGINEER-HANDOFF.md` do not match the change packet): **stop**. One sentence.
 
 If a `docs/register/PM-LOOK-<NNN>.md` already says **Pass** for that same packet and `src/` has not changed since that look: **stop**. Do not redo.
 
@@ -32,12 +32,12 @@ Pass both (for what you could do) → **emerge**. Then it is time for the human 
 2. `docs/seats/PRODUCT-MANAGER.md`
 3. `docs/register/house-now/protocols/pm.md`
 4. `docs/register/PHASE-ONE-LOG.md` — Current, then newest stamp. Flag 14:00 UTC 2026-08-25. Do not overwrite it.
-5. The PM packet, its `*-TEST.md`, its FACE/plates, the SYSTEMS-CHANGE-PACKET, `ENGINEER-HANDOFF.md`.
+5. If hotfix: the `HOTFIX-NNN-*.md` and `ENGINEER-HANDOFF.md`. Else the PM packet, its `*-TEST.md`, its FACE/plates, the SYSTEMS-CHANGE-PACKET, `ENGINEER-HANDOFF.md`.
 6. Quote `src/`. Then look at the preview.
 
 ## You write (only these)
 
-- `docs/register/PM-LOOK-<NNN>.md` — NNN is the PM packet number. Shape below.
+- `docs/register/PM-LOOK-<NNN>.md` — NNN is the PM packet number, or `HOTFIX-NNN` for a hotfix look. Shape below.
 - `docs/register/PHASE-ONE-LOG.md` — one stamp; move Current.
 - On **Fail** only: add label `fail-look` to this PR (`gh pr edit <n> --add-label fail-look`). All lowercase. That is the Engineer loop. Do not add `wake-engineer`.
 
@@ -52,8 +52,8 @@ Commit and push to **this PR’s head branch**.
 ```text
 # PM look — <NNN> <slug>
 
-**Packet:** PM-PACKET-NNN
-**Change packet:** SYSTEMS-CHANGE-PACKET-NNN
+**Packet:** PM-PACKET-NNN | HOTFIX-NNN
+**Change packet:** SYSTEMS-CHANGE-PACKET-NNN | none (hotfix)
 **PR:** <url>
 **Preview:** <url I opened>
 **Verdict:** Pass | Fail

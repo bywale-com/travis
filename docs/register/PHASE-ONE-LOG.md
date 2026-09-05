@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 19:51 UTC — Hang is a packet. Action tags wake-sa, not this seat. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 20:12 UTC — Hang is a hotfix. Action tags wake-engineer; skip SA. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2115,3 +2115,17 @@ This seat has no live `DATABASE_URL`. I cannot hang the row from here. The write
 **No.** I write `PM-PACKET-010-…` on the open PR and push. I do not add the label. The cheap Action diffs **this push**. A real `PM-PACKET-NNN` (not `*-TEST.md`) → label `wake-sa`. Cursor A boots on **label added**. Same as today. I am not a fourth trigger.
 
 **Next number:** **010**. SA **026**. Do not remint 009 / 025. Do not put a `bc-` in migrate. Packet when you say cut it.
+
+---
+
+## 2026-09-05 20:12 UTC — Hang is a hotfix; Action skips SA (founder)
+
+**Kind:** Process lock. Recut of 19:51. Not packet 010. No new Cursor automation.
+
+**Founder (preserved):** Smarter to create a GitHub Action — we already have the automations. Not a new Cursor automation. Does not go to SA at all. Directly to the Engineer. Call these hotfixes. If it is a hotfix PR, the Engineer picks it up, then the regular pass / the loop. Skip opening so many seats for something so basic. When it is titled hotfix, that is the tell.
+
+**Stood up:** [`HOTFIX-074-HOTFIX-PATH.md`](./HOTFIX-074-HOTFIX-PATH.md). Same Action [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml): this push lands `HOTFIX-NNN-*.md` → `wake-engineer` only. No `wake-sa`. Title `Hotfix NNN — …`. Same B (re-paste — hotfix is a third gate). `src/` later → look as usual. SQL-only hang has no look.
+
+**Engineer plant on 074:** hang this bind (`bc-25c5c6bf-…`) as a **new** person in room Travis. Not catalog `pm`. Not migrate.
+
+**Do not:** mint packet 010. Mint a fourth automation. Overwrite catalog `pm`. Put a `bc-` in migrate.

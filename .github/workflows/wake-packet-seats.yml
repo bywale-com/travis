@@ -1,6 +1,7 @@
 # Cheap gate in front of Cursor Automations.
 # GitHub path filter + this-push diff. No Cursor boot until a label lands.
 # Labels: wake-sa · wake-engineer · wake-pm-look · fail-look · emerge
+# Hotfix: this push lands HOTFIX-NNN-*.md → wake-engineer only (no wake-sa).
 # Pass → emerge letter (issue + optional email). Not Travis. No LLM.
 # See docs/register/AUTOMATION-PACKET-CHAIN.md
 
@@ -12,6 +13,7 @@ on:
       - "docs/register/PM-PACKET-*.md"
       - "docs/register/SYSTEMS-CHANGE-PACKET-*.md"
       - "docs/register/PM-LOOK-*.md"
+      - "docs/register/HOTFIX-*.md"
       - "src/**"
       - ".github/workflows/wake-packet-seats.yml"
       - ".github/scripts/**"
@@ -64,7 +66,13 @@ jobs:
           gh label create fail-look --color CCCCCC --description "Cursor: Engineer loop after PM look Fail" 2>/dev/null || true
           gh label create emerge --color CCCCCC --description "PM look Pass — human test" 2>/dev/null || true
 
-          if echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$'; then
+          # Hotfix pickup: this push lands HOTFIX-NNN-*.md. Title the PR
+          # "Hotfix NNN — …" (human tell). Skip SA. Do not re-wake Engineer
+          # on later commits on the same PR (file not in this push).
+          if echo "$files" | grep -qE '^docs/register/HOTFIX-[0-9]+-.+\.md$'; then
+            gh pr edit "$pr" --add-label wake-engineer
+            echo "Hotfix. Labeled #$pr wake-engineer. No wake-sa."
+          elif echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$'; then
             gh pr edit "$pr" --add-label wake-sa
             echo "Labeled #$pr wake-sa"
           fi
@@ -139,8 +147,12 @@ jobs:
           done
 
           if echo "$files" | grep -qE '^src/'; then
-            if git ls-tree -r --name-only "$AFTER" | grep -qE '^docs/register/SYSTEMS-CHANGE-PACKET-'; then
-              if git ls-tree -r --name-only "$AFTER" | grep -qE '^docs/register/PM-PACKET-[0-9]'; then
+            pr_files=$(gh pr view "$pr" --json files --jq '.files[].path')
+            if echo "$pr_files" | grep -qE '^docs/register/HOTFIX-[0-9]+-.+\.md$'; then
+              gh pr edit "$pr" --add-label wake-pm-look
+              echo "Labeled #$pr wake-pm-look (hotfix plant)"
+            elif echo "$pr_files" | grep -qE '^docs/register/SYSTEMS-CHANGE-PACKET-'; then
+              if echo "$pr_files" | grep -qE '^docs/register/PM-PACKET-[0-9]'; then
                 gh pr edit "$pr" --add-label wake-pm-look
                 echo "Labeled #$pr wake-pm-look"
               fi

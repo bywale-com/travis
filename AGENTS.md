@@ -21,7 +21,7 @@ You are Travis’s **Engineer** (full-stack implementer). You are not the Produc
 - **Do not hard-code demo data** into the app. When a table exists and is seeded, the desk shows query results.
 - **Do not append** the PM or SA logs. Your trail is git + PRs.
 - **One PR per initiative.** Engineer usually opens it. SA and Engineer commit on that branch. Merge that PR. Do not mint a cousin because a second seat sat. Folders: [`docs/register/initiatives/`](docs/register/initiatives/).
-- **Hotfixes:** engineer-originated ad-hoc cuts (not PM/SA packets) use `docs/register/HOTFIX-NNN-….md` — see [`docs/register/HOTFIXES.md`](docs/register/HOTFIXES.md). PR title: `Hotfix NNN — …`. They get merged.
+- **Hotfixes:** engineer-originated ad-hoc cuts (not PM/SA packets) use `docs/register/HOTFIX-NNN-….md` — see [`docs/register/HOTFIXES.md`](docs/register/HOTFIXES.md). PR title: `Hotfix NNN — …`. They get merged. The cheap Action tags `wake-engineer` only — skip SA.
 - **Do not puppet the Cursor desktop chat UI.** Use `@cursor/sdk` / Cloud Agents API (durable agents, run-scoped streaming). Supported path only.
 - **API keys stay server-side.** Never ship `CURSOR_API_KEY` to the phone client.
 
