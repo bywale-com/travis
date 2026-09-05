@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 17:10 UTC — Seat health / context cap (vision). **009** on [#127](https://github.com/bywale-com/travis/pull/127). Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 17:14 UTC — PM look+test before human test (vision). **009 planted** on [#127](https://github.com/bywale-com/travis/pull/127), not on `main`. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1860,3 +1860,17 @@ What's on the desk in this room?
 **New grain (held):** idle is not enough. A fat idle seat is the wrong dest. Health is a second filter before reuse. The number is not locked. The inspect port is not ascribed — Cursor may not hand the pipe a context-token count.
 
 **Not this:** a spend dashboard. A talent scout. Triage in v1. A cap on how many seats may exist (D9 stands).
+
+---
+
+## 2026-09-05 17:14 UTC — PM look+test before the human (founder; vision)
+
+**Kind:** Vision. Not a packet. After the automation fix. Do not mint a store. Do not add a third “PR pushed” automation.
+
+**009 / 025:** planted on [#127](https://github.com/bywale-com/travis/pull/127). Close hangs on the answering post after this trigger (`pickAnsweringPost`, `gt(seq, trigger.seq)`). Not on `main`. Not human-walked. Preview is the desk.
+
+**Founder (preserved):** When a packet is finished — a Technical PM automation inspects from two angles: it looks good, and it tests what it can test. It cannot test everything; that is why the human exists. There is a protocol. Fail → the loop (back to Engineer). Only if it passes the PM re-look / re-use test does it emerge. Then it is time for the human test.
+
+**Already on this trail — do not remint:** every packet has a `*-TEST.md` (Setup, then the packet; sentence provided). First human job is a tester walking that sheet. Future testers / gig / sandbox held.
+
+**New grain (held):** the sheet is also the PM automation’s script, for the steps a cloud agent can actually do (look at the preview, walk what it can). Human test is the rest. The chain grows one beat: plant → PM look+test → emerge → human. Wake the same way as SA/Engineer — a label after the plant, not every push.
