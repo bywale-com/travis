@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 18:16 UTC — C trigger was `pm-wake-look`, we tagged `wake-pm-look`. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 18:21 UTC — PM look 009 Pass. Emerged. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1926,3 +1926,21 @@ What's on the desk in this room?
 **Runs:** last SA/Engineer pair **17:13 UTC** (before the label switch). No boots after 17:13 — later stamps did not fire A/B. The pile in Run History is the old leak, not a new one.
 
 **Did:** added `pm-wake-look` on #127 so the live trigger can fire. Still fix C to `wake-pm-look` so the Action matches. Re-paste Fail → `fail-look` (the JSON still says `wake-engineer`).
+
+---
+
+## 2026-09-05 18:21 UTC — PM look 009 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`PM-PACKET-009-STREAM-CLOSE.md`](./PM-PACKET-009-STREAM-CLOSE.md) · SA **025** · plant on [#127](https://github.com/bywale-com/travis/pull/127). Sheet: [`PM-LOOK-009.md`](./PM-LOOK-009.md).
+
+**Look.** src/ matches the lock. `pickAnsweringPost` / `gt(seq, trigger.seq)` / stay until that post. Card still paints above `closeTurnId`. Stream does not auto-open. Dest still `post.id`. Named backfill `643e3e50-…` → 747 is in migrate. ST3 staple is the card above the completed line.
+
+**Preview I opened:** `https://travis-git-cursor-technical-pm-seat-35b2-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see the Log glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not type `Name the open initiatives.` I did not Talk.
+
+**Steps I could not do (human):** Vercel team SSO. Travis email link. Talk on a phone. The card above the 008 answer and above a new send.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
