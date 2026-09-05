@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 04:36 UTC — **Read signed 023.** Engineer drafted tape/card/dest-job. SA signed it. M1–M5 look-only. Founder has a product vision next. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 04:50 UTC — **Public moment constraints.** Video + request access. Not open source. Not Astra. K-shaped. Show, don’t jargon. Canvas/glasses are vision. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1371,4 +1371,40 @@ Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tighten
 **Do not from this stamp:** invent the vision, recut M1–M5, plant 023, mix Type A dest with Type B chrome.
 
 **Ask:** the vision — go.
+
+---
+
+## 2026-09-05 04:50 UTC — Public moment: request access, K-shaped, show (founder)
+
+**Kind:** Type A vision + constraints for a first public post. **Not a new flag.** Flag remains 14:00. Not a packet. Not SA tables.
+
+**Founder (preserved; STT cleaned in capture, not in meaning):**
+
+- Never released anything publicly. Wasn’t even thinking of releasing Travis. Why open source? No benefit. Doesn’t have to.
+- If anything goes out: **request access** — real, not a joke waitlist. Not public access for everyone.
+- First post ever. Impressions matter (figures who followed the Om Coda / agent-led build). Narrative has to be tight. Video in days, not months.
+- **K-shaped company** (not “caseship”). Already on the Om Coda site. Frame, not the whole truth — Travis is beyond that, but that’s the frame.
+- Public does not know what a harness is. Don’t use big words. **Show** what it does. Tony Stark by demonstration.
+- Do **not** mention Astra / OpenAI / “first.” The loser frame is claiming you thought of it first and didn’t ship. Don’t make the claim. Let the audience connect if they want.
+- Who: anyone interested in agents for GTM / sales / product; lean / small team / startup; agent-led ALG (acquisition, activation, evolution). Especially not at a desk all day — field, conference, networking, clearing a head. Technologist who happens to be a tech CEO, not the other way around. Field builder. Whole team on the move. Needs **process and protocol**, not “let Claude do it.” Structure. BA mind.
+- Hurt this week about recognition. Ground: earned recognition (customers, revenue, product working) is the scoreboard. A video is nice-to-have. If posting, it has to be rare enough to be worth the first post.
+- Canvas: “Travis, place in motion and initiatives in separate tabs on the canvas.” Glasses: Travis barges in, send that to the glasses, see it live. Founder: not out of this world; a week if the people exist in one person.
+
+**Do not from this stamp:** mint a waitlist table, plant a canvas, plant glasses, recut 023, mention Astra in any public copy from this seat, open-source the repo, overwrite 14:00.
+
+---
+
+**Join (agent alignment — not the flag)**
+
+14:00 stays the product: open this app, not Cursor; talk; hear; images in order. The public moment is a **door** on that product, not a second product.
+
+023 (signed, now planting on this PR): tape, card, dest job, catalog fallback dies — that *is* the showable walk (M1–M5 + Voice barge-in + artifacts in the log). Spatial canvas and glasses are **not** in 023. 023 named DAG / canvas / PTY as must-not. Glasses are an external SDK someone else owns.
+
+| In a video as **today** | In a video as **headed** | Not this stamp |
+|-------------------------|--------------------------|----------------|
+| Voice to Cursor seats. Barge-in / New. Artifacts in the log. Speak once, card under the line, interrupt, tape finishes, BA is the next turn. In flight heartbeat (S3). Request access as the gate. | Canvas tabs. Glasses as another pane. | Open source. Primacy. Harness lecture. Fake scenery. |
+
+Request access is a **product constraint**. The store/control is SA when locked. I will not mint it.
+
+**Ask:** lock these constraints as the public-moment law (this stamp is the hold), or cut a short FACE for the video + request-access door? Demo this week = planted 023 walk, canvas/glasses spoken as next — or do you want canvas as a named plant *this* pocket (SA has not ascribed it; 023 refused the store)?
 
