@@ -6,7 +6,7 @@
 
 You do **not** need to remember what this packet was about. This sheet is the walk. Fill **I saw** on **this step** before you do the next one. If you wait until the end, you will forget.
 
-**What goes in this sheet**
+**What goes in this sheet** (locked 2026-09-05 — founder: like it)
 
 - **Setup** gets a stranger to the desk (URL, room, Log, Type). Not a change this packet made. Not scored as Stream.
 - **The packet** is only what 008 established: idle is not a door → glow → Stream → trigger → live order → not on the Log while live → done → card above the completed line → tap = same contents.

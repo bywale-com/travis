@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:08 UTC — **Test spec: Setup is not the packet.** 008 walk starts at idle-is-not-a-door. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:09 UTC — **Test spec shape locked: Setup, then the packet.** Founder likes it. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1737,3 +1737,11 @@ When we generate plates and packets (usually at the same time) we also generate 
 **Answer:** Setup. Not an 008 change. 008 did not recut how you open a room or the Log. Section 1 was me putting a stranger on the desk so they could reach the door.
 
 **Sheet:** [`PM-PACKET-008-STREAM-TEST.md`](./PM-PACKET-008-STREAM-TEST.md) now splits **Setup — not this packet** from **The packet**. Founder may later specify what belongs in Setup vs the walk.
+
+---
+
+## 2026-09-05 16:09 UTC — Test spec shape: Setup, then the packet (founder)
+
+**Kind:** Lock. Founder: agree; like it; definitely perfect. Will read the 008 walk with that split in mind.
+
+**Lock:** A packet test spec has **Setup** (get a stranger to the desk — not scored as the pocket) then **the packet** (only what this packet established).
