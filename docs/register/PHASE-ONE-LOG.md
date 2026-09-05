@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 00:55 UTC — **PM seat accepted.** Living bind is `bc-460a15d0`. Pickup [`PM-HANDOFF.md`](./PM-HANDOFF.md). Flag 14:00 stands. Founder has not named a pocket yet.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 01:00 UTC — **Got current.** Planted on `main` is **021**. Living work is **023 tightness** on [#123](https://github.com/bywale-com/travis/pull/123) (envelope + S1–S5 look-only). **022** ports signed, not planted, on [#120](https://github.com/bywale-com/travis/pull/120). SA has not signed dest. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1362,4 +1362,35 @@ Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tighten
 **Do not from this stamp:** cut 008, recut Mission/Carbon, plant, rebind seats in the room, treat 021 as a PM packet.
 
 **Ask:** what pocket are we in?
+
+---
+
+## 2026-09-05 01:00 UTC — Got current (this bind)
+
+**Kind:** Trail / where we are. Not a packet. Not a plate. Founder: get current on the repo, exactly what we are working on right now, so you can see.
+
+**Looked at:** `main` · open PRs · Engineer bind `bc-94804572` · SA Current on #120 · envelope + S plates on #123. I did not plant.
+
+**Planted (`main`, last plant 2026-09-04):** **021** worker — prove / keep / unfold · [#119](https://github.com/bywale-com/travis/pull/119). Face is still Voice / Log / Backlog on `https://travis-psi.vercel.app`. Box is a Sprite. House ≠ disk. `TRAVIS_GITHUB_TOKEN` still not wired.
+
+**Living work (not on `main`):**
+
+| Object | PR | State |
+|--------|----|--------|
+| **023 tightness** — dest is not mail; his / theirs / nobody; job not blob; watch / take-back | [#123](https://github.com/bywale-com/travis/pull/123) draft | Envelope + Engineer write-back + **S1–S5** plates. **Not a plant.** SA has **not** signed dest. |
+| **022 ports** — control, not another env line; connectors plate replaces I1 | [#120](https://github.com/bywale-com/travis/pull/120) draft | **Signed.** Host + plate not planted. Do not remint `travis.port`. |
+| Hotfix 072 PM rebind → `bc-e36b1259` | [#121](https://github.com/bywale-com/travis/pull/121) draft | Cousin of the comic fail. Not this bind. |
+| PM accept `bc-e36b1259` | [#122](https://github.com/bywale-com/travis/pull/122) draft | Other chat. This seat is `bc-460a15d0`. |
+| This accept | [#124](https://github.com/bywale-com/travis/pull/124) | Trail only. |
+| Leftover 016 / 019 drafts | #113 · #118 | Already planted as 016 / 071. Close, do not re-plant. |
+
+**Why 023 exists (founder wording on the envelope, not a new flag):** “Go ahead and deprecate the existing PM seat and create a new PM.” Travis mailed it to catalog `pm`. The old bind woke and tried to replace itself. Could have been any skill he can do. 021 + 022 without a dest gate do not finish it. Children stay in Cursor. Tightness is our runner.
+
+**S plates (look only, Mission, planted chrome):** S1 Voice heartbeat `Engineer · 2s ago` · S2 Log thought strip live/stale · S3 In flight as a **job list** · S4 Backlog presence · S5 Box stream behind an In-flight door. No DAG. No canvas. Founder has not signed them as glass.
+
+**SA:** Current on #120 is **022 signed**. Next packet number is **023**. Dest / supervise is still open arguments on the envelope. Engineer must not plant dest until that packet (or a signed Story) names the gate.
+
+**Do not from this stamp:** cut 008, recut C3/C4, reprint P1/P2, mint a job table, plant 022/023, treat S1–S5 as locked, fold #120 into #123 unless the founder says fold.
+
+**Ask:** is **023** the pocket? Sign S1–S5 as the look, walk dest as Type A, or the connectors plate (022 glass, still unprinted)?
 

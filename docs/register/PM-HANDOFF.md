@@ -12,17 +12,19 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) on **`main`** — Current is this accept |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is the 01:00 got-current stamp (on this PR until merge) |
 | Packets 001–007 | [`PM-PACKETS.md`](./PM-PACKETS.md) on **`main`** |
 | Envelope (work layer) | [`ENVELOPE-TRAVIS-ORCHESTRATE.md`](./ENVELOPE-TRAVIS-ORCHESTRATE.md) · [PR #94](https://github.com/bywale-com/travis/pull/94) |
 | Motion plant | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) — `motion` + runner in Backlog |
 | House | [`ENVELOPE-TRAVIS-OS-TREE.md`](./ENVELOPE-TRAVIS-OS-TREE.md) · sit planted as SCP-015 · [PR #107](https://github.com/bywale-com/travis/pull/107) |
-| Last plant while PM was vacant | SCP-021 worker · [PR #119](https://github.com/bywale-com/travis/pull/119) |
+| Last plant on `main` | SCP-021 worker · [PR #119](https://github.com/bywale-com/travis/pull/119) |
+| Living (not planted) | Envelope 023 tightness · [PR #123](https://github.com/bywale-com/travis/pull/123) · S1–S5 look-only |
+| 022 | Signed, not planted · [PR #120](https://github.com/bywale-com/travis/pull/120) |
 | 007 | Locked. Hear-queue. Hear / Next / Skip still SA. Do not recut C3/C4. |
 
 **Do not** follow any “no new plate / V6 grown only” FACE from `bc-1ac0762e`. Home is **Backlog** (All / In motion / Initiatives). Voice count = Travis processes only.
 
-Founder seated this chat 2026-09-05. **No pocket named yet.**
+Founder seated this chat 2026-09-05. Got current: planted **021**; living work **023 tightness** [#123](https://github.com/bywale-com/travis/pull/123) + **022** signed [#120](https://github.com/bywale-com/travis/pull/120). Pocket not locked by this PM yet.
 
 ---
 
