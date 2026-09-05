@@ -173,3 +173,9 @@ No leftover analysis. Packet **023** if dest / supervise needs a packet. Do not 
 7. **Must-not:** computer use; 042 lifting; third orchestrator host; marketplace; box tools becoming Cursor send; reminting 021; rewriting this product from the box; MCP this cut (022 already refused).
 
 Do not send **That’s fine.** from Engineer. Engineer plants dest only after 023 (or a signed Story) names the gate. Engineer plants 022 only from the signed packet on #120.
+
+---
+
+## Live visual patterns (write-back, not a plant)
+
+Founder seeded Gemini’s five patterns onto the live-state opportunities. Engineer write-back: [`ENGINEER-LIVE-VISUALS.md`](./ENGINEER-LIVE-VISUALS.md) — what / when / where for DAG, terminal, canvas, backlog-optimistic, seat health. Sequenced against 023 and 021/022. Does not plant a graph, PTY, canvas, or heartbeat.
