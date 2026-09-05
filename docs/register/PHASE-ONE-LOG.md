@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 14:49 UTC — **Vision: Travis-spun seats are PM-style; packets carry a human checklist.** Automations lived. Grander idea not yet told. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 14:55 UTC — **Vision: the job is packets; first human job is a tester.** Gig / Om Coda test space is far. Gap is the environment, bounded per packet. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1691,3 +1691,27 @@ When we generate plates and packets (usually at the same time) we also generate 
 - SA-now-for-a-question vs protocol-break automations (this stamp — hold)
 
 **Ask:** following so far — go to the grander idea.
+
+---
+
+## 2026-09-05 14:55 UTC — Packets are the job; tester is the first human (founder)
+
+**Kind:** Vision. The grander idea. Not a packet. Do not plant a gig marketplace.
+
+**Founder — it clicked because the automations lived:**
+
+> I was asleep. I didn't have to wait on anyone. I didn't have to take what you generated and gave it to another person or another engineer. All of it was built. So it means that, the only job we really need to work on is packets. That's it. But, we still need to test.
+
+**First human job:** a tester. Not a professional tester. A human who walks the spec. That is why the spec has to be so well detailed. We are building what we wanted. When the founder says yes to the plates, that is yes to exactly what should occur. So we know everything that should happen. When you do X: everything that should happen, everything you see. Detailed enough that **any human** can walk it and see if that happened.
+
+**Gap named (number one):** what environment this is deployed in that gives that kind of testing.
+
+**Om Coda (far):** the bigger company has this as a **gig role** — people sign up to test features. Compensation is far ahead. Testing space hosted on Coda's website or somewhere. **No app.** Email that there is a new test. Bounded **per packet**. They cannot miss how to test. Feedback is strong and comes back — that return is the pipeline.
+
+**Future day (founder):** spend a day building packets. They get built and deployed instantly. A supply of testers. A pipeline that takes everything that was built. Everything is also built **for that environment** — the space that orchestrates human testing of the features.
+
+**Immediate hold:** the checklist on every packet (14:49). The environment, bounded per packet. Do not invent the gig signup or pay.
+
+**Still parked:** initiative curate; Find/primitive recut; Hear / Next / Skip; Travis capability gap; request-line door; SA-now vs protocol-break automations.
+
+**Ask:** this land? Next beat is the environment, or keep vision.
