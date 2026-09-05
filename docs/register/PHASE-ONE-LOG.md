@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:32 UTC — **Test spec provides the sentence.** `What's on the desk in this room?` Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:37 UTC — **008 walk: Stream store wrote; glass did not.** Closed on the wrong turn. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1779,3 +1779,17 @@ What's on the desk in this room?
 ```
 
 **Honest:** Stream has three looks (words / process = tool name + body / thought). Not four labeled primitives. This sentence may only produce words. If process never appears, the **I saw** is the report. Do not invent a second sentence on the walk.
+
+---
+
+## 2026-09-05 16:37 UTC — 008 walk inspected (founder)
+
+**Kind:** Test result. Founder sent the locked sentence. Accurate answer on the Log. No Stream compartment. Stopped the walk.
+
+**Session:** `0e8875f8-283b-4dae-bf54-76c82a05b6ef` (title Travis). Trigger `bfa67009-…` seq 746. Answer landed seq 747.
+
+**Store (quote):** one `travis.stream` row. Live **6 seconds** (16:32:35 → 16:32:41). One event: `process` / `list_backlog`. No `message` event. `close_turn_id` = seq **745** (10:41 — “I started listing the files…”) — not 747.
+
+**Why the glass was empty:** Stream does not open itself. Glow/door only while `live`. He closed when the first tool finished, before the speakable post. Card would hang above the **old** line. The new answer has no card. Follow-up (“did you pull these from memory”) did not open a stream.
+
+**024 already required:** stay live until labor ends; `close_turn_id` = that completed `agent_post`; live text as `message`. Plant missed. PM does not plant.
