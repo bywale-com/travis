@@ -86,7 +86,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 
 | Gap | Why it is blocked |
 |-----|-------------------|
-| Tightness / dest gate | Envelope [`ENVELOPE-TRAVIS-TIGHTNESS.md`](./ENVELOPE-TRAVIS-TIGHTNESS.md). 021+022 do not stop mailing his own action. Gate is **SA 023**. |
+| Tightness / dest gate | Envelope [`ENVELOPE-TRAVIS-TIGHTNESS.md`](./ENVELOPE-TRAVIS-TIGHTNESS.md). Draft packet [`SYSTEMS-CHANGE-PACKET-023-TAPE.md`](./SYSTEMS-CHANGE-PACKET-023-TAPE.md) — **not signed**. SA signs, then plant. |
 | Live visuals (Gemini patterns) | Write-back [`ENGINEER-LIVE-VISUALS.md`](./ENGINEER-LIVE-VISUALS.md). Job table + `parent_id` + push bus not planted. Canvas store not ascribed. |
 | Ports host + connectors plate | 022 signed on [#120](https://github.com/bywale-com/travis/pull/120). Do not remint `travis.port`. |
 | `TRAVIS_GITHUB_TOKEN` | Unfold receipts `not wired` until founder sets it, or 022 hangs it on port `github`. Not `GITHUB_TOKEN`. |

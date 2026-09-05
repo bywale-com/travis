@@ -174,6 +174,8 @@ No leftover analysis. Packet **023** if dest / supervise needs a packet. Do not 
 
 Do not send **That’s fine.** from Engineer. Engineer plants dest only after 023 (or a signed Story) names the gate. Engineer plants 022 only from the signed packet on #120.
 
+**Draft packet (Engineer → SA, not signed):** [`SYSTEMS-CHANGE-PACKET-023-TAPE.md`](./SYSTEMS-CHANGE-PACKET-023-TAPE.md). Tape, card, dest job. SA signs Story and closes the cuts.
+
 ---
 
 ## Live visual patterns (write-back, not a plant)
