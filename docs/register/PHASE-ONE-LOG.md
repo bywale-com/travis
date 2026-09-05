@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 14:55 UTC — **Vision: the job is packets; first human job is a tester.** Gig / Om Coda test space is far. Gap is the environment, bounded per packet. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 15:05 UTC — **008 Stream test spec, first rendition.** Human walk, per-step I saw. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1715,3 +1715,15 @@ When we generate plates and packets (usually at the same time) we also generate 
 **Still parked:** initiative curate; Find/primitive recut; Hear / Next / Skip; Travis capability gap; request-line door; SA-now vs protocol-break automations.
 
 **Ask:** this land? Next beat is the environment, or keep vision.
+
+---
+
+## 2026-09-05 15:05 UTC — 008 test spec, first rendition
+
+**Kind:** Packet grain. Founder: create a test spec for this packet. Anyone can follow. He does not need to remember the packet. Per-step I saw — not a dump at the end.
+
+**Landed:** [`PM-PACKET-008-STREAM-TEST.md`](./PM-PACKET-008-STREAM-TEST.md). Sequential. Do / Expect / I saw on every step. Covers idle-is-not-a-door, live Stream, live-not-on-the-Log, done → card above the completed line, tap card = same contents, Travis, must-nots.
+
+**Honest:** first rendition of the shape. Use the #126 preview; psi may still be the old desk.
+
+**Ask:** walk it. Tell me where the sheet missed you.

@@ -4,6 +4,7 @@
 **Seat:** Technical PM. **SA** ascribes as **024**. **Engineer** plants after that ascription. PM does not plant.  
 **When:** Locked 2026-09-05 — founder: like the look; create the packet so SA and Engineer can pick up.  
 **FACE:** [`PLATES-STREAM.md`](./PLATES-STREAM.md) — ST1 / ST2 / ST3.  
+**Test spec (first rendition):** [`PM-PACKET-008-STREAM-TEST.md`](./PM-PACKET-008-STREAM-TEST.md) — human walk; part of the packet.  
 **Plate law:** [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) · [`PLATE-READ.md`](./PLATE-READ.md).  
 **Flag:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) **14:00 UTC 2026-08-25**. Request line **04:58 UTC 2026-09-02** stands.  
 **Next SA packet:** **024**. Do not remint **023**.  

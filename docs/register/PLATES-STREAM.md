@@ -2,6 +2,7 @@
 
 **Status:** **PM-PACKET-008 locked.** FACE for the packet.  
 **Packet:** [`PM-PACKET-008-STREAM.md`](./PM-PACKET-008-STREAM.md)  
+**Test spec:** [`PM-PACKET-008-STREAM-TEST.md`](./PM-PACKET-008-STREAM-TEST.md)  
 **Seat:** Technical PM.  
 **When:** Printed 2026-09-05. Locked when the founder said create the packet.  
 **Kind:** Printed plates. Middle of a state. The look. Not a before/after set.  
