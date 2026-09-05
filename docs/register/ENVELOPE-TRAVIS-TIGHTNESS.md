@@ -179,3 +179,5 @@ Do not send **That’s fine.** from Engineer. Engineer plants dest only after 02
 ## Live visual patterns (write-back, not a plant)
 
 Founder seeded Gemini’s five patterns onto the live-state opportunities. Engineer write-back: [`ENGINEER-LIVE-VISUALS.md`](./ENGINEER-LIVE-VISUALS.md) — what / when / where for DAG, terminal, canvas, backlog-optimistic, seat health. Sequenced against 023 and 021/022. Does not plant a graph, PTY, canvas, or heartbeat.
+
+**Plates (look only):** [`PLATES-LIVE-VISUALS.md`](./PLATES-LIVE-VISUALS.md) · S1–S5 on the planted Voice / Log / In flight / Backlog faces. No DAG. No canvas.

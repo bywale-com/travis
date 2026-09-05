@@ -4,7 +4,8 @@
 **Seat:** Engineer.  
 **When:** 2026-09-05.  
 **One PR:** [#123](https://github.com/bywale-com/travis/pull/123) (tightness envelope).  
-**Source packet:** founder paste (Gemini recommendations as-is). `ENVELOPE-TRAVIS-LIVE-STATE.md` is **not in this repo** — opportunities below are the five Gemini named, plus seat health.
+**Source packet:** founder paste (Gemini recommendations as-is). `ENVELOPE-TRAVIS-LIVE-STATE.md` is **not in this repo** — opportunities below are the five Gemini named, plus seat health.  
+**Plates (look only):** [`PLATES-LIVE-VISUALS.md`](./PLATES-LIVE-VISUALS.md) · S1–S5. Mission, planted chrome. Not a plant.
 
 Do not append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG. Do not mint a table from this file. Do not plant a DAG, PTY stream, canvas, or heartbeat from this file.
 
