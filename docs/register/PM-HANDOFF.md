@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-05 19:32 UTC
+# PM seat handoff — 2026-09-05 19:42 UTC
 
 **This bind is living.** `bc-25c5c6bf-006f-4252-9f25-49ab183835b2` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -14,7 +14,7 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **19:32 UTC 2026-09-05** (held inventory). Flag **14:00**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **19:42 UTC 2026-09-05** (no merge; capability gap is the start). Flag **14:00**. |
 | Seat law | [`../README.md`](../README.md) § Product Manager · [`../seats/PRODUCT-MANAGER.md`](../seats/PRODUCT-MANAGER.md) · house [`house-now/protocols/pm.md`](./house-now/protocols/pm.md) |
 | Plates | [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) generate · [`PLATE-READ.md`](./PLATE-READ.md) read |
 | Packets 001–009 | [`PM-PACKETS.md`](./PM-PACKETS.md). 001–007 on **`main`**. **008–009** on this PR. 009 look **Pass** — [`PM-LOOK-009.md`](./PM-LOOK-009.md). Human walk not started. |
@@ -30,7 +30,7 @@
 ## Next PM job
 
 1. Accept the seat. Fetch this PR. Read Current, then the newest stamp.
-2. 009 has emerged. The letter is the test sheet. Human walks [`PM-PACKET-009-STREAM-CLOSE-TEST.md`](./PM-PACKET-009-STREAM-CLOSE-TEST.md) on the #127 preview. Do not remint 009. Repo Actions secrets are on. Pass path sends the letter.
+2. Do **not** merge #127 until the human test is green. Founder will revise 127 (replay). Human-test loop is unnamed. Start = capability gap: why this work cannot be done inside Travis correctly. Do not name the hole before he does.
 3. Open PM work only if the founder names the pocket. Write on the Engineer’s open PR. Next packet number is **010**. Next SA is **026**.
 4. Do **not** reprint P1/P2. Do **not** invent a second index. Do **not** remint 007 C3/C4.
 5. When **you** stop: rewrite this file and move Current so the next bind does not start from a transcript.

@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 19:32 UTC — Held inventory. Suggest walk 009, then talk seat health. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 19:42 UTC — No merge until human test green. Three: revise 127 · human-test loop · capability gap (start). Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2046,3 +2046,22 @@ First Resend try was Cloudflare 1010 (no User-Agent). Same 1010 as this VM. UA f
 **Older parked (do not lose):** initiative curate (after Stream) · Find / primitive recut · Hear / Next / Skip (007, SA silence) · Travis capability gap · request-line door · 022 on #120.
 
 **Suggest:** start = walk 009. Talk = seat health (this session’s unfinished grain). Product packet after the walk = initiative curate (parked until Stream). Do not start gig, sandbox, or another un-gated automation.
+
+---
+
+## 2026-09-05 19:42 UTC — No merge; three; capability gap is the start (founder)
+
+**Kind:** Correction + Type A. Not a packet yet. Do not merge #127. Do not invent the gap. Do not recut 009 until he says how.
+
+**Founder (preserved):**
+
+- Do not merge into prod until the human test is green. Usual law. The human test is not green — not because it wasn’t built properly. Built okay-ish. He will say why.
+- Three things:
+  1. **Revise 127.** He will say how, why, and what. We need a replay. He will tell.
+  2. **The human test loop.** We have not worked what that looks like.
+  3. **Capability gap.** Everything he is doing here, he is supposed to be doing inside Travis. Why can’t he do it inside Travis correctly. That is the gap he alluded to a couple of passes ago.
+- Most important: the capability gap, so we can start using Travis.
+
+**Already on this trail — do not remint:** 11:28 parked “capability gap on Travis side — later” while Stream was first. Stream has emerged. The gap is now the start.
+
+**Do not from this stamp:** merge #127. Mint a store. Name the hole before he does. Recut 009 from this chat.
