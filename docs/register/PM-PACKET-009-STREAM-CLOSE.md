@@ -7,7 +7,7 @@
 **Test spec:** [`PM-PACKET-009-STREAM-CLOSE-TEST.md`](./PM-PACKET-009-STREAM-CLOSE-TEST.md)  
 **Builds on:** [`PM-PACKET-008-STREAM.md`](./PM-PACKET-008-STREAM.md) · SA **024** planted. Do not remint `travis.stream`.  
 **Flag:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) **14:00 UTC 2026-08-25**.  
-**Where:** [PR #126](https://github.com/bywale-com/travis/pull/126) — same PR. Do not mint a cousin.
+**Where:** [PR #127](https://github.com/bywale-com/travis/pull/127) — 009 pocket. #126 merged. Do not mint a cousin.
 
 ---
 
@@ -121,7 +121,7 @@ Packet: docs/register/PM-PACKET-009-STREAM-CLOSE.md
 Test: docs/register/PM-PACKET-009-STREAM-CLOSE-TEST.md
 Prior: 024 planted. Do not remint travis.stream.
 
-Next SA packet is 025. Same PR #126.
+Next SA packet is 025. Same PR #127.
 
 Ascribe: close after this trigger’s completed agent_post; labor end (not first tool);
 message events; backfill of 643e3e50 vs forward-only; dest path.
@@ -144,5 +144,5 @@ card above it; message events; do not auto-open Stream.
 
 Must-not: remint 023/024 tables; hang on latest session post; cousin PR.
 
-Same PR #126. Smoke the phone face.
+Same PR #127. Smoke the phone face.
 ```

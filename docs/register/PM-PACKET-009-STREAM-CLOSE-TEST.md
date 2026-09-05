@@ -15,7 +15,7 @@ Fill **I saw** on this step before the next.
 
 ## Before you start
 
-**Where.** Preview for [PR #126](https://github.com/bywale-com/travis/pull/126). Production psi may still miss the plant.
+**Where.** Preview for [PR #127](https://github.com/bywale-com/travis/pull/127). Production psi may still miss the plant.
 
 **URL I opened:**
 
