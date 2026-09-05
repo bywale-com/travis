@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:30 UTC — **Test spec: “your ask” is a sentence you invent, not a phrase to type.** Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:32 UTC — **Test spec provides the sentence.** `What's on the desk in this room?` Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1765,3 +1765,17 @@ When we generate plates and packets (usually at the same time) we also generate 
 **No.** Invent a real sentence for Travis. Write it in Setup. Later steps mean that sentence.
 
 **Sheet recut:** blank is **The sentence I will send.**
+
+---
+
+## 2026-09-05 16:32 UTC — Provide the sentence (founder)
+
+**Kind:** Sheet law. Founder: absolute specificity. One of the things we’re testing is process visuals. If there are multiple types, even more reason to provide the line. He would write the sentence I gave.
+
+**Locked sentence:**
+
+```
+What's on the desk in this room?
+```
+
+**Honest:** Stream has three looks (words / process = tool name + body / thought). Not four labeled primitives. This sentence may only produce words. If process never appears, the **I saw** is the report. Do not invent a second sentence on the walk.
