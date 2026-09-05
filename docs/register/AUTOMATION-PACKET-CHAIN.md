@@ -26,7 +26,16 @@ plant stays on that same PR
 
 **Same PR** is law. Do not open a cousin. Turn **off** “Pull request creation” on both automations if the UI lets you; the prompts also forbid it.
 
-There is no file-path trigger. The gate lives in the prompt.
+There is no file-path trigger in Cursor. The gate lives in the prompt — and it must be **this commit**, not the whole PR.
+
+**Why:** Cursor boots a full `cursor-grok-4.6-high-fast` agent on every matching event, then the prompt decides. A gate that looks at `origin/main...HEAD` wakes SA on every later stamp (“the PR already has a packet”). Engineer’s “PR pushed” trigger fires on those same stamps. Inspect 2026-09-05: **27 automation boots**, almost all paired SA+Engineer, almost all gate-fail after reading the seat. One useful SA sign (025). One Engineer sat ~85 minutes re-gating follow-up events on #126.
+
+**This-commit gate (prompts):**
+
+- SA: `git diff --name-only HEAD~1` must include `docs/register/PM-PACKET-[0-9]*-*.md` and must **not** be only `*-TEST.md`. Do not accept the seat until that passes.
+- Engineer: the same command must include `docs/register/SYSTEMS-CHANGE-PACKET-*.md`. Do not accept the seat until that passes.
+
+Re-paste both prompts at [cursor.com/automations](https://cursor.com/automations) after this file changes. Cloud agents cannot Save + Activate. Until the live prompts match, every push still burns a pair.
 
 ---
 
@@ -65,10 +74,10 @@ That push is the Engineer trigger.
 
 ## Save + Activate (human or local `/automate`)
 
-1. Open [cursor.com/automations/new](https://cursor.com/automations/new) (or Agents Window → Automations, or local chat `/automate`).
-2. Create **A**, paste the SA prompt, set the three triggers, attach this repo, disable PR creation, Save + Activate.
-3. Create **B**, paste the Engineer prompt, set PR pushed, attach this repo, disable PR creation, Save + Activate.
-4. After both are on, the next push to a PR that already has an unascribed `PM-PACKET-*.md` (including **008** on [#126](https://github.com/bywale-com/travis/pull/126)) wakes SA. You do not paste seats.
+1. **Pause both** at [cursor.com/automations](https://cursor.com/automations) before pushing paper, or every stamp still boots a pair on the **old** prompts.
+2. Open each automation. Replace the prompt with the file in this repo (full paste). Save + Activate.
+3. First create (if they are not already on): [cursor.com/automations/new](https://cursor.com/automations/new) — **A** three triggers, **B** PR pushed, this repo, PR creation **off**.
+4. After the this-commit prompts are live, a push wakes SA only when that commit added a real `PM-PACKET-NNN` (not a test). Engineer wakes only when that commit added a `SYSTEMS-CHANGE-PACKET`.
 
 ---
 

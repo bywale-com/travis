@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:46 UTC — **009 on [#127](https://github.com/bywale-com/travis/pull/127).** #126 merged. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:56 UTC — Automations inspected: this-commit gate. **009** still on [#127](https://github.com/bywale-com/travis/pull/127). Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1809,3 +1809,21 @@ What's on the desk in this room?
 ## 2026-09-05 16:46 UTC — 009 lives on #127
 
 **Kind:** Correction. #126 merged 16:26. 009 + later 008-walk stamps were still on the branch. Opened [#127](https://github.com/bywale-com/travis/pull/127). SA/Engineer land there.
+
+---
+
+## 2026-09-05 16:56 UTC — Automations burn on every push (founder)
+
+**Kind:** Inspect. Founder: automations fire, burn tokens, do nothing; spend highest today even without sitting in one chat.
+
+**What I can see:** run list + transcripts. I cannot see Cursor dollar spend.
+
+**Today (2026-09-05) in this environment:** **27 automation boots** (first at 12:36 UTC). **0** yesterday. **0** the day before. 15 SA + 12 Engineer. Model: `cursor-grok-4.6-high-fast`. Triggers have no path filter — every PR opened / draft opened / PR pushed (SA) and every PR pushed (Engineer) boots a full agent; the gate is after the boot.
+
+**Useful labor:** SA `bc-90689f06` signed **025** on #127. One Engineer is still running on that wake (`bc-925e2ab1`).
+
+**The rest:** gate-fail. Typical 30–90s. They still read the seat, then stop. Sample: four of five SA transcripts no-op’d; three Engineer transcripts no-op’d. Engineer `bc-e3e1c2a1` sat **~85 minutes** on #126 re-gating Vercel / synchronize / ready_for_review / merge — not planting.
+
+**Also today (not automations):** this PM bind (`bc-25c5c6bf`) has been live since 10:58 UTC. That is a second burn, separate from the pair-per-push.
+
+**Recut:** prompts now gate on **this commit** (`git diff --name-only HEAD~1`). SA only on a real `PM-PACKET-NNN` (not `*-TEST.md`). Engineer only on `SYSTEMS-CHANGE-PACKET`. Do not accept the seat until the gate passes. Human must re-paste at cursor.com/automations — I cannot Save + Activate. Pause both until the paste lands, or this push wakes another pair.
