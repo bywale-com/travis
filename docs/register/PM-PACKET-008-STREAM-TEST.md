@@ -71,6 +71,8 @@ Do **not** fail the walk because these are missing. They are out.
 
 Get to the place. 008 did not change how you open a room or the Log.
 
+**Today only.** The future test space is a sandbox — the tester is already in the place. Do not treat this Setup as that environment.
+
 ## 1. Get to the Log
 
 ### 1.1 Open the room

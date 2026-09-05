@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:09 UTC — **Test spec shape locked: Setup, then the packet.** Founder likes it. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:12 UTC — **Hold: future test space is a sandbox.** Tester is already in the place. Setup is for today, on this desk. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1745,3 +1745,13 @@ When we generate plates and packets (usually at the same time) we also generate 
 **Kind:** Lock. Founder: agree; like it; definitely perfect. Will read the 008 walk with that split in mind.
 
 **Lock:** A packet test spec has **Setup** (get a stranger to the desk — not scored as the pocket) then **the packet** (only what this packet established).
+
+---
+
+## 2026-09-05 16:12 UTC — Future test space is a sandbox (founder)
+
+**Kind:** Hold. Not this plate. Evolution of the test environment — not a recut of the 008 sheet.
+
+**Founder:** Worth mentioning now, since you did Setup in the environments we’re trying to build. That is **not** the evolution. They would not even need to get there. Some kind of **sandbox**. They would only ever be in the places they need to be.
+
+**Hold:** Today’s sheet still has Setup because the walk is this desk (preview / psi). The future space places the tester in the pocket. Setup falls away. Do not invent the sandbox. Do not strip Setup from 008.
