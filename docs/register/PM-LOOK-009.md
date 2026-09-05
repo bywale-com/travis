@@ -91,3 +91,5 @@ Walked from [`PM-PACKET-009-STREAM-CLOSE-TEST.md`](./PM-PACKET-009-STREAM-CLOSE-
 ## Loop
 
 Pass. Emerged. Human may walk the same sheet on this preview (SSO + email, then S.1 → R.1–R.3 → 1.1–1.5). Same PR. No cousin. No `fail-look`.
+
+Repo Actions secrets landed 2026-09-05. This line is the 009 letter fire (same Pass path). Not a recut.
