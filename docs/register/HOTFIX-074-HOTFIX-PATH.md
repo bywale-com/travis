@@ -13,6 +13,8 @@ Founder: we already have the automations. A hotfix does not need SA. Do not open
 
 Hang this bind was going to be PM-PACKET-010 → SA. Recut. Same cheap Action. No new Cursor automation.
 
+**Pick up.** The house Action is on this PR. The plant is the hang SQL below. Do it now.
+
 ## Cut — house (already on this PR)
 
 Same Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml).

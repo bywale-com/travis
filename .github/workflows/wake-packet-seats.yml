@@ -70,6 +70,9 @@ jobs:
           # "Hotfix NNN — …" (human tell). Skip SA. Do not re-wake Engineer
           # on later commits on the same PR (file not in this push).
           if echo "$files" | grep -qE '^docs/register/HOTFIX-[0-9]+-.+\.md$'; then
+            # Re-arm: label-added only fires on a fresh add. A leftover
+            # wake-engineer from an earlier push would otherwise stay silent.
+            gh pr edit "$pr" --remove-label wake-engineer || true
             gh pr edit "$pr" --add-label wake-engineer
             echo "Hotfix. Labeled #$pr wake-engineer. No wake-sa."
           elif echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$'; then
