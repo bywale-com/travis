@@ -14,7 +14,7 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **12:28 UTC 2026-09-05** (packet-chain automations). Flag **14:00**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **14:49 UTC 2026-09-05** (vision: PM-style seats + packet checklist). Flag **14:00**. |
 | Seat law | [`../README.md`](../README.md) § Product Manager · [`../seats/PRODUCT-MANAGER.md`](../seats/PRODUCT-MANAGER.md) · house [`house-now/protocols/pm.md`](./house-now/protocols/pm.md) |
 | Plates | [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) generate · [`PLATE-READ.md`](./PLATE-READ.md) read |
 | Packets 001–008 | [`PM-PACKETS.md`](./PM-PACKETS.md). 001–007 on **`main`**. **008** Stream on this PR — SA **024** + Engineer plant **here**. 007 Hear / Next / Skip still SA. |

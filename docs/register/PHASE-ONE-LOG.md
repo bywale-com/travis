@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 12:28 UTC — **Packet-chain automations written.** Packet → SA → Engineer, same PR. Save + Activate is human / local `/automate`. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 14:49 UTC — **Vision: Travis-spun seats are PM-style; packets carry a human checklist.** Automations lived. Grander idea not yet told. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1661,3 +1661,33 @@ Production-ready for a request line is smaller than production-ready as a compan
 
 **Ask:** Save + Activate A then B. After both are on, the next push to #126 wakes SA on 008.
 
+---
+
+## 2026-09-05 14:49 UTC — Vision so far (founder; automations lived)
+
+**Kind:** Vision. Not a packet. Grander idea not yet told. Founder: start with vision; confirm I am following.
+
+**Lived:** founder built the automations and saw the chain working live. Previous ideas started connecting.
+
+**Founder (seats inside Travis):**
+
+> the kinds of agents that we're going to be spinning up inside of Travis are not engineers or systems analysts, rarely. They're going to be PM-style agents. Why? Because we don't need an engineer, and we don't need an SA.
+
+Then: not quite true. We might need an SA **now** — not a packet to be worked on. Spin an SA and ask a question. Or better: that is an automation, because what would break the current protocol is bounded; we can know it ahead of time.
+
+**Hold:** that is not the biggest idea. Also hold everything from the last couple of discussions we put to the side.
+
+**Founder (second idea — test instructions on every packet):**
+
+When we generate plates and packets (usually at the same time) we also generate the **test instructions**. Build-passing is not enough. The human step is still critical. Simple user language. Exact use cases as discussed — not a vague statement. Step by step by step. Everything that should happen. What to expect on each step. The test is: do it, observe, follow this checklist. If anything is missing, wrap around with how it missed or what you observed. On every packet.
+
+**Parked (still held — do not lose):**
+
+- Initiative curate (after Stream)
+- Process-primitive recut / Find rename
+- Hear / Next / Skip (007)
+- Travis capability gap
+- Request-line door not on the glass until founder wants it
+- SA-now-for-a-question vs protocol-break automations (this stamp — hold)
+
+**Ask:** following so far — go to the grander idea.
