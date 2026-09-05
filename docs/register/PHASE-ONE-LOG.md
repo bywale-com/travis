@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:12 UTC — **Hold: future test space is a sandbox.** Tester is already in the place. Setup is for today, on this desk. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:30 UTC — **Test spec: “your ask” is a sentence you invent, not a phrase to type.** Flag 14:00 stands.
 
 **How we maintain this log**
 

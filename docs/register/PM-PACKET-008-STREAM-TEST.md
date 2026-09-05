@@ -47,9 +47,9 @@ That is the whole packet. Everything below is that, step by step.
 
 **Talk | Type:** use **Type** for this walk so the line is exact.
 
-**My line** — write this **before** you send. You will match it later. Keep it short. Something Travis has to actually work on (not just “ok”). Example shape: a real ask, one sentence.
+**Your ask** — invent a real sentence for Travis. Write it in the blank **now**, before you send anything. Later steps mean **this sentence**, not the words “your ask” or “my line.” Keep it short. Something he has to actually work on (not just “ok”). Example of the *kind* of thing — do not type the example unless you want to: `What’s on the desk in this room?`
 
-**My line:**
+**The sentence I will send:**
 
 ---
 
@@ -131,7 +131,7 @@ Do this **before** you send your line. Nobody should be working yet. If someone 
 
 ### 3.1 Send your line
 
-**Do:** Type **My line** exactly as you wrote it above. Send.
+**Do:** In the composer, type the sentence you wrote in Setup under **The sentence I will send.** Type those words. Not the label. Send.
 
 **Expect:** The send goes. You do not need a spoken reply for this walk.
 
@@ -183,7 +183,7 @@ Stay here. Do not close yet. Watch it. Fill each step as you see it.
 
 **Do:** Read the first body line — the line under the title, before any other work.
 
-**Expect:** That line is **My line** — the same words you sent. It stays there. It does not scroll away as the first thing in the pile.
+**Expect:** That line is the sentence you wrote in Setup — the same words you sent. It stays there. It does not scroll away as the first thing in the pile.
 
 **I saw:**
 
@@ -215,7 +215,7 @@ Stay here. Do not close yet. Watch it. Fill each step as you see it.
 
 **Do:** Look at the Log tape. Do **not** open Stream yet.
 
-**Expect:** His **finished** reply is **not** sitting on the Log as a completed turn yet (he is still working). Live work does not belong on that tape. Your **My line** may already be on the Log as your message. That is fine.
+**Expect:** His **finished** reply is **not** sitting on the Log as a completed turn yet (he is still working). Live work does not belong on that tape. Your sent sentence may already be on the Log as your message. That is fine.
 
 **I saw:**
 
@@ -223,7 +223,7 @@ Stay here. Do not close yet. Watch it. Fill each step as you see it.
 
 **Do:** Either tap the glowing Travis mark on the Log header, **or** room-title pill → glowing Travis mark.
 
-**Expect:** Stream opens again. Same title **Stream**. Same trigger (**My line**). The work you already saw is still there, plus anything new. It is the same stream, not a second empty one.
+**Expect:** Stream opens again. Same title **Stream**. Same trigger (the sentence you sent). The work you already saw is still there, plus anything new. It is the same stream, not a second empty one.
 
 **I saw:**
 
@@ -261,7 +261,7 @@ Stay here. Do not close yet. Watch it. Fill each step as you see it.
 
 ### 7.1 Find the finished Travis message
 
-**Do:** Scroll the Log to Travis’s **completed** reply to **My line**.
+**Do:** Scroll the Log to Travis’s **completed** reply to the sentence you sent.
 
 **Expect:** There is a finished Travis message on the tape. You can read it. This is completed work.
 
@@ -271,7 +271,7 @@ Stay here. Do not close yet. Watch it. Fill each step as you see it.
 
 **Do:** Look **immediately above** that finished Travis message. Not below. Not on your user line.
 
-**Expect:** A **card** sits **above** his completed message. The card says **Stream**. It shows **My line** (the trigger), not a fake caption.
+**Expect:** A **card** sits **above** his completed message. The card says **Stream**. It shows the sentence you sent (the trigger), not a fake caption.
 
 **I saw:**
 
@@ -287,7 +287,7 @@ Stay here. Do not close yet. Watch it. Fill each step as you see it.
 
 **Do:** Tap the Stream card.
 
-**Expect:** The Stream compartment opens. Title **Stream**. Top line is **My line**. Below: the same work you watched while it was live. Not empty. Not a different episode.
+**Expect:** The Stream compartment opens. Title **Stream**. Top line is the sentence you sent. Below: the same work you watched while it was live. Not empty. Not a different episode.
 
 **I saw:**
 
