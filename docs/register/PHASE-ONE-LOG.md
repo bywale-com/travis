@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 01:15 UTC — **S3 recut.** In flight is V6 + heartbeat, not the Engineer print. Photo [`plates/travis-s3-inflight-jobs-mission.png`](./plates/travis-s3-inflight-jobs-mission.png) on [#123](https://github.com/bywale-com/travis/pull/123). Not a packet. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 04:36 UTC — **Read signed 023.** Engineer drafted tape/card/dest-job. SA signed it. M1–M5 look-only. Founder has a product vision next. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1354,4 +1354,21 @@ Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tighten
 **Do not from this stamp:** plant heartbeat, mint a ping table, recut the other S plates, grow I1.
 
 **Ask:** like this S3 enough that it is the In flight photo? Recut S1/S2/S4/S5 the same way (V6/planted chrome, not a new identity)? Packet, or hold until dest is signed?
+
+---
+
+## 2026-09-05 04:36 UTC — Read 023 before the vision (this bind)
+
+**Kind:** Trail. Not a packet. Not a plate. Founder: look at the most recent packet the Engineer created, and the essay SA just signed, so the vision has absolute context.
+
+**Read (this PR [#123](https://github.com/bywale-com/travis/pull/123)):**
+
+- Engineer draft: `57f6047` — tape, card, dest job. Labor leaves his mouth. One hidden card on the Log. In flight is seats. Cuts left open.
+- SA signed 04:25 UTC: [`SYSTEMS-CHANGE-PACKET-023-TAPE.md`](./SYSTEMS-CHANGE-PACKET-023-TAPE.md). Closed the cuts: mutate-the-tape / unseat / SSE / create-sit-on-queue = **named silence**. Card hang **B**. Catalog fallback **dies**. Mint `travis.dest_job`. Blocking send dies.
+- Glass look-only: [`PLATES-MOTION-LOG.md`](./PLATES-MOTION-LOG.md) M1–M5 — Let me get to that → card under the line → interrupt the card stays → tape done, BA is the next turn.
+- S3 recut still of record for In flight. 022 stays on [#120](https://github.com/bywale-com/travis/pull/120), plant after this gate.
+
+**Do not from this stamp:** invent the vision, recut M1–M5, plant 023, mix Type A dest with Type B chrome.
+
+**Ask:** the vision — go.
 
