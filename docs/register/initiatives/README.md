@@ -35,6 +35,7 @@ A little context: what the pocket was, what changed, the PR. Point at the packet
 | 022 | [`022-ports/`](https://github.com/bywale-com/travis/tree/cursor/envelope-travis-ports-0bd3/docs/register/initiatives/022-ports) | [#120](https://github.com/bywale-com/travis/pull/120) (signed, not planted) |
 | 023 | [`023-tightness/`](./023-tightness/) | [#123](https://github.com/bywale-com/travis/pull/123) |
 | 024 | [`024-stream/`](./024-stream/) | [#126](https://github.com/bywale-com/travis/pull/126) |
+| 025 | [`025-stream-close/`](./025-stream-close/) | [#127](https://github.com/bywale-com/travis/pull/127) |
 
 ## Must-not
 

@@ -1,12 +1,17 @@
 /**
  * SCP-024 — Stream store. Live grain is rows. The Log tape stays completed.
+ * SCP-025 — Travis close hangs on this trigger’s answering post, not session-latest.
  * Founder lands the table. ensure-once + migrate + Drizzle.
  */
-import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gt, inArray, sql } from "drizzle-orm";
 import {
+  decideTravisStreamClose,
   lastEventOfKind,
   nextStreamMessage,
+  pickAnsweringPost,
+  pickFoundingFallbackPost,
   processEventValues,
+  processFloorAt,
   streamShowsCard,
   type StreamEventGrain,
   type StreamGrain,
@@ -64,7 +69,51 @@ export async function ensureStreamStore(): Promise<void> {
       CONSTRAINT stream_event_seq_uniq UNIQUE (stream_id, seq)
     )
   `);
+  await backfillWalkStreamClose();
   streamStoreReady = true;
+}
+
+/** SCP-025 — named walk row only. Idempotent. Do not scan every stream. */
+async function backfillWalkStreamClose(): Promise<void> {
+  await db.execute(sql`
+    UPDATE travis.stream AS s
+    SET
+      close_turn_id = t.id,
+      status = 'completed',
+      closed_at = COALESCE(s.closed_at, now())
+    FROM travis.voice_turn AS t
+    WHERE t.session_id = '0e8875f8-283b-4dae-bf54-76c82a05b6ef'
+      AND t.seq = 747
+      AND t.kind = 'agent_post'
+      AND t.seat_key = 'travis'
+      AND s.session_id = t.session_id
+      AND s.id::text LIKE '643e3e50-%'
+  `);
+  await db.execute(sql`
+    INSERT INTO travis.stream_event (stream_id, seq, kind, body, tool)
+    SELECT
+      s.id,
+      COALESCE(
+        (SELECT MAX(e.seq) FROM travis.stream_event AS e WHERE e.stream_id = s.id),
+        0
+      ) + 1,
+      'message',
+      t.text,
+      ''
+    FROM travis.stream AS s
+    JOIN travis.voice_turn AS t
+      ON t.session_id = s.session_id
+     AND t.seq = 747
+     AND t.kind = 'agent_post'
+     AND t.seat_key = 'travis'
+    WHERE s.id::text LIKE '643e3e50-%'
+      AND NOT EXISTS (
+        SELECT 1
+        FROM travis.stream_event AS e
+        WHERE e.stream_id = s.id
+          AND e.kind = 'message'
+      )
+  `);
 }
 
 async function latestUserTrigger(sessionId: string) {
@@ -412,29 +461,80 @@ export async function travisLaborStillOpen(sessionId: string): Promise<boolean> 
 export async function maybeCloseTravisStream(params: {
   sessionId: string;
   failed?: boolean;
+  foundingFallback?: boolean;
 }): Promise<void> {
   const binding = await travisBinding();
   if (!binding) return;
   if (await travisLaborStillOpen(params.sessionId)) return;
   const live = await liveStreamForBinding(params.sessionId, binding.id);
   if (!live) return;
-  const [closeTurn] = await db
-    .select()
+
+  const [trigger] = await db
+    .select({ seq: voiceTurn.seq })
     .from(voiceTurn)
-    .where(
-      and(
-        eq(voiceTurn.sessionId, params.sessionId),
-        eq(voiceTurn.kind, "agent_post"),
-        eq(voiceTurn.seatKey, "travis"),
-        eq(voiceTurn.speakable, true),
-      ),
-    )
-    .orderBy(desc(voiceTurn.seq))
+    .where(eq(voiceTurn.id, live.triggerTurnId))
     .limit(1);
+
+  const [lastProcess] = await db
+    .select({ createdAt: streamEvent.createdAt })
+    .from(streamEvent)
+    .where(
+      and(eq(streamEvent.streamId, live.id), eq(streamEvent.kind, "process")),
+    )
+    .orderBy(desc(streamEvent.createdAt))
+    .limit(1);
+  const processFloor = processFloorAt(lastProcess?.createdAt, live.createdAt);
+
+  const afterTrigger = trigger
+    ? await db
+        .select({
+          id: voiceTurn.id,
+          seq: voiceTurn.seq,
+          createdAt: voiceTurn.createdAt,
+        })
+        .from(voiceTurn)
+        .where(
+          and(
+            eq(voiceTurn.sessionId, params.sessionId),
+            eq(voiceTurn.kind, "agent_post"),
+            eq(voiceTurn.seatKey, "travis"),
+            eq(voiceTurn.speakable, true),
+            gt(voiceTurn.seq, trigger.seq),
+          ),
+        )
+        .orderBy(desc(voiceTurn.seq))
+    : [];
+
+  const answering = pickAnsweringPost(
+    afterTrigger,
+    trigger?.seq ?? -1,
+    processFloor,
+  );
+  const founding = pickFoundingFallbackPost(
+    afterTrigger,
+    trigger?.seq ?? -1,
+  );
+  const decision = decideTravisStreamClose({
+    laborOpen: false,
+    failed: params.failed,
+    foundingFallback: params.foundingFallback,
+    answeringPostId: answering?.id ?? null,
+    foundingFallbackPostId: founding?.id ?? null,
+  });
+
+  if (decision.action === "stay") return;
+  if (decision.action === "fail-without-card") {
+    await closeStream({
+      streamId: live.id,
+      status: "failed",
+      closeTurnId: null,
+    });
+    return;
+  }
   await closeStream({
     streamId: live.id,
-    status: params.failed ? "failed" : "completed",
-    closeTurnId: closeTurn?.id ?? null,
+    status: "completed",
+    closeTurnId: decision.closeTurnId,
   });
 }
 

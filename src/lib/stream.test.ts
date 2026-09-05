@@ -1,9 +1,13 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  decideTravisStreamClose,
   glowFromLive,
   nextStreamMessage,
+  pickAnsweringPost,
+  pickFoundingFallbackPost,
   processEventValues,
+  processFloorAt,
   processFromCursorEvent,
   streamPollMs,
   streamShowsCard,
@@ -80,4 +84,97 @@ test("phone poll stays in the 1–3s jitter", () => {
   assert.equal(streamPollMs(0), 1000);
   const high = streamPollMs(0.999);
   assert.ok(high >= 1000 && high < 3000);
+});
+
+test("answering post is after this trigger and after this process, not session-latest", () => {
+  const triggerSeq = 746;
+  const processFloor = processFloorAt("2026-09-05T16:32:35.000Z", "2026-09-05T16:32:35.000Z");
+  const old = {
+    id: "745",
+    seq: 745,
+    createdAt: "2026-09-05T10:41:00.000Z",
+  };
+  const answer = {
+    id: "747",
+    seq: 747,
+    createdAt: "2026-09-05T16:32:46.000Z",
+  };
+  assert.equal(
+    pickAnsweringPost([old, answer], triggerSeq, processFloor)?.id,
+    "747",
+  );
+  assert.equal(pickAnsweringPost([old], triggerSeq, processFloor), null);
+  assert.equal(
+    pickFoundingFallbackPost([old, answer], triggerSeq)?.id,
+    "747",
+  );
+  assert.equal(pickFoundingFallbackPost([old], triggerSeq), null);
+});
+
+test("founding fallback hangs after the trigger when he never spoke after tools", () => {
+  const founding = {
+    id: "founding",
+    seq: 800,
+    createdAt: "2026-09-05T16:40:00.000Z",
+  };
+  const floor = processFloorAt(
+    "2026-09-05T16:40:10.000Z",
+    "2026-09-05T16:39:50.000Z",
+  );
+  assert.equal(pickAnsweringPost([founding], 799, floor), null);
+  assert.equal(pickFoundingFallbackPost([founding], 799)?.id, "founding");
+});
+
+test("close stays live until the answering post; failed with no post has no card", () => {
+  assert.deepEqual(
+    decideTravisStreamClose({
+      laborOpen: true,
+      answeringPostId: "747",
+      foundingFallbackPostId: null,
+    }),
+    { action: "stay" },
+  );
+  assert.deepEqual(
+    decideTravisStreamClose({
+      laborOpen: false,
+      answeringPostId: null,
+      foundingFallbackPostId: null,
+    }),
+    { action: "stay" },
+  );
+  assert.deepEqual(
+    decideTravisStreamClose({
+      laborOpen: false,
+      answeringPostId: "747",
+      foundingFallbackPostId: "745",
+    }),
+    { action: "close", closeTurnId: "747" },
+  );
+  assert.deepEqual(
+    decideTravisStreamClose({
+      laborOpen: false,
+      failed: true,
+      answeringPostId: "747",
+      foundingFallbackPostId: null,
+    }),
+    { action: "close", closeTurnId: "747" },
+  );
+  assert.deepEqual(
+    decideTravisStreamClose({
+      laborOpen: false,
+      failed: true,
+      answeringPostId: null,
+      foundingFallbackPostId: null,
+    }),
+    { action: "fail-without-card" },
+  );
+  assert.deepEqual(
+    decideTravisStreamClose({
+      laborOpen: false,
+      foundingFallback: true,
+      answeringPostId: null,
+      foundingFallbackPostId: "founding",
+    }),
+    { action: "close", closeTurnId: "founding" },
+  );
 });

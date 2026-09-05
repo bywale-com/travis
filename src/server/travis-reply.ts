@@ -6,6 +6,7 @@ import {
   insertUserTurn,
   type SendFn,
 } from "@/server/seat-pipe";
+import { maybeCloseTravisStream } from "@/server/stream";
 import type { VoiceTurn } from "@/server/db/schema";
 
 type Send = (event: string, data: unknown) => void;
@@ -29,6 +30,7 @@ export async function pipeTravisText(params: {
 
   if (!travisIsWired()) {
     const status = await insertStatusTurn(sessionId, "Travis isn’t wired");
+    await maybeCloseTravisStream({ sessionId, failed: true }).catch(() => {});
     send("done", {
       matched: true,
       mode: "stand-in",
@@ -49,6 +51,7 @@ export async function pipeTravisText(params: {
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     const status = await insertStatusTurn(sessionId, `Travis: ${msg}`);
+    await maybeCloseTravisStream({ sessionId, failed: true }).catch(() => {});
     send("done", {
       matched: true,
       mode: "error",
@@ -73,6 +76,10 @@ export async function pipeTravisText(params: {
     userTurn.id,
   );
   await runMotionRunner(sessionId);
+  await maybeCloseTravisStream({
+    sessionId,
+    foundingFallback: true,
+  }).catch(() => {});
   send("done", {
     matched: true,
     mode: "real",

@@ -167,3 +167,79 @@ export function argsBody(args: Record<string, unknown>): string {
 export function streamPollMs(random = Math.random()): number {
   return 1000 + Math.floor(random * 2000);
 }
+
+/** SCP-025 — hang on this episode’s answering post, not session-latest. */
+export type TravisCloseCandidate = {
+  id: string;
+  seq: number;
+  createdAt: Date | string | number;
+};
+
+export function processFloorAt(
+  lastProcessCreatedAt: Date | string | number | null | undefined,
+  streamCreatedAt: Date | string | number,
+): Date {
+  if (lastProcessCreatedAt != null) return new Date(lastProcessCreatedAt);
+  return new Date(streamCreatedAt);
+}
+
+export function isAnsweringPost(params: {
+  post: TravisCloseCandidate;
+  triggerSeq: number;
+  processFloor: Date | string | number;
+}): boolean {
+  if (params.post.seq <= params.triggerSeq) return false;
+  return (
+    new Date(params.post.createdAt).getTime() >=
+    new Date(params.processFloor).getTime()
+  );
+}
+
+export function pickAnsweringPost(
+  posts: TravisCloseCandidate[],
+  triggerSeq: number,
+  processFloor: Date | string | number,
+): TravisCloseCandidate | null {
+  let picked: TravisCloseCandidate | null = null;
+  for (const post of posts) {
+    if (!isAnsweringPost({ post, triggerSeq, processFloor })) continue;
+    if (!picked || post.seq > picked.seq) picked = post;
+  }
+  return picked;
+}
+
+/** Founding-only: he never spoke after tools. Still after this trigger. */
+export function pickFoundingFallbackPost(
+  posts: TravisCloseCandidate[],
+  triggerSeq: number,
+): TravisCloseCandidate | null {
+  let picked: TravisCloseCandidate | null = null;
+  for (const post of posts) {
+    if (post.seq <= triggerSeq) continue;
+    if (!picked || post.seq > picked.seq) picked = post;
+  }
+  return picked;
+}
+
+export type TravisCloseDecision =
+  | { action: "stay" }
+  | { action: "close"; closeTurnId: string }
+  | { action: "fail-without-card" };
+
+export function decideTravisStreamClose(params: {
+  laborOpen: boolean;
+  failed?: boolean;
+  foundingFallback?: boolean;
+  answeringPostId: string | null;
+  foundingFallbackPostId: string | null;
+}): TravisCloseDecision {
+  if (params.laborOpen) return { action: "stay" };
+  if (params.answeringPostId) {
+    return { action: "close", closeTurnId: params.answeringPostId };
+  }
+  if (params.failed) return { action: "fail-without-card" };
+  if (params.foundingFallback && params.foundingFallbackPostId) {
+    return { action: "close", closeTurnId: params.foundingFallbackPostId };
+  }
+  return { action: "stay" };
+}

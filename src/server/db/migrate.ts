@@ -522,7 +522,47 @@ async function main() {
     )
   `;
 
-  console.log("travis schema + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion + SCP-015 sit + SCP-023 dest_job + SCP-024 stream ready");
+  await sql`
+    UPDATE travis.stream AS s
+    SET
+      close_turn_id = t.id,
+      status = 'completed',
+      closed_at = COALESCE(s.closed_at, now())
+    FROM travis.voice_turn AS t
+    WHERE t.session_id = '0e8875f8-283b-4dae-bf54-76c82a05b6ef'
+      AND t.seq = 747
+      AND t.kind = 'agent_post'
+      AND t.seat_key = 'travis'
+      AND s.session_id = t.session_id
+      AND s.id::text LIKE '643e3e50-%'
+  `;
+  await sql`
+    INSERT INTO travis.stream_event (stream_id, seq, kind, body, tool)
+    SELECT
+      s.id,
+      COALESCE(
+        (SELECT MAX(e.seq) FROM travis.stream_event AS e WHERE e.stream_id = s.id),
+        0
+      ) + 1,
+      'message',
+      t.text,
+      ''
+    FROM travis.stream AS s
+    JOIN travis.voice_turn AS t
+      ON t.session_id = s.session_id
+     AND t.seq = 747
+     AND t.kind = 'agent_post'
+     AND t.seat_key = 'travis'
+    WHERE s.id::text LIKE '643e3e50-%'
+      AND NOT EXISTS (
+        SELECT 1
+        FROM travis.stream_event AS e
+        WHERE e.stream_id = s.id
+          AND e.kind = 'message'
+      )
+  `;
+
+  console.log("travis schema + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion + SCP-015 sit + SCP-023 dest_job + SCP-024 stream + SCP-025 walk close ready");
   await sql.end();
 }
 

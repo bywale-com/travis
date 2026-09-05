@@ -32,6 +32,7 @@ import {
 import {
   closeStream,
   liveStreamForBinding,
+  maybeCloseTravisStream,
   messageBodies,
   openStream,
   setStreamCursorRun,
@@ -338,6 +339,7 @@ export async function insertAgentPostTurn(
   if (speakable && seatKey === "travis") {
     await hangOrphanMotionsOn(sessionId, row.id).catch(() => {});
     await mirrorTravisMessage(sessionId, text).catch(() => {});
+    await maybeCloseTravisStream({ sessionId }).catch(() => {});
   }
   return row;
 }
@@ -428,6 +430,7 @@ export async function absorbLiveTravisPost(
   if (posted?.id) {
     await hangOrphanMotionsOn(sessionId, posted.id).catch(() => {});
     await mirrorTravisMessage(sessionId, posted.text).catch(() => {});
+    await maybeCloseTravisStream({ sessionId }).catch(() => {});
   }
   return posted;
 }
