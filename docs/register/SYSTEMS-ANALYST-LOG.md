@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 04:25 UTC — **SCP-023 signed.** Dest is a job, not mail. Catalog fallback dies. Card hangs on motion (B). Packet: [`SYSTEMS-CHANGE-PACKET-023-TAPE.md`](./SYSTEMS-CHANGE-PACKET-023-TAPE.md) on PR **#123**. 022 stays on [#120](https://github.com/bywale-com/travis/pull/120) — plant after this gate.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 10:19 UTC — **SCP-023 signed.** Dest is a job, not mail. Backlog-verb findings hung on this initiative: [`initiatives/023-tightness/BACKLOG-VERBS.md`](./initiatives/023-tightness/BACKLOG-VERBS.md). Not a new ticket.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -414,3 +414,19 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-023-TAPE.md`](./SYSTEMS-CHANGE-PACKET-023-TAPE.md) now **signed**.
 
 **Handoff:** Engineer plants thread truth → card B → gate + dest_job on #123. Next packet number is **024**.
+
+---
+
+## 2026-09-05 10:19 UTC — Backlog verbs (combined request, hung on 023)
+
+**Kind:** Findings. Combined hand: look at the face, then delete / complete / …. **Not a new ticket. Not 024.**
+
+**Ascribed** on [`initiatives/023-tightness/BACKLOG-VERBS.md`](./initiatives/023-tightness/BACKLOG-VERBS.md):
+
+1. Complete and rename are already writes. Missing on the ticket face. Founder + Travis (when asked). Seats never. Seat finish ≠ done.
+2. Discard is the hole. Unused → delete row + unstamp founding (request again). Used → refuse; do not call it done. No `void` status.
+3. Reopen is the mirror of accidental Done.
+4. Hold stays the only promote. No priority, assignee, merge, archive.
+5. Gate: mailing complete/delete is **his**.
+
+**Handoff:** 023 plant order unchanged. A slim follow-on plants discard + reopen + Done on the ticket if the founder seats it.
