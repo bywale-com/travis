@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:44 UTC — **PM-PACKET-009 Stream close / card hang.** Every packet gets a packet test. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:46 UTC — **009 on [#127](https://github.com/bywale-com/travis/pull/127).** #126 merged. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1803,3 +1803,9 @@ What's on the desk in this room?
 **Locked:** [`PM-PACKET-009-STREAM-CLOSE.md`](./PM-PACKET-009-STREAM-CLOSE.md) · test [`PM-PACKET-009-STREAM-CLOSE-TEST.md`](./PM-PACKET-009-STREAM-CLOSE-TEST.md). Same PR #126. SA **025**. Do not remint 024 tables. Stream does not auto-open. Card hangs on **this** episode’s completed line.
 
 **Sentence for the new walk:** `Name the open initiatives.`
+
+---
+
+## 2026-09-05 16:46 UTC — 009 lives on #127
+
+**Kind:** Correction. #126 merged 16:26. 009 + later 008-walk stamps were still on the branch. Opened [#127](https://github.com/bywale-com/travis/pull/127). SA/Engineer land there.
