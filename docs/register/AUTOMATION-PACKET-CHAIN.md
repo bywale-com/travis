@@ -134,7 +134,7 @@ Founder lock 2026-09-05: emerge is silent unless something lands in the inbox. W
 **How (cheap, same Action):**
 
 1. **Floor (no new secret):** open one GitHub issue, assigned to you, body = the letter. GitHub already emails assignments. One issue per NNN.
-2. **Real mailbox letter:** same Action POSTs Resend when these **GitHub** secrets exist — `EMERGE_EMAIL`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`. Vercel’s key does not count until it is copied to the repo Actions secrets. Attachment is the `*-TEST.md`.
+2. **Real mailbox letter:** same Action POSTs Resend when these **GitHub** secrets exist — `EMERGE_EMAIL`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`. Vercel’s key does not count until it is copied to the repo Actions secrets. Attachment is the `*-TEST.md`. To = the inbox already used as `TEST_EMAIL_TO`. After the three secrets are on the repo, **Actions → Wake packet seats → Run workflow → `009`** sends this one.
 
 Do not send this through Travis operator mail. Same vendor is fine. Same product path is not.
 

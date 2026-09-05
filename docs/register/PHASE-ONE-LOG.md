@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 18:40 UTC — Emerge letter is email. Not Travis. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 18:51 UTC — Emerge mail fields are here. GitHub secrets still human. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1985,3 +1985,21 @@ What's on the desk in this room?
 **Floor:** one GitHub issue assigned to you (GitHub already emails that). **Real letter:** GitHub secrets `EMERGE_EMAIL` · `RESEND_API_KEY` · `RESEND_FROM_EMAIL`. Do not send through Travis operator mail.
 
 **009:** already emerged. This Action will not retro-fire. Backfill letter: [issue #129](https://github.com/bywale-com/travis/issues/129) (the sheet, verbatim).
+
+---
+
+## 2026-09-05 18:51 UTC — Emerge mail fields (founder)
+
+**Kind:** House. Not a product packet. Do not mint a store.
+
+**Have:** Resend key, verified From on `mail.try-tower.com`, To = the `TEST_EMAIL_TO` inbox. That is the whole letter.
+
+**Do not put on GitHub:** database URL, Twilio, Vercel token. Those are not this beat.
+
+**Still human:** this seat cannot write repo Actions secrets (403). Paste three on `bywale-com/travis` → Settings → Secrets and variables → Actions:
+
+- `EMERGE_EMAIL` — that same inbox
+- `RESEND_API_KEY`
+- `RESEND_FROM_EMAIL`
+
+Then run **Wake packet seats** with `009`. A send from this VM was blocked (Cloudflare 1010). GitHub’s IPs are the real path. Same vendor as magic-link. Not Travis operator mail.

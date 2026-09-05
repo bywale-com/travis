@@ -13,10 +13,15 @@ on:
       - "docs/register/SYSTEMS-CHANGE-PACKET-*.md"
       - "docs/register/PM-LOOK-*.md"
       - "src/**"
+  workflow_dispatch:
+    inputs:
+      nnn:
+        description: Packet number to letter (e.g. 009)
+        required: true
 
 jobs:
   label:
-    if: github.ref != 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -170,3 +175,99 @@ PY
               fi
             fi
           fi
+
+  emerge-now:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Send emerge letter for one packet
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EMERGE_EMAIL: ${{ secrets.EMERGE_EMAIL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_FROM_EMAIL: ${{ secrets.RESEND_FROM_EMAIL }}
+          NNN: ${{ github.event.inputs.nnn }}
+        run: |
+          set -euo pipefail
+          nnn=$(echo "$NNN" | tr -cd '0-9')
+          if [[ -z "$nnn" ]]; then
+            echo "Need a packet number."
+            exit 1
+          fi
+          nnn=$(printf '%03d' "$((10#$nnn))")
+          testfile=$(git ls-tree -r --name-only HEAD | grep -E "^docs/register/PM-PACKET-${nnn}-.+-TEST\\.md$" | head -n 1 || true)
+          look="docs/register/PM-LOOK-${nnn}.md"
+          preview=""
+          if [[ -f "$look" ]]; then
+            preview=$(sed -n 's/^\*\*Preview:\*\* //p' "$look" | head -n 1)
+          fi
+          repo=$(gh repo view --json nameWithOwner --jq .nameWithOwner)
+          pr=$(gh pr list --state open --json number,files --jq '.[0].number // empty' || true)
+          letter=$(mktemp)
+          {
+            echo "${nnn} emerged. Human test."
+            echo
+            if [[ -n "$pr" ]]; then
+              echo "PR: https://github.com/${repo}/pull/${pr}"
+            fi
+            if [[ -n "$preview" ]]; then
+              echo "Preview: ${preview}"
+            fi
+            echo "Look: Pass. Walk the sheet. SSO / Talk / a typed sentence are still yours."
+            echo
+            echo "This is house mail. Not Travis."
+            echo
+            if [[ -n "$testfile" ]]; then
+              echo "Sheet: \`${testfile}\`"
+              echo
+              echo "---"
+              echo
+              cat "$testfile"
+            else
+              echo "No PM-PACKET-${nnn}-*-TEST.md on this commit."
+            fi
+          } > "$letter"
+          if [[ -n "${EMERGE_EMAIL:-}" && -n "${RESEND_API_KEY:-}" && -n "${RESEND_FROM_EMAIL:-}" ]]; then
+            att=""
+            if [[ -n "$testfile" ]]; then
+              att=$(mktemp)
+              cat "$testfile" > "$att"
+            fi
+            python3 - "$letter" "${nnn}" "$att" "${testfile:-}" <<'PY'
+import base64, json, os, sys, urllib.request
+letter_path, nnn, att, testfile = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+body = open(letter_path, encoding="utf-8").read()
+payload = {
+    "from": os.environ["RESEND_FROM_EMAIL"],
+    "to": [os.environ["EMERGE_EMAIL"]],
+    "subject": f"{nnn} emerged — walk this sheet",
+    "text": body,
+}
+if att:
+    raw = open(att, "rb").read()
+    payload["attachments"] = [{
+        "filename": (testfile or "packet-test.md").rsplit("/", 1)[-1],
+        "content": base64.b64encode(raw).decode("ascii"),
+    }]
+req = urllib.request.Request(
+    "https://api.resend.com/emails",
+    data=json.dumps(payload).encode("utf-8"),
+    headers={
+        "Authorization": f"Bearer {os.environ['RESEND_API_KEY']}",
+        "Content-Type": "application/json",
+    },
+    method="POST",
+)
+with urllib.request.urlopen(req, timeout=30) as resp:
+    print("Resend", resp.status, resp.read().decode()[:300])
+PY
+            rm -f "$att"
+          else
+            echo "Missing EMERGE_EMAIL or RESEND_API_KEY or RESEND_FROM_EMAIL on this repo."
+            exit 1
+          fi
+          rm -f "$letter"
