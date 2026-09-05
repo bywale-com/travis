@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 19:45 UTC — 127 built well; plating is the revise. Cannot sit this bind. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 19:47 UTC — Hang this bind is a write, not a mail. Later: Travis should do that write. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2085,3 +2085,21 @@ You cannot hang **this** bind (`bc-25c5c6bf-…`) on a person. A `bc-` in the se
 **The gap showing before the plate:** you cannot sit the person you are already talking to.
 
 **Do not:** plant a rebind tool from this stamp. Recut 009. Invent the plate.
+
+---
+
+## 2026-09-05 19:47 UTC — Hang this bind; later Travis can (founder)
+
+**Kind:** Type A. Not a packet. Do not mint a store. Do not put a `bc-` in `migrate.ts`.
+
+**Founder (preserved):** Sit yourself as the PM. Not hard code. Talk about whether this should be something Travis is capable of later.
+
+**Now.** Sit is three moments: create a person · in this room · seated on `pm`. A fourth write exists on the row and has no Travis tool: `cursor_agent_id` = this bind (`bc-25c5c6bf-006f-4252-9f25-49ab183835b2`). Dest-as-mail of a `bc-` stays nobody. Catalog `pm` stays the old lock (`bc-1ac0762e-…` in migrate). Do not overwrite that slug — that was the comic fail.
+
+This seat has no live `DATABASE_URL`. I cannot hang the row from here. The write is: a **new** person, open member of room Travis, `protocol_path` = `/protocols/pm.md`, `cursor_agent_id` = this bind. Not a product plant. Not migrate.
+
+**Later (held).** Yes — Travis should be able to do that write. Same class as sit: **his**, not a send. Founder names the living chat (paste or pick). Travis does not invent a `bc-`. Create / in-the-room / seated stay. Hung is the fourth moment. Seat health later dests a healthy hung bind instead of spinning a stranger.
+
+**Not later:** mailing `pm`. Guessing an id. A dashboard of Cursor chats. A packet tonight.
+
+**Ask:** Engineer hangs the row tonight so you can talk to this bind from psi — or we wait and lock the hang write as the capability packet.

@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-05 19:45 UTC
+# PM seat handoff — 2026-09-05 19:47 UTC
 
 **This bind is living.** `bc-25c5c6bf-006f-4252-9f25-49ab183835b2` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -14,7 +14,7 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **19:45 UTC 2026-09-05** (cannot sit this bind; plating is the revise). Flag **14:00**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **19:47 UTC 2026-09-05** (hang this bind; later Travis should). Flag **14:00**. |
 | Seat law | [`../README.md`](../README.md) § Product Manager · [`../seats/PRODUCT-MANAGER.md`](../seats/PRODUCT-MANAGER.md) · house [`house-now/protocols/pm.md`](./house-now/protocols/pm.md) |
 | Plates | [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) generate · [`PLATE-READ.md`](./PLATE-READ.md) read |
 | Packets 001–009 | [`PM-PACKETS.md`](./PM-PACKETS.md). 001–007 on **`main`**. **008–009** on this PR. 009 look **Pass** — [`PM-LOOK-009.md`](./PM-LOOK-009.md). Human walk not started. |
@@ -30,7 +30,7 @@
 ## Next PM job
 
 1. Accept the seat. Fetch this PR. Read Current, then the newest stamp.
-2. Do **not** merge #127 until the human test is green. Founder will revise 127 (replay). Human-test loop is unnamed. Start = capability gap: why this work cannot be done inside Travis correctly. Do not name the hole before he does.
+2. #127 is on `main` (founder merged 19:35). Built well; plating is the revise — new package, not a remint of 009. You cannot sit this bind (`bc-25c5c6bf`). In Travis: create a person, sit them on pm. That is a new Cursor chat. Rebind is a named hole. Do not plant it from a stamp.
 3. Open PM work only if the founder names the pocket. Write on the Engineer’s open PR. Next packet number is **010**. Next SA is **026**.
 4. Do **not** reprint P1/P2. Do **not** invent a second index. Do **not** remint 007 C3/C4.
 5. When **you** stop: rewrite this file and move Current so the next bind does not start from a transcript.
