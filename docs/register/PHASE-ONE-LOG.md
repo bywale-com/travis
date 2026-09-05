@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 04:50 UTC — **Public moment constraints.** Video + request access. Not open source. Not Astra. K-shaped. Show, don’t jargon. Canvas/glasses are vision. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 04:55 UTC — **Request line is real.** Not OSS. If they ask, they get in. Time-bounded. They leave with their work. Travis’s model is gated. Canvas later this week. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1407,4 +1407,37 @@ Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tighten
 Request access is a **product constraint**. The store/control is SA when locked. I will not mint it.
 
 **Ask:** lock these constraints as the public-moment law (this stamp is the hold), or cut a short FACE for the video + request-access door? Demo this week = planted 023 walk, canvas/glasses spoken as next — or do you want canvas as a named plant *this* pocket (SA has not ascribed it; 023 refused the store)?
+
+---
+
+## 2026-09-05 04:55 UTC — Request line: get in, leave with your work (founder)
+
+**Kind:** Type A. Tightens the public-moment door. **Not a new flag.** Not a packet. Not a store.
+
+**Founder (preserved):**
+
+- Canvas: eventually, next couple of days / within the week. Not this clarification.
+- Request line is **real**. Definitely **not open source**.
+- If someone requests, they **get in**. Not stuck. Access for a certain amount of time. Then maybe pay — not sure. Must not feel obliged.
+- Must not feel vendor-locked: their data, they can take it; they must not leave something behind that they can only have if they pay.
+- Production-ready **in that regard**.
+- No emphasis on models. Underlying model for **Travis itself** (not Cursor): they will not be allowed to modify it. No changing models. It’s just what you got. Gated.
+
+**Ask (founder):** what’s your advice, from a vision level.
+
+**Do not from this stamp:** mint a waitlist/billing/export table, plant OSS, plant a model picker, plant canvas, write the video.
+
+---
+
+**PM (vision, labeled alignment — not the flag)**
+
+The request line is hospitality with a clock, not a funnel.
+
+If they ask, they walk into a real Travis room and do the 14:00 loop. When the time is up, the hosted mouth can go quiet. **Their work does not.** That is the anti-lock: export / take the room with you. The thing you keep charging for (if you ever do) is Travis running — not their files, log, or backlog held hostage.
+
+Not open source means the **product** is hosted. The **brain** is yours. No model menu is not a missing feature; it is the same law as “don’t look at Cursor.” They came for Travis, not to pick a vendor.
+
+Production-ready for a request line is smaller than production-ready as a company. Ready enough: a stranger gets in, talks, works, leaves with their stuff, never sees your house or your keys, cannot retune his mouth. Billing can stay unnamed. Canvas can land later this week as you said.
+
+**Ask:** is “get in / clock / leave with your work / mouth is gated” the hold on the request line? If yes, I will not packet until you want the door on the glass — SA ascribes the grant + export; I will not mint it.
 
