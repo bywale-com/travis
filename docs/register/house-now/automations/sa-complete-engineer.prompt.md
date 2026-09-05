@@ -14,9 +14,10 @@ git diff --name-only HEAD~1
 
 If `HEAD~1` does not exist, use `git diff --name-only --diff-filter=A HEAD`.
 
-**Run only if this commit** added or materially revised:
+**Run only if this commit** added or materially revised **either**:
 
-`docs/register/SYSTEMS-CHANGE-PACKET-*.md`
+1. `docs/register/SYSTEMS-CHANGE-PACKET-*.md` (SA just completed), **or**
+2. `docs/register/PM-LOOK-*.md` whose **Verdict** is **Fail** (Technical PM look+test sent it back)
 
 If that list is empty: **stop immediately**. One short sentence if you must speak. No comment. No commit. No cousin PR. No memories. Do not read further.
 

@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 17:14 UTC — PM look+test before human test (vision). **009 planted** on [#127](https://github.com/bywale-com/travis/pull/127), not on `main`. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 17:46 UTC — Automation C (PM look+test) cut. **009 planted** on [#127](https://github.com/bywale-com/travis/pull/127). Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1874,3 +1874,13 @@ What's on the desk in this room?
 **Already on this trail — do not remint:** every packet has a `*-TEST.md` (Setup, then the packet; sentence provided). First human job is a tester walking that sheet. Future testers / gig / sandbox held.
 
 **New grain (held):** the sheet is also the PM automation’s script, for the steps a cloud agent can actually do (look at the preview, walk what it can). Human test is the rest. The chain grows one beat: plant → PM look+test → emerge → human. Wake the same way as SA/Engineer — a label after the plant, not every push.
+
+---
+
+## 2026-09-05 17:46 UTC — Automation C cut (founder)
+
+**Kind:** House. Not a product packet. Founder: SA/Engineer must not re-wake on #127; the PM look *can* run now because 009 is planted.
+
+**Landed:** [`house-now/automations/pm-look.prompt.md`](./house-now/automations/pm-look.prompt.md) · Action labels `wake-pm-look` on an `src/` plant · Engineer loop if `PM-LOOK` Verdict is Fail.
+
+**Human:** create `Travis — plant → PM look` at cursor.com/automations. Trigger: Label added / `wake-pm-look`. Computer use **on**. Memories off. PR creation off. Then add the label on #127 — do not add wake-sa or wake-engineer.

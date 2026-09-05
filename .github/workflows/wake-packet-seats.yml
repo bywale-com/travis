@@ -1,6 +1,6 @@
 # Cheap gate in front of Cursor Automations.
 # GitHub path filter + this-push diff. No Cursor boot until a label lands.
-# Human must change the two automations to "PR label changed" for wake-sa / wake-engineer.
+# Labels: wake-sa · wake-engineer · wake-pm-look
 # See docs/register/AUTOMATION-PACKET-CHAIN.md
 
 name: Wake packet seats
@@ -10,6 +10,8 @@ on:
     paths:
       - "docs/register/PM-PACKET-*.md"
       - "docs/register/SYSTEMS-CHANGE-PACKET-*.md"
+      - "docs/register/PM-LOOK-*.md"
+      - "src/**"
 
 jobs:
   label:
@@ -47,6 +49,7 @@ jobs:
 
           gh label create wake-sa --color CCCCCC --description "Cursor: wake SA" 2>/dev/null || true
           gh label create wake-engineer --color CCCCCC --description "Cursor: wake Engineer" 2>/dev/null || true
+          gh label create wake-pm-look --color CCCCCC --description "Cursor: wake Technical PM look+test" 2>/dev/null || true
 
           if echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$'; then
             gh pr edit "$pr" --add-label wake-sa
@@ -56,4 +59,21 @@ jobs:
           if echo "$files" | grep -E '^docs/register/SYSTEMS-CHANGE-PACKET-.+\.md$'; then
             gh pr edit "$pr" --add-label wake-engineer
             echo "Labeled #$pr wake-engineer"
+          fi
+
+          for f in $(echo "$files" | grep -E '^docs/register/PM-LOOK-.+\.md$' || true); do
+            if git show "$AFTER:$f" | grep -q '^\*\*Verdict:\*\* Fail'; then
+              gh pr edit "$pr" --add-label wake-engineer
+              echo "Labeled #$pr wake-engineer (PM look Fail)"
+              break
+            fi
+          done
+
+          if echo "$files" | grep -qE '^src/'; then
+            if git ls-tree -r --name-only "$AFTER" | grep -qE '^docs/register/SYSTEMS-CHANGE-PACKET-'; then
+              if git ls-tree -r --name-only "$AFTER" | grep -qE '^docs/register/PM-PACKET-[0-9]'; then
+                gh pr edit "$pr" --add-label wake-pm-look
+                echo "Labeled #$pr wake-pm-look"
+              fi
+            fi
           fi

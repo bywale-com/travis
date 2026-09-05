@@ -16,12 +16,14 @@ Cursor Automations cannot trigger “when an agent finishes.” Closest document
 
 ```text
 PM locks PM-PACKET-NNN on a PR
-        ↓  (PR opened / draft opened / PR pushed)
+        ↓  label wake-sa
 SA automation — full SA protocol
-        ↓  (SA pushes SYSTEMS-CHANGE-PACKET-NNN on the same PR)
+        ↓  label wake-engineer
 Engineer automation — full Engineer protocol
-        ↓
-plant stays on that same PR
+        ↓  label wake-pm-look  (src/ plant on a PR that already has packet + SCP)
+Technical PM look + what it can test
+        ↓  Fail → label wake-engineer (same PR)
+        ↓  Pass → emerge. Human walks the same sheet.
 ```
 
 **Same PR** is law. Do not open a cousin. Turn **off** “Pull request creation” on both automations if the UI lets you; the prompts also forbid it.
@@ -35,13 +37,15 @@ Cursor source-control triggers have **no path filter** (asked for; not shipped).
 ```text
 push touches a real PM-PACKET-NNN (not *-TEST.md)
         ↓  GitHub Action (no LLM)
-label  wake-sa  on this PR
-        ↓  Cursor trigger: PR label changed (wake-sa)
-SA automation — full SA protocol
-        ↓  SA pushes SYSTEMS-CHANGE-PACKET
-GitHub Action labels  wake-engineer
-        ↓  Cursor trigger: PR label changed (wake-engineer)
-Engineer automation — full Engineer protocol
+label  wake-sa
+        ↓
+SA → SYSTEMS-CHANGE-PACKET → label  wake-engineer
+        ↓
+Engineer plants src/ → label  wake-pm-look
+        ↓
+Technical PM look+test
+        Pass → emerge (human test)
+        Fail → label  wake-engineer  (loop)
 ```
 
 Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml). It diffs **this push** (`before…after`), not the whole PR. No Cursor token until the label is added.
@@ -93,12 +97,24 @@ That push is the Engineer trigger.
 
 ---
 
+## Automation C — Plant → Technical PM look+test
+
+**Name:** `Travis — plant → PM look`  
+**Triggers (any):** Source control — **Pull request label changed**, label **`wake-pm-look`** (added). Not PR pushed.  
+**Repository:** `bywale-com/travis`  
+**Tools:** Memories **off**. Pull request creation **off**. **Computer use on** — look is the preview.  
+**Prompt:** paste [`house-now/automations/pm-look.prompt.md`](./house-now/automations/pm-look.prompt.md) in full.
+
+This is the beat that can run on a **already planted** PR (009 / 025 on #127). SA and Engineer must not be re-woken for that.
+
+---
+
 ## Save + Activate (human or local `/automate`)
 
-1. **Pause both** at [cursor.com/automations](https://cursor.com/automations). Old “PR pushed” triggers are the leak.
-2. Switch **A** to label `wake-sa`, **B** to label `wake-engineer`. Re-paste prompts. Memories off. PR creation off. Save + Activate.
-3. The Action on this PR adds those labels only when this push touched a real packet / change packet.
-4. A vision stamp, test file, or plate edit must not boot Cursor.
+1. **A** / **B** stay label `wake-sa` / `wake-engineer`. Re-paste Engineer if the loop line (PM-LOOK Fail) is new.
+2. Create **C**. Trigger: Label added / `wake-pm-look`. Computer use on. Memories off. PR creation off. Paste the PM-look prompt. Save + Activate.
+3. To run the first look on #127: add `wake-pm-look` once C is Active. Do not add `wake-sa` or `wake-engineer` — 025 is already planted.
+4. Later plants: Action adds `wake-pm-look` when this push touched `src/` on a PR that already has a packet + change packet.
 
 ---
 

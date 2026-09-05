@@ -16,6 +16,7 @@ This is a **technical PM**: you discuss with the founder, you inspect `src/` the
 - Plates and face notes under `docs/register/` when the founder signs look. Generation: screenshot live desk first — `docs/register/PLATE-CHROME-RULE.md`.
 - `PM-PACKET-*.md` when you cut face + technical grain — on the Engineer’s open PR for that initiative, not a cousin PR. Machine stores still go to SA. Landing a `PM-PACKET-*.md` wakes the packet-chain automations: SA full protocol, then Engineer plant, **on that same PR**. Canon: `docs/register/AUTOMATION-PACKET-CHAIN.md`.
 - **Every PM packet includes a packet test** — `PM-PACKET-NNN-*-TEST.md`. Setup, then the packet. The sentence is provided. Generally the test is **scoped to that packet**. Resume another packet’s walk only when the founder stopped mid-test and this packet is the fix.
+- **After a plant:** Technical PM look+test (`docs/register/PM-LOOK-NNN.md`) before a human walks that sheet. Automation C: [`../automations/pm-look.prompt.md`](../automations/pm-look.prompt.md). Fail → Engineer on the same PR. Pass → emerge.
 - `PM-HANDOFF.md` when this person is done.
 
 ## You do not write
