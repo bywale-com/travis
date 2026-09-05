@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 19:04 UTC — Repo secrets are the right slot. Firing 009 letter. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 19:08 UTC — 009 letter sent. Resend 200. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2015,3 +2015,13 @@ Then run **Wake packet seats** with `009`. A send from this VM was blocked (Clou
 **Did:** this seat cannot `workflow_dispatch` (403). Re-pushed `PM-LOOK-009.md` still Pass so the same Action sends the letter. Not a recut. Not a Fail.
 
 The first fires died in 0s — a Python heredoc sat at column 1 and broke the workflow YAML. Sender is now `.github/scripts/send-emerge-letter.py`. Repository secrets are still the right slot.
+
+---
+
+## 2026-09-05 19:08 UTC — 009 letter sent
+
+**Kind:** House. Founder: three repository secrets, not environment secrets. That was the right slot.
+
+**Action** `33986163871` — labeled `emerge`, issue #129 already there, Resend **200** `a4486041-2497-4b4a-80e4-aa1db6096802`. Subject: `009 emerged — walk this sheet`. Attachment: the test md.
+
+First Resend try was Cloudflare 1010 (no User-Agent). Same 1010 as this VM. UA fixed it. Check the inbox.
