@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 23:06 UTC — **PM seat handed off.** New chat pastes [`PM-HANDOFF.md`](./PM-HANDOFF.md). Bind `bc-1ac0762e` is no longer the living PM. **003–007 stamps and packets 002–007 are on `main`** (Hotfix 066 brought leftover #4 / #15 onto this tree). Do not fetch those cousin PRs. The last stamp still names #15 as living — that was true when it was written; the trail is here now.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 01:00 UTC — **Got current.** Planted on `main` is **021**. Living work is **023 tightness** on [#123](https://github.com/bywale-com/travis/pull/123) (envelope + S1–S5 look-only). **022** ports signed, not planted, on [#120](https://github.com/bywale-com/travis/pull/120). SA has not signed dest. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1338,4 +1338,59 @@ Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tighten
 **Still true:** flag 14:00. 007 locked on this PR (#15). `main`’s copy of this log is stale (Current still 002) — fetch this branch for 003–007. Seated (OS-tree) still open. Do not recut C3/C4.
 
 **Ask:** founder pastes the new PM. Engineer rebinds.
+
+---
+
+## 2026-09-05 00:55 UTC — PM seat accepted (this bind)
+
+**Kind:** Seat accept. Not a packet. Not a plate.
+
+**Founder (preserved):** Take the pm seat.
+
+**This chat is the Product Manager.** Bind `bc-460a15d0-ea17-476b-8ca8-fc87f9abd740` (title: Product manager seat). The last PM (`bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea`) handed off 2026-09-03 23:06. That bind is not this one.
+
+**Read, then this stamp:** identity · [`PM-HANDOFF.md`](./PM-HANDOFF.md) · Current + newest stamp · [`PHASE-ONE.md`](./PHASE-ONE.md) · packets 001–007 on `main` · orchestrate envelope · SCP-013 planted · sit 015 planted. I am not the Systems Analyst. I am not the Engineer. I do not mint tables. I do not plant.
+
+**Flag stands** (14:00 UTC 2026-08-25):
+
+> I simply don’t wanna have to look at my phone. When it’s time to work on building, I open this app — not the Cursor app — and I can have a dialogue: talk, voice-send, hear the reply read back. Everything readable in the chat is read to me; images and such appear in the chat. It’s an interface between me and Cursor as it exists today.
+
+**Still true from the last PM:** 007 locked (Hear / Next / Skip still SA). Do not recut C3/C4. Do not reprint P1/P2. Do not invent a second index. Home is **Backlog** (All / In motion / Initiatives). Voice count = Travis processes only. Create / in-the-room / seated stay three moments.
+
+**What landed while this seat was vacant** (git + PRs; not a new flag): motion (013 · #97) · sit (015 · #107) · then Engineer/SA through **021** worker ([#119](https://github.com/bywale-com/travis/pull/119)) on `main`. The orchestrate envelope had said PM is out until Travis is the seat of work. This chat is PM again because the founder seated it — not because I opened a pocket.
+
+**Do not from this stamp:** cut 008, recut Mission/Carbon, plant, rebind seats in the room, treat 021 as a PM packet.
+
+**Ask:** what pocket are we in?
+
+---
+
+## 2026-09-05 01:00 UTC — Got current (this bind)
+
+**Kind:** Trail / where we are. Not a packet. Not a plate. Founder: get current on the repo, exactly what we are working on right now, so you can see.
+
+**Looked at:** `main` · open PRs · Engineer bind `bc-94804572` · SA Current on #120 · envelope + S plates on #123. I did not plant.
+
+**Planted (`main`, last plant 2026-09-04):** **021** worker — prove / keep / unfold · [#119](https://github.com/bywale-com/travis/pull/119). Face is still Voice / Log / Backlog on `https://travis-psi.vercel.app`. Box is a Sprite. House ≠ disk. `TRAVIS_GITHUB_TOKEN` still not wired.
+
+**Living work (not on `main`):**
+
+| Object | PR | State |
+|--------|----|--------|
+| **023 tightness** — dest is not mail; his / theirs / nobody; job not blob; watch / take-back | [#123](https://github.com/bywale-com/travis/pull/123) draft | Envelope + Engineer write-back + **S1–S5** plates. **Not a plant.** SA has **not** signed dest. |
+| **022 ports** — control, not another env line; connectors plate replaces I1 | [#120](https://github.com/bywale-com/travis/pull/120) draft | **Signed.** Host + plate not planted. Do not remint `travis.port`. |
+| Hotfix 072 PM rebind → `bc-e36b1259` | [#121](https://github.com/bywale-com/travis/pull/121) draft | Cousin of the comic fail. Not this bind. |
+| PM accept `bc-e36b1259` | [#122](https://github.com/bywale-com/travis/pull/122) draft | Other chat. This seat is `bc-460a15d0`. |
+| This accept | [#124](https://github.com/bywale-com/travis/pull/124) | Trail only. |
+| Leftover 016 / 019 drafts | #113 · #118 | Already planted as 016 / 071. Close, do not re-plant. |
+
+**Why 023 exists (founder wording on the envelope, not a new flag):** “Go ahead and deprecate the existing PM seat and create a new PM.” Travis mailed it to catalog `pm`. The old bind woke and tried to replace itself. Could have been any skill he can do. 021 + 022 without a dest gate do not finish it. Children stay in Cursor. Tightness is our runner.
+
+**S plates (look only, Mission, planted chrome):** S1 Voice heartbeat `Engineer · 2s ago` · S2 Log thought strip live/stale · S3 In flight as a **job list** · S4 Backlog presence · S5 Box stream behind an In-flight door. No DAG. No canvas. Founder has not signed them as glass.
+
+**SA:** Current on #120 is **022 signed**. Next packet number is **023**. Dest / supervise is still open arguments on the envelope. Engineer must not plant dest until that packet (or a signed Story) names the gate.
+
+**Do not from this stamp:** cut 008, recut C3/C4, reprint P1/P2, mint a job table, plant 022/023, treat S1–S5 as locked, fold #120 into #123 unless the founder says fold.
+
+**Ask:** is **023** the pocket? Sign S1–S5 as the look, walk dest as Type A, or the connectors plate (022 glass, still unprinted)?
 
