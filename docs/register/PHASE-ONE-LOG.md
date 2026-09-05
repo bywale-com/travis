@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 23:50 UTC — No difference: hotfix and packet are the same Action tag. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 23:59 UTC — Re-arm: Action drops then adds wake-engineer. Flag 14:00 stands.
 
 **How we maintain this log**
 

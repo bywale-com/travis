@@ -15,6 +15,8 @@ Hang this bind was going to be PM-PACKET-010 → SA. Recut. Same cheap Action. N
 
 **Pick up.** The house Action is on this PR. The plant is the hang SQL below. Do it now.
 
+Re-arm 2026-09-05 23:59 UTC: drop `wake-engineer` and add it again so B sees a fresh add.
+
 ## Cut — house (already on this PR)
 
 Same Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml).

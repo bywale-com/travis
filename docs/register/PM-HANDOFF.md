@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-05 23:50 UTC
+# PM seat handoff — 2026-09-05 23:59 UTC
 
 **This bind is living.** `bc-25c5c6bf-006f-4252-9f25-49ab183835b2` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
