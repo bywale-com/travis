@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 18:29 UTC — 009 chain cost counted. Dirty first sample. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 18:40 UTC — Emerge letter is email. Not Travis. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1971,3 +1971,17 @@ What's on the desk in this room?
 **Learn:** the extra cost was the old trigger, not a recut. Label swap delayed emerge (~1 h after plant; first `wake-pm-look` 18:04, live trigger was `pm-wake-look`, C 18:15) — one C, not a pile. Next new packet is the clean sample: **3 boots** if no loop; **3 + 2×N** if it loops.
 
 **Still human:** walk the same sheet on the #127 preview. Fix C `labelName` to `wake-pm-look`. Action is only on this branch until merge.
+
+---
+
+## 2026-09-05 18:40 UTC — Emerge letter is email (founder)
+
+**Kind:** House. Not a product packet. Not Travis. Flag 14:00 stands.
+
+**Founder (preserved):** When it is human test time I do not even know. Notify me. Ideally Travis — while we build Travis, do not conflate. Email. I hear what I get by email: it is finished, and the test packet for that, as a document.
+
+**Cut:** same cheap GitHub Action. No Cursor boot. Pass on `PM-LOOK-NNN.md` → label `emerge` + letter. The document is `PM-PACKET-NNN-*-TEST.md` verbatim. Fail does not send “finished.”
+
+**Floor:** one GitHub issue assigned to you (GitHub already emails that). **Real letter:** GitHub secrets `EMERGE_EMAIL` · `RESEND_API_KEY` · `RESEND_FROM_EMAIL`. Do not send through Travis operator mail.
+
+**009:** already emerged. This Action will not retro-fire. Backfill letter: [issue #129](https://github.com/bywale-com/travis/issues/129) (the sheet, verbatim).

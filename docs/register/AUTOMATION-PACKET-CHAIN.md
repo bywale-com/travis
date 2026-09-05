@@ -23,7 +23,7 @@ Engineer automation — full Engineer protocol
         ↓  label wake-pm-look  (src/ plant on a PR that already has packet + SCP)
 Technical PM look + what it can test
         ↓  Fail → label fail-look (same PR)
-        ↓  Pass → emerge. Human walks the same sheet.
+        ↓  Pass → emerge. Action emails the *-TEST.md. Human walks that sheet.
 ```
 
 **Same PR** is law. Do not open a cousin. Turn **off** “Pull request creation” on both automations if the UI lets you; the prompts also forbid it.
@@ -44,7 +44,7 @@ SA → SYSTEMS-CHANGE-PACKET → label  wake-engineer
 Engineer plants src/ → label  wake-pm-look
         ↓
 Technical PM look+test
-        Pass → emerge (human test)
+        Pass → label emerge + letter (human test)
         Fail → label  fail-look  (loop)
 ```
 
@@ -115,6 +115,28 @@ This is the beat that can run on a **already planted** PR (009 / 025 on #127). S
 2. Create **C**. Trigger: Label added / `wake-pm-look`. Computer use on. Memories off. PR creation off. Paste the PM-look prompt. Save + Activate.
 3. To run the first look on #127: add `wake-pm-look` once C is Active. Do not add `wake-sa` or `wake-engineer` — 025 is already planted.
 4. Later plants: Action adds `wake-pm-look` when this push touched `src/` on a PR that already has a packet + change packet.
+5. **Emerge letter (human).** When this push writes `PM-LOOK-NNN.md` with **Verdict: Pass**, the same Action (no LLM) labels `emerge` and sends the letter. Not Travis. Not a Cursor agent.
+
+---
+
+## Emerge letter — human test time
+
+Founder lock 2026-09-05: emerge is silent unless something lands in the inbox. While we build Travis, the channel is **email**, not the product face.
+
+**When:** this push has `docs/register/PM-LOOK-NNN.md` with `**Verdict:** Pass`. Not on plant. Not on Fail.
+
+**What you get:**
+
+- Subject: `NNN emerged — walk this sheet`
+- First lines: finished / human test / PR / preview
+- The document: that packet’s `PM-PACKET-NNN-*-TEST.md` **verbatim**. Not a summary. Not the look sheet.
+
+**How (cheap, same Action):**
+
+1. **Floor (no new secret):** open one GitHub issue, assigned to you, body = the letter. GitHub already emails assignments. One issue per NNN.
+2. **Real mailbox letter:** same Action POSTs Resend when these **GitHub** secrets exist — `EMERGE_EMAIL`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`. Vercel’s key does not count until it is copied to the repo Actions secrets. Attachment is the `*-TEST.md`.
+
+Do not send this through Travis operator mail. Same vendor is fine. Same product path is not.
 
 ---
 

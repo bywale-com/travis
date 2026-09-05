@@ -1,6 +1,7 @@
 # Cheap gate in front of Cursor Automations.
 # GitHub path filter + this-push diff. No Cursor boot until a label lands.
-# Labels: wake-sa · wake-engineer · wake-pm-look · fail-look
+# Labels: wake-sa · wake-engineer · wake-pm-look · fail-look · emerge
+# Pass → emerge letter (issue + optional email). Not Travis. No LLM.
 # See docs/register/AUTOMATION-PACKET-CHAIN.md
 
 name: Wake packet seats
@@ -31,6 +32,9 @@ jobs:
           BEFORE: ${{ github.event.before }}
           AFTER: ${{ github.sha }}
           HEAD_REF: ${{ github.ref_name }}
+          EMERGE_EMAIL: ${{ secrets.EMERGE_EMAIL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_FROM_EMAIL: ${{ secrets.RESEND_FROM_EMAIL }}
         run: |
           set -euo pipefail
           if [[ "$BEFORE" == "0000000000000000000000000000000000000000" ]]; then
@@ -51,6 +55,7 @@ jobs:
           gh label create wake-engineer --color CCCCCC --description "Cursor: wake Engineer" 2>/dev/null || true
           gh label create wake-pm-look --color CCCCCC --description "Cursor: wake Technical PM look+test" 2>/dev/null || true
           gh label create fail-look --color CCCCCC --description "Cursor: Engineer loop after PM look Fail" 2>/dev/null || true
+          gh label create emerge --color CCCCCC --description "PM look Pass — human test" 2>/dev/null || true
 
           if echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$'; then
             gh pr edit "$pr" --add-label wake-sa
@@ -68,6 +73,93 @@ jobs:
               echo "Labeled #$pr fail-look"
               break
             fi
+          done
+
+          for f in $(echo "$files" | grep -E '^docs/register/PM-LOOK-.+\.md$' || true); do
+            if ! git show "$AFTER:$f" | grep -q '^\*\*Verdict:\*\* Pass'; then
+              continue
+            fi
+            nnn=$(echo "$f" | sed -n 's#^docs/register/PM-LOOK-\([0-9][0-9]*\).*#\1#p')
+            if [[ -z "$nnn" ]]; then
+              continue
+            fi
+            testfile=$(git ls-tree -r --name-only "$AFTER" | grep -E "^docs/register/PM-PACKET-${nnn}-.+-TEST\\.md$" | head -n 1 || true)
+            preview=$(git show "$AFTER:$f" | sed -n 's/^\*\*Preview:\*\* //p' | head -n 1)
+            repo=$(gh repo view --json nameWithOwner --jq .nameWithOwner)
+            letter=$(mktemp)
+            {
+              echo "${nnn} emerged. Human test."
+              echo
+              echo "PR: https://github.com/${repo}/pull/${pr}"
+              if [[ -n "$preview" ]]; then
+                echo "Preview: ${preview}"
+              fi
+              echo "Look: Pass. Walk the sheet. SSO / Talk / a typed sentence are still yours."
+              echo
+              echo "This is house mail. Not Travis."
+              echo
+              if [[ -n "$testfile" ]]; then
+                echo "Sheet: \`${testfile}\`"
+                echo
+                echo "---"
+                echo
+                git show "$AFTER:$testfile"
+              else
+                echo "No PM-PACKET-${nnn}-*-TEST.md on this commit."
+              fi
+            } > "$letter"
+            gh pr edit "$pr" --add-label emerge && echo "Labeled #$pr emerge" || echo "Could not label emerge"
+            existing=$(gh issue list --state all --search "${nnn} emerged — walk this sheet in:title" --json number --jq '.[0].number // empty')
+            if [[ -z "$existing" ]]; then
+              issue=$(gh issue create --title "${nnn} emerged — walk this sheet" --body-file "$letter" --assignee bywale-com \
+                || gh issue create --title "${nnn} emerged — walk this sheet" --body-file "$letter")
+              echo "Opened $issue"
+            else
+              echo "Issue #$existing already exists for ${nnn}"
+            fi
+            if [[ -n "${EMERGE_EMAIL:-}" && -n "${RESEND_API_KEY:-}" && -n "${RESEND_FROM_EMAIL:-}" ]]; then
+              att=""
+              if [[ -n "$testfile" ]]; then
+                att=$(mktemp)
+                git show "$AFTER:$testfile" > "$att"
+              fi
+              python3 - "$letter" "${nnn}" "$att" "${testfile:-}" <<'PY'
+import base64, json, os, sys, urllib.request
+letter_path, nnn, att, testfile = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+body = open(letter_path, encoding="utf-8").read()
+payload = {
+    "from": os.environ["RESEND_FROM_EMAIL"],
+    "to": [os.environ["EMERGE_EMAIL"]],
+    "subject": f"{nnn} emerged — walk this sheet",
+    "text": body,
+}
+if att:
+    raw = open(att, "rb").read()
+    payload["attachments"] = [{
+        "filename": (testfile or "packet-test.md").rsplit("/", 1)[-1],
+        "content": base64.b64encode(raw).decode("ascii"),
+    }]
+req = urllib.request.Request(
+    "https://api.resend.com/emails",
+    data=json.dumps(payload).encode("utf-8"),
+    headers={
+        "Authorization": f"Bearer {os.environ['RESEND_API_KEY']}",
+        "Content-Type": "application/json",
+    },
+    method="POST",
+)
+try:
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        print("Resend", resp.status, resp.read().decode()[:300])
+except Exception as e:
+    print("Resend skipped/failed:", e)
+    sys.exit(0)
+PY
+              rm -f "$att"
+            else
+              echo "No EMERGE_EMAIL + RESEND_API_KEY + RESEND_FROM_EMAIL. Issue is the letter."
+            fi
+            rm -f "$letter"
           done
 
           if echo "$files" | grep -qE '^src/'; then
