@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:12 UTC — **Hold: future test space is a sandbox.** Tester is already in the place. Setup is for today, on this desk. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 19:32 UTC — Held inventory. Suggest walk 009, then talk seat health. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1755,3 +1755,294 @@ When we generate plates and packets (usually at the same time) we also generate 
 **Founder:** Worth mentioning now, since you did Setup in the environments we’re trying to build. That is **not** the evolution. They would not even need to get there. Some kind of **sandbox**. They would only ever be in the places they need to be.
 
 **Hold:** Today’s sheet still has Setup because the walk is this desk (preview / psi). The future space places the tester in the pocket. Setup falls away. Do not invent the sandbox. Do not strip Setup from 008.
+
+---
+
+## 2026-09-05 16:30 UTC — “My line” was a blank, not copy (founder)
+
+**Kind:** Sheet miss. Founder: are you asking me to type the phrase “my line”?
+
+**No.** Invent a real sentence for Travis. Write it in Setup. Later steps mean that sentence.
+
+**Sheet recut:** blank is **The sentence I will send.**
+
+---
+
+## 2026-09-05 16:32 UTC — Provide the sentence (founder)
+
+**Kind:** Sheet law. Founder: absolute specificity. One of the things we’re testing is process visuals. If there are multiple types, even more reason to provide the line. He would write the sentence I gave.
+
+**Locked sentence:**
+
+```
+What's on the desk in this room?
+```
+
+**Honest:** Stream has three looks (words / process = tool name + body / thought). Not four labeled primitives. This sentence may only produce words. If process never appears, the **I saw** is the report. Do not invent a second sentence on the walk.
+
+---
+
+## 2026-09-05 16:37 UTC — 008 walk inspected (founder)
+
+**Kind:** Test result. Founder sent the locked sentence. Accurate answer on the Log. No Stream compartment. Stopped the walk.
+
+**Session:** `0e8875f8-283b-4dae-bf54-76c82a05b6ef` (title Travis). Trigger `bfa67009-…` seq 746. Answer landed seq 747.
+
+**Store (quote):** one `travis.stream` row. Live **6 seconds** (16:32:35 → 16:32:41). One event: `process` / `list_backlog`. No `message` event. `close_turn_id` = seq **745** (10:41 — “I started listing the files…”) — not 747.
+
+**Why the glass was empty:** Stream does not open itself. Glow/door only while `live`. He closed when the first tool finished, before the speakable post. Card would hang above the **old** line. The new answer has no card. Follow-up (“did you pull these from memory”) did not open a stream.
+
+**024 already required:** stay live until labor ends; `close_turn_id` = that completed `agent_post`; live text as `message`. Plant missed. PM does not plant.
+
+---
+
+## 2026-09-05 16:44 UTC — PM-PACKET-009 Stream close (founder)
+
+**Kind:** Packet lock. Founder: card is positioned wrongly; create a packet. From PM, it is a packet. Every packet gets a **packet test**. Tests are scoped to that packet. This test also resumes 008 only because we stopped mid-walk.
+
+**Locked:** [`PM-PACKET-009-STREAM-CLOSE.md`](./PM-PACKET-009-STREAM-CLOSE.md) · test [`PM-PACKET-009-STREAM-CLOSE-TEST.md`](./PM-PACKET-009-STREAM-CLOSE-TEST.md). Same PR #126. SA **025**. Do not remint 024 tables. Stream does not auto-open. Card hangs on **this** episode’s completed line.
+
+**Sentence for the new walk:** `Name the open initiatives.`
+
+---
+
+## 2026-09-05 16:46 UTC — 009 lives on #127
+
+**Kind:** Correction. #126 merged 16:26. 009 + later 008-walk stamps were still on the branch. Opened [#127](https://github.com/bywale-com/travis/pull/127). SA/Engineer land there.
+
+---
+
+## 2026-09-05 16:56 UTC — Automations burn on every push (founder)
+
+**Kind:** Inspect. Founder: automations fire, burn tokens, do nothing; spend highest today even without sitting in one chat.
+
+**What I can see:** run list + transcripts. I cannot see Cursor dollar spend.
+
+**Today (2026-09-05) in this environment:** **27 automation boots** (first at 12:36 UTC). **0** yesterday. **0** the day before. 15 SA + 12 Engineer. Model: `cursor-grok-4.6-high-fast`. Triggers have no path filter — every PR opened / draft opened / PR pushed (SA) and every PR pushed (Engineer) boots a full agent; the gate is after the boot.
+
+**Useful labor:** SA `bc-90689f06` signed **025** on #127. One Engineer is still running on that wake (`bc-925e2ab1`).
+
+**The rest:** gate-fail. Typical 30–90s. They still read the seat, then stop. Sample: four of five SA transcripts no-op’d; three Engineer transcripts no-op’d. Engineer `bc-e3e1c2a1` sat **~85 minutes** on #126 re-gating Vercel / synchronize / ready_for_review / merge — not planting.
+
+**Also today (not automations):** this PM bind (`bc-25c5c6bf`) has been live since 10:58 UTC. That is a second burn, separate from the pair-per-push.
+
+**Recut:** prompts now gate on **this commit** (`git diff --name-only HEAD~1`). SA only on a real `PM-PACKET-NNN` (not `*-TEST.md`). Engineer only on `SYSTEMS-CHANGE-PACKET`. Do not accept the seat until the gate passes. Human must re-paste at cursor.com/automations — I cannot Save + Activate. Pause both until the paste lands, or this push wakes another pair.
+
+---
+
+## 2026-09-05 17:02 UTC — Spin-up is already the bill (founder)
+
+**Kind:** Inspect / redesign. Founder: is just spinning up already a lot, even if they stop fast?
+
+**Yes.** Cursor docs: automations are cloud agents; they use the model’s **maximum** context window; **no toggle**; billed as cloud-agent usage. There is no cheap “peek then quit.” The first call already has the fat system + automation prompt. A 30-second gate-fail still paid that. Prompt tightening only saves the extra seat reads *after* the boot. It does not skip the boot.
+
+**No path filter** on PR pushed. That is why every stamp was two Max-mode boots.
+
+**Redesign (locked):** GitHub Action [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml) diffs this push and adds `wake-sa` / `wake-engineer`. Cursor triggers become **PR label changed** for those labels — not PR pushed. Human must switch the two automations. I cannot Save + Activate.
+
+**009 / 025** still on [#127](https://github.com/bywale-com/travis/pull/127). Do not remint.
+
+---
+
+## 2026-09-05 17:10 UTC — Seat health is a bar, not a dashboard (founder; vision)
+
+**Kind:** Vision. Not a packet. Do not mint a store. Do not plant.
+
+**Founder (preserved):** There is a max context any one seat can have. After that it is mathematically expensive — deprecate the chat and open a new Technical PM on the roster. Inspect each seat’s context easily. A bar: healthy / close / unhealthy. Travis passes to the best healthy seat, spins one if none are healthy, deprecates the unhealthy. Mostly Cursor-facing. Applies to every seat, not only PM.
+
+**Already on this trail — do not remint:**
+
+- Aug 26: interrupt-threshold and context-economics are the same layer. Separate chats are real because the transcript **is** the context.
+- **015 / D1–D5:** seats are disposable; reuse if free; busy → next, not enqueue; logging is the inheritance.
+- Tightness lived line: *“Go ahead and deprecate the existing PM seat and create a new PM.”* Dest-as-mail failed. Create + sit is his, or name the hole.
+- Sept 3: Live is the OpenAI meter. Seats are Cursor. No cost dashboard. `getUsage` is named, not planted.
+
+**New grain (held):** idle is not enough. A fat idle seat is the wrong dest. Health is a second filter before reuse. The number is not locked. The inspect port is not ascribed — Cursor may not hand the pipe a context-token count.
+
+**Not this:** a spend dashboard. A talent scout. Triage in v1. A cap on how many seats may exist (D9 stands).
+
+---
+
+## 2026-09-05 17:14 UTC — PM look+test before the human (founder; vision)
+
+**Kind:** Vision. Not a packet. After the automation fix. Do not mint a store. Do not add a third “PR pushed” automation.
+
+**009 / 025:** planted on [#127](https://github.com/bywale-com/travis/pull/127). Close hangs on the answering post after this trigger (`pickAnsweringPost`, `gt(seq, trigger.seq)`). Not on `main`. Not human-walked. Preview is the desk.
+
+**Founder (preserved):** When a packet is finished — a Technical PM automation inspects from two angles: it looks good, and it tests what it can test. It cannot test everything; that is why the human exists. There is a protocol. Fail → the loop (back to Engineer). Only if it passes the PM re-look / re-use test does it emerge. Then it is time for the human test.
+
+**Already on this trail — do not remint:** every packet has a `*-TEST.md` (Setup, then the packet; sentence provided). First human job is a tester walking that sheet. Future testers / gig / sandbox held.
+
+**New grain (held):** the sheet is also the PM automation’s script, for the steps a cloud agent can actually do (look at the preview, walk what it can). Human test is the rest. The chain grows one beat: plant → PM look+test → emerge → human. Wake the same way as SA/Engineer — a label after the plant, not every push.
+
+---
+
+## 2026-09-05 17:46 UTC — Automation C cut (founder)
+
+**Kind:** House. Not a product packet. Founder: SA/Engineer must not re-wake on #127; the PM look *can* run now because 009 is planted.
+
+**Landed:** [`house-now/automations/pm-look.prompt.md`](./house-now/automations/pm-look.prompt.md) · Action labels `wake-pm-look` on an `src/` plant · Engineer loop if `PM-LOOK` Verdict is Fail.
+
+**Human:** create `Travis — plant → PM look` at cursor.com/automations. Trigger: Label added / `wake-pm-look`. Computer use **on**. Memories off. PR creation off. Then add the label on #127 — do not add wake-sa or wake-engineer.
+
+---
+
+## 2026-09-05 18:00 UTC — Engineer second trigger is `fail-look` (founder)
+
+**Kind:** Correction. Founder: the loop label is `fail-look` — all small letters. Not a second `wake-engineer`.
+
+**B** has two Label-added triggers: `wake-engineer` (SA completed) and `fail-look` (PM look failed). Re-paste [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md).
+
+---
+
+## 2026-09-05 18:04 UTC — wake-pm-look on #127 (founder)
+
+**Kind:** Trigger. Founder: all automations in place; fire C.
+
+**Did:** added `wake-pm-look` on [#127](https://github.com/bywale-com/travis/pull/127). Did not add `wake-sa` or `wake-engineer`. Re-added once when no boot showed.
+
+**Seen from this seat:** label is on the PR. No new automation run in this environment yet. Next: C Run History. If empty, the trigger string or Active toggle is off.
+
+---
+
+## 2026-09-05 18:08 UTC — Cost of the chain, not the packet (founder)
+
+**Kind:** Vision / measure. Not a dashboard. Not a store.
+
+**Founder (preserved):** After the packet exists — SA, Engineer, PM look, maybe loops — until it is ready for human eyes. Not what it cost to write the packet. Fewer calls already means less cost. Learn from the loops. Evaluate after C finishes.
+
+**Window:** packet file lands → `PM-LOOK` Verdict **Pass** (emerge).  
+**In:** A + B + C + each `fail-look` B.  
+**Out:** this PM bind, stamp no-ops, the human walk.
+
+**What we can count from here:** boots, which automation, duration, Pass/Fail. Dollars live on Cursor usage / `getUsage` per `bc-` — not visible from this seat. No cost dashboard (Sept 3 stands).
+
+---
+
+## 2026-09-05 18:16 UTC — C trigger name was swapped (founder)
+
+**Kind:** Miss. Founder pasted C JSON. Trigger `labelName` is **`pm-wake-look`**. Prompt, Action, and the first tag were **`wake-pm-look`**. That is why C never woke.
+
+**Runs:** last SA/Engineer pair **17:13 UTC** (before the label switch). No boots after 17:13 — later stamps did not fire A/B. The pile in Run History is the old leak, not a new one.
+
+**Did:** added `pm-wake-look` on #127 so the live trigger can fire. Still fix C to `wake-pm-look` so the Action matches. Re-paste Fail → `fail-look` (the JSON still says `wake-engineer`).
+
+---
+
+## 2026-09-05 18:21 UTC — PM look 009 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`PM-PACKET-009-STREAM-CLOSE.md`](./PM-PACKET-009-STREAM-CLOSE.md) · SA **025** · plant on [#127](https://github.com/bywale-com/travis/pull/127). Sheet: [`PM-LOOK-009.md`](./PM-LOOK-009.md).
+
+**Look.** src/ matches the lock. `pickAnsweringPost` / `gt(seq, trigger.seq)` / stay until that post. Card still paints above `closeTurnId`. Stream does not auto-open. Dest still `post.id`. Named backfill `643e3e50-…` → 747 is in migrate. ST3 staple is the card above the completed line.
+
+**Preview I opened:** `https://travis-git-cursor-technical-pm-seat-35b2-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see the Log glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not type `Name the open initiatives.` I did not Talk.
+
+**Steps I could not do (human):** Vercel team SSO. Travis email link. Talk on a phone. The card above the 008 answer and above a new send.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-05 18:29 UTC — 009 chain cost (first sample)
+
+**Kind:** Measure. Not a dashboard. Not a store. Window from 18:08: packet file lands → `PM-LOOK` Pass. In: A + B + C + each `fail-look` B. Out: this bind, stamp no-ops, the human walk. Dollars not visible from this seat.
+
+**Window:** `472bf8b` 16:45:23 (lock 009) → C idle 18:22:37. Calendar **~97 min**. Most of that is the C trigger miss, not labor.
+
+**Automation boots in the window: 18** (9 A + 8 B + 1 C). Model `cursor-grok-4.6-high-fast`. Wall **28.8 min**.
+
+| Seat | Useful | Leak | Useful wall | Leak wall |
+|------|--------|------|-------------|-----------|
+| A | `bc-90689f06` signed 025 — 16:45:48–16:48:43 (**176s**) | 8 no-ops | 176s | 477s |
+| B | `bc-925e2ab1` planted 025 — 16:48:42–16:54:24 (**342s**) | 7 no-ops | 342s | 294s |
+| C | `bc-53c2a349` look — 18:15:20–18:22:37 (**438s**) | 0 | 438s | 0 |
+| C child | `bc-165d3bb2` computerUse — 18:17:59–18:21:13 (**194s**, internal, inside C) | — | — | — |
+
+**Loops:** 0. No `fail-look`. One Pass. Emerged.
+
+**Dirty:** 15 leak boots after the packet (PR-pushed, before the label gate). Last pair **17:13:13 / 17:13:15**. Then A/B silent. C is the only later automation boot.
+
+**Clean C:** 1 look + 1 computerUse child. Preview SSO wall. Did not type `Name the open initiatives.` Did not add `fail-look`.
+
+**Learn:** the extra cost was the old trigger, not a recut. Label swap delayed emerge (~1 h after plant; first `wake-pm-look` 18:04, live trigger was `pm-wake-look`, C 18:15) — one C, not a pile. Next new packet is the clean sample: **3 boots** if no loop; **3 + 2×N** if it loops.
+
+**Still human:** walk the same sheet on the #127 preview. Fix C `labelName` to `wake-pm-look`. Action is only on this branch until merge.
+
+---
+
+## 2026-09-05 18:40 UTC — Emerge letter is email (founder)
+
+**Kind:** House. Not a product packet. Not Travis. Flag 14:00 stands.
+
+**Founder (preserved):** When it is human test time I do not even know. Notify me. Ideally Travis — while we build Travis, do not conflate. Email. I hear what I get by email: it is finished, and the test packet for that, as a document.
+
+**Cut:** same cheap GitHub Action. No Cursor boot. Pass on `PM-LOOK-NNN.md` → label `emerge` + letter. The document is `PM-PACKET-NNN-*-TEST.md` verbatim. Fail does not send “finished.”
+
+**Floor:** one GitHub issue assigned to you (GitHub already emails that). **Real letter:** GitHub secrets `EMERGE_EMAIL` · `RESEND_API_KEY` · `RESEND_FROM_EMAIL`. Do not send through Travis operator mail.
+
+**009:** already emerged. This Action will not retro-fire. Backfill letter: [issue #129](https://github.com/bywale-com/travis/issues/129) (the sheet, verbatim).
+
+---
+
+## 2026-09-05 18:51 UTC — Emerge mail fields (founder)
+
+**Kind:** House. Not a product packet. Do not mint a store.
+
+**Have:** Resend key, verified From on `mail.try-tower.com`, To = the `TEST_EMAIL_TO` inbox. That is the whole letter.
+
+**Do not put on GitHub:** database URL, Twilio, Vercel token. Those are not this beat.
+
+**Still human:** this seat cannot write repo Actions secrets (403). Paste three on `bywale-com/travis` → Settings → Secrets and variables → Actions:
+
+- `EMERGE_EMAIL` — that same inbox
+- `RESEND_API_KEY`
+- `RESEND_FROM_EMAIL`
+
+Then run **Wake packet seats** with `009`. A send from this VM was blocked (Cloudflare 1010). GitHub’s IPs are the real path. Same vendor as magic-link. Not Travis operator mail.
+
+---
+
+## 2026-09-05 19:04 UTC — Repo secrets, not environment (founder)
+
+**Kind:** House. Founder: the three are on the repo as repository secrets, not environment secrets.
+
+**Cut:** that is the right slot. This workflow has no `environment:`. Repository secrets are what `${{ secrets.* }}` reads.
+
+**Did:** this seat cannot `workflow_dispatch` (403). Re-pushed `PM-LOOK-009.md` still Pass so the same Action sends the letter. Not a recut. Not a Fail.
+
+The first fires died in 0s — a Python heredoc sat at column 1 and broke the workflow YAML. Sender is now `.github/scripts/send-emerge-letter.py`. Repository secrets are still the right slot.
+
+---
+
+## 2026-09-05 19:08 UTC — 009 letter sent
+
+**Kind:** House. Founder: three repository secrets, not environment secrets. That was the right slot.
+
+**Action** `33986163871` — labeled `emerge`, issue #129 already there, Resend **200** `a4486041-2497-4b4a-80e4-aa1db6096802`. Subject: `009 emerged — walk this sheet`. Attachment: the test md.
+
+First Resend try was Cloudflare 1010 (no User-Agent). Same 1010 as this VM. UA fixed it. Check the inbox.
+
+---
+
+## 2026-09-05 19:32 UTC — Held inventory (this session)
+
+**Kind:** Inventory. Not a packet. Do not mint a store. Flag 14:00 stands.
+
+**Landed this session (no longer held):** label gate · Automation C · `fail-look` · chain-cost window · 009 dirty sample · emerge email · test-spec shape (Setup, then the packet; sentence provided).
+
+**Open, not vision:** walk 009 on the #127 preview · fix C `labelName` to `wake-pm-look` (Fail → `fail-look`) · merge #127 so the Action is on `main` · next packet is the clean cost sample.
+
+**Held this session:**
+
+1. **Seat health** (17:10) — idle is not enough. Bar: healthy / close / unhealthy. Inspect port not ascribed. Number not locked. Not a dashboard.
+2. **Learn from loops** (18:08) — 009 had 0 loops. Nothing to learn yet.
+3. **Tester environment / sandbox / gig** (14:49–16:12) — first human job is a walker. Environment is the gap. Sandbox is the evolution (no Setup). Gig / Om Coda is far. Do not invent it.
+4. **SA-now vs protocol-break automations** (14:49) — a question, not a packet. We now know a Cursor boot is already the bill.
+
+**Older parked (do not lose):** initiative curate (after Stream) · Find / primitive recut · Hear / Next / Skip (007, SA silence) · Travis capability gap · request-line door · 022 on #120.
+
+**Suggest:** start = walk 009. Talk = seat health (this session’s unfinished grain). Product packet after the walk = initiative curate (parked until Stream). Do not start gig, sandbox, or another un-gated automation.

@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-05** · SCP-025 · [PR #127](https://github.com/bywale-com/travis/pull/127) — A Stream card hangs above this episode’s answering Travis post, not an older line in the session, because the first tool return closed on seq 745 before the desk answer landed.
 - **2026-09-05** · SCP-024 · [PR #126](https://github.com/bywale-com/travis/pull/126) — Live work is a Stream episode (door, pin, events, then a card above the completed line), because the Log was hiding a still-open post and the working mark only expanded italic thought.
 - **2026-09-05** · Hotfix 073 · [PR #126](https://github.com/bywale-com/travis/pull/126) — The PM inspects `src/` and specs the face and the cut, and the Engineer only implements what PM and SA already specced, because the founder locked the seat as a technical PM on top of vision and the log.
 - **2026-09-05** · Hotfix 072 · [PR #125](https://github.com/bywale-com/travis/pull/125) — A box step left `running` when the request died is claimed again, and the backlog footer sits after the rows, because last night’s machine check stayed **1 in motion** and the older tickets hid under a pinned “end.”

@@ -10,6 +10,7 @@ You do **not** need to remember what this packet was about. This sheet is the wa
 
 - **Setup** gets a stranger to the desk (URL, room, Log, Type). Not a change this packet made. Not scored as Stream.
 - **The packet** is only what 008 established: idle is not a door → glow → Stream → trigger → live order → not on the Log while live → done → card above the completed line → tap = same contents.
+- **The sentence is provided.** Never a blank the tester invents. Same characters for every walk.
 
 ---
 
@@ -47,9 +48,13 @@ That is the whole packet. Everything below is that, step by step.
 
 **Talk | Type:** use **Type** for this walk so the line is exact.
 
-**My line** — write this **before** you send. You will match it later. Keep it short. Something Travis has to actually work on (not just “ok”). Example shape: a real ask, one sentence.
+**The sentence.** Do not invent one. Type this, exactly, when the walk says send:
 
-**My line:**
+```
+What's on the desk in this room?
+```
+
+Every later “the sentence” means that. Same characters. Same question mark. Nothing before or after.
 
 ---
 
@@ -99,7 +104,7 @@ From here, every step is something this packet meant to establish.
 
 ## 2. Idle is not a door
 
-Do this **before** you send your line. Nobody should be working yet. If someone is already glowing, write that and skip to 3.
+Do this **before** you send the sentence. Nobody should be working yet. If someone is already glowing, write that and skip to 3.
 
 ### 2.1 Open In this room (idle)
 
@@ -129,9 +134,15 @@ Do this **before** you send your line. Nobody should be working yet. If someone 
 
 ## 3. Start one Travis stream
 
-### 3.1 Send your line
+### 3.1 Send the sentence
 
-**Do:** Type **My line** exactly as you wrote it above. Send.
+**Do:** In the composer, type exactly:
+
+```
+What's on the desk in this room?
+```
+
+Then send. Do not change a word. Do not add a word.
 
 **Expect:** The send goes. You do not need a spoken reply for this walk.
 
@@ -183,7 +194,13 @@ Stay here. Do not close yet. Watch it. Fill each step as you see it.
 
 **Do:** Read the first body line — the line under the title, before any other work.
 
-**Expect:** That line is **My line** — the same words you sent. It stays there. It does not scroll away as the first thing in the pile.
+**Expect:** That line is exactly:
+
+```
+What's on the desk in this room?
+```
+
+It stays there. It does not scroll away as the first thing in the pile.
 
 **I saw:**
 
@@ -191,15 +208,23 @@ Stay here. Do not close yet. Watch it. Fill each step as you see it.
 
 **Do:** Look under that trigger line. Wait several seconds while he is still working.
 
-**Expect:** Work appears **below** the trigger. In the order it actually happens (words, then a process, or a process first, then words). It **grows**. It is not a single collapsed “done” receipt. You can see what is happening, not just that something finished.
+**Expect:** Work appears **below** the trigger. It **grows**. It is not a single collapsed “done” receipt.
+
+On this desk there are three looks — not four named process types:
+
+1. **Words** — his speech, landing.
+2. **Process** — a **tool name**, then a body that fills in. Not labeled Term. Not a fake terminal. Not a fake GitHub diff.
+3. **Thought** — quieter, smaller, under the words/process.
+
+Order is whatever actually happens (words then process, or process first). Write which looks you got, in order.
 
 **I saw:**
 
-### 5.4 Completely (as far as you can see)
+### 5.4 Process (if it appeared)
 
-**Do:** Keep watching until you have seen more than one beat if he does more than one thing.
+**Do:** If you saw a tool name + body, stay on it for a few seconds. If you only saw words / thought, write that and skip the rest of this step.
 
-**Expect:** You are not missing a whole class of work (he spoke and you only see a title; or he ran something and you see nothing). Not second-accurate. Not a lie. If he only speaks, you see the words land. If he runs a tool, you see that process — not a fake terminal, not a fake GitHub diff.
+**Expect:** The tool name stays. The body is the grain that occurred (it may fill after). Not a lie. Not second-accurate. This sentence may only produce words — if process never appears, that is what you write. Do not invent a second sentence.
 
 **I saw:**
 
@@ -215,7 +240,7 @@ Stay here. Do not close yet. Watch it. Fill each step as you see it.
 
 **Do:** Look at the Log tape. Do **not** open Stream yet.
 
-**Expect:** His **finished** reply is **not** sitting on the Log as a completed turn yet (he is still working). Live work does not belong on that tape. Your **My line** may already be on the Log as your message. That is fine.
+**Expect:** His **finished** reply is **not** sitting on the Log as a completed turn yet (he is still working). Live work does not belong on that tape. `What's on the desk in this room?` may already be on the Log as your message. That is fine.
 
 **I saw:**
 
@@ -223,7 +248,7 @@ Stay here. Do not close yet. Watch it. Fill each step as you see it.
 
 **Do:** Either tap the glowing Travis mark on the Log header, **or** room-title pill → glowing Travis mark.
 
-**Expect:** Stream opens again. Same title **Stream**. Same trigger (**My line**). The work you already saw is still there, plus anything new. It is the same stream, not a second empty one.
+**Expect:** Stream opens again. Same title **Stream**. Same trigger (`What's on the desk in this room?`). The work you already saw is still there, plus anything new. It is the same stream, not a second empty one.
 
 **I saw:**
 
@@ -261,7 +286,7 @@ Stay here. Do not close yet. Watch it. Fill each step as you see it.
 
 ### 7.1 Find the finished Travis message
 
-**Do:** Scroll the Log to Travis’s **completed** reply to **My line**.
+**Do:** Scroll the Log to Travis’s **completed** reply to `What's on the desk in this room?`
 
 **Expect:** There is a finished Travis message on the tape. You can read it. This is completed work.
 
@@ -271,7 +296,7 @@ Stay here. Do not close yet. Watch it. Fill each step as you see it.
 
 **Do:** Look **immediately above** that finished Travis message. Not below. Not on your user line.
 
-**Expect:** A **card** sits **above** his completed message. The card says **Stream**. It shows **My line** (the trigger), not a fake caption.
+**Expect:** A **card** sits **above** his completed message. The card says **Stream**. It shows `What's on the desk in this room?` — not a fake caption.
 
 **I saw:**
 
@@ -287,7 +312,7 @@ Stay here. Do not close yet. Watch it. Fill each step as you see it.
 
 **Do:** Tap the Stream card.
 
-**Expect:** The Stream compartment opens. Title **Stream**. Top line is **My line**. Below: the same work you watched while it was live. Not empty. Not a different episode.
+**Expect:** The Stream compartment opens. Title **Stream**. Top line is `What's on the desk in this room?`. Below: the same work you watched while it was live. Not empty. Not a different episode.
 
 **I saw:**
 
