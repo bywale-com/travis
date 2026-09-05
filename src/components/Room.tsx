@@ -65,6 +65,8 @@ import {
 import { RequestLogDoor } from "@/components/plates/RequestLogDoor";
 import { RoomIndex, type RoomRow } from "@/components/plates/RoomIndex";
 import { RosterDoor, type RosterMember } from "@/components/plates/RosterDoor";
+import { StreamCard, StreamDoor } from "@/components/plates/StreamDoor";
+import { streamPollMs, type StreamGrain } from "@/lib/stream";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
 import { TYPE } from "@/theme/scale";
@@ -272,6 +274,9 @@ export function Room({
   const [viewMode, setViewMode] = useState<ViewMode>("voice");
   const [turns, setTurns] = useState<Turn[]>([]);
   const [motionCards, setMotionCards] = useState<MotionCardData[]>([]);
+  const [liveStreams, setLiveStreams] = useState<StreamGrain[]>([]);
+  const [streamCards, setStreamCards] = useState<StreamGrain[]>([]);
+  const [openStreamId, setOpenStreamId] = useState<string | null>(null);
   const [presence, setPresence] = useState<Presence>("ended");
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
@@ -283,9 +288,8 @@ export function Room({
   const [streamingPostIds, setStreamingPostIds] = useState<
     Record<string, string>
   >({});
-  const [streamingSeat, setStreamingSeat] = useState<string | null>(null);
+  const [, setStreamingSeat] = useState<string | null>(null);
   const [subtitle, setSubtitle] = useState("");
-  const [expandedThoughtId, setExpandedThoughtId] = useState<string | null>(null);
   const [liveThoughts, setLiveThoughts] = useState<Record<string, string>>({});
   const [queueSeats, setQueueSeats] = useState<QueueSeatDto[]>([]);
   const [logSubmode, setLogSubmode] = useState<LogSubmode>("talk");
@@ -380,6 +384,11 @@ export function Room({
     const nextTurns = (data.turns ?? []) as Turn[];
     setTurns(nextTurns);
     if (Array.isArray(data.cards)) setMotionCards(data.cards as MotionCardData[]);
+    if (data.streams && typeof data.streams === "object") {
+      const next = data.streams as { live?: StreamGrain[]; cards?: StreamGrain[] };
+      setLiveStreams(Array.isArray(next.live) ? next.live : []);
+      setStreamCards(Array.isArray(next.cards) ? next.cards : []);
+    }
     setLiveThoughts((prev) => {
       const next: Record<string, string> = { ...prev };
       for (const t of nextTurns) {
@@ -473,12 +482,17 @@ export function Room({
       }
     };
     void tick();
-    const timer = window.setInterval(() => {
-      void tick();
-    }, 4000);
+    let timer = 0;
+    const schedule = () => {
+      if (cancelled) return;
+      timer = window.setTimeout(() => {
+        void tick().finally(schedule);
+      }, streamPollMs());
+    };
+    schedule();
     return () => {
       cancelled = true;
-      window.clearInterval(timer);
+      window.clearTimeout(timer);
     };
   }, [session?.id, applyQueue, refreshQueue, refreshTurns]);
 
@@ -1971,12 +1985,6 @@ export function Room({
     }
   };
 
-  const activeThoughts = turns.filter(
-    (t) =>
-      t.kind === "agent_thought" &&
-      (t.thoughtStatus === "streaming" || liveThoughts[t.id]),
-  );
-
   const viaShort = seatKeyToShort(session?.activeSeatKey, session?.activeLabel);
   const listenLine =
     presence === "paused"
@@ -2297,19 +2305,20 @@ export function Room({
             >
               {roomSeats.slice(0, 6).map((seat, i) => {
                 const key = seat.seatKey || seat.label;
-                const thought = activeThoughts.find((t) => t.seatKey === seat.seatKey);
-                const streaming = thought && liveThoughts[thought.id];
+                const live = liveStreams.find(
+                  (s) =>
+                    s.seatKey === seat.seatKey ||
+                    (seat.id && s.bindingId === seat.id),
+                );
                 const working = runningNow.some((r) => r.seatKey === seat.seatKey);
-                const active =
-                  thought?.thoughtStatus === "streaming" || !!streaming || working;
-                const expanded = thought && expandedThoughtId === thought.id;
+                const active = Boolean(live) || working;
                 return (
                   <button
                     key={`${seat.id ?? key}-${i}`}
                     type="button"
                     onClick={() => {
-                      if (thought) {
-                        setExpandedThoughtId(expanded ? null : thought.id);
+                      if (live) {
+                        setOpenStreamId(live.id);
                         return;
                       }
                       setDoor("roster");
@@ -2322,11 +2331,15 @@ export function Room({
                       zIndex: 6 - i,
                       cursor: "pointer",
                       opacity:
-                        thought || working || session.activeSeatKey === seat.seatKey
+                        live || working || session.activeSeatKey === seat.seatKey
                           ? 1
                           : 0.45,
                     }}
-                    aria-label={`${seatKeyToShort(seat.seatKey, seat.label)} thought`}
+                    aria-label={
+                      live
+                        ? `${seatKeyToShort(seat.seatKey, seat.label)} Stream`
+                        : `${seatKeyToShort(seat.seatKey, seat.label)}`
+                    }
                   >
                     <SeatMark
                       seatKey={key}
@@ -2355,24 +2368,7 @@ export function Room({
                 </button>
               ) : null}
             </div>
-            {expandedThoughtId && (
-              <div
-                style={{
-                  margin: "8px 16px",
-                  padding: "10px 12px",
-                  background: t.bgElevated,
-                  borderRadius: 12,
-                  fontSize: 13,
-                  fontStyle: "italic",
-                  color: t.textSecondary,
-                  maxHeight: 120,
-                  overflowY: "auto",
-                }}
-              >
-                {liveThoughts[expandedThoughtId] ||
-                  turns.find((x) => x.id === expandedThoughtId)?.text}
-              </div>
-            )}
+            {null}
             <div style={{ textAlign: "left", padding: "4px 20px 8px" }}>
               <Button
                 type="link"
@@ -2630,6 +2626,16 @@ export function Room({
                         />
                       </div>
                     ) : null}
+                    {streamCards
+                      .filter((card) => card.closeTurnId === turn.id)
+                      .map((card) => (
+                        <StreamCard
+                          key={card.id}
+                          stream={card}
+                          t={t}
+                          onOpen={(id) => setOpenStreamId(id)}
+                        />
+                      ))}
                   <div
                     id={`turn-${turn.id}`}
                     style={{
@@ -2833,44 +2839,7 @@ export function Room({
                 }
               />
             )}
-            {Object.entries(streamingPosts).map(([sk, liveText]) => (
-              <div
-                key={sk}
-                style={{
-                  alignSelf: "flex-start",
-                  maxWidth: "92%",
-                  display: "flex",
-                  gap: 8,
-                }}
-              >
-                <SeatMark
-                  seatKey={sk === "_" ? (streamingSeat ?? session.activeSeatKey) : sk}
-                  label={
-                    roomSeats.find(
-                      (s) =>
-                        s.seatKey ===
-                        (sk === "_"
-                          ? (streamingSeat ?? session.activeSeatKey)
-                          : sk),
-                    )?.label
-                  }
-                  t={t}
-                  size={28}
-                  glow
-                />
-                <div
-                  style={{
-                    background: t.assistantBubble,
-                    border: `1px solid ${t.border}`,
-                    borderRadius: "16px 16px 16px 4px",
-                    padding: "10px 14px",
-                    fontSize: 15,
-                  }}
-                >
-                  <AgentPostBody text={liveText} t={t} />
-                </div>
-              </div>
-            ))}
+            {null}
             {draft && logSubmode !== "type" && (
               <div
                 style={{
@@ -2967,36 +2936,33 @@ export function Room({
           members={roomSeats}
           catalog={catalog}
           adding={rosterAdding}
-          thoughts={Object.fromEntries(
+          doors={Object.fromEntries(
             roomSeats.flatMap((seat) => {
               const key = seat.seatKey;
               if (!key) return [];
-              const thought = [...turns]
-                .reverse()
-                .find((t) => t.kind === "agent_thought" && t.seatKey === key);
-              if (!thought) return [];
+              const live = liveStreams.find(
+                (s) =>
+                  s.seatKey === key || (seat.id && s.bindingId === seat.id),
+              );
               const glowing =
-                thought.thoughtStatus === "streaming" ||
-                !!liveThoughts[thought.id] ||
+                Boolean(live) ||
                 runningNow.some((r) => r.seatKey === key);
               return [
                 [
                   key,
                   {
-                    id: thought.id,
-                    text: liveThoughts[thought.id] || thought.text,
+                    streamId: live?.id ?? null,
                     glowing,
                   },
                 ],
               ];
             }),
           )}
-          openThoughtId={expandedThoughtId}
-          onSeatMark={(thought) =>
-            setExpandedThoughtId(
-              expandedThoughtId === thought.id ? null : thought.id,
-            )
-          }
+          onOpenStream={(id) => {
+            setDoor(null);
+            setRosterAdding(false);
+            setOpenStreamId(id);
+          }}
           onClose={() => {
             setDoor(null);
             setRosterAdding(false);
@@ -3078,6 +3044,22 @@ export function Room({
           onOpenLog={openTurnInLog}
         />
       ) : null}
+
+      {openStreamId
+        ? (() => {
+            const stream =
+              liveStreams.find((s) => s.id === openStreamId) ??
+              streamCards.find((s) => s.id === openStreamId);
+            if (!stream) return null;
+            return (
+              <StreamDoor
+                t={t}
+                stream={stream}
+                onClose={() => setOpenStreamId(null)}
+              />
+            );
+          })()
+        : null}
 
       {door === "inflight" ? (
         <InFlightDoor
