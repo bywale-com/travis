@@ -14,6 +14,7 @@
 | 005 | [`PM-PACKET-005-LOG-FORMAT.md`](./PM-PACKET-005-LOG-FORMAT.md) | `main` |
 | 006 | [`PM-PACKET-006-VOICE-SEND-QUIET.md`](./PM-PACKET-006-VOICE-SEND-QUIET.md) | `main` |
 | 007 | [`PM-PACKET-007-HEAR-QUEUE.md`](./PM-PACKET-007-HEAR-QUEUE.md) | `main` — locked; Hear / Next / Skip still SA silence |
-| 008 | [`PM-PACKET-008-STREAM.md`](./PM-PACKET-008-STREAM.md) · test [`PM-PACKET-008-STREAM-TEST.md`](./PM-PACKET-008-STREAM-TEST.md) | [#126](https://github.com/bywale-com/travis/pull/126) — Stream locked; SA **024** planted; test spec first rendition |
+| 008 | [`PM-PACKET-008-STREAM.md`](./PM-PACKET-008-STREAM.md) · test [`PM-PACKET-008-STREAM-TEST.md`](./PM-PACKET-008-STREAM-TEST.md) | [#126](https://github.com/bywale-com/travis/pull/126) — Stream locked; SA **024** planted |
+| 009 | [`PM-PACKET-009-STREAM-CLOSE.md`](./PM-PACKET-009-STREAM-CLOSE.md) · test [`PM-PACKET-009-STREAM-CLOSE-TEST.md`](./PM-PACKET-009-STREAM-CLOSE-TEST.md) | [#126](https://github.com/bywale-com/travis/pull/126) — close / card hang; SA **025** |
 
 Next packet number follows the last cut. Do not reuse.

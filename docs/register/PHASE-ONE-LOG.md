@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:37 UTC — **008 walk: Stream store wrote; glass did not.** Closed on the wrong turn. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:44 UTC — **PM-PACKET-009 Stream close / card hang.** Every packet gets a packet test. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1793,3 +1793,13 @@ What's on the desk in this room?
 **Why the glass was empty:** Stream does not open itself. Glow/door only while `live`. He closed when the first tool finished, before the speakable post. Card would hang above the **old** line. The new answer has no card. Follow-up (“did you pull these from memory”) did not open a stream.
 
 **024 already required:** stay live until labor ends; `close_turn_id` = that completed `agent_post`; live text as `message`. Plant missed. PM does not plant.
+
+---
+
+## 2026-09-05 16:44 UTC — PM-PACKET-009 Stream close (founder)
+
+**Kind:** Packet lock. Founder: card is positioned wrongly; create a packet. From PM, it is a packet. Every packet gets a **packet test**. Tests are scoped to that packet. This test also resumes 008 only because we stopped mid-walk.
+
+**Locked:** [`PM-PACKET-009-STREAM-CLOSE.md`](./PM-PACKET-009-STREAM-CLOSE.md) · test [`PM-PACKET-009-STREAM-CLOSE-TEST.md`](./PM-PACKET-009-STREAM-CLOSE-TEST.md). Same PR #126. SA **025**. Do not remint 024 tables. Stream does not auto-open. Card hangs on **this** episode’s completed line.
+
+**Sentence for the new walk:** `Name the open initiatives.`

@@ -14,11 +14,11 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **16:37 UTC 2026-09-05** (008 walk: store wrote, glass empty). Flag **14:00**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **16:44 UTC 2026-09-05** (009 Stream close / card hang). Flag **14:00**. |
 | Seat law | [`../README.md`](../README.md) § Product Manager · [`../seats/PRODUCT-MANAGER.md`](../seats/PRODUCT-MANAGER.md) · house [`house-now/protocols/pm.md`](./house-now/protocols/pm.md) |
 | Plates | [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) generate · [`PLATE-READ.md`](./PLATE-READ.md) read |
-| Packets 001–008 | [`PM-PACKETS.md`](./PM-PACKETS.md). 001–007 on **`main`**. **008** Stream on this PR — SA **024** planted. Test spec [`PM-PACKET-008-STREAM-TEST.md`](./PM-PACKET-008-STREAM-TEST.md). 007 Hear / Next / Skip still SA. |
-| Last face lock | **008 Stream** — In this room → Stream compartment → card above completed Log line. Request line (get in / clock / leave with your work / mouth is gated) still stands. |
+| Packets 001–009 | [`PM-PACKETS.md`](./PM-PACKETS.md). 001–007 on **`main`**. **008–009** on this PR. Every packet has a packet test, scoped to that packet. |
+| Last face lock | **009** — card above **this** episode’s completed line. Stream does not auto-open. |
 | Engineer | Implements specced work only. Pickup [`ENGINEER-HANDOFF.md`](./ENGINEER-HANDOFF.md). **024** Stream planted on this PR. Prior open pocket: **022** on [#120](https://github.com/bywale-com/travis/pull/120). |
 | Vision | The job is packets. First human job is a tester walking the spec. Gig / Om Coda test space is far. Gap: environment, bounded per packet. Evolution: a **sandbox** — tester is already in the place; Setup is only for today’s desk. |
 | Packet chain | [`AUTOMATION-PACKET-CHAIN.md`](./AUTOMATION-PACKET-CHAIN.md) — packet → SA → Engineer, same PR. Prompts written; Save + Activate is human / local `/automate`. |
