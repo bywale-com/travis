@@ -4,7 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
-- **2026-09-05** · Hotfix 072 · [PR #TBD](https://github.com/bywale-com/travis/pull/TBD) — A box step left `running` when the request died is claimed again, and the backlog footer sits after the rows, because last night’s machine check stayed **1 in motion** and the older tickets hid under a pinned “end.”
+- **2026-09-05** · Hotfix 072 · [PR #125](https://github.com/bywale-com/travis/pull/125) — A box step left `running` when the request died is claimed again, and the backlog footer sits after the rows, because last night’s machine check stayed **1 in motion** and the older tickets hid under a pinned “end.”
 - **2026-09-05** · SCP-023 · [PR #123](https://github.com/bywale-com/travis/pull/123) — Live Travis speech stays his line, a process hangs as a card under that line, dest is a job with a heartbeat, and an unseated catalog slug is nobody, because he mailed “new PM” to catalog `pm` and the ear painted his voice on the right.
 - **2026-09-04** · Envelope 023 · [PR #123](https://github.com/bywale-com/travis/pull/123) — Tightness is our runner (dest gate, job, watch, take-back); children stay in Cursor; 021+022 without the gate do not finish it, because Travis mailed “new PM” to the PM.
 - **2026-09-04** · 021 worker · [PR #119](https://github.com/bywale-com/travis/pull/119) — Travis proves a job on the same box, says house and disk are two, and can unfold a house template into a new GitHub repo, because a one-shot run is not a worker and calling run_box again is not a loop.
