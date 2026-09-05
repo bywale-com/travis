@@ -1755,3 +1755,13 @@ When we generate plates and packets (usually at the same time) we also generate 
 **Founder:** Worth mentioning now, since you did Setup in the environments we’re trying to build. That is **not** the evolution. They would not even need to get there. Some kind of **sandbox**. They would only ever be in the places they need to be.
 
 **Hold:** Today’s sheet still has Setup because the walk is this desk (preview / psi). The future space places the tester in the pocket. Setup falls away. Do not invent the sandbox. Do not strip Setup from 008.
+
+---
+
+## 2026-09-05 16:30 UTC — “My line” was a blank, not copy (founder)
+
+**Kind:** Sheet miss. Founder: are you asking me to type the phrase “my line”?
+
+**No.** Invent a real sentence for Travis. Write it in Setup. Later steps mean that sentence.
+
+**Sheet recut:** blank is **The sentence I will send.**
