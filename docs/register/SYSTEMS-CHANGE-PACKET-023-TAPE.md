@@ -1,30 +1,21 @@
 # SYSTEMS-CHANGE-PACKET-023 — Tape, card, dest job
 
 **Number:** `023` — next systems packet is `024`. Never reuse a number.  
-**Status:** **Draft.** Engineer wrote this for SA to sign. **Not signed. Not planted.**  
-**Seat:** Engineer drafted. Systems Analyst signs Story, ascribes stores, closes the cuts, then Engineer only cuts.  
+**Status:** **Signed.** Engineer drafted. SA closed the cuts. **Not planted.** Plant on **this PR** ([#123](https://github.com/bywale-com/travis/pull/123)) after this file.  
+**Seat:** Systems Analyst. Engineer pastes this. No leftover analysis.  
 **When:** 2026-09-05  
-**PR:** [#123](https://github.com/bywale-com/travis/pull/123) — same initiative as the tightness envelope. Do not open a second PR.  
 **Envelope:** [`ENVELOPE-TRAVIS-TIGHTNESS.md`](./ENVELOPE-TRAVIS-TIGHTNESS.md)  
-**Glass (look, do not mint from PNG):** [`PLATES-MOTION-LOG.md`](./PLATES-MOTION-LOG.md) M1–M5 · S3 In flight recut (V6 + heartbeat)  
-**Prior (do not remint):** 013 motion · 015 sit · 021 worker · 042 · 022 ports signed on [#120](https://github.com/bywale-com/travis/pull/120) — **plant 022 after this gate, not in this packet**  
-**Trail:** Engineer git + this PR. Do not append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG from Engineer.
+**Glass (look, do not mint from PNG):** [`PLATES-MOTION-LOG.md`](./PLATES-MOTION-LOG.md) M1–M5 · S3 In flight recut (V6 + heartbeat). Live visuals stay look-only.  
+**Prior (do not remint):** 013 motion · 015 sit · 021 worker · 042 · 022 ports signed on [#120](https://github.com/bywale-com/travis/pull/120) — **plant 022 after this gate is on `main`, not in this packet**  
+**Trail:** [`SYSTEMS-ANALYST-LOG.md`](./SYSTEMS-ANALYST-LOG.md)
 
 ---
 
-## Intent
+## 1. Story (signed)
 
-Travis is not the bottleneck. The founder talks. Labor leaves his mouth.
+Children stay in **Cursor**. Protocol / management / supervisory tightness is **our runner**. Dest is not a mailbox keyed by the noun in the sentence.
 
-One **hidden card** on the Log is every Travis action — house write, `search_room`, box prove, unfold, a filed plan. Same object. Not a Box door. Not In flight.
-
-**In flight** is seats (Roster is people; Backlog In motion is the tape’s index). Dest is a **job** he can watch and take back, not a blocking turn and not catalog mail.
-
-Voice echo must not put his words on the founder’s side. Right = founder only.
-
----
-
-## 1. Story (for SA to sign or rewrite)
+021 + 022 without the gate do **not** finish it. More verbs + dest-as-mail is more of the comic fail (he mailed “new PM” to catalog `pm`).
 
 **Must**
 
@@ -37,18 +28,11 @@ Voice echo must not put his words on the founder’s side. Right = founder only.
 
 **Must-not**
 
-- A second Watch app. A Box screen. Labor read aloud. Puppet Cursor chat. Remint 021. Plant 022 in this cut.
-- Mint a store from a plate. Invent triage.
+- A second Watch app. A Box screen. Labor read aloud. Puppet Cursor chat. Remint 021. Plant 022 in this cut. Mint a store from a plate. Invent triage. Unseat. DAG / canvas / PTY.
 
 **Chain**
 
-Thread truth → card on the Log → motion is the nobody-queue → dest gate + job → (later) 022.
-
-**Silence (SA must promote or name)**
-
-1. Mutate remaining steps from a new line (append / drop / rewrite **pending**).  
-2. `create_agent` / `sit_agent` on the queue, or keep 013 refuse (short turn).  
-3. Push bus vs today’s poll for card/job paint.
+Thread truth → card on the Log (motion already) → motion is the nobody-queue → dest gate + `travis.dest_job` → (later) 022 on #120.
 
 ---
 
@@ -56,16 +40,12 @@ Thread truth → card on the Log → motion is the nobody-queue → dest gate + 
 
 | Grain | Where |
 |-------|--------|
-| User vs him | `voice_turn.kind` — Log paints `kind=user` on the right (`Room.tsx`). Live persist: `insertUserTurn` vs `absorbLiveTravisPost` (`live/transcript`). |
-| Request scan | `REQUEST_SCAN = 200`, `kind=user` only, filter in memory (`src/server/room-read.ts`) |
-| Motion | `travis.motion` + `travis.motion_step` · `file_plan` · `runMotionRunner` · allowlist in `src/lib/motion.ts` |
+| User vs him | `voice_turn.kind` — Log paints `kind=user` on the right. Live persist: `insertUserTurn` vs `absorbLiveTravisPost`. |
+| Motion | `travis.motion` + `travis.motion_step` · already has `founding_turn_id` → `voice_turn` |
 | Motion refuse | `send_to_seat`, `dispatch_to_seat`, `create_agent`, `sit_agent`, `unfold_repo`, `file_plan`, … |
 | Seats live | `travis.seat_live_run` — one Cursor run per binding |
-| In flight door | Queue chip → `InFlightDoor` (V6). Roster is the room pill / thought miss. `N in motion` → Backlog In motion. |
 | Dest send | `send_to_seat` blocks. `dispatch_to_seat` returns. Catalog fallback still exists (comic fail). |
-| Box | HTTP one-shot + `prove_box` loop. No stdout stream to the phone. |
-| Phone liveness | Poll in `Room.tsx`. No SSE for jobs/cards. |
-| Job table | **Ascribed in the dest plan, not planted.** |
+| 022 | Signed on #120. Not planted. Do not remint `travis.port`. |
 
 ---
 
@@ -73,138 +53,146 @@ Thread truth → card on the Log → motion is the nobody-queue → dest gate + 
 
 No new table.
 
-- Persist Travis Live / TTS / readback as `absorbLiveTravisPost` (or equivalent `kind=agent_post`, `seatKey=travis`). **Never** `insertUserTurn`.
-- STT that is his voice is not a user line. If the ear cannot tell, drop it — do not guess founder.
-- `seatKey` on a user turn is dest, not the column. Right side is `kind=user` only.
-- `search_room` / motion title clip keep reading `kind=user`. After this cut that set is founder-only.
+- Persist Travis Live / TTS / readback as `absorbLiveTravisPost` (`kind=agent_post`, `seatKey=travis`). **Never** `insertUserTurn`.
+- STT that is his voice is not a user line. If the ear cannot tell, **drop it** — do not guess founder.
+- Right side is `kind=user` only. `seatKey` on a user turn is dest, not who spoke.
+- `search_room` / request scan stay `kind=user`. After this cut that set is founder-only.
 
 ---
 
-## 4. The card (priority 2)
+## 4. The card (priority 2) — pick **B**
 
-**Glass:** M1–M5. Talk Log. You → “Let me get to that.” → card **under** that line. Collapsed. Tap = real tool, real args, real `result_text`. Not spoken.
+**No new `voice_turn.kind`. No third labor table.**
 
-**One object.** `write_os`, `search_room` (scan + rows, not the spoken sentence), `run_box` / `write_box` / `prove_box` / `unfold_repo`, and every `motion_step`. Box is an inside, not a surface.
+Hang on **`travis.motion.founding_turn_id`** = the Travis `agent_post` (“Let me get to that.”). Client + Here derive the card from that motion and its `motion_step` rows. Collapsed. Tap = tool, args, `result_text`. Not spoken.
 
-**Hang (SA picks one — Engineer does not mint):**
+**In-turn his-tools** that never called `file_plan` (a lone `write_os`, `prove_box`, …): harness **auto-files a one-step motion** on that founding turn so they hang on the same object. He does not block the mouth on two writes. `file_plan` still returns immediately; the runner walks pending steps.
 
-| Pick | Meaning |
-|------|---------|
-| **A** | New `voice_turn.kind` (SA names it) on the founding turn, FK `motion_id` and/or a tool receipt. |
-| **B** | No new kind. Client + Here derive the card from `motion` / `motion_step` keyed by `founding_turn_id`. In-turn tools that never filed a plan still need a hang — SA says how (auto-`file_plan`, or a receipt row). |
+Fail: step `failed`, motion `failed`, he may speak a sentence. Later steps on that motion do not start. Empty / zero motion: no card, no `N in motion`.
 
-Do **not** mint a third labor table unless A and B cannot bear Story.
+`unfold_repo` stays **off** the motion allowlist (021). If he calls it in-turn, it may auto-file as a one-step motion (card), but it is not a planned tape step.
 
-**Runtime**
-
-- `file_plan` returns to the model immediately. Runner walks pending steps. Card reflects `motion_step` status.
-- In-turn tools that are his nobody-work **should leave the mouth** the same way (file or equivalent). He does not block the turn on two writes.
-- Fail: step `failed`, motion `failed`, he may speak a sentence. Later steps on that motion do not start.
-- Empty / zero motion: no card, no `N in motion`.
+Do not plant M1–M5 from the PNG. Talk Log only. No Box door.
 
 ---
 
 ## 5. Motion stays the nobody-queue (priority 3)
 
-013 stands except where SA lifts a silence in §8.
+013 stands.
 
-- Interrupt / barge does **not** wipe the row. Already 013.
+- Interrupt / barge does **not** wipe the row.
 - `1 in motion` = open `waiting|running` motions. Opens Backlog In motion. Staple with the card title.
-- Allowlist stays nobody-tools until §8.2 says otherwise. `unfold_repo` stays off the tape unless SA adds it (021 left it off; it is his, but fat).
+- Allowlist stays nobody-tools. `create_agent` / `sit_agent` stay refused as steps.
 
 ---
 
 ## 6. Dest gate + job (priority 4)
 
-**Gate** — no table. Lives in `send_to_seat` / `dispatch_to_seat`, not `TRAVIS_SYSTEM`.
+### Gate — no table. Code, not `TRAVIS_SYSTEM`.
 
-| Class | Meaning |
-|-------|---------|
-| **His** | He does it (tools he has; ports when 022 plants). |
-| **Theirs** | A seated person. Vacant / empty `protocol_path` → **nobody** before any send. |
-| **Nobody** | Name the hole. Offer Engineer. No retry, no guess, no mail-the-noun. |
+Lives in `send_to_seat` / `dispatch_to_seat` (one helper, e.g. `src/lib/dest-gate.ts`).
 
-Catalog role dest **must not** wake an unseated catalog bind.
+| Class | Meaning | Move |
+|-------|---------|------|
+| **His** | A tool or port he has (box, house, sit, create, prove, unfold, a wired port). Prompt is create / sit / deprecate / rebind / prove / unfold / box / house / authorize. | **Refuse send.** He does it. |
+| **Theirs** | Open member, **`protocol_path` nonempty**, that person. | Insert job, dispatch, return. |
+| **Nobody** | Vacant role, empty `protocol_path`, catalog-only bind, Cursor `bc-` / deploy / 042, or a hole we have not ascribed (unseat). | Receipt names the hole. Offer Engineer. **No mail. No retry. No guess.** |
 
-**`send_to_seat` must not hold his mouth.** Same leave-as-`dispatch`: return a job/receipt, seat works, he stays. (If SA keeps a blocking send, name it — founder said he cannot be the bottleneck.)
+**Catalog fallback dies entirely** — not only on his/nobody. Role dest never wakes an unseated catalog slug. Spin fail = nobody receipt. 071 `idleCatalogRole` path is struck.
 
-**Job row** — SA ascribes SQL. Shape already named (Day 1, Postgres, no new host):
+“New PM” is **his** (create + sit) or **nobody** (rebind a Cursor id). It is never “mail the current PM.”
 
-| Field | Notes |
-|-------|--------|
-| `job_id` | uuid PK |
-| `assigned_seat` | binding or seat key — SA picks the FK |
-| `payload` | structured, not a raw blob |
-| `idempotency_key` | |
-| `timeout_ms` | |
-| `status` | `created` \| `dispatched` \| `in_progress` \| `completed` \| `failed` \| `timed_out` |
-| `created_at` | |
-| `last_heartbeat_at` | dest watch / take-back reads **this row**, not the seat’s chat |
-| `parent_id` | **nullable.** Only if SA wants a graph later. Not required for In flight. |
+### `send_to_seat` does not hold his mouth
 
-**In flight (V6 chrome).** Running / waiting. Elapsed → heartbeat recency: `2s ago` muted; `stale` (danger) if last ping >15s. Outlined rings + live `(` as S3. No Close if SA follows the recut (handle dismisses). Task line is plain language, not jargon.
+Same leave as `dispatch_to_seat`: return a job/receipt. Seat works. He stays with the founder. Blocking send **dies**.
 
-Seat card **inside** (when they tap a running row, or the Log card for a send): the line we sent, live/stale, receipt. **Not** their tools, repo, diff, CI.
+### Mint `travis.dest_job`
 
-`seat_live_run` stays the Cursor run. Heartbeat writer = watch loop / seat-pipe. Null ping → quiet, not “healthy.”
+Story bears it: dest is a job he watches and takes back. Not a plate. Not a second host.
+
+```sql
+CREATE TABLE travis.dest_job (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  session_id uuid NOT NULL REFERENCES travis.voice_session(id),
+  binding_id uuid NOT NULL REFERENCES travis.agent_binding(id),
+  initiative_id uuid REFERENCES travis.initiative(id),
+  user_turn_id uuid REFERENCES travis.voice_turn(id),
+  parent_id uuid REFERENCES travis.dest_job(id),
+  payload jsonb NOT NULL,
+  idempotency_key text NOT NULL,
+  timeout_ms int NOT NULL DEFAULT 120000,
+  status text NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  last_heartbeat_at timestamptz,
+  CONSTRAINT dest_job_status_chk
+    CHECK (status IN ('created', 'dispatched', 'in_progress', 'completed', 'failed', 'timed_out')),
+  CONSTRAINT dest_job_idem_uniq UNIQUE (session_id, idempotency_key)
+);
+```
+
+| Field | Law |
+|-------|-----|
+| `binding_id` | The **person**, not `seat_key`. Disposable seats. |
+| `payload` | `{ "text": "…", "done": "…" }` — structured, not a raw blob. |
+| `parent_id` | **Nullable.** Flat In flight this packet. Do not draw a DAG. |
+| `last_heartbeat_at` | Dest watch reads **this row**. Null ping = quiet, not healthy. Stale if last ping >15s. |
+
+`seat_live_run` stays the Cursor run. Heartbeat writer = seat-pipe / watch loop.
+
+**Take-back:** on `completed` / `failed` / `timed_out`, Travis posts a short `agent_post` receipt and stays dest. He does not vanish into their chat. He does not start *his* work by mailing it.
+
+**In flight (V6):** grow the existing door. Running / waiting from `dest_job`. Elapsed → heartbeat recency (`2s ago` muted; `stale` if >15s). No new plate. Seat card inside: the line we sent, live/stale, receipt. **Not** their tools, repo, diff, CI.
+
+Ensure-once + founder ALTER.
 
 ---
 
 ## 7. 022
 
-Not this packet. Signed on #120. Plant **after** §6 is on `main`.
+Stands on #120. Plant **after** §6 is on `main`. Gate ships **tools-only**; ports make “his” honest when the host lands. Do not fold 022 onto this PR. Do not remint `travis.port`.
 
 ---
 
-## 8. Cuts SA must close (or name a silence)
+## 8. Cuts (closed)
 
-### 8.1 Mutate the tape
+### 8.1 Mutate the tape — **named silence**
 
-Founder test: as they talk, remaining work reshapes.
+New founder line = new `file_plan` (or a new motion). **Pending** steps are not rewritten from chat this packet. **Running** finishes or fails — do not rewind. Done stays done. Do not mint `rewrite_plan`.
 
-- **Pending** steps: append, drop, rewrite args.  
-- **Running:** finish or fail — do not rewind.  
-- Done stays done.
+### 8.2 Create / sit on the queue — **keep 013**
 
-Either mint a verb (SA names it, allowlist, who may call it) **or** name silence (new line = new `file_plan` only). Do not leave “reorganize” as vibe.
+`create_agent` / `sit_agent` stay refused as motion steps. “Say when you want the analyst” is a short turn (M5). Auto-sit catalog slugs stay forbidden.
 
-### 8.2 Create / sit on the queue
+### 8.3 Card/job liveness — **poll this packet**
 
-013 refused `create_agent` / `sit_agent` as steps. Feasible either way.
+Phone keeps 1–3s jitter poll. **SSE / LISTEN/NOTIFY is named silence** (later bus). Do not invent a second websocket product.
 
-| Pick | Meaning |
-|------|---------|
-| **Keep 013** | BA is a short turn after “Say when you want the analyst.” (M5) |
-| **Lift** | They may be pending steps (or jobs). Three moments still exist; they are not glued to his mouth. |
+### Unseat — **named silence**
 
-Auto-sit catalog `pm` / `sa` / `engineer` stays forbidden.
-
-### 8.3 Card/job liveness
-
-Poll may tell the truth first (1–3s jitter). SSE/NOTIFY is a later bus — ascribe or silence. Do not invent a second websocket product.
+No write. “Deprecate the PM” with no unseat tool = **nobody**. Do not invent unseat. Cursor rebind stays nobody-here.
 
 ---
 
-## 9. Must-not (this packet)
+## 9. Must-not
 
 - Computer use. MCP. Marketplace. Lifting 042.  
 - Reminting 021 or `travis.port`.  
-- Third orchestrator host / cron / Trigger.dev **engine**. Shape of assign-watch-take-back only.  
+- Third orchestrator host / cron / Trigger.dev engine.  
 - Growing I1. Dest as a new screen.  
-- Labor as Voice effect.  
-- Demo rows.
+- Labor as Voice effect. Demo rows.  
+- DAG / canvas / PTY / box stream from [`ENGINEER-LIVE-VISUALS.md`](./ENGINEER-LIVE-VISUALS.md).
 
 ---
 
-## 10. Engineer (after SA signs — not before)
+## 10. Engineer (paste)
 
-On **this PR**, in the Story order:
+On **this PR**, in this order:
 
 1. Thread truth.  
-2. Card hang as ascribed. Talk Log only.  
+2. Card hang **B** — motion under the Travis line. Auto one-step motion for in-turn nobody-work. Talk Log only.  
 3. `file_plan` / in-turn nobody-work leave the mouth; card follows `motion_step`.  
-4. Gate + job + In flight heartbeat. `send` does not hold him unless SA kept a blocking send.  
-5. Do not plant 022 here.
+4. Gate + `travis.dest_job` + In flight heartbeat. Catalog fallback struck. `send` does not hold him.  
+5. Do **not** plant 022 here.
 
 Do not send **That’s fine.**
 
@@ -217,11 +205,6 @@ Do not send **That’s fine.**
 - Interrupt: new user bubble, Travis answers, motion still `running` or `waiting`.  
 - Tap card: tool + args + `result_text`. Nothing read aloud from the card.  
 - Unseated catalog dest: nobody receipt, no wake.  
+- “New PM” / deprecate is his or nobody — never a send to `pm`.  
 - In flight stale when `last_heartbeat_at` is old. Null ping is quiet.  
-- 042 tests still pass. No box door. No new Watch tab.
-
----
-
-## SA sign-off
-
-Sign Story §1. Pick card hang §4 A or B. Close §8.1–8.3 (verb/silence, create/sit, poll/push). Ascribe job SQL (FKs). Then Engineer plants. If Story cannot bear a field, name the silence — do not leave analysis in the plant.
+- 042 tests still pass. No box door. No new Watch tab.  

@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-04 22:28 UTC — **SCP-021 signed.** Box is a worker with rules. House and disk are two. Unfold from `/templates/work-repo` + `TRAVIS_GITHUB_TOKEN`. 042 stands. Five back. Packet: [`SYSTEMS-CHANGE-PACKET-021-WORKER.md`](./SYSTEMS-CHANGE-PACKET-021-WORKER.md) on PR **#119**. Engineer plants prove on that PR.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 04:25 UTC — **SCP-023 signed.** Dest is a job, not mail. Catalog fallback dies. Card hangs on motion (B). Packet: [`SYSTEMS-CHANGE-PACKET-023-TAPE.md`](./SYSTEMS-CHANGE-PACKET-023-TAPE.md) on PR **#123**. 022 stays on [#120](https://github.com/bywale-com/travis/pull/120) — plant after this gate.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -395,3 +395,22 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-021-WORKER.md`](./SYSTEMS-CHANGE-PACKET-021-WORKER.md)
 
 **Handoff:** Engineer plants prove on #119, then unfold (may be not-wired). Next packet number is **022**.
+
+---
+
+## 2026-09-05 04:25 UTC — SCP-023 tightness (Engineer draft on #123)
+
+**Kind:** Envelope + draft pickup. [`ENVELOPE-TRAVIS-TIGHTNESS.md`](./ENVELOPE-TRAVIS-TIGHTNESS.md) · draft [`SYSTEMS-CHANGE-PACKET-023-TAPE.md`](./SYSTEMS-CHANGE-PACKET-023-TAPE.md). Packet on **this same PR**.
+
+**Ascribed:**
+
+1. Story — children in Cursor; tightness in our runner; dest is not mail. 021+022 without the gate do not finish it.
+2. Gate in `send_to_seat` / `dispatch_to_seat`. His / theirs / nobody. Catalog fallback **dies**. Vacant / empty `protocol_path` = nobody. Blocking send dies.
+3. Mint `travis.dest_job` (`binding_id`, payload, idempotency, heartbeat). `parent_id` nullable; no DAG. Take-back = Travis receipt, he stays dest.
+4. Card hang **B** — `motion.founding_turn_id`. Auto one-step motion for in-turn nobody-work. No new kind. No third labor table.
+5. Mutate-the-tape, unseat, SSE, create/sit-on-queue: **named silence**. Keep 013 refuse. Poll this packet.
+6. 022 stands on #120. Plant after this gate is on `main`. Do not remint `travis.port`.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-023-TAPE.md`](./SYSTEMS-CHANGE-PACKET-023-TAPE.md) now **signed**.
+
+**Handoff:** Engineer plants thread truth → card B → gate + dest_job on #123. Next packet number is **024**.
