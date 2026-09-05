@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 12:50 UTC — **SCP-024 signed.** Stream is a store. Live grain is not the Log tape. Same PR as PM-008 ([#126](https://github.com/bywale-com/travis/pull/126)). Next number is **025**.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:47 UTC — **SCP-025 signed.** Stream close hangs on this trigger’s answering post, not session-latest. Same PR as PM-009 ([#127](https://github.com/bywale-com/travis/pull/127)). Next number is **026**.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -463,3 +463,34 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-024-STREAM.md`](./SYSTEMS-CHANGE-PACKET-024-STREAM.md)
 
 **Handoff:** Engineer plants 024 on **this same PR**. Next packet number is **025**. Do not remint 023. Do not mint a cousin.
+
+---
+
+## 2026-09-05 16:47 UTC — SCP-025 Stream close (PM-009 on #127)
+
+**Kind:** Packet ascribe. Automation woke this seat. PM-009 + close test on this PR. No SYSTEMS-CHANGE-PACKET for 009 was on the branch. 023 and 024 stay planted — not reminted.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-009 lock + ST3). Not PM. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** Stream does not open itself. A fast reply can close the live door before you tap. That is fine. The card must sit above the completed message for this episode. If the card is missing next to the answer you just got, the hang is wrong.
+
+**Staples (not scenery):** **Stream** card **above** this episode’s completed line. Trigger text on the card = this user sentence.
+
+**Quoted stood-up:**
+
+- `maybeCloseTravisStream` (`stream.ts` L412–438) picks latest session Travis speakable `agent_post`. Called from `runTravisTool` `finish` after each tool.
+- Walk: stream `643e3e50-…` closed on seq **745**; answer seq **747** had no card; one `process` / `list_backlog`; no `message`.
+- `mirrorTravisMessage` no-ops when not live (`seat-pipe.ts` L354–366).
+- Dest already hangs on `post.id` (`dispatch.ts` L160–164 · `seat-pipe.ts` L743–748 · L866–870).
+
+**Ascribed:**
+
+1. **No remint.** 024 tables stand. Runtime only.
+2. **Answering post** = speakable Travis `agent_post` after this `trigger_turn_id` **and** after this stream’s last `process` (or `stream.created_at` if none). Stay live until it exists. Hang `close_turn_id` there.
+3. Close checks: tool finish (usually no-op) · after speakable persist · `pipeTravisText` end fallback (founding-only). Failed with no post → `failLiveStreamWithoutCard`. Interrupt stays.
+4. **Dest:** already correct. Refuse change.
+5. **Backfill SIGN** one named row (`643e3e50-…` → seq 747 + missing `message`). Refuse general repair. Speak-only with no live stream = no card (024 open law).
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-025-STREAM-CLOSE.md`](./SYSTEMS-CHANGE-PACKET-025-STREAM-CLOSE.md)
+
+**Handoff:** Engineer plants 025 on **this same PR**. Next packet number is **026**. Do not remint 023 or 024. Do not mint a cousin.
