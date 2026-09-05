@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 11:48 UTC — **Process stream: truthful live states.** Not a receipt. Grain matches what actually occurred. Shapes bounded by Travis tools. Ideas in this stamp — not locked. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 11:51 UTC — **“Look at this repo” is an ask, not a fifth look.** Box work streams as Term. The four are tool shapes, not utterances. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1578,4 +1578,18 @@ Production-ready for a request line is smaller than production-ready as a compan
 **Truth law:** stream the grain we actually have. If the box only returns start + a blob, show running *then* the blob landing — do not invent a Cursor diff. If later we get chunks, the same primitive grows. A lie is a loading spinner that hides a finished write, or a fake green/red we never received.
 
 **Ask:** hold the truth law + these four? Recut the set? Then we plate.
+
+---
+
+## 2026-09-05 11:51 UTC — “Look at this repo” (founder)
+
+**Kind:** Clarification. Not a fifth primitive.
+
+**Founder:** In these processes — “Hey Travis, look at this repo” + a link. Usually the box. Is that captured? Maybe I don’t understand.
+
+**Stood up:** No browse-GitHub tool. No browser. `curl` from the box is not a browser (021). `unfold_repo` *creates* a skeleton repo — it does not fetch their link. `link` artifact is SA silence.
+
+**Alignment:** The four are **how an emitting tool looks**, not a list of things you can say. “Look at this repo” is an ask. The stream is whatever he actually fires — almost always `run_box` (`git clone` / `curl`) = **Term**. Then `read_box` / a listing = **Look**. A write to disk = **Write**. Handing Engineer = **Hand**. The word “Look” in the primitive is search/list/read, not your English “look at this repo.” That collision is on me.
+
+**Ask:** does that land? If yes we can rename Look (Find / List) before we plate.
 
