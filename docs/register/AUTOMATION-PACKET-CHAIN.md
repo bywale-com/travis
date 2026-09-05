@@ -50,6 +50,21 @@ Technical PM look+test
 
 Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml). It diffs **this push** (`before…after`), not the whole PR. No Cursor token until the label is added.
 
+**Hotfix path (skip SA).** Founder 2026-09-05: a hotfix is not a new Cursor automation. Same Action. Title the PR `Hotfix NNN — …`. This push lands `docs/register/HOTFIX-NNN-*.md` → label **`wake-engineer`** only. No `wake-sa`. Same **B** — that label already wakes Engineer. Nothing else to change.
+
+```text
+this push lands HOTFIX-NNN-*.md
+        ↓  GitHub Action (no LLM)
+label  wake-engineer     (no wake-sa)
+        ↓
+Engineer plants the hotfix
+        ↓  src/ on a tree that already has the HOTFIX file
+label  wake-pm-look
+        ↓
+Technical PM look+test (hotfix gate, no PM-packet + SCP)
+        Fail → fail-look
+```
+
 **Human must change the two automations** (I cannot Save + Activate):
 
 1. Pause both, or every later stamp still boots on the old “PR pushed” triggers.
@@ -90,7 +105,7 @@ That push is the Engineer trigger.
 ## Automation B — SA complete → Engineer
 
 **Name:** `Travis — SA complete → Engineer`  
-**Triggers (any):** Source control — **Label added** **`wake-engineer`** (SA completed) **and** **Label added** **`fail-look`** (PM look failed). Both lowercase. Not PR pushed.  
+**Triggers (any):** Source control — **Label added** **`wake-engineer`** **and** **Label added** **`fail-look`**. Both lowercase. Not PR pushed. Not a third automation. Hotfix uses the same `wake-engineer` tag.  
 **Repository:** `bywale-com/travis`  
 **Tools:** Memories **off**. Pull request creation **off**.  
 **Prompt:** paste [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md) in full.
@@ -111,7 +126,7 @@ This is the beat that can run on a **already planted** PR (009 / 025 on #127). S
 
 ## Save + Activate (human or local `/automate`)
 
-1. **A** / **B** stay label `wake-sa` / `wake-engineer`. **B** also gets a second trigger: Label added / `fail-look`. Re-paste the Engineer prompt.
+1. **A** / **B** stay label `wake-sa` / `wake-engineer`. **B** also gets a second trigger: Label added / `fail-look`. Hotfix does not get a new paste.
 2. Create **C**. Trigger: Label added / `wake-pm-look`. Computer use on. Memories off. PR creation off. Paste the PM-look prompt. Save + Activate.
 3. To run the first look on #127: add `wake-pm-look` once C is Active. Do not add `wake-sa` or `wake-engineer` — 025 is already planted.
 4. Later plants: Action adds `wake-pm-look` when this push touched `src/` on a PR that already has a packet + change packet.
@@ -155,7 +170,7 @@ A clean future packet = **3 boots** if no loop; **3 + 2×N** if it loops N times
 ## Must-not
 
 - Do not mint a cousin PR.
-- Do not run SA because plates, FACE, or the Phase One log moved.
-- Do not run Engineer because the PM stamped.
+- Do not run SA because plates, FACE, the Phase One log, or a **hotfix** file moved.
+- Do not run Engineer because the PM stamped. A hotfix file **does** run Engineer.
 - Do not treat this as Travis product chrome. This is Cursor Automations waking seats.
 - Do not remint 023 / 024 / 025. Next SA packet is **026**. Next PM packet is **010**.

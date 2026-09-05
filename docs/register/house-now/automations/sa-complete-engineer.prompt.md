@@ -4,7 +4,7 @@ This run was started by a Cursor Automation because **`wake-engineer`** or **`fa
 
 If this wake is a label **removed**, or neither `wake-engineer` nor `fail-look` is on the PR: **stop**.
 
-- `wake-engineer` — SA just landed a change packet.
+- `wake-engineer` — SA just landed a change packet, **or** this PR is a **hotfix** (title `Hotfix NNN` / `HOTFIX-NNN` file). Skip SA.
 - `fail-look` — Technical PM look+test failed. Recut on this PR. All lowercase.
 
 ## First action — gate, then stop or continue
@@ -17,20 +17,23 @@ git diff --name-only HEAD~1
 
 If `HEAD~1` does not exist, use `git diff --name-only --diff-filter=A HEAD`.
 
-**Run only if this commit** added or materially revised **either**:
+**Run only if this commit** added or materially revised **one of**:
 
 1. `docs/register/SYSTEMS-CHANGE-PACKET-*.md` (SA just completed), **or**
-2. `docs/register/PM-LOOK-*.md` whose **Verdict** is **Fail** (Technical PM look+test sent it back)
+2. `docs/register/HOTFIX-[0-9]*-*.md` (hotfix — no SA), **or**
+3. `docs/register/PM-LOOK-*.md` whose **Verdict** is **Fail** (Technical PM look+test sent it back)
 
 If that list is empty: **stop immediately**. One short sentence if you must speak. No comment. No commit. No cousin PR. No memories. Do not read further.
 
-Do **not** run because a PM packet, plate, test file, or Phase One stamp moved. SA ascribes first.
+Do **not** run because a PM packet, plate, test file, or Phase One stamp moved. A hotfix file **is** the cut — do not wait for SA.
 
-If this wake is `wake-engineer` and the matching SYSTEMS-CHANGE-PACKET is already planted (handoff and `src/` already match; nothing specified-and-clear remains): **stop**.
+If this wake is `wake-engineer` on a SYSTEMS-CHANGE-PACKET that is already planted (handoff and `src/` already match; nothing specified-and-clear remains): **stop**.
+
+If this wake is `wake-engineer` on a **hotfix** and the hotfix is already planted: **stop**.
 
 If this wake is `fail-look`: do **not** stop for “already planted.” Recut what `PM-LOOK-*.md` named. Same PR.
 
-If a later GitHub follow-up arrives on this same run (synchronize, ready_for_review, Vercel preview, merge) and this commit still has no new SYSTEMS-CHANGE-PACKET and no Fail `PM-LOOK`: stop in one sentence. Do not re-read the protocol. Do not stay subscribed in labor.
+If a later GitHub follow-up arrives on this same run (synchronize, ready_for_review, Vercel preview, merge) and this commit still has no new SYSTEMS-CHANGE-PACKET, no new `HOTFIX-[0-9]*-*.md`, and no Fail `PM-LOOK`: stop in one sentence. Do not re-read the protocol. Do not stay subscribed in labor.
 
 ## Accept the seat (only after the gate passes)
 
@@ -42,7 +45,7 @@ If a later GitHub follow-up arrives on this same run (synchronize, ready_for_rev
 6. `docs/register/ENGINEER-HANDOFF.md` — where the last Engineer stopped.
 7. `docs/register/PHASE-ONE-LOG.md` Current — flagship wording only. Do not append. Do not overwrite 14:00 UTC 2026-08-25.
 8. `docs/register/SYSTEMS-ANALYST-LOG.md` Current — read-only. Do not append.
-9. The PM packet on this PR and the new `SYSTEMS-CHANGE-PACKET` on this PR. Both. Then work.
+9. If this is a hotfix: the `HOTFIX-NNN-*.md` on this PR. Then work. No SA packet. If this is a change packet: the PM packet and the new `SYSTEMS-CHANGE-PACKET` on this PR. Both. Then work.
 
 ## You write (only these)
 

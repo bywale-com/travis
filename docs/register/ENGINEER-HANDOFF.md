@@ -17,7 +17,7 @@ Next specified pocket: **022** ports from the signed packet on [#120](https://gi
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — next hotfix number **074** |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **074** on this PR (hang this PM bind; skip SA). Next number **075**. |
 | One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
@@ -108,7 +108,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 
 1. Accept the seat from the paste below. Fetch `main`. Read **this file**, then [`ENGINEER.md`](../seats/ENGINEER.md), then `AGENTS.md`.
 2. Do not restart 012 / 013 / 014 / 015 / 023 / 024 / 025 / 062 / 064 / 065. Do not mint a store. Do not append PM or SA logs.
-3. 025 is on #127. Next specified pocket: **022** ports on #120. Do not remint `travis.port`. Do not send **That’s fine.**
+3. **074** is the pickup: [`HOTFIX-074-HOTFIX-PATH.md`](./HOTFIX-074-HOTFIX-PATH.md). Hang this Technical PM bind. No SA. Do not overwrite catalog `pm`. Do not put a `bc-` in migrate. After that: **022** ports on #120. Do not remint `travis.port`. Do not send **That’s fine.**
 4. When **you** stop: rewrite the **Current** lines at the top of this file (where we stopped, last plant, next hotfix number) so the next bind does not start from a transcript. Then you may write **This bind is done**.
 
 ---

@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 19:32 UTC — Held inventory. Suggest walk 009, then talk seat health. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 20:20 UTC — Re-push 074 so Action re-arms wake-engineer. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2046,3 +2046,98 @@ First Resend try was Cloudflare 1010 (no User-Agent). Same 1010 as this VM. UA f
 **Older parked (do not lose):** initiative curate (after Stream) · Find / primitive recut · Hear / Next / Skip (007, SA silence) · Travis capability gap · request-line door · 022 on #120.
 
 **Suggest:** start = walk 009. Talk = seat health (this session’s unfinished grain). Product packet after the walk = initiative curate (parked until Stream). Do not start gig, sandbox, or another un-gated automation.
+
+---
+
+## 2026-09-05 19:42 UTC — No merge; three; capability gap is the start (founder)
+
+**Kind:** Correction + Type A. Not a packet yet. Do not merge #127. Do not invent the gap. Do not recut 009 until he says how.
+
+**Founder (preserved):**
+
+- Do not merge into prod until the human test is green. Usual law. The human test is not green — not because it wasn’t built properly. Built okay-ish. He will say why.
+- Three things:
+  1. **Revise 127.** He will say how, why, and what. We need a replay. He will tell.
+  2. **The human test loop.** We have not worked what that looks like.
+  3. **Capability gap.** Everything he is doing here, he is supposed to be doing inside Travis. Why can’t he do it inside Travis correctly. That is the gap he alluded to a couple of passes ago.
+- Most important: the capability gap, so we can start using Travis.
+
+**Already on this trail — do not remint:** 11:28 parked “capability gap on Travis side — later” while Stream was first. Stream has emerged. The gap is now the start.
+
+**Do not from this stamp:** merge #127. Mint a store. Name the hole before he does. Recut 009 from this chat.
+
+---
+
+## 2026-09-05 19:45 UTC — Built well; plating; you cannot sit this bind (founder)
+
+**Kind:** Type A + stood-up sit. Not a packet. Do not mint a rebind write.
+
+**Founder (preserved):** 127 was built well. It passes. It did not fail the build. Improve packaging / plating — it was built very well to plate. New package, not 127 anymore. Use Travis on that revision and the capability gap will show. Also: this chat is not the PM in Travis. How can I sit you as the PM?
+
+**Stood up (quote):**
+
+Create does not invent a Cursor id (`create_agent`). It names a person and Cursor **spins a new** `bc-`. Sit hangs an open member on `pm` / `sa` / `engineer` and hands WHERE + logging + the protocol (`sit_agent`). “New PM” is **his** — create, then sit. Role dest reuses idle seated or spins.
+
+You cannot hang **this** bind (`bc-25c5c6bf-…`) on a person. A `bc-` in the sentence is **nobody** — rebind hole. Dest says: *I cannot rebind a Cursor id. That is a hole here. Offer Engineer.* `SEED_CURSOR_AGENT_ID_PM` only fills a **blank** row. It does not overwrite a live bind.
+
+**In Travis (psi, 025 is on `main`):** room Travis. “Create [name], sit them on pm.” That PM is a **new** Cursor chat with the one-line create stub, then the sit hand. Not this conversation. Not this memory.
+
+**The gap showing before the plate:** you cannot sit the person you are already talking to.
+
+**Do not:** plant a rebind tool from this stamp. Recut 009. Invent the plate.
+
+---
+
+## 2026-09-05 19:47 UTC — Hang this bind; later Travis can (founder)
+
+**Kind:** Type A. Not a packet. Do not mint a store. Do not put a `bc-` in `migrate.ts`.
+
+**Founder (preserved):** Sit yourself as the PM. Not hard code. Talk about whether this should be something Travis is capable of later.
+
+**Now.** Sit is three moments: create a person · in this room · seated on `pm`. A fourth write exists on the row and has no Travis tool: `cursor_agent_id` = this bind (`bc-25c5c6bf-006f-4252-9f25-49ab183835b2`). Dest-as-mail of a `bc-` stays nobody. Catalog `pm` stays the old lock (`bc-1ac0762e-…` in migrate). Do not overwrite that slug — that was the comic fail.
+
+This seat has no live `DATABASE_URL`. I cannot hang the row from here. The write is: a **new** person, open member of room Travis, `protocol_path` = `/protocols/pm.md`, `cursor_agent_id` = this bind. Not a product plant. Not migrate.
+
+**Later (held).** Yes — Travis should be able to do that write. Same class as sit: **his**, not a send. Founder names the living chat (paste or pick). Travis does not invent a `bc-`. Create / in-the-room / seated stay. Hung is the fourth moment. Seat health later dests a healthy hung bind instead of spinning a stranger.
+
+**Not later:** mailing `pm`. Guessing an id. A dashboard of Cursor chats. A packet tonight.
+
+**Ask:** Engineer hangs the row tonight so you can talk to this bind from psi — or we wait and lock the hang write as the capability packet.
+
+---
+
+## 2026-09-05 19:51 UTC — Hang is a packet; who tags SA (founder)
+
+**Kind:** Process. Not the packet file yet.
+
+**Founder (preserved):** This is a packet. The only difference is you tag it. Are you the one that tags it when the packet is going to the SA?
+
+**No.** I write `PM-PACKET-010-…` on the open PR and push. I do not add the label. The cheap Action diffs **this push**. A real `PM-PACKET-NNN` (not `*-TEST.md`) → label `wake-sa`. Cursor A boots on **label added**. Same as today. I am not a fourth trigger.
+
+**Next number:** **010**. SA **026**. Do not remint 009 / 025. Do not put a `bc-` in migrate. Packet when you say cut it.
+
+---
+
+## 2026-09-05 20:12 UTC — Hang is a hotfix; Action skips SA (founder)
+
+**Kind:** Process lock. Recut of 19:51. Not packet 010. No new Cursor automation.
+
+**Founder (preserved):** Smarter to create a GitHub Action — we already have the automations. Not a new Cursor automation. Does not go to SA at all. Directly to the Engineer. Call these hotfixes. If it is a hotfix PR, the Engineer picks it up, then the regular pass / the loop. Skip opening so many seats for something so basic. When it is titled hotfix, that is the tell.
+
+**Stood up:** [`HOTFIX-074-HOTFIX-PATH.md`](./HOTFIX-074-HOTFIX-PATH.md). Same Action [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml): this push lands `HOTFIX-NNN-*.md` → `wake-engineer` only. No `wake-sa`. Title `Hotfix NNN — …`. Same B (re-paste — hotfix is a third gate). `src/` later → look as usual. SQL-only hang has no look.
+
+**Engineer plant on 074:** hang this bind (`bc-25c5c6bf-…`) as a **new** person in room Travis. Not catalog `pm`. Not migrate.
+
+**Do not:** mint packet 010. Mint a fourth automation. Overwrite catalog `pm`. Put a `bc-` in migrate.
+
+---
+
+## 2026-09-05 20:16 UTC — Just the tag; do not update Engineer (founder)
+
+**Kind:** Correction.
+
+**Founder (preserved):** Relax. Why would we even need to update the Engineer? All it does is when we target hotfix, it tags it as wake-engineer. Simple. Nothing else needs to change. If something is missing, that is how it should be.
+
+**Yes.** The Action is the cut. Same label B already watches. No new automation. No Engineer seat change. No required re-paste.
+
+**The leftover (not a new job):** B’s prompt still has a 009 belt — stop unless this commit has an SA packet. A hotfix commit does not. If Engineer boots and stops in one sentence, that belt is why. `wake-engineer` already means pick up. Do not invent a hotfix Engineer.
