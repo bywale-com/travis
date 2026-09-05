@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 19:47 UTC — Hang this bind is a write, not a mail. Later: Travis should do that write. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 19:51 UTC — Hang is a packet. Action tags wake-sa, not this seat. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2103,3 +2103,15 @@ This seat has no live `DATABASE_URL`. I cannot hang the row from here. The write
 **Not later:** mailing `pm`. Guessing an id. A dashboard of Cursor chats. A packet tonight.
 
 **Ask:** Engineer hangs the row tonight so you can talk to this bind from psi — or we wait and lock the hang write as the capability packet.
+
+---
+
+## 2026-09-05 19:51 UTC — Hang is a packet; who tags SA (founder)
+
+**Kind:** Process. Not the packet file yet.
+
+**Founder (preserved):** This is a packet. The only difference is you tag it. Are you the one that tags it when the packet is going to the SA?
+
+**No.** I write `PM-PACKET-010-…` on the open PR and push. I do not add the label. The cheap Action diffs **this push**. A real `PM-PACKET-NNN` (not `*-TEST.md`) → label `wake-sa`. Cursor A boots on **label added**. Same as today. I am not a fourth trigger.
+
+**Next number:** **010**. SA **026**. Do not remint 009 / 025. Do not put a `bc-` in migrate. Packet when you say cut it.
