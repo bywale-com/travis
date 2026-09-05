@@ -13,6 +13,8 @@ on:
       - "docs/register/SYSTEMS-CHANGE-PACKET-*.md"
       - "docs/register/PM-LOOK-*.md"
       - "src/**"
+      - ".github/workflows/wake-packet-seats.yml"
+      - ".github/scripts/**"
   workflow_dispatch:
     inputs:
       nnn:
@@ -128,38 +130,7 @@ jobs:
                 att=$(mktemp)
                 git show "$AFTER:$testfile" > "$att"
               fi
-              python3 - "$letter" "${nnn}" "$att" "${testfile:-}" <<'PY'
-import base64, json, os, sys, urllib.request
-letter_path, nnn, att, testfile = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
-body = open(letter_path, encoding="utf-8").read()
-payload = {
-    "from": os.environ["RESEND_FROM_EMAIL"],
-    "to": [os.environ["EMERGE_EMAIL"]],
-    "subject": f"{nnn} emerged — walk this sheet",
-    "text": body,
-}
-if att:
-    raw = open(att, "rb").read()
-    payload["attachments"] = [{
-        "filename": (testfile or "packet-test.md").rsplit("/", 1)[-1],
-        "content": base64.b64encode(raw).decode("ascii"),
-    }]
-req = urllib.request.Request(
-    "https://api.resend.com/emails",
-    data=json.dumps(payload).encode("utf-8"),
-    headers={
-        "Authorization": f"Bearer {os.environ['RESEND_API_KEY']}",
-        "Content-Type": "application/json",
-    },
-    method="POST",
-)
-try:
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        print("Resend", resp.status, resp.read().decode()[:300])
-except Exception as e:
-    print("Resend skipped/failed:", e)
-    sys.exit(0)
-PY
+              python3 .github/scripts/send-emerge-letter.py "$letter" "$nnn" "${att:-}" "${testfile:-}"
               rm -f "$att"
             else
               echo "No EMERGE_EMAIL + RESEND_API_KEY + RESEND_FROM_EMAIL. Issue is the letter."
@@ -237,34 +208,7 @@ PY
               att=$(mktemp)
               cat "$testfile" > "$att"
             fi
-            python3 - "$letter" "${nnn}" "$att" "${testfile:-}" <<'PY'
-import base64, json, os, sys, urllib.request
-letter_path, nnn, att, testfile = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
-body = open(letter_path, encoding="utf-8").read()
-payload = {
-    "from": os.environ["RESEND_FROM_EMAIL"],
-    "to": [os.environ["EMERGE_EMAIL"]],
-    "subject": f"{nnn} emerged — walk this sheet",
-    "text": body,
-}
-if att:
-    raw = open(att, "rb").read()
-    payload["attachments"] = [{
-        "filename": (testfile or "packet-test.md").rsplit("/", 1)[-1],
-        "content": base64.b64encode(raw).decode("ascii"),
-    }]
-req = urllib.request.Request(
-    "https://api.resend.com/emails",
-    data=json.dumps(payload).encode("utf-8"),
-    headers={
-        "Authorization": f"Bearer {os.environ['RESEND_API_KEY']}",
-        "Content-Type": "application/json",
-    },
-    method="POST",
-)
-with urllib.request.urlopen(req, timeout=30) as resp:
-    print("Resend", resp.status, resp.read().decode()[:300])
-PY
+            python3 .github/scripts/send-emerge-letter.py "$letter" "$nnn" "${att:-}" "${testfile:-}"
             rm -f "$att"
           else
             echo "Missing EMERGE_EMAIL or RESEND_API_KEY or RESEND_FROM_EMAIL on this repo."
