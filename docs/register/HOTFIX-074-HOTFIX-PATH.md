@@ -19,10 +19,7 @@ Same Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows
 
 1. This push lands `docs/register/HOTFIX-NNN-*.md` → label **`wake-engineer`**. Do **not** add `wake-sa`.
 2. Title the PR `Hotfix NNN — …` (human tell). The Action keys off the file in **this push**, not the title on every later commit (that would re-boot Engineer).
-3. Same automation **B**. Wider gate: a `HOTFIX-NNN` file is enough. No SA packet. Human must **re-paste** [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md).
-4. If a later push plants `src/` and the tree already has a HOTFIX file → `wake-pm-look`. Same **C**. Re-paste [`house-now/automations/pm-look.prompt.md`](./house-now/automations/pm-look.prompt.md) so a hotfix + `src/` is not a no-op.
-
-Do not create a fourth Cursor automation.
+3. Same automation **B**. Same label. Do not create a fourth Cursor automation. Do not change the Engineer seat.
 
 ## Cut — Engineer plant (hang this bind)
 

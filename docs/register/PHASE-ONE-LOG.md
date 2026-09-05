@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 20:12 UTC — Hang is a hotfix. Action tags wake-engineer; skip SA. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 20:16 UTC — Action tags wake-engineer. Engineer automation unchanged. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2129,3 +2129,15 @@ This seat has no live `DATABASE_URL`. I cannot hang the row from here. The write
 **Engineer plant on 074:** hang this bind (`bc-25c5c6bf-…`) as a **new** person in room Travis. Not catalog `pm`. Not migrate.
 
 **Do not:** mint packet 010. Mint a fourth automation. Overwrite catalog `pm`. Put a `bc-` in migrate.
+
+---
+
+## 2026-09-05 20:16 UTC — Just the tag; do not update Engineer (founder)
+
+**Kind:** Correction.
+
+**Founder (preserved):** Relax. Why would we even need to update the Engineer? All it does is when we target hotfix, it tags it as wake-engineer. Simple. Nothing else needs to change. If something is missing, that is how it should be.
+
+**Yes.** The Action is the cut. Same label B already watches. No new automation. No Engineer seat change. No required re-paste.
+
+**The leftover (not a new job):** B’s prompt still has a 009 belt — stop unless this commit has an SA packet. A hotfix commit does not. If Engineer boots and stops in one sentence, that belt is why. `wake-engineer` already means pick up. Do not invent a hotfix Engineer.

@@ -50,7 +50,7 @@ Technical PM look+test
 
 Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml). It diffs **this push** (`before…after`), not the whole PR. No Cursor token until the label is added.
 
-**Hotfix path (skip SA).** Founder 2026-09-05: a hotfix is not a new Cursor automation. Same Action. Title the PR `Hotfix NNN — …`. This push lands `docs/register/HOTFIX-NNN-*.md` → label **`wake-engineer`** only. No `wake-sa`. Engineer automation **B** (re-paste the prompt — hotfix is a third gate). Then the usual loop: plant `src/` → `wake-pm-look` → Pass / Fail. SQL-only hotfixes have no look. Do not open SA for something basic.
+**Hotfix path (skip SA).** Founder 2026-09-05: a hotfix is not a new Cursor automation. Same Action. Title the PR `Hotfix NNN — …`. This push lands `docs/register/HOTFIX-NNN-*.md` → label **`wake-engineer`** only. No `wake-sa`. Same **B** — that label already wakes Engineer. Nothing else to change.
 
 ```text
 this push lands HOTFIX-NNN-*.md
@@ -105,7 +105,7 @@ That push is the Engineer trigger.
 ## Automation B — SA complete → Engineer
 
 **Name:** `Travis — SA complete → Engineer`  
-**Triggers (any):** Source control — **Label added** **`wake-engineer`** (SA completed **or** hotfix file landed) **and** **Label added** **`fail-look`** (PM look failed). Both lowercase. Not PR pushed. Not a third automation.  
+**Triggers (any):** Source control — **Label added** **`wake-engineer`** **and** **Label added** **`fail-look`**. Both lowercase. Not PR pushed. Not a third automation. Hotfix uses the same `wake-engineer` tag.  
 **Repository:** `bywale-com/travis`  
 **Tools:** Memories **off**. Pull request creation **off**.  
 **Prompt:** paste [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md) in full.
@@ -126,7 +126,7 @@ This is the beat that can run on a **already planted** PR (009 / 025 on #127). S
 
 ## Save + Activate (human or local `/automate`)
 
-1. **A** / **B** stay label `wake-sa` / `wake-engineer`. **B** also gets a second trigger: Label added / `fail-look`. Re-paste the Engineer prompt (hotfix is a third gate — without it a hotfix wake boots then no-ops).
+1. **A** / **B** stay label `wake-sa` / `wake-engineer`. **B** also gets a second trigger: Label added / `fail-look`. Hotfix does not get a new paste.
 2. Create **C**. Trigger: Label added / `wake-pm-look`. Computer use on. Memories off. PR creation off. Paste the PM-look prompt. Save + Activate.
 3. To run the first look on #127: add `wake-pm-look` once C is Active. Do not add `wake-sa` or `wake-engineer` — 025 is already planted.
 4. Later plants: Action adds `wake-pm-look` when this push touched `src/` on a PR that already has a packet + change packet.
