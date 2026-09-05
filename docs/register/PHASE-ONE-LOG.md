@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 04:55 UTC — **Request line is real.** Not OSS. If they ask, they get in. Time-bounded. They leave with their work. Travis’s model is gated. Canvas later this week. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 04:58 UTC — **Request line locked.** Get in / clock / leave with your work / mouth is gated. Not OSS. Flag 14:00 stands. Door not packeted until founder wants it on the glass.
 
 **How we maintain this log**
 
@@ -1440,4 +1440,25 @@ Not open source means the **product** is hosted. The **brain** is yours. No mode
 Production-ready for a request line is smaller than production-ready as a company. Ready enough: a stranger gets in, talks, works, leaves with their stuff, never sees your house or your keys, cannot retune his mouth. Billing can stay unnamed. Canvas can land later this week as you said.
 
 **Ask:** is “get in / clock / leave with your work / mouth is gated” the hold on the request line? If yes, I will not packet until you want the door on the glass — SA ascribes the grant + export; I will not mint it.
+
+---
+
+## 2026-09-05 04:58 UTC — Request line locked (founder)
+
+**Kind:** Type A lock. Not a new flag. Not a packet.
+
+**Founder (preserved):** This is the right shape. This is what we’re building towards. I can stand behind this.
+
+**Locked (the 04:55 hold, now founder-backed):**
+
+| Law | Meaning |
+|-----|---------|
+| Get in | Request is real. They ask, they enter a working Travis. |
+| Clock | Access for a stretch. Not infinite hosted mouth. |
+| Leave with your work | Time up does not hostage the log, files, backlog. Pay later is for Travis running, if it ever exists. |
+| Mouth is gated | Travis’s model is not a picker. Not Cursor. Not OSS. |
+
+14:00 still the product. Canvas still later this week. Billing unnamed. SA ascribes grant + export when the door is cut. I do not mint it. I do not packet until you want it on the glass.
+
+**Ask:** hold. When you want the door, say packet.
 
