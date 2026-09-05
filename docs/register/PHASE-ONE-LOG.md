@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 15:05 UTC — **008 Stream test spec, first rendition.** Human walk, per-step I saw. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:08 UTC — **Test spec: Setup is not the packet.** 008 walk starts at idle-is-not-a-door. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1727,3 +1727,13 @@ When we generate plates and packets (usually at the same time) we also generate 
 **Honest:** first rendition of the shape. Use the #126 preview; psi may still be the old desk.
 
 **Ask:** walk it. Tell me where the sheet missed you.
+
+---
+
+## 2026-09-05 16:08 UTC — Test spec: Setup vs the packet (founder)
+
+**Kind:** Refinement. Founder asked what “get to the Log” is doing in the Stream test.
+
+**Answer:** Setup. Not an 008 change. 008 did not recut how you open a room or the Log. Section 1 was me putting a stranger on the desk so they could reach the door.
+
+**Sheet:** [`PM-PACKET-008-STREAM-TEST.md`](./PM-PACKET-008-STREAM-TEST.md) now splits **Setup — not this packet** from **The packet**. Founder may later specify what belongs in Setup vs the walk.

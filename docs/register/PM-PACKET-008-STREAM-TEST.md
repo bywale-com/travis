@@ -6,6 +6,11 @@
 
 You do **not** need to remember what this packet was about. This sheet is the walk. Fill **I saw** on **this step** before you do the next one. If you wait until the end, you will forget.
 
+**What goes in this sheet**
+
+- **Setup** gets a stranger to the desk (URL, room, Log, Type). Not a change this packet made. Not scored as Stream.
+- **The packet** is only what 008 established: idle is not a door → glow → Stream → trigger → live order → not on the Log while live → done → card above the completed line → tap = same contents.
+
 ---
 
 ## What this packet is (one breath)
@@ -62,7 +67,9 @@ Do **not** fail the walk because these are missing. They are out.
 
 ---
 
-# Walk
+# Setup — not this packet
+
+Get to the place. 008 did not change how you open a room or the Log.
 
 ## 1. Get to the Log
 
@@ -83,6 +90,10 @@ Do **not** fail the walk because these are missing. They are out.
 **I saw:**
 
 ---
+
+# The packet — 008 Stream
+
+From here, every step is something this packet meant to establish.
 
 ## 2. Idle is not a door
 
