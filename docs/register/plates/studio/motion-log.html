@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=390, initial-scale=1" />
+  <title>Travis motion on Log</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Orbitron:wght@600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F3EFE7;
+      --elev: #FAF7F1;
+      --ink: #1C1917;
+      --sec: #5C534B;
+      --mut: #9A8F84;
+      --line: #E0D8CB;
+      --ox: #7B2233;
+      --user: #E6DED0;
+      --asst: #FAF7F1;
+      --receipt: #8A8076;
+      --hover: #EAE4D9;
+      --font: "Segoe UI", "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+    .phone {
+      width: 390px; height: 844px; margin: 0 auto; background: var(--bg);
+      display: none; flex-direction: column; overflow: hidden;
+    }
+    body[data-p="m1"] #m1,
+    body[data-p="m2"] #m2,
+    body[data-p="m3"] #m3,
+    body[data-p="m4"] #m4,
+    body[data-p="m5"] #m5 { display: flex; }
+
+    .hdr { padding: 16px 20px 8px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .pill {
+      border: 1px solid var(--line); background: var(--elev); border-radius: 999px;
+      padding: 6px 12px; font-size: 13px; font-weight: 600; flex-shrink: 0;
+    }
+    .via { color: var(--mut); font-size: 12px; }
+    .hdr-right { display: flex; align-items: center; gap: 14px; margin-left: auto; }
+    .in-motion { color: var(--ox); font-size: 13px; font-weight: 600; }
+    .quiet { color: var(--sec); font-size: 13px; }
+
+    .toggle-row { padding: 0 20px 8px; }
+    .toggle { display: inline-flex; }
+    .toggle .on {
+      padding: 4px 12px; font-size: 12px; border: 1px solid var(--ox);
+      background: var(--ox); color: var(--bg); border-radius: 999px 0 0 999px; font-family: inherit;
+    }
+    .toggle .off {
+      padding: 4px 12px; font-size: 12px; border: 1px solid var(--line);
+      background: var(--elev); color: var(--sec); border-radius: 0 999px 999px 0; font-family: inherit;
+    }
+
+    .strip { display: flex; justify-content: center; align-items: center; padding: 10px 20px 8px; min-height: 52px; }
+    .mark {
+      width: 38px; height: 38px; border-radius: 50%; color: #FAF7F1; font-weight: 600;
+      font-size: 11px; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .strip .m { opacity: 0.45; }
+    .strip .m + .m { margin-left: -10px; }
+
+    .thread { flex: 1; min-height: 0; padding: 8px 16px 12px; display: flex; flex-direction: column; gap: 14px; overflow: hidden; }
+    .who { font-size: 11px; color: var(--mut); }
+    .who.me { align-self: flex-end; }
+    .row { display: flex; gap: 8px; max-width: 92%; align-items: flex-start; }
+    .row.me { align-self: flex-end; flex-direction: column; }
+    .row.trv { align-self: flex-start; }
+    .sm { width: 28px; height: 28px; border-radius: 50%; background: #2F6B6B; color: #FAF7F1; font-size: 10px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .col { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .bubble {
+      padding: 10px 14px; font-size: 15px; line-height: 1.45;
+      box-shadow: 0 2px 10px rgba(44,36,28,0.05);
+    }
+    .bubble.user { background: var(--user); border-radius: 16px 16px 4px 16px; }
+    .bubble.asst { background: var(--asst); border: 1px solid var(--line); border-radius: 16px 16px 16px 4px; }
+
+    .card {
+      align-self: stretch;
+      margin: 0 4px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 10px 4px 10px 2px;
+    }
+    .card-head { display: flex; align-items: flex-start; gap: 10px; }
+    .chev { color: var(--mut); font-size: 12px; width: 12px; padding-top: 3px; }
+    .card-title { font-size: 15px; font-weight: 600; }
+    .card-meta { font-size: 12px; color: var(--ox); margin-top: 2px; }
+    .card-meta.done { color: var(--mut); }
+    .steps { margin: 10px 0 0 22px; display: flex; flex-direction: column; gap: 8px; }
+    .step { display: flex; align-items: baseline; gap: 10px; font-size: 12px; }
+    .step .tool { color: var(--mut); width: 64px; flex-shrink: 0; }
+    .step .path { flex: 1; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .step .st { color: var(--mut); }
+    .step .st.live { color: var(--ox); font-weight: 600; }
+
+    .talk {
+      flex-shrink: 0; padding: 10px 16px 16px; display: flex; justify-content: space-between;
+      align-items: center; border-top: 1px solid var(--line); background: var(--bg);
+    }
+    .talk .left { color: var(--mut); font-size: 13px; }
+    .talk .pause { color: var(--ox); font-size: 16px; text-decoration: underline; text-underline-offset: 4px; }
+  </style>
+</head>
+<body>
+  <!-- M1 — speech first. No card. He is not busy yet. -->
+  <section class="phone" id="m1">
+    <header class="hdr">
+      <span class="pill">Travis</span>
+      <span class="via">via Travis</span>
+      <span class="hdr-right">
+        <span class="quiet">Backlog</span>
+        <span class="quiet">Leave</span>
+      </span>
+    </header>
+    <div class="toggle-row"><div class="toggle"><span class="on">Talk</span><span class="off">Type</span></div></div>
+    <div class="strip">
+      <span class="mark m" style="background:#2F6B6B">PM</span>
+      <span class="mark m" style="background:#3F5B79">SA</span>
+      <span class="mark m" style="background:#4F6B57">ENG</span>
+      <span class="mark m" style="background:#2F6B6B">TRV</span>
+    </div>
+    <div class="thread">
+      <div class="row me">
+        <span class="who me">3:04</span>
+        <div class="bubble user">Write ba.md in /protocols, then WHERE.md in /templates. Then spin up a Business Analyst.</div>
+      </div>
+      <div class="row trv">
+        <span class="sm">TRV</span>
+        <div class="col">
+          <span class="who">Travis · 3:04</span>
+          <div class="bubble asst">Let me get to that.</div>
+        </div>
+      </div>
+    </div>
+    <div class="talk"><span class="left">Listening</span><span class="pause">Pause</span></div>
+  </section>
+
+  <!-- M2 — card under that line. Collapsed. 1 in motion. He has not spoken again. -->
+  <section class="phone" id="m2">
+    <header class="hdr">
+      <span class="pill">Travis</span>
+      <span class="via">via Travis</span>
+      <span class="hdr-right">
+        <span class="in-motion">1 in motion</span>
+        <span class="quiet">Backlog</span>
+        <span class="quiet">Leave</span>
+      </span>
+    </header>
+    <div class="toggle-row"><div class="toggle"><span class="on">Talk</span><span class="off">Type</span></div></div>
+    <div class="strip">
+      <span class="mark m" style="background:#2F6B6B">PM</span>
+      <span class="mark m" style="background:#3F5B79">SA</span>
+      <span class="mark m" style="background:#4F6B57">ENG</span>
+      <span class="mark m" style="background:#2F6B6B">TRV</span>
+    </div>
+    <div class="thread">
+      <div class="row me">
+        <span class="who me">3:04</span>
+        <div class="bubble user">Write ba.md in /protocols, then WHERE.md in /templates. Then spin up a Business Analyst.</div>
+      </div>
+      <div class="row trv">
+        <span class="sm">TRV</span>
+        <div class="col">
+          <span class="who">Travis · 3:04</span>
+          <div class="bubble asst">Let me get to that.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="chev">▸</span>
+          <div>
+            <div class="card-title">Two protocol files</div>
+            <div class="card-meta">step 1 of 2 · writing</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="talk"><span class="left">Listening</span><span class="pause">Pause</span></div>
+  </section>
+
+  <!-- M3 — same stack, card open. Steps one by one. BA is not a step. -->
+  <section class="phone" id="m3">
+    <header class="hdr">
+      <span class="pill">Travis</span>
+      <span class="via">via Travis</span>
+      <span class="hdr-right">
+        <span class="in-motion">1 in motion</span>
+        <span class="quiet">Backlog</span>
+        <span class="quiet">Leave</span>
+      </span>
+    </header>
+    <div class="toggle-row"><div class="toggle"><span class="on">Talk</span><span class="off">Type</span></div></div>
+    <div class="strip">
+      <span class="mark m" style="background:#2F6B6B">PM</span>
+      <span class="mark m" style="background:#3F5B79">SA</span>
+      <span class="mark m" style="background:#4F6B57">ENG</span>
+      <span class="mark m" style="background:#2F6B6B">TRV</span>
+    </div>
+    <div class="thread">
+      <div class="row me">
+        <span class="who me">3:04</span>
+        <div class="bubble user">Write ba.md in /protocols, then WHERE.md in /templates. Then spin up a Business Analyst.</div>
+      </div>
+      <div class="row trv">
+        <span class="sm">TRV</span>
+        <div class="col">
+          <span class="who">Travis · 3:04</span>
+          <div class="bubble asst">Let me get to that.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="chev">▾</span>
+          <div>
+            <div class="card-title">Two protocol files</div>
+            <div class="card-meta">step 2 of 2 · writing</div>
+          </div>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <span class="tool">write_os</span>
+            <span class="path">/protocols/ba.md</span>
+            <span class="st">done</span>
+          </div>
+          <div class="step">
+            <span class="tool">write_os</span>
+            <span class="path">/templates/WHERE.md</span>
+            <span class="st live">running</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="talk"><span class="left">Listening</span><span class="pause">Pause</span></div>
+  </section>
+
+  <!-- M4 — interrupt. He answers. Card still going. Listening. -->
+  <section class="phone" id="m4">
+    <header class="hdr">
+      <span class="pill">Travis</span>
+      <span class="via">via Travis</span>
+      <span class="hdr-right">
+        <span class="in-motion">1 in motion</span>
+        <span class="quiet">Backlog</span>
+        <span class="quiet">Leave</span>
+      </span>
+    </header>
+    <div class="toggle-row"><div class="toggle"><span class="on">Talk</span><span class="off">Type</span></div></div>
+    <div class="strip">
+      <span class="mark m" style="background:#2F6B6B">PM</span>
+      <span class="mark m" style="background:#3F5B79">SA</span>
+      <span class="mark m" style="background:#4F6B57">ENG</span>
+      <span class="mark m" style="background:#2F6B6B">TRV</span>
+    </div>
+    <div class="thread">
+      <div class="row me">
+        <span class="who me">3:04</span>
+        <div class="bubble user">Write ba.md in /protocols, then WHERE.md in /templates. Then spin up a Business Analyst.</div>
+      </div>
+      <div class="row trv">
+        <span class="sm">TRV</span>
+        <div class="col">
+          <span class="who">Travis · 3:04</span>
+          <div class="bubble asst">Let me get to that.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="chev">▸</span>
+          <div>
+            <div class="card-title">Two protocol files</div>
+            <div class="card-meta">step 2 of 2 · writing</div>
+          </div>
+        </div>
+      </div>
+      <div class="row me">
+        <span class="who me">3:05</span>
+        <div class="bubble user">Wait — put the second file in /templates/seats.</div>
+      </div>
+      <div class="row trv">
+        <span class="sm">TRV</span>
+        <div class="col">
+          <span class="who">Travis · 3:05</span>
+          <div class="bubble asst">I’m here. First file’s in. Second is still writing.</div>
+        </div>
+      </div>
+    </div>
+    <div class="talk"><span class="left">Listening</span><span class="pause">Pause</span></div>
+  </section>
+
+  <!-- M5 — tape done. He is free. BA is the next turn, not a step. -->
+  <section class="phone" id="m5">
+    <header class="hdr">
+      <span class="pill">Travis</span>
+      <span class="via">via Travis</span>
+      <span class="hdr-right">
+        <span class="quiet">Backlog</span>
+        <span class="quiet">Leave</span>
+      </span>
+    </header>
+    <div class="toggle-row"><div class="toggle"><span class="on">Talk</span><span class="off">Type</span></div></div>
+    <div class="strip">
+      <span class="mark m" style="background:#2F6B6B">PM</span>
+      <span class="mark m" style="background:#3F5B79">SA</span>
+      <span class="mark m" style="background:#4F6B57">ENG</span>
+      <span class="mark m" style="background:#2F6B6B">TRV</span>
+    </div>
+    <div class="thread">
+      <div class="row me">
+        <span class="who me">3:04</span>
+        <div class="bubble user">Write ba.md in /protocols, then WHERE.md in /templates. Then spin up a Business Analyst.</div>
+      </div>
+      <div class="row trv">
+        <span class="sm">TRV</span>
+        <div class="col">
+          <span class="who">Travis · 3:04</span>
+          <div class="bubble asst">Let me get to that.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="chev">▸</span>
+          <div>
+            <div class="card-title">Two protocol files</div>
+            <div class="card-meta done">step 2 of 2 · done</div>
+          </div>
+        </div>
+      </div>
+      <div class="row trv">
+        <span class="sm">TRV</span>
+        <div class="col">
+          <span class="who">Travis · 3:06</span>
+          <div class="bubble asst">Both files are in. Say when you want the analyst.</div>
+        </div>
+      </div>
+    </div>
+    <div class="talk"><span class="left">Listening</span><span class="pause">Pause</span></div>
+  </section>
+
+  <script>
+    const q = new URLSearchParams(location.search);
+    document.body.dataset.p = q.get("p") || "m1";
+  </script>
+</body>
+</html>
