@@ -1,6 +1,6 @@
-# PM seat handoff — 2026-09-03 23:06 UTC
+# PM seat handoff — living
 
-**This bind is done.** `bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea` (Pm ID provision) is **not** the living PM after the founder pastes the block below into a new chat.
+**This bind is living.** `bc-460a15d0-ea17-476b-8ca8-fc87f9abd740` is the Product Manager until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
 **Flag:** PHASE-ONE-LOG **14:00 UTC 2026-08-25** — do not overwrite.
 
@@ -12,24 +12,26 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) on **`main`** — Current + 003–007 stamps |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) on **`main`** — Current is this accept |
 | Packets 001–007 | [`PM-PACKETS.md`](./PM-PACKETS.md) on **`main`** |
 | Envelope (work layer) | [`ENVELOPE-TRAVIS-ORCHESTRATE.md`](./ENVELOPE-TRAVIS-ORCHESTRATE.md) · [PR #94](https://github.com/bywale-com/travis/pull/94) |
 | Motion plant | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) — `motion` + runner in Backlog |
 | House | [`ENVELOPE-TRAVIS-OS-TREE.md`](./ENVELOPE-TRAVIS-OS-TREE.md) · sit planted as SCP-015 · [PR #107](https://github.com/bywale-com/travis/pull/107) |
-| 007 | Locked. Hear-queue. R0 Engineer / R1 SA. Do not recut C3/C4. Hear / Next / Skip still SA. |
+| Last plant while PM was vacant | SCP-021 worker · [PR #119](https://github.com/bywale-com/travis/pull/119) |
+| 007 | Locked. Hear-queue. Hear / Next / Skip still SA. Do not recut C3/C4. |
 
-**Do not** follow any “no new plate / V6 grown only” FACE from the old bind. Home is **Backlog** (All / In motion / Initiatives). Voice count = Travis processes only.
+**Do not** follow any “no new plate / V6 grown only” FACE from `bc-1ac0762e`. Home is **Backlog** (All / In motion / Initiatives). Voice count = Travis processes only.
+
+Founder seated this chat 2026-09-05. **No pocket named yet.**
 
 ---
 
-## Next PM job (if founder has not named a new pocket)
+## Next PM job
 
-1. Accept the seat. Fetch `main`. Read Current, then the newest stamp.
-2. Read the envelope, then SCP-013 as planted truth. Sit is planted (015). Do not collapse create / in-the-room / seated.
-3. Do **not** reprint P1/P2. Do **not** invent a second index.
-4. Open PM work only if the founder names it. Write on the Engineer’s open PR for that pocket.
-5. Rebind: the old `bc-…` must not stay the room’s PM once the new chat exists.
+1. Talk with the founder. Capture wording in the Phase One log. Ask at inflections.
+2. Open PM work only if the founder names a pocket. Write on the Engineer’s open PR for that pocket.
+3. Do **not** reprint P1/P2. Do **not** invent a second index. Do **not** collapse create / in-the-room / seated.
+4. When **you** stop: rewrite this file and move **Current** on the Phase One log. Then you may write **This bind is done**.
 
 ---
 
@@ -38,10 +40,10 @@
 ```text
 You are Travis’s Product Manager. Read docs/README.md “Product Manager — identity” and accept it. You are not the Systems Analyst. You are not the Engineer. Keep docs/register/PHASE-ONE-LOG.md (append unless I mark a separate entry). Capture founder wording; do not generate substitute flags. Do not mint tables. Do not plant. Detailed: docs/seats/PRODUCT-MANAGER.md.
 
-You are a NEW bind. The last PM was bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea. They handed off. Read docs/register/PM-HANDOFF.md first.
+You are a NEW bind. The last PM was bc-460a15d0-ea17-476b-8ca8-fc87f9abd740. They handed off. Read docs/register/PM-HANDOFF.md first.
 
 Then, in order:
-1. docs/register/PHASE-ONE-LOG.md — Current, then newest stamp. 003–007 are on main.
+1. docs/register/PHASE-ONE-LOG.md — Current, then newest stamp. Packets 001–007 are on main.
 2. docs/register/PHASE-ONE.md
 3. docs/register/PM-PACKETS.md — packets 001–007 on main. Do not fetch leftover PRs.
 4. docs/register/ENVELOPE-TRAVIS-ORCHESTRATE.md (main)

@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 23:06 UTC — **PM seat handed off.** New chat pastes [`PM-HANDOFF.md`](./PM-HANDOFF.md). Bind `bc-1ac0762e` is no longer the living PM. **003–007 stamps and packets 002–007 are on `main`** (Hotfix 066 brought leftover #4 / #15 onto this tree). Do not fetch those cousin PRs. The last stamp still names #15 as living — that was true when it was written; the trail is here now.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 00:55 UTC — **PM seat accepted.** Living bind is `bc-460a15d0`. Pickup [`PM-HANDOFF.md`](./PM-HANDOFF.md). Flag 14:00 stands. Founder has not named a pocket yet.
 
 **How we maintain this log**
 
@@ -1338,4 +1338,28 @@ Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tighten
 **Still true:** flag 14:00. 007 locked on this PR (#15). `main`’s copy of this log is stale (Current still 002) — fetch this branch for 003–007. Seated (OS-tree) still open. Do not recut C3/C4.
 
 **Ask:** founder pastes the new PM. Engineer rebinds.
+
+---
+
+## 2026-09-05 00:55 UTC — PM seat accepted (this bind)
+
+**Kind:** Seat accept. Not a packet. Not a plate.
+
+**Founder (preserved):** Take the pm seat.
+
+**This chat is the Product Manager.** Bind `bc-460a15d0-ea17-476b-8ca8-fc87f9abd740` (title: Product manager seat). The last PM (`bc-1ac0762e-f09a-4358-b4b8-b17d86d1b9ea`) handed off 2026-09-03 23:06. That bind is not this one.
+
+**Read, then this stamp:** identity · [`PM-HANDOFF.md`](./PM-HANDOFF.md) · Current + newest stamp · [`PHASE-ONE.md`](./PHASE-ONE.md) · packets 001–007 on `main` · orchestrate envelope · SCP-013 planted · sit 015 planted. I am not the Systems Analyst. I am not the Engineer. I do not mint tables. I do not plant.
+
+**Flag stands** (14:00 UTC 2026-08-25):
+
+> I simply don’t wanna have to look at my phone. When it’s time to work on building, I open this app — not the Cursor app — and I can have a dialogue: talk, voice-send, hear the reply read back. Everything readable in the chat is read to me; images and such appear in the chat. It’s an interface between me and Cursor as it exists today.
+
+**Still true from the last PM:** 007 locked (Hear / Next / Skip still SA). Do not recut C3/C4. Do not reprint P1/P2. Do not invent a second index. Home is **Backlog** (All / In motion / Initiatives). Voice count = Travis processes only. Create / in-the-room / seated stay three moments.
+
+**What landed while this seat was vacant** (git + PRs; not a new flag): motion (013 · #97) · sit (015 · #107) · then Engineer/SA through **021** worker ([#119](https://github.com/bywale-com/travis/pull/119)) on `main`. The orchestrate envelope had said PM is out until Travis is the seat of work. This chat is PM again because the founder seated it — not because I opened a pocket.
+
+**Do not from this stamp:** cut 008, recut Mission/Carbon, plant, rebind seats in the room, treat 021 as a PM packet.
+
+**Ask:** what pocket are we in?
 
