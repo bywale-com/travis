@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=390, initial-scale=1" />
+  <title>Travis live-state plates</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Orbitron:wght@600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F3EFE7;
+      --elev: #FAF7F1;
+      --ink: #1C1917;
+      --sec: #5C534B;
+      --mut: #9A8F84;
+      --line: #E0D8CB;
+      --ox: #7B2233;
+      --ox-soft: #EFE0E1;
+      --hover: #EAE4D9;
+      --user: #E6DED0;
+      --asst: #FAF7F1;
+      --receipt: #8A8076;
+      --danger: #8C3A3A;
+      --wash: #EAE2D4;
+      --ink-on-seat: #FAF7F1;
+      --font: "Segoe UI", "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+      --logo: "Orbitron", "Eurostile Extended", "Michroma", ui-sans-serif, sans-serif;
+      --serif: "Instrument Serif", Georgia, serif;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+    }
+    body { min-height: 100vh; }
+    .phone {
+      width: 390px;
+      height: 844px;
+      margin: 0 auto;
+      background: var(--bg);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+    body[data-p="s1"] #s1,
+    body[data-p="s2"] #s2,
+    body[data-p="s3"] #s3,
+    body[data-p="s4"] #s4,
+    body[data-p="s5"] #s5 { display: flex; }
+
+    .hdr {
+      padding: 16px 20px 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .room-pill {
+      border: 1px solid var(--line);
+      background: var(--elev);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .via { color: var(--mut); font-size: 12px; }
+    .hdr-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-left: auto;
+    }
+    .in-motion {
+      color: var(--ox);
+      font-size: 13px;
+      font-weight: 600;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .quiet {
+      color: var(--sec);
+      font-size: 13px;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .toggle-row { padding: 0 20px 8px; }
+    .toggle { display: inline-flex; gap: 0; }
+    .toggle button {
+      margin: 0;
+      padding: 4px 12px;
+      font-size: 12px;
+      cursor: default;
+      font-family: inherit;
+    }
+    .toggle .on {
+      border: 1px solid var(--ox);
+      background: var(--ox);
+      color: var(--bg);
+      border-radius: 999px 0 0 999px;
+    }
+    .toggle .off {
+      border: 1px solid var(--line);
+      background: var(--elev);
+      color: var(--sec);
+      border-radius: 0 999px 999px 0;
+    }
+
+    .mark {
+      border-radius: 50%;
+      color: var(--ink-on-seat);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .glow { box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 33%, transparent), 0 0 14px color-mix(in srgb, var(--c) 40%, transparent); }
+
+    .strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 20px 4px;
+      min-height: 52px;
+    }
+    .strip button {
+      border: none;
+      background: transparent;
+      padding: 0;
+      cursor: default;
+    }
+    .health {
+      text-align: center;
+      font-size: 12px;
+      color: var(--mut);
+      padding: 4px 20px 8px;
+    }
+    .health .live { color: var(--ox); }
+    .health .stale { color: var(--danger); }
+
+    .thread {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      padding: 8px 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .bubble-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      max-width: 92%;
+    }
+    .bubble-row.me { align-self: flex-end; flex-direction: row; }
+    .who {
+      font-size: 11px;
+      color: var(--mut);
+      margin-left: 2px;
+    }
+    .who.me { align-self: flex-end; margin-left: 0; }
+    .bubble {
+      border-radius: 16px 16px 16px 4px;
+      padding: 10px 14px;
+      font-size: 15px;
+      line-height: 1.45;
+      box-shadow: 0 2px 10px rgba(44,36,28,0.05);
+    }
+    .bubble.user {
+      background: var(--user);
+      border: none;
+      border-radius: 16px 16px 4px 16px;
+    }
+    .bubble.asst {
+      background: var(--asst);
+      border: 1px solid var(--line);
+    }
+    .receipt {
+      align-self: flex-start;
+      max-width: 92%;
+      color: var(--receipt);
+      font-size: 12px;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .voice-mid { flex: 1; display: flex; flex-direction: column; }
+    .voice-mid .spacer { flex: 1; min-height: 24px; }
+    .orb {
+      margin: 0 auto;
+      width: 176px;
+      height: 176px;
+      border-radius: 50%;
+      border: none;
+      background: radial-gradient(circle at 50% 48%, #7B2233 0%, #7B2233cc 32%, #EFE0E1 62%, transparent 78%);
+      box-shadow: 0 0 0 18px #7B223314, 0 0 56px #7B223340, 0 0 120px #7B223322;
+    }
+    .listen {
+      text-align: center;
+      color: var(--ox);
+      font-size: 20px;
+      font-weight: 400;
+      font-family: var(--serif);
+      margin: 22px 24px 0;
+      letter-spacing: -0.02em;
+    }
+    .running {
+      text-align: center;
+      color: var(--mut);
+      font-size: 13px;
+      margin: 8px 28px 0;
+      line-height: 1.4;
+    }
+    .running .tick { color: var(--ox); }
+
+    .chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 16px;
+      padding: 10px 12px 10px 14px;
+      border-radius: 16px;
+      background: var(--elev);
+      border: 1px solid var(--ox);
+      color: var(--ox);
+      font-size: 14px;
+    }
+    .view-log {
+      padding: 8px 20px 28px;
+      text-align: center;
+      color: var(--ox);
+      font-size: 16px;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-style: dashed;
+    }
+
+    .sheet-dim {
+      position: absolute;
+      inset: 0;
+      background: #F3EFE7ee;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .ghost-orb {
+      position: absolute;
+      top: 210px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 176px;
+      height: 176px;
+      border-radius: 50%;
+      opacity: 0.18;
+      background: radial-gradient(circle at 50% 48%, #7B2233 0%, #EFE0E1 62%, transparent 78%);
+    }
+    .sheet {
+      width: 100%;
+      max-height: 86%;
+      background: var(--elev);
+      border-radius: 16px 16px 0 0;
+      padding: 12px 20px 24px;
+      position: relative;
+    }
+    .handle {
+      width: 36px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--line);
+      margin: 0 auto 16px;
+    }
+    .sheet-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .sheet-top h2 { margin: 0; font-size: 22px; font-weight: 600; }
+    .sheet-top span { font-size: 12px; color: var(--mut); }
+    .close {
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--mut);
+      font-size: 12px;
+      margin-top: 4px;
+      font-family: inherit;
+    }
+    .sec {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--mut);
+      margin: 20px 0 8px;
+    }
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .row .name { display: block; font-size: 16px; font-weight: 600; }
+    .row .sub {
+      display: block;
+      font-size: 12px;
+      color: var(--mut);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .row .meta { color: var(--ox); font-size: 12px; }
+    .row .meta.stale { color: var(--danger); }
+    .row .ord { color: var(--mut); font-size: 12px; }
+    .row .icons { color: var(--ox); font-size: 14px; letter-spacing: 8px; }
+    .loud-quiet {
+      margin-top: 24px;
+      color: var(--ox);
+      font-size: 16px;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+    .cap {
+      margin: 6px 0 0;
+      color: var(--mut);
+      font-size: 12px;
+    }
+    .foot {
+      text-align: center;
+      color: var(--mut);
+      font-size: 12px;
+      margin: 28px 0 0;
+    }
+
+    .logo {
+      font-family: var(--logo);
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      margin: 0;
+    }
+    .plate-head { padding: 20px 20px 8px; }
+    .plate-head .bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .link-ox {
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--ox);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      font-size: 16px;
+      font-family: inherit;
+    }
+    .title { margin: 8px 0 0; font-size: 22px; }
+    .views { display: flex; gap: 16px; margin-top: 10px; }
+    .views span { font-size: 12px; color: var(--mut); }
+    .views .on { font-weight: 600; color: var(--ink); }
+
+    .list { flex: 1; overflow: hidden; padding: 8px 0; }
+    .item {
+      display: block;
+      width: 100%;
+      text-align: left;
+      border: none;
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+      padding: 14px 20px;
+      color: var(--ink);
+    }
+    .item.sel { background: var(--wash); }
+    .item-top { display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+    .item-top .t { flex: 1; font-size: 16px; font-weight: 600; }
+    .item-top .r { font-size: 12px; color: var(--sec); font-weight: 600; }
+    .item-under { font-size: 12px; color: var(--mut); }
+    .item-stage { display: flex; align-items: center; gap: 8px; }
+    .item-stage .age { margin-left: auto; font-size: 12px; color: var(--mut); }
+    .item-stage .age.live { color: var(--ox); }
+
+    .plate-foot {
+      padding: 16px 20px 28px;
+      text-align: center;
+    }
+    .plate-foot .note {
+      margin: 10px 0 0;
+      color: var(--mut);
+      font-size: 12px;
+      font-style: italic;
+    }
+
+    .stream {
+      margin-top: 8px;
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--receipt);
+      white-space: pre-wrap;
+    }
+    .stream .nl { color: var(--ink); }
+    .locked {
+      text-align: right;
+      font-size: 12px;
+      color: var(--mut);
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+  <!-- S1 — Voice. Room.tsx session header + orb + running ticker + queue chip. -->
+  <section class="phone" id="s1">
+    <header class="hdr">
+      <span class="room-pill">Travis</span>
+      <span class="via">via Travis</span>
+      <span class="hdr-right">
+        <span class="in-motion">2 in motion</span>
+        <span class="quiet">Backlog</span>
+        <span class="quiet">Leave</span>
+      </span>
+    </header>
+    <div class="voice-mid">
+      <div class="spacer"></div>
+      <div class="orb"></div>
+      <p class="listen">Listening…</p>
+      <p class="running">Engineer · <span class="tick">2s ago</span></p>
+      <div class="spacer"></div>
+      <div class="chip">
+        <span class="mark" style="--c:#3F5B79;width:28px;height:28px;background:#3F5B79;font-size:10px">SA</span>
+        <span>1 waiting · SA</span>
+      </div>
+      <div class="view-log">View log</div>
+    </div>
+  </section>
+
+  <!-- S2 — Log. Same header + Talk|Type + thought strip + thread. -->
+  <section class="phone" id="s2">
+    <header class="hdr">
+      <span class="room-pill">Travis</span>
+      <span class="via">via Travis</span>
+      <span class="hdr-right">
+        <span class="in-motion">2 in motion</span>
+        <span class="quiet">Backlog</span>
+        <span class="quiet">Leave</span>
+      </span>
+    </header>
+    <div class="toggle-row">
+      <div class="toggle">
+        <button class="on">Talk</button>
+        <button class="off">Type</button>
+      </div>
+    </div>
+    <div class="strip">
+      <button style="opacity:.45;z-index:4">
+        <span class="mark" style="--c:#2F6B6B;width:38px;height:38px;background:#2F6B6B;font-size:11px">PM</span>
+      </button>
+      <button style="margin-left:-10px;opacity:.45;z-index:3">
+        <span class="mark" style="--c:#3F5B79;width:38px;height:38px;background:#3F5B79;font-size:11px">SA</span>
+      </button>
+      <button style="margin-left:-10px;z-index:2">
+        <span class="mark glow" style="--c:#4F6B57;width:38px;height:38px;background:#4F6B57;font-size:11px">ENG</span>
+      </button>
+      <button style="margin-left:-10px;opacity:.45;z-index:1">
+        <span class="mark" style="--c:#2F6B6B;width:38px;height:38px;background:#2F6B6B;font-size:11px">TRV</span>
+      </button>
+    </div>
+    <p class="health"><span class="live">Engineer · 2s ago</span> · <span class="stale">SA · stale</span></p>
+    <div style="padding:4px 20px 8px;color:var(--ox);font-size:14px">← Back to voice</div>
+    <div class="thread">
+      <div class="bubble-row me" style="align-self:flex-end">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <span class="who me">9:14</span>
+          <div class="bubble user">How is dest coming.</div>
+        </div>
+      </div>
+      <div class="receipt">Sent to Engineer.</div>
+      <div class="bubble-row">
+        <span class="mark" style="width:28px;height:28px;background:#4F6B57;font-size:10px">ENG</span>
+        <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+          <span class="who">Eng · 9:14</span>
+          <div class="bubble asst">Gate first. Then the job row. I am on it.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S3 — In flight door. InFlightDoor geometry. Heartbeat + job line, not a DAG. -->
+  <section class="phone" id="s3">
+    <div class="ghost-orb"></div>
+    <div class="sheet-dim">
+      <div class="sheet">
+        <div class="handle"></div>
+        <div class="sheet-top">
+          <h2>In flight</h2>
+          <span>you can leave this open</span>
+        </div>
+        <button class="close">Close</button>
+        <p class="sec">RUNNING NOW</p>
+        <div class="row">
+          <span class="mark glow" style="--c:#4F6B57;width:32px;height:32px;background:#4F6B57;font-size:11px">ENG</span>
+          <span style="flex:1;min-width:0">
+            <span class="name">Engineer</span>
+            <span class="sub">dest gate · in progress</span>
+          </span>
+          <span class="meta">2s ago</span>
+        </div>
+        <div class="row">
+          <span class="mark" style="width:32px;height:32px;background:#3F5B79;font-size:11px;opacity:.55">SA</span>
+          <span style="flex:1;min-width:0">
+            <span class="name" style="color:var(--mut)">Systems Analyst</span>
+            <span class="sub">ascribe dest · stale</span>
+          </span>
+          <span class="meta stale">stale</span>
+        </div>
+        <p class="sec">WAITING</p>
+        <div class="row">
+          <span class="mark" style="width:32px;height:32px;background:#2F6B6B;font-size:11px">PM</span>
+          <span style="flex:1;min-width:0">
+            <span class="name" style="font-weight:400">Product Manager</span>
+            <span class="sub">print the connectors plate</span>
+          </span>
+          <span class="ord">1st</span>
+          <span class="icons" aria-hidden="true">➤ ✕</span>
+        </div>
+        <div class="loud-quiet">Send next without waiting</div>
+        <p class="cap">Travis does this too.</p>
+        <p class="foot">Nothing is read aloud from here.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- S4 — Backlog All. BacklogIndex. Presence is a glowing seat mark, not a cursor. -->
+  <section class="phone" id="s4">
+    <header class="plate-head">
+      <div class="bar">
+        <h1 class="logo">TRAVIS</h1>
+        <button class="link-ox">Close</button>
+      </div>
+      <p class="title">Backlog</p>
+      <div class="views">
+        <span class="on">All</span>
+        <span>In motion</span>
+        <span>Initiatives</span>
+      </div>
+    </header>
+    <div class="list">
+      <div class="item">
+        <div class="item-top">
+          <div class="t">Prove the box</div>
+          <span class="r">step 2 of 3</span>
+        </div>
+        <div class="item-under">Travis · proving</div>
+      </div>
+      <div class="item sel">
+        <div class="item-top">
+          <div class="t">Dest is not mail</div>
+          <span class="r">next Engineer</span>
+        </div>
+        <div class="item-stage">
+          <span class="mark glow" style="--c:#4F6B57;width:26px;height:26px;background:#4F6B57;font-size:10px">ENG</span>
+          <span class="mark" style="width:26px;height:26px;background:#3F5B79;font-size:10px;opacity:.55">SA</span>
+          <span class="age live">2s ago</span>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-top">
+          <div class="t">Unfold the work repo</div>
+          <span class="r">next Travis</span>
+        </div>
+        <div class="item-stage">
+          <span class="mark" style="width:26px;height:26px;background:#2F6B6B;font-size:10px">TRV</span>
+          <span class="age">3d</span>
+        </div>
+      </div>
+    </div>
+    <footer class="plate-foot">
+      <button class="link-ox">Not the request log</button>
+      <p class="note">Only what you gave Travis. Direct-to-seat stays personal.</p>
+    </footer>
+  </section>
+
+  <!-- S5 — Box door. Same sheet as In flight. Stream, not a CRT. -->
+  <section class="phone" id="s5">
+    <div class="ghost-orb"></div>
+    <div class="sheet-dim">
+      <div class="sheet">
+        <div class="handle"></div>
+        <div class="sheet-top">
+          <h2>Box</h2>
+          <span>you can leave this open</span>
+        </div>
+        <button class="close">Close</button>
+        <p class="sec">PROVE</p>
+        <div class="stream"><span class="nl">do</span>
+test -e /home/travis/.ok
+
+<span class="nl">check</span>
+test -e /home/travis/.ok
+ok
+
+<span class="nl">keep</span>
+wrote /home/travis/.ok</div>
+        <p class="locked">locked to bottom</p>
+        <p class="foot">Nothing is read aloud from here.</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const q = new URLSearchParams(location.search);
+    document.body.dataset.p = q.get("p") || "s1";
+  </script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 23:06 UTC — **PM seat handed off.** New chat pastes [`PM-HANDOFF.md`](./PM-HANDOFF.md). Bind `bc-1ac0762e` is no longer the living PM. **003–007 stamps and packets 002–007 are on `main`** (Hotfix 066 brought leftover #4 / #15 onto this tree). Do not fetch those cousin PRs. The last stamp still names #15 as living — that was true when it was written; the trail is here now.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 04:58 UTC — **Request line locked.** Get in / clock / leave with your work / mouth is gated. Not OSS. Flag 14:00 stands. Door not packeted until founder wants it on the glass.
 
 **How we maintain this log**
 
@@ -1338,4 +1338,127 @@ Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tighten
 **Still true:** flag 14:00. 007 locked on this PR (#15). `main`’s copy of this log is stale (Current still 002) — fetch this branch for 003–007. Seated (OS-tree) still open. Do not recut C3/C4.
 
 **Ask:** founder pastes the new PM. Engineer rebinds.
+
+---
+
+## 2026-09-05 01:15 UTC — S3 recut: In flight, seat health (founder)
+
+**Kind:** Type B glass. Recut of Engineer S3. Not a packet. Living: [#123](https://github.com/bywale-com/travis/pull/123). Bind `bc-460a15d0`.
+
+**Founder (preserved):** The plates the engineer generated suck. Plate S3 — In flight (seat health integrated). Warm cream `#F5F0E8`, same as the existing In Flight sheet. Softly blurred photographic lived-in room in the top ~15%. Sheet: 24px top radius, thin gray drag handle, **no Close** — handle and swipe-down only. Header: **In flight** bold ~28px left; **you can leave this open** muted 14px right. RUNNING NOW small-caps letter-spaced. Running row: outlined 1.5px ring, transparent center, initials in the ring tone; thin red `(` left of a live avatar, vertically matching the row. Role bold 16px; underneath a lowercase plain-language task 14px muted — not “dest gate · in progress” — like the original’s “look at the queue drain…”. Right: heartbeat **2s ago** muted when healthy, **stale** red after 15+ seconds without a ping. That is the one real content change from the original: elapsed-since-start becomes recency-of-last-heartbeat. Hairline between rows. WAITING same treatment. Waiting: outlined ring, name + one-line task, 1st/2nd, right-arrow reassign, X — original iconography, no redesign. Then **Send next without waiting** red underline, **Travis does this too.** Bottom centered: **Nothing is read aloud from here.**
+
+**Landed:** [`plates/travis-s3-inflight-jobs-mission.png`](./plates/travis-s3-inflight-jobs-mission.png) · studio [`plates/studio/s3-inflight.html`](./plates/studio/s3-inflight.html). FACE [`PLATES-LIVE-VISUALS.md`](./PLATES-LIVE-VISUALS.md). Source of chrome is **V6**, not the Engineer S3 (filled marks, Close, jargon).
+
+**This packet / not yet:** not a packet. S1 / S2 / S4 / S5 not recut this stamp.
+
+**Do not from this stamp:** plant heartbeat, mint a ping table, recut the other S plates, grow I1.
+
+**Ask:** like this S3 enough that it is the In flight photo? Recut S1/S2/S4/S5 the same way (V6/planted chrome, not a new identity)? Packet, or hold until dest is signed?
+
+---
+
+## 2026-09-05 04:36 UTC — Read 023 before the vision (this bind)
+
+**Kind:** Trail. Not a packet. Not a plate. Founder: look at the most recent packet the Engineer created, and the essay SA just signed, so the vision has absolute context.
+
+**Read (this PR [#123](https://github.com/bywale-com/travis/pull/123)):**
+
+- Engineer draft: `57f6047` — tape, card, dest job. Labor leaves his mouth. One hidden card on the Log. In flight is seats. Cuts left open.
+- SA signed 04:25 UTC: [`SYSTEMS-CHANGE-PACKET-023-TAPE.md`](./SYSTEMS-CHANGE-PACKET-023-TAPE.md). Closed the cuts: mutate-the-tape / unseat / SSE / create-sit-on-queue = **named silence**. Card hang **B**. Catalog fallback **dies**. Mint `travis.dest_job`. Blocking send dies.
+- Glass look-only: [`PLATES-MOTION-LOG.md`](./PLATES-MOTION-LOG.md) M1–M5 — Let me get to that → card under the line → interrupt the card stays → tape done, BA is the next turn.
+- S3 recut still of record for In flight. 022 stays on [#120](https://github.com/bywale-com/travis/pull/120), plant after this gate.
+
+**Do not from this stamp:** invent the vision, recut M1–M5, plant 023, mix Type A dest with Type B chrome.
+
+**Ask:** the vision — go.
+
+---
+
+## 2026-09-05 04:50 UTC — Public moment: request access, K-shaped, show (founder)
+
+**Kind:** Type A vision + constraints for a first public post. **Not a new flag.** Flag remains 14:00. Not a packet. Not SA tables.
+
+**Founder (preserved; STT cleaned in capture, not in meaning):**
+
+- Never released anything publicly. Wasn’t even thinking of releasing Travis. Why open source? No benefit. Doesn’t have to.
+- If anything goes out: **request access** — real, not a joke waitlist. Not public access for everyone.
+- First post ever. Impressions matter (figures who followed the Om Coda / agent-led build). Narrative has to be tight. Video in days, not months.
+- **K-shaped company** (not “caseship”). Already on the Om Coda site. Frame, not the whole truth — Travis is beyond that, but that’s the frame.
+- Public does not know what a harness is. Don’t use big words. **Show** what it does. Tony Stark by demonstration.
+- Do **not** mention Astra / OpenAI / “first.” The loser frame is claiming you thought of it first and didn’t ship. Don’t make the claim. Let the audience connect if they want.
+- Who: anyone interested in agents for GTM / sales / product; lean / small team / startup; agent-led ALG (acquisition, activation, evolution). Especially not at a desk all day — field, conference, networking, clearing a head. Technologist who happens to be a tech CEO, not the other way around. Field builder. Whole team on the move. Needs **process and protocol**, not “let Claude do it.” Structure. BA mind.
+- Hurt this week about recognition. Ground: earned recognition (customers, revenue, product working) is the scoreboard. A video is nice-to-have. If posting, it has to be rare enough to be worth the first post.
+- Canvas: “Travis, place in motion and initiatives in separate tabs on the canvas.” Glasses: Travis barges in, send that to the glasses, see it live. Founder: not out of this world; a week if the people exist in one person.
+
+**Do not from this stamp:** mint a waitlist table, plant a canvas, plant glasses, recut 023, mention Astra in any public copy from this seat, open-source the repo, overwrite 14:00.
+
+---
+
+**Join (agent alignment — not the flag)**
+
+14:00 stays the product: open this app, not Cursor; talk; hear; images in order. The public moment is a **door** on that product, not a second product.
+
+023 (signed, now planting on this PR): tape, card, dest job, catalog fallback dies — that *is* the showable walk (M1–M5 + Voice barge-in + artifacts in the log). Spatial canvas and glasses are **not** in 023. 023 named DAG / canvas / PTY as must-not. Glasses are an external SDK someone else owns.
+
+| In a video as **today** | In a video as **headed** | Not this stamp |
+|-------------------------|--------------------------|----------------|
+| Voice to Cursor seats. Barge-in / New. Artifacts in the log. Speak once, card under the line, interrupt, tape finishes, BA is the next turn. In flight heartbeat (S3). Request access as the gate. | Canvas tabs. Glasses as another pane. | Open source. Primacy. Harness lecture. Fake scenery. |
+
+Request access is a **product constraint**. The store/control is SA when locked. I will not mint it.
+
+**Ask:** lock these constraints as the public-moment law (this stamp is the hold), or cut a short FACE for the video + request-access door? Demo this week = planted 023 walk, canvas/glasses spoken as next — or do you want canvas as a named plant *this* pocket (SA has not ascribed it; 023 refused the store)?
+
+---
+
+## 2026-09-05 04:55 UTC — Request line: get in, leave with your work (founder)
+
+**Kind:** Type A. Tightens the public-moment door. **Not a new flag.** Not a packet. Not a store.
+
+**Founder (preserved):**
+
+- Canvas: eventually, next couple of days / within the week. Not this clarification.
+- Request line is **real**. Definitely **not open source**.
+- If someone requests, they **get in**. Not stuck. Access for a certain amount of time. Then maybe pay — not sure. Must not feel obliged.
+- Must not feel vendor-locked: their data, they can take it; they must not leave something behind that they can only have if they pay.
+- Production-ready **in that regard**.
+- No emphasis on models. Underlying model for **Travis itself** (not Cursor): they will not be allowed to modify it. No changing models. It’s just what you got. Gated.
+
+**Ask (founder):** what’s your advice, from a vision level.
+
+**Do not from this stamp:** mint a waitlist/billing/export table, plant OSS, plant a model picker, plant canvas, write the video.
+
+---
+
+**PM (vision, labeled alignment — not the flag)**
+
+The request line is hospitality with a clock, not a funnel.
+
+If they ask, they walk into a real Travis room and do the 14:00 loop. When the time is up, the hosted mouth can go quiet. **Their work does not.** That is the anti-lock: export / take the room with you. The thing you keep charging for (if you ever do) is Travis running — not their files, log, or backlog held hostage.
+
+Not open source means the **product** is hosted. The **brain** is yours. No model menu is not a missing feature; it is the same law as “don’t look at Cursor.” They came for Travis, not to pick a vendor.
+
+Production-ready for a request line is smaller than production-ready as a company. Ready enough: a stranger gets in, talks, works, leaves with their stuff, never sees your house or your keys, cannot retune his mouth. Billing can stay unnamed. Canvas can land later this week as you said.
+
+**Ask:** is “get in / clock / leave with your work / mouth is gated” the hold on the request line? If yes, I will not packet until you want the door on the glass — SA ascribes the grant + export; I will not mint it.
+
+---
+
+## 2026-09-05 04:58 UTC — Request line locked (founder)
+
+**Kind:** Type A lock. Not a new flag. Not a packet.
+
+**Founder (preserved):** This is the right shape. This is what we’re building towards. I can stand behind this.
+
+**Locked (the 04:55 hold, now founder-backed):**
+
+| Law | Meaning |
+|-----|---------|
+| Get in | Request is real. They ask, they enter a working Travis. |
+| Clock | Access for a stretch. Not infinite hosted mouth. |
+| Leave with your work | Time up does not hostage the log, files, backlog. Pay later is for Travis running, if it ever exists. |
+| Mouth is gated | Travis’s model is not a picker. Not Cursor. Not OSS. |
+
+14:00 still the product. Canvas still later this week. Billing unnamed. SA ascribes grant + export when the door is cut. I do not mint it. I do not packet until you want it on the glass.
+
+**Ask:** hold. When you want the door, say packet.
 

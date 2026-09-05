@@ -50,6 +50,8 @@ import { CreateAgent, type CreatedAgent } from "@/components/plates/CreateAgent"
 import { IntegrationStatusScreen } from "@/components/plates/IntegrationStatus";
 import { CreateRoom, type CatalogSeat } from "@/components/plates/CreateRoom";
 import { InFlightDoor, type RunningNow } from "@/components/plates/InFlightDoor";
+import { MotionCard } from "@/components/plates/MotionCard";
+import type { MotionCard as MotionCardData } from "@/lib/motion";
 import {
   BacklogIndex,
   type BacklogItem,
@@ -269,6 +271,7 @@ export function Room({
   const [session, setSession] = useState<Session | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("voice");
   const [turns, setTurns] = useState<Turn[]>([]);
+  const [motionCards, setMotionCards] = useState<MotionCardData[]>([]);
   const [presence, setPresence] = useState<Presence>("ended");
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
@@ -376,6 +379,7 @@ export function Room({
     const data = await res.json();
     const nextTurns = (data.turns ?? []) as Turn[];
     setTurns(nextTurns);
+    if (Array.isArray(data.cards)) setMotionCards(data.cards as MotionCardData[]);
     setLiveThoughts((prev) => {
       const next: Record<string, string> = { ...prev };
       for (const t of nextTurns) {
@@ -1637,6 +1641,7 @@ export function Room({
         await refreshQueue(s.id);
       } else {
         setTurns([]);
+        setMotionCards([]);
         setQueueSeats([]);
       }
       if (s.status === "paused") {
@@ -2799,6 +2804,14 @@ export function Room({
                       </div>
                     </div>
                   </div>
+                  {!isUser &&
+                    turn.kind === "agent_post" &&
+                    turn.seatKey === "travis" &&
+                    motionCards
+                      .filter((c) => c.foundingTurnId === turn.id)
+                      .map((card) => (
+                        <MotionCard key={card.id} card={card} t={t} />
+                      ))}
                   </div>
                 );
               })}

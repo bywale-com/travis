@@ -102,3 +102,10 @@ test("Travis is told seats are disposable and sit hangs a protocol", () => {
   assert.match(TRAVIS_SYSTEM, /Create is not seated/);
   assert.match(TRAVIS_SYSTEM, /Do not mint a new initiative/);
 });
+
+test("Travis is told dest is a job and catalog fallback is dead", () => {
+  assert.match(TRAVIS_SYSTEM, /same leave/i);
+  assert.match(TRAVIS_SYSTEM, /unseated catalog slug is nobody/i);
+  assert.match(TRAVIS_SYSTEM, /never a send to catalog pm/i);
+  assert.equal(/blocks until that seat finishes/.test(TRAVIS_SYSTEM), false);
+});

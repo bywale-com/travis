@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-04 22:28 UTC — **SCP-021 signed.** Box is a worker with rules. House and disk are two. Unfold from `/templates/work-repo` + `TRAVIS_GITHUB_TOKEN`. 042 stands. Five back. Packet: [`SYSTEMS-CHANGE-PACKET-021-WORKER.md`](./SYSTEMS-CHANGE-PACKET-021-WORKER.md) on PR **#119**. Engineer plants prove on that PR.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 10:19 UTC — **SCP-023 signed.** Dest is a job, not mail. Backlog-verb findings hung on this initiative: [`initiatives/023-tightness/BACKLOG-VERBS.md`](./initiatives/023-tightness/BACKLOG-VERBS.md). Not a new ticket.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -395,3 +395,38 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-021-WORKER.md`](./SYSTEMS-CHANGE-PACKET-021-WORKER.md)
 
 **Handoff:** Engineer plants prove on #119, then unfold (may be not-wired). Next packet number is **022**.
+
+---
+
+## 2026-09-05 04:25 UTC — SCP-023 tightness (Engineer draft on #123)
+
+**Kind:** Envelope + draft pickup. [`ENVELOPE-TRAVIS-TIGHTNESS.md`](./ENVELOPE-TRAVIS-TIGHTNESS.md) · draft [`SYSTEMS-CHANGE-PACKET-023-TAPE.md`](./SYSTEMS-CHANGE-PACKET-023-TAPE.md). Packet on **this same PR**.
+
+**Ascribed:**
+
+1. Story — children in Cursor; tightness in our runner; dest is not mail. 021+022 without the gate do not finish it.
+2. Gate in `send_to_seat` / `dispatch_to_seat`. His / theirs / nobody. Catalog fallback **dies**. Vacant / empty `protocol_path` = nobody. Blocking send dies.
+3. Mint `travis.dest_job` (`binding_id`, payload, idempotency, heartbeat). `parent_id` nullable; no DAG. Take-back = Travis receipt, he stays dest.
+4. Card hang **B** — `motion.founding_turn_id`. Auto one-step motion for in-turn nobody-work. No new kind. No third labor table.
+5. Mutate-the-tape, unseat, SSE, create/sit-on-queue: **named silence**. Keep 013 refuse. Poll this packet.
+6. 022 stands on #120. Plant after this gate is on `main`. Do not remint `travis.port`.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-023-TAPE.md`](./SYSTEMS-CHANGE-PACKET-023-TAPE.md) now **signed**.
+
+**Handoff:** Engineer plants thread truth → card B → gate + dest_job on #123. Next packet number is **024**.
+
+---
+
+## 2026-09-05 10:19 UTC — Backlog verbs (combined request, hung on 023)
+
+**Kind:** Findings. Combined hand: look at the face, then delete / complete / …. **Not a new ticket. Not 024.**
+
+**Ascribed** on [`initiatives/023-tightness/BACKLOG-VERBS.md`](./initiatives/023-tightness/BACKLOG-VERBS.md):
+
+1. Complete and rename are already writes. Missing on the ticket face. Founder + Travis (when asked). Seats never. Seat finish ≠ done.
+2. Discard is the hole. Unused → delete row + unstamp founding (request again). Used → refuse; do not call it done. No `void` status.
+3. Reopen is the mirror of accidental Done.
+4. Hold stays the only promote. No priority, assignee, merge, archive.
+5. Gate: mailing complete/delete is **his**.
+
+**Handoff:** 023 plant order unchanged. A slim follow-on plants discard + reopen + Done on the ticket if the founder seats it.

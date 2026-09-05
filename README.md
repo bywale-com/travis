@@ -4,6 +4,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-05** · SCP-023 · [PR #123](https://github.com/bywale-com/travis/pull/123) — Live Travis speech stays his line, a process hangs as a card under that line, dest is a job with a heartbeat, and an unseated catalog slug is nobody, because he mailed “new PM” to catalog `pm` and the ear painted his voice on the right.
+- **2026-09-04** · Envelope 023 · [PR #123](https://github.com/bywale-com/travis/pull/123) — Tightness is our runner (dest gate, job, watch, take-back); children stay in Cursor; 021+022 without the gate do not finish it, because Travis mailed “new PM” to the PM.
 - **2026-09-04** · 021 worker · [PR #119](https://github.com/bywale-com/travis/pull/119) — Travis proves a job on the same box, says house and disk are two, and can unfold a house template into a new GitHub repo, because a one-shot run is not a worker and calling run_box again is not a loop.
 - **2026-09-04** · Envelope 021 · [PR #119](https://github.com/bywale-com/travis/pull/119) — Prove, keep, unfold, and hands split are the next shape, browser stays back, because the box is live and the founder wants the worker with rules, not more tools.
 - **2026-09-04** · 020 box · [PR #117](https://github.com/bywale-com/travis/pull/117) — Travis can run, read, and write on one Fly Sprite, pointer in env, because an error has to retry on the same machine and Vercel is not that machine.

@@ -1,6 +1,7 @@
 "use client";
 
 import { absorbText, collapseSpeechStutter } from "@/lib/absorb-text";
+import { shouldDropHeardAsUser } from "@/lib/thread-truth";
 import {
   interpretRealtimeEvent,
   liveInstructions,
@@ -51,6 +52,7 @@ export async function startTravisLive(opts: {
   let closed = false;
   let userAcc = "";
   let travisAcc = "";
+  let lastTravis = "";
   let userFlush: ReturnType<typeof setTimeout> | null = null;
   let pendingNotify: string | null = null;
   let stopFn: () => Promise<void> = async () => {};
@@ -94,6 +96,15 @@ export async function startTravisLive(opts: {
     const said = collapseSpeechStutter(forced ?? userAcc);
     userAcc = "";
     if (!said) return;
+    if (
+      shouldDropHeardAsUser({
+        heard: said,
+        hisLast: lastTravis,
+        heIsSpeaking: Boolean(travisAcc.trim()),
+      })
+    ) {
+      return;
+    }
     void persist("user", said).then((data) => {
       if (data?.stopLive) void stopFn();
     });
@@ -214,7 +225,10 @@ export async function startTravisLive(opts: {
         if (action.op === "travis_flush") {
           const said = collapseSpeechStutter(travisAcc);
           travisAcc = "";
-          if (said) void persist("travis", said);
+          if (said) {
+            lastTravis = said;
+            void persist("travis", said);
+          }
           continue;
         }
         if (action.op === "tools") void runTools(action.calls);

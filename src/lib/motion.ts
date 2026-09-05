@@ -62,6 +62,53 @@ export function isMotionStepRefused(tool: string): boolean {
   return (MOTION_STEP_REFUSED as readonly string[]).includes(tool);
 }
 
+/** In-turn nobody-work may hang as a one-step card. unfold is card-only. */
+export function isAutoFileableTool(tool: string): boolean {
+  return isMotionStepAllowed(tool) || tool === "unfold_repo";
+}
+
+/** Writes he should not hold the mouth for. Glance reads stay in-turn. */
+export const IN_TURN_AUTO_FILE = [
+  "write_os",
+  "run_box",
+  "read_box",
+  "write_box",
+  "prove_box",
+  "unfold_repo",
+  "rename_initiative",
+  "mark_initiative_done",
+  "rename_room",
+] as const;
+
+export function isInTurnAutoFile(tool: string): boolean {
+  return (IN_TURN_AUTO_FILE as readonly string[]).includes(tool);
+}
+
+export type MotionCardStep = {
+  seq: number;
+  tool: string;
+  args: Record<string, unknown>;
+  status: MotionStepStatus;
+  resultText: string;
+};
+
+export type MotionCard = {
+  id: string;
+  foundingTurnId: string | null;
+  title: string;
+  status: MotionStatus;
+  stepN: number;
+  stepM: number;
+  under: string;
+  steps: MotionCardStep[];
+};
+
+export function motionCardCollapsed(card: MotionCard): string {
+  const title = card.title.trim() || "In motion";
+  if (!card.stepM) return title;
+  return `${title} · ${card.stepN} of ${card.stepM}`;
+}
+
 export function parseBacklogView(raw: unknown): BacklogView {
   const v = String(raw ?? "all");
   if (v === "in_motion" || v === "initiatives" || v === "all") return v;

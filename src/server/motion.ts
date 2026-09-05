@@ -2,17 +2,20 @@
  * SCP-013 — Travis process store + dumb runner.
  * Sibling of initiative. No seat send. No product cap.
  */
-import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 import { clipInitiativeTitle } from "@/lib/initiative-title";
 import {
   formatFiledPlan,
   formatMotionList,
+  isAutoFileableTool,
   isMotionStepAllowed,
   isMotionStepRefused,
   motionStepN,
   motionUnder,
   parseBacklogView,
   type BacklogView,
+  type MotionCard,
+  type MotionCardStep,
   type MotionListItem,
   type MotionStatus,
 } from "@/lib/motion";
@@ -125,15 +128,34 @@ async function latestUserTurn(sessionId: string) {
   return row ?? null;
 }
 
+/** Card hangs on his spoken line, not the founder request. */
+export async function latestTravisFoundingTurn(sessionId: string) {
+  const [row] = await db
+    .select()
+    .from(voiceTurn)
+    .where(
+      and(
+        eq(voiceTurn.sessionId, sessionId),
+        eq(voiceTurn.kind, "agent_post"),
+        eq(voiceTurn.seatKey, "travis"),
+        eq(voiceTurn.speakable, true),
+      ),
+    )
+    .orderBy(desc(voiceTurn.seq))
+    .limit(1);
+  return row ?? null;
+}
+
 export async function filePlan(
   sessionId: string,
   params: { title?: string; steps: unknown },
 ): Promise<FiledPlan> {
   await ensureMotionStore();
   const steps = parsePlanSteps(params.steps);
-  const founding = await latestUserTurn(sessionId);
+  const founding = await latestTravisFoundingTurn(sessionId);
+  const clipFrom = founding ?? (await latestUserTurn(sessionId));
   const given = typeof params.title === "string" ? params.title.trim() : "";
-  const title = given || clipInitiativeTitle(founding?.text ?? "");
+  const title = given || clipInitiativeTitle(clipFrom?.text ?? "");
   if (!title) {
     throw new MotionError("Need a title or a user line to clip.", 400);
   }
@@ -162,6 +184,120 @@ export async function filePlan(
   const filed = { id: row.id, title: row.title, stepCount: steps.length };
   void runMotionRunner(sessionId);
   return filed;
+}
+
+/**
+ * In-turn nobody-work that never called file_plan. One step on his last
+ * spoken line. unfold_repo may hang here; it stays off the planned allowlist.
+ */
+export async function autoFileOneStep(
+  sessionId: string,
+  params: {
+    tool: string;
+    args?: Record<string, unknown>;
+  },
+): Promise<FiledPlan | null> {
+  await ensureMotionStore();
+  if (!isAutoFileableTool(params.tool)) return null;
+  const founding = await latestTravisFoundingTurn(sessionId);
+  const clipFrom = founding ?? (await latestUserTurn(sessionId));
+  const title = clipInitiativeTitle(clipFrom?.text ?? "") || humanTitle(params.tool);
+  const [row] = await db
+    .insert(motion)
+    .values({
+      sessionId,
+      title,
+      status: "waiting",
+      foundingTurnId: founding?.id ?? null,
+    })
+    .returning();
+  if (!row) return null;
+  await db.insert(motionStep).values({
+    motionId: row.id,
+    seq: 1,
+    tool: params.tool,
+    args: JSON.stringify(params.args ?? {}),
+    status: "pending",
+  });
+  void runMotionRunner(sessionId);
+  return { id: row.id, title: row.title, stepCount: 1 };
+}
+
+function humanTitle(tool: string): string {
+  return tool.replace(/_/g, " ");
+}
+
+export async function hangOrphanMotionsOn(
+  sessionId: string,
+  foundingTurnId: string,
+): Promise<void> {
+  await ensureMotionStore();
+  await db
+    .update(motion)
+    .set({ foundingTurnId })
+    .where(and(eq(motion.sessionId, sessionId), isNull(motion.foundingTurnId)));
+}
+
+export async function listMotionCards(sessionId: string): Promise<MotionCard[]> {
+  await ensureMotionStore();
+  const rows = await db
+    .select()
+    .from(motion)
+    .where(eq(motion.sessionId, sessionId))
+    .orderBy(desc(motion.updatedAt));
+  if (!rows.length) return [];
+  const stepRows = await db
+    .select()
+    .from(motionStep)
+    .where(
+      inArray(
+        motionStep.motionId,
+        rows.map((r) => r.id),
+      ),
+    );
+  const byId = new Map<string, MotionCardStep[]>();
+  for (const step of stepRows) {
+    let args: Record<string, unknown> = {};
+    try {
+      const parsed = JSON.parse(step.args || "{}") as unknown;
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        args = parsed as Record<string, unknown>;
+      }
+    } catch {
+      args = {};
+    }
+    const list = byId.get(step.motionId) ?? [];
+    list.push({
+      seq: step.seq,
+      tool: step.tool,
+      args,
+      status: (["pending", "running", "done", "failed"].includes(step.status)
+        ? step.status
+        : "pending") as MotionCardStep["status"],
+      resultText: step.resultText ?? "",
+    });
+    byId.set(step.motionId, list);
+  }
+  for (const list of byId.values()) list.sort((a, b) => a.seq - b.seq);
+  return rows
+    .map((row) => {
+      const steps = byId.get(row.id) ?? [];
+      const item = toMotionListItem(
+        row,
+        steps.map((s) => ({ seq: s.seq, tool: s.tool, status: s.status })),
+      );
+      return {
+        id: row.id,
+        foundingTurnId: row.foundingTurnId,
+        title: row.title,
+        status: item.status,
+        stepN: item.stepN,
+        stepM: item.stepM,
+        under: item.under,
+        steps,
+      };
+    })
+    .filter((c) => c.foundingTurnId && c.stepM > 0);
 }
 
 export async function countOpenMotions(sessionId: string): Promise<number> {
@@ -469,6 +605,7 @@ async function runOneMotion(sessionId: string, motionId: string): Promise<void> 
         sessionId,
         name: claimed.tool,
         args,
+        asMotionStep: true,
       });
       await finishStep(claimed.id, motionId, result.text, result.ok);
       if (!result.ok) return;

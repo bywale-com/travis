@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=390, initial-scale=1" />
+  <title>S3 In flight</title>
+  <style>
+    :root {
+      --cream: #F5F0E8;
+      --ink: #1C1917;
+      --muted: #9A8F84;
+      --hair: #E0D8CB;
+      --oxblood: #7B2233;
+      --stale: #8C3A3A;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 390px; height: 844px; overflow: hidden; }
+    body {
+      font-family: "Segoe UI", "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+    .frame {
+      width: 390px;
+      height: 844px;
+      position: relative;
+      background: #1a1008;
+    }
+    .backdrop {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 15%;
+      background: url("./s3-room-backdrop.png") center 35% / cover no-repeat;
+      filter: blur(10px) saturate(0.95);
+      transform: scale(1.08);
+      transform-origin: top center;
+    }
+    .backdrop-wash {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 18%;
+      background: linear-gradient(to bottom, rgba(20,12,6,0.15), rgba(245,240,232,0.55) 70%, var(--cream));
+      pointer-events: none;
+    }
+    .sheet {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 15%;
+      bottom: 0;
+      background: var(--cream);
+      border-radius: 24px 24px 0 0;
+      padding: 10px 22px 28px;
+      display: flex;
+      flex-direction: column;
+    }
+    .handle {
+      width: 36px;
+      height: 4px;
+      border-radius: 999px;
+      background: #C9C0B4;
+      margin: 2px auto 18px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .header .aside {
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .sec {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      font-variant: small-caps;
+      text-transform: none;
+      color: var(--muted);
+      margin: 22px 0 4px;
+      font-weight: 500;
+    }
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 0.5px solid var(--hair);
+      position: relative;
+    }
+    .bracket {
+      width: 8px;
+      height: 36px;
+      flex-shrink: 0;
+      margin-right: -2px;
+    }
+    .bracket svg { display: block; }
+    .spacer { width: 8px; flex-shrink: 0; margin-right: -2px; }
+    .mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--muted);
+      background: transparent;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .copy { flex: 1; min-width: 0; }
+    .name {
+      display: block;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .task {
+      display: block;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.3;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .wait .name { font-weight: 700; color: var(--ink); }
+    .beat {
+      font-size: 14px;
+      color: var(--muted);
+      flex-shrink: 0;
+      margin-left: 8px;
+    }
+    .beat.stale {
+      color: var(--stale);
+      font-weight: 600;
+    }
+    .ord {
+      font-size: 14px;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+    .ico {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      color: var(--oxblood);
+    }
+    .ico.x { color: var(--stale); }
+    .send {
+      margin-top: 22px;
+    }
+    .send a {
+      color: var(--oxblood);
+      font-size: 16px;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-weight: 500;
+    }
+    .send p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .quiet {
+      margin-top: auto;
+      padding-top: 36px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <div class="backdrop"></div>
+    <div class="backdrop-wash"></div>
+    <div class="sheet">
+      <div class="handle"></div>
+      <div class="header">
+        <h1>In flight</h1>
+        <span class="aside">you can leave this open</span>
+      </div>
+
+      <p class="sec">Running now</p>
+
+      <div class="row">
+        <span class="bracket" aria-hidden="true">
+          <svg width="8" height="36" viewBox="0 0 8 36" fill="none">
+            <path d="M7 2 C1.5 8, 1.5 28, 7 34" stroke="#7B2233" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="mark">ENG</span>
+        <span class="copy">
+          <span class="name">Engineer</span>
+          <span class="task">look at the queue drain…</span>
+        </span>
+        <span class="beat">2s ago</span>
+      </div>
+
+      <div class="row">
+        <span class="bracket" aria-hidden="true">
+          <svg width="8" height="36" viewBox="0 0 8 36" fill="none">
+            <path d="M7 2 C1.5 8, 1.5 28, 7 34" stroke="#7B2233" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="mark">SA</span>
+        <span class="copy">
+          <span class="name">SA</span>
+          <span class="task">check the token refresh path…</span>
+        </span>
+        <span class="beat stale">stale</span>
+      </div>
+
+      <p class="sec">Waiting</p>
+
+      <div class="row wait">
+        <span class="spacer"></span>
+        <span class="mark">PM</span>
+        <span class="copy">
+          <span class="name">PM</span>
+          <span class="task">print the connectors plate</span>
+        </span>
+        <span class="ord">1st</span>
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14"/><path d="M13 6l6 6-6 6"/><path d="M5 6v12"/>
+        </svg>
+        <svg class="ico x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+        </svg>
+      </div>
+
+      <div class="row wait">
+        <span class="spacer"></span>
+        <span class="mark">ENG</span>
+        <span class="copy">
+          <span class="name">Engineer</span>
+          <span class="task">look over the last packet…</span>
+        </span>
+        <span class="ord">2nd</span>
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14"/><path d="M13 6l6 6-6 6"/><path d="M5 6v12"/>
+        </svg>
+        <svg class="ico x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+        </svg>
+      </div>
+
+      <div class="send">
+        <a>Send next without waiting</a>
+        <p>Travis does this too.</p>
+      </div>
+
+      <p class="quiet">Nothing is read aloud from here.</p>
+    </div>
+  </div>
+</body>
+</html>

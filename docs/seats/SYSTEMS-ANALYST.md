@@ -190,6 +190,9 @@ Do not mint these unless the founder seats them.
 | **Heard / Hear / Next / Skip** | Still SA silence. |
 | **Computer use / browser** | 021 five — back. `curl` from the box is not a browser. |
 | **House dumped onto the Sprite** | 021 keep: they are two. |
+| **Unseat / Cursor rebind** | 023 nobody. Do not mint. |
+| **Mutate the tape** | 023 silence. New line = new `file_plan`. |
+| **SSE / job bus** | 023 silence. Poll this packet. |
 
 ### Live packets (do not restart these)
 
@@ -203,9 +206,11 @@ Do not mint these unless the founder seats them.
 | 014 | Split beats + Voice `create_agent` | Planted — [`SYSTEMS-CHANGE-PACKET-014-LOG-BEATS.md`](../register/SYSTEMS-CHANGE-PACKET-014-LOG-BEATS.md). L1/L3/hang = 064. |
 | 015 | Disposable seats | Planted — [`SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md`](../register/SYSTEMS-CHANGE-PACKET-015-DISPOSABLE-SEATS.md) |
 | 016–020 | Here / Hand / Glance / Pass-on / Box | Planted as engineer cuts. Do not remint. |
-| 021 | Prove, keep, unfold, hands split | **Signed** — [`SYSTEMS-CHANGE-PACKET-021-WORKER.md`](../register/SYSTEMS-CHANGE-PACKET-021-WORKER.md) on PR **#119**. Engineer plants prove there. |
+| 021 | Prove, keep, unfold, hands split | Planted — [`SYSTEMS-CHANGE-PACKET-021-WORKER.md`](../register/SYSTEMS-CHANGE-PACKET-021-WORKER.md) (PR **#119**). |
+| 022 | Ports as a control | **Signed** on [#120](https://github.com/bywale-com/travis/pull/120). Plant **after** 023 gate. Do not remint `travis.port`. |
+| 023 | Tape, card, dest job | **Signed** — [`SYSTEMS-CHANGE-PACKET-023-TAPE.md`](../register/SYSTEMS-CHANGE-PACKET-023-TAPE.md) on PR **#123**. Engineer plants gate + dest_job there. |
 
-Next packet number is **022**. Never reuse a number.
+Next packet number is **024**. Never reuse a number.
 
 ### Paste this into a new Systems Analyst chat
 
