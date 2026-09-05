@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 19:08 UTC — 009 letter sent. Resend 200. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 19:32 UTC — Held inventory. Suggest walk 009, then talk seat health. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2025,3 +2025,24 @@ The first fires died in 0s — a Python heredoc sat at column 1 and broke the wo
 **Action** `33986163871` — labeled `emerge`, issue #129 already there, Resend **200** `a4486041-2497-4b4a-80e4-aa1db6096802`. Subject: `009 emerged — walk this sheet`. Attachment: the test md.
 
 First Resend try was Cloudflare 1010 (no User-Agent). Same 1010 as this VM. UA fixed it. Check the inbox.
+
+---
+
+## 2026-09-05 19:32 UTC — Held inventory (this session)
+
+**Kind:** Inventory. Not a packet. Do not mint a store. Flag 14:00 stands.
+
+**Landed this session (no longer held):** label gate · Automation C · `fail-look` · chain-cost window · 009 dirty sample · emerge email · test-spec shape (Setup, then the packet; sentence provided).
+
+**Open, not vision:** walk 009 on the #127 preview · fix C `labelName` to `wake-pm-look` (Fail → `fail-look`) · merge #127 so the Action is on `main` · next packet is the clean cost sample.
+
+**Held this session:**
+
+1. **Seat health** (17:10) — idle is not enough. Bar: healthy / close / unhealthy. Inspect port not ascribed. Number not locked. Not a dashboard.
+2. **Learn from loops** (18:08) — 009 had 0 loops. Nothing to learn yet.
+3. **Tester environment / sandbox / gig** (14:49–16:12) — first human job is a walker. Environment is the gap. Sandbox is the evolution (no Setup). Gig / Om Coda is far. Do not invent it.
+4. **SA-now vs protocol-break automations** (14:49) — a question, not a packet. We now know a Cursor boot is already the bill.
+
+**Older parked (do not lose):** initiative curate (after Stream) · Find / primitive recut · Hear / Next / Skip (007, SA silence) · Travis capability gap · request-line door · 022 on #120.
+
+**Suggest:** start = walk 009. Talk = seat health (this session’s unfinished grain). Product packet after the walk = initiative curate (parked until Stream). Do not start gig, sandbox, or another un-gated automation.

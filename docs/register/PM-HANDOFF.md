@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-05 19:08 UTC
+# PM seat handoff — 2026-09-05 19:32 UTC
 
 **This bind is living.** `bc-25c5c6bf-006f-4252-9f25-49ab183835b2` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -14,13 +14,13 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **19:08 UTC 2026-09-05** (009 letter sent). Flag **14:00**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **19:32 UTC 2026-09-05** (held inventory). Flag **14:00**. |
 | Seat law | [`../README.md`](../README.md) § Product Manager · [`../seats/PRODUCT-MANAGER.md`](../seats/PRODUCT-MANAGER.md) · house [`house-now/protocols/pm.md`](./house-now/protocols/pm.md) |
 | Plates | [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) generate · [`PLATE-READ.md`](./PLATE-READ.md) read |
 | Packets 001–009 | [`PM-PACKETS.md`](./PM-PACKETS.md). 001–007 on **`main`**. **008–009** on this PR. 009 look **Pass** — [`PM-LOOK-009.md`](./PM-LOOK-009.md). Human walk not started. |
 | Last face lock | **009** — card above **this** episode’s completed line. Stream does not auto-open. Emerged. |
 | Engineer | Implements specced work only. Pickup [`ENGINEER-HANDOFF.md`](./ENGINEER-HANDOFF.md). **025** planted on this PR. Prior open pocket: **022** on [#120](https://github.com/bywale-com/travis/pull/120). |
-| Vision | The job is packets. First human job is a tester walking the spec. Gig / Om Coda test space is far. Gap: environment, bounded per packet. Evolution: a **sandbox** — tester is already in the place; Setup is only for today’s desk. |
+| Vision | Held: seat health · tester sandbox/gig · SA-now automations · initiative curate (after Stream) · Find rename · 007 · capability gap · request-line. Suggest walk 009, then talk seat health. |
 | Packet chain | [`AUTOMATION-PACKET-CHAIN.md`](./AUTOMATION-PACKET-CHAIN.md) — A → B → C → emerge letter. Pass emails the `*-TEST.md`. Not Travis. 009 is a dirty first sample. |
 
 **Do not** follow any “no new plate / V6 grown only” FACE from an old bind. Home is **Backlog** (All / In motion / Initiatives). Voice count = Travis processes only.
