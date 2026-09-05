@@ -1,6 +1,6 @@
 # Cheap gate in front of Cursor Automations.
 # GitHub path filter + this-push diff. No Cursor boot until a label lands.
-# Labels: wake-sa · wake-engineer · wake-pm-look
+# Labels: wake-sa · wake-engineer · wake-pm-look · fail-look
 # See docs/register/AUTOMATION-PACKET-CHAIN.md
 
 name: Wake packet seats
@@ -50,6 +50,7 @@ jobs:
           gh label create wake-sa --color CCCCCC --description "Cursor: wake SA" 2>/dev/null || true
           gh label create wake-engineer --color CCCCCC --description "Cursor: wake Engineer" 2>/dev/null || true
           gh label create wake-pm-look --color CCCCCC --description "Cursor: wake Technical PM look+test" 2>/dev/null || true
+          gh label create fail-look --color CCCCCC --description "Cursor: Engineer loop after PM look Fail" 2>/dev/null || true
 
           if echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$'; then
             gh pr edit "$pr" --add-label wake-sa
@@ -63,8 +64,8 @@ jobs:
 
           for f in $(echo "$files" | grep -E '^docs/register/PM-LOOK-.+\.md$' || true); do
             if git show "$AFTER:$f" | grep -q '^\*\*Verdict:\*\* Fail'; then
-              gh pr edit "$pr" --add-label wake-engineer
-              echo "Labeled #$pr wake-engineer (PM look Fail)"
+              gh pr edit "$pr" --add-label fail-look
+              echo "Labeled #$pr fail-look"
               break
             fi
           done

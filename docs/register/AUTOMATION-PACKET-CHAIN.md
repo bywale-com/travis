@@ -22,7 +22,7 @@ SA automation — full SA protocol
 Engineer automation — full Engineer protocol
         ↓  label wake-pm-look  (src/ plant on a PR that already has packet + SCP)
 Technical PM look + what it can test
-        ↓  Fail → label wake-engineer (same PR)
+        ↓  Fail → label fail-look (same PR)
         ↓  Pass → emerge. Human walks the same sheet.
 ```
 
@@ -45,7 +45,7 @@ Engineer plants src/ → label  wake-pm-look
         ↓
 Technical PM look+test
         Pass → emerge (human test)
-        Fail → label  wake-engineer  (loop)
+        Fail → label  fail-look  (loop)
 ```
 
 Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml). It diffs **this push** (`before…after`), not the whole PR. No Cursor token until the label is added.
@@ -90,7 +90,7 @@ That push is the Engineer trigger.
 ## Automation B — SA complete → Engineer
 
 **Name:** `Travis — SA complete → Engineer`  
-**Triggers (any):** Source control — **Pull request label changed**, label **`wake-engineer`** (added). Not PR pushed.  
+**Triggers (any):** Source control — **Label added** **`wake-engineer`** (SA completed) **and** **Label added** **`fail-look`** (PM look failed). Both lowercase. Not PR pushed.  
 **Repository:** `bywale-com/travis`  
 **Tools:** Memories **off**. Pull request creation **off**.  
 **Prompt:** paste [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md) in full.
@@ -111,7 +111,7 @@ This is the beat that can run on a **already planted** PR (009 / 025 on #127). S
 
 ## Save + Activate (human or local `/automate`)
 
-1. **A** / **B** stay label `wake-sa` / `wake-engineer`. Re-paste Engineer if the loop line (PM-LOOK Fail) is new.
+1. **A** / **B** stay label `wake-sa` / `wake-engineer`. **B** also gets a second trigger: Label added / `fail-look`. Re-paste the Engineer prompt.
 2. Create **C**. Trigger: Label added / `wake-pm-look`. Computer use on. Memories off. PR creation off. Paste the PM-look prompt. Save + Activate.
 3. To run the first look on #127: add `wake-pm-look` once C is Active. Do not add `wake-sa` or `wake-engineer` — 025 is already planted.
 4. Later plants: Action adds `wake-pm-look` when this push touched `src/` on a PR that already has a packet + change packet.

@@ -39,7 +39,7 @@ Pass both (for what you could do) → **emerge**. Then it is time for the human 
 
 - `docs/register/PM-LOOK-<NNN>.md` — NNN is the PM packet number. Shape below.
 - `docs/register/PHASE-ONE-LOG.md` — one stamp; move Current.
-- On **Fail** only: add label `wake-engineer` to this PR (`gh pr edit <n> --add-label wake-engineer`). That is the loop.
+- On **Fail** only: add label `fail-look` to this PR (`gh pr edit <n> --add-label fail-look`). All lowercase. That is the Engineer loop. Do not add `wake-engineer`.
 
 Commit and push to **this PR’s head branch**.
 

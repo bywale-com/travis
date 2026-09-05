@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 17:46 UTC — Automation C (PM look+test) cut. **009 planted** on [#127](https://github.com/bywale-com/travis/pull/127). Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 18:00 UTC — Engineer second trigger is `fail-look`. **009 planted** on [#127](https://github.com/bywale-com/travis/pull/127). Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1884,3 +1884,11 @@ What's on the desk in this room?
 **Landed:** [`house-now/automations/pm-look.prompt.md`](./house-now/automations/pm-look.prompt.md) · Action labels `wake-pm-look` on an `src/` plant · Engineer loop if `PM-LOOK` Verdict is Fail.
 
 **Human:** create `Travis — plant → PM look` at cursor.com/automations. Trigger: Label added / `wake-pm-look`. Computer use **on**. Memories off. PR creation off. Then add the label on #127 — do not add wake-sa or wake-engineer.
+
+---
+
+## 2026-09-05 18:00 UTC — Engineer second trigger is `fail-look` (founder)
+
+**Kind:** Correction. Founder: the loop label is `fail-look` — all small letters. Not a second `wake-engineer`.
+
+**B** has two Label-added triggers: `wake-engineer` (SA completed) and `fail-look` (PM look failed). Re-paste [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md).
