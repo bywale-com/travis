@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 18:08 UTC — Packet-chain cost = after the packet, until emerge. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 18:16 UTC — C trigger was `pm-wake-look`, we tagged `wake-pm-look`. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1916,3 +1916,13 @@ What's on the desk in this room?
 **Out:** this PM bind, stamp no-ops, the human walk.
 
 **What we can count from here:** boots, which automation, duration, Pass/Fail. Dollars live on Cursor usage / `getUsage` per `bc-` — not visible from this seat. No cost dashboard (Sept 3 stands).
+
+---
+
+## 2026-09-05 18:16 UTC — C trigger name was swapped (founder)
+
+**Kind:** Miss. Founder pasted C JSON. Trigger `labelName` is **`pm-wake-look`**. Prompt, Action, and the first tag were **`wake-pm-look`**. That is why C never woke.
+
+**Runs:** last SA/Engineer pair **17:13 UTC** (before the label switch). No boots after 17:13 — later stamps did not fire A/B. The pile in Run History is the old leak, not a new one.
+
+**Did:** added `pm-wake-look` on #127 so the live trigger can fire. Still fix C to `wake-pm-look` so the Action matches. Re-paste Fail → `fail-look` (the JSON still says `wake-engineer`).
