@@ -30,7 +30,7 @@
 ## Next PM job
 
 1. Accept the seat. Fetch this PR. Read Current, then the newest stamp.
-2. 009 has emerged. The letter is the test sheet. Human walks [`PM-PACKET-009-STREAM-CLOSE-TEST.md`](./PM-PACKET-009-STREAM-CLOSE-TEST.md) on the #127 preview. Do not remint 009. Real mailbox letter needs GitHub secrets `EMERGE_EMAIL` · `RESEND_API_KEY` · `RESEND_FROM_EMAIL`.
+2. 009 has emerged. The letter is the test sheet. Human walks [`PM-PACKET-009-STREAM-CLOSE-TEST.md`](./PM-PACKET-009-STREAM-CLOSE-TEST.md) on the #127 preview. Do not remint 009. Mail fields are in hand; paste `EMERGE_EMAIL` · `RESEND_API_KEY` · `RESEND_FROM_EMAIL` on the repo, then run **Wake packet seats** with `009`.
 3. Open PM work only if the founder names the pocket. Write on the Engineer’s open PR. Next packet number is **010**. Next SA is **026**.
 4. Do **not** reprint P1/P2. Do **not** invent a second index. Do **not** remint 007 C3/C4.
 5. When **you** stop: rewrite this file and move Current so the next bind does not start from a transcript.

@@ -2013,3 +2013,5 @@ Then run **Wake packet seats** with `009`. A send from this VM was blocked (Clou
 **Cut:** that is the right slot. This workflow has no `environment:`. Repository secrets are what `${{ secrets.* }}` reads.
 
 **Did:** this seat cannot `workflow_dispatch` (403). Re-pushed `PM-LOOK-009.md` still Pass so the same Action sends the letter. Not a recut. Not a Fail.
+
+The first fires died in 0s — a Python heredoc sat at column 1 and broke the workflow YAML. Sender is now `.github/scripts/send-emerge-letter.py`. Repository secrets are still the right slot.
