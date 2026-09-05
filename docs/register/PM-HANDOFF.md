@@ -14,7 +14,7 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **11:28 UTC 2026-09-05** (live vs completed, named). Plate chrome **11:20**. Technical PM **11:10**. Request line **04:58**. Flag **14:00**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **11:40 UTC 2026-09-05** (stream compartment). Live vs completed **11:28**. Plate chrome **11:20**. Technical PM **11:10**. Flag **14:00**. |
 | Seat law | [`../README.md`](../README.md) § Product Manager · [`../seats/PRODUCT-MANAGER.md`](../seats/PRODUCT-MANAGER.md) · house [`house-now/protocols/pm.md`](./house-now/protocols/pm.md) |
 | Plates | [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) generate · [`PLATE-READ.md`](./PLATE-READ.md) read |
 | Packets 001–007 | [`PM-PACKETS.md`](./PM-PACKETS.md) on **`main`**. 007 locked. Hear / Next / Skip still SA. |

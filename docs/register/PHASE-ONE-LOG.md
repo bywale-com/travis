@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 11:28 UTC — **Live vs completed (named, not packeted).** Log is for finished turns. Live work needs another place. Process stream is still a receipt. Capability gap parked. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 11:40 UTC — **Stream compartment named.** Live sits in In this room → working seat. Done stream is a card above the completed log line. Initiatives are curated completed logs, not live. Process primitives later. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1526,4 +1526,27 @@ Production-ready for a request line is smaller than production-ready as a compan
 **Do not from this stamp:** mint a live table, name the other place, recut 023, packet, plate.
 
 **Ask:** is this the hold — log = completed turns; live work elsewhere; process must actually stream? If yes I stay here until you name the other place or tell me to keep going.
+
+---
+
+## 2026-09-05 11:40 UTC — Stream compartment (founder)
+
+**Kind:** Type A. The other place is named. Not a packet. Not a Room primitive. Process primitives later. Initiative curate later.
+
+**Founder (preserved):**
+
+- Natural place. Applies to Travis too.
+- In this room. When a seat is working the profile circle lights up. Click into that agent. It opens a **compartment** (not a room-room). Streaming messages and processes live there.
+- Topmost is always the message that triggered the stream — why it is occurring. Example: “Travis, write this to SA.” That may also be an initiative. Fine.
+- Initiatives show curated **completed** logs, not what is working now, not live stream. And they don’t even do that well today — mostly the first message / first person on the ticket. After this.
+- Inside the compartment: working order. Message then process then message, or process then message — whatever it actually does. Completely.
+- When the stream is done it leaves the compartment. It is a **record**. It lives on the Log, **above** the completed message.
+- Claude image: take only how the **card sits on the chat**. Click it: you see exactly what the streaming compartment showed. Same thing.
+- Process streaming has primitives too — easier, later. This is the harder design architecture.
+
+**Stood up (quote, not a fix):** “In this room” is `RosterDoor`. Glow = thought streaming or `runningNow`. Click expands an italic thought line (`onSeatMark`). Not a stream compartment. Initiative ticket Messages = `turnsForInitiative` where `initiative_id` is stamped — founding + posts. Follow-on seats often never get the stamp.
+
+**Do not from this stamp:** mint a compartment store, recut initiatives, plate Claude, packet, decide process primitives.
+
+**Ask:** hold this architecture? Claude card next, or keep talking.
 
