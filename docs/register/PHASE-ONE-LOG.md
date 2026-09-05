@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-03 23:06 UTC — **PM seat handed off.** New chat pastes [`PM-HANDOFF.md`](./PM-HANDOFF.md). Bind `bc-1ac0762e` is no longer the living PM. **003–007 stamps and packets 002–007 are on `main`** (Hotfix 066 brought leftover #4 / #15 onto this tree). Do not fetch those cousin PRs. The last stamp still names #15 as living — that was true when it was written; the trail is here now.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 01:15 UTC — **S3 recut.** In flight is V6 + heartbeat, not the Engineer print. Photo [`plates/travis-s3-inflight-jobs-mission.png`](./plates/travis-s3-inflight-jobs-mission.png) on [#123](https://github.com/bywale-com/travis/pull/123). Not a packet. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1338,4 +1338,20 @@ Engineer bind 16:34–22:20 UTC matches the envelope list. Still **13**. Tighten
 **Still true:** flag 14:00. 007 locked on this PR (#15). `main`’s copy of this log is stale (Current still 002) — fetch this branch for 003–007. Seated (OS-tree) still open. Do not recut C3/C4.
 
 **Ask:** founder pastes the new PM. Engineer rebinds.
+
+---
+
+## 2026-09-05 01:15 UTC — S3 recut: In flight, seat health (founder)
+
+**Kind:** Type B glass. Recut of Engineer S3. Not a packet. Living: [#123](https://github.com/bywale-com/travis/pull/123). Bind `bc-460a15d0`.
+
+**Founder (preserved):** The plates the engineer generated suck. Plate S3 — In flight (seat health integrated). Warm cream `#F5F0E8`, same as the existing In Flight sheet. Softly blurred photographic lived-in room in the top ~15%. Sheet: 24px top radius, thin gray drag handle, **no Close** — handle and swipe-down only. Header: **In flight** bold ~28px left; **you can leave this open** muted 14px right. RUNNING NOW small-caps letter-spaced. Running row: outlined 1.5px ring, transparent center, initials in the ring tone; thin red `(` left of a live avatar, vertically matching the row. Role bold 16px; underneath a lowercase plain-language task 14px muted — not “dest gate · in progress” — like the original’s “look at the queue drain…”. Right: heartbeat **2s ago** muted when healthy, **stale** red after 15+ seconds without a ping. That is the one real content change from the original: elapsed-since-start becomes recency-of-last-heartbeat. Hairline between rows. WAITING same treatment. Waiting: outlined ring, name + one-line task, 1st/2nd, right-arrow reassign, X — original iconography, no redesign. Then **Send next without waiting** red underline, **Travis does this too.** Bottom centered: **Nothing is read aloud from here.**
+
+**Landed:** [`plates/travis-s3-inflight-jobs-mission.png`](./plates/travis-s3-inflight-jobs-mission.png) · studio [`plates/studio/s3-inflight.html`](./plates/studio/s3-inflight.html). FACE [`PLATES-LIVE-VISUALS.md`](./PLATES-LIVE-VISUALS.md). Source of chrome is **V6**, not the Engineer S3 (filled marks, Close, jargon).
+
+**This packet / not yet:** not a packet. S1 / S2 / S4 / S5 not recut this stamp.
+
+**Do not from this stamp:** plant heartbeat, mint a ping table, recut the other S plates, grow I1.
+
+**Ask:** like this S3 enough that it is the In flight photo? Recut S1/S2/S4/S5 the same way (V6/planted chrome, not a new identity)? Packet, or hold until dest is signed?
 
