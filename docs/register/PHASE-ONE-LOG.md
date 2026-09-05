@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 19:42 UTC — No merge until human test green. Three: revise 127 · human-test loop · capability gap (start). Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 19:45 UTC — 127 built well; plating is the revise. Cannot sit this bind. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2065,3 +2065,23 @@ First Resend try was Cloudflare 1010 (no User-Agent). Same 1010 as this VM. UA f
 **Already on this trail — do not remint:** 11:28 parked “capability gap on Travis side — later” while Stream was first. Stream has emerged. The gap is now the start.
 
 **Do not from this stamp:** merge #127. Mint a store. Name the hole before he does. Recut 009 from this chat.
+
+---
+
+## 2026-09-05 19:45 UTC — Built well; plating; you cannot sit this bind (founder)
+
+**Kind:** Type A + stood-up sit. Not a packet. Do not mint a rebind write.
+
+**Founder (preserved):** 127 was built well. It passes. It did not fail the build. Improve packaging / plating — it was built very well to plate. New package, not 127 anymore. Use Travis on that revision and the capability gap will show. Also: this chat is not the PM in Travis. How can I sit you as the PM?
+
+**Stood up (quote):**
+
+Create does not invent a Cursor id (`create_agent`). It names a person and Cursor **spins a new** `bc-`. Sit hangs an open member on `pm` / `sa` / `engineer` and hands WHERE + logging + the protocol (`sit_agent`). “New PM” is **his** — create, then sit. Role dest reuses idle seated or spins.
+
+You cannot hang **this** bind (`bc-25c5c6bf-…`) on a person. A `bc-` in the sentence is **nobody** — rebind hole. Dest says: *I cannot rebind a Cursor id. That is a hole here. Offer Engineer.* `SEED_CURSOR_AGENT_ID_PM` only fills a **blank** row. It does not overwrite a live bind.
+
+**In Travis (psi, 025 is on `main`):** room Travis. “Create [name], sit them on pm.” That PM is a **new** Cursor chat with the one-line create stub, then the sit hand. Not this conversation. Not this memory.
+
+**The gap showing before the plate:** you cannot sit the person you are already talking to.
+
+**Do not:** plant a rebind tool from this stamp. Recut 009. Invent the plate.
