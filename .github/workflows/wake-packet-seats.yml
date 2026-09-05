@@ -1,0 +1,59 @@
+# Cheap gate in front of Cursor Automations.
+# GitHub path filter + this-push diff. No Cursor boot until a label lands.
+# Human must change the two automations to "PR label changed" for wake-sa / wake-engineer.
+# See docs/register/AUTOMATION-PACKET-CHAIN.md
+
+name: Wake packet seats
+
+on:
+  push:
+    paths:
+      - "docs/register/PM-PACKET-*.md"
+      - "docs/register/SYSTEMS-CHANGE-PACKET-*.md"
+
+jobs:
+  label:
+    if: github.ref != 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Label the open PR for this push only
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+          HEAD_REF: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if [[ "$BEFORE" == "0000000000000000000000000000000000000000" ]]; then
+            files=$(git diff --name-only --diff-filter=A "$AFTER")
+          else
+            files=$(git diff --name-only "$BEFORE" "$AFTER")
+          fi
+          echo "This push:"
+          echo "$files"
+
+          pr=$(gh pr list --head "$HEAD_REF" --state open --json number --jq '.[0].number // empty')
+          if [[ -z "$pr" ]]; then
+            echo "No open PR for $HEAD_REF. Stop."
+            exit 0
+          fi
+
+          gh label create wake-sa --color CCCCCC --description "Cursor: wake SA" 2>/dev/null || true
+          gh label create wake-engineer --color CCCCCC --description "Cursor: wake Engineer" 2>/dev/null || true
+
+          if echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$'; then
+            gh pr edit "$pr" --add-label wake-sa
+            echo "Labeled #$pr wake-sa"
+          fi
+
+          if echo "$files" | grep -E '^docs/register/SYSTEMS-CHANGE-PACKET-.+\.md$'; then
+            gh pr edit "$pr" --add-label wake-engineer
+            echo "Labeled #$pr wake-engineer"
+          fi

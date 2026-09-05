@@ -26,16 +26,37 @@ plant stays on that same PR
 
 **Same PR** is law. Do not open a cousin. Turn **off** “Pull request creation” on both automations if the UI lets you; the prompts also forbid it.
 
-There is no file-path trigger in Cursor. The gate lives in the prompt — and it must be **this commit**, not the whole PR.
+A prompt gate **cannot** skip the bill. Official Cursor docs: automations **are** cloud agents; they use the model’s **maximum** context window; **there is no context-window toggle**; they are billed as cloud-agent usage. Every matching GitHub event boots a Max-mode agent, then the prompt speaks. Spin-up is already a model call with the fat system + automation prompt. Stopping in 30 seconds still paid that call. Today’s 27 boots were that, twice per stamp.
 
-**Why:** Cursor boots a full `cursor-grok-4.6-high-fast` agent on every matching event, then the prompt decides. A gate that looks at `origin/main...HEAD` wakes SA on every later stamp (“the PR already has a packet”). Engineer’s “PR pushed” trigger fires on those same stamps. Inspect 2026-09-05: **27 automation boots**, almost all paired SA+Engineer, almost all gate-fail after reading the seat. One useful SA sign (025). One Engineer sat ~85 minutes re-gating follow-up events on #126.
+Cursor source-control triggers have **no path filter** (asked for; not shipped). “PR pushed” will always boot.
 
-**This-commit gate (prompts):**
+**Redesign — cheap gate in GitHub, Cursor only when the label lands:**
 
-- SA: `git diff --name-only HEAD~1` must include `docs/register/PM-PACKET-[0-9]*-*.md` and must **not** be only `*-TEST.md`. Do not accept the seat until that passes.
-- Engineer: the same command must include `docs/register/SYSTEMS-CHANGE-PACKET-*.md`. Do not accept the seat until that passes.
+```text
+push touches a real PM-PACKET-NNN (not *-TEST.md)
+        ↓  GitHub Action (no LLM)
+label  wake-sa  on this PR
+        ↓  Cursor trigger: PR label changed (wake-sa)
+SA automation — full SA protocol
+        ↓  SA pushes SYSTEMS-CHANGE-PACKET
+GitHub Action labels  wake-engineer
+        ↓  Cursor trigger: PR label changed (wake-engineer)
+Engineer automation — full Engineer protocol
+```
 
-Re-paste both prompts at [cursor.com/automations](https://cursor.com/automations) after this file changes. Cloud agents cannot Save + Activate. Until the live prompts match, every push still burns a pair.
+Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml). It diffs **this push** (`before…after`), not the whole PR. No Cursor token until the label is added.
+
+**Human must change the two automations** (I cannot Save + Activate):
+
+1. Pause both, or every later stamp still boots on the old “PR pushed” triggers.
+2. **A** — drop Draft opened / PR opened / PR pushed. Trigger: **Pull request label changed**, label **`wake-sa`** (added).
+3. **B** — drop PR pushed. Trigger: **Pull request label changed**, label **`wake-engineer`** (added).
+4. Re-paste the prompts. Memories **off**. PR creation **off**.
+5. Create the two labels once if the Action has not already.
+
+Prompt gate stays as a belt: do not accept the seat unless this commit has the matching file. Do not run on label **removed**.
+
+**Webhook** is the same idea if you do not want labels: Action POSTs only on those paths. Still no Cursor boot on a vision stamp.
 
 ---
 
@@ -55,7 +76,7 @@ That push is the Engineer trigger.
 ## Automation A — Packet → SA
 
 **Name:** `Travis — packet → SA`  
-**Triggers (any):** Source control — **Draft opened**, **Pull request opened**, **Pull request pushed**  
+**Triggers (any):** Source control — **Pull request label changed**, label **`wake-sa`** (added). Not PR pushed.  
 **Repository:** `bywale-com/travis` (single repo; inferred from the PR)  
 **Tools:** Memories **off**. Pull request creation **off**. Comment on PR optional (silence is better — do nothing when the gate fails).  
 **Prompt:** paste [`house-now/automations/packet-sa.prompt.md`](./house-now/automations/packet-sa.prompt.md) in full.
@@ -65,7 +86,7 @@ That push is the Engineer trigger.
 ## Automation B — SA complete → Engineer
 
 **Name:** `Travis — SA complete → Engineer`  
-**Triggers (any):** Source control — **Pull request pushed**  
+**Triggers (any):** Source control — **Pull request label changed**, label **`wake-engineer`** (added). Not PR pushed.  
 **Repository:** `bywale-com/travis`  
 **Tools:** Memories **off**. Pull request creation **off**.  
 **Prompt:** paste [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md) in full.
@@ -74,10 +95,10 @@ That push is the Engineer trigger.
 
 ## Save + Activate (human or local `/automate`)
 
-1. **Pause both** at [cursor.com/automations](https://cursor.com/automations) before pushing paper, or every stamp still boots a pair on the **old** prompts.
-2. Open each automation. Replace the prompt with the file in this repo (full paste). Save + Activate.
-3. First create (if they are not already on): [cursor.com/automations/new](https://cursor.com/automations/new) — **A** three triggers, **B** PR pushed, this repo, PR creation **off**.
-4. After the this-commit prompts are live, a push wakes SA only when that commit added a real `PM-PACKET-NNN` (not a test). Engineer wakes only when that commit added a `SYSTEMS-CHANGE-PACKET`.
+1. **Pause both** at [cursor.com/automations](https://cursor.com/automations). Old “PR pushed” triggers are the leak.
+2. Switch **A** to label `wake-sa`, **B** to label `wake-engineer`. Re-paste prompts. Memories off. PR creation off. Save + Activate.
+3. The Action on this PR adds those labels only when this push touched a real packet / change packet.
+4. A vision stamp, test file, or plate edit must not boot Cursor.
 
 ---
 

@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:56 UTC — Automations inspected: this-commit gate. **009** still on [#127](https://github.com/bywale-com/travis/pull/127). Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 17:02 UTC — Spin-up is the bill. Label gate. **009** on [#127](https://github.com/bywale-com/travis/pull/127). Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1827,3 +1827,17 @@ What's on the desk in this room?
 **Also today (not automations):** this PM bind (`bc-25c5c6bf`) has been live since 10:58 UTC. That is a second burn, separate from the pair-per-push.
 
 **Recut:** prompts now gate on **this commit** (`git diff --name-only HEAD~1`). SA only on a real `PM-PACKET-NNN` (not `*-TEST.md`). Engineer only on `SYSTEMS-CHANGE-PACKET`. Do not accept the seat until the gate passes. Human must re-paste at cursor.com/automations — I cannot Save + Activate. Pause both until the paste lands, or this push wakes another pair.
+
+---
+
+## 2026-09-05 17:02 UTC — Spin-up is already the bill (founder)
+
+**Kind:** Inspect / redesign. Founder: is just spinning up already a lot, even if they stop fast?
+
+**Yes.** Cursor docs: automations are cloud agents; they use the model’s **maximum** context window; **no toggle**; billed as cloud-agent usage. There is no cheap “peek then quit.” The first call already has the fat system + automation prompt. A 30-second gate-fail still paid that. Prompt tightening only saves the extra seat reads *after* the boot. It does not skip the boot.
+
+**No path filter** on PR pushed. That is why every stamp was two Max-mode boots.
+
+**Redesign (locked):** GitHub Action [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml) diffs this push and adds `wake-sa` / `wake-engineer`. Cursor triggers become **PR label changed** for those labels — not PR pushed. Human must switch the two automations. I cannot Save + Activate.
+
+**009 / 025** still on [#127](https://github.com/bywale-com/travis/pull/127). Do not remint.
