@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 11:51 UTC — **“Look at this repo” is an ask, not a fifth look.** Box work streams as Term. The four are tool shapes, not utterances. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 12:02 UTC — **Stream plates ST1–ST3 printed.** Look, middle of a state. Compartment title Stream. Not a packet. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1592,4 +1592,24 @@ Production-ready for a request line is smaller than production-ready as a compan
 **Alignment:** The four are **how an emitting tool looks**, not a list of things you can say. “Look at this repo” is an ask. The stream is whatever he actually fires — almost always `run_box` (`git clone` / `curl`) = **Term**. Then `read_box` / a listing = **Look**. A write to disk = **Write**. Handing Engineer = **Hand**. The word “Look” in the primitive is search/list/read, not your English “look at this repo.” That collision is on me.
 
 **Ask:** does that land? If yes we can rename Look (Find / List) before we plate.
+
+---
+
+## 2026-09-05 12:02 UTC — Stream plates ST1–ST3 (look)
+
+**Kind:** Printed plates. Middle of a state. Not a packet. IDs **ST** so they do not collide with S1–S5 or L1–L3.
+
+**Founder:** Generate plates. Say what and how many first. Do not print three frames of one idea — middle of a state. Want the look. Compartment title is Stream. Cover In this room, the Stream look, and the Log card.
+
+**What I printed:** three. [`PLATES-STREAM.md`](./PLATES-STREAM.md)
+
+| ID | Hole |
+|----|------|
+| ST1 | In this room — glowing seat is the door |
+| ST2 | Stream — trigger + live Term (the look) |
+| ST3 | Log — card above the completed line |
+
+**Honest:** no psi screenshot of those homes (login wall). First desk for Stream. Chrome from planted `src/` + login bone/oxblood.
+
+**Ask:** like the look? Recut ST2/ST3, or hold.
 
