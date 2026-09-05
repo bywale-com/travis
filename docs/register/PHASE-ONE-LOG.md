@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 04:58 UTC — **Request line locked.** Get in / clock / leave with your work / mouth is gated. Not OSS. Flag 14:00 stands. Door not packeted until founder wants it on the glass.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:12 UTC — **Hold: future test space is a sandbox.** Tester is already in the place. Setup is for today, on this desk. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -1462,3 +1462,296 @@ Production-ready for a request line is smaller than production-ready as a compan
 
 **Ask:** hold. When you want the door, say packet.
 
+---
+
+## 2026-09-05 11:10 UTC — Technical PM (founder)
+
+**Kind:** Seat refinement. Not a new product flag. Type A for the seats, not for the pipe.
+
+**Founder (preserved):**
+
+- The Engineer role stays the Engineer role.
+- Adopt a lot of what the Engineer does into PM. In addition to what the PM already does, it should inspect the code — like the Engineer would. It is technical. It is the implementation specialist.
+- The Engineer is literally just to implement what the PM and the SA have already specced out.
+- The PM specs out both the technical side and the product side, UX, UI side.
+- On top of how the PM already logs and captures vision.
+- Modifying the PM role to be a technical PM role. Update that, then take that seat.
+
+**Locked (this stamp):**
+
+| Seat | Job |
+|------|-----|
+| **Technical PM** | Vision + log + Type A/B, **and** inspect `src/`, **and** spec product/UX/UI **and** the technical cut. Decides. Does not plant. Does not mint tables. |
+| **SA** | Machine: Story, Requirements, stores, contracts, change packets. Unchanged. |
+| **Engineer** | Implement what PM and SA have already specced. Does not invent the cut. |
+
+14:00 still the product. Request line 04:58 still stands. I do not packet a face pocket from this stamp.
+
+**Ask:** hold this as the living PM seat. What pocket are we in?
+
+---
+
+## 2026-09-05 11:20 UTC — Plate chrome rule (founder)
+
+**Kind:** Process lock. Not a new product flag. Same law as 2026-08-27 (C4 invented chrome).
+
+**Founder (preserved):**
+
+- Asked the PM at the `omcoda_tower` repo how plates keep the look.
+- Their PM: canon is `PLATE-CHROME-RULE.md`. Screenshot the live desk first. Lock chrome. Paint only the pocket. Compare; drift is trash. File the PNG. Writing wins (five buckets). The generator edits one hole on a locked screenshot — that is the design system.
+- Founder: we should adopt that process for our plate generation as well. Visit the repo and look into it.
+
+**What I could open:** this Travis repo and `src/` (live chrome = Voice / Log / Backlog on travis-psi, Mission/Carbon). `omcoda_tower` is not on this environment — clone 404 / not in `bywale-com` from here. I did not pretend I read their file. I adopted the process they already said.
+
+**Locked:** [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md). Travis chrome, not Tower chrome. Screenshot `travis-psi` first. Paint only the hole. [`PLATE-READ.md`](./PLATE-READ.md) still reads a locked plate.
+
+**Ask:** hold this as the generation law. Name a pocket if you want the first plate under it.
+
+---
+
+## 2026-09-05 11:28 UTC — Live vs completed (founder)
+
+**Kind:** Type A. Primitive named. Not a packet. Not a store. Capability gap parked.
+
+**Founder (preserved):**
+
+- Two things now that plate law is set. Capability gap on Travis side — later. First: visual process streaming. Call it streaming.
+- Thought experiment: a room with 100 agents plus Travis.
+- Today the order they speak is the order it visualizes. Common across seats including Travis: start with what they’re about to do; each later line is its own message, not an append; it references the previous. Process visuals land under the messages, also in sequence. At a hundred agents it almost doesn’t look like anything. Wrong primitive.
+- Chat log is reserved first for **completed** turns — the agent isn’t working on anything; you’re responding to work that’s done. Anything live needs to be in a different place. Stop here: do you understand.
+- Also: message streaming is kind of okay. Process-side streaming is still not streaming. It’s static. A receipt, not live.
+
+**Stood up (quote, not a fix):** Log is one time-ordered thread (`Room.tsx` `threadTurns`). New speech is usually a new `agent_post` (`beats.ts` insert, not append). Motion hangs under the founding Travis post (`foundingTurnId`). The card is collapsed title + tap-for `resultText` — a receipt. In-flight is a door, not the log’s live stream.
+
+**Do not from this stamp:** mint a live table, name the other place, recut 023, packet, plate.
+
+**Ask:** is this the hold — log = completed turns; live work elsewhere; process must actually stream? If yes I stay here until you name the other place or tell me to keep going.
+
+---
+
+## 2026-09-05 11:40 UTC — Stream compartment (founder)
+
+**Kind:** Type A. The other place is named. Not a packet. Not a Room primitive. Process primitives later. Initiative curate later.
+
+**Founder (preserved):**
+
+- Natural place. Applies to Travis too.
+- In this room. When a seat is working the profile circle lights up. Click into that agent. It opens a **compartment** (not a room-room). Streaming messages and processes live there.
+- Topmost is always the message that triggered the stream — why it is occurring. Example: “Travis, write this to SA.” That may also be an initiative. Fine.
+- Initiatives show curated **completed** logs, not what is working now, not live stream. And they don’t even do that well today — mostly the first message / first person on the ticket. After this.
+- Inside the compartment: working order. Message then process then message, or process then message — whatever it actually does. Completely.
+- When the stream is done it leaves the compartment. It is a **record**. It lives on the Log, **above** the completed message.
+- Claude image: take only how the **card sits on the chat**. Click it: you see exactly what the streaming compartment showed. Same thing.
+- Process streaming has primitives too — easier, later. This is the harder design architecture.
+
+**Stood up (quote, not a fix):** “In this room” is `RosterDoor`. Glow = thought streaming or `runningNow`. Click expands an italic thought line (`onSeatMark`). Not a stream compartment. Initiative ticket Messages = `turnsForInitiative` where `initiative_id` is stamped — founding + posts. Follow-on seats often never get the stamp.
+
+**Do not from this stamp:** mint a compartment store, recut initiatives, plate Claude, packet, decide process primitives.
+
+**Ask:** hold this architecture? Claude card next, or keep talking.
+
+---
+
+## 2026-09-05 11:48 UTC — Process stream primitives (founder + ideas)
+
+**Kind:** Type B on process chrome. Mental model first. Ideas labeled alignment. Not locked. Not a packet. Not a plate yet.
+
+**Founder (preserved):**
+
+- One last thing, then we can generate plates.
+- There is a transition design to working: seeing code appear is streaming. Cursor does not have to show green/red diffs live — it could say “writing code” and dump GitHub later. The fact it *can* stream is the point. Doesn’t have to be accurate to the second. Want **truthful states in a live streaming visual**. Not a lie. Ascribe the correct transition visual to what actually occurred.
+- Processes are already bounded — anything Travis initiates has a shape (“what did we do yesterday”). How should the streaming visual look? stdout? request then response? Hear ideas. Streaming, not static.
+
+**Stood up (quote):** Tools are a closed set (`TRAVIS_TOOL_DECLS` / `TOOL_POLICY`). Box `run_box` is one-shot today — stdout arrives as a blob, not a byte stream. Motion card is collapsed title + tap `resultText`. Narration is a quiet italic line.
+
+**Agent ideas (not the lock) — four live primitives, not one look per tool:**
+
+| Primitive | For | Live (emitting) | Do not |
+|-----------|-----|-----------------|--------|
+| **Look** | search / list / read | Query stays; rows *arrive* | “12 hits · done” |
+| **Term** | run_box / prove | Command stays; lines *append* | “ran ls · done” |
+| **Write** | write_os / write_box | Path stays; body *fills* | “wrote file · done” |
+| **Hand** | send / dispatch / sit | Line *leaves* toward the dest mark | Fake their terminal in Travis’s compartment |
+
+`file_plan` is a **spine**: steps walk; the open step uses one of the four. Create/sit/rename/mark are short Hand or a pulse — still a state change, not a receipt.
+
+**Truth law:** stream the grain we actually have. If the box only returns start + a blob, show running *then* the blob landing — do not invent a Cursor diff. If later we get chunks, the same primitive grows. A lie is a loading spinner that hides a finished write, or a fake green/red we never received.
+
+**Ask:** hold the truth law + these four? Recut the set? Then we plate.
+
+---
+
+## 2026-09-05 11:51 UTC — “Look at this repo” (founder)
+
+**Kind:** Clarification. Not a fifth primitive.
+
+**Founder:** In these processes — “Hey Travis, look at this repo” + a link. Usually the box. Is that captured? Maybe I don’t understand.
+
+**Stood up:** No browse-GitHub tool. No browser. `curl` from the box is not a browser (021). `unfold_repo` *creates* a skeleton repo — it does not fetch their link. `link` artifact is SA silence.
+
+**Alignment:** The four are **how an emitting tool looks**, not a list of things you can say. “Look at this repo” is an ask. The stream is whatever he actually fires — almost always `run_box` (`git clone` / `curl`) = **Term**. Then `read_box` / a listing = **Look**. A write to disk = **Write**. Handing Engineer = **Hand**. The word “Look” in the primitive is search/list/read, not your English “look at this repo.” That collision is on me.
+
+**Ask:** does that land? If yes we can rename Look (Find / List) before we plate.
+
+---
+
+## 2026-09-05 12:02 UTC — Stream plates ST1–ST3 (look)
+
+**Kind:** Printed plates. Middle of a state. Not a packet. IDs **ST** so they do not collide with S1–S5 or L1–L3.
+
+**Founder:** Generate plates. Say what and how many first. Do not print three frames of one idea — middle of a state. Want the look. Compartment title is Stream. Cover In this room, the Stream look, and the Log card.
+
+**What I printed:** three. [`PLATES-STREAM.md`](./PLATES-STREAM.md)
+
+| ID | Hole |
+|----|------|
+| ST1 | In this room — glowing seat is the door |
+| ST2 | Stream — trigger + live Term (the look) |
+| ST3 | Log — card above the completed line |
+
+**Honest:** no psi screenshot of those homes (login wall). First desk for Stream. Chrome from planted `src/` + login bone/oxblood.
+
+**Ask:** like the look? Recut ST2/ST3, or hold.
+
+---
+
+## 2026-09-05 12:20 UTC — PM-PACKET-008 Stream locked
+
+**Kind:** Packet lock. Founder: like the idea; create the packet so SA and Engineer can pick up.
+
+**Locked:** [`PM-PACKET-008-STREAM.md`](./PM-PACKET-008-STREAM.md) · FACE [`PLATES-STREAM.md`](./PLATES-STREAM.md) · plates ST1–ST3. Index [`PM-PACKETS.md`](./PM-PACKETS.md). Living glass: [PR #126](https://github.com/bywale-com/travis/pull/126).
+
+**Founder lock (do not overwrite):** Live work is not the Log tape. In this room working mark → Stream compartment (not a Room). Trigger pinned. Live order below. Done → card above the completed line; card = Stream contents. Applies to Travis. Initiatives are not this place.
+
+**SA:** ascribe as **024**. Stream as store/contract (live vs completed record); trigger hang; process events in order; live-leaves-to-card seam; silences (chunked box stdout, Find rename, initiative stamp). Do not remint 023. Land 024 on the Stream plant PR — not on #126.
+
+**Engineer:** wait for 024. Open the Stream initiative PR. Then plant the specified-and-clear face. Do not invent the store. Do not plant initiative curate. Do not recut 023. Do not plant on #126.
+
+**Parked:** initiative curate; process-primitive recut as closed store; Hear / Next / Skip (007); Travis capability gap.
+
+---
+
+## 2026-09-05 12:28 UTC — Packet-chain automations (founder)
+
+**Kind:** Process lock. The 19:44 parked seam, now asked.
+
+**Founder:** When it specifically packets, spin up SA to run the entire process protocol. When SA completes (backend), Engineer picks it up and builds. All inside the same PR the packet was placed in.
+
+**Correction:** 008 said SA/Engineer open a new Stream PR. That is wrong. **Same PR.** 024 and the plant stay on [#126](https://github.com/bywale-com/travis/pull/126).
+
+**Landed:** [`AUTOMATION-PACKET-CHAIN.md`](./AUTOMATION-PACKET-CHAIN.md) · prompts [`house-now/automations/packet-sa.prompt.md`](./house-now/automations/packet-sa.prompt.md) · [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md).
+
+**Honest:** a cloud agent cannot Save + Activate a Cursor Automation (no create API). Human or local `/automate` registers the two automations. Cursor has no “agent finished” trigger — SA’s push of the change packet is completion; that push wakes Engineer.
+
+**Ask:** Save + Activate A then B. After both are on, the next push to #126 wakes SA on 008.
+
+---
+
+## 2026-09-05 12:28 UTC — Packet-chain automations (founder)
+
+**Kind:** Process lock. The 19:44 parked seam, now asked.
+
+**Founder:** When it specifically packets, spin up SA to run the entire process protocol. When SA completes (backend), Engineer picks it up and builds. All inside the same PR the packet was placed in.
+
+**Correction:** 008 said SA/Engineer open a new Stream PR. That is wrong. **Same PR.** 024 and the plant stay on [#126](https://github.com/bywale-com/travis/pull/126).
+
+**Landed:** [`AUTOMATION-PACKET-CHAIN.md`](./AUTOMATION-PACKET-CHAIN.md) · prompts [`house-now/automations/packet-sa.prompt.md`](./house-now/automations/packet-sa.prompt.md) · [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md).
+
+**Honest:** a cloud agent cannot Save + Activate a Cursor Automation (no create API). Human or local `/automate` registers the two automations. Cursor has no “agent finished” trigger — SA’s push of the change packet is completion; that push wakes Engineer.
+
+**Ask:** Save + Activate A then B. After both are on, the next push to #126 wakes SA on 008.
+
+---
+
+## 2026-09-05 14:49 UTC — Vision so far (founder; automations lived)
+
+**Kind:** Vision. Not a packet. Grander idea not yet told. Founder: start with vision; confirm I am following.
+
+**Lived:** founder built the automations and saw the chain working live. Previous ideas started connecting.
+
+**Founder (seats inside Travis):**
+
+> the kinds of agents that we're going to be spinning up inside of Travis are not engineers or systems analysts, rarely. They're going to be PM-style agents. Why? Because we don't need an engineer, and we don't need an SA.
+
+Then: not quite true. We might need an SA **now** — not a packet to be worked on. Spin an SA and ask a question. Or better: that is an automation, because what would break the current protocol is bounded; we can know it ahead of time.
+
+**Hold:** that is not the biggest idea. Also hold everything from the last couple of discussions we put to the side.
+
+**Founder (second idea — test instructions on every packet):**
+
+When we generate plates and packets (usually at the same time) we also generate the **test instructions**. Build-passing is not enough. The human step is still critical. Simple user language. Exact use cases as discussed — not a vague statement. Step by step by step. Everything that should happen. What to expect on each step. The test is: do it, observe, follow this checklist. If anything is missing, wrap around with how it missed or what you observed. On every packet.
+
+**Parked (still held — do not lose):**
+
+- Initiative curate (after Stream)
+- Process-primitive recut / Find rename
+- Hear / Next / Skip (007)
+- Travis capability gap
+- Request-line door not on the glass until founder wants it
+- SA-now-for-a-question vs protocol-break automations (this stamp — hold)
+
+**Ask:** following so far — go to the grander idea.
+
+---
+
+## 2026-09-05 14:55 UTC — Packets are the job; tester is the first human (founder)
+
+**Kind:** Vision. The grander idea. Not a packet. Do not plant a gig marketplace.
+
+**Founder — it clicked because the automations lived:**
+
+> I was asleep. I didn't have to wait on anyone. I didn't have to take what you generated and gave it to another person or another engineer. All of it was built. So it means that, the only job we really need to work on is packets. That's it. But, we still need to test.
+
+**First human job:** a tester. Not a professional tester. A human who walks the spec. That is why the spec has to be so well detailed. We are building what we wanted. When the founder says yes to the plates, that is yes to exactly what should occur. So we know everything that should happen. When you do X: everything that should happen, everything you see. Detailed enough that **any human** can walk it and see if that happened.
+
+**Gap named (number one):** what environment this is deployed in that gives that kind of testing.
+
+**Om Coda (far):** the bigger company has this as a **gig role** — people sign up to test features. Compensation is far ahead. Testing space hosted on Coda's website or somewhere. **No app.** Email that there is a new test. Bounded **per packet**. They cannot miss how to test. Feedback is strong and comes back — that return is the pipeline.
+
+**Future day (founder):** spend a day building packets. They get built and deployed instantly. A supply of testers. A pipeline that takes everything that was built. Everything is also built **for that environment** — the space that orchestrates human testing of the features.
+
+**Immediate hold:** the checklist on every packet (14:49). The environment, bounded per packet. Do not invent the gig signup or pay.
+
+**Still parked:** initiative curate; Find/primitive recut; Hear / Next / Skip; Travis capability gap; request-line door; SA-now vs protocol-break automations.
+
+**Ask:** this land? Next beat is the environment, or keep vision.
+
+---
+
+## 2026-09-05 15:05 UTC — 008 test spec, first rendition
+
+**Kind:** Packet grain. Founder: create a test spec for this packet. Anyone can follow. He does not need to remember the packet. Per-step I saw — not a dump at the end.
+
+**Landed:** [`PM-PACKET-008-STREAM-TEST.md`](./PM-PACKET-008-STREAM-TEST.md). Sequential. Do / Expect / I saw on every step. Covers idle-is-not-a-door, live Stream, live-not-on-the-Log, done → card above the completed line, tap card = same contents, Travis, must-nots.
+
+**Honest:** first rendition of the shape. Use the #126 preview; psi may still be the old desk.
+
+**Ask:** walk it. Tell me where the sheet missed you.
+
+---
+
+## 2026-09-05 16:08 UTC — Test spec: Setup vs the packet (founder)
+
+**Kind:** Refinement. Founder asked what “get to the Log” is doing in the Stream test.
+
+**Answer:** Setup. Not an 008 change. 008 did not recut how you open a room or the Log. Section 1 was me putting a stranger on the desk so they could reach the door.
+
+**Sheet:** [`PM-PACKET-008-STREAM-TEST.md`](./PM-PACKET-008-STREAM-TEST.md) now splits **Setup — not this packet** from **The packet**. Founder may later specify what belongs in Setup vs the walk.
+
+---
+
+## 2026-09-05 16:09 UTC — Test spec shape: Setup, then the packet (founder)
+
+**Kind:** Lock. Founder: agree; like it; definitely perfect. Will read the 008 walk with that split in mind.
+
+**Lock:** A packet test spec has **Setup** (get a stranger to the desk — not scored as the pocket) then **the packet** (only what this packet established).
+
+---
+
+## 2026-09-05 16:12 UTC — Future test space is a sandbox (founder)
+
+**Kind:** Hold. Not this plate. Evolution of the test environment — not a recut of the 008 sheet.
+
+**Founder:** Worth mentioning now, since you did Setup in the environments we’re trying to build. That is **not** the evolution. They would not even need to get there. Some kind of **sandbox**. They would only ever be in the places they need to be.
+
+**Hold:** Today’s sheet still has Setup because the walk is this desk (preview / psi). The future space places the tester in the pocket. Setup falls away. Do not invent the sandbox. Do not strip Setup from 008.

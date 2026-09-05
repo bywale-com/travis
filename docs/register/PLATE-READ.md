@@ -3,6 +3,7 @@
 **Seat:** Product Manager.  
 **Why:** Om Coda protocol (Tower specimen). Once a pocket is locked, read the image for what we **did not say** but the build still has to do — and for what is **in the picture but out of this build**.  
 **Flag:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) Current — do not overwrite founder wording.  
+**Generate** (before this file): [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) — screenshot the live desk, lock chrome, paint only the pocket.  
 **With:** This file says what the engineer does with a locked pocket. FACE files name the glass; packets fill the five buckets.
 
 Do not invent a thirteenth bucket. These five are the read.

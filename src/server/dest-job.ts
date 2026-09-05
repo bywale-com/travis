@@ -200,6 +200,11 @@ export async function finishDestJobsForBinding(params: {
           : `${label} failed.`;
     const { insertAgentPostTurn } = await import("./seat-pipe");
     await insertAgentPostTurn(params.sessionId, line, "travis").catch(() => {});
+    const { failLiveStreamWithoutCard } = await import("./stream");
+    await failLiveStreamWithoutCard({
+      sessionId: params.sessionId,
+      bindingId: params.binding.id,
+    }).catch(() => {});
   }
 }
 

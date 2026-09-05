@@ -97,7 +97,7 @@ Do **not** design a reverse-engineered puppet of Cursor desktop chat. Official S
 
 | Out of seat | Who owns it |
 |-------------|-------------|
-| Product flags, Type A/B method, chrome leaf parity | Founder (plates + locks). PM if seated. |
+| Product flags, Type A/B method, chrome leaf parity, technical cut of the planted face | Founder (plates + locks). Technical PM if seated. |
 | Shipping code, Vercel, planting UI | **Engineer** |
 | Overwriting PHASE-ONE-LOG founder wording | Nobody |
 

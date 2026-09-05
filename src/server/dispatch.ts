@@ -17,11 +17,14 @@ import { isTravisSeat } from "@/lib/seats";
 import { streamCursorReply, type CursorStreamEvent } from "@/server/cursor-port";
 import { upsertLiveRun } from "@/server/queue";
 import {
+  absorbStreamingAgentPost,
+  continueDestStream,
   enqueueOnSeat,
   insertStatusTurn,
   insertUserTurn,
   seatHasActiveRun,
 } from "@/server/seat-pipe";
+import { closeStream, openStream, writeStreamMessage } from "@/server/stream";
 import type { AgentBinding, SeatKey } from "@/server/db/schema";
 import { requireOpenMember } from "@/server/room-membership";
 
@@ -68,9 +71,10 @@ export async function dispatchToSeat(params: {
   });
 
   let event: CursorStreamEvent | undefined;
+  let handedOff = false;
   try {
-    // Walk only as far as the run identifying itself. Anything past that is
-    // the harvester's job.
+    // Walk only as far as the run identifying itself. Live events continue
+    // on the stream store so Travis's mouth is not held (039).
     for (let i = 0; i < 4; i++) {
       const next = await gen.next();
       if (next.done) break;
@@ -97,6 +101,16 @@ export async function dispatchToSeat(params: {
         cursorRunId: event.runId,
         userTurnId: userTurn.id,
       });
+      handedOff = true;
+      void continueDestStream({
+        sessionId,
+        binding,
+        userTurn,
+        gen,
+        runId: event.runId,
+      }).catch((err) => {
+        console.error("[travis] dest stream", err);
+      });
       return { status: "started", runId: event.runId, seatLabel };
     }
 
@@ -120,7 +134,35 @@ export async function dispatchToSeat(params: {
     }
 
     if (event?.type === "done" && event.mode === "stand-in") {
-      await insertUserTurn(sessionId, prompt, seatKey, initiativeId);
+      const userTurn = await insertUserTurn(
+        sessionId,
+        prompt,
+        seatKey,
+        initiativeId,
+      );
+      const opened = await openStream({
+        sessionId,
+        binding,
+        triggerTurnId: userTurn.id,
+      });
+      if (opened && event.assistantText.trim()) {
+        await writeStreamMessage({
+          streamId: opened.id,
+          text: event.assistantText,
+          closer: "dest",
+        });
+        const post = await absorbStreamingAgentPost({
+          sessionId,
+          userTurnId: userTurn.id,
+          seatKey,
+          text: event.assistantText,
+        });
+        await closeStream({
+          streamId: opened.id,
+          status: "completed",
+          closeTurnId: post.id,
+        });
+      }
       await insertStatusTurn(sessionId, "stand-in");
       return { status: "stand-in", seatLabel };
     }
@@ -129,7 +171,8 @@ export async function dispatchToSeat(params: {
       event?.type === "done" ? (event.error ?? "Cursor send failed") : "No run started";
     return { status: "error", seatLabel, error };
   } finally {
-    // Closes our client handle. The Cursor run keeps going without us.
-    await gen.return(undefined).catch(() => {});
+    if (!handedOff) {
+      await gen.return(undefined).catch(() => {});
+    }
   }
 }

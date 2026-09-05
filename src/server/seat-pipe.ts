@@ -25,8 +25,20 @@ import { hangOrphanMotionsOn, runMotionRunner } from "@/server/motion";
 import {
   finishDestJobsForBinding,
   heartbeatOpenDestJobs,
+  listOpenDestJobs,
+  markDestJob,
   timeOutStaleDestJobs,
 } from "@/server/dest-job";
+import {
+  closeStream,
+  liveStreamForBinding,
+  messageBodies,
+  openStream,
+  setStreamCursorRun,
+  startStreamProcess,
+  writeStreamMessage,
+  writeStreamThought,
+} from "@/server/stream";
 import { isOpenMember, requireOpenMember } from "@/server/room-membership";
 import {
   agentBinding,
@@ -49,7 +61,6 @@ import {
   deleteQueuedItem,
 } from "@/server/queue";
 
-const POST_PERSIST_MS = 400;
 
 export function sse(event: string, data: unknown): string {
   return `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
@@ -326,8 +337,33 @@ export async function insertAgentPostTurn(
   });
   if (speakable && seatKey === "travis") {
     await hangOrphanMotionsOn(sessionId, row.id).catch(() => {});
+    await mirrorTravisMessage(sessionId, text).catch(() => {});
   }
   return row;
+}
+
+async function travisBindingId(): Promise<string | null> {
+  const [row] = await db
+    .select({ id: agentBinding.id })
+    .from(agentBinding)
+    .where(eq(agentBinding.seatKey, "travis"))
+    .limit(1);
+  return row?.id ?? null;
+}
+
+async function mirrorTravisMessage(
+  sessionId: string,
+  text: string,
+): Promise<void> {
+  const bindingId = await travisBindingId();
+  if (!bindingId) return;
+  const live = await liveStreamForBinding(sessionId, bindingId);
+  if (!live) return;
+  await writeStreamMessage({
+    streamId: live.id,
+    text,
+    closer: "travis",
+  });
 }
 
 export async function lastSpeakableTravisText(
@@ -391,6 +427,7 @@ export async function absorbLiveTravisPost(
   });
   if (posted?.id) {
     await hangOrphanMotionsOn(sessionId, posted.id).catch(() => {});
+    await mirrorTravisMessage(sessionId, posted.text).catch(() => {});
   }
   return posted;
 }
@@ -472,11 +509,72 @@ export async function pipeOneSend(params: {
     activeLabel: seatLabel,
   });
 
-  let thoughtTurnId: string | null = null;
+  const dests = await listOpenDestJobs(sessionId).catch(() => []);
+  const destJob = dests.find((d) => d.binding.id === binding.id)?.job;
+  if (destJob) {
+    await markDestJob(destJob.id, { userTurnId: userTurn.id }).catch(() => {});
+  }
+  const opened = await openStream({
+    sessionId,
+    binding,
+    triggerTurnId: userTurn.id,
+    destJobId: destJob?.id ?? null,
+  });
+
+  const driven = await driveDestCursorEvents({
+    sessionId,
+    binding,
+    userTurn,
+    send,
+    gen,
+    first: first.value,
+    streamId: opened?.id ?? null,
+    destJobId: destJob?.id ?? null,
+  });
+
+  send("done", {
+    matched: true,
+    mode: driven.donePayload?.mode ?? "real",
+    matchedPhrase: params.matchedPhrase,
+    seatKey,
+    seatLabel,
+    postTurn: driven.postTurn,
+    thoughtTurnId: null,
+    turns: driven.postTurn
+      ? [userTurn, driven.postTurn, driven.statusTurn]
+      : [userTurn, driven.statusTurn],
+  });
+
+  return { ownedTerminal: driven.ownedTerminal };
+}
+
+async function driveDestCursorEvents(params: {
+  sessionId: string;
+  binding: AgentBinding;
+  userTurn: VoiceTurn;
+  send: SendFn;
+  gen: AsyncGenerator<CursorStreamEvent>;
+  first?: CursorStreamEvent;
+  streamId: string | null;
+  destJobId: string | null;
+}): Promise<{
+  ownedTerminal: boolean;
+  postTurn: VoiceTurn | null;
+  statusTurn: VoiceTurn;
+  donePayload: {
+    mode: string;
+    statusText: string;
+    error?: string;
+    runId?: string;
+  } | null;
+}> {
+  const { sessionId, binding, userTurn, send, gen } = params;
+  const seatKey = (binding.seatKey ?? "pm") as SeatKey;
+  const seatLabel = binding.label ?? seatKeyToLabel(seatKey);
+  let streamId = params.streamId;
   let thoughtText = "";
   let postText = "";
   let postTurn: VoiceTurn | null = null;
-  let lastPostPersist = 0;
   let liveRunId: string | null = null;
   let runStartedAt: Date | null = null;
   const doneBox: {
@@ -499,6 +597,18 @@ export async function pipeOneSend(params: {
       });
       const live = await getLiveRun(binding.id);
       runStartedAt = live?.startedAt ?? new Date();
+      if (!streamId) {
+        const opened = await openStream({
+          sessionId,
+          binding,
+          triggerTurnId: userTurn.id,
+          destJobId: params.destJobId,
+          cursorRunId: ev.runId,
+        });
+        streamId = opened?.id ?? null;
+      } else {
+        await setStreamCursorRun(streamId, ev.runId);
+      }
       return;
     }
     if (ev.type === "busy") {
@@ -508,23 +618,17 @@ export async function pipeOneSend(params: {
       send("status", { text: ev.text });
     } else if (ev.type === "thought_delta") {
       thoughtText = absorbText(thoughtText, ev.text).acc;
-      if (!thoughtTurnId) {
-        const row = await insertTurn(sessionId, {
-          role: "assistant",
-          kind: "agent_thought",
-          seatKey,
-          speakable: false,
-          thoughtStatus: "streaming",
-          text: thoughtText,
+      if (streamId && thoughtText.trim()) {
+        await writeStreamThought({ streamId, text: thoughtText });
+      }
+      send("thought_delta", { text: thoughtText, seatKey });
+    } else if (ev.type === "process") {
+      if (streamId) {
+        await startStreamProcess({
+          streamId,
+          tool: ev.tool,
+          body: ev.body,
         });
-        thoughtTurnId = row.id;
-        send("thought", { turn: row });
-      } else {
-        await db
-          .update(voiceTurn)
-          .set({ text: thoughtText })
-          .where(eq(voiceTurn.id, thoughtTurnId));
-        send("thought_delta", { id: thoughtTurnId, text: thoughtText });
       }
     } else if (
       ev.type === "post_delta" ||
@@ -532,36 +636,18 @@ export async function pipeOneSend(params: {
       ev.type === "post_beat"
     ) {
       const next = nextDestSeatText(postText, ev.text);
-      const closed =
-        (next.mode === "insert" || ev.type === "post_beat") &&
-        Boolean(postText.trim()) &&
-        postTurn;
-      if (closed && postTurn && runStartedAt) {
-        await harvestTurnArtifacts({
-          post: postTurn,
-          binding,
-          startedAt: runStartedAt,
+      postText = next.text;
+      if (streamId && postText.trim()) {
+        await writeStreamMessage({
+          streamId,
+          text: postText,
+          closer: "dest",
         });
       }
-      postText = next.text;
-      if (next.mode === "insert" && closed) {
+      if (next.mode === "insert") {
         send("post_beat", { text: next.text, seatKey, seatLabel });
       } else if (next.delta) {
         send("post_delta", { text: next.delta, seatKey, seatLabel });
-      }
-      const now = Date.now();
-      if (
-        postText.trim() &&
-        (closed || !postTurn || now - lastPostPersist >= POST_PERSIST_MS)
-      ) {
-        lastPostPersist = now;
-        postTurn = await absorbStreamingAgentPost({
-          sessionId,
-          userTurnId: userTurn.id,
-          seatKey,
-          text: postText,
-        });
-        send("post", { turn: postTurn });
       }
     } else if (ev.type === "done") {
       if (ev.mode !== "error" && !postText.trim()) {
@@ -574,6 +660,16 @@ export async function pipeOneSend(params: {
         postText = ev.assistantText;
       }
       if (!thoughtText.trim() && ev.thoughtText) thoughtText = ev.thoughtText;
+      if (streamId && thoughtText.trim()) {
+        await writeStreamThought({ streamId, text: thoughtText });
+      }
+      if (streamId && postText.trim()) {
+        await writeStreamMessage({
+          streamId,
+          text: postText,
+          closer: "dest",
+        });
+      }
       doneBox.current = {
         mode: ev.mode,
         statusText: ev.statusText,
@@ -584,47 +680,30 @@ export async function pipeOneSend(params: {
     }
   };
 
-  await handle(first.value);
+  if (params.first) await handle(params.first);
   for (;;) {
     const next = await gen.next();
     if (next.done) break;
     await handle(next.value);
   }
 
-  if (thoughtTurnId && thoughtText.trim()) {
-    await db
-      .update(voiceTurn)
-      .set({
-        text: thoughtText.trim(),
-        thoughtStatus: postText.trim() ? "promoted" : "collapsed",
-      })
-      .where(eq(voiceTurn.id, thoughtTurnId));
-  } else if (thoughtText.trim() && !thoughtTurnId) {
-    const row = await insertTurn(sessionId, {
-      role: "assistant",
-      kind: "agent_thought",
-      seatKey,
-      speakable: false,
-      thoughtStatus: postText.trim() ? "promoted" : "collapsed",
-      text: thoughtText.trim(),
-    });
-    thoughtTurnId = row.id;
-  }
-
   const donePayload = doneBox.current;
   const cancelled = donePayload?.statusText === "cancelled";
   const bareError = donePayload?.mode === "error" && !postText.trim();
-  const finalPost = postText.trim()
-    ? postText.trim()
-    : cancelled || bareError
-      ? ""
-      : "Run finished (no assistant text).";
-  if (finalPost) {
+  const landed = streamId ? await messageBodies(streamId) : [];
+  const beats = landed.length
+    ? landed
+    : postText.trim()
+      ? [postText.trim()]
+      : cancelled || bareError
+        ? []
+        : ["Run finished (no assistant text)."];
+  for (const beat of beats) {
     postTurn = await absorbStreamingAgentPost({
       sessionId,
       userTurnId: userTurn.id,
       seatKey,
-      text: finalPost,
+      text: beat,
     });
   }
 
@@ -660,20 +739,58 @@ export async function pipeOneSend(params: {
     ownedTerminal = !(await seatHasActiveRun(binding));
   }
 
-  send("done", {
-    matched: true,
-    mode: donePayload?.mode ?? "real",
-    matchedPhrase: params.matchedPhrase,
-    seatKey,
-    seatLabel,
-    postTurn,
-    thoughtTurnId,
-    turns: postTurn
-      ? [userTurn, postTurn, statusTurn]
-      : [userTurn, statusTurn],
-  });
+  const failed = donePayload?.mode === "error" || cancelled;
+  if (streamId) {
+    await closeStream({
+      streamId,
+      status: failed ? "failed" : "completed",
+      closeTurnId: postTurn?.id ?? null,
+    });
+  }
+  if (params.destJobId) {
+    await markDestJob(params.destJobId, {
+      status: failed ? "failed" : "completed",
+      done: statusText,
+    }).catch(() => {});
+  }
 
-  return { ownedTerminal };
+  return { ownedTerminal, postTurn, statusTurn, donePayload };
+}
+
+/** Dispatch handed off the Cursor generator. Do not hold Travis's mouth. */
+export async function continueDestStream(params: {
+  sessionId: string;
+  binding: AgentBinding;
+  userTurn: VoiceTurn;
+  gen: AsyncGenerator<CursorStreamEvent>;
+  destJobId?: string | null;
+  runId?: string;
+}): Promise<void> {
+  const dests = await listOpenDestJobs(params.sessionId).catch(() => []);
+  const destJob =
+    dests.find((d) => d.binding.id === params.binding.id)?.job ?? null;
+  const destJobId = params.destJobId ?? destJob?.id ?? null;
+  if (destJobId) {
+    await markDestJob(destJobId, { userTurnId: params.userTurn.id }).catch(
+      () => {},
+    );
+  }
+  const opened = await openStream({
+    sessionId: params.sessionId,
+    binding: params.binding,
+    triggerTurnId: params.userTurn.id,
+    destJobId,
+    cursorRunId: params.runId,
+  });
+  await driveDestCursorEvents({
+    sessionId: params.sessionId,
+    binding: params.binding,
+    userTurn: params.userTurn,
+    send: () => {},
+    gen: params.gen,
+    streamId: opened?.id ?? null,
+    destJobId,
+  });
 }
 
 export async function drainHead(
@@ -744,6 +861,14 @@ export async function reapFinishedLiveRuns(sessionId: string): Promise<void> {
     }
     await insertStatusTurn(sessionId, "finished");
     await releaseLiveRunIfMatch(binding.id, live.cursorRunId);
+    const liveStream = await liveStreamForBinding(sessionId, binding.id);
+    if (liveStream) {
+      await closeStream({
+        streamId: liveStream.id,
+        status: "completed",
+        closeTurnId: post?.id ?? null,
+      });
+    }
     await finishDestJobsForBinding({
       sessionId,
       binding,

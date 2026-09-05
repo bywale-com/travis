@@ -15,6 +15,7 @@ import {
   isRunNotCancellable,
   RACE_RETRY_DELAY_MS,
 } from "@/lib/cursor-busy";
+import { processFromCursorEvent } from "@/lib/stream";
 
 export type CursorStreamEvent =
   | { type: "status"; text: string }
@@ -24,6 +25,7 @@ export type CursorStreamEvent =
   | { type: "post_delta"; text: string }
   /** New dest-seat message — pipe closes the open beat */
   | { type: "post_beat"; text: string }
+  | { type: "process"; tool: string; body: string }
   | { type: "run_started"; runId: string }
   | { type: "busy"; discoveredRunId: string | null }
   | {
@@ -269,7 +271,11 @@ async function* streamRunEvents(
         text?: string;
       };
 
-      if (e.type === "tool_call" || e.type === "tool_use") continue;
+      if (e.type === "tool_call" || e.type === "tool_use") {
+        const process = processFromCursorEvent(e);
+        if (process) yield { type: "process", tool: process.tool, body: process.body };
+        continue;
+      }
 
       if (e.type === "thinking") {
         const chunk = e.text ?? "";

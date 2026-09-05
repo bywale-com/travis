@@ -214,6 +214,43 @@ export const destJob = travis.table("dest_job", {
   lastHeartbeatAt: timestamp("last_heartbeat_at", { withTimezone: true }),
 });
 
+/** SCP-024 — one working episode. Live vs completed is this row. */
+export const stream = travis.table("stream", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  sessionId: uuid("session_id")
+    .notNull()
+    .references(() => voiceSession.id),
+  bindingId: uuid("binding_id")
+    .notNull()
+    .references(() => agentBinding.id),
+  triggerTurnId: uuid("trigger_turn_id")
+    .notNull()
+    .references(() => voiceTurn.id),
+  closeTurnId: uuid("close_turn_id").references(() => voiceTurn.id),
+  destJobId: uuid("dest_job_id").references(() => destJob.id),
+  motionId: uuid("motion_id").references(() => motion.id),
+  cursorRunId: text("cursor_run_id").notNull().default(""),
+  status: text("status").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  closedAt: timestamp("closed_at", { withTimezone: true }),
+});
+
+export const streamEvent = travis.table("stream_event", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  streamId: uuid("stream_id")
+    .notNull()
+    .references(() => stream.id),
+  seq: integer("seq").notNull(),
+  kind: text("kind").notNull(),
+  body: text("body").notNull().default(""),
+  tool: text("tool").notNull().default(""),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
 export const motionStep = travis.table("motion_step", {
   id: uuid("id").defaultRandom().primaryKey(),
   motionId: uuid("motion_id")
@@ -282,6 +319,10 @@ export type DestJobStatus =
   | "completed"
   | "failed"
   | "timed_out";
+export type Stream = typeof stream.$inferSelect;
+export type StreamEvent = typeof streamEvent.$inferSelect;
+export type StreamStatus = "live" | "completed" | "failed";
+export type StreamEventKind = "message" | "process" | "thought";
 
 export type TurnKind =
   | "user"

@@ -25,7 +25,7 @@ Filled from the Om Coda `PROJECT-BRIEF` template. Hand this to the agent with `d
 - Stack: Next.js (`src/`), Vercel (`travis-psi`), Postgres schema `travis`, `@cursor/sdk` / Cloud Agents API. API keys server-side only. Phone-first.
 - Existing design references: Om Coda method + build-foundation (this repo). Product is not Tower.
 - Must stay on rudiments: tokens · icons · surface boundaries · How/flows when relevant.
-- Same seat law as Tower: PM / SA / Engineer; two buckets for Engineer; no third bucket.
+- Same seat law as Tower, refined: Technical PM (vision + inspect `src/` + spec face and cut) / SA (machine) / Engineer (implement only); two buckets for Engineer; no third bucket.
 
 ## Agent instruction
 

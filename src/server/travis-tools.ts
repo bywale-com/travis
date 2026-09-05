@@ -96,6 +96,14 @@ import {
 import { isInTurnAutoFile, parseBacklogView } from "@/lib/motion";
 import { BoxError, proveBox, readBox, runBox, writeBox } from "@/server/travis-box";
 import { UnfoldError, unfoldRepo } from "@/server/travis-unfold";
+import { argsBody } from "@/lib/stream";
+import {
+  attachMotionToLiveStream,
+  maybeCloseTravisStream,
+  openTravisStream,
+  startStreamProcess,
+  finishStreamProcess,
+} from "@/server/stream";
 
 export const TRAVIS_TOOL_DECLS = [
   {
@@ -612,11 +620,47 @@ export async function runTravisTool(params: {
   const verdict = guardToolCall(name, args);
   if (!verdict.allow) return { ok: false, text: verdict.reason };
 
+  const opened = await openTravisStream({ sessionId }).catch(() => null);
+
   if (!params.asMotionStep && isInTurnAutoFile(name)) {
     const filed = await autoFileOneStep(sessionId, { tool: name, args });
-    if (filed) return { ok: true, text: formatFilePlanResult(filed) };
+    if (filed) {
+      if (opened) {
+        await attachMotionToLiveStream({
+          sessionId,
+          bindingId: opened.binding.id,
+          motionId: filed.id,
+        }).catch(() => {});
+      }
+      return { ok: true, text: formatFilePlanResult(filed) };
+    }
   }
 
+  const processEv = opened
+    ? await startStreamProcess({
+        streamId: opened.id,
+        tool: name,
+        body: argsBody(args),
+      }).catch(() => null)
+    : null;
+
+  const finish = async (result: ToolResult): Promise<ToolResult> => {
+    if (processEv) {
+      await finishStreamProcess({
+        eventId: processEv.id,
+        body: result.text,
+      }).catch(() => {});
+    }
+    await maybeCloseTravisStream({
+      sessionId,
+      failed: !result.ok,
+    }).catch(() => {});
+    return result;
+  };
+
+  try {
+    return await finish(
+      await (async (): Promise<ToolResult> => {
   const narration = narrateToolCall(name, args);
   if (narration) {
     await insertAgentPostTurn(sessionId, narration, "travis", null, false).catch(
@@ -974,6 +1018,13 @@ export async function runTravisTool(params: {
         title: typeof args.title === "string" ? args.title : "",
         steps: args.steps,
       });
+      if (opened) {
+        await attachMotionToLiveStream({
+          sessionId,
+          bindingId: opened.binding.id,
+          motionId: filed.id,
+        }).catch(() => {});
+      }
       return { ok: true, text: formatFilePlanResult(filed) };
     } catch (err) {
       if (err instanceof MotionError) return { ok: false, text: err.message };
@@ -1047,6 +1098,12 @@ export async function runTravisTool(params: {
   }
 
   return { ok: false, text: `Unknown tool ${name}.` };
+      })(),
+    );
+  } catch (err) {
+    const text = err instanceof Error ? err.message : String(err);
+    return await finish({ ok: false, text });
+  }
 }
 
 export const TRAVIS_SYSTEM = `You are Travis. You are in this room with the founder. Seats are disposable people, not forever-pm slugs. You are your own agent — not PM, SA, or Engineer.

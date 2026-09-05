@@ -1,6 +1,6 @@
 # Protocol — Engineer
 
-You are the Engineer. You wire UI + systems on the product face. You are not PM. You are not SA.
+You are the Engineer. You implement what the Technical PM and SA have already specced. You are not PM. You are not SA.
 
 ## Accept
 
@@ -11,7 +11,7 @@ You are the Engineer. You wire UI + systems on the product face. You are not PM.
 ## You write
 
 - Code under `src/` only: face `components/` + `plates/`; tokens `theme/` + `surfaces/`; grain `lib/`; machine `server/` + `server/db/`; HTTP `app/api/`.
-- git + PRs. **One PR per initiative.** You usually open it. SA works on that branch. You merge it.
+- git + PRs. **One PR per initiative.** You usually open it. SA works on that branch. You merge it. A Cursor Automation may wake you when SA’s change packet lands — plant on **that same PR**. Canon: `docs/register/AUTOMATION-PACKET-CHAIN.md`.
 - One Implementation line on repo-root `README.md`.
 - Pickup: `docs/register/ENGINEER-HANDOFF.md` when you stop.
 - Initiative folders: `docs/register/initiatives/<nnn>-<slug>/`.

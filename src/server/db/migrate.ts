@@ -1,5 +1,5 @@
 /**
- * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership + SCP-008 backlog + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion + SCP-015 sit.
+ * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership + SCP-008 backlog + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion + SCP-015 sit + SCP-023 dest_job + SCP-024 stream.
  */
 import { config } from "dotenv";
 import postgres from "postgres";
@@ -483,7 +483,46 @@ async function main() {
     )
   `;
 
-  console.log("travis schema + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion + SCP-015 sit + SCP-023 dest_job ready");
+  await sql`
+    CREATE TABLE IF NOT EXISTS travis.stream (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      session_id uuid NOT NULL REFERENCES travis.voice_session(id),
+      binding_id uuid NOT NULL REFERENCES travis.agent_binding(id),
+      trigger_turn_id uuid NOT NULL REFERENCES travis.voice_turn(id),
+      close_turn_id uuid REFERENCES travis.voice_turn(id),
+      dest_job_id uuid REFERENCES travis.dest_job(id),
+      motion_id uuid REFERENCES travis.motion(id),
+      cursor_run_id text NOT NULL DEFAULT '',
+      status text NOT NULL,
+      created_at timestamptz NOT NULL DEFAULT now(),
+      closed_at timestamptz,
+      CONSTRAINT stream_status_chk
+        CHECK (status IN ('live', 'completed', 'failed'))
+    )
+  `;
+
+  await sql`
+    CREATE UNIQUE INDEX IF NOT EXISTS stream_live_one
+      ON travis.stream (session_id, binding_id)
+      WHERE status = 'live'
+  `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS travis.stream_event (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      stream_id uuid NOT NULL REFERENCES travis.stream(id),
+      seq int NOT NULL,
+      kind text NOT NULL,
+      body text NOT NULL DEFAULT '',
+      tool text NOT NULL DEFAULT '',
+      created_at timestamptz NOT NULL DEFAULT now(),
+      CONSTRAINT stream_event_kind_chk
+        CHECK (kind IN ('message', 'process', 'thought')),
+      CONSTRAINT stream_event_seq_uniq UNIQUE (stream_id, seq)
+    )
+  `;
+
+  console.log("travis schema + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion + SCP-015 sit + SCP-023 dest_job + SCP-024 stream ready");
   await sql.end();
 }
 

@@ -42,10 +42,10 @@ Plain statement (opening):
 
 ## How we work (same Om Coda practices)
 
-- Three seats: PM · SA · Engineer — do not swap jobs.  
-- PM: Type A / Type B, module-by-module with perimeter, founder wording, Phase One log.  
+- Three seats: Technical PM · SA · Engineer — do not swap jobs.  
+- Technical PM: Type A / Type B, module-by-module with perimeter, founder wording, Phase One log; inspect `src/`; spec product/UX/UI **and** the technical cut.  
 - SA: Story → Requirements → stores/contracts, change packets, SA log.  
-- Engineer: two buckets only; wire locked pockets; trail = git + PRs.  
+- Engineer: two buckets only; implement what PM and SA have specced; trail = git + PRs.  
 - Method: [`../method/`](../method/). Build: [`../build-foundation/`](../build-foundation/).
 
 ---

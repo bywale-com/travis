@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 10:19 UTC — **SCP-023 signed.** Dest is a job, not mail. Backlog-verb findings hung on this initiative: [`initiatives/023-tightness/BACKLOG-VERBS.md`](./initiatives/023-tightness/BACKLOG-VERBS.md). Not a new ticket.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-05 12:50 UTC — **SCP-024 signed.** Stream is a store. Live grain is not the Log tape. Same PR as PM-008 ([#126](https://github.com/bywale-com/travis/pull/126)). Next number is **025**.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -430,3 +430,36 @@ Packet on `main` already has question 5 = **None**.
 5. Gate: mailing complete/delete is **his**.
 
 **Handoff:** 023 plant order unchanged. A slim follow-on plants discard + reopen + Done on the ticket if the founder seats it.
+
+---
+
+## 2026-09-05 12:50 UTC — SCP-024 Stream (PM-008 on #126)
+
+**Kind:** Packet ascribe. Automation woke this seat. PM-008 + ST1–ST3 on this PR. No SYSTEMS-CHANGE-PACKET for 008 was on the branch. 023 stays planted — not reminted.
+
+**Seat:** Systems Analyst. Job-law from the founder (plates + PM-008 lock). Not PM. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** Live work is not the Log. Door = working seat → compartment titled Stream. Trigger pinned. Live order, completely, at the grain that occurred. Done → same record is the card above the completed message. Applies to Travis. Four primitives are an idea, not a closed store. `file_plan` is a spine. “Look at this repo” + URL is an ask.
+
+**Staples (not scenery):** **Stream** (compartment title = card title). Trigger text (user line = pin = card line). Glow = door.
+
+**Quoted stood-up:**
+
+- Log hides open `agent_post` in the client (`threadTurns` + `isOpenStreamingPost`). The row is still `voice_turn`.
+- Door is italic `onSeatMark` (`RosterDoor.tsx`).
+- Cursor port drops `tool_call` / `tool_use` (`cursor-port.ts` L272).
+- Box `run_box` is one-shot `{ exit, stdout, stderr }` (`travis-box.ts`).
+- 023 `dest_job` + MotionCard on `founding_turn_id` stand. Receipt, not stream.
+
+**Ascribed:**
+
+1. **Mint** `travis.stream` + `travis.stream_event`. Live vs completed is one object. Card cannot drift. Process order is not `motion_step` and not `dest_job.payload`.
+2. **Trigger** = `trigger_turn_id` → `kind=user`. No user trigger → do not open (faceless silence).
+3. **Events:** `message` (014 grow/insert) · `process` (actual tool name + actual body) · `thought` (in stream, not spoken, not a new Log `agent_thought`). Not Look/Find/Term/Write/Hand.
+4. **Seam:** live writes events. Close lands 014 beats on `voice_turn`. `close_turn_id` = completed `agent_post`. Same `stream.id` is the card. 023 founding posts still hit the tape. MotionCard hang **B** stays under founding. Two hangs. Do not merge.
+5. **One live** per `(session_id, binding_id)`. Dest queue waits. Extra Travis motions append. Cursor process: stop dropping tool events. Box: start + blob, not a PTY.
+6. **Silences:** chunked box; Find rename; initiative follow-on stamp; Hear / Next / Skip; primitive table; live artifacts; faceless open; failed-without-close card; 04:58 request line; 022; SSE bus.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-024-STREAM.md`](./SYSTEMS-CHANGE-PACKET-024-STREAM.md)
+
+**Handoff:** Engineer plants 024 on **this same PR**. Next packet number is **025**. Do not remint 023. Do not mint a cousin.

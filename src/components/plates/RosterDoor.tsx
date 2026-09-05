@@ -21,6 +21,11 @@ export type RosterThought = {
   glowing: boolean;
 };
 
+export type RosterDoorMark = {
+  streamId: string | null;
+  glowing: boolean;
+};
+
 export function RosterDoor({
   t,
   roomTitle,
@@ -37,7 +42,8 @@ export function RosterDoor({
   onRename,
   thoughts,
   openThoughtId,
-  onSeatMark,
+  doors,
+  onOpenStream,
 }: {
   t: Tokens;
   roomTitle: string;
@@ -55,6 +61,8 @@ export function RosterDoor({
   thoughts?: Record<string, RosterThought>;
   openThoughtId?: string | null;
   onSeatMark?: (thought: RosterThought) => void;
+  doors?: Record<string, RosterDoorMark>;
+  onOpenStream?: (streamId: string) => void;
 }) {
   const inIds = new Set(members.map((m) => m.id).filter(Boolean) as string[]);
   const inKeys = new Set(
@@ -177,6 +185,9 @@ export function RosterDoor({
             const locked = isTravisSeat(m.seatKey);
             const key = m.seatKey ?? m.label;
             const thought = thoughts?.[key];
+            const door = doors?.[key];
+            const streamId = door?.streamId ?? null;
+            const glowing = !!door?.glowing || !!thought?.glowing;
             const open = thought && openThoughtId === thought.id;
             return (
               <div key={`${m.seatKey}-${m.label}`} style={{ padding: "10px 0" }}>
@@ -189,16 +200,18 @@ export function RosterDoor({
                 >
                   <button
                     type="button"
-                    onClick={() => thought && onSeatMark?.(thought)}
-                    disabled={!thought}
+                    onClick={() => {
+                      if (streamId) onOpenStream?.(streamId);
+                    }}
+                    disabled={!streamId}
                     aria-label={
-                      thought ? `${m.label} thought` : m.label
+                      streamId ? `${m.label} Stream` : m.label
                     }
                     style={{
                       border: "none",
                       background: "transparent",
                       padding: 0,
-                      cursor: thought ? "pointer" : "default",
+                      cursor: streamId ? "pointer" : "default",
                     }}
                   >
                     <SeatMark
@@ -206,7 +219,7 @@ export function RosterDoor({
                       label={m.label}
                       t={t}
                       size={28}
-                      glow={!!thought?.glowing}
+                      glow={glowing}
                     />
                   </button>
                   <span style={{ flex: 1 }}>
