@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 00:54 UTC — Retry 074 with Issues write. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 00:55 UTC — Still you; still no label write. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2260,3 +2260,11 @@ The secret is you. Fine-grained PAT needs **Issues: Read and write** on this rep
 **Kind:** Process. Founder: try again.
 
 Re-push `HOTFIX-074`.
+
+---
+
+## 2026-09-06 00:55 UTC — Still no label write
+
+**Kind:** Honest. [Run](https://github.com/bywale-com/travis/actions/runs/34002533924): `Label actor: bywale-com`. Then `Could not add wake-engineer. Token needs Issues write.` No new label event. B did not boot.
+
+The token is still missing **Issues: Read and write** on `bywale-com/travis`. Pull request write is not enough. Classic `repo` also works.
