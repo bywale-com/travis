@@ -89,8 +89,11 @@ jobs:
             # Re-arm: label-added only fires on a fresh add. A leftover
             # wake-engineer from an earlier push would otherwise stay silent.
             gh pr edit "$pr" --remove-label wake-engineer || true
-            gh pr edit "$pr" --add-label wake-engineer
-            echo "Hotfix. Labeled #$pr wake-engineer. No wake-sa."
+            if gh pr edit "$pr" --add-label wake-engineer; then
+              echo "Hotfix. Labeled #$pr wake-engineer. No wake-sa."
+            else
+              echo "Hotfix. Could not add wake-engineer. Token needs Issues write."
+            fi
           elif echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$'; then
             gh pr edit "$pr" --add-label wake-sa
             echo "Labeled #$pr wake-sa"
