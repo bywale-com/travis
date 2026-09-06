@@ -3,6 +3,14 @@
  * No new bus. Poll stays.
  */
 
+/** Last-Event-ID wins when both are set and parsable. */
+export function resumeAfterSeq(
+  lastEventId: string | null | undefined,
+  queryAfterSeq: string | null | undefined,
+): number | null {
+  return parseAfterSeq(lastEventId) ?? parseAfterSeq(queryAfterSeq);
+}
+
 export function parseAfterSeq(raw: string | null | undefined): number | null {
   if (raw == null) return null;
   const s = raw.trim();

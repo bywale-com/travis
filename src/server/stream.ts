@@ -18,6 +18,7 @@ import {
   type StreamStatus,
 } from "@/lib/stream";
 import { isTravisSeat } from "@/lib/seats";
+import { notifyRoom } from "@/server/room-bus";
 import { db } from "@/server/db/client";
 import {
   agentBinding,
@@ -177,6 +178,7 @@ export async function openStream(params: {
         .set({ cursorRunId: params.cursorRunId })
         .where(eq(stream.id, existing.id));
     }
+    await notifyRoom(params.sessionId).catch(() => {});
     return { id: existing.id };
   }
 
@@ -208,6 +210,7 @@ export async function openStream(params: {
         status: "live",
       })
       .returning({ id: stream.id });
+    if (row) await notifyRoom(params.sessionId).catch(() => {});
     return row ?? null;
   } catch {
     const again = await liveStreamForBinding(
@@ -364,14 +367,16 @@ export async function closeStream(params: {
   closeTurnId?: string | null;
 }): Promise<void> {
   await ensureStreamStore();
-  await db
+  const [row] = await db
     .update(stream)
     .set({
       status: params.status,
       closeTurnId: params.closeTurnId ?? null,
       closedAt: new Date(),
     })
-    .where(and(eq(stream.id, params.streamId), eq(stream.status, "live")));
+    .where(and(eq(stream.id, params.streamId), eq(stream.status, "live")))
+    .returning({ sessionId: stream.sessionId });
+  if (row?.sessionId) await notifyRoom(row.sessionId).catch(() => {});
 }
 
 export async function failLiveStreamWithoutCard(params: {

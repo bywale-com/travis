@@ -10,7 +10,7 @@
 
 ## Where we stopped
 
-**029 Lists show now is planted on [#144](https://github.com/bywale-com/travis/pull/144).** Same 1–3s poll. `GET /turns?afterSeq=` merges by id (streaming thoughts included). Enter-room / hard refresh is a full GET. `listInitiatives` is one grain query (no per-row `turnsForInitiative`). The tick paints the open door: rooms on the index, cheap backlog, open ticket, or in-room tape + queue. Failed GET keeps last good. Foreground runs one tick now. Index `voice_turn_session_seq_idx` is isolate-once in `ensureInitiativeStore` + `migrate.ts` and applied on live Travis Postgres. 023 SSE / LISTEN stays silence. Hear / Skip buttons stay off. Do not remint 012 / 023 / 028. Do not plant a websocket. Do not remint the index.
+**029 The room stays live is planted on [#144](https://github.com/bywale-com/travis/pull/144).** In-room `GET /api/session/:id/events` resumes from last `seq` (or `Last-Event-ID`), emits turn / backlog / ticket / stream, then `LISTEN travis_room`. `insertTurn`, initiative hold/rename/done, stream open/close, and motion status `NOTIFY travis_room`. Cheap `listInitiatives` (no N+1). `GET /turns?afterSeq=` is fallback while the wire is down. Failed GET keeps last good. Foreground reconnects the wire now. Index `voice_turn_session_seq_idx` is isolate-once and live. First 029 (smarter poll) is void. Hear / Skip buttons stay off. Do not remint 012 / 023 / 028. Do not plant a websocket. Do not remint the index. Do not ship whole-tape poll as the product.
 
 **027 Voice stay is on [#140](https://github.com/bywale-com/travis/pull/140).** New after cutoff, reply thread, dest timeout ≠ stream fail, `travis-stay`, Technical PM glass. Do not remint `heard_at`, `reference_turn_id`, `travis.stream`, hang SQL, or the cutoff UPDATE. Do not mint `/protocols/technical-pm.md`.
 
@@ -48,7 +48,7 @@ Newest first. Full sentences live on the README Implementation trail.
 
 | Ref | PR | One line |
 |-----|----|----------|
-| 029 | [#144](https://github.com/bywale-com/travis/pull/144) | Incremental tape, cheap backlog, last good, open-door tick — not yet on `main` until this PR merges |
+| 029 | [#144](https://github.com/bywale-com/travis/pull/144) | Room SSE + seq resume + `NOTIFY travis_room` — not yet on `main` until this PR merges |
 | 027 | [#140](https://github.com/bywale-com/travis/pull/140) | New after cutoff, reply thread, dest timeout ≠ stream fail, `travis-stay`, Technical PM glass — not yet on `main` until that PR merges |
 | 025 | [#127](https://github.com/bywale-com/travis/pull/127) | Stream card hangs on this episode’s answering post |
 | 024 | [#126](https://github.com/bywale-com/travis/pull/126) | Stream store + door + card |
@@ -115,7 +115,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 | 007 R2 Hear-queue sheet · invited urgency | 027 removed Hear / Skip **buttons**; spoken invites stay. Invited urgency is still 007 R1 silence. |
 | Chunked box stdout · Find rename · initiative stamp · process-primitive table | 024 named silence. Do not invent. |
 | Idle door / catch-it-live compartment | 008 remainder. Already specified. Not 025. |
-| Room SSE / LISTEN/NOTIFY | 023 silence. 029 kept the poll. Next cut only if the cheap list is still slow after plant. |
+| Rooms index bus | 029 silence. Index is one-shot + last good. Not on the room wire. |
 | 015 lived smoke | Phone face: create Pat (must not be picked as PM), sit, idle send, busy→spin, `who` still queues. Do not auto-sit existing `pm`/`sa`/`engineer`/`travis` rows. |
 | 028 usable Log | PM-012 on [#142](https://github.com/bywale-com/travis/pull/142). Do not remint here. |
 

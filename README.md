@@ -4,7 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
-- **2026-09-06** · SCP-029 · [PR #144](https://github.com/bywale-com/travis/pull/144) — Lists he is looking at refresh on the poll from last `seq` and a cheap backlog grain, a failed GET keeps the last good rows, and coming back to the phone ticks now, because the whole tape and an emptied list were why a landing waited on hard refresh.
+- **2026-09-06** · SCP-029 · [PR #144](https://github.com/bywale-com/travis/pull/144) — The room holds one SSE that resumes from last `seq` and other-request writes `NOTIFY travis_room`, a failed GET keeps last good rows, and poll is only catch-up while the wire is down, because a smarter whole-tape tick was still guessing.
 - **2026-09-06** · SCP-027 · [PR #140](https://github.com/bywale-com/travis/pull/140) — New is only a landing after the cutoff, a reply hangs on that message, dest timeout does not eat the Stream card, refresh stays put, and glass dest is Technical PM, because stale New, missing reply, a null close, and a rooms-list dump were the lived desk.
 - **2026-09-06** · SCP-026 · [PR #134](https://github.com/bywale-com/travis/pull/134) — A dest on a ticket stamps that thread, Travis offers the landing with the ticket’s name, Hear is a gist, and plates hang behind a first-icon Artifacts door, because follow-on dests were minting cousins and New died on refresh.
 - **2026-09-06** · Hotfix 076 · [PR #130](https://github.com/bywale-com/travis/pull/130) — Dest done and reap land one finished seat bubble on the Log, and the Stream card hangs on that row, because 014 was dumping every dest chat onto the tape and only the last one got a card.

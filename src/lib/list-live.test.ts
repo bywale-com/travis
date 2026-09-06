@@ -5,7 +5,14 @@ import {
   mergeTurnsById,
   openDoorTick,
   parseAfterSeq,
+  resumeAfterSeq,
 } from "./list-live";
+
+test("Last-Event-ID wins over afterSeq when both parse", () => {
+  assert.equal(resumeAfterSeq("9", "2"), 9);
+  assert.equal(resumeAfterSeq("nope", "2"), 2);
+  assert.equal(resumeAfterSeq(null, "4"), 4);
+});
 
 test("afterSeq is an integer or the full tape", () => {
   assert.equal(parseAfterSeq(null), null);

@@ -211,6 +211,8 @@ async function insertOpen(
     })
     .returning();
   await stampTurn(foundingTurnId, row.id);
+  const { notifyRoom } = await import("@/server/room-bus");
+  await notifyRoom(sessionId).catch(() => {});
   return row;
 }
 
@@ -537,6 +539,8 @@ export async function renameInitiative(
     .set({ title })
     .where(eq(initiative.id, initiativeId))
     .returning();
+  const { notifyRoom } = await import("@/server/room-bus");
+  await notifyRoom(sessionId).catch(() => {});
   return updated;
 }
 
@@ -557,6 +561,8 @@ export async function markInitiativeDone(
     .set({ status: "done", doneAt: new Date() })
     .where(eq(initiative.id, initiativeId))
     .returning();
+  const { notifyRoom } = await import("@/server/room-bus");
+  await notifyRoom(sessionId).catch(() => {});
   return updated;
 }
 

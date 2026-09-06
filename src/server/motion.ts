@@ -26,6 +26,7 @@ import {
   type InitiativeListItem,
   type ListInitiativesOpts,
 } from "@/server/initiative";
+import { notifyRoom } from "@/server/room-bus";
 import { db } from "@/server/db/client";
 import { motion, motionStep, voiceTurn } from "@/server/db/schema";
 
@@ -183,6 +184,7 @@ export async function filePlan(
   );
 
   const filed = { id: row.id, title: row.title, stepCount: steps.length };
+  await notifyRoom(sessionId).catch(() => {});
   void runMotionRunner(sessionId);
   return filed;
 }
@@ -220,6 +222,7 @@ export async function autoFileOneStep(
     args: JSON.stringify(params.args ?? {}),
     status: "pending",
   });
+  await notifyRoom(sessionId).catch(() => {});
   void runMotionRunner(sessionId);
   return { id: row.id, title: row.title, stepCount: 1 };
 }
@@ -523,6 +526,15 @@ async function claimNextStep(motionId: string): Promise<ClaimedStep | null> {
   return asClaimed(raw);
 }
 
+async function notifyMotionRoom(motionId: string): Promise<void> {
+  const [row] = await db
+    .select({ sessionId: motion.sessionId })
+    .from(motion)
+    .where(eq(motion.id, motionId))
+    .limit(1);
+  if (row) await notifyRoom(row.sessionId).catch(() => {});
+}
+
 async function finishStep(
   stepId: string,
   motionId: string,
@@ -544,6 +556,7 @@ async function finishStep(
       .update(motion)
       .set({ status: "failed", updatedAt: now, doneAt: now })
       .where(eq(motion.id, motionId));
+    await notifyMotionRoom(motionId);
     return;
   }
 
@@ -563,6 +576,7 @@ async function finishStep(
       .update(motion)
       .set({ status: "done", updatedAt: now, doneAt: now })
       .where(eq(motion.id, motionId));
+    await notifyMotionRoom(motionId);
     return;
   }
 
@@ -570,6 +584,7 @@ async function finishStep(
     .update(motion)
     .set({ status: "waiting", updatedAt: now })
     .where(eq(motion.id, motionId));
+  await notifyMotionRoom(motionId);
 }
 
 async function runOneMotion(sessionId: string, motionId: string): Promise<void> {
@@ -578,6 +593,7 @@ async function runOneMotion(sessionId: string, motionId: string): Promise<void> 
     .update(motion)
     .set({ status: "running", updatedAt: new Date() })
     .where(and(eq(motion.id, motionId), eq(motion.status, "waiting")));
+  await notifyRoom(sessionId).catch(() => {});
 
   for (;;) {
     const claimed = await claimNextStep(motionId);
@@ -596,6 +612,7 @@ async function runOneMotion(sessionId: string, motionId: string): Promise<void> 
           .update(motion)
           .set({ status: "done", updatedAt: new Date(), doneAt: new Date() })
           .where(eq(motion.id, motionId));
+        await notifyRoom(sessionId).catch(() => {});
       } else if (failed) {
         await db
           .update(motion)
@@ -603,6 +620,7 @@ async function runOneMotion(sessionId: string, motionId: string): Promise<void> 
           .where(
             and(eq(motion.id, motionId), inArray(motion.status, ["waiting", "running"])),
           );
+        await notifyRoom(sessionId).catch(() => {});
       }
       return;
     }
@@ -611,6 +629,7 @@ async function runOneMotion(sessionId: string, motionId: string): Promise<void> 
       .update(motion)
       .set({ status: "running", updatedAt: new Date() })
       .where(eq(motion.id, motionId));
+    await notifyRoom(sessionId).catch(() => {});
 
     let args: Record<string, unknown> = {};
     try {

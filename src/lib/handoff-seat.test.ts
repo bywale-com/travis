@@ -9,7 +9,7 @@ test("Engineer Current names where the last bind stopped", () => {
   );
   assert.match(handoff, /This bind is done/);
   assert.match(handoff, /bc-74e606bd-b795-46d7-9844-d5247d8cd350/);
-  assert.match(handoff, /029 Lists show now/);
+  assert.match(handoff, /029 The room stays live/);
   assert.match(handoff, /026 Serve/);
   assert.match(handoff, /076 dest closer/);
   assert.match(handoff, /Hotfix 062/);
