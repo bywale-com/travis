@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:12 UTC — Seat Stream is hotfix 076, not a packet. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:18 UTC — PM look 076 Pass. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2466,3 +2466,21 @@ No new plates. Same `StreamCard` / `StreamDoor` as Travis.
 **Decide: hotfix.** Face is 008. Store is 024. The miss is dest landing every stream `message` as a Log row. No new plate. No new table. SA would only name a recut already named. Three seats is waste.
 
 **076** [`HOTFIX-076-SEAT-STREAM.md`](./HOTFIX-076-SEAT-STREAM.md) + [`HOTFIX-076-SEAT-STREAM-TEST.md`](./HOTFIX-076-SEAT-STREAM-TEST.md). Same PR. Next hotfix **077**. Next packet still **010**. Next SA still **026**.
+
+---
+
+## 2026-09-06 02:18 UTC — PM look 076 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Hotfix:** [`HOTFIX-076-SEAT-STREAM.md`](./HOTFIX-076-SEAT-STREAM.md) · plant on [#130](https://github.com/bywale-com/travis/pull/130) (`1ce6bcc`). Sheet: [`PM-LOOK-HOTFIX-076.md`](./PM-LOOK-HOTFIX-076.md).
+
+**Look.** src/ matches the lock. `decideDestStreamClose` picks the last stream `message` (or `postText`). `driveDestCursorEvents` and `reapFinishedLiveRuns` land one `agent_post`. The boom `for (const beat of beats)` is gone. Card still paints above `closeTurnId`. `dispatch.ts` stand-in left. 025 Travis close not reminted. No new plates.
+
+**Preview I opened:** `https://travis-git-cursor-plating-and-sit-d6be48-wale-omotayos-projects.vercel.app` — not psi. Vercel SSO. Did not sign in. Did not see the Log glass.
+
+**Test.** Walked G.1. Grain test pass (10/10). D.1–D.4 are the desk. I did not dest. I did not Talk.
+
+**Steps I could not do (human):** Vercel team SSO. Dest a seat in room Travis. Watch one finished bubble and the Stream card. Confirm Travis 025 on the phone.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
