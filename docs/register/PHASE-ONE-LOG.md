@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:10 UTC — Seat Stream same as Travis. Log gets only the finished message. Card holds the rest. No new plates. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:12 UTC — Seat Stream is hotfix 076, not a packet. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2454,3 +2454,15 @@ No new plates. Same `StreamCard` / `StreamDoor` as Travis.
 014 beat-split vs this one-closer law — SA names the recut. Thought / process never were Log rows; they stay events. Whether a seat’s last Cursor bubble is the closer text is SA.
 
 **Ask:** cut **010**?
+
+---
+
+## 2026-09-06 02:12 UTC — Hotfix, not a packet (founder)
+
+**Kind:** Process lock.
+
+**Founder (preserved):** Would it be a packet? … I feel like it's a hot fix. … I'll let you decide … we don't want to be sloppy, but we don't want to be wasteful … if it is a packet, it's passing through more people.
+
+**Decide: hotfix.** Face is 008. Store is 024. The miss is dest landing every stream `message` as a Log row. No new plate. No new table. SA would only name a recut already named. Three seats is waste.
+
+**076** [`HOTFIX-076-SEAT-STREAM.md`](./HOTFIX-076-SEAT-STREAM.md) + [`HOTFIX-076-SEAT-STREAM-TEST.md`](./HOTFIX-076-SEAT-STREAM-TEST.md). Same PR. Next hotfix **077**. Next packet still **010**. Next SA still **026**.

@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-06 02:00 UTC
+# PM seat handoff — 2026-09-06 02:12 UTC
 
 **This bind is living.** `bc-25c5c6bf-006f-4252-9f25-49ab183835b2` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -14,12 +14,12 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **02:00 UTC 2026-09-06** (Tech PM-centric room defined; dest by who). Flag **14:00**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **02:12 UTC 2026-09-06** (076 seat Stream hotfix). Flag **14:00**. |
 | Seat law | [`../README.md`](../README.md) § Product Manager · [`../seats/PRODUCT-MANAGER.md`](../seats/PRODUCT-MANAGER.md) · house [`house-now/protocols/pm.md`](./house-now/protocols/pm.md) |
 | Plates | [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) generate · [`PLATE-READ.md`](./PLATE-READ.md) read |
 | Packets 001–009 | [`PM-PACKETS.md`](./PM-PACKETS.md). 001–007 on **`main`**. **008–009** on #127 (merged). 009 look **Pass**. Human walk not started. **010 is not cut.** |
-| Last face lock | **009** — card above **this** episode’s completed line. Stream does not auto-open. Emerged. Do not merge 009/025 into prod until the human test is green. |
-| Hotfix | **075** applied on [#130](https://github.com/bywale-com/travis/pull/130). Look [`PM-LOOK-HOTFIX-075.md`](./PM-LOOK-HOTFIX-075.md) **Pass**. Next hotfix **076**. |
+| Last face lock | **Seat Stream** — same card as Travis. Log gets only the finished message. Rest in the card. No new plates. **009** still: card above this episode’s line; Stream does not auto-open. Do not merge 009/025 into prod until the human test is green. |
+| Hotfix | **076** [`HOTFIX-076-SEAT-STREAM.md`](./HOTFIX-076-SEAT-STREAM.md) + test on [#130](https://github.com/bywale-com/travis/pull/130). **075** hang applied. Next hotfix **077**. |
 | Prompts | C + B recut and founder pasted. This seat cannot Save + Activate. |
 | Engineer | Pickup [`ENGINEER-HANDOFF.md`](./ENGINEER-HANDOFF.md). Live hang is on. Open pocket: **022** on [#120](https://github.com/bywale-com/travis/pull/120). |
 | Vision | Held: seat health · tester sandbox/gig · SA-now automations · initiative curate (after Stream) · Find rename · 007 · capability gap · request-line · Travis hang tool (later). Suggest dest `technical-pm`, then walk 009. |
@@ -32,8 +32,8 @@
 ## Next PM job
 
 1. Accept the seat. Fetch this PR. Read Current, then the newest stamp.
-2. Tech PM-centric room is alignment (02:00 stamp). Wait for the founder lock: role dest “PM” → this bind, or dest by name only. Then recut `travis.md` / `pm.md`. SA ascribes idle-lookup / `default_binding_id` if role dest changes. Next packet still **010**. Next SA **026**.
-3. Human leftover on 075: dest **technical-pm**. Do not dest catalog `pm`. Do not put the id in migrate.
+2. Seat Stream is **076**, not 010. Engineer plants the dest closer. SA **026** still unused. Do not remint `travis.stream`. No seat-stream plates.
+3. Tech PM-centric room is alignment (02:00). Role dest “PM” vs dest by name still open. Human leftover on 075: dest **technical-pm**.
 4. Do **not** reprint P1/P2. Do **not** invent a second index. Do **not** remint 007 C3/C4.
 5. When **you** stop: rewrite this file and move Current so the next bind does not start from a transcript.
 
