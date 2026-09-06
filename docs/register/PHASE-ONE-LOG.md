@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 23:59 UTC — Re-arm: Action drops then adds wake-engineer. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 00:06 UTC — Founder made the repo private; this seat still sees public. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2177,3 +2177,21 @@ This seat has no live `DATABASE_URL`. I cannot hang the row from here. The write
 **The hole is the gate, not the hotfix.** After 17:10 we moved A/B off PR-pushed onto label-added so the Action could tag. We have never seen A or B boot from a label the Action added. 009’s Engineer boots were still PR-pushed. C at 18:15 was a person adding the look label. The next `PM-PACKET` would hit the same wall.
 
 Do not have the founder click. The Action is supposed to be the tagger. That add is not waking Cursor.
+
+---
+
+## 2026-09-05 23:59 UTC — Re-arm the tag (founder)
+
+**Kind:** Process. Founder: remove the label and add it again.
+
+This seat cannot write labels (403). The Action can. This push lands `HOTFIX-074` again so the Action drops `wake-engineer` and adds it.
+
+---
+
+## 2026-09-06 00:06 UTC — Repo was made private (founder)
+
+**Kind:** Correction.
+
+**Founder (preserved):** No. I did make it private.
+
+**This seat:** `gh` still reads `bywale-com/travis` as **public**. If he flipped it, it is public again from here, or this token is looking at the wrong lock. Believe the founder. Private-org webhook miss is real in Cursor’s forum. The 00:00 re-arm still did not boot B, and GitHub was showing public at that check.
