@@ -7,6 +7,7 @@
 
 - `**Wake:** hold` — waiting (sign, plates, leftover grain). File may land. No `wake-sa`.
 - `**Wake:** sa` — get-go. This push labels `wake-sa`.
+- Own line. The Action greps `^**Wake:** sa` as the whole line. Do not tuck it onto Status.
 - Missing line = hold.
 
 Draft is not the hold. “Then SA” in a sentence is not the hold.

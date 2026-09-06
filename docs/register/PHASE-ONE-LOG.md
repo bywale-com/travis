@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 09:52 UTC — Travis is the conversational PM; one trail. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 09:56 UTC — 011 did not wake Cursor: Wake was not its own line. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2783,3 +2783,15 @@ Open: is Travis the **trail** (this log), a **room diary**, **initiative notes**
 **Canon:** [`TRAVIS-AS-PM.md`](./TRAVIS-AS-PM.md).
 
 **Not planted:** the port that lets Travis write this file. 011 / 027 stay the desk recut.
+
+---
+
+## 2026-09-06 09:56 UTC — 011 did not wake Cursor (this seat)
+
+**Kind:** Gate miss. Same go. Not a recut.
+
+The Action ran on the go push (`b0b13b2`) and said: `PM-PACKET-011-VOICE-TPM.md is on hold (no **Wake:** sa)`. #140 has no labels. No SA boot.
+
+Cause: the hold grep is a **whole line** — `^**Wake:** sa`. The packet had `**Status:** Specified. **Wake:** sa` on one line. First push (`42c5088`) was `**Wake:** hold` — correctly silent. House push (`151d7a2`) did not touch the packet — correctly silent.
+
+Fix: Wake on its own line. That push is the get-go the go recut meant to be.

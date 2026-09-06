@@ -3,7 +3,8 @@
 **Number:** `011` — next PM packet is `012`. Never reuse. Index: [`PM-PACKETS.md`](./PM-PACKETS.md).  
 **Seat:** Technical PM. **SA** ascribes as **027**.  
 **When:** Named 2026-09-06. Go + recut same day.  
-**Status:** Specified. **Wake:** sa  
+**Status:** Specified.  
+**Wake:** sa
 **Test spec:** [`PM-PACKET-011-VOICE-TPM-TEST.md`](./PM-PACKET-011-VOICE-TPM-TEST.md)  
 **Flag:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) **14:00 UTC 2026-08-25**.  
 **Builds on:** 007 / 010 / 026 Hear · 051 New · 009 / 025 / 076 Stream · 073 / 075 Technical PM.  
