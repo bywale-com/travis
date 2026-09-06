@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 10:22 UTC — PM look 011 Pass (this seat). Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 11:08 UTC — The Log is a chat and it does not work as one. 012 go. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2823,3 +2823,17 @@ Fix: Wake on its own line. That push is the get-go the go recut meant to be.
 **Steps I could not do (human):** Vercel team SSO. Travis email link. Talk on a phone. Dest / reply door / timeout card / stay refresh / dest chips / spoken Hear.
 
 **Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-06 11:08 UTC — The Log is a chat; it is not one (founder)
+
+**Kind:** Packet cut. **Wake:** sa. Not a remint of 011 / 027.
+
+**Founder (preserved):** The app is generally unusable. … I should almost never even need to invent or specify anything again. … we’ve added a reply ability … if you reply to a message that was … a reply to another message, it doesn’t automatically send back to the person. … Forget the voice mode for now … the text side of the app is freaking unusable. … images don’t work, they don’t populate. … just prompt the engineer to just keep working on the app till it’s ready. Use computer use … it’s just a chat app. … I don’t give a fuck what V1 is. I just care what the app is right now … any agent should be able to go into the app … write a cohesive narrative of clearly how it needs to work … and how it just doesn’t do that by testing the app.
+
+**Story:** [`USABLE-CHAT.md`](./USABLE-CHAT.md). Packet [`PM-PACKET-012-USABLE-CHAT.md`](./PM-PACKET-012-USABLE-CHAT.md) · test [`PM-PACKET-012-USABLE-CHAT-TEST.md`](./PM-PACKET-012-USABLE-CHAT-TEST.md). SA **028**. Same PR [#140](https://github.com/bywale-com/travis/pull/140).
+
+**Looked (027 plant, not another src Pass):** Reply quotes. Dest does not follow the author. Images hang only from Cursor’s artifacts API. Look 011 never opened the Log (SSO) and Passed. He is on psi. psi is not #140.
+
+**Lock.** Reply dests that person. Pictures in the Cursor turn sit under the post. Engineer computer-uses the Log on psi until the sheet matches. Voice parked. Do not remint 027 columns.
