@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 10:22 UTC — PM look 011 Pass (this seat). Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 14:48 UTC — Lists show now: poll the open door. 013 go. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2823,3 +2823,17 @@ Fix: Wake on its own line. That push is the get-go the go recut meant to be.
 **Steps I could not do (human):** Vercel team SSO. Travis email link. Talk on a phone. Dest / reply door / timeout card / stay refresh / dest chips / spoken Hear.
 
 **Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-06 14:48 UTC — Lists populate too slow; hard refresh (founder)
+
+**Kind:** Packet cut. **Wake:** sa. Not a remint of 012 / 028. SSE still 023 silence.
+
+**Founder (preserved):** Messages, backlogs, e.t.c, populate too slowly, sometimes don't even show. Until hard refresh We need these more reliable and faster. How?
+
+**How (looked).** The phone already polls 1–3s (`streamPollMs`). The tick refetches the **whole** turn tape. Backlog is not on the tick; `listInitiatives` walks every ticket’s turns; a failed fetch **empties** the list. Open ticket is one-shot. Hard refresh is a clean GET.
+
+**Lock.** Tick paints the open door (Log / Backlog / ticket / rooms). Failed GET keeps last good rows. Turns after last `seq`. Backlog list is a list — not every thread. Foreground → tick now. No websocket this cut.
+
+**Packet:** [`PM-PACKET-013-LIST-LIVE.md`](./PM-PACKET-013-LIST-LIVE.md) · test [`PM-PACKET-013-LIST-LIVE-TEST.md`](./PM-PACKET-013-LIST-LIVE-TEST.md). SA **029**.

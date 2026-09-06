@@ -1,10 +1,10 @@
-# PM seat handoff — 2026-09-06 10:14 UTC
+# PM seat handoff — 2026-09-06 14:48 UTC
 
 **This bind is living.** `bc-25c5c6bf-006f-4252-9f25-49ab183835b2` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
 **Flag:** PHASE-ONE-LOG **14:00 UTC 2026-08-25** — do not overwrite.
 
-**Seat:** Technical PM. Inspect `src/`. Spec face + technical cut. Keep the log. Do not plant. Do not mint tables.
+**Seat:** Technical PM. Inspect `src/`. Spec face + technical cut. Keep the log. Do not plant.
 
 ---
 
@@ -12,18 +12,18 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **10:14 UTC 2026-09-06**. Flag **14:00**. |
-| Travis | Conversational PM. [`TRAVIS-AS-PM.md`](./TRAVIS-AS-PM.md). One trail = this log. Write port not planted. |
-| 011 | [`PM-PACKET-011-VOICE-TPM.md`](./PM-PACKET-011-VOICE-TPM.md). **Wake:** sa. SA **027**. |
-| Held | Travis write-port. Canvas. 022 on [#120](https://github.com/bywale-com/travis/pull/120). Travis-beyond-build / Grok Bot orchestra — discussed, not locked. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **14:48 UTC 2026-09-06**. Flag **14:00**. |
+| 013 | [`PM-PACKET-013-LIST-LIVE.md`](./PM-PACKET-013-LIST-LIVE.md). **Wake:** sa. SA **029**. Lists show without hard refresh. |
+| 012 | [`PM-PACKET-012-USABLE-CHAT.md`](./PM-PACKET-012-USABLE-CHAT.md) on [#142](https://github.com/bywale-com/travis/pull/142). Do not remint. |
+| Held | Travis write-port. Canvas. 022 on [#120](https://github.com/bywale-com/travis/pull/120). Grok Bot orchestra — discussed, not locked. |
 
 ---
 
 ## Next PM job
 
-1. Accept. Read Current, then the newest stamp, then `TRAVIS-AS-PM.md`.
-2. 011 is go. Do not fold the write-port into 027.
-3. Dest Technical PM is the cut, not the vision partner.
+1. Accept. Read Current, then the newest stamp.
+2. 013 is go. Poll the open door. Do not invent SSE this cut.
+3. Look on psi. Hard refresh to see a row is Fail.
 
 ---
 
@@ -31,7 +31,5 @@
 
 - Do not overwrite the 14:00 flag.
 - Do not plant `src/`.
-- Do not mint tables.
-- Do not append SYSTEMS-ANALYST-LOG.
+- Do not remint 012 / 028.
 - Do not put Hear it / Skip buttons back.
-- Do not plant Travis-appends-PHASE-ONE-LOG in 027.
