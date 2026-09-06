@@ -6,6 +6,8 @@ An **initiative** here is a pocket of work (014, 015, …). It is **not** a Back
 
 Hotfixes are their own initiative-shaped cuts. They already have [`../HOTFIX-NNN-*.md`](../HOTFIXES.md). They **get merged**. Do not park them.
 
+A **`House — …`** PR is trail / process only. Not an initiative. No folder. [`../HOUSE-PRS.md`](../HOUSE-PRS.md).
+
 ## Roles of the same PR
 
 These names are jobs, not extra pull requests.

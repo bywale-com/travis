@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 09:08 UTC — packet wait is `**Wake:** sa`, not prose. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 09:23 UTC — test sheets exact; House PRs. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2730,3 +2730,27 @@ Nothing else. Offer copy is already 02:28. Canvas stays later.
 **Hotfix path unchanged.** `HOTFIX-NNN` is already the go.
 
 **Do not** mint a fourth automation. Do not use draft as the hold. Do not remint 010 / 026. Next hotfix still **079**. Next packet still **011**.
+
+---
+
+## 2026-09-06 09:23 UTC — Test sheets are exact; House PRs (founder)
+
+**Kind:** Process lock. Not a packet. Not a hotfix. Do not recut 010’s test file.
+
+**Founder (preserved):** with test packets you have to be fucking precise, even with the exact thing you want them to do. That's the only way … in the expectation line, you can be very detailed in exactly what they should expect to see, in the order. … you can't be sloppy on that. … you don't have to change anything, just ensure that you update yourself. … If there's no active PR we're working on, what do you do? When you update, you create a PR … around what we just said, and then you push it immediately. … it will not be a packet PR or hotfix. It's literally just like a PR about … we should probably … model the naming convention of these kinds of PRs.
+
+**Test sheets (next cut; 010 file stays).** **Do** is the exact action — the sentence, the tap, the screen. **Expect** is the exact thing they see, **in order**. Not a vibe. Not “receipt that it went.” 008’s “that line is exactly:” is the bar. This stamp is the reminder. Do not rewrite [`PM-PACKET-010-SERVE-TEST.md`](./PM-PACKET-010-SERVE-TEST.md) unless he asks.
+
+**No active cut.** Do not ride a merged packet or hotfix. Open a PR for the stamp. Push it on that turn.
+
+**Name.** Third class, parallel to the other two:
+
+| Title | Class |
+|-------|--------|
+| `Packet NNN — …` | Product cut |
+| `Hotfix NNN — …` | Engineer cut |
+| `House — …` | Trail / process / hygiene |
+
+Canon: [`HOUSE-PRS.md`](./HOUSE-PRS.md). House does not wake seats.
+
+**010 / 134 / 138** are on `main`. Next packet **011**. Next hotfix **079**.

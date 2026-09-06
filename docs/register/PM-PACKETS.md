@@ -11,6 +11,10 @@
 
 Draft is not the hold. “Then SA” in a sentence is not the hold.
 
+**Test.** **Do** = the exact action. **Expect** = the exact thing they see, in order. Sloppy Expect is a bad sheet. 008 is the bar. Do not recut 010’s test unless the founder asks.
+
+**No active cut.** `House — …` — [`HOUSE-PRS.md`](./HOUSE-PRS.md).
+
 ## Packets
 
 | # | File | Where |

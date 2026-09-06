@@ -9,8 +9,8 @@
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
 | Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **079**. |
-| PR title | `Hotfix NNN — …` (human tell). Action: this push lands `HOTFIX-NNN-*.md` → `wake-engineer` only. No `wake-sa`. |
-| Test | Every hotfix gets a `HOTFIX-NNN-*-TEST.md` (same job as a packet test). Emerge mails that sheet. |
+| PR title | `Hotfix NNN — …` (human tell). Action: this push lands `HOTFIX-NNN-*.md` **and** the title starts with `Hotfix` → `wake-engineer` only. No `wake-sa`. Merging main into a packet PR is not a hotfix. |
+| Test | Every hotfix gets a `HOTFIX-NNN-*-TEST.md` (same job as a packet test). **Do** exact. **Expect** exact, in order. Emerge mails that sheet. |
 
 ## Hotfixes
 
