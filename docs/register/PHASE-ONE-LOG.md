@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:48 UTC — 076 ≈ 0.22M tokens floor (~0.015% of the 100% bar). Log PR hygiene. Merge #130. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:53 UTC — 076 billed 3.2M (B 1.9 + C 1.3) = ~0.23% of the included bar. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2597,3 +2597,50 @@ If there is **no** active cut PR: do **not** keep stamping on a finished hotfix.
 ### Merge
 
 [#130](https://github.com/bywale-com/travis/pull/130) is the living pile (074 hang, 075 apply, 076 closer, house, this trail). Founder: merge what needs to be merged. Merge it.
+
+---
+
+## 2026-09-06 02:53 UTC — 076 billed: 1.9M + 1.3M = 3.2M ≈ 0.23% of the bar
+
+**Kind:** Measure. Founder checked the two runs. Replaces the 02:48 floor as the 076 number. Do not edit 02:48.
+
+**Founder (preserved):** The engineer, for 076, cost 1.9 million tokens, and the PM was 1.3 million tokens. … what does that mean about the total percentage … of 076? … I think in total they might have ran for like, how many minutes? I don’t know if it was even up to 5 minutes … I don’t know the breakdown of … input, output, cache … the total, as what it says there was …
+
+### Billed (founder-read)
+
+| Run | Tokens he saw | Labor (created → last message) |
+|-----|---------------|--------------------------------|
+| B Engineer `bc-3d6452cd` | **1.9M** | **168 s** (2 min 48 s) |
+| C Look `bc-ac0a9930` | **1.3M** | **92 s** (1 min 32 s) |
+| **076** | **3.2M** | **260 s** labor |
+
+**Wall:** first boot → look done **4 min 35 s** (B created 02:11:59 → C last message 02:16:34). File-land → emerge was **5 min** only because ~20 s sat before B and a few seconds after C. Neither run was 5 minutes. Together they were not quite 5.
+
+### His bar (same 764M = 54%)
+
+100% included ≈ **1.415 billion** tokens (764 ÷ 0.54).
+
+| 076 = 3.2M as | Number |
+|---------------|--------|
+| Share of the **100% bar** | **0.226%** (~a quarter of one percent) |
+| Share of the **764M already used** | **0.42%** |
+| How many 076s fill a **full** included period | **~442** |
+| How many 076s fill the **remaining 46%** | **~203** |
+
+The 02:48 floor (0.219M unique ≈ 0.015%) was unique text, not billed. Billed ÷ unique ≈ **15×**. That is the max-window replay, not new words.
+
+### Input / output / cache
+
+Still no split. This seat cannot read Spending line items.
+
+What 15× means: the 3.2M is almost all **context the run touched** (the window replayed each turn), not 3.2M new tokens written. Look is shorter wall and still 1.3M because C swallows hotfix + PR + logs in one gulp (14k billed tokens/s). Engineer is 1.9M over 2:48 because it planted (11k/s). Output from two short Fast runs is tens of thousands, not millions. Cache would change the **dollar**, not the “1.9 / 1.3” he already has.
+
+### Dollar (list, still not an invoice)
+
+Cursor Models included — this may only move the bar.
+
+If 3.2M were Fast input uncached: **~$13**. Cache-heavy: a few dollars. A little output at $12/M does not move it much. Not this bind’s night. Not `getUsage`.
+
+### Hygiene
+
+[#130](https://github.com/bywale-com/travis/pull/130) merged. This stamp is a **log PR**, not a 074 rider. Next cut still **077** / packet **010**.
