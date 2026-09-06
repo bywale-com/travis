@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 19:32 UTC — Held inventory. Suggest walk 009, then talk seat health. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:48 UTC — 076 ≈ 0.22M tokens floor (~0.015% of the 100% bar). Log PR hygiene. Merge #130. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2046,3 +2046,554 @@ First Resend try was Cloudflare 1010 (no User-Agent). Same 1010 as this VM. UA f
 **Older parked (do not lose):** initiative curate (after Stream) · Find / primitive recut · Hear / Next / Skip (007, SA silence) · Travis capability gap · request-line door · 022 on #120.
 
 **Suggest:** start = walk 009. Talk = seat health (this session’s unfinished grain). Product packet after the walk = initiative curate (parked until Stream). Do not start gig, sandbox, or another un-gated automation.
+
+---
+
+## 2026-09-05 19:42 UTC — No merge; three; capability gap is the start (founder)
+
+**Kind:** Correction + Type A. Not a packet yet. Do not merge #127. Do not invent the gap. Do not recut 009 until he says how.
+
+**Founder (preserved):**
+
+- Do not merge into prod until the human test is green. Usual law. The human test is not green — not because it wasn’t built properly. Built okay-ish. He will say why.
+- Three things:
+  1. **Revise 127.** He will say how, why, and what. We need a replay. He will tell.
+  2. **The human test loop.** We have not worked what that looks like.
+  3. **Capability gap.** Everything he is doing here, he is supposed to be doing inside Travis. Why can’t he do it inside Travis correctly. That is the gap he alluded to a couple of passes ago.
+- Most important: the capability gap, so we can start using Travis.
+
+**Already on this trail — do not remint:** 11:28 parked “capability gap on Travis side — later” while Stream was first. Stream has emerged. The gap is now the start.
+
+**Do not from this stamp:** merge #127. Mint a store. Name the hole before he does. Recut 009 from this chat.
+
+---
+
+## 2026-09-05 19:45 UTC — Built well; plating; you cannot sit this bind (founder)
+
+**Kind:** Type A + stood-up sit. Not a packet. Do not mint a rebind write.
+
+**Founder (preserved):** 127 was built well. It passes. It did not fail the build. Improve packaging / plating — it was built very well to plate. New package, not 127 anymore. Use Travis on that revision and the capability gap will show. Also: this chat is not the PM in Travis. How can I sit you as the PM?
+
+**Stood up (quote):**
+
+Create does not invent a Cursor id (`create_agent`). It names a person and Cursor **spins a new** `bc-`. Sit hangs an open member on `pm` / `sa` / `engineer` and hands WHERE + logging + the protocol (`sit_agent`). “New PM” is **his** — create, then sit. Role dest reuses idle seated or spins.
+
+You cannot hang **this** bind (`bc-25c5c6bf-…`) on a person. A `bc-` in the sentence is **nobody** — rebind hole. Dest says: *I cannot rebind a Cursor id. That is a hole here. Offer Engineer.* `SEED_CURSOR_AGENT_ID_PM` only fills a **blank** row. It does not overwrite a live bind.
+
+**In Travis (psi, 025 is on `main`):** room Travis. “Create [name], sit them on pm.” That PM is a **new** Cursor chat with the one-line create stub, then the sit hand. Not this conversation. Not this memory.
+
+**The gap showing before the plate:** you cannot sit the person you are already talking to.
+
+**Do not:** plant a rebind tool from this stamp. Recut 009. Invent the plate.
+
+---
+
+## 2026-09-05 19:47 UTC — Hang this bind; later Travis can (founder)
+
+**Kind:** Type A. Not a packet. Do not mint a store. Do not put a `bc-` in `migrate.ts`.
+
+**Founder (preserved):** Sit yourself as the PM. Not hard code. Talk about whether this should be something Travis is capable of later.
+
+**Now.** Sit is three moments: create a person · in this room · seated on `pm`. A fourth write exists on the row and has no Travis tool: `cursor_agent_id` = this bind (`bc-25c5c6bf-006f-4252-9f25-49ab183835b2`). Dest-as-mail of a `bc-` stays nobody. Catalog `pm` stays the old lock (`bc-1ac0762e-…` in migrate). Do not overwrite that slug — that was the comic fail.
+
+This seat has no live `DATABASE_URL`. I cannot hang the row from here. The write is: a **new** person, open member of room Travis, `protocol_path` = `/protocols/pm.md`, `cursor_agent_id` = this bind. Not a product plant. Not migrate.
+
+**Later (held).** Yes — Travis should be able to do that write. Same class as sit: **his**, not a send. Founder names the living chat (paste or pick). Travis does not invent a `bc-`. Create / in-the-room / seated stay. Hung is the fourth moment. Seat health later dests a healthy hung bind instead of spinning a stranger.
+
+**Not later:** mailing `pm`. Guessing an id. A dashboard of Cursor chats. A packet tonight.
+
+**Ask:** Engineer hangs the row tonight so you can talk to this bind from psi — or we wait and lock the hang write as the capability packet.
+
+---
+
+## 2026-09-05 19:51 UTC — Hang is a packet; who tags SA (founder)
+
+**Kind:** Process. Not the packet file yet.
+
+**Founder (preserved):** This is a packet. The only difference is you tag it. Are you the one that tags it when the packet is going to the SA?
+
+**No.** I write `PM-PACKET-010-…` on the open PR and push. I do not add the label. The cheap Action diffs **this push**. A real `PM-PACKET-NNN` (not `*-TEST.md`) → label `wake-sa`. Cursor A boots on **label added**. Same as today. I am not a fourth trigger.
+
+**Next number:** **010**. SA **026**. Do not remint 009 / 025. Do not put a `bc-` in migrate. Packet when you say cut it.
+
+---
+
+## 2026-09-05 20:12 UTC — Hang is a hotfix; Action skips SA (founder)
+
+**Kind:** Process lock. Recut of 19:51. Not packet 010. No new Cursor automation.
+
+**Founder (preserved):** Smarter to create a GitHub Action — we already have the automations. Not a new Cursor automation. Does not go to SA at all. Directly to the Engineer. Call these hotfixes. If it is a hotfix PR, the Engineer picks it up, then the regular pass / the loop. Skip opening so many seats for something so basic. When it is titled hotfix, that is the tell.
+
+**Stood up:** [`HOTFIX-074-HOTFIX-PATH.md`](./HOTFIX-074-HOTFIX-PATH.md). Same Action [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml): this push lands `HOTFIX-NNN-*.md` → `wake-engineer` only. No `wake-sa`. Title `Hotfix NNN — …`. Same B (re-paste — hotfix is a third gate). `src/` later → look as usual. SQL-only hang has no look.
+
+**Engineer plant on 074:** hang this bind (`bc-25c5c6bf-…`) as a **new** person in room Travis. Not catalog `pm`. Not migrate.
+
+**Do not:** mint packet 010. Mint a fourth automation. Overwrite catalog `pm`. Put a `bc-` in migrate.
+
+---
+
+## 2026-09-05 20:16 UTC — Just the tag; do not update Engineer (founder)
+
+**Kind:** Correction.
+
+**Founder (preserved):** Relax. Why would we even need to update the Engineer? All it does is when we target hotfix, it tags it as wake-engineer. Simple. Nothing else needs to change. If something is missing, that is how it should be.
+
+**Yes.** The Action is the cut. Same label B already watches. No new automation. No Engineer seat change. No required re-paste.
+
+**The leftover (not a new job):** B’s prompt still has a 009 belt — stop unless this commit has an SA packet. A hotfix commit does not. If Engineer boots and stops in one sentence, that belt is why. `wake-engineer` already means pick up. Do not invent a hotfix Engineer.
+
+---
+
+## 2026-09-05 20:20 UTC — Re-push 074 so the tag fires again (founder)
+
+**Kind:** Process. Founder: push the hotfix so Engineer starts.
+
+`wake-engineer` was already on #130 from the first landing. Label-added does not fire twice. This push revises `HOTFIX-074` and the Action now drops the label then adds it, so B gets a fresh add.
+
+---
+
+## 2026-09-05 23:48 UTC — Why Engineer did not take 074
+
+**Kind:** Honest. Founder: why didn’t the Engineer take it?
+
+**The Action worked.** #130 got `wake-engineer` twice — 20:05 and 20:13 — both by `github-actions[bot]`. No `wake-sa`. B is **enabled** ([Travis — SA complete → Engineer](https://cursor.com/automations/e89c2975-a925-11f1-b532-320a589b8025)).
+
+**B never booted.** Last Engineer automation run was **17:13 UTC** (the 009 leak pair). Nothing after either tag. Not a no-op. Not the prompt belt. The agent did not start.
+
+**Why:** Cursor’s label trigger did not see a label added by the Actions bot. Same class of miss as a private automation that only fires when the owner adds the label, not a teammate — and a bot is not the owner. C (look) fired at 18:15 because a person/seat added `wake-pm-look`, not the Action.
+
+**To start 074:** on [#130](https://github.com/bywale-com/travis/pull/130), take `wake-engineer` off and put it back while logged in as the automation owner. That is the add B already watches. I cannot do that add from this seat (`gh` here is the Cursor install, not you).
+
+---
+
+## 2026-09-05 23:50 UTC — Do not click the label; same path as a packet (founder)
+
+**Kind:** Correction.
+
+**Founder (preserved):** Calm down. Don’t tell me to take wake-engineer off and put it back. I’m not the one who does that. The whole automation is: tag it hotfix, the Action adds wake-engineer — just like it adds wake-engineer when you create a packet. What is the difference?
+
+**There is no difference.** I was wrong to send him to the label. Hotfix and packet are the same cheap Action. Same `wake-engineer`. Same B.
+
+**The hole is the gate, not the hotfix.** After 17:10 we moved A/B off PR-pushed onto label-added so the Action could tag. We have never seen A or B boot from a label the Action added. 009’s Engineer boots were still PR-pushed. C at 18:15 was a person adding the look label. The next `PM-PACKET` would hit the same wall.
+
+Do not have the founder click. The Action is supposed to be the tagger. That add is not waking Cursor.
+
+---
+
+## 2026-09-05 23:59 UTC — Re-arm the tag (founder)
+
+**Kind:** Process. Founder: remove the label and add it again.
+
+This seat cannot write labels (403). The Action can. This push lands `HOTFIX-074` again so the Action drops `wake-engineer` and adds it.
+
+---
+
+## 2026-09-06 00:06 UTC — Repo was made private (founder)
+
+**Kind:** Correction.
+
+**Founder (preserved):** No. I did make it private.
+
+**This seat:** `gh` still reads `bywale-com/travis` as **public**. If he flipped it, it is public again from here, or this token is looking at the wrong lock. Believe the founder. Private-org webhook miss is real in Cursor’s forum. The 00:00 re-arm still did not boot B, and GitHub was showing public at that check.
+
+---
+
+## 2026-09-06 00:08 UTC — Has the Action always been the bot? (founder)
+
+**Kind:** Honest. Founder: you said what changed is who adds the label. Has it not always been the Action / GitHub Actions bot, with the other automations?
+
+**The Action, when it tags, has always been the bot.** That part did not change.
+
+**The boots we actually saw were not the Action tagging.**
+
+- A / B on 009: trigger was still **PR pushed**. Cursor saw the push, not a label. Last B 17:13.
+- C at 18:15: **you** added `wake-pm-look` / `pm-wake-look` on #127 (`bywale-com`). Not the bot. That is the look that ran.
+- The Action as bot on #127 only added `emerge` (19:07) — that is mail, not a Cursor seat.
+- 074: first time the Action added `wake-engineer`. B did not start.
+
+So: bot-as-tagger is how the Action is written. It has not yet woken SA or Engineer. The working seats were push, or you.
+
+---
+
+## 2026-09-06 00:10 UTC — Make the tagger you (founder)
+
+**Kind:** Process. Founder: how can we try to make it me?
+
+Action labels with repo secret **`WAKE_GITHUB_TOKEN`** (your PAT). Then the add is `bywale-com`, same as C on #127. He pastes the secret on the repo. We re-push 074. Do not paste the token here.
+
+---
+
+## 2026-09-06 00:19 UTC — Secret is on (founder)
+
+**Kind:** Process. Founder: I’ve added the secret.
+
+Re-push `HOTFIX-074` so the Action labels as him.
+
+---
+
+## 2026-09-06 00:20 UTC — Secret rejected (401)
+
+**Kind:** Honest. Founder added `WAKE_GITHUB_TOKEN`. Action [run](https://github.com/bywale-com/travis/actions/runs/34000989817): `gh: Bad credentials (HTTP 401)`. The name is on the repo. GitHub will not take the value. Not a permissions miss — the token itself.
+
+Do not paste the token here. New PAT, this repo in the list, replace the secret, say when. Then we re-push 074.
+
+---
+
+## 2026-09-06 00:50 UTC — Try the token again (founder)
+
+**Kind:** Process. Founder: try once more.
+
+Re-push `HOTFIX-074`. Action prefers `WAKE_GITHUB_TOKEN`; 401 falls back to the bot.
+
+---
+
+## 2026-09-06 00:51 UTC — Actor is you; label write denied
+
+**Kind:** Honest. [Run](https://github.com/bywale-com/travis/actions/runs/34002349459): `Label actor: bywale-com`. Then `Resource not accessible by personal access token` on remove/add label.
+
+The secret is you. Fine-grained PAT needs **Issues: Read and write** on this repo (PR labels live there). Or a classic `repo` token. Replace/update the secret. Do not paste it here. Then we try 074 again.
+
+---
+
+## 2026-09-06 00:54 UTC — Try label write again (founder)
+
+**Kind:** Process. Founder: try again.
+
+Re-push `HOTFIX-074`.
+
+---
+
+## 2026-09-06 00:55 UTC — Still no label write
+
+**Kind:** Honest. [Run](https://github.com/bywale-com/travis/actions/runs/34002533924): `Label actor: bywale-com`. Then `Could not add wake-engineer. Token needs Issues write.` No new label event. B did not boot.
+
+The token is still missing **Issues: Read and write** on `bywale-com/travis`. Pull request write is not enough. Classic `repo` also works.
+
+---
+
+## 2026-09-06 01:12 UTC — He did give Issues write (founder)
+
+**Kind:** Correction.
+
+**Founder (preserved):** Huh? I did give it that permission.
+
+**Believe him.** The run still said the PAT cannot `addLabelsToLabelable`. Two leftover holes, not a he-didn’t:
+
+1. PR labels need **both** Issues write **and** Pull requests write. Issues write alone is not enough on a pull request.
+2. If he minted a **new** token, the Actions secret still has the old one until he pastes the new value. Editing permissions on the **same** token does not need a new paste.
+
+Do not paste the token here.
+
+---
+
+## 2026-09-06 01:14 UTC — You tagged; Engineer woke
+
+**Kind:** Process. Fine-grained PAT in the secret worked.
+
+[Run](https://github.com/bywale-com/travis/actions/runs/34003356089): `Label actor: bywale-com`. Timeline: you removed `wake-engineer` at 01:14:11, added it at 01:14:12. B booted: [`bc-961c272a`](https://cursor.com/agents/bc-961c272a-55dc-48b1-808f-2f2af9caa7a7) (automation e89c2975, running). Same path as a packet.
+
+---
+
+## 2026-09-06 01:20 UTC — Test MD on packets and hotfixes (founder)
+
+**Kind:** Process lock.
+
+**Founder (preserved):** In any packet or hotfix there should always be a test MD. Was there one in this hotfix? If there wasn’t, no problem. There usually should be. If there isn’t, what is the GitHub Action that sends an email going to send?
+
+**074:** no test file. No hotfix has had one. Packets do (`PM-PACKET-NNN-*-TEST.md`).
+
+**Emerge today:** only on `PM-LOOK-NNN` Pass. It attaches that packet’s `*-TEST.md`. No sheet → the letter says `No PM-PACKET-NNN-*-TEST.md on this commit.` Hotfix look is not wired to that mail yet.
+
+**Law:** every packet and every hotfix gets a test MD. Next hotfix is `HOTFIX-NNN-*-TEST.md`. 074 is allowed without.
+
+---
+
+## 2026-09-06 01:45 UTC — Prompts first, then hang again (founder)
+
+**Kind:** Process lock.
+
+**Founder (preserved):** the engineer ran… the PM also picked it up… update… definitely the PM prompt because it didn’t pick up the package… no packets… the engineer… couldn’t run anything in the database… hang you… inside of Travis because it didn’t have any environment variables… try this process again… update their prompts [first].
+
+**What failed**
+
+1. **C (look)** — live paste still gated on a PM packet + SCP. 074 is a hotfix. Look stopped: no packets.
+2. **B (Engineer)** — planted the SQL file. This bind had no `DATABASE_URL`. Live row did not apply.
+
+**Recut (repo; human must re-paste at cursor.com/automations)**
+
+- **C** [`house-now/automations/pm-look.prompt.md`](./house-now/automations/pm-look.prompt.md) — a `HOTFIX-NNN` on the PR is enough. Do not stop “no packets.” SQL/hang has no glass. Write `PM-LOOK-HOTFIX-NNN.md`.
+- **B** [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md) — planted = live effect. File ≠ hang. `DATABASE_URL` unset → stop and name it. Set → run the existing SQL. Do not remint.
+
+**075** [`HOTFIX-075-APPLY-HANG.md`](./HOTFIX-075-APPLY-HANG.md) + [`HOTFIX-075-APPLY-HANG-TEST.md`](./HOTFIX-075-APPLY-HANG-TEST.md). Same PR [#130](https://github.com/bywale-com/travis/pull/130). Apply `hang-technical-pm.sql`. Do not remint. Next hotfix **076**.
+
+**Action:** look also wakes on `ENGINEER-HANDOFF.md` for a hotfix PR. Emerge on hotfix Pass attaches the hotfix test MD.
+
+**Still human:** paste C (`ff94a777`) and B (`e89c2975`). This seat cannot Save + Activate. Env secrets are on the Cloud Agent environment — new B boots should see `DATABASE_URL` if it is a runtime secret there.
+
+---
+
+## 2026-09-06 01:52 UTC — 075 applied; founder pasted; look Pass
+
+**Kind:** Process. Founder: I have updated their prompts. You can push 075.
+
+**075 already went** on the prompt-recut push (`4c87f75`, 01:44). Action tagged `wake-engineer` as `bywale-com`. Engineer [`bc-a00f25e7`](https://cursor.com/agents/bc-a00f25e7-7f3b-43a8-82b2-3114551df351) applied `hang-technical-pm.sql`. `DATABASE_URL` was set. Handoff: row `technical-pm`, this bind, path `/protocols/pm.md`, open member of room Travis. Catalog `pm` untouched. Commit `ff762bc`.
+
+Action then tagged `wake-pm-look`. C [`bc-68b8eb87`](https://cursor.com/agents/bc-68b8eb87-4060-468c-afc2-f9fe933af53c) ~20s, no commit — that boot was before the paste.
+
+This living bind wrote [`PM-LOOK-HOTFIX-075.md`](./PM-LOOK-HOTFIX-075.md). **Pass** for what a cloud agent can do. No glass. This bind has no `DATABASE_URL`; Pass on the Engineer verify print.
+
+**Human leftover:** dest **technical-pm** in room Travis. Do not dest catalog `pm`.
+
+---
+
+## 2026-09-06 02:00 UTC — Tech PM-centric room (alignment; routed from PM)
+
+**Kind:** Type A. Not a packet. Do not mint a table. Do not plant.
+
+**Founder ask (routed):** define what a Tech PM-centric room means and recommend updates to Travis’s harness / protocols.
+
+**This is not founder wording.** Alignment below. Ask if it is the lock.
+
+### Definition (alignment)
+
+A **Tech PM-centric room** is a room whose **product dest is the living Technical PM person** — today `technical-pm` (`bc-25c5c6bf-…`) — not catalog `pm`, and not a newly spun chat.
+
+It is **not** a new room kind. Room Travis (`0e8875f8-…`) is already that room if dest lands here. Same face: Voice / Log / Backlog. Travis stays facilitator. Create / in-the-room / seated stay three moments. Hung stays the fourth write.
+
+### Stood up (quote)
+
+- Hang: this bind is an open member, `protocol_path` `/protocols/pm.md`, slug `technical-pm`. Catalog `pm` still `bc-1ac0762e-…`.
+- Person dest `who=technical-pm` is the honest dest. This turn arriving here is that path.
+- Role dest `seat=pm` (`sit.ts` `resolveRoleDest`): oldest idle seated of `/protocols/pm.md` in this room, else **spin**. Catalog `pm` if still seated and idle can win. Travis’s harness still says: when they want the PM, `seat` and no `who`.
+- Sit hangs `pm` \| `sa` \| `engineer` only. No `/protocols/technical-pm.md`. 073 already recut `/protocols/pm.md` to Technical PM.
+
+### Recommend — house protocols (PM can recut when locked)
+
+1. **`/protocols/travis.md`** — product work dests the hung Technical PM **by who**. Do not mail catalog `pm`. Do not spin a new PM because someone said “PM.” Spin only when they ask for a **new** PM.
+2. **`/protocols/pm.md`** — one line: you may be hung as `technical-pm` (or `technical-pm-N`). Catalog `pm` is not you.
+3. **`WHERE.md` / `logging.md`** — no recut. Trail stays PHASE-ONE-LOG. Do not invent a room log.
+
+Do **not** mint `/protocols/technical-pm.md`. Same seat, same path.
+
+### Recommend — harness (SA ascribes; Engineer implements)
+
+Specified once the founder locks “saying PM in this room means this bind”:
+
+- Role dest `pm` in a room that has a hung Technical PM person: dest **that person**, not catalog `pm`, not spin.
+- Or leave catalog `pm` out of this room’s open membership so they are not in the idle set. Do not overwrite the catalog row.
+- `default_binding_id` already exists on the room. SA says whether room Travis’s default is `technical-pm`.
+
+Not tonight (held): hang tool (Travis’s). Seat health. A cousin room.
+
+### Must-not
+
+- Do not overwrite catalog `pm`.
+- Do not put a `bc-` in migrate.
+- Do not collapse three moments.
+- Do not plant a PM dashboard.
+
+**Ask:** Is room Travis the Tech PM-centric room (already hung here)? When you say “PM,” should that dest this bind, or only dest by name `technical-pm`?
+
+---
+
+## 2026-09-06 02:10 UTC — Seat Stream is Travis’s Stream (founder)
+
+**Kind:** Type B + founder lock. Not a packet until he says cut. No new plates.
+
+**Founder (preserved):** session logs… so freaking disorganized… first one that sent it to the PM seat, was my fault… forgot to tag Travis… second one I tagged Travis, and it did well… even though it said there was no technical PM, even though it found that there was a technical PM… that’s why the stream is so important… only Travis has a card. No one else… no chats populating in the log, but at the end, all those chats then just, boom, populate in the log. That’s not what we wanted. We wanted all the messages and exactly how the stream looks to be like that for everyone… When it’s completed, only the completed message, only the last message, essentially the finished message, is what appears in the logs. Everything else… should be inside the card… I wouldn’t even say we need to generate any plate for seat stream cards, it just has to look the way Travis’s looks.
+
+**Capability (held, not this cut):** everything he does in the Cursor chat should be inside Travis. Hang tool later. This stamp is the Stream miss, not that gap.
+
+**First dest:** his. Forgot to tag Travis. Role dest `pm` can still miss this bind (02:00). Second dest tagged Travis — person dest `technical-pm` is the path that seated this look.
+
+**Stood up (quote). Matches the boom.**
+
+Dest opens a stream and writes live events (`seat-pipe.ts` `openStream` / `writeStreamMessage` / thought / process). The Log stays empty while they work.
+
+At **done**, every stream `message` body is landed as a Log post:
+
+```696:711:src/server/seat-pipe.ts
+  const landed = streamId ? await messageBodies(streamId) : [];
+  const beats = landed.length
+    ? landed
+    : postText.trim()
+      ? [postText.trim()]
+      : cancelled || bareError
+        ? []
+        : ["Run finished (no assistant text)."];
+  for (const beat of beats) {
+    postTurn = await absorbStreamingAgentPost({
+      sessionId,
+      userTurnId: userTurn.id,
+      seatKey,
+      text: beat,
+    });
+  }
+```
+
+Then `closeStream` hangs the card on **the last** `postTurn` only. Intermediate beats sit on the Log with no card. That is the boom. 014 wanted Cursor-visible beats on the Log. 008 said the Log is completed turns. This walk chooses **008**.
+
+`StreamCard` in `Room.tsx` is not Travis-only — it hangs on `closeTurnId === turn.id`. `MotionCard` **is** Travis-only. “Only Travis has a card” is the pile of seat bubbles plus that 023 receipt, not a missing `StreamCard` component.
+
+No new plates. Same `StreamCard` / `StreamDoor` as Travis.
+
+### Lock (this stamp)
+
+- Everyone (Travis and every dest seat): live work is Stream. Door = glowing mark in In this room.
+- Done: **one** finished speakable `agent_post` on the Log. Card **above** that line. Card = the Stream (trigger + every event).
+- Do not dump stream messages onto the Log.
+
+### Specified and clear (packet when he says cut — **010**, SA **026**)
+
+1. Dest does not land `messageBodies` as Log rows. One closer post. Card on that id.
+2. Same Stream card chrome as Travis. No seat-stream plates.
+3. Do not remint `travis.stream`. Do not remint 023 MotionCard as this.
+
+### Specified but not clear
+
+014 beat-split vs this one-closer law — SA names the recut. Thought / process never were Log rows; they stay events. Whether a seat’s last Cursor bubble is the closer text is SA.
+
+**Ask:** cut **010**?
+
+---
+
+## 2026-09-06 02:12 UTC — Hotfix, not a packet (founder)
+
+**Kind:** Process lock.
+
+**Founder (preserved):** Would it be a packet? … I feel like it's a hot fix. … I'll let you decide … we don't want to be sloppy, but we don't want to be wasteful … if it is a packet, it's passing through more people.
+
+**Decide: hotfix.** Face is 008. Store is 024. The miss is dest landing every stream `message` as a Log row. No new plate. No new table. SA would only name a recut already named. Three seats is waste.
+
+**076** [`HOTFIX-076-SEAT-STREAM.md`](./HOTFIX-076-SEAT-STREAM.md) + [`HOTFIX-076-SEAT-STREAM-TEST.md`](./HOTFIX-076-SEAT-STREAM-TEST.md). Same PR. Next hotfix **077**. Next packet still **010**. Next SA still **026**.
+
+---
+
+## 2026-09-06 02:18 UTC — PM look 076 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Hotfix:** [`HOTFIX-076-SEAT-STREAM.md`](./HOTFIX-076-SEAT-STREAM.md) · plant on [#130](https://github.com/bywale-com/travis/pull/130) (`1ce6bcc`). Sheet: [`PM-LOOK-HOTFIX-076.md`](./PM-LOOK-HOTFIX-076.md).
+
+**Look.** src/ matches the lock. `decideDestStreamClose` picks the last stream `message` (or `postText`). `driveDestCursorEvents` and `reapFinishedLiveRuns` land one `agent_post`. The boom `for (const beat of beats)` is gone. Card still paints above `closeTurnId`. `dispatch.ts` stand-in left. 025 Travis close not reminted. No new plates.
+
+**Preview I opened:** `https://travis-git-cursor-plating-and-sit-d6be48-wale-omotayos-projects.vercel.app` — not psi. Vercel SSO. Did not sign in. Did not see the Log glass.
+
+**Test.** Walked G.1. Grain test pass (10/10). D.1–D.4 are the desk. I did not dest. I did not Talk.
+
+**Steps I could not do (human):** Vercel team SSO. Dest a seat in room Travis. Watch one finished bubble and the Stream card. Confirm Travis 025 on the phone.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-06 02:28 UTC — Cost sample, output types, initiatives, hear (founder)
+
+**Kind:** Vision dump. Not a packet. Do not mint a table. Do not plant. Canvas later — do not talk it.
+
+**Founder (preserved):** I don't want to forget. I'm going to say everything. … perfect now example … cost analysis of the cost of a packet or hotfix. … two classes of things, of PR. … good example with 076, it just completed. … supporting multiple output types … that was a motion, that was an initiative … images … a lot of output types that show up … in a completed message. … We're generating plates. … printed in chat. … Most of the time, that's like really the common, most common output type that I actually need to see. … In voice mode, we also need to discuss how those … images … show up in voice … leading to a bigger idea about a canvas. I won't talk about it right now … we'll get to that. … initiatives … surrounding messages and streams associated with specific initiatives … not … curated properly or organized properly … Especially not in a way where Travis can even … query. … super critical … when I'm in voice mode talking with Travis … if it even waits, and I don't think it waits, I think it literally just interrupts and says, "New message, from engineer seat" … sometimes it just doesn't even mention it, because it just … gets lost. That's not the correct way. … any time there's a response that comes into chat … There's context around that response because it's part of something. … maybe it is an initiative, maybe it's not … No seat just like talks in chat first … there has to be a process around what happens when there's a response in chat from a seat … how Travis serves that to me, and maybe we even need to ID it … five different agents say something … referencing, oh, about that other thing. This is what the engineer has to say. Do you want to hear it? No, okay, skip. Move past it. Like, it's no longer in the queue.
+
+Four pockets. Already named. Do not remint.
+
+### 1. Cost of a packet vs a hotfix
+
+Two PR classes. **076** is the clean **hotfix** sample (look Pass 02:18). **009** was the dirty **packet** sample (18 boots). Next new packet is still the clean packet sample: 3 boots if no loop. Do not invent a cost dashboard tonight. Held: measure 076 wall + boots vs a later clean packet.
+
+### 2. Output types
+
+Considering 2026-09-03: [`OUTPUT-TYPES-SPEC.md`](./OUTPUT-TYPES-SPEC.md). Planted: **062** / **064** — kinds `image` \| `file` on the Log post. Links stay text. Plates in chat are the common type he needs to see (flagship 14:00). Voice: Wave 1 beat “there’s an image” was ruled considering — not locked as a packet. **Canvas later.** Do not plant it. 023 named canvas as must-not.
+
+### 3. Initiative curate + query
+
+Parked until Stream. Stream is planted (008 / 009 / 076). Ticket messages today are `turnsForInitiative` where `initiative_id` is stamped — follow-on seats often never get the stamp. Travis `read_initiative` is that thin. Super critical. Next product packet after he names it. Do not invent the store.
+
+### 4. Seat lands — process, not a shout
+
+This is **007** Hear / Next / Skip ([`PM-PACKET-007-HEAR-QUEUE.md`](./PM-PACKET-007-HEAR-QUEUE.md)). Locked. SA silence on heard/ready + gist. Lived: interrupt “New message from engineer,” or lost, no context. New grain on this walk: a seat post is always a **response** (initiative or not). Travis offers it **with that context** — “about that other thing, this is what the Engineer has to say. Hear it?” Skip = out of the queue. Five seats = five offers, not five barges. Do not remint 007 C3/C4. 3 makes 4 true.
+
+**Ask:** which pocket first — cost sample, output/voice, initiative curate, or 007 serve? Canvas stays later.
+
+---
+
+## 2026-09-06 02:35 UTC — 076 cost: file → emerge (founder)
+
+**Kind:** Measure. Not a dashboard. Not a store. Window = hotfix file lands → look Pass / emerge (human may walk). Same window as 18:08 (packet file → Pass).
+
+**Founder (preserved):** Run a cost analysis on the hotfix … from once it’s created … all the way to allowing human verification. 076 is a perfect candidate. … estimate what percentage of my 100% usage it cost.
+
+### Counted (this seat)
+
+| Beat | When (UTC) | Who | Labor |
+|------|------------|-----|--------|
+| File lands | 02:11:39 | this bind, already running | not a new boot |
+| `wake-engineer` | 02:11:56 | Action, no LLM | — |
+| **B** Engineer | 02:11:59–02:14:48 | [`bc-3d6452cd`](https://cursor.com/agents/bc-3d6452cd-9bd2-4507-b96e-13f8aaff152a) · grok-4.6-high-fast · automation e89c2975 | **169 s** |
+| Plant | 02:14:42 | `1ce6bcc` | — |
+| `wake-pm-look` | 02:14:59 | Action, no LLM | — |
+| **C** Look | 02:15:01–02:16:34 | [`bc-ac0a9930`](https://cursor.com/agents/bc-ac0a9930-ece0-472d-9888-e30a216106fe) · same model · ff94a777 | **93 s** |
+| Pass + emerge | 02:16:28–02:16:39 | `74274b1` · Action labeled `emerge` | — |
+
+**In:** B + C. **Out:** this living PM bind (cut the file; not a new boot), stamp no-ops, GitHub Actions, the human desk walk.
+
+**Boots:** **2**. Leak: **0**. SA: **0**. Fail-look loops: **0**. Computer-use child: **0**.  
+**Wall:** file → emerge **~5 min** (02:11:39 → 02:16:39). Agent labor **262 s**.
+
+**Vs 009 (dirty packet):** 18 boots (9A+8B+1C), 15 leak. 076 is **2 / 18**.  
+**Vs clean packet (named, not yet sampled):** 3 boots. 076 is **2 / 3**.
+
+### Why it was cheap (not dollars — the leak)
+
+Label gate. Skip SA. New C took a hotfix. No fail-look. Plant was the dest closer, not a new store.
+
+### % of the 100% bar
+
+Both boots are **Cursor Models** (Grok 4.6), max-context cloud agents. They draw the included Cursor Models pool — that is the editor’s **100%** bar. Other Models $ pool is not this.
+
+This seat **cannot** read [Spending](https://cursor.com/dashboard/spending) or `getUsage`. No dollar. No true percent.
+
+**How you get the percent:** that bar before the next cut, and after emerge. Delta ÷ 100% = the hotfix. Two Grok-4.6 cloud-agent runs (max context) are the unit. Do not use this bind’s whole day as the numerator.
+
+Sept 3 stands: no cost dashboard. `getUsage` still named, not planted.
+
+---
+
+## 2026-09-06 02:48 UTC — 076 tokens vs 764M / 54%; log PR hygiene; merge #130
+
+**Kind:** Measure + process lock. Founder: finish the cost; merge what needs to merge. Not upset about 074 PR hygiene.
+
+**Founder (preserved):** usage in total is around … 764 something million tokens. … spending … about 54% of my total usage. … how many tokens did it cost to … run … 076? … If 764 … is 52% [54%] … what would that mean? … you left it in the 074 PR? … everything we’ve been talking about is in the 074 PR? … we’ve moved past 074 a long time ago. … Unless there is an active PR … you’re making your commits in that PR. It’s okay. … If there’s no active PR … create a PR for your logs … titled like what is relevant. … Just merge what needs to be merged.
+
+### 076 tokens (no `getUsage` — floor from the two transcripts)
+
+| Run | Unique chars (user+think+text+tool) | ÷ 4 ≈ tokens |
+|-----|--------------------------------------|--------------|
+| B `bc-3d6452cd` | 250,180 | **62.5k** |
+| C `bc-ac0a9930` | 624,686 | **156.2k** |
+| **076 chain** | 874,866 | **~219k** |
+
+Billed tokens are **at least** that. Context is replayed each turn (automation = max window; cache reads cheaper). This seat cannot confirm the billed number. A 10× replay would be ~2.2M. Do not treat 219k as `getUsage`.
+
+### His bar
+
+Used **764M** tokens = **54%** of included → 100% bar ≈ **1.415 billion** tokens (764 / 0.54).
+
+| 076 as | Floor 0.219M | If billed 2.2M |
+|--------|----------------|----------------|
+| Share of **100%** bar | **0.015%** | 0.16% |
+| Share of the **764M already used** | **0.029%** | 0.29% |
+
+### Dollar (list, Fast Grok 4.6)
+
+Cursor docs: Fast **$4 / M input**, **$1 / M cache**, **$12 / M output**. Cursor Models included — Spending may show bar, not an invoice line.
+
+Floor (treat 0.21M as input, 8k output): **about $0.90**. If 2.2M input Fast uncached: **about $9**. Cache-heavy: closer to **$2**. Not `getUsage`. Not this bind’s night.
+
+### Log PR hygiene (lock)
+
+An **active** packet or hotfix PR may take stamps that happen while that cut is live. 074 on #130 ran long; later 075 / 076 / talk rode it. Allowed that once.
+
+If there is **no** active cut PR: do **not** keep stamping on a finished hotfix. Open a short PR titled for the log (or the new cut). Next number still **077** / packet **010**.
+
+### Merge
+
+[#130](https://github.com/bywale-com/travis/pull/130) is the living pile (074 hang, 075 apply, 076 closer, house, this trail). Founder: merge what needs to be merged. Merge it.

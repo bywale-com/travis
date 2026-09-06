@@ -1,6 +1,9 @@
 # Cheap gate in front of Cursor Automations.
 # GitHub path filter + this-push diff. No Cursor boot until a label lands.
 # Labels: wake-sa · wake-engineer · wake-pm-look · fail-look · emerge
+# Hotfix: this push lands HOTFIX-NNN-*.md → wake-engineer only (no wake-sa).
+# Label adds must be the founder (WAKE_GITHUB_TOKEN), not github-actions[bot].
+# Cursor's label trigger does not treat the Actions bot as the owner.
 # Pass → emerge letter (issue + optional email). Not Travis. No LLM.
 # See docs/register/AUTOMATION-PACKET-CHAIN.md
 
@@ -12,6 +15,8 @@ on:
       - "docs/register/PM-PACKET-*.md"
       - "docs/register/SYSTEMS-CHANGE-PACKET-*.md"
       - "docs/register/PM-LOOK-*.md"
+      - "docs/register/HOTFIX-*.md"
+      - "docs/register/ENGINEER-HANDOFF.md"
       - "src/**"
       - ".github/workflows/wake-packet-seats.yml"
       - ".github/scripts/**"
@@ -35,7 +40,8 @@ jobs:
           fetch-depth: 0
       - name: Label the open PR for this push only
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WAKE_GITHUB_TOKEN: ${{ secrets.WAKE_GITHUB_TOKEN }}
+          FALLBACK_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BEFORE: ${{ github.event.before }}
           AFTER: ${{ github.sha }}
           HEAD_REF: ${{ github.ref_name }}
@@ -44,6 +50,19 @@ jobs:
           RESEND_FROM_EMAIL: ${{ secrets.RESEND_FROM_EMAIL }}
         run: |
           set -euo pipefail
+          if [[ -n "${WAKE_GITHUB_TOKEN:-}" ]]; then
+            export GH_TOKEN="$WAKE_GITHUB_TOKEN"
+            if login=$(gh api user --jq .login 2>/dev/null); then
+              echo "Label actor: $login (WAKE_GITHUB_TOKEN)"
+            else
+              echo "WAKE_GITHUB_TOKEN rejected (401). Falling back to Actions bot."
+              export GH_TOKEN="$FALLBACK_GH_TOKEN"
+              echo "Label actor: github-actions[bot]"
+            fi
+          else
+            export GH_TOKEN="$FALLBACK_GH_TOKEN"
+            echo "Label actor: github-actions[bot] (no WAKE_GITHUB_TOKEN)"
+          fi
           if [[ "$BEFORE" == "0000000000000000000000000000000000000000" ]]; then
             files=$(git diff --name-only --diff-filter=A "$AFTER")
           else
@@ -64,7 +83,19 @@ jobs:
           gh label create fail-look --color CCCCCC --description "Cursor: Engineer loop after PM look Fail" 2>/dev/null || true
           gh label create emerge --color CCCCCC --description "PM look Pass — human test" 2>/dev/null || true
 
-          if echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$'; then
+          # Hotfix pickup: this push lands HOTFIX-NNN-*.md. Title the PR
+          # "Hotfix NNN — …" (human tell). Skip SA. Do not re-wake Engineer
+          # on later commits on the same PR (file not in this push).
+          if echo "$files" | grep -E '^docs/register/HOTFIX-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$' | grep -q .; then
+            # Re-arm: label-added only fires on a fresh add. A leftover
+            # wake-engineer from an earlier push would otherwise stay silent.
+            gh pr edit "$pr" --remove-label wake-engineer || true
+            if gh pr edit "$pr" --add-label wake-engineer; then
+              echo "Hotfix. Labeled #$pr wake-engineer. No wake-sa."
+            else
+              echo "Hotfix. Could not add wake-engineer. Fine-grained PAT needs Issues write AND Pull requests write on this repo."
+            fi
+          elif echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$'; then
             gh pr edit "$pr" --add-label wake-sa
             echo "Labeled #$pr wake-sa"
           fi
@@ -86,16 +117,31 @@ jobs:
             if ! git show "$AFTER:$f" | grep -q '^\*\*Verdict:\*\* Pass'; then
               continue
             fi
+            hotfix=$(echo "$f" | sed -n 's#^docs/register/PM-LOOK-HOTFIX-\([0-9][0-9]*\).*#\1#p')
             nnn=$(echo "$f" | sed -n 's#^docs/register/PM-LOOK-\([0-9][0-9]*\).*#\1#p')
-            if [[ -z "$nnn" ]]; then
+            if [[ -n "$hotfix" ]]; then
+              nnn="$hotfix"
+              kind="hotfix"
+              testfile=$(git ls-tree -r --name-only "$AFTER" | grep -E "^docs/register/HOTFIX-${nnn}-.+-TEST\\.md$" | head -n 1 || true)
+              issue_title="Hotfix ${nnn} emerged — walk this sheet"
+              missing="No HOTFIX-${nnn}-*-TEST.md on this commit."
+            elif [[ -n "$nnn" ]]; then
+              kind="packet"
+              testfile=$(git ls-tree -r --name-only "$AFTER" | grep -E "^docs/register/PM-PACKET-${nnn}-.+-TEST\\.md$" | head -n 1 || true)
+              issue_title="${nnn} emerged — walk this sheet"
+              missing="No PM-PACKET-${nnn}-*-TEST.md on this commit."
+            else
               continue
             fi
-            testfile=$(git ls-tree -r --name-only "$AFTER" | grep -E "^docs/register/PM-PACKET-${nnn}-.+-TEST\\.md$" | head -n 1 || true)
             preview=$(git show "$AFTER:$f" | sed -n 's/^\*\*Preview:\*\* //p' | head -n 1)
             repo=$(gh repo view --json nameWithOwner --jq .nameWithOwner)
             letter=$(mktemp)
             {
-              echo "${nnn} emerged. Human test."
+              if [[ "$kind" == "hotfix" ]]; then
+                echo "Hotfix ${nnn} emerged. Human test."
+              else
+                echo "${nnn} emerged. Human test."
+              fi
               echo
               echo "PR: https://github.com/${repo}/pull/${pr}"
               if [[ -n "$preview" ]]; then
@@ -112,14 +158,14 @@ jobs:
                 echo
                 git show "$AFTER:$testfile"
               else
-                echo "No PM-PACKET-${nnn}-*-TEST.md on this commit."
+                echo "$missing"
               fi
             } > "$letter"
             gh pr edit "$pr" --add-label emerge && echo "Labeled #$pr emerge" || echo "Could not label emerge"
-            existing=$(gh issue list --state all --search "${nnn} emerged — walk this sheet in:title" --json number --jq '.[0].number // empty')
+            existing=$(gh issue list --state all --search "${issue_title} in:title" --json number --jq '.[0].number // empty')
             if [[ -z "$existing" ]]; then
-              issue=$(gh issue create --title "${nnn} emerged — walk this sheet" --body-file "$letter" --assignee bywale-com \
-                || gh issue create --title "${nnn} emerged — walk this sheet" --body-file "$letter")
+              issue=$(gh issue create --title "$issue_title" --body-file "$letter" --assignee bywale-com \
+                || gh issue create --title "$issue_title" --body-file "$letter")
               echo "Opened $issue"
             else
               echo "Issue #$existing already exists for ${nnn}"
@@ -138,9 +184,19 @@ jobs:
             rm -f "$letter"
           done
 
-          if echo "$files" | grep -qE '^src/'; then
-            if git ls-tree -r --name-only "$AFTER" | grep -qE '^docs/register/SYSTEMS-CHANGE-PACKET-'; then
-              if git ls-tree -r --name-only "$AFTER" | grep -qE '^docs/register/PM-PACKET-[0-9]'; then
+          # Look: plant finished. src/ or (hotfix + Engineer handoff).
+          # SQL-only hang may only rewrite ENGINEER-HANDOFF.md.
+          if echo "$files" | grep -qE '^(src/|docs/register/ENGINEER-HANDOFF\.md$)'; then
+            pr_files=$(gh pr view "$pr" --json files --jq '.files[].path')
+            if echo "$pr_files" | grep -qE '^docs/register/HOTFIX-[0-9]+-.+\.md$'; then
+              gh pr edit "$pr" --remove-label wake-pm-look || true
+              if gh pr edit "$pr" --add-label wake-pm-look; then
+                echo "Labeled #$pr wake-pm-look (hotfix plant)"
+              else
+                echo "Could not add wake-pm-look."
+              fi
+            elif echo "$pr_files" | grep -qE '^docs/register/SYSTEMS-CHANGE-PACKET-'; then
+              if echo "$pr_files" | grep -qE '^docs/register/PM-PACKET-[0-9]'; then
                 gh pr edit "$pr" --add-label wake-pm-look
                 echo "Labeled #$pr wake-pm-look"
               fi

@@ -50,6 +50,28 @@ Technical PM look+test
 
 Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml). It diffs **this push** (`before…after`), not the whole PR. No Cursor token until the label is added.
 
+**Who tags.** `GITHUB_TOKEN` is `github-actions[bot]`. Cursor’s label trigger has not woken A or B from that actor. Repo secret **`WAKE_GITHUB_TOKEN`** = a PAT for the GitHub user connected to the automations (you). Fine-grained: this repo, Issues read/write. The Action uses that for `gh pr edit` labels. Unset → bot (old path). Not `TRAVIS_GITHUB_TOKEN` (unfold). Do not paste the token in chat.
+
+**Hotfix path (skip SA).** Founder 2026-09-05: a hotfix is not a new Cursor automation. Same Action. Title the PR `Hotfix NNN — …`. This push lands `docs/register/HOTFIX-NNN-*.md` (not `*-TEST.md`) → label **`wake-engineer`** only. No `wake-sa`. Same **B**.
+
+```text
+this push lands HOTFIX-NNN-*.md
+        ↓  GitHub Action (no LLM)
+label  wake-engineer     (no wake-sa)
+        ↓
+Engineer plants the hotfix
+        ↓  src/  or  ENGINEER-HANDOFF.md  (SQL-only hang may only touch the handoff)
+label  wake-pm-look
+        ↓
+Technical PM look+test (hotfix is enough — no PM-packet, no SCP)
+        Fail → fail-look
+        Pass → emerge + HOTFIX-NNN-*-TEST.md
+```
+
+**C must take a hotfix.** Live look that stops on “no packets” is the old paste. Re-paste [`house-now/automations/pm-look.prompt.md`](./house-now/automations/pm-look.prompt.md). A `HOTFIX-NNN` on the PR is the cut. Do not require a packet.
+
+**B must apply, not only plant a file.** A SQL file on the PR is not a hang. `DATABASE_URL` is a Cloud Agent **runtime secret** on the environment B uses. Unset → stop and name it. Set → run the existing file. Re-paste [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md).
+
 **Human must change the two automations** (I cannot Save + Activate):
 
 1. Pause both, or every later stamp still boots on the old “PR pushed” triggers.
@@ -90,10 +112,10 @@ That push is the Engineer trigger.
 ## Automation B — SA complete → Engineer
 
 **Name:** `Travis — SA complete → Engineer`  
-**Triggers (any):** Source control — **Label added** **`wake-engineer`** (SA completed) **and** **Label added** **`fail-look`** (PM look failed). Both lowercase. Not PR pushed.  
+**Triggers (any):** Source control — **Label added** **`wake-engineer`** **and** **Label added** **`fail-look`**. Both lowercase. Not PR pushed. Not a third automation. Hotfix uses the same `wake-engineer` tag.  
 **Repository:** `bywale-com/travis`  
 **Tools:** Memories **off**. Pull request creation **off**.  
-**Prompt:** paste [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md) in full.
+**Prompt:** paste [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md) in full. Re-paste after 075 — planted = live effect; `DATABASE_URL` named.
 
 ---
 
@@ -103,7 +125,7 @@ That push is the Engineer trigger.
 **Triggers (any):** Source control — **Pull request label changed**, label **`wake-pm-look`** (added). Not PR pushed.  
 **Repository:** `bywale-com/travis`  
 **Tools:** Memories **off**. Pull request creation **off**. **Computer use on** — look is the preview.  
-**Prompt:** paste [`house-now/automations/pm-look.prompt.md`](./house-now/automations/pm-look.prompt.md) in full.
+**Prompt:** paste [`house-now/automations/pm-look.prompt.md`](./house-now/automations/pm-look.prompt.md) in full. Re-paste after 075 — hotfix is enough; do not stop “no packets.”
 
 This is the beat that can run on a **already planted** PR (009 / 025 on #127). SA and Engineer must not be re-woken for that.
 
@@ -111,11 +133,11 @@ This is the beat that can run on a **already planted** PR (009 / 025 on #127). S
 
 ## Save + Activate (human or local `/automate`)
 
-1. **A** / **B** stay label `wake-sa` / `wake-engineer`. **B** also gets a second trigger: Label added / `fail-look`. Re-paste the Engineer prompt.
+1. **A** / **B** stay label `wake-sa` / `wake-engineer`. **B** also gets a second trigger: Label added / `fail-look`. Hotfix does not get a new paste.
 2. Create **C**. Trigger: Label added / `wake-pm-look`. Computer use on. Memories off. PR creation off. Paste the PM-look prompt. Save + Activate.
 3. To run the first look on #127: add `wake-pm-look` once C is Active. Do not add `wake-sa` or `wake-engineer` — 025 is already planted.
-4. Later plants: Action adds `wake-pm-look` when this push touched `src/` on a PR that already has a packet + change packet.
-5. **Emerge letter (human).** When this push writes `PM-LOOK-NNN.md` with **Verdict: Pass**, the same Action (no LLM) labels `emerge` and sends the letter. Not Travis. Not a Cursor agent.
+4. Later plants: Action adds `wake-pm-look` when this push touched `src/` on a PR that already has a packet + change packet, **or** `src/` / `ENGINEER-HANDOFF.md` on a PR that already has a `HOTFIX-NNN`.
+5. **Emerge letter (human).** When this push writes `PM-LOOK-NNN.md` or `PM-LOOK-HOTFIX-NNN.md` with **Verdict: Pass**, the same Action (no LLM) labels `emerge` and sends the letter (packet `*-TEST.md` or `HOTFIX-NNN-*-TEST.md`). Not Travis. Not a Cursor agent.
 
 ---
 
@@ -123,13 +145,13 @@ This is the beat that can run on a **already planted** PR (009 / 025 on #127). S
 
 Founder lock 2026-09-05: emerge is silent unless something lands in the inbox. While we build Travis, the channel is **email**, not the product face.
 
-**When:** this push has `docs/register/PM-LOOK-NNN.md` with `**Verdict:** Pass`. Not on plant. Not on Fail.
+**When:** this push has `docs/register/PM-LOOK-NNN.md` or `docs/register/PM-LOOK-HOTFIX-NNN.md` with `**Verdict:** Pass`. Not on plant. Not on Fail.
 
 **What you get:**
 
-- Subject: `NNN emerged — walk this sheet`
+- Subject: `NNN emerged — walk this sheet` (packet) or `Hotfix NNN emerged — walk this sheet`
 - First lines: finished / human test / PR / preview
-- The document: that packet’s `PM-PACKET-NNN-*-TEST.md` **verbatim**. Not a summary. Not the look sheet.
+- The document: that packet’s `PM-PACKET-NNN-*-TEST.md` or that hotfix’s `HOTFIX-NNN-*-TEST.md` **verbatim**. Not a summary. Not the look sheet.
 
 **How (cheap, same Action):**
 
@@ -155,7 +177,7 @@ A clean future packet = **3 boots** if no loop; **3 + 2×N** if it loops N times
 ## Must-not
 
 - Do not mint a cousin PR.
-- Do not run SA because plates, FACE, or the Phase One log moved.
-- Do not run Engineer because the PM stamped.
+- Do not run SA because plates, FACE, the Phase One log, or a **hotfix** file moved.
+- Do not run Engineer because the PM stamped. A hotfix file **does** run Engineer.
 - Do not treat this as Travis product chrome. This is Cursor Automations waking seats.
 - Do not remint 023 / 024 / 025. Next SA packet is **026**. Next PM packet is **010**.

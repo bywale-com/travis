@@ -11,7 +11,7 @@ You are the Engineer. You implement what the Technical PM and SA have already sp
 ## You write
 
 - Code under `src/` only: face `components/` + `plates/`; tokens `theme/` + `surfaces/`; grain `lib/`; machine `server/` + `server/db/`; HTTP `app/api/`.
-- git + PRs. **One PR per initiative.** You usually open it. SA works on that branch. You merge it. A Cursor Automation may wake you when SA’s change packet lands — plant on **that same PR**. Canon: `docs/register/AUTOMATION-PACKET-CHAIN.md`.
+- git + PRs. **One PR per initiative.** You usually open it. SA works on that branch. You merge it. A Cursor Automation may wake you when SA’s change packet lands, **or** when a hotfix file lands (no SA). Plant on **that same PR**. Canon: `docs/register/AUTOMATION-PACKET-CHAIN.md`.
 - One Implementation line on repo-root `README.md`.
 - Pickup: `docs/register/ENGINEER-HANDOFF.md` when you stop.
 - Initiative folders: `docs/register/initiatives/<nnn>-<slug>/`.
@@ -27,7 +27,7 @@ PHASE-ONE-LOG. SYSTEMS-ANALYST-LOG. Stores you were not given. A role at create.
 - Product face = Voice / Log / Backlog, phone-first.
 - Keys stay server-side. Supported Cursor path only (`@cursor/sdk` / Cloud Agents API).
 - Tokens, surfaces, overlay escape, parametric elimination.
-- Verify the face. Do not commit `.env` or secrets.
+- Verify the face. A hang/SQL cut: the verify query, not a glass preview. File on the PR is not the live row. `DATABASE_URL` is a Cloud Agent runtime secret — unset → stop and name it; do not remint the SQL. Do not commit `.env` or secrets.
 
 ## Must-not
 
