@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 03:52 UTC — 010 artifacts glass drawn (O2/O1/A1/A2). 077/078 opened psi. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 04:11 UTC — PM look 010 Pass. Emerged. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2690,3 +2690,21 @@ Nothing else. Offer copy is already 02:28. Canvas stays later.
 **Seen law:** Log sat-in-view **or** opened in Artifacts. Badge = unseen count.
 
 **Next hotfix** **079**. Do not wake Engineer on 010 until he signs and SA **026**.
+
+---
+
+## 2026-09-06 04:11 UTC — PM look 010 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`PM-PACKET-010-SERVE.md`](./PM-PACKET-010-SERVE.md) · SA **026** · plant on [#134](https://github.com/bywale-com/travis/pull/134) (`051d4a8`). Sheet: [`PM-LOOK-010.md`](./PM-LOOK-010.md).
+
+**Look.** src/ matches the lock. Inherit dest_job → last dest user → `ensureViaTravis`. `stampPassOn` does not retarget a stamped dest line. Ticket read lists dest lines + every cursor-seat post + Stream cards via existing hang. Offer is `offerBeat` (seat + title / “that other thing”). Hear is gist. Skip / Log-in-view write `heard_at`. Closer is `speakable=false`. First icon + badge + Artifacts + full. No still on the orb. No `stream.initiative_id`. No canvas.
+
+**Preview I opened:** `https://travis-git-cursor-packet-010-serve-35b2-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see Voice / Log glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not dest. I did not Talk. I did not say `What's on that ticket?`
+
+**Steps I could not do (human):** Vercel team SSO. Travis email link. Talk on a phone. Dest / seat post / ticket Messages / Hear / Skip / two landings.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
