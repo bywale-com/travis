@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 09:08 UTC — packet wait is `**Wake:** sa`, not prose. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 09:30 UTC — packet 011 Voice New, Hear it, Technical PM. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2730,3 +2730,22 @@ Nothing else. Offer copy is already 02:28. Canvas stays later.
 **Hotfix path unchanged.** `HOTFIX-NNN` is already the go.
 
 **Do not** mint a fourth automation. Do not use draft as the hold. Do not remint 010 / 026. Next hotfix still **079**. Next packet still **011**.
+
+---
+
+## 2026-09-06 09:30 UTC — Packet 011: Voice New, Hear it, Technical PM (founder)
+
+**Kind:** Packet cut. **Wake:** hold.
+
+**Founder (preserved):** Stop ad-libbing in log summaries, especially ending with “do not read” style lines. In voice mode, don’t show “3 new” for PM/Engineer/SA when they’re just existing initiatives, and fix the hear/skip labels so they’re usable. Also: when we say PM, we mean Technical PM; the old PM should not be used or shown.
+
+**Achievement:** [`PM-PACKET-011-VOICE-TPM.md`](./PM-PACKET-011-VOICE-TPM.md) · test [`PM-PACKET-011-VOICE-TPM-TEST.md`](./PM-PACKET-011-VOICE-TPM-TEST.md). SA **027**.
+
+| Pocket | Lock |
+|--------|------|
+| Gist | Outcome only. No invented closer. Empty gist = offer once, no “full text / do not read” line. Trail stamps follow the same closer law. |
+| New | A landing, not `3 new · PM, Eng, SA` for existing tickets. `heard_at` null on pre-026 rows is the lived miss. |
+| Labels | Exactly `Hear it` then `Skip`. Hear it loud. Both ≥ 44×44. Only when New is real. |
+| Name | Product PM is Technical PM. Catalog `pm` is not dest and not shown. |
+
+**Quoted:** `listUnheardReports` / `newReportChip` · `Room.tsx` Hear/Skip · `summarizeSeatReply` · `ensure-bindings` label `"PM"` · `isCursorSeat` = `pm` \| `sa` \| `engineer`.
