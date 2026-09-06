@@ -127,8 +127,10 @@ export type TurnAttachment = {
 
 export async function attachmentsForTurns(
   sessionId: string,
+  turnIds?: string[],
 ): Promise<Map<string, TurnAttachment[]>> {
   await ensureArtifactStore();
+  if (turnIds && turnIds.length === 0) return new Map();
   const rows = await db
     .select({
       id: turnArtifact.id,
@@ -139,7 +141,14 @@ export async function attachmentsForTurns(
       seenAt: turnArtifact.seenAt,
     })
     .from(turnArtifact)
-    .where(eq(turnArtifact.sessionId, sessionId))
+    .where(
+      turnIds
+        ? and(
+            eq(turnArtifact.sessionId, sessionId),
+            inArray(turnArtifact.turnId, turnIds),
+          )
+        : eq(turnArtifact.sessionId, sessionId),
+    )
     .orderBy(asc(turnArtifact.createdAt));
   const map = new Map<string, TurnAttachment[]>();
   for (const row of rows) {

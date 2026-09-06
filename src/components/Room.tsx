@@ -83,6 +83,11 @@ import {
   type ArtifactRow,
 } from "@/components/plates/ArtifactsDoor";
 import { StreamCard, StreamDoor } from "@/components/plates/StreamDoor";
+import {
+  maxTurnSeq,
+  mergeTurnsById,
+  openDoorTick,
+} from "@/lib/list-live";
 import { streamPollMs, type StreamGrain } from "@/lib/stream";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
@@ -386,6 +391,12 @@ export function Room({
   const switchViewModeRef = useRef<(mode: ViewMode) => Promise<void>>(
     async () => {},
   );
+  const plateRef = useRef(plate);
+  const doorRef = useRef(door);
+  const ticketIdRef = useRef<string | null>(null);
+  const backlogRowsRef = useRef<BacklogItem[]>([]);
+  const backlogViewRef = useRef(backlogView);
+  const tickOpenDoorRef = useRef<() => Promise<void>>(async () => {});
 
   viewModeRef.current = viewMode;
   logSubmodeRef.current = logSubmode;
@@ -399,6 +410,11 @@ export function Room({
   sessionRef.current = session;
   turnsRef.current = turns;
   pendingRefTurnRef.current = pendingReferenceTurnId;
+  plateRef.current = plate;
+  doorRef.current = door;
+  ticketIdRef.current = ticket?.id ?? null;
+  backlogRowsRef.current = backlogRows;
+  backlogViewRef.current = backlogView;
 
   const applyQueue = useCallback((queue: { seats?: QueueSeatDto[] } | undefined) => {
     if (queue?.seats) setQueueSeats(queue.seats);
@@ -411,42 +427,72 @@ export function Room({
     if (Array.isArray(data.running)) setRunningNow(data.running);
   }, [applyQueue]);
 
-  const refreshTurns = useCallback(async (sessionId: string) => {
-    const res = await fetch(`/api/session/${sessionId}/turns`);
-    const data = await res.json();
-    const nextTurns = (data.turns ?? []) as Turn[];
-    setTurns(nextTurns);
-    setNewIds(unheardReports(nextTurns).map((t) => t.id));
-    if (Array.isArray(data.cards)) setMotionCards(data.cards as MotionCardData[]);
-    if (data.streams && typeof data.streams === "object") {
-      const next = data.streams as { live?: StreamGrain[]; cards?: StreamGrain[] };
-      setLiveStreams(Array.isArray(next.live) ? next.live : []);
-      setStreamCards(Array.isArray(next.cards) ? next.cards : []);
-    }
-    setLiveThoughts((prev) => {
-      const next: Record<string, string> = { ...prev };
-      for (const t of nextTurns) {
-        if (t.kind !== "agent_thought") continue;
-        if (t.thoughtStatus === "streaming") {
-          const cur = next[t.id] ?? "";
-          next[t.id] = t.text.length >= cur.length ? t.text : cur;
-        } else {
-          delete next[t.id];
+  const refreshTurns = useCallback(
+    async (sessionId: string, opts?: { full?: boolean }) => {
+      try {
+        const have = turnsRef.current;
+        const afterSeq =
+          opts?.full || have.length === 0 ? null : maxTurnSeq(have);
+        const url =
+          afterSeq != null
+            ? `/api/session/${sessionId}/turns?afterSeq=${afterSeq}`
+            : `/api/session/${sessionId}/turns`;
+        const res = await fetch(url);
+        if (!res.ok) return;
+        const data = (await res.json()) as {
+          turns?: Turn[];
+          cards?: MotionCardData[];
+          streams?: { live?: StreamGrain[]; cards?: StreamGrain[] };
+        };
+        if (!Array.isArray(data.turns)) return;
+        const merged =
+          afterSeq != null
+            ? mergeTurnsById(have, data.turns)
+            : data.turns;
+        const deltaHasUser = data.turns.some((t) => t.kind === "user");
+        const nextTurns =
+          afterSeq != null && deltaHasUser
+            ? merged.filter((t) => !t.id.startsWith("tmp-"))
+            : merged;
+        setTurns(nextTurns);
+        setNewIds(unheardReports(nextTurns).map((t) => t.id));
+        if (Array.isArray(data.cards)) {
+          setMotionCards(data.cards);
         }
+        if (data.streams && typeof data.streams === "object") {
+          const next = data.streams;
+          setLiveStreams(Array.isArray(next.live) ? next.live : []);
+          setStreamCards(Array.isArray(next.cards) ? next.cards : []);
+        }
+        setLiveThoughts((prev) => {
+          const next: Record<string, string> = { ...prev };
+          for (const t of nextTurns) {
+            if (t.kind !== "agent_thought") continue;
+            if (t.thoughtStatus === "streaming") {
+              const cur = next[t.id] ?? "";
+              next[t.id] = t.text.length >= cur.length ? t.text : cur;
+            } else {
+              delete next[t.id];
+            }
+          }
+          return next;
+        });
+        setStreamingPosts((prev) => {
+          const next = { ...prev };
+          for (const [sk, text] of Object.entries(prev)) {
+            const latest = [...nextTurns]
+              .reverse()
+              .find((t) => t.kind === "agent_post" && (t.seatKey ?? "_") === sk);
+            if (latest && latest.text.length >= text.length) delete next[sk];
+          }
+          return next;
+        });
+      } catch {
+        /* last good stays */
       }
-      return next;
-    });
-    setStreamingPosts((prev) => {
-      const next = { ...prev };
-      for (const [sk, text] of Object.entries(prev)) {
-        const latest = [...nextTurns]
-          .reverse()
-          .find((t) => t.kind === "agent_post" && (t.seatKey ?? "_") === sk);
-        if (latest && latest.text.length >= text.length) delete next[sk];
-      }
-      return next;
-    });
-  }, []);
+    },
+    [],
+  );
 
   const refreshSession = useCallback(async (sessionId: string) => {
     const res = await fetch(`/api/session?id=${sessionId}`);
@@ -476,59 +522,6 @@ export function Room({
       })
       .catch(() => {});
   }, []);
-
-  useEffect(() => {
-    const sid = session?.id;
-    if (!sid) return;
-    let cancelled = false;
-    const tick = async () => {
-      if (cancelled) return;
-      try {
-        const res = await fetch(`/api/session/${sid}/queue`);
-        const data = (await res.json()) as {
-          queue?: { seats?: QueueSeatDto[] };
-          drainable?: string[];
-          running?: RunningNow[];
-        };
-        if (cancelled) return;
-        applyQueue(data.queue);
-        if (Array.isArray(data.running)) setRunningNow(data.running);
-        void refreshTurns(sid);
-        const drainable = Array.isArray(data.drainable) ? data.drainable : [];
-        if (!drainable.length || drainingRef.current) return;
-        drainingRef.current = true;
-        try {
-          const drainRes = await fetch(`/api/session/${sid}/queue/drain`, {
-            method: "POST",
-          });
-          if (cancelled) return;
-          const ct = drainRes.headers.get("content-type") ?? "";
-          if (ct.includes("text/event-stream")) {
-            await consumeAgentStreamRef.current(sid, drainRes);
-          }
-          await refreshTurns(sid);
-          await refreshQueue(sid);
-        } finally {
-          drainingRef.current = false;
-        }
-      } catch {
-        /* next tick retries */
-      }
-    };
-    void tick();
-    let timer = 0;
-    const schedule = () => {
-      if (cancelled) return;
-      timer = window.setTimeout(() => {
-        void tick().finally(schedule);
-      }, streamPollMs());
-    };
-    schedule();
-    return () => {
-      cancelled = true;
-      window.clearTimeout(timer);
-    };
-  }, [session?.id, applyQueue, refreshQueue, refreshTurns]);
 
   const scrollThreadToLatest = useCallback(() => {
     const el = threadRef.current;
@@ -562,15 +555,6 @@ export function Room({
     if (viewMode !== "log") return;
     scrollThreadToLatest();
   }, [viewMode, logSubmode, scrollThreadToLatest]);
-
-  useEffect(() => {
-    if (!session) return;
-    const onVis = () => {
-      if (document.visibilityState === "visible") resumeSendSounds();
-    };
-    document.addEventListener("visibilitychange", onVis);
-    return () => document.removeEventListener("visibilitychange", onVis);
-  }, [session]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !window.speechSynthesis) return;
@@ -904,15 +888,20 @@ export function Room({
   );
   consumeAgentStreamRef.current = consumeAgentStream;
 
-  const loadBacklog = useCallback(async (view: BacklogView = backlogView) => {
+  const loadBacklog = useCallback(async (
+    view: BacklogView = backlogViewRef.current,
+    opts?: { poll?: boolean },
+  ) => {
     const sid = sessionIdRef.current;
     if (!sid) return;
     setBacklogView(view);
-    setBacklogLoading(true);
+    const hasRows = backlogRowsRef.current.length > 0;
+    if (!opts?.poll || !hasRows) setBacklogLoading(true);
     try {
       const res = await fetch(
         `/api/session/${sid}/initiatives?view=${view}&status=all`,
       );
+      if (!res.ok) return;
       const data = await readJson<{
         items?: BacklogItem[];
         initiatives?: BacklogInitiativeRow[];
@@ -927,18 +916,16 @@ export function Room({
             kind: "initiative" as const,
           })),
         );
-      } else {
-        setBacklogRows([]);
       }
       if (typeof data.motionCount === "number") {
         setMotionCount(data.motionCount);
       }
     } catch {
-      setBacklogRows([]);
+      /* last good stays */
     } finally {
       setBacklogLoading(false);
     }
-  }, [backlogView]);
+  }, []);
 
   const openTicket = useCallback(async (initiativeId: string) => {
     const sid = sessionIdRef.current;
@@ -947,6 +934,7 @@ export function Room({
       const res = await fetch(
         `/api/session/${sid}/initiatives/${initiativeId}`,
       );
+      if (!res.ok) return;
       const data = await readJson<{ initiative?: BacklogTicketData }>(res);
       if (data.initiative) {
         setSelectedBacklogId(initiativeId);
@@ -1798,13 +1786,13 @@ export function Room({
         stopRecognition();
         void stopLive();
         if (resume) {
-          await refreshTurns(s.id);
+          await refreshTurns(s.id, { full: true });
           await refreshQueue(s.id);
         }
         return;
       }
       if (resume) {
-        await refreshTurns(s.id);
+        await refreshTurns(s.id, { full: true });
         await refreshQueue(s.id);
       } else {
         setTurns([]);
@@ -1840,10 +1828,102 @@ export function Room({
   );
 
   const loadRooms = useCallback(async () => {
-    const res = await fetch("/api/rooms");
-    const data = await readJson<{ rooms?: RoomRow[]; error?: string }>(res);
-    if (!res.ok) throw new Error(data.error ?? "Could not list rooms");
-    setRooms(Array.isArray(data.rooms) ? data.rooms : []);
+    try {
+      const res = await fetch("/api/rooms");
+      if (!res.ok) return;
+      const data = await readJson<{ rooms?: RoomRow[]; error?: string }>(res);
+      if (Array.isArray(data.rooms)) setRooms(data.rooms);
+    } catch {
+      /* last good stays */
+    }
+  }, []);
+
+  const tickRoom = useCallback(async () => {
+    const sid = sessionIdRef.current;
+    if (!sid) return;
+    const res = await fetch(`/api/session/${sid}/queue`);
+    const data = (await res.json()) as {
+      queue?: { seats?: QueueSeatDto[] };
+      drainable?: string[];
+      running?: RunningNow[];
+    };
+    applyQueue(data.queue);
+    if (Array.isArray(data.running)) setRunningNow(data.running);
+    await refreshTurns(sid);
+    const drainable = Array.isArray(data.drainable) ? data.drainable : [];
+    if (!drainable.length || drainingRef.current) return;
+    drainingRef.current = true;
+    try {
+      const drainRes = await fetch(`/api/session/${sid}/queue/drain`, {
+        method: "POST",
+      });
+      const ct = drainRes.headers.get("content-type") ?? "";
+      if (ct.includes("text/event-stream")) {
+        await consumeAgentStreamRef.current(sid, drainRes);
+      }
+      await refreshTurns(sid);
+      await refreshQueue(sid);
+    } finally {
+      drainingRef.current = false;
+    }
+  }, [applyQueue, refreshQueue, refreshTurns]);
+
+  const tickOpenDoor = useCallback(async () => {
+    const which = openDoorTick({
+      plate: plateRef.current,
+      door: doorRef.current,
+      ticketId: ticketIdRef.current,
+      sessionId: sessionIdRef.current,
+    });
+    if (which.kind === "rooms") {
+      await loadRooms();
+      return;
+    }
+    if (which.kind === "ticket") {
+      await openTicket(which.id);
+      return;
+    }
+    if (which.kind === "backlog") {
+      await loadBacklog(backlogViewRef.current, { poll: true });
+      return;
+    }
+    if (which.kind === "room") {
+      await tickRoom();
+    }
+  }, [loadBacklog, loadRooms, openTicket, tickRoom]);
+  tickOpenDoorRef.current = tickOpenDoor;
+
+  useEffect(() => {
+    let cancelled = false;
+    const tick = async () => {
+      if (cancelled) return;
+      try {
+        await tickOpenDoorRef.current();
+      } catch {
+        /* next tick retries */
+      }
+    };
+    void tick();
+    let timer = 0;
+    const schedule = () => {
+      if (cancelled) return;
+      timer = window.setTimeout(() => {
+        void tick().finally(schedule);
+      }, streamPollMs());
+    };
+    schedule();
+    const onVis = () => {
+      if (document.visibilityState === "visible") {
+        resumeSendSounds();
+        void tick();
+      }
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+      document.removeEventListener("visibilitychange", onVis);
+    };
   }, []);
 
   const loadCatalog = useCallback(async () => {
