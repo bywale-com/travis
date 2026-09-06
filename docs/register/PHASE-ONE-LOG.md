@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 01:20 UTC — Packet and hotfix both get a test MD. 074 has none. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 01:45 UTC — Recut C + B. Look takes a hotfix. Engineer needs `DATABASE_URL`. 075 applies the hang. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2305,3 +2305,27 @@ Do not paste the token here.
 **Emerge today:** only on `PM-LOOK-NNN` Pass. It attaches that packet’s `*-TEST.md`. No sheet → the letter says `No PM-PACKET-NNN-*-TEST.md on this commit.` Hotfix look is not wired to that mail yet.
 
 **Law:** every packet and every hotfix gets a test MD. Next hotfix is `HOTFIX-NNN-*-TEST.md`. 074 is allowed without.
+
+---
+
+## 2026-09-06 01:45 UTC — Prompts first, then hang again (founder)
+
+**Kind:** Process lock.
+
+**Founder (preserved):** the engineer ran… the PM also picked it up… update… definitely the PM prompt because it didn’t pick up the package… no packets… the engineer… couldn’t run anything in the database… hang you… inside of Travis because it didn’t have any environment variables… try this process again… update their prompts [first].
+
+**What failed**
+
+1. **C (look)** — live paste still gated on a PM packet + SCP. 074 is a hotfix. Look stopped: no packets.
+2. **B (Engineer)** — planted the SQL file. This bind had no `DATABASE_URL`. Live row did not apply.
+
+**Recut (repo; human must re-paste at cursor.com/automations)**
+
+- **C** [`house-now/automations/pm-look.prompt.md`](./house-now/automations/pm-look.prompt.md) — a `HOTFIX-NNN` on the PR is enough. Do not stop “no packets.” SQL/hang has no glass. Write `PM-LOOK-HOTFIX-NNN.md`.
+- **B** [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md) — planted = live effect. File ≠ hang. `DATABASE_URL` unset → stop and name it. Set → run the existing SQL. Do not remint.
+
+**075** [`HOTFIX-075-APPLY-HANG.md`](./HOTFIX-075-APPLY-HANG.md) + [`HOTFIX-075-APPLY-HANG-TEST.md`](./HOTFIX-075-APPLY-HANG-TEST.md). Same PR [#130](https://github.com/bywale-com/travis/pull/130). Apply `hang-technical-pm.sql`. Do not remint. Next hotfix **076**.
+
+**Action:** look also wakes on `ENGINEER-HANDOFF.md` for a hotfix PR. Emerge on hotfix Pass attaches the hotfix test MD.
+
+**Still human:** paste C (`ff94a777`) and B (`e89c2975`). This seat cannot Save + Activate. Env secrets are on the Cloud Agent environment — new B boots should see `DATABASE_URL` if it is a runtime secret there.

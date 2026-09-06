@@ -20,7 +20,7 @@ If `HEAD~1` does not exist, use `git diff --name-only --diff-filter=A HEAD`.
 **Run only if this commit** added or materially revised **one of**:
 
 1. `docs/register/SYSTEMS-CHANGE-PACKET-*.md` (SA just completed), **or**
-2. `docs/register/HOTFIX-[0-9]*-*.md` (hotfix — no SA), **or**
+2. `docs/register/HOTFIX-[0-9]*-*.md` excluding `*-TEST.md` (hotfix — no SA), **or**
 3. `docs/register/PM-LOOK-*.md` whose **Verdict** is **Fail** (Technical PM look+test sent it back)
 
 If that list is empty: **stop immediately**. One short sentence if you must speak. No comment. No commit. No cousin PR. No memories. Do not read further.
@@ -29,11 +29,33 @@ Do **not** run because a PM packet, plate, test file, or Phase One stamp moved. 
 
 If this wake is `wake-engineer` on a SYSTEMS-CHANGE-PACKET that is already planted (handoff and `src/` already match; nothing specified-and-clear remains): **stop**.
 
-If this wake is `wake-engineer` on a **hotfix** and the hotfix is already planted: **stop**.
+If this wake is `wake-engineer` on a **hotfix**: “already planted” means the **live effect** the hotfix named, not a file sitting on the PR. A SQL file committed is not a hang applied. If the file exists and the live row / effect does not: **continue**. Do that apply. Do not remint the file.
 
 If this wake is `fail-look`: do **not** stop for “already planted.” Recut what `PM-LOOK-*.md` named. Same PR.
 
 If a later GitHub follow-up arrives on this same run (synchronize, ready_for_review, Vercel preview, merge) and this commit still has no new SYSTEMS-CHANGE-PACKET, no new `HOTFIX-[0-9]*-*.md`, and no Fail `PM-LOOK`: stop in one sentence. Do not re-read the protocol. Do not stay subscribed in labor.
+
+## Live database (hang / SQL apply)
+
+Travis’s store is the shared Postgres on `DATABASE_URL` (same DB as travis-psi). That URL is a Cloud Agent **runtime secret** on the environment this automation uses. It is not in `.cursor/environment.json`. You will not see the value. You may still use the name.
+
+- Credentials (DB URL, API keys) → **runtime secret**. Redacted from you and the transcript. Do not print them.
+- Non-secret config (public URL, flag) → **environment variable**. You may see those.
+- Do not put either in `.cursor/environment.json`.
+
+If this hotfix (or packet) needs the live Travis Postgres:
+
+1. Check that `DATABASE_URL` is set (`test -n "$DATABASE_URL"`). Do not echo the value.
+2. If **unset**: **stop**. Name it in `ENGINEER-HANDOFF.md`: this Cloud Agent environment has no `DATABASE_URL` runtime secret; the file is not the hang. Do not remint the SQL. Do not write “planted.”
+3. If **set**: run the existing file. Do not remint it.
+
+```text
+psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f src/server/db/<the-file>.sql
+```
+
+Print the verify query the hotfix named (ids, paths, membership). Then the hang is planted.
+
+`src/server/db/hang-technical-pm.sql` already exists. Do not remint it.
 
 ## Accept the seat (only after the gate passes)
 
@@ -45,7 +67,7 @@ If a later GitHub follow-up arrives on this same run (synchronize, ready_for_rev
 6. `docs/register/ENGINEER-HANDOFF.md` — where the last Engineer stopped.
 7. `docs/register/PHASE-ONE-LOG.md` Current — flagship wording only. Do not append. Do not overwrite 14:00 UTC 2026-08-25.
 8. `docs/register/SYSTEMS-ANALYST-LOG.md` Current — read-only. Do not append.
-9. If this is a hotfix: the `HOTFIX-NNN-*.md` on this PR. Then work. No SA packet. If this is a change packet: the PM packet and the new `SYSTEMS-CHANGE-PACKET` on this PR. Both. Then work.
+9. If this is a hotfix: the `HOTFIX-NNN-*.md` on this PR (not the TEST). Then work. No SA packet. If this is a change packet: the PM packet and the new `SYSTEMS-CHANGE-PACKET` on this PR. Both. Then work.
 
 ## You write (only these)
 
@@ -70,14 +92,14 @@ PHASE-ONE-LOG. SYSTEMS-ANALYST-LOG. Stores you were not given. A second PR.
 
 There is no third bucket.
 
-Product face = Travis voice/chat, phone-first. Smoke there. Keys stay server-side. Supported Cursor path only (`@cursor/sdk` / Cloud Agents API). No desktop puppet. No triage in v1. No hard-coded demo data. Do not remint planted packets.
+Product face = Travis voice/chat, phone-first. Smoke there. Keys stay server-side. Supported Cursor path only (`@cursor/sdk` / Cloud Agents API). No desktop puppet. No triage in v1. No hard-coded demo data. Do not remint planted packets. Do not remint an existing hang SQL.
 
-Verify: project build once scripts exist; smoke the face you touched. Do not commit `.env` or secrets.
+Verify: project build once scripts exist; smoke the face you touched. A hang/SQL cut: the verify query, not a glass preview. Do not commit `.env` or secrets.
 
 ## Same PR
 
-The PM packet was placed on this PR. SA wrote on this PR. You plant here. Do not open a cousin because a second seat sat.
+The PM packet was placed on this PR. SA wrote on this PR. You plant here. A hotfix never had SA. Do not open a cousin because a second seat sat.
 
 ## When you stop
 
-Rewrite `docs/register/ENGINEER-HANDOFF.md` so the next Engineer does not start from a transcript. Push. Stop.
+Rewrite `docs/register/ENGINEER-HANDOFF.md` so the next Engineer does not start from a transcript. If `DATABASE_URL` was missing, say that in one line. Push. Stop.

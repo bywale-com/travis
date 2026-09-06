@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-06 01:20 UTC
+# PM seat handoff — 2026-09-06 01:45 UTC
 
 **This bind is living.** `bc-25c5c6bf-006f-4252-9f25-49ab183835b2` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -14,15 +14,16 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **01:20 UTC 2026-09-06** (packet and hotfix both get a test MD; 074 has none). Flag **14:00**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **01:45 UTC 2026-09-06** (recut C + B; 075 applies the hang). Flag **14:00**. |
 | Seat law | [`../README.md`](../README.md) § Product Manager · [`../seats/PRODUCT-MANAGER.md`](../seats/PRODUCT-MANAGER.md) · house [`house-now/protocols/pm.md`](./house-now/protocols/pm.md) |
 | Plates | [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) generate · [`PLATE-READ.md`](./PLATE-READ.md) read |
-| Packets 001–009 | [`PM-PACKETS.md`](./PM-PACKETS.md). 001–007 on **`main`**. **008–009** on this PR. 009 look **Pass** — [`PM-LOOK-009.md`](./PM-LOOK-009.md). Human walk not started. **010 is not cut.** |
-| Last face lock | **009** — card above **this** episode’s completed line. Stream does not auto-open. Emerged. |
-| Hotfix | [`HOTFIX-074-HOTFIX-PATH.md`](./HOTFIX-074-HOTFIX-PATH.md) on [#130](https://github.com/bywale-com/travis/pull/130). House Action is on the PR. Engineer hangs this bind. Next hotfix **075**. |
-| Engineer | Implements specced work only. Pickup [`ENGINEER-HANDOFF.md`](./ENGINEER-HANDOFF.md). **025** planted on #127 (merged). Open pocket: **022** on [#120](https://github.com/bywale-com/travis/pull/120). **074** is the pickup on this PR. |
+| Packets 001–009 | [`PM-PACKETS.md`](./PM-PACKETS.md). 001–007 on **`main`**. **008–009** on #127 (merged). 009 look **Pass**. Human walk not started. **010 is not cut.** |
+| Last face lock | **009** — card above **this** episode’s completed line. Stream does not auto-open. Emerged. Do not merge 009/025 into prod until the human test is green. |
+| Hotfix | **075** [`HOTFIX-075-APPLY-HANG.md`](./HOTFIX-075-APPLY-HANG.md) + test on [#130](https://github.com/bywale-com/travis/pull/130). Apply the 074 SQL. Prompts recut. Next hotfix **076**. |
+| Prompts | **C** must take a hotfix (no “no packets”). **B** must apply when `DATABASE_URL` is on; file ≠ hang. Human re-pastes both. This seat cannot Save + Activate. |
+| Engineer | Pickup [`ENGINEER-HANDOFF.md`](./ENGINEER-HANDOFF.md). **074** SQL on #130; live row not applied. **075** is the apply. Open pocket: **022** on [#120](https://github.com/bywale-com/travis/pull/120). |
 | Vision | Held: seat health · tester sandbox/gig · SA-now automations · initiative curate (after Stream) · Find rename · 007 · capability gap · request-line · Travis hang tool (later). Suggest walk 009, then talk seat health. |
-| Packet chain | [`AUTOMATION-PACKET-CHAIN.md`](./AUTOMATION-PACKET-CHAIN.md) — A → B → C → emerge letter. **Hotfix skips A.** Same `wake-engineer`. Do not re-paste B for this. 009 is a dirty first sample. |
+| Packet chain | [`AUTOMATION-PACKET-CHAIN.md`](./AUTOMATION-PACKET-CHAIN.md) — A → B → C → emerge letter. **Hotfix skips A.** Same `wake-engineer`. Re-paste **C and B** after 075. |
 
 **Do not** follow any “no new plate / V6 grown only” FACE from an old bind. Home is **Backlog** (All / In motion / Initiatives). Voice count = Travis processes only.
 
@@ -31,26 +32,17 @@
 ## Next PM job
 
 1. Accept the seat. Fetch this PR. Read Current, then the newest stamp.
-2. Hang this bind is hotfix **074**. Action tags `wake-engineer`. Same B. Engineer writes the SQL. Do not put the id in migrate. Catalog `pm` stays. Later: Travis should do that write (his, founder names the chat).
+2. Founder must re-paste C and B. Then 075 wakes Engineer to apply the hang. Look writes `PM-LOOK-HOTFIX-075.md`. Do not put the id in migrate. Catalog `pm` stays.
 3. Open PM packet work only if the founder names the pocket. Write on the Engineer’s open PR. Next packet number is still **010**. Next SA is **026**.
 4. Do **not** reprint P1/P2. Do **not** invent a second index. Do **not** remint 007 C3/C4.
 5. When **you** stop: rewrite this file and move Current so the next bind does not start from a transcript.
 
 ---
 
-## Paste — new Product Manager
+## Must-not
 
-```text
-You are Travis’s Technical Product Manager. Read docs/README.md “Product Manager — identity” and accept it. You are not the Systems Analyst. You are not the Engineer. Keep docs/register/PHASE-ONE-LOG.md (append unless I mark a separate entry). Capture founder wording; do not generate substitute flags. Inspect src/ the way the Engineer would — quote stood-up code, not memory. Spec both the product/UX/UI and the technical cut so the Engineer only implements. Do not mint tables. Do not plant. Detailed: docs/seats/PRODUCT-MANAGER.md.
-
-You are a NEW bind. The last PM was bc-25c5c6bf-006f-4252-9f25-49ab183835b2. They handed off. Read docs/register/PM-HANDOFF.md first.
-
-Then, in order:
-1. docs/register/PHASE-ONE-LOG.md — Current, then newest stamp.
-2. docs/register/PHASE-ONE.md
-3. docs/register/PM-PACKETS.md — packets 001–007 on main. 008–009 on the plating PR. 009 look Pass; human walk open. 007 Hear / Next / Skip is still SA. 010 is not cut.
-4. Planted src/ when the pocket already exists.
-5. Sit is planted (015). Do not collapse create / in-the-room / seated.
-
-One PR per initiative. Write on the Engineer’s open PR. Flag 14:00 UTC 2026-08-25 stands. Stamp this log that you accepted. Ask me what pocket we are in.
-```
+- Do not overwrite the 14:00 flag.
+- Do not plant `src/`.
+- Do not mint tables.
+- Do not append SYSTEMS-ANALYST-LOG.
+- Do not open a cousin PR.

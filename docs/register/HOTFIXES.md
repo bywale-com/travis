@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **075**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **076**. |
 | PR title | `Hotfix NNN — …` (human tell). Action: this push lands `HOTFIX-NNN-*.md` → `wake-engineer` only. No `wake-sa`. |
 | Test | Every hotfix gets a `HOTFIX-NNN-*-TEST.md` (same job as a packet test). Emerge mails that sheet. |
 
@@ -16,6 +16,7 @@
 
 | # | File | Cut |
 |---|------|-----|
+| 075 | [`HOTFIX-075-APPLY-HANG.md`](./HOTFIX-075-APPLY-HANG.md) | Apply 074 SQL; recut C + B so Look takes a hotfix and Engineer needs `DATABASE_URL` |
 | 074 | [`HOTFIX-074-HOTFIX-PATH.md`](./HOTFIX-074-HOTFIX-PATH.md) | Hotfix skips SA; Action wakes Engineer; hang this PM bind |
 | 073 | [`HOTFIX-073-TECHNICAL-PM.md`](./HOTFIX-073-TECHNICAL-PM.md) | PM is technical: inspects `src/`, specs face + cut; Engineer only implements |
 | 072 | [`HOTFIX-072-STALE-MOTION.md`](./HOTFIX-072-STALE-MOTION.md) | Dead `running` box step is reclaimed; backlog footer is not a fake end |
