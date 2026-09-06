@@ -10,6 +10,48 @@ export function artifactKindFromPath(path: string): ArtifactKind {
   return IMAGE_SUFFIX.test(path.trim()) ? "image" : "file";
 }
 
+export function isHttpArtifactPath(path: string): boolean {
+  return /^https?:\/\//i.test(path.trim());
+}
+
+const MD_IMAGE =
+  /!\[(?:[^\]]*)\]\(\s*<?([^)\s>]+)>?(?:\s+(?:"[^"]*"|'[^']*'))?\s*\)/g;
+
+/** Markdown `![alt](src)` srcs — hang those on this post. */
+export function markdownImageSrcs(text: string): string[] {
+  const out: string[] = [];
+  const re = new RegExp(MD_IMAGE.source, "g");
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    const src = m[1]?.trim() ?? "";
+    if (src && !out.includes(src)) out.push(src);
+  }
+  return out;
+}
+
+export function stripMarkdownImages(text: string): string {
+  return text
+    .replace(
+      /!\[(?:[^\]]*)\]\(\s*<?([^)\s>]+)>?(?:\s+(?:"[^"]*"|'[^']*'))?\s*\)/g,
+      "",
+    )
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n");
+}
+
+/** Any IMAGE_SUFFIX path in a process body. No closed tool-name list. */
+export function imagePathsFromProcessBody(body: string): string[] {
+  const out: string[] = [];
+  const re =
+    /(?:https?:\/\/[^\s<>"'`\\]+|[^\s<>"'`\\]+)\.(?:png|jpe?g|gif|webp)/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(body))) {
+    const raw = m[0].replace(/[),.;!?]+$/g, "");
+    if (IMAGE_SUFFIX.test(raw) && !out.includes(raw)) out.push(raw);
+  }
+  return out;
+}
+
 export function artifactFilename(path: string): string {
   const trimmed = path.trim().replace(/\\/g, "/");
   const base = trimmed.split("/").filter(Boolean).pop() ?? "";

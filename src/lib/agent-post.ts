@@ -1,7 +1,10 @@
 /**
  * Agent-post display subset — heading, list, inline code, paragraphs.
  * Store stays voice_turn.text; this is render + speak hygiene only.
+ * SCP-028 — omit markdown images from text runs; the hang is the picture.
  */
+
+import { stripMarkdownImages } from "@/lib/artifact-kind";
 
 export type PostInline =
   | { type: "text"; text: string }
@@ -92,7 +95,7 @@ function isBlockStart(line: string): boolean {
 }
 
 export function parseAgentPost(src: string): PostBlock[] {
-  const lines = src.replace(/\r\n/g, "\n").split("\n");
+  const lines = stripMarkdownImages(src).replace(/\r\n/g, "\n").split("\n");
   const blocks: PostBlock[] = [];
   let i = 0;
 

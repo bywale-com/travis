@@ -25,7 +25,12 @@ import {
 } from "@/lib/ear";
 import { readJson } from "@/lib/http";
 import { isRequestTurn } from "@/lib/request-log";
-import { hideCatalogPm } from "@/lib/dest-glass";
+import {
+  hideCatalogPm,
+  quoteAuthorLabel,
+  quoteRailText,
+  replyToLabel,
+} from "@/lib/dest-glass";
 import {
   isNewReportTurn,
   newCutTurnId,
@@ -123,6 +128,28 @@ type Session = {
 
 type PlateFace = "index" | "create" | "create-agent" | "room" | "integrations";
 type Door = null | "roster" | "inflight" | "requests" | "backlog";
+
+function pendingReplyAuthorLabel(
+  turnId: string,
+  turns: Turn[],
+  ticket: BacklogTicketData | null,
+  seats: RoomSeat[],
+): string {
+  const fromLog = turns.find((x) => x.id === turnId);
+  const fromPost = ticket?.posts.find((p) => p.id === turnId);
+  const fromDest = ticket?.destLines?.find((d) => d.id === turnId);
+  const kind =
+    fromLog?.kind ??
+    fromPost?.kind ??
+    (ticket?.founding?.id === turnId || fromDest ? "user" : null);
+  const seatKey =
+    fromLog?.seatKey ?? fromPost?.seatKey ?? fromDest?.seatKey ?? null;
+  return quoteAuthorLabel({
+    kind,
+    seatKey,
+    label: seats.find((s) => s.seatKey === seatKey)?.label,
+  });
+}
 
 function asRoomSeats(raw: unknown): RoomSeat[] {
   if (!Array.isArray(raw)) return [];
@@ -376,6 +403,7 @@ export function Room({
   const pendingStayScrollRef = useRef<TravisStay | null>(null);
   const stayBootedRef = useRef(false);
   const pendingRefTurnRef = useRef<string | null>(null);
+  const ticketIdRef = useRef<string | null>(null);
   const turnsRef = useRef<Turn[]>([]);
   const seenArtifactRef = useRef<Set<string>>(new Set());
   const drainingRef = useRef(false);
@@ -399,6 +427,7 @@ export function Room({
   sessionRef.current = session;
   turnsRef.current = turns;
   pendingRefTurnRef.current = pendingReferenceTurnId;
+  ticketIdRef.current = ticket?.id ?? null;
 
   const applyQueue = useCallback((queue: { seats?: QueueSeatDto[] } | undefined) => {
     if (queue?.seats) setQueueSeats(queue.seats);
@@ -1400,6 +1429,7 @@ export function Room({
             kind: "user",
             seatKey,
             text: prompt,
+            referenceTurnId: pendingRefTurnRef.current,
             createdAt: new Date().toISOString(),
           },
         ]);
@@ -1429,14 +1459,20 @@ export function Room({
             setError(String(data.error));
             return false;
           }
+          if (ticketIdRef.current) void openTicket(ticketIdRef.current);
           return true;
         }
-        void consumeAgentStream(sid, res, tempId || undefined).catch((e) => {
-          setError(e instanceof Error ? e.message : String(e));
-          if (tempId) {
-            setTurns((prev) => prev.filter((x) => x.id !== tempId));
-          }
-        });
+        void consumeAgentStream(sid, res, tempId || undefined)
+          .catch((e) => {
+            setError(e instanceof Error ? e.message : String(e));
+            if (tempId) {
+              setTurns((prev) => prev.filter((x) => x.id !== tempId));
+            }
+          })
+          .finally(() => {
+            const ticketId = ticketIdRef.current;
+            if (ticketId) void openTicket(ticketId);
+          });
         return true;
       } catch (e) {
         if (tempId) {
@@ -1446,7 +1482,7 @@ export function Room({
         return false;
       }
     },
-    [applyQueue, consumeAgentStream, refreshSession],
+    [applyQueue, consumeAgentStream, openTicket, refreshSession],
   );
 
   const startRecognition = useCallback(() => {
@@ -3013,8 +3049,16 @@ export function Room({
                               paddingLeft: 8,
                             }}
                           >
-                            {refTurn.text.slice(0, 120)}
-                            {refTurn.text.length > 120 ? "…" : ""}
+                            {quoteRailText({
+                              authorLabel: quoteAuthorLabel({
+                                kind: refTurn.kind,
+                                seatKey: refTurn.seatKey,
+                                label: roomSeats.find(
+                                  (s) => s.seatKey === refTurn.seatKey,
+                                )?.label,
+                              }),
+                              text: refTurn.text,
+                            })}
                           </p>
                         )}
                         {turn.kind === "agent_post" ? (
@@ -3200,6 +3244,30 @@ export function Room({
             <LogComposer
               t={t}
               seats={roomSeats}
+              replyTo={
+                pendingReferenceTurnId
+                  ? replyToLabel(
+                      quoteAuthorLabel({
+                        kind:
+                          turns.find((x) => x.id === pendingReferenceTurnId)
+                            ?.kind ?? null,
+                        seatKey:
+                          turns.find((x) => x.id === pendingReferenceTurnId)
+                            ?.seatKey ?? null,
+                        label: roomSeats.find(
+                          (s) =>
+                            s.seatKey ===
+                            turns.find((x) => x.id === pendingReferenceTurnId)
+                              ?.seatKey,
+                        )?.label,
+                      }),
+                    )
+                  : null
+              }
+              onCancelReply={() => {
+                setPendingReferenceTurnId(null);
+                pendingRefTurnRef.current = null;
+              }}
               onSend={sendTyped}
             />
           )}
@@ -3325,14 +3393,27 @@ export function Room({
           ticket={ticket}
           onBack={() => setTicket(null)}
           onOpenLog={openTurnInLog}
+          pendingReply={
+            pendingReferenceTurnId
+              ? {
+                  turnId: pendingReferenceTurnId,
+                  label: pendingReplyAuthorLabel(
+                    pendingReferenceTurnId,
+                    turns,
+                    ticket,
+                    roomSeats,
+                  ),
+                }
+              : null
+          }
+          onCancelReply={() => {
+            setPendingReferenceTurnId(null);
+            pendingRefTurnRef.current = null;
+          }}
+          onSend={sendTyped}
           onReply={(turnId) => {
             setPendingReferenceTurnId(turnId);
             pendingRefTurnRef.current = turnId;
-            setTicket(null);
-            setDoor(null);
-            if (viewMode === "log" && logSubmode !== "type") {
-              void setLogInput("type");
-            }
           }}
         />
       ) : null}

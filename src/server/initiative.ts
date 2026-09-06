@@ -7,6 +7,7 @@
 
 import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
 import { formatLandedFiles } from "@/lib/artifact-kind";
+import { quoteAuthorLabel } from "@/lib/dest-glass";
 import {
   catalogNeedleHits,
   clipInitiativeTitle,
@@ -728,12 +729,16 @@ export type InitiativeRead = {
     seatKey: string | null;
     text: string;
     createdAt: Date;
+    referenceTurnId: string | null;
+    quote: { authorLabel: string; text: string } | null;
   }>;
   destLines: Array<{
     id: string;
     seatKey: string | null;
     text: string;
     createdAt: Date;
+    referenceTurnId: string | null;
+    quote: { authorLabel: string; text: string } | null;
   }>;
   streams: Array<{
     id: string;
@@ -762,6 +767,18 @@ export async function readInitiative(
   const posts = turns.filter(
     (t) => t.kind === "agent_post" && isCursorSeat(t.seatKey),
   );
+  const quoteFor = (turn: TicketTurn) => {
+    if (!turn.referenceTurnId) return null;
+    const ref = turns.find((x) => x.id === turn.referenceTurnId);
+    if (!ref) return null;
+    return {
+      authorLabel: quoteAuthorLabel({
+        kind: ref.kind,
+        seatKey: ref.seatKey,
+      }),
+      text: ref.text,
+    };
+  };
   const turnIds = new Set(turns.map((t) => t.id));
   const streams = (await listSessionStreams(sessionId).catch(() => ({
     live: [],
@@ -800,12 +817,16 @@ export async function readInitiative(
       seatKey: p.seatKey,
       text: p.text,
       createdAt: p.createdAt,
+      referenceTurnId: p.referenceTurnId,
+      quote: quoteFor(p),
     })),
     destLines: destLines.map((d) => ({
       id: d.id,
       seatKey: d.seatKey,
       text: d.text,
       createdAt: d.createdAt,
+      referenceTurnId: d.referenceTurnId,
+      quote: quoteFor(d),
     })),
     streams,
     next: nextOf(row, turns),

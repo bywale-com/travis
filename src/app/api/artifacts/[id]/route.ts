@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import {
   artifactContentType,
   dispositionFilename,
+  isHttpArtifactPath,
 } from "@/lib/artifact-kind";
 import { describeServerError } from "@/lib/http";
 import { artifactForProxy } from "@/server/artifacts";
@@ -20,6 +21,9 @@ export async function GET(
     const row = await artifactForProxy(artifactId);
     if (!row) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+    if (isHttpArtifactPath(row.path)) {
+      return NextResponse.redirect(row.path, 302);
     }
     const bytes = await downloadCursorArtifact({
       agentId: row.cursorAgentId,

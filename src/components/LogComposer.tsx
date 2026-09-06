@@ -63,11 +63,15 @@ export function LogComposer({
   t,
   seats,
   disabled,
+  replyTo,
+  onCancelReply,
   onSend,
 }: {
   t: Tokens;
   seats: RoomSeat[];
   disabled?: boolean;
+  replyTo?: string | null;
+  onCancelReply?: () => void;
   onSend: (args: {
     text: string;
     chipSeatKeys: string[];
@@ -445,6 +449,38 @@ export function LogComposer({
       }}
     >
       {list}
+      {replyTo ? (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 8,
+            padding: "0 8px 8px",
+            color: t.textMuted,
+            fontSize: 13,
+            fontStyle: "italic",
+          }}
+        >
+          <span>{replyTo}</span>
+          {onCancelReply ? (
+            <button
+              type="button"
+              onClick={onCancelReply}
+              style={{
+                border: "none",
+                background: "transparent",
+                color: t.textMuted,
+                fontSize: 13,
+                cursor: "pointer",
+                padding: 0,
+              }}
+            >
+              Cancel
+            </button>
+          ) : null}
+        </div>
+      ) : null}
       <div
         ref={wrapRef}
         data-at-mention="field"

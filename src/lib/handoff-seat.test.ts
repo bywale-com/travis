@@ -7,8 +7,9 @@ test("Engineer Current names where the last bind stopped", () => {
     new URL("../../docs/register/ENGINEER-HANDOFF.md", import.meta.url),
     "utf8",
   );
-  assert.match(handoff, /This bind is living/);
-  assert.match(handoff, /bc-fb4a75ab-6197-469e-b54d-40645aaa8dc2/);
+  assert.match(handoff, /This bind is done/);
+  assert.match(handoff, /bc-260738b7-24a2-4874-8d2a-3d83f29da33d/);
+  assert.match(handoff, /028 Usable chat/);
   assert.match(handoff, /026 Serve/);
   assert.match(handoff, /076 dest closer/);
   assert.match(handoff, /Hotfix 062/);

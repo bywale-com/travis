@@ -10,7 +10,7 @@ import { noteTravisUnwired } from "@/server/travis-dest";
 import { AuthError } from "@/server/api-error";
 import { MembershipError, requireOpenMember } from "@/server/room-membership";
 import { requireOwnedSession } from "@/server/operator";
-import { resolveDestBinding } from "@/server/dest-resolve";
+import { destBindingsForSend } from "@/server/dest-resolve";
 import { pipeTravisText } from "@/server/travis-reply";
 import {
   insertUserTurn,
@@ -71,15 +71,15 @@ export async function POST(
     return Response.json({ empty: true });
   }
 
-  const destBindings: AgentBinding[] = [];
-  if (decided.kind === "switch" || decided.kind === "send") {
-    const keys =
-      decided.kind === "switch" ? [decided.seatKey] : decided.seatKeys;
-    for (const key of keys) {
-      const dest = await resolveDestBinding(sessionId, key);
-      if (dest) destBindings.push(dest);
-    }
-  }
+  const referenceTurnId =
+    typeof body.referenceTurnId === "string" && body.referenceTurnId.trim()
+      ? body.referenceTurnId.trim()
+      : null;
+  const destBindings: AgentBinding[] = await destBindingsForSend({
+    sessionId,
+    decided,
+    referenceTurnId,
+  });
 
   try {
     for (const dest of destBindings) {
@@ -135,10 +135,6 @@ export async function POST(
   }
 
   const prompt = collapseSpeechStutter(decided.prompt);
-  const referenceTurnId =
-    typeof body.referenceTurnId === "string" && body.referenceTurnId.trim()
-      ? body.referenceTurnId.trim()
-      : null;
   const bindings = destBindings.length ? destBindings : [active];
   const travisBinds = bindings.filter((b) => isTravisSeat(b.seatKey));
   const cursorBinds = bindings.filter((b) => !isTravisSeat(b.seatKey));
