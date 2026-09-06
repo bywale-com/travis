@@ -1,5 +1,5 @@
 /**
- * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership + SCP-008 backlog + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion + SCP-015 sit + SCP-023 dest_job + SCP-024 stream.
+ * Travis schema migrate — SCP-001 base + SCP-002 room + SCP-003 queue + SCP-007 membership + SCP-008 backlog + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion + SCP-015 sit + SCP-023 dest_job + SCP-024 stream + SCP-029 session-seq index.
  */
 import { config } from "dotenv";
 import postgres from "postgres";
@@ -338,6 +338,11 @@ async function main() {
     CREATE INDEX IF NOT EXISTS voice_turn_initiative_idx
       ON travis.voice_turn (initiative_id)
       WHERE initiative_id IS NOT NULL
+  `;
+
+  await sql`
+    CREATE INDEX IF NOT EXISTS voice_turn_session_seq_idx
+      ON travis.voice_turn (session_id, seq)
   `;
 
   await sql`

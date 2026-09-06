@@ -33,6 +33,7 @@ import {
   destJob,
   initiative,
   queuedUtterance,
+  turnArtifact,
   voiceSession,
   voiceTurn,
   type Initiative,
@@ -82,6 +83,10 @@ export async function ensureInitiativeStore(): Promise<void> {
     CREATE INDEX IF NOT EXISTS voice_turn_initiative_idx
       ON travis.voice_turn (initiative_id)
       WHERE initiative_id IS NOT NULL
+  `);
+  await db.execute(sql`
+    CREATE INDEX IF NOT EXISTS voice_turn_session_seq_idx
+      ON travis.voice_turn (session_id, seq)
   `);
   await db.execute(sql`
     ALTER TABLE travis.queued_utterance
@@ -207,6 +212,8 @@ async function insertOpen(
     })
     .returning();
   await stampTurn(foundingTurnId, row.id);
+  const { notifyRoom } = await import("@/server/room-bus");
+  await notifyRoom(sessionId).catch(() => {});
   return row;
 }
 
@@ -533,6 +540,8 @@ export async function renameInitiative(
     .set({ title })
     .where(eq(initiative.id, initiativeId))
     .returning();
+  const { notifyRoom } = await import("@/server/room-bus");
+  await notifyRoom(sessionId).catch(() => {});
   return updated;
 }
 
@@ -553,6 +562,8 @@ export async function markInitiativeDone(
     .set({ status: "done", doneAt: new Date() })
     .where(eq(initiative.id, initiativeId))
     .returning();
+  const { notifyRoom } = await import("@/server/room-bus");
+  await notifyRoom(sessionId).catch(() => {});
   return updated;
 }
 
@@ -611,35 +622,36 @@ export type ListInitiativesOpts = {
   q?: string;
 };
 
-async function artifactNamesForInitiative(
-  initiativeId: string,
-): Promise<string[]> {
+async function artifactNamesForInitiatives(
+  initiativeIds: string[],
+): Promise<Map<string, string[]>> {
+  const map = new Map<string, string[]>();
+  if (!initiativeIds.length) return map;
   try {
-    const raw = await db.execute(sql`
-      SELECT a.filename, a.path
-      FROM travis.turn_artifact a
-      INNER JOIN travis.voice_turn t ON t.id = a.turn_id
-      WHERE t.initiative_id = ${initiativeId}::uuid
-    `);
-    const list = (
-      Array.isArray(raw)
-        ? raw
-        : raw && typeof raw === "object" && Array.isArray((raw as { rows?: unknown }).rows)
-          ? (raw as { rows: unknown[] }).rows
-          : []
-    ) as Array<{ filename?: string; path?: string }>;
-    const names: string[] = [];
+    const list = await db
+      .select({
+        initiativeId: voiceTurn.initiativeId,
+        filename: turnArtifact.filename,
+        path: turnArtifact.path,
+      })
+      .from(turnArtifact)
+      .innerJoin(voiceTurn, eq(voiceTurn.id, turnArtifact.turnId))
+      .where(inArray(voiceTurn.initiativeId, initiativeIds));
     for (const row of list) {
+      const id = row.initiativeId;
+      if (!id) continue;
+      const names = map.get(id) ?? [];
       if (typeof row.filename === "string" && row.filename.trim()) {
         names.push(row.filename);
       }
       if (typeof row.path === "string" && row.path.trim()) {
         names.push(pathBasename(row.path));
       }
+      map.set(id, names);
     }
-    return names;
+    return map;
   } catch {
-    return [];
+    return map;
   }
 }
 
@@ -671,19 +683,60 @@ export async function listInitiatives(
           )
           .orderBy(desc(initiative.createdAt));
 
+  const windowed = rows.filter((row) =>
+    requestInWindow(row.createdAt, requestWindowStart(when)),
+  );
+  if (!windowed.length) return [];
+
+  const ids = windowed.map((row) => row.id);
+  const grain = await db
+    .select({
+      id: voiceTurn.id,
+      seq: voiceTurn.seq,
+      kind: voiceTurn.kind,
+      seatKey: voiceTurn.seatKey,
+      text: voiceTurn.text,
+      createdAt: voiceTurn.createdAt,
+      referenceTurnId: voiceTurn.referenceTurnId,
+      initiativeId: voiceTurn.initiativeId,
+    })
+    .from(voiceTurn)
+    .where(
+      and(
+        inArray(voiceTurn.initiativeId, ids),
+        inArray(voiceTurn.kind, ["user", "agent_post"]),
+      ),
+    )
+    .orderBy(asc(voiceTurn.seq));
+
+  const byInit = new Map<string, TicketTurn[]>();
+  for (const t of grain) {
+    if (!t.initiativeId) continue;
+    const list = byInit.get(t.initiativeId) ?? [];
+    list.push({
+      id: t.id,
+      seq: t.seq,
+      kind: t.kind,
+      seatKey: t.seatKey,
+      text: t.text,
+      createdAt: t.createdAt,
+      referenceTurnId: t.referenceTurnId,
+    });
+    byInit.set(t.initiativeId, list);
+  }
+
+  const filesByInit = q.trim()
+    ? await artifactNamesForInitiatives(ids)
+    : null;
+
   const out: InitiativeListItem[] = [];
-  for (const row of rows) {
-    if (!requestInWindow(row.createdAt, requestWindowStart(when))) {
-      continue;
-    }
-    const turns = await turnsForInitiative(row.id);
+  for (const row of windowed) {
+    const turns = byInit.get(row.id) ?? [];
     const [founding] = turns.filter((t) => t.id === row.foundingTurnId);
     const posts = turns.filter((t) => t.kind === "agent_post");
     if (q.trim()) {
-      const messages = turns
-        .filter((t) => t.kind === "user" || t.kind === "agent_post")
-        .map((t) => t.text);
-      const files = await artifactNamesForInitiative(row.id);
+      const messages = turns.map((t) => t.text);
+      const files = filesByInit?.get(row.id) ?? [];
       if (
         !catalogNeedleHits(q, [
           row.title,

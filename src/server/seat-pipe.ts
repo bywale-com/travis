@@ -151,6 +151,8 @@ async function insertTurn(
       .insert(voiceTurn)
       .values({ sessionId, seq, ...values })
       .returning();
+    const { notifyRoom } = await import("@/server/room-bus");
+    await notifyRoom(sessionId).catch(() => {});
     return row;
   });
 }

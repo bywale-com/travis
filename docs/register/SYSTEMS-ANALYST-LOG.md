@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 11:25 UTC — **SCP-028 signed.** Reply dests that post’s author; visible Cursor-turn images hang on that post; ticket Reply stays on the ticket. Same PR as PM-012 ([#142](https://github.com/bywale-com/travis/pull/142)). Next number is **029**.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 15:05 UTC — **SCP-029 recut.** Room SSE + `seq` resume + `NOTIFY travis_room`. First 029 (smarter poll) is void. **028** planted on [#142](https://github.com/bywale-com/travis/pull/142). Next number is **030**.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -599,3 +599,64 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-028-USABLE-CHAT.md`](./SYSTEMS-CHANGE-PACKET-028-USABLE-CHAT.md)
 
 **Handoff:** Engineer plants 028 on **this same PR**. Next packet number is **029**. Do not remint 023–027. Do not mint a cousin.
+
+---
+
+## 2026-09-06 14:52 UTC — SCP-029 Lists show now (PM-013 on #144)
+
+**Kind:** Packet ascribe. Automation woke this seat. PM-013 + test on this PR. No SYSTEMS-CHANGE-PACKET for List Live was on the branch. 023–027 stay planted — not reminted. **028** is reserved for PM-012 on [#142](https://github.com/bywale-com/travis/pull/142) — not this cut.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-013 lock + plates). Not PM. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** Messages, backlogs, e.t.c, populate too slowly, sometimes don't even show. Until hard refresh. Keep the poll. Tick paints the open door. Failed GET keeps last good. Turns after last `seq`. Backlog list is a list. Foreground → tick now. No websocket this cut.
+
+**Staples (not scenery):** Ticket **title** (B1 and the open ticket). **Lit** seats / **next**. Room **title** on the index. Log tape.
+
+**Quoted stood-up:**
+
+- `streamPollMs` is 1–3s (`src/lib/stream.ts` L167–169). Tick (`Room.tsx` L480–531) GETs queue then the **whole** `/turns` tape. `catch` swallows. Effect deps `session?.id` — rooms index never ticks.
+- `/turns` selects every `voice_turn` for the session + all attachments + cards + streams. `refreshTurns` does `setTurns(data.turns ?? [])` — a bad body blanks the tape.
+- `listInitiatives` calls `turnsForInitiative` per row (`initiative.ts` L673–708). `loadBacklog` `catch { setBacklogRows([]); }`. Ticket GET is one-shot. `loadRooms` can `setRooms([])` then throw.
+- `voice_turn.seq` exists. No `(session_id, seq)` index. `visibilitychange` only `resumeSendSounds`.
+- 023: SSE / LISTEN/NOTIFY named silence.
+
+**Ascribed:**
+
+1. **No remint** of 023–027 tables, 012, 028. No websocket. No new table. No Hear / Skip buttons.
+2. **Index only:** `voice_turn_session_seq_idx` on `(session_id, seq)`.
+3. **`GET /turns?afterSeq=`** — `seq > afterSeq` OR `thought_status = 'streaming'`. Attachments for returned ids. Merge by id. Full GET on enter-room / hard refresh. Last good on fail.
+4. **`listInitiatives`** — one grain query, not N `turnsForInitiative`. List = title / status / lit / next. `q` uses the same grain. Ticket GET rides the tick while open.
+5. **Tick** paints the open door (Log/Voice tape, backlog list, open ticket, rooms index). Rooms poll without `session.id`. Foreground → one tick now. Last good on backlog and rooms. No loading flash on poll refresh.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-029-LIST-LIVE.md`](./SYSTEMS-CHANGE-PACKET-029-LIST-LIVE.md)
+
+**Handoff:** Engineer plants 029 on **this same PR**. Next packet number is **030**. Do not remint 023–027. Do not mint 028 here. Do not mint a cousin.
+
+---
+
+## 2026-09-06 15:05 UTC — SCP-029 recut (room wire; poll-only void)
+
+**Kind:** Founder correction. PM recut landed on this PR (`b4864c7`) after the first 029. Do not edit the 14:52 stamp. Same number. Not a cousin.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-013 recut). Not PM. Not Engineer.
+
+**Founder lock (not rewritten):** Poll is provincial. Cursor / Claude do not lose: durable tape + one live wire + resume from the last id. 023 silence on the **room** bus is **open**. A smarter poll is still guessing.
+
+**Quoted stood-up (this recut):**
+
+- Send SSE closes in `finally` (`send/route.ts` L187–193). Dest absorb / dest-job closer write through `insertTurn` on **another** request.
+- Neon session-mode pool is max 1 (`pool.ts`). LISTEN cannot share that client. `NOTIFY` is a one-shot on the query client. Dedicated listen client per open wire.
+- No `maxDuration` on routes today. Cookie auth (`requireOwnedSession`).
+- Cheap list + last-good + `voice_turn.seq` from the first 029 still stand. The **product** is not the tick.
+
+**Ascribed:**
+
+1. **Void** the poll-as-product cut. Keep last-good, cheap list, `afterSeq` select, session-seq index.
+2. **`GET /api/session/:id/events`** — resume turns + one `backlog` snapshot + optional ticket + stream, then `LISTEN travis_room`. `Last-Event-ID` / `afterSeq`. `maxDuration = 800`. Reconnect with last `seq`.
+3. **`notifyRoom`** after `insertTurn`, initiative hold/rename/done, stream open/close/fail, motion status. Payload = `session_id`.
+4. While the wire is open, this session may reap / nudge dest. Phone tape-tick is **fallback only** (wire down). Foreground → reopen the wire. No websocket. Rooms index is not on this wire.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-029-LIST-LIVE.md`](./SYSTEMS-CHANGE-PACKET-029-LIST-LIVE.md) (recut in place).
+
+**Handoff:** Engineer plants **this** 029 on **this same PR**. Next packet number is **030**. Do not remint 023 tables. Do not mint 028 here. Do not mint a cousin.
+
