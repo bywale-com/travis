@@ -11,7 +11,7 @@
 **Builds on:** 004 / 005 Log · 062 / 010 images · 011 / 027 reply staple.  
 **Next SA:** **028**.
 
-**Where:** [#140](https://github.com/bywale-com/travis/pull/140). Same PR. Do not open a cousin.
+**Where:** this PR. #140 already merged (011 / 027). Do not remint that plant. Do not open a cousin of this cut.
 
 Voice is parked this cut. Walk the **Log**.
 
@@ -53,7 +53,17 @@ The Log is already a chat in the logs. It does not behave as one. Engineer stays
 
 ---
 
-## Pocket 3 — The app he opens is the chat
+## Pocket 3 — Reply on a ticket stays on that ticket
+
+**Lived (psi walk, 11:04):** Backlog → ticket → Messages → Reply. The ticket closes. You are on the room Log. You cannot answer in the thread you opened.
+
+**Planted (027):** `BacklogTicket` `onReply` clears the ticket and the door, then Type in the room (`Room.tsx`).
+
+**Lock:** Reply on a ticket message stays on **that ticket**. Same dest-the-author lock. The quote names who. Do not route him to the room Log to finish the send.
+
+---
+
+## Pocket 4 — The app he opens is the chat
 
 **Lived:** He uses psi. 027 is on #140. Look 011 never got past SSO on the preview and still Passed.
 
@@ -65,6 +75,7 @@ The Log is already a chat in the logs. It does not behave as one. Engineer stays
 
 - Log is the walk. Voice parked.
 - Reply dests the author. Reply-to-reply dests that author.
+- Ticket Reply stays on that ticket. The quote names who.
 - Visible Cursor images hang on the post.
 - Engineer computer-uses until [`PM-PACKET-012-USABLE-CHAT-TEST.md`](./PM-PACKET-012-USABLE-CHAT-TEST.md) matches.
 - Do not remint 027 doors, `reference_turn_id`, `turn_artifact`, `heard_at`.
@@ -79,4 +90,5 @@ Ascribe, quote live rows:
 
 1. Dest target from the referenced turn’s author (`seat_key` / binding). Reply-to-reply uses **that** turn’s author, not the first dest in the chain.
 2. What counts as “visible in the Cursor turn” → `turn_artifact` on that `agent_post` (API artifact, tool image, markdown image).
-3. No new table. No remint of 062 / 027 columns.
+3. Ticket Reply compose + send stay on that ticket (same `reference_turn_id`). Quote shows the author.
+4. No new table. No remint of 062 / 027 columns.

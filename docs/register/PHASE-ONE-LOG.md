@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 11:08 UTC — The Log is a chat and it does not work as one. 012 go. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 11:12 UTC — Psi walk: images absent, ticket Reply leaves the ticket. 012 on its own PR. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2837,3 +2837,13 @@ Fix: Wake on its own line. That push is the get-go the go recut meant to be.
 **Looked (027 plant, not another src Pass):** Reply quotes. Dest does not follow the author. Images hang only from Cursor’s artifacts API. Look 011 never opened the Log (SSO) and Passed. He is on psi. psi is not #140.
 
 **Lock.** Reply dests that person. Pictures in the Cursor turn sit under the post. Engineer computer-uses the Log on psi until the sheet matches. Voice parked. Do not remint 027 columns.
+
+---
+
+## 2026-09-06 11:12 UTC — Psi Log walk (this seat)
+
+**Kind:** Lived walk. Same 012. #140 already merged (011 / 027). 012 was on the dead branch — own PR.
+
+**Walk (psi, room Travis, Log / Type):** Send works. Reply on the room quotes, does not dest the author. Images are paths; Artifacts empty. Ticket Messages → Reply **leaves the ticket** for the room Log. Quote rail does not name who.
+
+**012 pocket 3:** Reply on a ticket stays on that ticket.

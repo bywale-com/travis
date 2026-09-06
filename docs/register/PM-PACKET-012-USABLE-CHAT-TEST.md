@@ -99,6 +99,23 @@ Stay on that line.
 
 ---
 
+## E. Ticket Reply stays
+
+### E.1 Reply on a ticket line
+
+**Do:** Backlog. Open one ticket. Messages. Tap a left-side post. Tap **Reply**. Type `Stay on that line.` Send.
+
+**Expect:** In this order:
+
+1. You are still on that ticket.
+2. The new line hangs on that post.
+3. Dest is that post’s author.
+4. You are not on the room Log.
+
+**I saw:**
+
+---
+
 ## After
 
 If any **I saw** misses Expect, the packet is not done. Engineer keeps computer-using the Log. Do not write Pass from files.
