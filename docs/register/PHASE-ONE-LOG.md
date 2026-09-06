@@ -2291,3 +2291,17 @@ Do not paste the token here.
 **Kind:** Process. Fine-grained PAT in the secret worked.
 
 [Run](https://github.com/bywale-com/travis/actions/runs/34003356089): `Label actor: bywale-com`. Timeline: you removed `wake-engineer` at 01:14:11, added it at 01:14:12. B booted: [`bc-961c272a`](https://cursor.com/agents/bc-961c272a-55dc-48b1-808f-2f2af9caa7a7) (automation e89c2975, running). Same path as a packet.
+
+---
+
+## 2026-09-06 01:20 UTC — Test MD on packets and hotfixes (founder)
+
+**Kind:** Process lock.
+
+**Founder (preserved):** In any packet or hotfix there should always be a test MD. Was there one in this hotfix? If there wasn’t, no problem. There usually should be. If there isn’t, what is the GitHub Action that sends an email going to send?
+
+**074:** no test file. No hotfix has had one. Packets do (`PM-PACKET-NNN-*-TEST.md`).
+
+**Emerge today:** only on `PM-LOOK-NNN` Pass. It attaches that packet’s `*-TEST.md`. No sheet → the letter says `No PM-PACKET-NNN-*-TEST.md on this commit.` Hotfix look is not wired to that mail yet.
+
+**Law:** every packet and every hotfix gets a test MD. Next hotfix is `HOTFIX-NNN-*-TEST.md`. 074 is allowed without.
