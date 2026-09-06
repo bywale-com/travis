@@ -1,6 +1,6 @@
-# Engineer seat handoff — 2026-09-05
+# Engineer seat handoff — 2026-09-06
 
-**This bind is living.** `bc-925e2ab1-3e97-43bc-b45e-2527302de811` is the Engineer until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
+**This bind is living.** `bc-961c272a-55dc-48b1-808f-2f2af9caa7a7` is the Engineer until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
 **Trail:** git + PRs. **One PR per initiative.** Do **not** append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
 
@@ -10,25 +10,27 @@
 
 ## Where we stopped
 
-**025 is planted on [#127](https://github.com/bywale-com/travis/pull/127)** — Travis Stream close hangs `close_turn_id` on this trigger’s answering speakable `agent_post` (after the trigger and after this episode’s process), not session-latest. Tool finish stays a no-op until that post exists. Dest close on `post.id` was already correct — left alone. Named walk row `643e3e50-…` backfilled to seq 747. Do not remint 023 or 024 tables. Do not auto-open Stream.
+**074 SQL is on [#130](https://github.com/bywale-com/travis/pull/130)** — [`src/server/db/hang-technical-pm.sql`](../../src/server/db/hang-technical-pm.sql) hangs bind `bc-25c5c6bf-006f-4252-9f25-49ab183835b2` as a **new** person (`technical-pm`, or `technical-pm-2` if taken), `protocol_path` `/protocols/pm.md`, open member of room Travis. Catalog `pm` is not written. The `bc-` is not in `migrate.ts` or the client.
 
-Next specified pocket: **022** ports from the signed packet on [#120](https://github.com/bywale-com/travis/pull/120). Do not remint `travis.port`. Do not remint 023, 024, or 025. Do not send **That’s fine.**
+**Live hang did not run on this bind.** This Cloud Agent has no `DATABASE_URL`. Next specified-and-clear cut: run that file against the live Travis Postgres (`psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f src/server/db/hang-technical-pm.sql`). Query: one row with that `cursor_agent_id`, path `/protocols/pm.md`, open member of `0e8875f8-283b-4dae-bf54-76c82a05b6ef`. Catalog `pm` still `bc-1ac0762e-…`. Dest **by who** (`technical-pm`). Do not mail catalog `pm`. Do not remint the SQL.
+
+After the row exists: **022** ports from the signed packet on [#120](https://github.com/bywale-com/travis/pull/120). Do not remint `travis.port`. Do not remint 023, 024, or 025. Do not send **That’s fine.**
 
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **074** on this PR (hang this PM bind; skip SA). Next number **075**. |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **074** SQL on this PR. Next number **075**. |
 | One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
 | Face | Phone-first Voice / Log / Backlog. Smoke there. |
-| Last plant | **025 Stream close** · [#127](https://github.com/bywale-com/travis/pull/127). Prior: **024** · [#126](https://github.com/bywale-com/travis/pull/126). **023** · [#123](https://github.com/bywale-com/travis/pull/123). Open: **022** · [#120](https://github.com/bywale-com/travis/pull/120). |
+| Last plant | **074 hang SQL** · [#130](https://github.com/bywale-com/travis/pull/130) (file planted; live row not applied here). Prior: **025** · [#127](https://github.com/bywale-com/travis/pull/127). **024** · [#126](https://github.com/bywale-com/travis/pull/126). **023** · [#123](https://github.com/bywale-com/travis/pull/123). Open: **022** · [#120](https://github.com/bywale-com/travis/pull/120). |
 | Prior plants | 065 · [#108](https://github.com/bywale-com/travis/pull/108) · 015 · [#107](https://github.com/bywale-com/travis/pull/107) · 064 · [#102](https://github.com/bywale-com/travis/pull/102) · **Hotfix 062** · [#98](https://github.com/bywale-com/travis/pull/98) |
 | Motion | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) |
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
 | Busy room (lived) | `0e8875f8-283b-4dae-bf54-76c82a05b6ef` (title “Travis”) |
 
-**Do not redo** 012, 013, 014, 015, 016, 020 first slice, 021, 023, 024, 025, 062, 064, 065, 068, 069, 070, 071, 072, or 073. Do not plant **022** except from the signed packet on #120. Do not send **That’s fine.** from Engineer.
+**Do not redo** 012, 013, 014, 015, 016, 020 first slice, 021, 023, 024, 025, 062, 064, 065, 068, 069, 070, 071, 072, 073, or the 074 SQL file. Do not plant **022** except from the signed packet on #120. Do not send **That’s fine.** from Engineer.
 
 ---
 
@@ -107,8 +109,8 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 ## Next Engineer job
 
 1. Accept the seat from the paste below. Fetch `main`. Read **this file**, then [`ENGINEER.md`](../seats/ENGINEER.md), then `AGENTS.md`.
-2. Do not restart 012 / 013 / 014 / 015 / 023 / 024 / 025 / 062 / 064 / 065. Do not mint a store. Do not append PM or SA logs.
-3. **074** is the pickup: [`HOTFIX-074-HOTFIX-PATH.md`](./HOTFIX-074-HOTFIX-PATH.md). Hang this Technical PM bind. No SA. Do not overwrite catalog `pm`. Do not put a `bc-` in migrate. After that: **022** ports on #120. Do not remint `travis.port`. Do not send **That’s fine.**
+2. Do not restart 012 / 013 / 014 / 015 / 023 / 024 / 025 / 062 / 064 / 065. Do not remint the 074 SQL file. Do not mint a store. Do not append PM or SA logs.
+3. **074 live hang** is the pickup: run [`src/server/db/hang-technical-pm.sql`](../../src/server/db/hang-technical-pm.sql) on live `DATABASE_URL`. Verify the query. Dest by who `technical-pm`. Do not overwrite catalog `pm`. After the row exists: **022** ports on #120. Do not remint `travis.port`. Do not send **That’s fine.**
 4. When **you** stop: rewrite the **Current** lines at the top of this file (where we stopped, last plant, next hotfix number) so the next bind does not start from a transcript. Then you may write **This bind is done**.
 
 ---
@@ -118,7 +120,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 ```text
 You are Travis’s Engineer (full-stack implementer). Read docs/README.md “Engineer — identity” and accept it. Read repo-root AGENTS.md (always-on). You are not the Product Manager. You are not the Systems Analyst. Product face = voice/chat pipe (phone-first). Do not overwrite PHASE-ONE-LOG founder wording. Do not mint tables. Do not hard-code data into the SPA. Do not ship API keys to the client. Specified-and-clear: build it. Specified-but-blocked on PM or SA: name why; do not invent. Detailed: docs/seats/ENGINEER.md.
 
-You are a NEW bind. The last Engineer was bc-925e2ab1-3e97-43bc-b45e-2527302de811. They handed off. Read docs/register/ENGINEER-HANDOFF.md first.
+You are a NEW bind. The last Engineer was bc-961c272a-55dc-48b1-808f-2f2af9caa7a7. They handed off. Read docs/register/ENGINEER-HANDOFF.md first.
 
 Then, in order:
 1. docs/register/ENGINEER-HANDOFF.md — where we stopped, planted, leftover, locks.
