@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:18 UTC — PM look 076 Pass. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:28 UTC — Four held pockets named. 076 is the hotfix cost sample. Canvas later. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2484,3 +2484,31 @@ No new plates. Same `StreamCard` / `StreamDoor` as Travis.
 **Steps I could not do (human):** Vercel team SSO. Dest a seat in room Travis. Watch one finished bubble and the Stream card. Confirm Travis 025 on the phone.
 
 **Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-06 02:28 UTC — Cost sample, output types, initiatives, hear (founder)
+
+**Kind:** Vision dump. Not a packet. Do not mint a table. Do not plant. Canvas later — do not talk it.
+
+**Founder (preserved):** I don't want to forget. I'm going to say everything. … perfect now example … cost analysis of the cost of a packet or hotfix. … two classes of things, of PR. … good example with 076, it just completed. … supporting multiple output types … that was a motion, that was an initiative … images … a lot of output types that show up … in a completed message. … We're generating plates. … printed in chat. … Most of the time, that's like really the common, most common output type that I actually need to see. … In voice mode, we also need to discuss how those … images … show up in voice … leading to a bigger idea about a canvas. I won't talk about it right now … we'll get to that. … initiatives … surrounding messages and streams associated with specific initiatives … not … curated properly or organized properly … Especially not in a way where Travis can even … query. … super critical … when I'm in voice mode talking with Travis … if it even waits, and I don't think it waits, I think it literally just interrupts and says, "New message, from engineer seat" … sometimes it just doesn't even mention it, because it just … gets lost. That's not the correct way. … any time there's a response that comes into chat … There's context around that response because it's part of something. … maybe it is an initiative, maybe it's not … No seat just like talks in chat first … there has to be a process around what happens when there's a response in chat from a seat … how Travis serves that to me, and maybe we even need to ID it … five different agents say something … referencing, oh, about that other thing. This is what the engineer has to say. Do you want to hear it? No, okay, skip. Move past it. Like, it's no longer in the queue.
+
+Four pockets. Already named. Do not remint.
+
+### 1. Cost of a packet vs a hotfix
+
+Two PR classes. **076** is the clean **hotfix** sample (look Pass 02:18). **009** was the dirty **packet** sample (18 boots). Next new packet is still the clean packet sample: 3 boots if no loop. Do not invent a cost dashboard tonight. Held: measure 076 wall + boots vs a later clean packet.
+
+### 2. Output types
+
+Considering 2026-09-03: [`OUTPUT-TYPES-SPEC.md`](./OUTPUT-TYPES-SPEC.md). Planted: **062** / **064** — kinds `image` \| `file` on the Log post. Links stay text. Plates in chat are the common type he needs to see (flagship 14:00). Voice: Wave 1 beat “there’s an image” was ruled considering — not locked as a packet. **Canvas later.** Do not plant it. 023 named canvas as must-not.
+
+### 3. Initiative curate + query
+
+Parked until Stream. Stream is planted (008 / 009 / 076). Ticket messages today are `turnsForInitiative` where `initiative_id` is stamped — follow-on seats often never get the stamp. Travis `read_initiative` is that thin. Super critical. Next product packet after he names it. Do not invent the store.
+
+### 4. Seat lands — process, not a shout
+
+This is **007** Hear / Next / Skip ([`PM-PACKET-007-HEAR-QUEUE.md`](./PM-PACKET-007-HEAR-QUEUE.md)). Locked. SA silence on heard/ready + gist. Lived: interrupt “New message from engineer,” or lost, no context. New grain on this walk: a seat post is always a **response** (initiative or not). Travis offers it **with that context** — “about that other thing, this is what the Engineer has to say. Hear it?” Skip = out of the queue. Five seats = five offers, not five barges. Do not remint 007 C3/C4. 3 makes 4 true.
+
+**Ask:** which pocket first — cost sample, output/voice, initiative curate, or 007 serve? Canvas stays later.
