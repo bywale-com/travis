@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 04:20 UTC — **SCP-026 signed.** Serve: follow-on stamp inherit, heard/seen columns, harvest window, offer. Same PR as PM-010 ([#134](https://github.com/bywale-com/travis/pull/134)). Next number is **027**.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 09:58 UTC — **SCP-027 signed.** Voice New cutoff, reply `reference_turn_id`, dest timeout ≠ stream close, stay, Technical PM. Same PR as PM-011 ([#140](https://github.com/bywale-com/travis/pull/140)). Next number is **028**.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -528,3 +528,41 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-026-SERVE.md`](./SYSTEMS-CHANGE-PACKET-026-SERVE.md)
 
 **Handoff:** Engineer plants 026 on **this same PR**. Next packet number is **027**. Do not remint 023–025. Do not mint a cousin.
+
+---
+
+## 2026-09-06 09:58 UTC — SCP-027 Voice stay (PM-011 on #140)
+
+**Kind:** Packet ascribe. Automation woke this seat. PM-011 + test on this PR. No SYSTEMS-CHANGE-PACKET for 011 was on the branch. 023–026 stay planted — not reminted.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-011 lock + plates). Not PM. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** New is an unseen landing after the cutoff. Seen = Log in view or he already answered. No Hear it / Skip buttons. Reply-to a specific message. Dest timeout must not eat the Stream card. Refresh returns him to the same place. Technical PM, not catalog PM. Gist has no closer. Travis polishes; he does not paraphrase. Travis-writes-the-trail is held.
+
+**Staples (not scenery):** **New** (the landing seat). **Stream** card above the completed dest bubble. **Technical PM**. Reply hangs on **that** message.
+
+**Quoted stood-up:**
+
+- `listUnheardReports` + `isCursorSeat` (`pm` \| `sa` \| `engineer` only). Person `technical-pm` is not New. Catalog `pm` old posts are.
+- 026: no `heard_at` backfill. Log POST `/heard` only on Log→Voice (`Room.tsx` L2047–2057). Intersection does not write.
+- Hear / Skip buttons under the orb (`Room.tsx` L2610–2640). Spoken `parseHearInvite` already stands.
+- `insertUserTurn` has no `referenceTurnId`. `nextSeatBeat` already chains dest seats.
+- `finishDestJobsForBinding` → `failLiveStreamWithoutCard` (`close_turn_id` null). Reap can still absorb; `closeStream` only updates `live`.
+- Room boots `plate: "index"`. `view_mode` / `log_submode` already on `voice_session`. Character persist = `travis-character`.
+- `openBindingForSeat(..., "pm")` is catalog. `resolveRoleDest("pm")` is the seated Technical PM person. `uniqueSeatKeys` drops `technical-pm`.
+- `gistEmptyFallback` appends “The full text is in the Log.” `TRAVIS_SYSTEM` “Speak short.”
+
+**Ascribed:**
+
+1. **No remint** of 023–026, `heard_at`, `reference_turn_id`, `travis.stream`. No stay table. No `/protocols/technical-pm.md`.
+2. **Cutoff write** — one-shot `heard_at = created_at` on existing speakable non-Travis `agent_post`. After plant, New = later inserts. New predicate: not Travis, not catalog `pm`. Person dests count. Do not reuse `isCursorSeat` for New.
+3. **Seen now** — Log intersect POSTs `/heard`. `insertUserTurn` hears prior unheard. Buttons off. Spoken Hear / Skip / read it stay.
+4. **Reply** — `insertUserTurn` + send/live take `referenceTurnId`. Copy `initiative_id` from the referenced turn. Door on the selected bubble. `nextSeatBeat` unchanged.
+5. **Timeout** — dest_job closer only. Do not `failLiveStreamWithoutCard` from `finishDestJobsForBinding`. Hang 025 when the post lands. Fail-without-card only when the Cursor run is over and there is no post.
+6. **Stay** — `localStorage` `travis-stay` (session + plate + scroll turn). View columns already on the session.
+7. **Glass dest** — hide catalog `pm`. Spoken/typed PM → `resolveRoleDest("pm")`. Person chips survive send. `SIT_ROLE_LABEL.pm` = Technical PM.
+8. **Gist / polish** — empty gist = offer once. `summarizeSeatReply` never on founder lines. `TRAVIS_SYSTEM` polish paragraph. Travis-writes-PHASE-ONE-LOG stays silence.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-027-VOICE-STAY.md`](./SYSTEMS-CHANGE-PACKET-027-VOICE-STAY.md)
+
+**Handoff:** Engineer plants 027 on **this same PR**. Next packet number is **028**. Do not remint 023–026. Do not mint a cousin.
