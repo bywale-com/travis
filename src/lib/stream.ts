@@ -243,3 +243,39 @@ export function decideTravisStreamClose(params: {
   }
   return { action: "stay" };
 }
+
+/**
+ * Hotfix 076 — dest done / reap lands one Log post: the finished message.
+ * Last stream `message` body, or `postText` when there is no event.
+ * Stream events stay. The card hangs on that one row.
+ */
+export function destFinishedMessage(params: {
+  messageBodies: string[];
+  postText?: string;
+  cancelled?: boolean;
+  bareError?: boolean;
+}): string | null {
+  for (let i = params.messageBodies.length - 1; i >= 0; i--) {
+    const body = params.messageBodies[i]?.trim();
+    if (body) return body;
+  }
+  const post = (params.postText ?? "").trim();
+  if (post) return post;
+  if (params.cancelled || params.bareError) return null;
+  return "Run finished (no assistant text).";
+}
+
+export type DestCloseDecision =
+  | { action: "close"; text: string }
+  | { action: "no-post" };
+
+export function decideDestStreamClose(params: {
+  messageBodies: string[];
+  postText?: string;
+  cancelled?: boolean;
+  bareError?: boolean;
+}): DestCloseDecision {
+  const text = destFinishedMessage(params);
+  if (!text) return { action: "no-post" };
+  return { action: "close", text };
+}

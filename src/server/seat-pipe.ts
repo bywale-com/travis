@@ -3,6 +3,7 @@ import { delay, isDeadStreamError } from "@/lib/cursor-busy";
 import { absorbText, nextLiveTravisText } from "@/lib/absorb-text";
 import { nextDestSeatText, nextSeatBeat, postIsInRunChain } from "@/lib/beats";
 import { isTravisSeat } from "@/lib/seats";
+import { decideDestStreamClose } from "@/lib/stream";
 import { seatKeyToLabel } from "@/lib/router";
 import {
   isDrainableSeat,
@@ -694,19 +695,18 @@ async function driveDestCursorEvents(params: {
   const cancelled = donePayload?.statusText === "cancelled";
   const bareError = donePayload?.mode === "error" && !postText.trim();
   const landed = streamId ? await messageBodies(streamId) : [];
-  const beats = landed.length
-    ? landed
-    : postText.trim()
-      ? [postText.trim()]
-      : cancelled || bareError
-        ? []
-        : ["Run finished (no assistant text)."];
-  for (const beat of beats) {
+  const destClose = decideDestStreamClose({
+    messageBodies: landed,
+    postText,
+    cancelled,
+    bareError,
+  });
+  if (destClose.action === "close") {
     postTurn = await absorbStreamingAgentPost({
       sessionId,
       userTurnId: userTurn.id,
       seatKey,
-      text: beat,
+      text: destClose.text,
     });
   }
 
@@ -841,21 +841,20 @@ export async function reapFinishedLiveRuns(sessionId: string): Promise<void> {
       continue;
     }
     const seatKey = (binding.seatKey ?? "pm") as SeatKey;
-    const beats = harvested.beats.length
-      ? harvested.beats
-      : harvested.assistantText.trim()
-        ? [harvested.assistantText.trim()]
-        : ["Run finished (no assistant text)."];
+    const destClose = decideDestStreamClose({
+      messageBodies: harvested.beats,
+      postText: harvested.assistantText,
+    });
     let post: VoiceTurn | null = null;
-    for (const beat of beats) {
+    if (destClose.action === "close") {
       post = live.userTurnId
         ? await absorbStreamingAgentPost({
             sessionId,
             userTurnId: live.userTurnId,
             seatKey,
-            text: beat,
+            text: destClose.text,
           })
-        : await insertAgentPostTurn(sessionId, beat, seatKey);
+        : await insertAgentPostTurn(sessionId, destClose.text, seatKey);
       await harvestTurnArtifacts({
         post,
         binding,

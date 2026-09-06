@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-06** · Hotfix 076 · [PR #130](https://github.com/bywale-com/travis/pull/130) — Dest done and reap land one finished seat bubble on the Log, and the Stream card hangs on that row, because 014 was dumping every dest chat onto the tape and only the last one got a card.
 - **2026-09-06** · Hotfix 075 · [PR #130](https://github.com/bywale-com/travis/pull/130) — The 074 hang SQL ran on live Travis Postgres and hung this Technical PM bind as `technical-pm` in room Travis (catalog `pm` untouched), because the file was already on the PR and the prior bind had no `DATABASE_URL`.
 - **2026-09-06** · Hotfix 074 · [PR #130](https://github.com/bywale-com/travis/pull/130) — A hotfix file wakes Engineer only, and hang SQL plants the living Technical PM as a new person in room Travis (not catalog `pm`), because dest-as-mail of a `bc-` is nobody and overwriting `pm` was the comic fail.
 - **2026-09-05** · SCP-025 · [PR #127](https://github.com/bywale-com/travis/pull/127) — A Stream card hangs above this episode’s answering Travis post, not an older line in the session, because the first tool return closed on seq 745 before the desk answer landed.

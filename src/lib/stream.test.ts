@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  decideDestStreamClose,
   decideTravisStreamClose,
   glowFromLive,
   nextStreamMessage,
@@ -176,5 +177,42 @@ test("close stays live until the answering post; failed with no post has no card
       foundingFallbackPostId: "founding",
     }),
     { action: "close", closeTurnId: "founding" },
+  );
+});
+
+test("dest closer: N stream messages land one Log post; card hangs on that id", () => {
+  const bodies = ["First chat.", "Tool follow-up.", "Finished message."];
+  const close = decideDestStreamClose({ messageBodies: bodies });
+  assert.deepEqual(close, { action: "close", text: "Finished message." });
+  assert.equal(
+    streamShowsCard({ status: "completed", closeTurnId: "dest-post-1" }),
+    true,
+  );
+  assert.deepEqual(
+    decideDestStreamClose({
+      messageBodies: [],
+      postText: "Only postText.",
+    }),
+    { action: "close", text: "Only postText." },
+  );
+  assert.deepEqual(
+    decideDestStreamClose({
+      messageBodies: ["", "  "],
+      postText: "",
+      cancelled: true,
+    }),
+    { action: "no-post" },
+  );
+  assert.deepEqual(
+    decideDestStreamClose({
+      messageBodies: [],
+      postText: "  ",
+      bareError: true,
+    }),
+    { action: "no-post" },
+  );
+  assert.deepEqual(
+    decideDestStreamClose({ messageBodies: [], postText: "" }),
+    { action: "close", text: "Run finished (no assistant text)." },
   );
 });

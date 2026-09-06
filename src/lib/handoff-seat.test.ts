@@ -8,8 +8,8 @@ test("Engineer Current names where the last bind stopped", () => {
     "utf8",
   );
   assert.match(handoff, /This bind is living/);
-  assert.match(handoff, /bc-961c272a-55dc-48b1-808f-2f2af9caa7a7/);
-  assert.match(handoff, /074 SQL is on/);
+  assert.match(handoff, /bc-3d6452cd-9bd2-4507-b96e-13f8aaff152a/);
+  assert.match(handoff, /076 dest closer/);
   assert.match(handoff, /Hotfix 062/);
   assert.match(handoff, /next hotfix number/);
   assert.match(handoff, /One PR per initiative/);
