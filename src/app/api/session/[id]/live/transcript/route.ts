@@ -1,20 +1,20 @@
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { parseCallByName } from "@/lib/router";
-import { isCursorSeat, isVocativeOnlyCall } from "@/lib/seats";
+import { isVocativeOnlyCall, isTravisSeat } from "@/lib/seats";
 import { db } from "@/server/db/client";
 import { voiceSession } from "@/server/db/schema";
 import {
   absorbLiveTravisPost,
   insertUserTurn,
   lastSpeakableTravisText,
-  sendOrEnqueue,
+  sendOrEnqueueMany,
   sse,
   sseHeaders,
 } from "@/server/seat-pipe";
 import { collapseSpeechStutter } from "@/lib/absorb-text";
 import { shouldDropHeardAsUser } from "@/lib/thread-truth";
-import { resolveDestBinding } from "@/server/dest-resolve";
+import { destBindingsForSend } from "@/server/dest-resolve";
 import { AuthError } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
 import { runMotionRunner } from "@/server/motion";
@@ -97,57 +97,68 @@ export async function POST(
     referenceTurnId,
   );
   const { seatKey, remainder } = parseCallByName(text);
-  if (seatKey && isCursorSeat(seatKey)) {
-    const binding = await resolveDestBinding(sessionId, seatKey);
-    if (!binding) {
-      return NextResponse.json(
-        { error: "Dest is not an open member of this room" },
-        { status: 400 },
-      );
-    }
+  const calledPrompt =
+    seatKey && isVocativeOnlyCall(text, remainder, seatKey)
+      ? ""
+      : seatKey
+        ? remainder.trim()
+        : heard;
+  const decided = seatKey
+    ? calledPrompt
+      ? { kind: "send" as const, seatKeys: [seatKey], prompt: calledPrompt }
+      : { kind: "switch" as const, seatKey }
+    : { kind: "send" as const, seatKeys: [], prompt: heard };
+  const dests = await destBindingsForSend({
+    sessionId,
+    decided,
+    referenceTurnId,
+  });
+  const cursorDests = dests.filter((b) => !isTravisSeat(b.seatKey));
+  const sticky = dests[dests.length - 1];
+  if (sticky) {
     await db
       .update(voiceSession)
       .set({
-        activeBindingId: binding.id,
-        bindingId: binding.id,
+        activeBindingId: sticky.id,
+        bindingId: sticky.id,
       })
       .where(eq(voiceSession.id, sessionId));
-    const prompt = isVocativeOnlyCall(text, remainder, seatKey)
-      ? ""
-      : remainder.trim();
-    if (prompt && binding) {
-      await runMotionRunner(sessionId);
-      const encoder = new TextEncoder();
-      const stream = new ReadableStream({
-        async start(controller) {
-          const send = (event: string, data: unknown) => {
-            controller.enqueue(encoder.encode(sse(event, data)));
-          };
-          try {
-            await sendOrEnqueue({
-              sessionId,
-              binding,
-              prompt,
-              send,
-              userTurn,
-              referenceTurnId,
-            });
-          } catch (err) {
-            send("error", {
-              error: err instanceof Error ? err.message : String(err),
-            });
-          } finally {
-            controller.close();
-          }
-        },
-      });
-      return new Response(stream, { headers: sseHeaders() });
-    }
+  }
+  const prompt = decided.kind === "send" ? decided.prompt : "";
+  if (prompt && cursorDests.length) {
+    await runMotionRunner(sessionId);
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      async start(controller) {
+        const send = (event: string, data: unknown) => {
+          controller.enqueue(encoder.encode(sse(event, data)));
+        };
+        try {
+          await sendOrEnqueueMany({
+            sessionId,
+            bindings: cursorDests,
+            prompt,
+            send,
+            userTurn,
+            referenceTurnId,
+          });
+        } catch (err) {
+          send("error", {
+            error: err instanceof Error ? err.message : String(err),
+          });
+        } finally {
+          controller.close();
+        }
+      },
+    });
+    return new Response(stream, { headers: sseHeaders() });
+  }
+  if (dests.length && !prompt) {
     await runMotionRunner(sessionId);
     return NextResponse.json({
       ok: true,
       turn: userTurn,
-      switched: binding.seatKey ?? seatKey,
+      switched: sticky?.seatKey ?? seatKey,
       stopLive: true,
     });
   }

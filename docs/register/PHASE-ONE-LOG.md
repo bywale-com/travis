@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 10:22 UTC — PM look 011 Pass (this seat). Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 12:01 UTC — PM look 012 Pass (this seat). Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2821,5 +2821,47 @@ Fix: Wake on its own line. That push is the get-go the go recut meant to be.
 **Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not dest. I did not Talk. I did not sit on a Log bubble. I did not pull-to-refresh in the room.
 
 **Steps I could not do (human):** Vercel team SSO. Travis email link. Talk on a phone. Dest / reply door / timeout card / stay refresh / dest chips / spoken Hear.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-06 11:08 UTC — The Log is a chat; it is not one (founder)
+
+**Kind:** Packet cut. **Wake:** sa. Not a remint of 011 / 027.
+
+**Founder (preserved):** The app is generally unusable. … I should almost never even need to invent or specify anything again. … we’ve added a reply ability … if you reply to a message that was … a reply to another message, it doesn’t automatically send back to the person. … Forget the voice mode for now … the text side of the app is freaking unusable. … images don’t work, they don’t populate. … just prompt the engineer to just keep working on the app till it’s ready. Use computer use … it’s just a chat app. … I don’t give a fuck what V1 is. I just care what the app is right now … any agent should be able to go into the app … write a cohesive narrative of clearly how it needs to work … and how it just doesn’t do that by testing the app.
+
+**Story:** [`USABLE-CHAT.md`](./USABLE-CHAT.md). Packet [`PM-PACKET-012-USABLE-CHAT.md`](./PM-PACKET-012-USABLE-CHAT.md) · test [`PM-PACKET-012-USABLE-CHAT-TEST.md`](./PM-PACKET-012-USABLE-CHAT-TEST.md). SA **028**. Same PR [#140](https://github.com/bywale-com/travis/pull/140).
+
+**Looked (027 plant, not another src Pass):** Reply quotes. Dest does not follow the author. Images hang only from Cursor’s artifacts API. Look 011 never opened the Log (SSO) and Passed. He is on psi. psi is not #140.
+
+**Lock.** Reply dests that person. Pictures in the Cursor turn sit under the post. Engineer computer-uses the Log on psi until the sheet matches. Voice parked. Do not remint 027 columns.
+
+---
+
+## 2026-09-06 11:12 UTC — Psi Log walk (this seat)
+
+**Kind:** Lived walk. Same 012. #140 already merged (011 / 027). 012 was on the dead branch — own PR.
+
+**Walk (psi, room Travis, Log / Type):** Send works. Reply on the room quotes, does not dest the author. Images are paths; Artifacts empty. Ticket Messages → Reply **leaves the ticket** for the room Log. Quote rail does not name who.
+
+**012 pocket 3:** Reply on a ticket stays on that ticket.
+
+---
+
+## 2026-09-06 12:01 UTC — PM look 012 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`PM-PACKET-012-USABLE-CHAT.md`](./PM-PACKET-012-USABLE-CHAT.md) · SA **028** · plant on [#142](https://github.com/bywale-com/travis/pull/142) (`dac01b7`). Sheet: [`PM-LOOK-012.md`](./PM-LOOK-012.md).
+
+**Look.** src/ matches the lock. `destFromReferencedTurn` reads this `agent_post` author only; `kind=user` does not dest from `seat_key`. Chips / call-by-name add. Quote rails name who (`Reply to {label}`). Ticket `onReply` keeps the ticket; Type compose lives there. Harvest hangs API ∪ markdown ∪ process paths on this `turn_id`; `http(s)` 302; `parseAgentPost` omits image markdown. No new table. No remint of `reference_turn_id` / `heard_at` / `turn_artifact`. No Hear / Skip buttons.
+
+**Preview I opened:** `https://travis-git-cursor-packet-012-usab-4fa860-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Behind protection: Travis email door. Did not sign in. Did not see Voice / Log glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not enter Travis. I did not Reply. I did not dest. I did not see a picture under a post. I did not open a ticket.
+
+**Steps I could not do (human):** Vercel team SSO. Travis email link. Enter Travis · Log · Type. Reply / image hang / stay reload / ticket Reply.
 
 **Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.

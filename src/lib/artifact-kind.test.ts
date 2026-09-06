@@ -5,8 +5,12 @@ import {
   artifactFilename,
   artifactKindFromPath,
   formatLandedFiles,
+  imagePathsFromProcessBody,
+  isHttpArtifactPath,
+  markdownImageSrcs,
   parseCursorUpdatedAt,
   shouldHangArtifact,
+  stripMarkdownImages,
 } from "./artifact-kind";
 
 test("png jpeg gif webp are images; everything else is a file", () => {
@@ -86,6 +90,29 @@ test("updatedAt parses ISO; junk is null", () => {
   assert.equal(at.toISOString(), "2026-09-03T12:00:00.000Z");
   assert.equal(parseCursorUpdatedAt(""), null);
   assert.equal(parseCursorUpdatedAt("nope"), null);
+});
+
+test("markdown image srcs and process-body image paths", () => {
+  assert.deepEqual(
+    markdownImageSrcs("see ![plate](docs/register/plates/shot.png) here"),
+    ["docs/register/plates/shot.png"],
+  );
+  assert.deepEqual(
+    markdownImageSrcs('![a](https://example.com/x.png "title")'),
+    ["https://example.com/x.png"],
+  );
+  assert.equal(isHttpArtifactPath("https://example.com/x.png"), true);
+  assert.equal(isHttpArtifactPath("artifacts/shot.png"), false);
+  assert.deepEqual(
+    imagePathsFromProcessBody(
+      "wrote /tmp/shot.png and also https://cdn.example/a.webp next",
+    ),
+    ["/tmp/shot.png", "https://cdn.example/a.webp"],
+  );
+  assert.equal(
+    stripMarkdownImages("see ![plate](shot.png) here").includes("shot.png"),
+    false,
+  );
 });
 
 test("read lists filenames; empty stays quiet", () => {

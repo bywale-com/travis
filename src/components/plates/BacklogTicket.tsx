@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { FileText, Image } from "lucide-react";
+import { FileText, Image, Send } from "lucide-react";
 import { AgentPostBody } from "@/components/AgentPostBody";
 import { SeatMark } from "@/components/QueueChrome";
+import { quoteRailText, replyToLabel } from "@/lib/dest-glass";
 import { seatKeyToShort } from "@/lib/router";
 import { backlogStageKeys, backlogWithLine } from "@/lib/backlog-face";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
@@ -12,17 +13,26 @@ import type { Tokens } from "@/theme/tokens";
 import { StreamCard } from "./StreamDoor";
 import { plateShell, quietLink } from "./shell";
 
+export type BacklogTicketQuote = {
+  authorLabel: string;
+  text: string;
+};
+
 export type BacklogTicketPost = {
   id: string;
   kind?: string;
   seatKey: string | null;
   text: string;
+  referenceTurnId?: string | null;
+  quote?: BacklogTicketQuote | null;
 };
 
 export type BacklogTicketDest = {
   id: string;
   seatKey: string | null;
   text: string;
+  referenceTurnId?: string | null;
+  quote?: BacklogTicketQuote | null;
 };
 
 export type BacklogTicketStream = {
@@ -67,15 +77,25 @@ export function BacklogTicket({
   onBack,
   onOpenLog,
   onReply,
+  pendingReply,
+  onCancelReply,
+  onSend,
 }: {
   t: Tokens;
   ticket: BacklogTicketData;
   onBack: () => void;
   onOpenLog: (turnId: string) => void;
   onReply?: (turnId: string) => void;
+  pendingReply?: { turnId: string; label: string } | null;
+  onCancelReply?: () => void;
+  onSend?: (args: {
+    text: string;
+    chipSeatKeys: string[];
+  }) => Promise<void | boolean>;
 }) {
   const [door, setDoor] = useState<TicketDoor>("messages");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [compose, setCompose] = useState("");
   const title = ticket.title.trim() || ticket.founding?.text.trim() || "Untitled";
   const lit = ticket.posts
     .map((p) => p.seatKey)
@@ -274,6 +294,23 @@ export function BacklogTicket({
                       fontSize: TYPE.body,
                     }}
                   >
+                    {dest.quote ? (
+                      <p
+                        style={{
+                          margin: "0 0 8px",
+                          fontSize: 12,
+                          fontStyle: "italic",
+                          color: t.textMuted,
+                          borderLeft: `2px solid ${t.accent}`,
+                          paddingLeft: 8,
+                        }}
+                      >
+                        {quoteRailText({
+                          authorLabel: dest.quote.authorLabel,
+                          text: dest.quote.text,
+                        })}
+                      </p>
+                    ) : null}
                     {dest.text}
                   </div>
                   {selectedId === dest.id && onReply ? (
@@ -341,6 +378,23 @@ export function BacklogTicket({
                             : undefined,
                       }}
                     >
+                      {post.quote ? (
+                        <p
+                          style={{
+                            margin: "0 0 8px",
+                            fontSize: 12,
+                            fontStyle: "italic",
+                            color: t.textMuted,
+                            borderLeft: `2px solid ${t.accent}`,
+                            paddingLeft: 8,
+                          }}
+                        >
+                          {quoteRailText({
+                            authorLabel: post.quote.authorLabel,
+                            text: post.quote.text,
+                          })}
+                        </p>
+                      ) : null}
                       <AgentPostBody text={post.text} t={t} />
                     </div>
                     {selectedId === post.id && onReply ? (
@@ -421,9 +475,108 @@ export function BacklogTicket({
           </div>
         )}
 
+        {pendingReply && door === "messages" ? (
+          <div
+            style={{
+              marginTop: "auto",
+              padding: "12px 20px 16px",
+              borderTop: `1px solid ${t.border}`,
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 8,
+                marginBottom: 8,
+                color: t.textMuted,
+                fontSize: TYPE.meta,
+                fontStyle: "italic",
+              }}
+            >
+              <span>{replyToLabel(pendingReply.label)}</span>
+              {onCancelReply ? (
+                <button
+                  type="button"
+                  onClick={onCancelReply}
+                  style={{ ...quietLink(t), fontSize: TYPE.meta }}
+                >
+                  Cancel
+                </button>
+              ) : null}
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "flex-end",
+                gap: 8,
+                background: t.bgElevated,
+                border: `1px solid ${t.border}`,
+                borderRadius: 22,
+                padding: "6px 10px",
+              }}
+            >
+              <textarea
+                value={compose}
+                rows={1}
+                placeholder="Message this ticket"
+                onChange={(e) => setCompose(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    const text = compose.trim();
+                    if (!text || !onSend) return;
+                    setCompose("");
+                    void onSend({ text, chipSeatKeys: [] });
+                  }
+                }}
+                style={{
+                  flex: 1,
+                  border: "none",
+                  outline: "none",
+                  background: "transparent",
+                  color: t.textPrimary,
+                  fontSize: TYPE.body,
+                  lineHeight: "21px",
+                  minHeight: 21,
+                  maxHeight: 126,
+                  resize: "none",
+                  fontFamily: "inherit",
+                }}
+              />
+              <button
+                type="button"
+                aria-label="Send"
+                onClick={() => {
+                  const text = compose.trim();
+                  if (!text || !onSend) return;
+                  setCompose("");
+                  void onSend({ text, chipSeatKeys: [] });
+                }}
+                style={{
+                  border: "none",
+                  background: t.accent,
+                  color: t.bgPrimary,
+                  width: 36,
+                  height: 36,
+                  borderRadius: "50%",
+                  padding: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
+              >
+                <Send size={16} />
+              </button>
+            </div>
+          </div>
+        ) : null}
+
         <footer
           style={{
-            marginTop: "auto",
+            marginTop: pendingReply ? 0 : "auto",
             padding: "12px 20px 28px",
             textAlign: "center",
           }}
