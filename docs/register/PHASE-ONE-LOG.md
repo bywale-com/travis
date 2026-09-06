@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:53 UTC — 076 billed 3.2M (B 1.9 + C 1.3) = ~0.23% of the included bar. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 03:34 UTC — 077 look Fail. `next build` type-errors `isOpenDesk`. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2644,3 +2644,21 @@ If 3.2M were Fast input uncached: **~$13**. Cache-heavy: a few dollars. A little
 ### Hygiene
 
 [#130](https://github.com/bywale-com/travis/pull/130) merged. This stamp is a **log PR**, not a 074 rider. Next cut still **077** / packet **010**.
+
+---
+
+## 2026-09-06 03:34 UTC — PM look 077 Fail (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Hotfix:** [`HOTFIX-077-OPEN-DESK.md`](./HOTFIX-077-OPEN-DESK.md) · plant on [#135](https://github.com/bywale-com/travis/pull/135) (`c8e2389`). Sheet: [`PM-LOOK-HOTFIX-077.md`](./PM-LOOK-HOTFIX-077.md).
+
+**Look.** Grain matches the lock: `isOpenDesk` is explicit on, explicit off, else `VERCEL_ENV === "production"`. Cookie still wins. `/enter` stays. `tsx` grain test 9/9. **`next build` type-errors** the `process.env` default on `isOpenDesk`. Vercel Preview for this SHA is Error. No preview host.
+
+**What I opened:** `https://travis-psi.vercel.app` — GitHub merged #135; psi is still 053 login door (“Personal access by email — no password.”). Not this plant.
+
+**Test.** Walked step 1 (grain). Steps 2–4 need a shipped host or the founder’s enter link. I did not Talk.
+
+**Steps I could not do (human):** Talk. Mode / rooms / Room Travis / Voice / Log on a live 077 host. Founder’s `/enter/…`. `TRAVIS_OPEN_DESK=0` on production.
+
+**Verdict:** Fail. Label `fail-look`. Engineer recuts `isOpenDesk` so `next build` typechecks. Same PR. No cousin.
