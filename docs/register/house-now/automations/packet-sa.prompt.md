@@ -22,10 +22,17 @@ If `HEAD~1` does not exist (orphan / first commit), use `git diff --name-only --
 
 If that list is empty: **stop immediately**. One short sentence if you must speak. No comment. No commit. No cousin PR. No memories. Do not read further.
 
+Then open each matching packet on this commit. **Run only if at least one has this exact line:**
+
+`**Wake:** sa`
+
+`**Wake:** hold`, a missing line, or any other value means the packet is waiting. **Stop.** The Action should not have labeled. Do not ascribe.
+
 Do **not** run because:
 
 - the PR already had a packet on an earlier commit
 - plates, FACE, PHASE-ONE-LOG, or PM-HANDOFF moved
+- a packet file moved but is still on hold
 - a `*-TEST.md` appeared
 - a SYSTEMS-CHANGE-PACKET is already signed for that PM packet (Current in `docs/register/SYSTEMS-ANALYST-LOG.md` points at it)
 

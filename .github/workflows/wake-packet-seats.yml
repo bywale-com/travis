@@ -1,6 +1,8 @@
 # Cheap gate in front of Cursor Automations.
 # GitHub path filter + this-push diff. No Cursor boot until a label lands.
 # Labels: wake-sa · wake-engineer · wake-pm-look · fail-look · emerge
+# Packet: this push lands PM-PACKET-NNN-*.md AND that file has **Wake:** sa
+#   → wake-sa. Missing / hold = wait. Filename alone is not the go.
 # Hotfix: this push lands HOTFIX-NNN-*.md → wake-engineer only (no wake-sa).
 # Label adds must be the founder (WAKE_GITHUB_TOKEN), not github-actions[bot].
 # Cursor's label trigger does not treat the Actions bot as the owner.
@@ -95,9 +97,26 @@ jobs:
             else
               echo "Hotfix. Could not add wake-engineer. Fine-grained PAT needs Issues write AND Pull requests write on this repo."
             fi
-          elif echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$'; then
-            gh pr edit "$pr" --add-label wake-sa
-            echo "Labeled #$pr wake-sa"
+          elif echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$' | grep -q .; then
+            # Filename is not the go. Prose "then SA" is not the go.
+            # Only an exact **Wake:** sa line on a packet in this push.
+            # Missing / hold / anything else = wait. No wake-sa.
+            go=""
+            while IFS= read -r pkt; do
+              [[ -z "$pkt" ]] && continue
+              if git show "$AFTER:$pkt" | grep -q '^\*\*Wake:\*\* sa[[:space:]]*$'; then
+                echo "$pkt has Wake: sa"
+                go=1
+              else
+                echo "$pkt is on hold (no **Wake:** sa). No wake-sa from this file."
+              fi
+            done < <(echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$')
+            if [[ -n "$go" ]]; then
+              gh pr edit "$pr" --add-label wake-sa
+              echo "Labeled #$pr wake-sa"
+            else
+              echo "Packet waiting. No wake-sa."
+            fi
           fi
 
           if echo "$files" | grep -E '^docs/register/SYSTEMS-CHANGE-PACKET-.+\.md$'; then
