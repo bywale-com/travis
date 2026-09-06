@@ -14,10 +14,11 @@
 
 ## Cut
 
-1. `TRAVIS_OPEN_DESK=1` (or `true` / `yes`) → no cookie still **is** the preferred seeded operator. `/` shows `TravisApp`. `/api/rooms` and the rest of `requireOperator` succeed as that operator. Same rooms. Same `src/`.
-2. Flag **off** (unset / `0`) → 053 unchanged. No cookie → login door. `/api/rooms` → 401.
-3. `/enter/:token` and the login door **stay**. A real cookie still wins over the flag.
-4. Do not mint a second app. Do not mint a plate-only host in git. Production psi **is** the mirror when the flag is on.
+1. No cookie still **is** the preferred seeded operator when the desk is open. `/` shows `TravisApp`. `/api/rooms` and `requireOperator` succeed as that operator. Same rooms. Same `src/`.
+2. Open when `TRAVIS_OPEN_DESK` is `1` / `true` / `yes`, **or** when the flag is unset on **Vercel production** (psi). That is the live screenshot source — not a drifting branch.
+3. Closed when `TRAVIS_OPEN_DESK` is `0` / `false` / `off` / `no`. Preview and local stay 053 unless the flag is on.
+4. `/enter/:token` and the login door **stay**. A real cookie still wins.
+5. Do not mint a second app. Do not mint a plate-only host in git.
 
 ## Must-not
 
@@ -29,6 +30,7 @@
 
 ## Verify
 
-1. Flag off: no cookie → login door. Unknown email still quiet.
-2. Flag on: no cookie → Mode door / room index / Room Travis. Voice and Log are the planted chrome.
-3. Founder’s `/enter/…` still works.
+1. Local / preview, flag unset: no cookie → login door.
+2. psi (production), flag unset: no cookie → Mode door / rooms / Room Travis. Voice and Log are the planted chrome.
+3. `TRAVIS_OPEN_DESK=0` on production restores 053.
+4. Founder’s `/enter/…` still works.
