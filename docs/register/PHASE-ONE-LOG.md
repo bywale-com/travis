@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 09:56 UTC — 011 did not wake Cursor: Wake was not its own line. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 10:14 UTC — Travis beyond build / Grok Bots as other work — discussed, not locked. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2795,3 +2795,13 @@ The Action ran on the go push (`b0b13b2`) and said: `PM-PACKET-011-VOICE-TPM.md 
 Cause: the hold grep is a **whole line** — `^**Wake:** sa`. The packet had `**Status:** Specified. **Wake:** sa` on one line. First push (`42c5088`) was `**Wake:** hold` — correctly silent. House push (`151d7a2`) did not touch the packet — correctly silent.
 
 Fix: Wake on its own line. That push is the get-go the go recut meant to be.
+
+---
+
+## 2026-09-06 10:14 UTC — Travis beyond build; Grok Bots as other work (founder)
+
+**Kind:** Vision discussion. **Not a lock.** Not 011 / 027. Do not overwrite the 14:00 flag.
+
+**Founder (preserved):** While these are, good, I realize that… I think what Grokbot really can allow us to do is to expand Travis's scope, right? Right now, Travis is… build-focused. But imagine Travis was also capable of orchestrating other projects. I mean, it has the shape in terms of rooms, right? … there could be another side of Travis where cursor isn't the only thing, right? Other things… you can make the argument and say, well but then just talk to Grokbot, but what if I could do it all in one app? Plus, Travis can get smarter. We can… make Travis smarter where… it is beneficial to talk to Travis and then let Travis coordinate the Grok bots or coordinate with the chief of staff Grok master or whatever… Just thinking out loud.
+
+**Alignment (not the flag):** Rooms already have a multi-thread shape. v1 stays the Cursor pipe. A later side is Travis as the one face, Cursor one backend among others, Grok Bots as workers (or one chief of staff) he talks to Travis to coordinate — same reason he does not open Cursor. Not “go use Grok Bot instead.” Not a lock. Not a store. Not a packet.
