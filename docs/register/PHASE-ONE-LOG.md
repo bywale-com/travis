@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 09:30 UTC — packet 011 Voice New, Hear it, Technical PM. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 09:43 UTC — 011 go + recut; Travis-as-logger discussed, not planted. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2749,3 +2749,23 @@ Nothing else. Offer copy is already 02:28. Canvas stays later.
 | Name | Product PM is Technical PM. Catalog `pm` is not dest and not shown. |
 
 **Quoted:** `listUnheardReports` / `newReportChip` · `Room.tsx` Hear/Skip · `summarizeSeatReply` · `ensure-bindings` label `"PM"` · `isCursorSeat` = `pm` \| `sa` \| `engineer`.
+
+---
+
+## 2026-09-06 09:43 UTC — 011 go + recut; Travis log discussed (founder)
+
+**Kind:** Packet recut + discussion. **Wake:** sa.
+
+**Founder (preserved):** Yes, it's a go … the new, it's stale … you've actually already responded in the chat, and it still keeps continually reading this to renew. … there was no way for it to not be new anymore … I don't even need a hear it, or skip. I don't need those buttons. … only the things after that cutoff are new. … Unless I've already seen those messages, they're not new. … the curation mechanism is just … a thread of replies and references … we can't like literally reply to that specific message … it said technical PM timed out. … the stream card that should have been above your message … was absent. … when I scroll down and refresh … it takes me out of the room and back to the room place. … whenever I refresh, it should just bring me back to exactly where I was. … Travis, is paraphrasing my request … He just needs to polish what I've said. … if I'm … working mostly with Travis … he needs to be logging like the PM … let's discuss that first.
+
+**011 recut** ([`PM-PACKET-011-VOICE-TPM.md`](./PM-PACKET-011-VOICE-TPM.md) · test rewritten). Hear it / Skip **buttons off**. New = unseen after cutoff; Log in view or his answering line writes `heard_at` now. Reply-to a message = `reference_turn_id` (column exists). Dest timeout must not `failLiveStreamWithoutCard` with a null close. Refresh restores room + view + scroll. Technical PM stays. Gist closer recut stays. Travis **polishes** a restatement — not a paraphrase.
+
+**Quoted:** `failLiveStreamWithoutCard` + `{label} timed out.` · `Room` boots `plate: "index"` · `reference_turn_id` / `nextSeatBeat` · `switchViewMode` heard write only on Log→Voice.
+
+### Travis logging like the PM — discussion, not a plant
+
+Today the trail is this file: founder wording, then what landed. The Technical PM writes it. Travis is the pipe in the room.
+
+If he mostly talks to Travis, the detailed request has to survive **in the room** the way a stamp survives here: his words, polished, excerpts. That is pocket 8 — restatement hygiene. It is not yet “Travis appends PHASE-ONE-LOG.”
+
+Open: is Travis the **trail** (this log), a **room diary**, **initiative notes**, or still the Technical PM when dest’d? He asked to discuss that before we lock it. No store. No plant.
