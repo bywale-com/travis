@@ -14,7 +14,7 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **01:52 UTC 2026-09-06** (075 hang applied; look Pass). Flag **14:00**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **02:00 UTC 2026-09-06** (Tech PM-centric room defined; dest by who). Flag **14:00**. |
 | Seat law | [`../README.md`](../README.md) § Product Manager · [`../seats/PRODUCT-MANAGER.md`](../seats/PRODUCT-MANAGER.md) · house [`house-now/protocols/pm.md`](./house-now/protocols/pm.md) |
 | Plates | [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) generate · [`PLATE-READ.md`](./PLATE-READ.md) read |
 | Packets 001–009 | [`PM-PACKETS.md`](./PM-PACKETS.md). 001–007 on **`main`**. **008–009** on #127 (merged). 009 look **Pass**. Human walk not started. **010 is not cut.** |
@@ -32,8 +32,8 @@
 ## Next PM job
 
 1. Accept the seat. Fetch this PR. Read Current, then the newest stamp.
-2. Human leftover on 075: dest **technical-pm** in room Travis. Do not dest catalog `pm`. Do not put the id in migrate.
-3. Open PM packet work only if the founder names the pocket. Write on the Engineer’s open PR. Next packet number is still **010**. Next SA is **026**.
+2. Tech PM-centric room is alignment (02:00 stamp). Wait for the founder lock: role dest “PM” → this bind, or dest by name only. Then recut `travis.md` / `pm.md`. SA ascribes idle-lookup / `default_binding_id` if role dest changes. Next packet still **010**. Next SA **026**.
+3. Human leftover on 075: dest **technical-pm**. Do not dest catalog `pm`. Do not put the id in migrate.
 4. Do **not** reprint P1/P2. Do **not** invent a second index. Do **not** remint 007 C3/C4.
 5. When **you** stop: rewrite this file and move Current so the next bind does not start from a transcript.
 

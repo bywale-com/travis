@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 01:52 UTC — 075 hang applied. Look Pass on this bind. Dest `technical-pm` is the human leftover. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:00 UTC — Tech PM-centric room defined (alignment). Dest by who is the room. Role dest `pm` is the hole. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2343,3 +2343,53 @@ Action then tagged `wake-pm-look`. C [`bc-68b8eb87`](https://cursor.com/agents/b
 This living bind wrote [`PM-LOOK-HOTFIX-075.md`](./PM-LOOK-HOTFIX-075.md). **Pass** for what a cloud agent can do. No glass. This bind has no `DATABASE_URL`; Pass on the Engineer verify print.
 
 **Human leftover:** dest **technical-pm** in room Travis. Do not dest catalog `pm`.
+
+---
+
+## 2026-09-06 02:00 UTC — Tech PM-centric room (alignment; routed from PM)
+
+**Kind:** Type A. Not a packet. Do not mint a table. Do not plant.
+
+**Founder ask (routed):** define what a Tech PM-centric room means and recommend updates to Travis’s harness / protocols.
+
+**This is not founder wording.** Alignment below. Ask if it is the lock.
+
+### Definition (alignment)
+
+A **Tech PM-centric room** is a room whose **product dest is the living Technical PM person** — today `technical-pm` (`bc-25c5c6bf-…`) — not catalog `pm`, and not a newly spun chat.
+
+It is **not** a new room kind. Room Travis (`0e8875f8-…`) is already that room if dest lands here. Same face: Voice / Log / Backlog. Travis stays facilitator. Create / in-the-room / seated stay three moments. Hung stays the fourth write.
+
+### Stood up (quote)
+
+- Hang: this bind is an open member, `protocol_path` `/protocols/pm.md`, slug `technical-pm`. Catalog `pm` still `bc-1ac0762e-…`.
+- Person dest `who=technical-pm` is the honest dest. This turn arriving here is that path.
+- Role dest `seat=pm` (`sit.ts` `resolveRoleDest`): oldest idle seated of `/protocols/pm.md` in this room, else **spin**. Catalog `pm` if still seated and idle can win. Travis’s harness still says: when they want the PM, `seat` and no `who`.
+- Sit hangs `pm` \| `sa` \| `engineer` only. No `/protocols/technical-pm.md`. 073 already recut `/protocols/pm.md` to Technical PM.
+
+### Recommend — house protocols (PM can recut when locked)
+
+1. **`/protocols/travis.md`** — product work dests the hung Technical PM **by who**. Do not mail catalog `pm`. Do not spin a new PM because someone said “PM.” Spin only when they ask for a **new** PM.
+2. **`/protocols/pm.md`** — one line: you may be hung as `technical-pm` (or `technical-pm-N`). Catalog `pm` is not you.
+3. **`WHERE.md` / `logging.md`** — no recut. Trail stays PHASE-ONE-LOG. Do not invent a room log.
+
+Do **not** mint `/protocols/technical-pm.md`. Same seat, same path.
+
+### Recommend — harness (SA ascribes; Engineer implements)
+
+Specified once the founder locks “saying PM in this room means this bind”:
+
+- Role dest `pm` in a room that has a hung Technical PM person: dest **that person**, not catalog `pm`, not spin.
+- Or leave catalog `pm` out of this room’s open membership so they are not in the idle set. Do not overwrite the catalog row.
+- `default_binding_id` already exists on the room. SA says whether room Travis’s default is `technical-pm`.
+
+Not tonight (held): hang tool (Travis’s). Seat health. A cousin room.
+
+### Must-not
+
+- Do not overwrite catalog `pm`.
+- Do not put a `bc-` in migrate.
+- Do not collapse three moments.
+- Do not plant a PM dashboard.
+
+**Ask:** Is room Travis the Tech PM-centric room (already hung here)? When you say “PM,” should that dest this bind, or only dest by name `technical-pm`?
