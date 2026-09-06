@@ -10,7 +10,7 @@
 **Builds on:** 023 poll · 010 / 013 backlog · Log turns GET.  
 **Next SA:** **029**.
 
-**Where:** this PR. Do not open a cousin. Do not remint 012 / 028.
+**Where:** [#144](https://github.com/bywale-com/travis/pull/144). Do not open a cousin. Do not remint 012 / 028.
 
 ---
 

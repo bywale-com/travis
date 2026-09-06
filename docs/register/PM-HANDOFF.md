@@ -13,7 +13,7 @@
 | What | Where |
 |------|--------|
 | Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **14:48 UTC 2026-09-06**. Flag **14:00**. |
-| 013 | [`PM-PACKET-013-LIST-LIVE.md`](./PM-PACKET-013-LIST-LIVE.md). **Wake:** sa. SA **029**. Lists show without hard refresh. |
+| 013 | [`PM-PACKET-013-LIST-LIVE.md`](./PM-PACKET-013-LIST-LIVE.md). **Wake:** sa. SA **029**. [#144](https://github.com/bywale-com/travis/pull/144). |
 | 012 | [`PM-PACKET-012-USABLE-CHAT.md`](./PM-PACKET-012-USABLE-CHAT.md) on [#142](https://github.com/bywale-com/travis/pull/142). Do not remint. |
 | Held | Travis write-port. Canvas. 022 on [#120](https://github.com/bywale-com/travis/pull/120). Grok Bot orchestra — discussed, not locked. |
 
