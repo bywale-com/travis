@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 03:02 UTC — Packet 010 cut: pockets 2+3+4. 3 and 4 specified. 2 waits on plates O1/O2. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 03:52 UTC — 010 artifacts glass drawn (O2/O1/A1/A2). 077/078 opened psi. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2674,3 +2674,19 @@ Nothing else. Offer copy is already 02:28. Canvas stays later.
 **3 makes 4 true.** One walk in the test spec.
 
 **Do not** wake Engineer until O1 / O2 signed **and** SA 026. 3 and 4 may be ascribed now.
+
+---
+
+## 2026-09-06 03:52 UTC — Artifacts glass; psi open (077/078)
+
+**Kind:** FACE. Founder locked the Voice/Log door as an **icon compartment**. Not planted.
+
+**Founder (preserved):** we're gonna add an artifacts icon, artifacts compartment … the 1st icon modal … document icon … at the top … exists in both … voice mode and … the chat log … in voice mode, it should be at the top … new plates that I've yet to be seen … the number of new artifacts is … a badge … on the icon … inside … it says artifacts, and there's a list … click into each one … image full screen … X out.
+
+**077 / 078:** login door off on psi production unless `TRAVIS_OPEN_DESK=0`. 077 build failed a typecheck. 078 deployed. Live Voice / Log walked.
+
+**Drawn:** [`PLATES-ARTIFACTS.md`](./PLATES-ARTIFACTS.md) · O2 Voice badge · O1 Log same icon · A1 list · A2 full. First desk from planted chrome + the walk. Ask him to sign.
+
+**Seen law:** Log sat-in-view **or** opened in Artifacts. Badge = unseen count.
+
+**Next hotfix** **079**. Do not wake Engineer on 010 until he signs and SA **026**.

@@ -3,7 +3,7 @@
 **Number:** `010` — next PM packet is `011`. Never reuse. Index: [`PM-PACKETS.md`](./PM-PACKETS.md).  
 **Seat:** Technical PM. **SA** ascribes as **026**. **Engineer** plants after that ascription. PM does not plant.  
 **When:** Named 2026-09-06 — founder: work **2, 3, and 4** in one packet; tests are connected. Pocket **1** (cost) is done.  
-**Status:** **3 and 4 specified.** **2 waits on plates** (Log + Voice). Not locked until those plates are signed.  
+**Status:** **2 glass drawn** ([`PLATES-ARTIFACTS.md`](./PLATES-ARTIFACTS.md) O2 / O1 / A1 / A2). **3 and 4 specified.** Founder signs the four plates, then SA **026**.  
 **Test spec:** [`PM-PACKET-010-SERVE-TEST.md`](./PM-PACKET-010-SERVE-TEST.md)  
 **Flag:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) **14:00 UTC 2026-08-25**.  
 **Builds on:** 007 hear-queue (locked; do not remint C3/C4) · New / 051 · 008 / 009 / 076 Stream · 062 / 064 `image` \| `file` · considering [`OUTPUT-TYPES-SPEC.md`](./OUTPUT-TYPES-SPEC.md).  
@@ -43,30 +43,27 @@ If 3 is thin, 4 has nothing to name. If 2 never lands in chat, Hear has nothing 
 - Log paint: `TurnAttachments` — filename + `<img>` under the turn (`src/components/TurnAttachments.tsx`).
 - Ticket files: `attachmentsForInitiative` only sees artifacts on **stamped** turns.
 
-**Lived miss:** plates often never hang (`turn_artifact` was 0 on the 09-04 walk). Voice has **no** locked beat. [`OUTPUT-TYPES-SPEC.md`](./OUTPUT-TYPES-SPEC.md) Wave 1 (“There’s an image.” / stay on the orb / View log) is **considering**, not this packet’s glass.
+**Lived miss:** plates often never hang (`turn_artifact` was 0 on the 09-04 walk). Voice had no door except View log.
+
+**Glass (founder 03:16, drawn 03:51):** [`PLATES-ARTIFACTS.md`](./PLATES-ARTIFACTS.md).
+
+| ID | File | Job |
+|----|------|-----|
+| **O2** | Voice | First icon (document) at the **top**. Badge = unseen count. No still on the orb. |
+| **O1** | Log | Same icon + badge. Inline plate in the bubble stays planted. |
+| **A1** | Compartment | Title Artifacts. List. New = weight. |
+| **A2** | Full | Most/full screen. **X**. |
+
+**Seen:** sat in view on the Log, **or** opened in Artifacts. Badge dies at 0.
 
 **Achievement (product):**
 
-1. A plate the run emits **appears in the Log bubble**, in stream order, nested in that turn. Not a gallery. Not a side rail. Not canvas.
-2. Same plate is openable from Talk and Type. Dead ref → muted line, not a broken shrine.
-3. **Voice:** he hears that an image is there and can stay on the orb. TTS does not describe pixels and does not spell a URL. The still lives in the Log (and on the ticket once 3 is true).
-4. Links stay 005. Files may ride the same nest if they already hang; do not start a Files.app. Wave 2–4 in the considering spec stay later unless the plates say otherwise.
+1. A plate the run emits **appears in the Log bubble**, in stream order. Not a gallery. Not canvas.
+2. Same plate is in **Artifacts**. Voice learns it from the **badge**, not a still on the orb.
+3. Talk and Type can open it. Dead ref → muted line.
+4. Links stay 005. Files are quiet rows. Wave 2–4 later.
 
-**Specified but not clear until plates:**
-
-- How the plate sits on **Voice** (beat only? peek? View-log chip?). Considering said: no still on the orb. The plate locks this.
-- Exact beat copy. Considering: “There’s an image.”
-
-**Plates needed (founder). Two.**
-
-Screenshot `https://travis-psi.vercel.app` first. Lock chrome. Paint only the pocket. [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md). File under `docs/register/plates/`.
-
-| ID | Home | Job |
-|----|------|-----|
-| **O1** | Log (Talk) | Completed turn; **plate inline** in the bubble, in thread order. Common type. No gallery. No canvas. 076 card may sit above if that episode had a stream — do not invent a second card for the image. |
-| **O2** | Voice | Same moment from the orb. **How the plate shows up in Voice.** This is the lock. Do not put canvas. Do not invent a board. |
-
-Do not generate these from vibes. Do not start Wave 1 glass without O1 / O2 signed.
+Considering Wave 1 beat (“There’s an image.”) is **not** this glass. The icon is.
 
 ---
 

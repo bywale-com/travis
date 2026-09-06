@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=390, initial-scale=1" />
+  <title>Travis artifacts plates</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Orbitron:wght@600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F3EFE7;
+      --elev: #FAF7F1;
+      --ink: #1C1917;
+      --sec: #5C534B;
+      --mut: #9A8F84;
+      --line: #E0D8CB;
+      --ox: #7B2233;
+      --ox-soft: #EFE0E1;
+      --user: #E6DED0;
+      --asst: #FAF7F1;
+      --font: "Segoe UI", "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+      --serif: "Instrument Serif", Georgia, serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); }
+    .phone {
+      width: 390px;
+      height: 844px;
+      margin: 0 auto;
+      background: var(--bg);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+    body[data-p="v1"] #v1,
+    body[data-p="l1"] #l1,
+    body[data-p="a1"] #a1,
+    body[data-p="a2"] #a2 { display: flex; }
+
+    .hdr {
+      padding: 16px 20px 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .art-btn {
+      position: relative;
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .art-btn svg { display: block; }
+    .badge {
+      position: absolute;
+      top: -4px;
+      right: -6px;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      border-radius: 999px;
+      background: var(--ox);
+      color: var(--elev);
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 16px;
+      text-align: center;
+    }
+    .room-pill {
+      border: 1px solid var(--line);
+      background: var(--elev);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .via { color: var(--mut); font-size: 12px; }
+    .hdr-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-left: auto;
+    }
+    .quiet {
+      color: var(--sec);
+      font-size: 13px;
+    }
+
+    .voice-mid { flex: 1; display: flex; flex-direction: column; }
+    .voice-mid .spacer { flex: 1; min-height: 24px; }
+    .orb {
+      margin: 0 auto;
+      width: 176px;
+      height: 176px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 48%, #7B2233 0%, #7B2233cc 32%, #EFE0E1 62%, transparent 78%);
+      box-shadow: 0 0 0 18px #7B223314, 0 0 56px #7B223340, 0 0 120px #7B223322;
+    }
+    .listen {
+      text-align: center;
+      color: var(--ox);
+      font-size: 20px;
+      font-weight: 400;
+      font-family: var(--serif);
+      margin: 22px 24px 0;
+      letter-spacing: -0.02em;
+    }
+    .view-log {
+      padding: 8px 20px 28px;
+      text-align: center;
+      color: var(--ox);
+      font-size: 16px;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-style: dashed;
+    }
+
+    .toggle-row { padding: 0 20px 8px; }
+    .toggle { display: inline-flex; }
+    .toggle .on {
+      margin: 0;
+      padding: 4px 12px;
+      font-size: 12px;
+      border: 1px solid var(--ox);
+      background: var(--ox);
+      color: var(--bg);
+      border-radius: 999px 0 0 999px;
+    }
+    .toggle .off {
+      margin: 0;
+      padding: 4px 12px;
+      font-size: 12px;
+      border: 1px solid var(--line);
+      background: var(--elev);
+      color: var(--sec);
+      border-radius: 0 999px 999px 0;
+    }
+    .strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 20px 4px;
+      min-height: 52px;
+    }
+    .mark {
+      border-radius: 50%;
+      color: #FAF7F1;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .back-voice { padding: 4px 20px 8px; color: var(--ox); font-size: 14px; }
+    .thread {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      padding: 8px 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .bubble-row { display: flex; align-items: flex-start; gap: 8px; max-width: 92%; }
+    .who { font-size: 11px; color: var(--mut); }
+    .bubble {
+      border-radius: 16px 16px 16px 4px;
+      padding: 10px 14px;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+    .bubble.asst { background: var(--asst); border: 1px solid var(--line); }
+    .bubble.user {
+      background: var(--user);
+      border-radius: 16px 16px 4px 16px;
+    }
+    .inline-plate {
+      display: block;
+      margin-top: 8px;
+      width: 100%;
+      max-height: 140px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .talk-bar {
+      flex-shrink: 0;
+      padding: 10px 16px 16px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      color: var(--mut);
+      font-size: 13px;
+    }
+    .talk-bar .loud { color: var(--ox); }
+
+    .sheet-dim {
+      position: absolute;
+      inset: 0;
+      background: #F3EFE7ee;
+      display: flex;
+      align-items: flex-end;
+      z-index: 4;
+    }
+    .ghost-orb {
+      position: absolute;
+      top: 210px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 176px;
+      height: 176px;
+      border-radius: 50%;
+      opacity: 0.18;
+      background: radial-gradient(circle at 50% 48%, #7B2233 0%, #EFE0E1 62%, transparent 78%);
+    }
+    .sheet {
+      width: 100%;
+      max-height: 86%;
+      background: var(--elev);
+      border-radius: 16px 16px 0 0;
+      padding: 12px 20px 28px;
+    }
+    .handle {
+      width: 36px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--line);
+      margin: 0 auto 16px;
+    }
+    .sheet-top { display: flex; justify-content: space-between; align-items: baseline; }
+    .sheet-top h2 { margin: 0; font-size: 22px; font-weight: 600; }
+    .close { color: var(--mut); font-size: 12px; }
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: var(--line);
+      flex-shrink: 0;
+    }
+    .row .name { display: block; font-size: 16px; font-weight: 600; }
+    .row .name.seen { font-weight: 400; color: var(--sec); }
+    .row .sub { display: block; font-size: 12px; color: var(--mut); }
+
+    .full {
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+    }
+    .full-bar {
+      padding: 16px 20px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .x {
+      color: var(--ink);
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 400;
+    }
+    .full img {
+      flex: 1;
+      width: calc(100% - 24px);
+      margin: 0 12px 24px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <!-- icon: document. First icon modal. Header, both modes. -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="doc" viewBox="0 0 24 24" fill="none" stroke="#5C534B" stroke-width="1.75">
+      <path d="M7 3.5h7.2L19 8.2V20.5H7z" />
+      <path d="M14 3.5V8.5h5" />
+    </symbol>
+  </svg>
+
+  <!-- O2 — Voice. Icon at top. Badge = unseen plates. No still on the orb. -->
+  <section class="phone" id="v1">
+    <header class="hdr">
+      <span class="art-btn" aria-label="Artifacts">
+        <svg width="22" height="22"><use href="#doc" /></svg>
+        <span class="badge">2</span>
+      </span>
+      <span class="room-pill">Travis</span>
+      <span class="via">via Travis</span>
+      <span class="hdr-right">
+        <span class="quiet">Backlog</span>
+        <span class="quiet">Requests</span>
+        <span class="quiet">Leave</span>
+      </span>
+    </header>
+    <div class="voice-mid">
+      <div class="spacer"></div>
+      <div class="orb"></div>
+      <p class="listen">Listening…</p>
+      <div class="spacer"></div>
+      <div class="view-log">View log</div>
+    </div>
+  </section>
+
+  <!-- O1 — Log. Same icon. Inline plate is already planted furniture. -->
+  <section class="phone" id="l1">
+    <header class="hdr">
+      <span class="art-btn" aria-label="Artifacts">
+        <svg width="22" height="22"><use href="#doc" /></svg>
+        <span class="badge">2</span>
+      </span>
+      <span class="room-pill">Travis</span>
+      <span class="via">via Travis</span>
+      <span class="hdr-right">
+        <span class="quiet">Backlog</span>
+        <span class="quiet">Requests</span>
+        <span class="quiet">Leave</span>
+      </span>
+    </header>
+    <div class="toggle-row">
+      <div class="toggle">
+        <span class="on">Talk</span>
+        <span class="off">Type</span>
+      </div>
+    </div>
+    <div class="strip">
+      <span class="mark" style="width:38px;height:38px;background:#2F6B6B;font-size:11px;opacity:.45">PM</span>
+      <span class="mark" style="width:38px;height:38px;background:#3F5B79;font-size:11px;margin-left:-10px;opacity:.45">SA</span>
+      <span class="mark" style="width:38px;height:38px;background:#4F6B57;font-size:11px;margin-left:-10px">ENG</span>
+      <span class="mark" style="width:38px;height:38px;background:#2F6B6B;font-size:11px;margin-left:-10px;opacity:.45">TRV</span>
+    </div>
+    <div class="back-voice">← Back to voice</div>
+    <div class="thread">
+      <div class="bubble-row" style="align-self:flex-end;flex-direction:row-reverse">
+        <div>
+          <div class="who" style="text-align:right">9:14</div>
+          <div class="bubble user">Put a short note on this ticket and include a plate.</div>
+        </div>
+      </div>
+      <div class="bubble-row">
+        <span class="mark" style="width:28px;height:28px;background:#4F6B57;font-size:10px">ENG</span>
+        <div>
+          <div class="who">Eng · 9:16</div>
+          <div class="bubble asst">
+            Gate first. Plate is on this ticket.
+            <img class="inline-plate" src="s3-room-backdrop.png" alt="" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="talk-bar">
+      <span>Listening</span>
+      <span class="loud">Pause</span>
+    </div>
+  </section>
+
+  <!-- A1 — Artifacts compartment. Same sheet as Stream / Requests. -->
+  <section class="phone" id="a1">
+    <div class="ghost-orb"></div>
+    <div class="sheet-dim">
+      <div class="sheet">
+        <div class="handle"></div>
+        <div class="sheet-top">
+          <h2>Artifacts</h2>
+          <span class="close">Close</span>
+        </div>
+        <div class="row">
+          <img class="thumb" src="s3-room-backdrop.png" alt="" />
+          <span>
+            <span class="name">output-type-image.png</span>
+            <span class="sub">Engineer · new</span>
+          </span>
+        </div>
+        <div class="row">
+          <img class="thumb" src="s3-room-backdrop.png" alt="" />
+          <span>
+            <span class="name">hear-queue-o2.png</span>
+            <span class="sub">Engineer · new</span>
+          </span>
+        </div>
+        <div class="row">
+          <img class="thumb" src="s3-room-backdrop.png" alt="" />
+          <span>
+            <span class="name seen">plate-chrome.png</span>
+            <span class="sub">seen</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- A2 — Full screen (or most of it). X out. -->
+  <section class="phone" id="a2">
+    <div class="full">
+      <div class="full-bar"><span class="x">×</span></div>
+      <img src="s3-room-backdrop.png" alt="" />
+    </div>
+  </section>
+
+  <script>
+    document.body.dataset.p = new URLSearchParams(location.search).get("p") || "v1";
+  </script>
+</body>
+</html>
