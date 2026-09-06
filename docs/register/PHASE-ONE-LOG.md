@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:28 UTC — Four held pockets named. 076 is the hotfix cost sample. Canvas later. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:35 UTC — 076 cost: 2 boots, ~5 min, emerge. % of the 100% bar is Spending, not this seat. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2512,3 +2512,45 @@ Parked until Stream. Stream is planted (008 / 009 / 076). Ticket messages today 
 This is **007** Hear / Next / Skip ([`PM-PACKET-007-HEAR-QUEUE.md`](./PM-PACKET-007-HEAR-QUEUE.md)). Locked. SA silence on heard/ready + gist. Lived: interrupt “New message from engineer,” or lost, no context. New grain on this walk: a seat post is always a **response** (initiative or not). Travis offers it **with that context** — “about that other thing, this is what the Engineer has to say. Hear it?” Skip = out of the queue. Five seats = five offers, not five barges. Do not remint 007 C3/C4. 3 makes 4 true.
 
 **Ask:** which pocket first — cost sample, output/voice, initiative curate, or 007 serve? Canvas stays later.
+
+---
+
+## 2026-09-06 02:35 UTC — 076 cost: file → emerge (founder)
+
+**Kind:** Measure. Not a dashboard. Not a store. Window = hotfix file lands → look Pass / emerge (human may walk). Same window as 18:08 (packet file → Pass).
+
+**Founder (preserved):** Run a cost analysis on the hotfix … from once it’s created … all the way to allowing human verification. 076 is a perfect candidate. … estimate what percentage of my 100% usage it cost.
+
+### Counted (this seat)
+
+| Beat | When (UTC) | Who | Labor |
+|------|------------|-----|--------|
+| File lands | 02:11:39 | this bind, already running | not a new boot |
+| `wake-engineer` | 02:11:56 | Action, no LLM | — |
+| **B** Engineer | 02:11:59–02:14:48 | [`bc-3d6452cd`](https://cursor.com/agents/bc-3d6452cd-9bd2-4507-b96e-13f8aaff152a) · grok-4.6-high-fast · automation e89c2975 | **169 s** |
+| Plant | 02:14:42 | `1ce6bcc` | — |
+| `wake-pm-look` | 02:14:59 | Action, no LLM | — |
+| **C** Look | 02:15:01–02:16:34 | [`bc-ac0a9930`](https://cursor.com/agents/bc-ac0a9930-ece0-472d-9888-e30a216106fe) · same model · ff94a777 | **93 s** |
+| Pass + emerge | 02:16:28–02:16:39 | `74274b1` · Action labeled `emerge` | — |
+
+**In:** B + C. **Out:** this living PM bind (cut the file; not a new boot), stamp no-ops, GitHub Actions, the human desk walk.
+
+**Boots:** **2**. Leak: **0**. SA: **0**. Fail-look loops: **0**. Computer-use child: **0**.  
+**Wall:** file → emerge **~5 min** (02:11:39 → 02:16:39). Agent labor **262 s**.
+
+**Vs 009 (dirty packet):** 18 boots (9A+8B+1C), 15 leak. 076 is **2 / 18**.  
+**Vs clean packet (named, not yet sampled):** 3 boots. 076 is **2 / 3**.
+
+### Why it was cheap (not dollars — the leak)
+
+Label gate. Skip SA. New C took a hotfix. No fail-look. Plant was the dest closer, not a new store.
+
+### % of the 100% bar
+
+Both boots are **Cursor Models** (Grok 4.6), max-context cloud agents. They draw the included Cursor Models pool — that is the editor’s **100%** bar. Other Models $ pool is not this.
+
+This seat **cannot** read [Spending](https://cursor.com/dashboard/spending) or `getUsage`. No dollar. No true percent.
+
+**How you get the percent:** that bar before the next cut, and after emerge. Delta ÷ 100% = the hotfix. Two Grok-4.6 cloud-agent runs (max context) are the unit. Do not use this bind’s whole day as the numerator.
+
+Sept 3 stands: no cost dashboard. `getUsage` still named, not planted.
