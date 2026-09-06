@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 09:58 UTC — **SCP-027 signed.** Voice New cutoff, reply `reference_turn_id`, dest timeout ≠ stream close, stay, Technical PM. Same PR as PM-011 ([#140](https://github.com/bywale-com/travis/pull/140)). Next number is **028**.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 11:25 UTC — **SCP-028 signed.** Reply dests that post’s author; visible Cursor-turn images hang on that post; ticket Reply stays on the ticket. Same PR as PM-012 ([#142](https://github.com/bywale-com/travis/pull/142)). Next number is **029**.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -566,3 +566,36 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-027-VOICE-STAY.md`](./SYSTEMS-CHANGE-PACKET-027-VOICE-STAY.md)
 
 **Handoff:** Engineer plants 027 on **this same PR**. Next packet number is **028**. Do not remint 023–026. Do not mint a cousin.
+
+---
+
+## 2026-09-06 11:25 UTC — SCP-028 Usable chat (PM-012 on #142)
+
+**Kind:** Packet ascribe. Automation woke this seat. PM-012 + usable-chat story + test on this PR. No SYSTEMS-CHANGE-PACKET for 012 was on the branch. 023–027 stay planted — not reminted.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-012 lock + plates). Not PM. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** The text side is unusable. Reply to a reply does not dest that person. Images do not populate. Ticket Reply leaves the ticket. Forget Voice. Engineer computer-uses the Log on psi until it is a chat. Do not Pass from `src/`.
+
+**Staples (not scenery):** **Who** on the quote (author = dest). **Picture under that post.** Ticket **Messages** is the thread he answers in.
+
+**Quoted stood-up:**
+
+- `/send` dests `resolveTypedSend` chips / name / sticky `activeBindingId`. `referenceTurnId` is written; `dest-resolve.ts` never reads the referenced turn.
+- User-turn `seat_key` is the dest they sent **to** (`pipeOneSend` → `insertUserTurn`). Not the founder.
+- Quote rail is `refTurn.text.slice(0, 120)` — no author label (`Room.tsx`).
+- Ticket `onReply` `setTicket(null)` + `setDoor(null)`. `BacklogTicket` has no Type compose.
+- `harvestTurnArtifacts` requires `startedAt`; hung set is session+binding; API list only. `AgentPostBody` has no image. Proxy always `downloadCursorArtifact`.
+
+**Ascribed:**
+
+1. **No remint** of 023–027, `reference_turn_id`, `heard_at`, `turn_artifact`, `travis.stream`. No new table.
+2. **`destFromReferencedTurn`** — this `agent_post`’s `seat_key` only. Do not walk the chain. `kind=user` → null (chips / name / sticky stand). Travis author → Travis bind. Else `resolveDestBinding`. Chips add; they do not drop the author.
+3. **Quote names who** — author label on Log + ticket + pending Type rail.
+4. **Ticket stay** — Reply does not close the ticket. Type compose on the ticket. Same `/send`.
+5. **Harvest visibility** — this `turn_id` only. API window ∪ markdown `![](src)` ∪ process-body image paths. `http(s)` path → proxy 302/stream, not Cursor download. `parseAgentPost` omits image markdown.
+6. **Verify** — psi Log · Type. Computer-use the 012 test sheet. Preview-only Pass is not Pass.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-028-USABLE-CHAT.md`](./SYSTEMS-CHANGE-PACKET-028-USABLE-CHAT.md)
+
+**Handoff:** Engineer plants 028 on **this same PR**. Next packet number is **029**. Do not remint 023–027. Do not mint a cousin.
