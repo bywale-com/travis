@@ -23,9 +23,9 @@ Private / incognito. No `travis_op` cookie.
 
 ---
 
-### 2. Flag off (if you can unset)
+### 2. Local / preview, flag unset
 
-**Do:** Open `/` with no cookie while the flag is off.
+**Do:** Open `/` with no cookie on local or a preview (not psi).
 
 **Expect:** Login door. “Personal access by email — no password.”
 
@@ -33,9 +33,9 @@ Private / incognito. No `travis_op` cookie.
 
 ---
 
-### 3. Flag on — desk
+### 3. psi — desk
 
-**Do:** Open psi in a private window. No email.
+**Do:** Open `https://travis-psi.vercel.app` in a private window. No email.
 
 **Expect:** Not the login door. Character (Mode) then rooms. Room Travis opens. Voice orb + header. View log → Talk|Type + thread.
 
