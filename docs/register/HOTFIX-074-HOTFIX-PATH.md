@@ -21,6 +21,8 @@ Re-arm 2026-09-06 00:19 UTC: `WAKE_GITHUB_TOKEN` is on the repo. Tag as the foun
 
 Re-arm 2026-09-06 00:50 UTC: try the founder token again.
 
+Re-arm 2026-09-06 00:54 UTC: token should have Issues write. Tag as the founder.
+
 ## Cut — house (already on this PR)
 
 Same Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml).

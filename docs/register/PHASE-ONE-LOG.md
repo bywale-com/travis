@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 00:51 UTC — Token is you; it cannot write labels. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 00:54 UTC — Retry 074 with Issues write. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2252,3 +2252,11 @@ Re-push `HOTFIX-074`. Action prefers `WAKE_GITHUB_TOKEN`; 401 falls back to the 
 **Kind:** Honest. [Run](https://github.com/bywale-com/travis/actions/runs/34002349459): `Label actor: bywale-com`. Then `Resource not accessible by personal access token` on remove/add label.
 
 The secret is you. Fine-grained PAT needs **Issues: Read and write** on this repo (PR labels live there). Or a classic `repo` token. Replace/update the secret. Do not paste it here. Then we try 074 again.
+
+---
+
+## 2026-09-06 00:54 UTC — Try label write again (founder)
+
+**Kind:** Process. Founder: try again.
+
+Re-push `HOTFIX-074`.
