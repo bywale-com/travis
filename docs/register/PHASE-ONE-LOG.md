@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 00:55 UTC — Still you; still no label write. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 01:12 UTC — Issues write is not enough for PR labels; need PR write too. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2268,3 +2268,18 @@ Re-push `HOTFIX-074`.
 **Kind:** Honest. [Run](https://github.com/bywale-com/travis/actions/runs/34002533924): `Label actor: bywale-com`. Then `Could not add wake-engineer. Token needs Issues write.` No new label event. B did not boot.
 
 The token is still missing **Issues: Read and write** on `bywale-com/travis`. Pull request write is not enough. Classic `repo` also works.
+
+---
+
+## 2026-09-06 01:12 UTC — He did give Issues write (founder)
+
+**Kind:** Correction.
+
+**Founder (preserved):** Huh? I did give it that permission.
+
+**Believe him.** The run still said the PAT cannot `addLabelsToLabelable`. Two leftover holes, not a he-didn’t:
+
+1. PR labels need **both** Issues write **and** Pull requests write. Issues write alone is not enough on a pull request.
+2. If he minted a **new** token, the Actions secret still has the old one until he pastes the new value. Editing permissions on the **same** token does not need a new paste.
+
+Do not paste the token here.
