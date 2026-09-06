@@ -2236,3 +2236,11 @@ Re-push `HOTFIX-074` so the Action labels as him.
 **Kind:** Honest. Founder added `WAKE_GITHUB_TOKEN`. Action [run](https://github.com/bywale-com/travis/actions/runs/34000989817): `gh: Bad credentials (HTTP 401)`. The name is on the repo. GitHub will not take the value. Not a permissions miss — the token itself.
 
 Do not paste the token here. New PAT, this repo in the list, replace the secret, say when. Then we re-push 074.
+
+---
+
+## 2026-09-06 00:50 UTC — Try the token again (founder)
+
+**Kind:** Process. Founder: try once more.
+
+Re-push `HOTFIX-074`. Action prefers `WAKE_GITHUB_TOKEN`; 401 falls back to the bot.
