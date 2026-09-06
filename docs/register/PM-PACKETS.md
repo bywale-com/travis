@@ -3,6 +3,14 @@
 **Seat:** Product Manager.  
 **Law:** Packets land on the Engineer’s open initiative PR. There is no living `pm/packets` cousin.
 
+**Wake.** Each packet carries one machine line the Action greps:
+
+- `**Wake:** hold` — waiting (sign, plates, leftover grain). File may land. No `wake-sa`.
+- `**Wake:** sa` — get-go. This push labels `wake-sa`.
+- Missing line = hold.
+
+Draft is not the hold. “Then SA” in a sentence is not the hold.
+
 ## Packets
 
 | # | File | Where |

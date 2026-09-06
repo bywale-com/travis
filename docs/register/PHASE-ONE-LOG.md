@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:53 UTC — 076 billed 3.2M (B 1.9 + C 1.3) = ~0.23% of the included bar. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 09:08 UTC — packet wait is `**Wake:** sa`, not prose. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2644,3 +2644,25 @@ If 3.2M were Fast input uncached: **~$13**. Cache-heavy: a few dollars. A little
 ### Hygiene
 
 [#130](https://github.com/bywale-com/travis/pull/130) merged. This stamp is a **log PR**, not a 074 rider. Next cut still **077** / packet **010**.
+
+---
+
+## 2026-09-06 09:08 UTC — Packet wait is `**Wake:** sa`, not prose (founder)
+
+**Kind:** Process lock. Recut of the packet get-go. Not a product packet. Not hotfix **079**. No new Cursor automation.
+
+**Founder (preserved):** if it wasn't ready … you told the engineer not to do something. And yet it was still … why did that PR at the state it was trigger cursor? … was it not a draft? … even if it lives in prose, it will still wake up the agents, and that's a waste of tokens. … if it's waiting … we need a better strategy for how these PR should exist before the get-go. … imagine it really wasn't ready. … all those agents are fired.
+
+**What 010 did (lived, on [#134](https://github.com/bywale-com/travis/pull/134), not this PR).** Draft the whole time. Draft is not a trigger and not a hold — we keep packet PRs draft through plant. The Action greps filenames. First packet cut (03:01) saw an empty new-branch diff and did not label. Plates commit (03:52) also edited `PM-PACKET-010-SERVE.md`. That file touch labeled `wake-sa`. SA → Engineer → look. Three boots. Chat said “founder signs, then SA” and “don’t wake Engineer.” The machine cannot read that.
+
+**Lock.** A waiting packet may exist. Plates may land. Stamps may land. Cursor does not boot until the packet has this exact line:
+
+`**Wake:** sa`
+
+`**Wake:** hold` or a missing line = wait. Founder go → PM flips the line and pushes. That commit is the get-go. No founder label click. No ready-for-review flip.
+
+**Stood up:** [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml) greps the line. [`AUTOMATION-PACKET-CHAIN.md`](./AUTOMATION-PACKET-CHAIN.md). SA prompt belt: stop if the line is not `sa`. Human may re-paste A (`4d502645`). The Action works without a re-paste.
+
+**Hotfix path unchanged.** `HOTFIX-NNN` is already the go.
+
+**Do not** mint a fourth automation. Do not use draft as the hold. Do not remint 010 / 026. Next hotfix still **079**. Next packet still **011**.
