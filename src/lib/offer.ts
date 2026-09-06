@@ -2,6 +2,8 @@
  * SCP-026 — Travis offers a landing. Not the body. Not “New message from engineer.”
  */
 
+import { destGlassName } from "./dest-glass";
+
 export type OfferSeat = {
   seatKey: string;
   label?: string | null;
@@ -14,11 +16,7 @@ export function offerSeatWord(
   seatKey: string,
   label?: string | null,
 ): string {
-  if (seatKey === "engineer") return "Engineer";
-  if (seatKey === "pm") return "PM";
-  if (seatKey === "sa") return "SA";
-  const named = label?.trim();
-  return named || "that seat";
+  return destGlassName(seatKey, label);
 }
 
 export function offerContext(title?: string | null): string {
@@ -76,6 +74,5 @@ export function parseHearInvite(text: string): HearInvite {
 }
 
 export function gistEmptyFallback(offer: string): string {
-  const lead = offer.trim() || "Hear it?";
-  return `${lead} The full text is in the Log.`;
+  return offer.trim() || "Hear it?";
 }

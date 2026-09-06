@@ -66,11 +66,15 @@ export function seatShortLabel(
   cap = 10,
 ): string {
   const key = (seatKey ?? "").trim().toLowerCase();
+  const named = (label ?? "").trim();
+  if (named && named !== "PM") {
+    return named.length <= cap ? named : `${named.slice(0, cap).trimEnd()}…`;
+  }
   if (key === "pm") return "PM";
   if (key === "sa") return "SA";
   if (key === "engineer") return "Eng";
   if (key === "travis") return "Travis";
-  const text = (label ?? "").trim();
+  const text = named;
   if (!text) return seatInitials(seatKey, label);
   return text.length <= cap ? text : `${text.slice(0, cap).trimEnd()}…`;
 }

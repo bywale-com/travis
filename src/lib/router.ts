@@ -12,13 +12,16 @@ const SEAT_ALIASES: Record<string, SeatKey> = {
   engineer: "engineer",
   eng: "engineer",
   travis: "travis",
+  "technical pm": "pm",
+  "technical product manager": "pm",
 };
 
-/** Spoken / STT forms. Engineer before Eng; Travis last. */
-const SEAT_NAME = "Systems Analyst|Engineer|Eng|P\\.M\\.?|PM|SA|Travis";
+/** Spoken / STT forms. Longer Technical PM names before PM. Travis last. */
+const SEAT_NAME =
+  "Technical Product Manager|Technical PM|Systems Analyst|Engineer|Eng|P\\.M\\.?|PM|SA|Travis";
 
 export function seatKeyToLabel(key: SeatKey): string {
-  if (key === "pm") return "PM";
+  if (key === "pm") return "Technical PM";
   if (key === "sa") return "SA";
   if (key === "travis") return "Travis";
   return "Engineer";

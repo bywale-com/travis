@@ -14,7 +14,7 @@ import {
 } from "@/server/seat-pipe";
 import { collapseSpeechStutter } from "@/lib/absorb-text";
 import { shouldDropHeardAsUser } from "@/lib/thread-truth";
-import { openBindingForSeat } from "@/server/room-membership";
+import { resolveDestBinding } from "@/server/dest-resolve";
 import { AuthError } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
 import { runMotionRunner } from "@/server/motion";
@@ -25,6 +25,7 @@ type Body = {
   role?: "user" | "travis";
   text?: string;
   handle?: string | null;
+  referenceTurnId?: string | null;
 };
 
 export async function POST(
@@ -84,10 +85,20 @@ export async function POST(
       here,
     });
   }
-  const userTurn = await insertUserTurn(sessionId, heard, "travis");
+  const referenceTurnId =
+    typeof body.referenceTurnId === "string" && body.referenceTurnId.trim()
+      ? body.referenceTurnId.trim()
+      : null;
+  const userTurn = await insertUserTurn(
+    sessionId,
+    heard,
+    "travis",
+    undefined,
+    referenceTurnId,
+  );
   const { seatKey, remainder } = parseCallByName(text);
   if (seatKey && isCursorSeat(seatKey)) {
-    const binding = await openBindingForSeat(sessionId, seatKey);
+    const binding = await resolveDestBinding(sessionId, seatKey);
     if (!binding) {
       return NextResponse.json(
         { error: "Dest is not an open member of this room" },
@@ -119,6 +130,7 @@ export async function POST(
               prompt,
               send,
               userTurn,
+              referenceTurnId,
             });
           } catch (err) {
             send("error", {
@@ -135,7 +147,7 @@ export async function POST(
     return NextResponse.json({
       ok: true,
       turn: userTurn,
-      switched: seatKey,
+      switched: binding.seatKey ?? seatKey,
       stopLive: true,
     });
   }

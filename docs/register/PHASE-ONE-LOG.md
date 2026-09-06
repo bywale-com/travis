@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 09:08 UTC — packet wait is `**Wake:** sa`, not prose. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 10:22 UTC — PM look 011 Pass (this seat). Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2730,3 +2730,96 @@ Nothing else. Offer copy is already 02:28. Canvas stays later.
 **Hotfix path unchanged.** `HOTFIX-NNN` is already the go.
 
 **Do not** mint a fourth automation. Do not use draft as the hold. Do not remint 010 / 026. Next hotfix still **079**. Next packet still **011**.
+
+---
+
+## 2026-09-06 09:30 UTC — Packet 011: Voice New, Hear it, Technical PM (founder)
+
+**Kind:** Packet cut. **Wake:** hold.
+
+**Founder (preserved):** Stop ad-libbing in log summaries, especially ending with “do not read” style lines. In voice mode, don’t show “3 new” for PM/Engineer/SA when they’re just existing initiatives, and fix the hear/skip labels so they’re usable. Also: when we say PM, we mean Technical PM; the old PM should not be used or shown.
+
+**Achievement:** [`PM-PACKET-011-VOICE-TPM.md`](./PM-PACKET-011-VOICE-TPM.md) · test [`PM-PACKET-011-VOICE-TPM-TEST.md`](./PM-PACKET-011-VOICE-TPM-TEST.md). SA **027**.
+
+| Pocket | Lock |
+|--------|------|
+| Gist | Outcome only. No invented closer. Empty gist = offer once, no “full text / do not read” line. Trail stamps follow the same closer law. |
+| New | A landing, not `3 new · PM, Eng, SA` for existing tickets. `heard_at` null on pre-026 rows is the lived miss. |
+| Labels | Exactly `Hear it` then `Skip`. Hear it loud. Both ≥ 44×44. Only when New is real. |
+| Name | Product PM is Technical PM. Catalog `pm` is not dest and not shown. |
+
+**Quoted:** `listUnheardReports` / `newReportChip` · `Room.tsx` Hear/Skip · `summarizeSeatReply` · `ensure-bindings` label `"PM"` · `isCursorSeat` = `pm` \| `sa` \| `engineer`.
+
+---
+
+## 2026-09-06 09:43 UTC — 011 go + recut; Travis log discussed (founder)
+
+**Kind:** Packet recut + discussion. **Wake:** sa.
+
+**Founder (preserved):** Yes, it's a go … the new, it's stale … you've actually already responded in the chat, and it still keeps continually reading this to renew. … there was no way for it to not be new anymore … I don't even need a hear it, or skip. I don't need those buttons. … only the things after that cutoff are new. … Unless I've already seen those messages, they're not new. … the curation mechanism is just … a thread of replies and references … we can't like literally reply to that specific message … it said technical PM timed out. … the stream card that should have been above your message … was absent. … when I scroll down and refresh … it takes me out of the room and back to the room place. … whenever I refresh, it should just bring me back to exactly where I was. … Travis, is paraphrasing my request … He just needs to polish what I've said. … if I'm … working mostly with Travis … he needs to be logging like the PM … let's discuss that first.
+
+**011 recut** ([`PM-PACKET-011-VOICE-TPM.md`](./PM-PACKET-011-VOICE-TPM.md) · test rewritten). Hear it / Skip **buttons off**. New = unseen after cutoff; Log in view or his answering line writes `heard_at` now. Reply-to a message = `reference_turn_id` (column exists). Dest timeout must not `failLiveStreamWithoutCard` with a null close. Refresh restores room + view + scroll. Technical PM stays. Gist closer recut stays. Travis **polishes** a restatement — not a paraphrase.
+
+**Quoted:** `failLiveStreamWithoutCard` + `{label} timed out.` · `Room` boots `plate: "index"` · `reference_turn_id` / `nextSeatBeat` · `switchViewMode` heard write only on Log→Voice.
+
+### Travis logging like the PM — discussion, not a plant
+
+Today the trail is this file: founder wording, then what landed. The Technical PM writes it. Travis is the pipe in the room.
+
+If he mostly talks to Travis, the detailed request has to survive **in the room** the way a stamp survives here: his words, polished, excerpts. That is pocket 8 — restatement hygiene. It is not yet “Travis appends PHASE-ONE-LOG.”
+
+Open: is Travis the **trail** (this log), a **room diary**, **initiative notes**, or still the Technical PM when dest’d? He asked to discuss that before we lock it. No store. No plant.
+
+---
+
+## 2026-09-06 09:52 UTC — Travis is the conversational PM (founder)
+
+**Kind:** Process lock. Not 027. Not a table.
+
+**Founder (preserved):** Travis is basically … very similar in behavior to like the technical PM … it has to be the technical PM. It is … not a technical PM … it's the PM. … the same way that you can go through the repo … when I reference something … similar process that Travis should take. … the room is usually like where it starts from. But, if not in the room … the logs, the repo logs, or the repo itself. I would almost rarely ask it for advice on the repo. I'm usually just … using the repo for reference. … ultimately, it's really just routing requests … sometimes I may just be talking with Travis. … we're setting the vision … that's not with … the PM, I'm doing that with Travis, in the hopes that it's capturing that in a place, that … the technical PM … has access to. So when it's … checking there, it can see that … there's no loss. … The process, that I'm not telling it to do, it just does. Just like I don't tell you to log.
+
+**Lock.** Travis is the PM he talks to. Dest Technical PM is the cut. One trail: this log. Read: room first, then this file / the repo as reference. Write unprompted when the talk is load-bearing — founder wording, then the lock. Not on dest-a-seat.
+
+**Canon:** [`TRAVIS-AS-PM.md`](./TRAVIS-AS-PM.md).
+
+**Not planted:** the port that lets Travis write this file. 011 / 027 stay the desk recut.
+
+---
+
+## 2026-09-06 09:56 UTC — 011 did not wake Cursor (this seat)
+
+**Kind:** Gate miss. Same go. Not a recut.
+
+The Action ran on the go push (`b0b13b2`) and said: `PM-PACKET-011-VOICE-TPM.md is on hold (no **Wake:** sa)`. #140 has no labels. No SA boot.
+
+Cause: the hold grep is a **whole line** — `^**Wake:** sa`. The packet had `**Status:** Specified. **Wake:** sa` on one line. First push (`42c5088`) was `**Wake:** hold` — correctly silent. House push (`151d7a2`) did not touch the packet — correctly silent.
+
+Fix: Wake on its own line. That push is the get-go the go recut meant to be.
+
+---
+
+## 2026-09-06 10:14 UTC — Travis beyond build; Grok Bots as other work (founder)
+
+**Kind:** Vision discussion. **Not a lock.** Not 011 / 027. Do not overwrite the 14:00 flag.
+
+**Founder (preserved):** While these are, good, I realize that… I think what Grokbot really can allow us to do is to expand Travis's scope, right? Right now, Travis is… build-focused. But imagine Travis was also capable of orchestrating other projects. I mean, it has the shape in terms of rooms, right? … there could be another side of Travis where cursor isn't the only thing, right? Other things… you can make the argument and say, well but then just talk to Grokbot, but what if I could do it all in one app? Plus, Travis can get smarter. We can… make Travis smarter where… it is beneficial to talk to Travis and then let Travis coordinate the Grok bots or coordinate with the chief of staff Grok master or whatever… Just thinking out loud.
+
+**Alignment (not the flag):** Rooms already have a multi-thread shape. v1 stays the Cursor pipe. A later side is Travis as the one face, Cursor one backend among others, Grok Bots as workers (or one chief of staff) he talks to Travis to coordinate — same reason he does not open Cursor. Not “go use Grok Bot instead.” Not a lock. Not a store. Not a packet.
+
+---
+
+## 2026-09-06 10:22 UTC — PM look 011 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`PM-PACKET-011-VOICE-TPM.md`](./PM-PACKET-011-VOICE-TPM.md) · SA **027** · plant on [#140](https://github.com/bywale-com/travis/pull/140) (`472915f`). Sheet: [`PM-LOOK-011.md`](./PM-LOOK-011.md).
+
+**Look.** src/ matches the lock. Cutoff latch `027-cutoff`. New = speakable non-Travis, non-catalog-`pm` `agent_post` with `heard_at` null. Log intersect POSTs `/heard` now. `insertUserTurn` hears prior unheard. Hear / Skip buttons off; spoken invites stay. Reply door sets `reference_turn_id`. Dest timeout does not `failLiveStreamWithoutCard`. `travis-stay` restores room / view / Talk|Type / scroll. Glass dest is Technical PM. Empty gist is the offer once. Travis polish paragraph is on `TRAVIS_SYSTEM`. No new table. No remint of `heard_at` / `reference_turn_id` / `travis.stream`.
+
+**Preview I opened:** `https://travis-git-cursor-packet-011-voic-372e95-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see Voice / Log glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not dest. I did not Talk. I did not sit on a Log bubble. I did not pull-to-refresh in the room.
+
+**Steps I could not do (human):** Vercel team SSO. Travis email link. Talk on a phone. Dest / reply door / timeout card / stay refresh / dest chips / spoken Hear.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.

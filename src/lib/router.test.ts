@@ -70,6 +70,14 @@ test("spoken p.m. at the end is PM", () => {
   assert.equal(r.seatKey, "pm");
 });
 
+test("Technical PM and technical product manager are the pm role", () => {
+  assert.equal(parseCallByName("Technical PM look").seatKey, "pm");
+  assert.equal(
+    parseCallByName("hey technical product manager look").seatKey,
+    "pm",
+  );
+});
+
 test("dead-man no switches to default", () => {
   const r = parseDeadManResponse("No.");
   assert.equal(r.action, "default");
@@ -89,6 +97,7 @@ test("dead-man ignores a real turn so it can still send", () => {
 test("seatKeyToShort matches plate chips", () => {
   assert.equal(seatKeyToShort("engineer"), "Eng");
   assert.equal(seatKeyToShort("pm"), "PM");
+  assert.equal(seatKeyToShort("technical-pm", "Technical PM"), "Technical…");
   assert.equal(seatKeyToShort("sa"), "SA");
   assert.equal(seatKeyToShort("travis"), "Travis");
   assert.equal(seatKeyToShort("auth-engineer", "Auth Engineer"), "Auth Engin…");

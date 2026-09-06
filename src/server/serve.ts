@@ -2,7 +2,7 @@
  * SCP-026 — Hear / Skip / Log-in-view write heard_at. Offer is spoken, not stored.
  */
 
-import { and, asc, eq, inArray, isNull } from "drizzle-orm";
+import { and, asc, eq, inArray, isNull, lt } from "drizzle-orm";
 import {
   gistEmptyFallback,
   offerBeat,
@@ -11,7 +11,6 @@ import {
 } from "@/lib/offer";
 import { isNewReportTurn } from "@/lib/new-report";
 import { READ_CAP } from "@/lib/room-context";
-import { isCursorSeat } from "@/lib/seats";
 import { db } from "@/server/db/client";
 import { agentBinding, initiative, voiceTurn } from "@/server/db/schema";
 import { ensureInitiativeStore } from "@/server/initiative";
@@ -58,9 +57,7 @@ export async function listUnheardReports(
         heardAt: row.heardAt,
       }),
     )
-    .filter((row): row is typeof row & { seatKey: string } =>
-      Boolean(row.seatKey && isCursorSeat(row.seatKey)),
-    )
+    .filter((row): row is typeof row & { seatKey: string } => Boolean(row.seatKey))
     .map((row) => ({
       id: row.id,
       seatKey: row.seatKey,
@@ -88,6 +85,35 @@ export async function markTurnsHeard(
         isNull(voiceTurn.heardAt),
       ),
     );
+}
+
+export async function markUnheardBeforeSeq(
+  sessionId: string,
+  seq: number,
+): Promise<void> {
+  await ensureInitiativeStore();
+  const rows = await db
+    .select({
+      id: voiceTurn.id,
+      seq: voiceTurn.seq,
+      kind: voiceTurn.kind,
+      seatKey: voiceTurn.seatKey,
+      speakable: voiceTurn.speakable,
+      heardAt: voiceTurn.heardAt,
+    })
+    .from(voiceTurn)
+    .where(
+      and(
+        eq(voiceTurn.sessionId, sessionId),
+        eq(voiceTurn.kind, "agent_post"),
+        isNull(voiceTurn.heardAt),
+        lt(voiceTurn.seq, seq),
+      ),
+    );
+  await markTurnsHeard(
+    sessionId,
+    rows.filter((row) => isNewReportTurn(row)).map((row) => row.id),
+  );
 }
 
 function pickUnheard(

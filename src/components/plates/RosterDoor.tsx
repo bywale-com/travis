@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SeatMark } from "@/components/QueueChrome";
+import { hideCatalogPm } from "@/lib/dest-glass";
 import { isTravisSeat } from "@/lib/seats";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import { TYPE } from "@/theme/scale";
@@ -75,7 +76,7 @@ export function RosterDoor({
     setRenaming(false);
   }, [roomTitle]);
 
-  const addable = catalog.filter((c) => {
+  const addable = hideCatalogPm(catalog).filter((c) => {
     if (c.id && inIds.has(c.id)) return false;
     if (c.seatKey && inKeys.has(c.seatKey)) return false;
     return true;

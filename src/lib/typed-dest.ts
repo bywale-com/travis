@@ -1,10 +1,12 @@
 import { parseCallByName } from "@/lib/router";
 import type { SeatKey } from "@/server/db/schema";
 
+export type DestKey = string;
+
 export type TypedDest =
   | { kind: "empty" }
-  | { kind: "switch"; seatKey: SeatKey }
-  | { kind: "send"; seatKeys: SeatKey[]; prompt: string };
+  | { kind: "switch"; seatKey: DestKey }
+  | { kind: "send"; seatKeys: DestKey[]; prompt: string };
 
 const SEATS: readonly SeatKey[] = ["pm", "sa", "engineer", "travis"];
 
@@ -12,10 +14,11 @@ export function isSeatKey(value: string): value is SeatKey {
   return (SEATS as readonly string[]).includes(value);
 }
 
-export function uniqueSeatKeys(keys: Array<string | null | undefined>): SeatKey[] {
-  const out: SeatKey[] = [];
+/** Open-member dest keys, including person dests outside the SeatKey union. */
+export function uniqueSeatKeys(keys: Array<string | null | undefined>): DestKey[] {
+  const out: DestKey[] = [];
   for (const key of keys) {
-    if (!key || !isSeatKey(key) || out.includes(key)) continue;
+    if (!key || out.includes(key)) continue;
     out.push(key);
   }
   return out;
@@ -27,8 +30,8 @@ export function uniqueSeatKeys(keys: Array<string | null | undefined>): SeatKey[
  * Several chips → fan-out to each tagged seat (Type @ only).
  */
 export function resolveTypedSend(opts: {
-  chipSeatKeys?: SeatKey[] | null;
-  chipSeatKey?: SeatKey | null;
+  chipSeatKeys?: DestKey[] | null;
+  chipSeatKey?: DestKey | null;
   text: string;
 }): TypedDest {
   const chips = uniqueSeatKeys([

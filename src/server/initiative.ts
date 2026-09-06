@@ -94,8 +94,34 @@ export async function ensureInitiativeStore(): Promise<void> {
     ALTER TABLE travis.voice_turn
       ADD COLUMN IF NOT EXISTS heard_at timestamptz
   `);
+  await applyHeardCutoffOnce();
   await backfillEmptyTitles();
   initiativeStoreReady = true;
+}
+
+/** SCP-027 — one-shot. Column comment is the latch so a new isolate does not eat New. */
+export async function applyHeardCutoffOnce(): Promise<void> {
+  await db.execute(sql`
+    DO $$
+    BEGIN
+      IF COALESCE(
+        col_description('travis.voice_turn'::regclass, (
+          SELECT attnum FROM pg_attribute
+          WHERE attrelid = 'travis.voice_turn'::regclass
+            AND attname = 'heard_at'
+        )),
+        ''
+      ) NOT LIKE '%027-cutoff%' THEN
+        UPDATE travis.voice_turn
+        SET heard_at = created_at
+        WHERE heard_at IS NULL
+          AND kind = 'agent_post'
+          AND speakable = true
+          AND seat_key IS DISTINCT FROM 'travis';
+        COMMENT ON COLUMN travis.voice_turn.heard_at IS '027-cutoff';
+      END IF;
+    END $$
+  `);
 }
 
 async function backfillEmptyTitles(): Promise<void> {

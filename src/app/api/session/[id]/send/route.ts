@@ -10,6 +10,7 @@ import { noteTravisUnwired } from "@/server/travis-dest";
 import { AuthError } from "@/server/api-error";
 import { MembershipError, requireOpenMember } from "@/server/room-membership";
 import { requireOwnedSession } from "@/server/operator";
+import { resolveDestBinding } from "@/server/dest-resolve";
 import { pipeTravisText } from "@/server/travis-reply";
 import {
   insertUserTurn,
@@ -20,18 +21,10 @@ import {
 
 type Body = {
   text?: string;
-  chipSeatKey?: SeatKey | null;
-  chipSeatKeys?: SeatKey[] | null;
+  chipSeatKey?: string | null;
+  chipSeatKeys?: string[] | null;
+  referenceTurnId?: string | null;
 };
-
-async function bindingForSeat(seatKey: SeatKey) {
-  const [row] = await db
-    .select()
-    .from(agentBinding)
-    .where(eq(agentBinding.seatKey, seatKey))
-    .limit(1);
-  return row;
-}
 
 async function setActiveBinding(sessionId: string, bindingId: string) {
   await db
@@ -83,7 +76,7 @@ export async function POST(
     const keys =
       decided.kind === "switch" ? [decided.seatKey] : decided.seatKeys;
     for (const key of keys) {
-      const dest = await bindingForSeat(key);
+      const dest = await resolveDestBinding(sessionId, key);
       if (dest) destBindings.push(dest);
     }
   }
@@ -142,6 +135,10 @@ export async function POST(
   }
 
   const prompt = collapseSpeechStutter(decided.prompt);
+  const referenceTurnId =
+    typeof body.referenceTurnId === "string" && body.referenceTurnId.trim()
+      ? body.referenceTurnId.trim()
+      : null;
   const bindings = destBindings.length ? destBindings : [active];
   const travisBinds = bindings.filter((b) => isTravisSeat(b.seatKey));
   const cursorBinds = bindings.filter((b) => !isTravisSeat(b.seatKey));
@@ -157,7 +154,13 @@ export async function POST(
       try {
         const shared =
           travisBinds.length && cursorBinds.length
-            ? await insertUserTurn(sessionId, prompt, "travis")
+            ? await insertUserTurn(
+                sessionId,
+                prompt,
+                "travis",
+                undefined,
+                referenceTurnId,
+              )
             : undefined;
         if (travisBinds.length) {
           await pipeTravisText({
@@ -165,6 +168,7 @@ export async function POST(
             prompt,
             send,
             userTurn: shared,
+            referenceTurnId,
           });
         }
         if (cursorBinds.length) {
@@ -174,6 +178,7 @@ export async function POST(
             prompt,
             send,
             userTurn: shared,
+            referenceTurnId,
           });
         }
       } catch (err) {

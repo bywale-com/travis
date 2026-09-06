@@ -8,11 +8,12 @@ import {
   parseHearInvite,
 } from "./offer";
 
-test("seat word is Engineer / PM / SA or the binding label", () => {
+test("seat word is Engineer / Technical PM / SA or the binding label", () => {
   assert.equal(offerSeatWord("engineer"), "Engineer");
-  assert.equal(offerSeatWord("pm"), "PM");
+  assert.equal(offerSeatWord("pm"), "Technical PM");
   assert.equal(offerSeatWord("sa"), "SA");
   assert.equal(offerSeatWord("other", "Pat"), "Pat");
+  assert.equal(offerSeatWord("technical-pm", "Technical PM"), "Technical PM");
 });
 
 test("context is the title or that other thing", () => {
@@ -53,11 +54,13 @@ test("Hear / Skip / verbatim are invites; chatter is not", () => {
   assert.equal(parseHearInvite("What's on that ticket?"), null);
 });
 
-test("empty gist does not become a 40k read", () => {
-  assert.match(
+test("empty gist is the offer once, no closer", () => {
+  assert.equal(
     gistEmptyFallback(
       "About Serve plates, this is what the Engineer has to say. Hear it?",
     ),
-    /The full text is in the Log/,
+    "About Serve plates, this is what the Engineer has to say. Hear it?",
   );
+  assert.equal(gistEmptyFallback(""), "Hear it?");
+  assert.doesNotMatch(gistEmptyFallback("Hear it?"), /full text|do not read/i);
 });

@@ -41,7 +41,7 @@ export function isVocativeOnlyCall(
   const rest = remainder.trim();
   if (!rest) return true;
   const names: Record<SeatKey, string> = {
-    pm: "pm|p\\.m\\.?",
+    pm: "pm|p\\.m\\.?|technical pm|technical product manager",
     sa: "sa|systems analyst",
     engineer: "engineer|eng",
     travis: "travis",

@@ -81,6 +81,17 @@ test("Type @ Travis is a dest", () => {
   if (r.kind === "send") assert.deepEqual(r.seatKeys, ["travis"]);
 });
 
+test("person dest chips survive send", () => {
+  const r = resolveTypedSend({
+    chipSeatKeys: ["technical-pm"],
+    text: "look at this",
+  });
+  assert.equal(r.kind, "send");
+  if (r.kind === "send") {
+    assert.deepEqual(r.seatKeys, ["technical-pm"]);
+  }
+});
+
 test("mixed Travis + Engineer chips fan out", () => {
   const r = resolveTypedSend({
     chipSeatKeys: ["travis", "engineer"],
