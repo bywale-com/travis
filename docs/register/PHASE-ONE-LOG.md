@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 01:45 UTC — Recut C + B. Look takes a hotfix. Engineer needs `DATABASE_URL`. 075 applies the hang. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 01:52 UTC — 075 hang applied. Look Pass on this bind. Dest `technical-pm` is the human leftover. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2329,3 +2329,17 @@ Do not paste the token here.
 **Action:** look also wakes on `ENGINEER-HANDOFF.md` for a hotfix PR. Emerge on hotfix Pass attaches the hotfix test MD.
 
 **Still human:** paste C (`ff94a777`) and B (`e89c2975`). This seat cannot Save + Activate. Env secrets are on the Cloud Agent environment — new B boots should see `DATABASE_URL` if it is a runtime secret there.
+
+---
+
+## 2026-09-06 01:52 UTC — 075 applied; founder pasted; look Pass
+
+**Kind:** Process. Founder: I have updated their prompts. You can push 075.
+
+**075 already went** on the prompt-recut push (`4c87f75`, 01:44). Action tagged `wake-engineer` as `bywale-com`. Engineer [`bc-a00f25e7`](https://cursor.com/agents/bc-a00f25e7-7f3b-43a8-82b2-3114551df351) applied `hang-technical-pm.sql`. `DATABASE_URL` was set. Handoff: row `technical-pm`, this bind, path `/protocols/pm.md`, open member of room Travis. Catalog `pm` untouched. Commit `ff762bc`.
+
+Action then tagged `wake-pm-look`. C [`bc-68b8eb87`](https://cursor.com/agents/bc-68b8eb87-4060-468c-afc2-f9fe933af53c) ~20s, no commit — that boot was before the paste.
+
+This living bind wrote [`PM-LOOK-HOTFIX-075.md`](./PM-LOOK-HOTFIX-075.md). **Pass** for what a cloud agent can do. No glass. This bind has no `DATABASE_URL`; Pass on the Engineer verify print.
+
+**Human leftover:** dest **technical-pm** in room Travis. Do not dest catalog `pm`.
