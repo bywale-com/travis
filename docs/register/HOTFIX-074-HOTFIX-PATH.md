@@ -17,6 +17,8 @@ Hang this bind was going to be PM-PACKET-010 → SA. Recut. Same cheap Action. N
 
 Re-arm 2026-09-05 23:59 UTC: drop `wake-engineer` and add it again so B sees a fresh add.
 
+Re-arm 2026-09-06 00:19 UTC: `WAKE_GITHUB_TOKEN` is on the repo. Tag as the founder.
+
 ## Cut — house (already on this PR)
 
 Same Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml).

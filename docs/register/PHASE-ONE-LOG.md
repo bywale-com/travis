@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 00:10 UTC — Make the Action tag as you: WAKE_GITHUB_TOKEN. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 00:19 UTC — Secret on. Re-push 074 so the Action tags as you. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2220,3 +2220,11 @@ So: bot-as-tagger is how the Action is written. It has not yet woken SA or Engin
 **Kind:** Process. Founder: how can we try to make it me?
 
 Action labels with repo secret **`WAKE_GITHUB_TOKEN`** (your PAT). Then the add is `bywale-com`, same as C on #127. He pastes the secret on the repo. We re-push 074. Do not paste the token here.
+
+---
+
+## 2026-09-06 00:19 UTC — Secret is on (founder)
+
+**Kind:** Process. Founder: I’ve added the secret.
+
+Re-push `HOTFIX-074` so the Action labels as him.
