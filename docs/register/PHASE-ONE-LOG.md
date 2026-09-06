@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 14:52 UTC — 013 recut: room wire + resume, not a smarter poll. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 15:06 UTC — PM look 013 Pass. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2849,3 +2849,21 @@ Fix: Wake on its own line. That push is the get-go the go recut meant to be.
 **Alignment.** They have a durable tape, one live wire (SSE), and reconnect from the last id. Hard refresh is re-read-from-zero. They never need that for a new line. A smarter poll is still a guess.
 
 **Lock.** Room SSE while he is in the room. Resume from `seq`. Catch-up after drop. Never blank. Poll is fallback only. Same `#144`. SA **029**.
+
+---
+
+## 2026-09-06 15:06 UTC — PM look 013 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`PM-PACKET-013-LIST-LIVE.md`](./PM-PACKET-013-LIST-LIVE.md) · SA **029** · plant on [#144](https://github.com/bywale-com/travis/pull/144) (`74db1d9`). Sheet: [`PM-LOOK-013.md`](./PM-LOOK-013.md).
+
+**Look.** src/ matches the lock. Room `GET /events` resumes from `seq` / `Last-Event-ID`, then `LISTEN travis_room`. `insertTurn`, initiative, stream, and motion `NOTIFY`. Cheap `listInitiatives` (no N+1). Failed GET keeps last good. Foreground reconnects the wire now. Poll is catch-up only while the wire is down. Index `voice_turn_session_seq_idx` is isolate-once. Hear / Skip buttons stay off. No websocket. No remint of 012 / 023 / 028.
+
+**Preview I opened:** `https://travis-git-cursor-packet-013-list-aa3f26-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see Voice / Log glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not Send. I did not leave and re-enter. I did not open Backlog or a ticket.
+
+**Steps I could not do (human):** Vercel team SSO. Travis email link. Type / Send. Rooms leave/enter. Backlog + ticket. Talk on a phone.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
