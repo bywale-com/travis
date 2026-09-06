@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 10:14 UTC — Travis beyond build / Grok Bots as other work — discussed, not locked. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 10:22 UTC — PM look 011 Pass (this seat). Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2805,3 +2805,21 @@ Fix: Wake on its own line. That push is the get-go the go recut meant to be.
 **Founder (preserved):** While these are, good, I realize that… I think what Grokbot really can allow us to do is to expand Travis's scope, right? Right now, Travis is… build-focused. But imagine Travis was also capable of orchestrating other projects. I mean, it has the shape in terms of rooms, right? … there could be another side of Travis where cursor isn't the only thing, right? Other things… you can make the argument and say, well but then just talk to Grokbot, but what if I could do it all in one app? Plus, Travis can get smarter. We can… make Travis smarter where… it is beneficial to talk to Travis and then let Travis coordinate the Grok bots or coordinate with the chief of staff Grok master or whatever… Just thinking out loud.
 
 **Alignment (not the flag):** Rooms already have a multi-thread shape. v1 stays the Cursor pipe. A later side is Travis as the one face, Cursor one backend among others, Grok Bots as workers (or one chief of staff) he talks to Travis to coordinate — same reason he does not open Cursor. Not “go use Grok Bot instead.” Not a lock. Not a store. Not a packet.
+
+---
+
+## 2026-09-06 10:22 UTC — PM look 011 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`PM-PACKET-011-VOICE-TPM.md`](./PM-PACKET-011-VOICE-TPM.md) · SA **027** · plant on [#140](https://github.com/bywale-com/travis/pull/140) (`472915f`). Sheet: [`PM-LOOK-011.md`](./PM-LOOK-011.md).
+
+**Look.** src/ matches the lock. Cutoff latch `027-cutoff`. New = speakable non-Travis, non-catalog-`pm` `agent_post` with `heard_at` null. Log intersect POSTs `/heard` now. `insertUserTurn` hears prior unheard. Hear / Skip buttons off; spoken invites stay. Reply door sets `reference_turn_id`. Dest timeout does not `failLiveStreamWithoutCard`. `travis-stay` restores room / view / Talk|Type / scroll. Glass dest is Technical PM. Empty gist is the offer once. Travis polish paragraph is on `TRAVIS_SYSTEM`. No new table. No remint of `heard_at` / `reference_turn_id` / `travis.stream`.
+
+**Preview I opened:** `https://travis-git-cursor-packet-011-voic-372e95-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see Voice / Log glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not dest. I did not Talk. I did not sit on a Log bubble. I did not pull-to-refresh in the room.
+
+**Steps I could not do (human):** Vercel team SSO. Travis email link. Talk on a phone. Dest / reply door / timeout card / stay refresh / dest chips / spoken Hear.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
