@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 01:13 UTC — New fine-grained PAT in the secret. Retry 074. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 01:14 UTC — You tagged. B is running. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2283,3 +2283,11 @@ The token is still missing **Issues: Read and write** on `bywale-com/travis`. Pu
 2. If he minted a **new** token, the Actions secret still has the old one until he pastes the new value. Editing permissions on the **same** token does not need a new paste.
 
 Do not paste the token here.
+
+---
+
+## 2026-09-06 01:14 UTC — You tagged; Engineer woke
+
+**Kind:** Process. Fine-grained PAT in the secret worked.
+
+[Run](https://github.com/bywale-com/travis/actions/runs/34003356089): `Label actor: bywale-com`. Timeline: you removed `wake-engineer` at 01:14:11, added it at 01:14:12. B booted: [`bc-961c272a`](https://cursor.com/agents/bc-961c272a-55dc-48b1-808f-2f2af9caa7a7) (automation e89c2975, running). Same path as a packet.
