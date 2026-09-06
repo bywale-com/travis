@@ -19,6 +19,8 @@ Re-arm 2026-09-05 23:59 UTC: drop `wake-engineer` and add it again so B sees a f
 
 Re-arm 2026-09-06 00:19 UTC: `WAKE_GITHUB_TOKEN` is on the repo. Tag as the founder.
 
+Re-arm 2026-09-06 00:50 UTC: try the founder token again.
+
 ## Cut — house (already on this PR)
 
 Same Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml).

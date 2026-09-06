@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 00:20 UTC — WAKE_GITHUB_TOKEN is on; GitHub said 401. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 00:50 UTC — Try WAKE_GITHUB_TOKEN again. Flag 14:00 stands.
 
 **How we maintain this log**
 
