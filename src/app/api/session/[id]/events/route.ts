@@ -14,7 +14,8 @@ import {
 import { listSessionStreams } from "@/server/stream";
 import { turnsAfterSeq } from "@/server/turns-read";
 
-export const maxDuration = 800;
+/** Hobby cap. Resume from last seq when this function ends. */
+export const maxDuration = 60;
 
 const HEARTBEAT_MS = 15_000;
 const REAP_MS = 2_000;

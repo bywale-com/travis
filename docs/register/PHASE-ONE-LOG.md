@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 15:06 UTC — PM look 013 Pass. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 15:28 UTC — Vercel fail on 013 was maxDuration 800 on Hobby. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2867,3 +2867,11 @@ Fix: Wake on its own line. That push is the get-go the go recut meant to be.
 **Steps I could not do (human):** Vercel team SSO. Travis email link. Type / Send. Rooms leave/enter. Backlog + ticket. Talk on a phone.
 
 **Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-06 15:28 UTC — Vercel fail on #144 (this seat)
+
+**Kind:** Deploy. Same 013.
+
+Preview deploy `dpl_HDpcdWpPKqVMXTjAzbJMCirgERq8` failed. Local `next build` passed. The room wire exported `maxDuration = 800`. This team is Hobby. That number is over the plan. Resume from `seq` is the no-loss — the function does not need 800s. Set `60`. Client reconnects.
