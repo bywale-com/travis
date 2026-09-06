@@ -28,6 +28,6 @@ Draft is not the hold. “Then SA” in a sentence is not the hold.
 | 010 | [`PM-PACKET-010-SERVE.md`](./PM-PACKET-010-SERVE.md) · FACE [`PLATES-ARTIFACTS.md`](./PLATES-ARTIFACTS.md) · test [`PM-PACKET-010-SERVE-TEST.md`](./PM-PACKET-010-SERVE-TEST.md) · look [`PM-LOOK-010.md`](./PM-LOOK-010.md) | [#134](https://github.com/bywale-com/travis/pull/134) — 026 planted; look **Pass**. Human walk open. |
 | 011 | [`PM-PACKET-011-VOICE-TPM.md`](./PM-PACKET-011-VOICE-TPM.md) · test [`PM-PACKET-011-VOICE-TPM-TEST.md`](./PM-PACKET-011-VOICE-TPM-TEST.md) | Voice New, reply thread, stay. **Wake:** sa. SA **027**. |
 | 012 | [`PM-PACKET-012-USABLE-CHAT.md`](./PM-PACKET-012-USABLE-CHAT.md) | Usable Log. Living [#142](https://github.com/bywale-com/travis/pull/142). SA **028**. Do not remint here. |
-| 013 | [`PM-PACKET-013-LIST-LIVE.md`](./PM-PACKET-013-LIST-LIVE.md) · test [`PM-PACKET-013-LIST-LIVE-TEST.md`](./PM-PACKET-013-LIST-LIVE-TEST.md) | Lists show now. Poll the open door. **Wake:** sa. SA **029**. [#144](https://github.com/bywale-com/travis/pull/144). |
+| 013 | [`PM-PACKET-013-LIST-LIVE.md`](./PM-PACKET-013-LIST-LIVE.md) · test [`PM-PACKET-013-LIST-LIVE-TEST.md`](./PM-PACKET-013-LIST-LIVE-TEST.md) | Room stays live. Wire + resume. **Wake:** sa. SA **029**. [#144](https://github.com/bywale-com/travis/pull/144). |
 
 Next packet number follows the last cut. Do not reuse.

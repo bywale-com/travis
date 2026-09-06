@@ -1,14 +1,14 @@
-# Test spec — 013 Lists show now
+# Test spec — 013 The room stays live
 
 **Packet:** [`PM-PACKET-013-LIST-LIVE.md`](./PM-PACKET-013-LIST-LIVE.md)  
 **Desk:** `https://travis-psi.vercel.app`  
 **Room:** Travis (`0e8875f8-283b-4dae-bf54-76c82a05b6ef`)  
 **Viewport:** phone, or 430×932.  
-**Mode:** **Log** · **Type** unless a step says Rooms or Backlog.
+**Mode:** **Log** · **Type** unless a step says Backlog.
 
 Fill **I saw** on this step before the next.
 
-**Pass** = saw matches Expect, in order. **Hard refresh to see a row is a miss.**
+**Pass** = saw matches Expect, in order. **Hard refresh to see a row is a miss.** Waiting out a poll guess to see a row is a miss.
 
 ---
 
@@ -24,51 +24,54 @@ One-line note on the tape.
 
 ---
 
-## A. Log without hard refresh
+## A. The wire, not the timer
 
 ### A.1 Send and see
 
-**Do:** Type `One-line note on the tape.` Send. Do not refresh. Watch the thread up to five seconds.
+**Do:** Type `One-line note on the tape.` Send. Do not refresh. Do not wait three seconds on purpose.
 
 **Expect:** In this order:
 
-1. Your line is on the right.
-2. Their reply or Stream shows without a hard refresh.
+1. Your line is on the right as soon as it is sent.
+2. Their reply or Stream shows when it lands — not after a later refresh.
 
 **I saw:**
 
 ---
 
-## B. Backlog without hard refresh
+## B. Reconnect does not lose
 
-### B.1 List stays, then updates
+### B.1 Leave and come back to the same room
 
-**Do:** Open Backlog. Wait until rows show. Keep it open.
+**Do:** After A, switch to Rooms, then enter Travis again. Do not hard-refresh the browser. Look at the Log.
 
 **Expect:** In this order:
 
-1. The list is rows, not a long blank.
-2. A new or changed ticket appears on this list without hard refresh (or within one poll beat after it lands).
-
-**I saw:**
-
-### B.2 Ticket while open
-
-**Do:** Open one ticket. Messages. Keep it open. Have a line land on that ticket (or dest that ticket). Do not leave. Do not hard refresh.
-
-**Expect:** The new line shows on **this** ticket.
+1. The lines from A are still there.
+2. Nothing that landed is missing.
 
 **I saw:**
 
 ---
 
-## C. A blip does not wipe
+## C. Backlog
 
-### C.1 Still there
+### C.1 List
 
-**Do:** On Backlog with rows showing, wait through at least one poll (three seconds). Do not refresh.
+**Do:** Open Backlog. Keep it open. Do not hard refresh.
 
-**Expect:** The list does not flash empty.
+**Expect:** In this order:
+
+1. Rows show. The list does not flash empty.
+2. A new or changed ticket appears on this list without hard refresh.
+
+**I saw:**
+
+### C.2 Ticket
+
+**Do:** Open one ticket. Messages. A line lands on that ticket. Stay. Do not hard refresh.
+
+**Expect:** The new line is on **this** ticket.
 
 **I saw:**
 
@@ -76,4 +79,4 @@ One-line note on the tape.
 
 ## After
 
-If any **I saw** needs a hard refresh to match Expect, the packet is not done.
+If any **I saw** needed a hard refresh, the packet is not done.

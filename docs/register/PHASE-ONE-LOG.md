@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 14:48 UTC — Lists show now: poll the open door. 013 go. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 14:52 UTC — 013 recut: room wire + resume, not a smarter poll. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2837,3 +2837,15 @@ Fix: Wake on its own line. That push is the get-go the go recut meant to be.
 **Lock.** Tick paints the open door (Log / Backlog / ticket / rooms). Failed GET keeps last good rows. Turns after last `seq`. Backlog list is a list — not every thread. Foreground → tick now. No websocket this cut.
 
 **Packet:** [`PM-PACKET-013-LIST-LIVE.md`](./PM-PACKET-013-LIST-LIVE.md) · test [`PM-PACKET-013-LIST-LIVE-TEST.md`](./PM-PACKET-013-LIST-LIVE-TEST.md). SA **029**.
+
+---
+
+## 2026-09-06 14:52 UTC — 013 recut: no loss, like Cursor / Claude (founder)
+
+**Kind:** Packet recut. **Wake:** sa. 023 room-bus silence **opens**.
+
+**Founder (preserved):** I don't know why I feel like this is just like, it's too, it's too provincial or local of a solution. Like, think about a big production company, like Cursor, or Claude. What are they using? How come they, you're not, you never lose, there's no loss, ever?
+
+**Alignment.** They have a durable tape, one live wire (SSE), and reconnect from the last id. Hard refresh is re-read-from-zero. They never need that for a new line. A smarter poll is still a guess.
+
+**Lock.** Room SSE while he is in the room. Resume from `seq`. Catch-up after drop. Never blank. Poll is fallback only. Same `#144`. SA **029**.
