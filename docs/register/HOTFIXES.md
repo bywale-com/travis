@@ -10,6 +10,7 @@
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
 | Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **075**. |
 | PR title | `Hotfix NNN — …` (human tell). Action: this push lands `HOTFIX-NNN-*.md` → `wake-engineer` only. No `wake-sa`. |
+| Test | Every hotfix gets a `HOTFIX-NNN-*-TEST.md` (same job as a packet test). Emerge mails that sheet. |
 
 ## Hotfixes
 
