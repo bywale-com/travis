@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 11:12 UTC — Psi walk: images absent, ticket Reply leaves the ticket. 012 on its own PR. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 12:01 UTC — PM look 012 Pass (this seat). Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2847,3 +2847,21 @@ Fix: Wake on its own line. That push is the get-go the go recut meant to be.
 **Walk (psi, room Travis, Log / Type):** Send works. Reply on the room quotes, does not dest the author. Images are paths; Artifacts empty. Ticket Messages → Reply **leaves the ticket** for the room Log. Quote rail does not name who.
 
 **012 pocket 3:** Reply on a ticket stays on that ticket.
+
+---
+
+## 2026-09-06 12:01 UTC — PM look 012 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`PM-PACKET-012-USABLE-CHAT.md`](./PM-PACKET-012-USABLE-CHAT.md) · SA **028** · plant on [#142](https://github.com/bywale-com/travis/pull/142) (`dac01b7`). Sheet: [`PM-LOOK-012.md`](./PM-LOOK-012.md).
+
+**Look.** src/ matches the lock. `destFromReferencedTurn` reads this `agent_post` author only; `kind=user` does not dest from `seat_key`. Chips / call-by-name add. Quote rails name who (`Reply to {label}`). Ticket `onReply` keeps the ticket; Type compose lives there. Harvest hangs API ∪ markdown ∪ process paths on this `turn_id`; `http(s)` 302; `parseAgentPost` omits image markdown. No new table. No remint of `reference_turn_id` / `heard_at` / `turn_artifact`. No Hear / Skip buttons.
+
+**Preview I opened:** `https://travis-git-cursor-packet-012-usab-4fa860-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Behind protection: Travis email door. Did not sign in. Did not see Voice / Log glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not enter Travis. I did not Reply. I did not dest. I did not see a picture under a post. I did not open a ticket.
+
+**Steps I could not do (human):** Vercel team SSO. Travis email link. Enter Travis · Log · Type. Reply / image hang / stay reload / ticket Reply.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
