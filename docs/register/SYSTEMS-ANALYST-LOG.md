@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-05 16:47 UTC — **SCP-025 signed.** Stream close hangs on this trigger’s answering post, not session-latest. Same PR as PM-009 ([#127](https://github.com/bywale-com/travis/pull/127)). Next number is **026**.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 04:20 UTC — **SCP-026 signed.** Serve: follow-on stamp inherit, heard/seen columns, harvest window, offer. Same PR as PM-010 ([#134](https://github.com/bywale-com/travis/pull/134)). Next number is **027**.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -494,3 +494,37 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-025-STREAM-CLOSE.md`](./SYSTEMS-CHANGE-PACKET-025-STREAM-CLOSE.md)
 
 **Handoff:** Engineer plants 025 on **this same PR**. Next packet number is **026**. Do not remint 023 or 024. Do not mint a cousin.
+
+---
+
+## 2026-09-06 04:20 UTC — SCP-026 Serve (PM-010 on #134)
+
+**Kind:** Packet ascribe. Automation woke this seat. PM-010 + O2/O1/A1/A2 on this PR. No SYSTEMS-CHANGE-PACKET for 010 was on the branch. 023 / 024 / 025 stay planted — not reminted.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-010 lock + plates). Not PM. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** 2, 3, and 4 are one packet. Dest a seat on a ticket. That seat posts — text, and often a plate. Voice: Travis offers it with that ticket’s context. Hear / Skip. The ticket read sees the same post (and the plate). Stream card still hangs on the finished line. Canvas later.
+
+**Staples (not scenery):** **Artifacts** (compartment title). Document icon on Voice **and** Log; Voice at the **top**. Badge = unseen count. Offer names the **seat** and the **ticket title** (or “that other thing”).
+
+**Quoted stood-up:**
+
+- Seat post copies `initiative_id` from the dest user turn (`seat-pipe.ts` L267–308).
+- `ticketForHand` without `id` falls through to `ensureViaTravis` (mints from latest Travis user line). `stampLatestPassOn` then retargets dest lines that already had a stamp.
+- `dest_job.initiative_id` already exists. `travis.stream` has no initiative column; card hang is `closeTurnId === turn.id`.
+- `readInitiative` uses `canonicalPosts` (latest per seat). `formatInitiativeRead` says “No seat has posted” on that empty list.
+- Harvest requires `updatedAt` (`shouldHangArtifact`). `listCursorArtifacts` returns `[]` on fail. Dest-job closer is speakable `{label} finished.`
+- 051 New is session-local `newIds` (`Room.tsx`). `summarizeSeatReply` stands.
+
+**Ascribed:**
+
+1. **No remint** of 023–025 or hang SQL. No second messages / artifact store. No `stream.initiative_id`.
+2. **Follow-on inherit** on existing columns: named title → latest open `dest_job.initiative_id` → latest dest user stamp → then `ensureViaTravis`. `stampPassOn` must not retarget a dest line that already has `initiative_id`. Stream on ticket = trigger or close turn stamped. Ticket Messages = all stamped dest lines + cursor-seat posts + Stream cards. `canonicalPosts` stays for `next` / lit only. Old unstamped posts = named silence.
+3. **Mint columns only:** `voice_turn.heard_at`, `turn_artifact.seen_at`. Ready / New = unheard cursor-seat speakable post. Seen plate ≠ heard post. Invited urgency stays silence.
+4. **Gist** = `summarizeSeatReply` at Hear. Empty gist → no 40k TTS.
+5. **Harvest:** hang when `updatedAt` is missing if the path is new; one retry on empty list. Dead ref → muted line.
+6. **Offer copy locked:** `About {title|that other thing}, this is what the {Seat} has to say. Hear it?` Dest-job closer `speakable=false`. Chip stays New.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-026-SERVE.md`](./SYSTEMS-CHANGE-PACKET-026-SERVE.md)
+
+**Handoff:** Engineer plants 026 on **this same PR**. Next packet number is **027**. Do not remint 023–025. Do not mint a cousin.

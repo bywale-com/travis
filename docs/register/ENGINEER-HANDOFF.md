@@ -1,6 +1,6 @@
 # Engineer seat handoff — 2026-09-06
 
-**This bind is living.** `bc-3d6452cd-9bd2-4507-b96e-13f8aaff152a` is the Engineer until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
+**This bind is living.** `bc-fb4a75ab-6197-469e-b54d-40645aaa8dc2` is the Engineer until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
 **Trail:** git + PRs. **One PR per initiative.** Do **not** append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
 
@@ -10,29 +10,31 @@
 
 ## Where we stopped
 
-**077 open desk** — `TRAVIS_OPEN_DESK=1` makes no-cookie `/` and `requireOperator` the preferred seeded operator. Login door + `/enter` stay. Off unless the flag is on. Do not remint 053 tables.
+**026 Serve is on [#134](https://github.com/bywale-com/travis/pull/134).** Follow-on dest inherits the last open dest ticket (`dest_job` then last dest user, then `ensureViaTravis`). `stampPassOn` does not retarget a dest line that already has `initiative_id`. Ticket Messages / `readInitiative` list dest lines + every cursor-seat post + completed Stream cards via existing hang. `heard_at` / `seen_at` are isolate-once + migrate, and both columns exist on live Travis Postgres. Offer copy is locked; Hear reuses `summarizeSeatReply`; Skip writes `heard_at`. Dest-job closer is `speakable=false`. First icon + Artifacts sheet + full. Do not remint 023–025. Do not remint hang SQL.
+
+**078 / 077 open desk** — on `main`. Production psi is open desk unless `TRAVIS_OPEN_DESK=0`. Do not remint 053 tables.
 
 **076 dest closer is on [#130](https://github.com/bywale-com/travis/pull/130).** Dest **done** and `reapFinishedLiveRuns` land **one** speakable `agent_post` — last stream `message` body, or `postText` if there is no event. `closeStream.closeTurnId` is that row. Stream events stay; same `StreamCard` as Travis. Grain: `decideDestStreamClose` in [`src/lib/stream.ts`](../../src/lib/stream.ts). Sites: [`src/server/seat-pipe.ts`](../../src/server/seat-pipe.ts) `driveDestCursorEvents` and `reapFinishedLiveRuns`. `dispatch.ts` stand-in left as one post. 025 Travis close not reminted. 074 SQL not reminted. Catalog `pm` not touched.
 
 Human leftover on 075: dest **by who** (`technical-pm`) on the phone. Do not mail catalog `pm`.
 
-Next specified-and-clear cut is **022** ports from the signed packet on [#120](https://github.com/bywale-com/travis/pull/120). Do not remint `travis.port`. Do not remint 023, 024, 025, or 076. Do not remint the 074 SQL. Do not send **That’s fine.**
+Next specified-and-clear cut is **022** ports from the signed packet on [#120](https://github.com/bywale-com/travis/pull/120). Do not remint `travis.port`. Do not remint 023, 024, 025, 026, or 076. Do not remint the 074 SQL. Do not send **That’s fine.**
 
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **077** open desk. Next number **078**. |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **078** on `main`. Next number **079**. |
 | One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
 | Face | Phone-first Voice / Log / Backlog. Smoke there. |
-| Last plant | **076 dest closer** · [#130](https://github.com/bywale-com/travis/pull/130) (one finished Log post; card on that id). Prior: **075** live hang · same PR. **074** SQL file · same PR. **025** · [#127](https://github.com/bywale-com/travis/pull/127). **024** · [#126](https://github.com/bywale-com/travis/pull/126). **023** · [#123](https://github.com/bywale-com/travis/pull/123). Open: **022** · [#120](https://github.com/bywale-com/travis/pull/120). |
+| Last plant | **026 Serve** · [#134](https://github.com/bywale-com/travis/pull/134). Prior: **076 dest closer** · [#130](https://github.com/bywale-com/travis/pull/130). **075** live hang · same PR. **074** SQL file · same PR. **025** · [#127](https://github.com/bywale-com/travis/pull/127). **024** · [#126](https://github.com/bywale-com/travis/pull/126). **023** · [#123](https://github.com/bywale-com/travis/pull/123). Open: **022** · [#120](https://github.com/bywale-com/travis/pull/120). |
 | Prior plants | 065 · [#108](https://github.com/bywale-com/travis/pull/108) · 015 · [#107](https://github.com/bywale-com/travis/pull/107) · 064 · [#102](https://github.com/bywale-com/travis/pull/102) · **Hotfix 062** · [#98](https://github.com/bywale-com/travis/pull/98) |
 | Motion | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) |
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
 | Busy room (lived) | `0e8875f8-283b-4dae-bf54-76c82a05b6ef` (title “Travis”) |
 
-**Do not redo** 012, 013, 014, 015, 016, 020 first slice, 021, 023, 024, 025, 062, 064, 065, 068, 069, 070, 071, 072, 073, 074 SQL, the 075 live hang, or the 076 dest closer. Do not plant **022** except from the signed packet on #120. Do not send **That’s fine.** from Engineer.
+**Do not redo** 012, 013, 014, 015, 016, 020 first slice, 021, 023, 024, 025, 026, 062, 064, 065, 068, 069, 070, 071, 072, 073, 074 SQL, the 075 live hang, the 076 dest closer, or **077 / 078** open desk. Do not plant **022** except from the signed packet on #120. Do not send **That’s fine.** from Engineer.
 
 ---
 
@@ -81,6 +83,7 @@ Create-agent prompt is still the one-line stub. Do not paste a seat block at cre
 - Live work is not a Log line. Stream is the episode. 023 MotionCard is a receipt, not the stream.
 - Stream does **not** open itself. The card hangs above **this** episode’s completed line.
 - Dest done: one finished message on the Log. Everything else in the card. Same card as Travis (076).
+- Work on a ticket is **on** that ticket. Travis offers a landing with seat + title (or “that other thing”). Hear is a gist. Skip leaves the post (026).
 
 ---
 
@@ -102,7 +105,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 | Ports host + connectors plate | 022 signed on [#120](https://github.com/bywale-com/travis/pull/120). Do not remint `travis.port`. |
 | `TRAVIS_GITHUB_TOKEN` | Unfold receipts `not wired` until founder sets it, or 022 hangs it on port `github`. Not `GITHUB_TOKEN`. |
 | `link` / structured artifact kind · founder upload | SA named silence. |
-| Heard-survives-refresh · 007 R2 Hear / Next / Skip · urgency tiers | SA. |
+| 007 R2 Hear-queue sheet · invited urgency | 026 planted Hear / Skip / offer. Invited urgency is still 007 R1 silence. |
 | Chunked box stdout · Find rename · initiative stamp · process-primitive table | 024 named silence. Do not invent. |
 | Idle door / catch-it-live compartment | 008 remainder. Already specified. Not 025. |
 | 015 lived smoke | Phone face: create Pat (must not be picked as PM), sit, idle send, busy→spin, `who` still queues. Do not auto-sit existing `pm`/`sa`/`engineer`/`travis` rows. |
@@ -112,8 +115,8 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 ## Next Engineer job
 
 1. Accept the seat from the paste below. Fetch `main`. Read **this file**, then [`ENGINEER.md`](../seats/ENGINEER.md), then `AGENTS.md`.
-2. Do not restart 012 / 013 / 014 / 015 / 023 / 024 / 025 / 062 / 064 / 065. Do not remint the 074 SQL file. Do not remint the 075 hang. Do not remint the 076 dest closer. Do not mint a store. Do not append PM or SA logs.
-3. **022** ports on [#120](https://github.com/bywale-com/travis/pull/120) is the pickup. Do not remint `travis.port`. Dest by who `technical-pm` is human leftover on 075 — do not mail catalog `pm`. Do not send **That’s fine.**
+2. Do not restart 012 / 013 / 014 / 015 / 023 / 024 / 025 / 026 / 062 / 064 / 065 / 077 / 078. Do not remint the 074 SQL file. Do not remint the 075 hang. Do not remint the 076 dest closer. Do not mint a store. Do not append PM or SA logs.
+3. **022** ports on [#120](https://github.com/bywale-com/travis/pull/120) is the pickup after 026 merges. Do not remint `travis.port`. Dest by who `technical-pm` is human leftover on 075 — do not mail catalog `pm`. Do not send **That’s fine.**
 4. When **you** stop: rewrite the **Current** lines at the top of this file (where we stopped, last plant, next hotfix number) so the next bind does not start from a transcript. Then you may write **This bind is done**.
 
 ---
@@ -123,7 +126,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 ```text
 You are Travis’s Engineer (full-stack implementer). Read docs/README.md “Engineer — identity” and accept it. Read repo-root AGENTS.md (always-on). You are not the Product Manager. You are not the Systems Analyst. Product face = voice/chat pipe (phone-first). Do not overwrite PHASE-ONE-LOG founder wording. Do not mint tables. Do not hard-code data into the SPA. Do not ship API keys to the client. Specified-and-clear: build it. Specified-but-blocked on PM or SA: name why; do not invent. Detailed: docs/seats/ENGINEER.md.
 
-You are a NEW bind. The last Engineer was bc-3d6452cd-9bd2-4507-b96e-13f8aaff152a. They handed off. Read docs/register/ENGINEER-HANDOFF.md first.
+You are a NEW bind. The last Engineer was bc-fb4a75ab-6197-469e-b54d-40645aaa8dc2. They handed off. Read docs/register/ENGINEER-HANDOFF.md first.
 
 Then, in order:
 1. docs/register/ENGINEER-HANDOFF.md — where we stopped, planted, leftover, locks.

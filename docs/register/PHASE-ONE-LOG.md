@@ -2647,6 +2647,70 @@ If 3.2M were Fast input uncached: **~$13**. Cache-heavy: a few dollars. A little
 
 ---
 
+## 2026-09-06 03:02 UTC — Packet 010: pockets 2 + 3 + 4 (founder)
+
+**Kind:** Packet cut. Not planted. Canvas later. Pocket 1 (cost) is done.
+
+**Founder (preserved):** I want us to work on 3, 4, and 2. … maybe let’s do one at a time. … 3 and 4 I think go together. … we can do 2, 3, and 4 … because the tests are like very cohesive. … three is something we can diagnose … and have the engineer build … I think we can do two, three, and four in the same hotfix. … this would definitely be a packet. … output types … plates that naturally emerge … just needs plates, really. For three … less about plates. … you stated it very well. … four … we don't even really need plates. … lock that, and then … write … what we're trying to achieve for two, three, and four. … so we can create a proper packet.
+
+**Recut:** not a hotfix. **010.** SA **026**. Next hotfix still **077**.
+
+### What I needed from him
+
+**Plates for 2.** Two: **O1** Log (plate inline in the bubble) · **O2** Voice (how the plate shows up on the orb). Screenshot psi first. [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md). 3 and 4 do not wait on plates.
+
+Nothing else. Offer copy is already 02:28. Canvas stays later.
+
+### Achievement (written)
+
+[`PM-PACKET-010-SERVE.md`](./PM-PACKET-010-SERVE.md) · test [`PM-PACKET-010-SERVE-TEST.md`](./PM-PACKET-010-SERVE-TEST.md).
+
+| Pocket | Job | Status |
+|--------|-----|--------|
+| **2** Plates in chat + voice | Common type in the bubble, in order. Voice tells him it is there. | Store planted (062/064). Glass waits **O1 / O2**. |
+| **3** Ticket thread + query | Follow-on posts and streams on the ticket. Travis can read it. | Specified. SA ascribes stamp / stream hang. |
+| **4** Offer, don’t barge | Seat never talks first. Context + Hear / Skip. | Specified. 007 stays; do not remint C3/C4. |
+
+**3 makes 4 true.** One walk in the test spec.
+
+**Do not** wake Engineer until O1 / O2 signed **and** SA 026. 3 and 4 may be ascribed now.
+
+---
+
+## 2026-09-06 03:52 UTC — Artifacts glass; psi open (077/078)
+
+**Kind:** FACE. Founder locked the Voice/Log door as an **icon compartment**. Not planted.
+
+**Founder (preserved):** we're gonna add an artifacts icon, artifacts compartment … the 1st icon modal … document icon … at the top … exists in both … voice mode and … the chat log … in voice mode, it should be at the top … new plates that I've yet to be seen … the number of new artifacts is … a badge … on the icon … inside … it says artifacts, and there's a list … click into each one … image full screen … X out.
+
+**077 / 078:** login door off on psi production unless `TRAVIS_OPEN_DESK=0`. 077 build failed a typecheck. 078 deployed. Live Voice / Log walked.
+
+**Drawn:** [`PLATES-ARTIFACTS.md`](./PLATES-ARTIFACTS.md) · O2 Voice badge · O1 Log same icon · A1 list · A2 full. First desk from planted chrome + the walk. Ask him to sign.
+
+**Seen law:** Log sat-in-view **or** opened in Artifacts. Badge = unseen count.
+
+**Next hotfix** **079**. Do not wake Engineer on 010 until he signs and SA **026**.
+
+---
+
+## 2026-09-06 04:11 UTC — PM look 010 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`PM-PACKET-010-SERVE.md`](./PM-PACKET-010-SERVE.md) · SA **026** · plant on [#134](https://github.com/bywale-com/travis/pull/134) (`051d4a8`). Sheet: [`PM-LOOK-010.md`](./PM-LOOK-010.md).
+
+**Look.** src/ matches the lock. Inherit dest_job → last dest user → `ensureViaTravis`. `stampPassOn` does not retarget a stamped dest line. Ticket read lists dest lines + every cursor-seat post + Stream cards via existing hang. Offer is `offerBeat` (seat + title / “that other thing”). Hear is gist. Skip / Log-in-view write `heard_at`. Closer is `speakable=false`. First icon + badge + Artifacts + full. No still on the orb. No `stream.initiative_id`. No canvas.
+
+**Preview I opened:** `https://travis-git-cursor-packet-010-serve-35b2-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see Voice / Log glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not dest. I did not Talk. I did not say `What's on that ticket?`
+
+**Steps I could not do (human):** Vercel team SSO. Travis email link. Talk on a phone. Dest / seat post / ticket Messages / Hear / Skip / two landings.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
 ## 2026-09-06 09:08 UTC — Packet wait is `**Wake:** sa`, not prose (founder)
 
 **Kind:** Process lock. Recut of the packet get-go. Not a product packet. Not hotfix **079**. No new Cursor automation.

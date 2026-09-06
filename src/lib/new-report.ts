@@ -14,6 +14,7 @@ export type NewReportTurn = {
   kind: string;
   seatKey?: string | null;
   speakable?: boolean;
+  heardAt?: string | Date | null;
 };
 
 export type NewSeat = {
@@ -24,7 +25,13 @@ export type NewSeat = {
 export function isNewReportTurn(turn: NewReportTurn): boolean {
   if (turn.kind !== "agent_post") return false;
   if (turn.speakable === false) return false;
+  if (turn.heardAt) return false;
   return isCursorSeat(turn.seatKey);
+}
+
+/** Durable New — heard_at IS NULL. Replaces session newIds. */
+export function unheardReports<T extends NewReportTurn>(turns: T[]): T[] {
+  return turns.filter(isNewReportTurn);
 }
 
 export function collectNewReports<T extends NewReportTurn>(

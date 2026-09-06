@@ -523,6 +523,15 @@ async function main() {
   `;
 
   await sql`
+    ALTER TABLE travis.voice_turn
+      ADD COLUMN IF NOT EXISTS heard_at timestamptz
+  `;
+  await sql`
+    ALTER TABLE travis.turn_artifact
+      ADD COLUMN IF NOT EXISTS seen_at timestamptz
+  `;
+
+  await sql`
     UPDATE travis.stream AS s
     SET
       close_turn_id = t.id,
@@ -562,7 +571,7 @@ async function main() {
       )
   `;
 
-  console.log("travis schema + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion + SCP-015 sit + SCP-023 dest_job + SCP-024 stream + SCP-025 walk close ready");
+  console.log("travis schema + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion + SCP-015 sit + SCP-023 dest_job + SCP-024 stream + SCP-025 walk close + SCP-026 heard/seen ready");
   await sql.end();
 }
 

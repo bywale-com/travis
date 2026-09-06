@@ -81,7 +81,16 @@ export async function startTravisLive(opts: {
       opts.onSeatStream(res);
       return { stopLive: true };
     }
-    const data = (await res.json()) as { stopLive?: boolean; here?: string };
+    const data = (await res.json()) as {
+      stopLive?: boolean;
+      here?: string;
+      serveSpeak?: string;
+    };
+    if (typeof data.serveSpeak === "string") {
+      if (data.serveSpeak.trim()) sendNotify(data.serveSpeak);
+      opts.onTravisText(data.serveSpeak);
+      return data;
+    }
     if (role === "user") opts.onUserText(text);
     if (role === "travis") opts.onTravisText(text);
     if (data.here) pushHere(data.here);

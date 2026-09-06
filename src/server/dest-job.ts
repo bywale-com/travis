@@ -199,12 +199,46 @@ export async function finishDestJobsForBinding(params: {
           ? `${label} timed out.`
           : `${label} failed.`;
     const { insertAgentPostTurn } = await import("./seat-pipe");
-    await insertAgentPostTurn(params.sessionId, line, "travis").catch(() => {});
+    await insertAgentPostTurn(params.sessionId, line, "travis", null, false).catch(
+      () => {},
+    );
     const { failLiveStreamWithoutCard } = await import("./stream");
     await failLiveStreamWithoutCard({
       sessionId: params.sessionId,
       bindingId: params.binding.id,
     }).catch(() => {});
+  }
+}
+
+/** File dest_job.initiative_id as the dest's ticket. Do not remint the table. */
+export async function fileDestJobInitiative(params: {
+  sessionId: string;
+  userTurnId?: string | null;
+  initiativeId: string;
+}): Promise<void> {
+  await ensureDestJobStore();
+  if (params.userTurnId) {
+    await db
+      .update(destJob)
+      .set({ initiativeId: params.initiativeId })
+      .where(
+        and(
+          eq(destJob.sessionId, params.sessionId),
+          eq(destJob.userTurnId, params.userTurnId),
+        ),
+      );
+  }
+  const [latest] = await db
+    .select()
+    .from(destJob)
+    .where(eq(destJob.sessionId, params.sessionId))
+    .orderBy(desc(destJob.createdAt))
+    .limit(1);
+  if (latest && !latest.initiativeId) {
+    await db
+      .update(destJob)
+      .set({ initiativeId: params.initiativeId })
+      .where(eq(destJob.id, latest.id));
   }
 }
 

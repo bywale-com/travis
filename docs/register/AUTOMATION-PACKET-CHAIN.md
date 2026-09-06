@@ -68,6 +68,7 @@ Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake
 
 ```text
 this push lands HOTFIX-NNN-*.md
+  AND the PR title starts with Hotfix
         ↓  GitHub Action (no LLM)
 label  wake-engineer     (no wake-sa)
         ↓

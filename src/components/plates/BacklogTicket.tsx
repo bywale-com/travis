@@ -9,12 +9,27 @@ import { backlogStageKeys, backlogWithLine } from "@/lib/backlog-face";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import { TYPE } from "@/theme/scale";
 import type { Tokens } from "@/theme/tokens";
+import { StreamCard } from "./StreamDoor";
 import { plateShell, quietLink } from "./shell";
 
 export type BacklogTicketPost = {
   id: string;
+  kind?: string;
   seatKey: string | null;
   text: string;
+};
+
+export type BacklogTicketDest = {
+  id: string;
+  seatKey: string | null;
+  text: string;
+};
+
+export type BacklogTicketStream = {
+  id: string;
+  closeTurnId: string | null;
+  triggerText: string;
+  status: string;
 };
 
 export type BacklogTicketFile = {
@@ -31,6 +46,8 @@ export type BacklogTicketData = {
   status: string;
   founding: { id: string; text: string } | null;
   posts: BacklogTicketPost[];
+  destLines?: BacklogTicketDest[];
+  streams?: BacklogTicketStream[];
   next: "travis" | "pm" | "sa" | "engineer" | null;
   attachments: BacklogTicketFile[];
 };
@@ -199,10 +216,61 @@ export function BacklogTicket({
               </div>
             ) : null}
 
+            {(ticket.destLines ?? [])
+              .filter((d) => d.id !== ticket.founding?.id)
+              .map((dest) => (
+                <div
+                  key={dest.id}
+                  style={{
+                    alignSelf: "flex-end",
+                    maxWidth: "92%",
+                    display: "flex",
+                    alignItems: "flex-end",
+                    gap: 8,
+                  }}
+                >
+                  <div
+                    style={{
+                      background: t.userBubble,
+                      color: t.textPrimary,
+                      borderRadius: 16,
+                      padding: "10px 14px",
+                      fontSize: TYPE.body,
+                    }}
+                  >
+                    {dest.text}
+                  </div>
+                </div>
+              ))}
+
             {ticket.posts.map((post) => {
               const files = ticket.attachments.filter((a) => a.turnId === post.id);
+              const cards = (ticket.streams ?? []).filter(
+                (s) => s.closeTurnId === post.id,
+              );
               return (
-                <div key={post.id} style={{ display: "flex", gap: 8, maxWidth: "92%" }}>
+                <div key={post.id} style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: "92%" }}>
+                  {cards.map((card) => (
+                    <StreamCard
+                      key={card.id}
+                      t={t}
+                      stream={{
+                        id: card.id,
+                        bindingId: "",
+                        seatKey: post.seatKey,
+                        triggerTurnId: "",
+                        triggerText: card.triggerText,
+                        closeTurnId: card.closeTurnId,
+                        destJobId: null,
+                        motionId: null,
+                        cursorRunId: "",
+                        status: card.status === "failed" ? "failed" : "completed",
+                        events: [],
+                      }}
+                      onOpen={() => onOpenLog(post.id)}
+                    />
+                  ))}
+                <div style={{ display: "flex", gap: 8 }}>
                   <SeatMark seatKey={post.seatKey || "pm"} t={t} size={28} />
                   <div style={{ minWidth: 0, flex: 1 }}>
                     <div
@@ -221,6 +289,7 @@ export function BacklogTicket({
                       <ArtifactQuiet key={file.id} t={t} file={file} />
                     ))}
                   </div>
+                </div>
                 </div>
               );
             })}

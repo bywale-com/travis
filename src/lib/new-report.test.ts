@@ -7,6 +7,7 @@ import {
   newReportBeat,
   newReportChip,
   newReportSeats,
+  unheardReports,
 } from "./new-report";
 
 test("only speakable cursor posts are New", () => {
@@ -75,4 +76,23 @@ test("unique seats keep first-seen order", () => {
 test("the New cut sits on the first unseen id", () => {
   assert.equal(newCutTurnId(["old", "mid", "fresh"], new Set(["fresh"])), "fresh");
   assert.equal(newCutTurnId(["old"], new Set(["fresh"])), null);
+});
+
+test("heard_at takes a post off New", () => {
+  assert.equal(
+    isNewReportTurn({
+      id: "1",
+      kind: "agent_post",
+      seatKey: "engineer",
+      heardAt: "2026-09-06T04:00:00.000Z",
+    }),
+    false,
+  );
+  assert.deepEqual(
+    unheardReports([
+      { id: "old", kind: "agent_post", seatKey: "engineer", heardAt: new Date() },
+      { id: "fresh", kind: "agent_post", seatKey: "sa" },
+    ]).map((t) => t.id),
+    ["fresh"],
+  );
 });
