@@ -11,7 +11,7 @@
 **Builds on:** 004 / 005 Log · 062 / 010 images · 011 / 027 reply staple.  
 **Next SA:** **028**.
 
-**Where:** this PR. #140 already merged (011 / 027). Do not remint that plant. Do not open a cousin of this cut.
+**Where:** [#142](https://github.com/bywale-com/travis/pull/142). #140 already merged (011 / 027). Do not remint that plant. Do not open a cousin of this cut.
 
 Voice is parked this cut. Walk the **Log**.
 

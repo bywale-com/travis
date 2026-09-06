@@ -14,7 +14,7 @@
 |------|--------|
 | Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **11:12 UTC 2026-09-06**. Flag **14:00**. |
 | Chat | [`USABLE-CHAT.md`](./USABLE-CHAT.md) — how the Log needs to work. |
-| 012 | [`PM-PACKET-012-USABLE-CHAT.md`](./PM-PACKET-012-USABLE-CHAT.md). **Wake:** sa. SA **028**. Own PR — #140 already merged. |
+| 012 | [`PM-PACKET-012-USABLE-CHAT.md`](./PM-PACKET-012-USABLE-CHAT.md). **Wake:** sa. SA **028**. [#142](https://github.com/bywale-com/travis/pull/142). |
 | 011 | Planted 027. Look Pass never opened the Log. Do not remint. |
 | Held | Travis write-port. Canvas. 022 on [#120](https://github.com/bywale-com/travis/pull/120). Grok Bot orchestra — discussed, not locked. |
 
