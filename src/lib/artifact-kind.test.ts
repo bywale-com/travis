@@ -31,7 +31,7 @@ test("content type follows the path", () => {
   assert.equal(artifactContentType("file", "artifacts/a.md"), "application/octet-stream");
 });
 
-test("dest-seat hangs when the window is this run; missing times do not", () => {
+test("dest-seat hangs when the window is this run; missing startedAt does not", () => {
   const started = new Date("2026-09-03T12:00:00Z");
   const late = new Date("2026-09-03T12:01:00Z");
   const early = new Date("2026-09-03T11:00:00Z");
@@ -60,6 +60,14 @@ test("dest-seat hangs when the window is this run; missing times do not", () => 
     shouldHangArtifact({
       startedAt: started,
       updatedAt: null,
+    }),
+    true,
+  );
+  assert.equal(
+    shouldHangArtifact({
+      startedAt: started,
+      updatedAt: null,
+      alreadyHung: true,
     }),
     false,
   );

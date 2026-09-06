@@ -26,12 +26,12 @@ import {
 import { readJson } from "@/lib/http";
 import { isRequestTurn } from "@/lib/request-log";
 import {
-  collectNewReports,
   newCutTurnId,
-  newReportBeat,
   newReportChip,
   newReportSeats,
+  unheardReports,
 } from "@/lib/new-report";
+import { parseHearInvite } from "@/lib/offer";
 import { isTravisSeat, keepWorkAfterTravisCall } from "@/lib/seats";
 import {
   playQueuedCue,
@@ -65,6 +65,12 @@ import {
 import { RequestLogDoor } from "@/components/plates/RequestLogDoor";
 import { RoomIndex, type RoomRow } from "@/components/plates/RoomIndex";
 import { RosterDoor, type RosterMember } from "@/components/plates/RosterDoor";
+import {
+  ArtifactFull,
+  ArtifactsChromeButton,
+  ArtifactsDoor,
+  type ArtifactRow,
+} from "@/components/plates/ArtifactsDoor";
 import { StreamCard, StreamDoor } from "@/components/plates/StreamDoor";
 import { streamPollMs, type StreamGrain } from "@/lib/stream";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
@@ -85,6 +91,7 @@ type Turn = {
   speakable?: boolean;
   thoughtStatus?: string | null;
   initiativeId?: string | null;
+  heardAt?: string | Date | null;
   text: string;
   createdAt?: string;
   attachments?: TurnFile[];
@@ -315,6 +322,9 @@ export function Room({
   const [runningNow, setRunningNow] = useState<RunningNow[]>([]);
   const [agentReturn, setAgentReturn] = useState<"create" | "roster">("create");
   const [newIds, setNewIds] = useState<string[]>([]);
+  const [artifactsOpen, setArtifactsOpen] = useState(false);
+  const [artifactFullId, setArtifactFullId] = useState<string | null>(null);
+  const [sessionArtifacts, setSessionArtifacts] = useState<ArtifactRow[]>([]);
   const [roomsLoading, setRoomsLoading] = useState(true);
 
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
@@ -344,9 +354,12 @@ export function Room({
   const listenRestartGenRef = useRef(0);
   const inflightRef = useRef(0);
   const liveRef = useRef<TravisLiveSession | null>(null);
-  const newBaselineSeqRef = useRef<number | null>(null);
   const notifiedNewRef = useRef<Set<string>>(new Set());
   const wakeNewTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const offeredKeyRef = useRef("");
+  const pendingOfferRef = useRef(false);
+  const seenInLogRef = useRef<Set<string>>(new Set());
+  const seenArtifactRef = useRef<Set<string>>(new Set());
   const drainingRef = useRef(false);
   const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const consumeAgentStreamRef = useRef<
@@ -383,6 +396,7 @@ export function Room({
     const data = await res.json();
     const nextTurns = (data.turns ?? []) as Turn[];
     setTurns(nextTurns);
+    setNewIds(unheardReports(nextTurns).map((t) => t.id));
     if (Array.isArray(data.cards)) setMotionCards(data.cards as MotionCardData[]);
     if (data.streams && typeof data.streams === "object") {
       const next = data.streams as { live?: StreamGrain[]; cards?: StreamGrain[] };
@@ -1069,6 +1083,7 @@ export function Room({
       const up = liveRef.current ? true : await connectLive(sid);
       if (!up) {
         setSubtitle(beat);
+        await facilitatorSpeak(beat);
         return;
       }
       liveRef.current?.notify(beat);
@@ -1076,35 +1091,114 @@ export function Room({
     [connectLive],
   );
 
+  const earBusy = useCallback(() => {
+    return (
+      presenceRef.current === "speaking" ||
+      speechEngineBusy() ||
+      sendingRef.current ||
+      Boolean(lastHeardRef.current.trim())
+    );
+  }, []);
+
+  const speakOffer = useCallback(async () => {
+    const sid = sessionIdRef.current;
+    if (!sid) return;
+    const res = await fetch(`/api/session/${sid}/hear`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "offer" }),
+    });
+    const data = (await res.json()) as { speak?: string; count?: number };
+    const beat = data.speak?.trim() ?? "";
+    if (!beat) return;
+    offeredKeyRef.current = unheardReports(turns)
+      .map((t) => t.id)
+      .join(",");
+    pendingOfferRef.current = false;
+    void routeNewToTravis(beat);
+  }, [routeNewToTravis, turns]);
+
+  const runHear = useCallback(
+    async (action: "hear" | "skip" | "verbatim") => {
+      const sid = sessionIdRef.current;
+      if (!sid) return;
+      const res = await fetch(`/api/session/${sid}/hear`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: action === "skip" ? "skip" : "hear",
+          form: action === "verbatim" ? "full" : "gist",
+        }),
+      });
+      const data = (await res.json()) as { speak?: string };
+      await refreshTurns(sid);
+      const speak = data.speak?.trim() ?? "";
+      if (speak) void routeNewToTravis(speak);
+    },
+    [refreshTurns, routeNewToTravis],
+  );
+
+  const markArtifactsSeenClient = useCallback(
+    async (ids: string[]) => {
+      const sid = sessionIdRef.current;
+      const fresh = ids.filter((id) => id && !seenArtifactRef.current.has(id));
+      if (!sid || !fresh.length) return;
+      for (const id of fresh) seenArtifactRef.current.add(id);
+      await fetch(`/api/session/${sid}/artifacts`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: fresh }),
+      });
+      const res = await fetch(`/api/session/${sid}/artifacts`);
+      const data = (await res.json()) as { artifacts?: ArtifactRow[] };
+      if (Array.isArray(data.artifacts)) setSessionArtifacts(data.artifacts);
+      await refreshTurns(sid);
+    },
+    [refreshTurns],
+  );
+
   useEffect(() => {
-    if (!turns.length) return;
-    if (newBaselineSeqRef.current == null) {
-      newBaselineSeqRef.current = Math.max(
-        0,
-        ...turns.map((t) => t.seq ?? 0),
-      );
+    const sid = sessionIdRef.current;
+    if (!sid) return;
+    void fetch(`/api/session/${sid}/artifacts`)
+      .then((r) => r.json())
+      .then((data: { artifacts?: ArtifactRow[] }) => {
+        if (Array.isArray(data.artifacts)) setSessionArtifacts(data.artifacts);
+      })
+      .catch(() => {});
+  }, [session?.id, turns.length]);
+
+  useEffect(() => {
+    const unheard = unheardReports(turns);
+    setNewIds(unheard.map((t) => t.id));
+    newIdsRef.current = unheard.map((t) => t.id);
+    if (!unheard.length) {
+      offeredKeyRef.current = "";
+      pendingOfferRef.current = false;
       return;
     }
-    const fresh = collectNewReports(turns, newBaselineSeqRef.current).filter(
-      (t) => !notifiedNewRef.current.has(t.id),
-    );
-    if (!fresh.length) return;
+    const key = unheard.map((t) => t.id).join(",");
+    const fresh = unheard.filter((t) => !notifiedNewRef.current.has(t.id));
+    if (!fresh.length && offeredKeyRef.current === key) return;
     for (const t of fresh) notifiedNewRef.current.add(t.id);
-    setNewIds((prev) => {
-      const next = [...prev];
-      for (const t of fresh) {
-        if (!next.includes(t.id)) next.push(t.id);
-      }
-      newIdsRef.current = next;
-      return next;
-    });
     if (wakeNewTimerRef.current) clearTimeout(wakeNewTimerRef.current);
     wakeNewTimerRef.current = setTimeout(() => {
-      const pending = turns.filter((t) => newIdsRef.current.includes(t.id));
-      const beat = newReportBeat(newReportSeats(pending.length ? pending : fresh));
-      void routeNewToTravis(beat);
+      if (viewModeRef.current !== "voice" || earBusy()) {
+        pendingOfferRef.current = true;
+        return;
+      }
+      if (offeredKeyRef.current === key) return;
+      void speakOffer();
     }, 400);
-  }, [turns, routeNewToTravis]);
+  }, [turns, earBusy, speakOffer]);
+
+  useEffect(() => {
+    if (presence !== "listening") return;
+    if (!pendingOfferRef.current) return;
+    if (earBusy()) return;
+    pendingOfferRef.current = false;
+    void speakOffer();
+  }, [presence, earBusy, speakOffer]);
 
   const finalizeUtterance = useCallback(
     async (utterance: string) => {
@@ -1140,6 +1234,21 @@ export function Room({
       clearDraft();
       listenSoon();
 
+      const invite = parseHearInvite(text);
+      if (invite && newIdsRef.current.length) {
+        sendingRef.current = false;
+        finalizingRef.current = false;
+        endInflight();
+        await runHear(
+          invite === "skip"
+            ? "skip"
+            : invite === "verbatim"
+              ? "verbatim"
+              : "hear",
+        );
+        return;
+      }
+
       try {
         const res = await fetch(`/api/session/${sid}/finalize`, {
           method: "POST",
@@ -1170,6 +1279,15 @@ export function Room({
                   : s,
               );
             }
+            return;
+          }
+          if (data.serve?.speak) {
+            void routeNewToTravis(String(data.serve.speak));
+            await refreshTurns(sid);
+            return;
+          }
+          if (data.serve) {
+            await refreshTurns(sid);
             return;
           }
           if (data.routerHandled) {
@@ -1204,6 +1322,9 @@ export function Room({
       haltRecognition,
       listenSoon,
       refreshSession,
+      refreshTurns,
+      routeNewToTravis,
+      runHear,
     ],
   );
 
@@ -1924,8 +2045,16 @@ export function Room({
       liveUp: Boolean(liveRef.current),
     };
     if (viewModeRef.current === "log" && mode === "voice") {
+      const viewed = [...seenInLogRef.current];
       setNewIds([]);
       newIdsRef.current = [];
+      if (viewed.length) {
+        void fetch(`/api/session/${session.id}/heard`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ turnIds: viewed }),
+        }).then(() => refreshTurns(session.id));
+      }
     }
     setViewMode(mode);
     viewModeRef.current = mode;
@@ -2024,8 +2153,25 @@ export function Room({
   });
   const newCutId = newCutTurnId(
     threadTurns.map((t) => t.id),
-    new Set(newIds),
+    new Set(unheardReports(threadTurns).map((t) => t.id)),
   );
+
+  useEffect(() => {
+    if (viewMode !== "log" || !threadRef.current) return;
+    const nodes = threadRef.current.querySelectorAll<HTMLElement>("[id^='turn-']");
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const id = entry.target.id.replace(/^turn-/, "");
+          if (id) seenInLogRef.current.add(id);
+        }
+      },
+      { threshold: 0.55 },
+    );
+    for (const node of nodes) io.observe(node);
+    return () => io.disconnect();
+  }, [viewMode, threadTurns]);
 
   const shellStyle = {
     minHeight: "100dvh",
@@ -2149,6 +2295,17 @@ export function Room({
             gap: 12,
           }}
         >
+          <span style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+          <ArtifactsChromeButton
+            t={t}
+            unseen={
+              sessionArtifacts.filter((a) => !a.seenAt).length ||
+              turns
+                .flatMap((turn) => turn.attachments ?? [])
+                .filter((file) => !file.seenAt).length
+            }
+            onOpen={() => setArtifactsOpen(true)}
+          />
           <button
             type="button"
             onClick={() => setDoor("roster")}
@@ -2169,6 +2326,7 @@ export function Room({
           >
             {session.title?.trim() || "Untitled"}
           </button>
+          </span>
           <span style={{ color: t.textMuted, fontSize: TYPE.meta }}>
             via {session.activeLabel || viaShort}
           </span>
@@ -2434,16 +2592,54 @@ export function Room({
                 newReportSeats(turns.filter((t) => newIds.includes(t.id))),
               );
               return chip ? (
-                <p
+                <div
                   style={{
                     textAlign: "center",
-                    color: t.textMuted,
-                    fontSize: TYPE.meta,
                     margin: "8px 28px 0",
                   }}
                 >
-                  {chip}
-                </p>
+                  <p
+                    style={{
+                      color: t.textMuted,
+                      fontSize: TYPE.meta,
+                      margin: 0,
+                    }}
+                  >
+                    {chip}
+                  </p>
+                  <div style={{ display: "flex", justifyContent: "center", gap: 16, marginTop: 6 }}>
+                    <button
+                      type="button"
+                      onClick={() => void runHear("hear")}
+                      style={{
+                        border: "none",
+                        background: "none",
+                        color: t.accent,
+                        fontSize: TYPE.meta,
+                        cursor: "pointer",
+                        fontFamily: "inherit",
+                        padding: 0,
+                      }}
+                    >
+                      Hear
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void runHear("skip")}
+                      style={{
+                        border: "none",
+                        background: "none",
+                        color: t.textMuted,
+                        fontSize: TYPE.meta,
+                        cursor: "pointer",
+                        fontFamily: "inherit",
+                        padding: 0,
+                      }}
+                    >
+                      Skip
+                    </button>
+                  </div>
+                </div>
               ) : runningLabel ? (
                 <p
                   style={{
@@ -2770,6 +2966,7 @@ export function Room({
                           <TurnAttachments
                             files={turn.attachments ?? []}
                             t={t}
+                            onSeen={(id) => void markArtifactsSeenClient([id])}
                           />
                         ) : null}
                         {!isUser && turn.kind === "agent_post" && (
@@ -3044,6 +3241,58 @@ export function Room({
           onOpenLog={openTurnInLog}
         />
       ) : null}
+
+      {artifactsOpen && !artifactFullId ? (
+        <ArtifactsDoor
+          t={t}
+          artifacts={
+            sessionArtifacts.length
+              ? sessionArtifacts
+              : turns.flatMap((turn) =>
+                  (turn.attachments ?? []).map((file) => ({
+                    id: file.id,
+                    turnId: turn.id,
+                    kind: file.kind,
+                    filename: file.filename,
+                    seenAt: file.seenAt,
+                  })),
+                )
+          }
+          onClose={() => setArtifactsOpen(false)}
+          onOpen={(id) => {
+            void markArtifactsSeenClient([id]);
+            const row = sessionArtifacts.find((a) => a.id === id);
+            if (row?.kind === "file") return;
+            setArtifactFullId(id);
+          }}
+        />
+      ) : null}
+
+      {artifactFullId
+        ? (() => {
+            const row =
+              sessionArtifacts.find((a) => a.id === artifactFullId) ??
+              turns
+                .flatMap((turn) =>
+                  (turn.attachments ?? []).map((file) => ({
+                    id: file.id,
+                    turnId: turn.id,
+                    kind: file.kind,
+                    filename: file.filename,
+                    seenAt: file.seenAt,
+                  })),
+                )
+                .find((a) => a.id === artifactFullId);
+            if (!row) return null;
+            return (
+              <ArtifactFull
+                t={t}
+                artifact={row}
+                onClose={() => setArtifactFullId(null)}
+              />
+            );
+          })()
+        : null}
 
       {openStreamId
         ? (() => {

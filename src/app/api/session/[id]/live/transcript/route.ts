@@ -19,6 +19,7 @@ import { AuthError } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
 import { runMotionRunner } from "@/server/motion";
 import { roomContextFor } from "@/server/room-read";
+import { serveInvite } from "@/server/serve";
 
 type Body = {
   role?: "user" | "travis";
@@ -73,6 +74,15 @@ export async function POST(
   if (shouldDropHeardAsUser({ heard, hisLast, heIsSpeaking: false })) {
     const here = await roomContextFor(sessionId).catch(() => "");
     return NextResponse.json({ ok: true, dropped: true, here });
+  }
+  const served = await serveInvite(sessionId, heard).catch(() => null);
+  if (served) {
+    const here = await roomContextFor(sessionId).catch(() => "");
+    return NextResponse.json({
+      ok: true,
+      serveSpeak: served.speak,
+      here,
+    });
   }
   const userTurn = await insertUserTurn(sessionId, heard, "travis");
   const { seatKey, remainder } = parseCallByName(text);

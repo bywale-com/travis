@@ -75,6 +75,8 @@ export const voiceTurn = travis.table("voice_turn", {
     .defaultNow(),
   /** SCP-008 — founding user, pass-on user, answering agent_post. FK is SQL. */
   initiativeId: uuid("initiative_id"),
+  /** SCP-026 — null = unheard. Hear / Skip / Log-in-view set this. */
+  heardAt: timestamp("heard_at", { withTimezone: true }),
 });
 
 export const turnConductorPhrase = travis.table("turn_conductor_phrase", {
@@ -172,6 +174,8 @@ export const turnArtifact = travis.table("turn_artifact", {
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
+  /** SCP-026 — null = unseen. Log-in-view or Artifacts open sets this. */
+  seenAt: timestamp("seen_at", { withTimezone: true }),
 });
 
 /** SCP-013 — Travis process. Ordered tool sequence. Not a ticket. */

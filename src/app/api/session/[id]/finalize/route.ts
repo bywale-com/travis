@@ -27,6 +27,7 @@ import {
   sse,
   sseHeaders,
 } from "@/server/seat-pipe";
+import { serveInvite } from "@/server/serve";
 
 type Body = { utterance: string };
 
@@ -73,6 +74,15 @@ export async function POST(
   }
   if (session.status === "ended") {
     return Response.json({ error: "Session ended" }, { status: 400 });
+  }
+
+  const served = await serveInvite(sessionId, utterance).catch(() => null);
+  if (served) {
+    return Response.json({
+      matched: false,
+      routerHandled: true,
+      serve: served,
+    });
   }
 
   const phrases = await db

@@ -3,7 +3,7 @@
  * Do not remint initiative. Do not store the 15-minute URL.
  */
 
-import { and, asc, eq, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 import {
   artifactFilename,
   artifactKindFromPath,
@@ -51,6 +51,10 @@ export async function ensureArtifactStore(): Promise<void> {
     CREATE INDEX IF NOT EXISTS turn_artifact_turn_idx
       ON travis.turn_artifact (turn_id)
   `);
+  await db.execute(sql`
+    ALTER TABLE travis.turn_artifact
+      ADD COLUMN IF NOT EXISTS seen_at timestamptz
+  `);
   artifactStoreReady = true;
 }
 
@@ -76,14 +80,18 @@ export async function harvestTurnArtifacts(params: {
         ),
       );
     const hungPaths = new Set(hung.map((row) => row.path));
-    const items = await listCursorArtifacts(agentId);
+    let items = await listCursorArtifacts(agentId);
+    if (!items.length) {
+      items = await listCursorArtifacts(agentId);
+    }
     for (const item of items) {
-      if (hungPaths.has(item.path)) continue;
+      const alreadyHung = hungPaths.has(item.path);
       const updatedAt = parseCursorUpdatedAt(item.updatedAt);
       if (
         !shouldHangArtifact({
           startedAt: params.startedAt,
           updatedAt,
+          alreadyHung,
         })
       ) {
         continue;
@@ -114,6 +122,7 @@ export type TurnAttachment = {
   kind: "image" | "file";
   filename: string;
   sizeBytes: number | null;
+  seenAt: Date | null;
 };
 
 export async function attachmentsForTurns(
@@ -127,6 +136,7 @@ export async function attachmentsForTurns(
       kind: turnArtifact.kind,
       filename: turnArtifact.filename,
       sizeBytes: turnArtifact.sizeBytes,
+      seenAt: turnArtifact.seenAt,
     })
     .from(turnArtifact)
     .where(eq(turnArtifact.sessionId, sessionId))
@@ -139,6 +149,7 @@ export async function attachmentsForTurns(
       kind: row.kind === "image" ? "image" : "file",
       filename: row.filename,
       sizeBytes: row.sizeBytes,
+      seenAt: row.seenAt ?? null,
     };
     const list = map.get(row.turnId) ?? [];
     list.push(item);
@@ -174,6 +185,75 @@ export async function attachmentsForInitiative(
     createdAt: row.createdAt,
     seatKey: row.seatKey,
   }));
+}
+
+export type SessionArtifact = {
+  id: string;
+  turnId: string;
+  kind: "image" | "file";
+  filename: string;
+  sizeBytes: number | null;
+  seenAt: Date | null;
+  createdAt: Date;
+};
+
+export async function listSessionArtifacts(
+  sessionId: string,
+): Promise<SessionArtifact[]> {
+  await ensureArtifactStore();
+  const rows = await db
+    .select({
+      id: turnArtifact.id,
+      turnId: turnArtifact.turnId,
+      kind: turnArtifact.kind,
+      filename: turnArtifact.filename,
+      sizeBytes: turnArtifact.sizeBytes,
+      seenAt: turnArtifact.seenAt,
+      createdAt: turnArtifact.createdAt,
+    })
+    .from(turnArtifact)
+    .where(eq(turnArtifact.sessionId, sessionId))
+    .orderBy(asc(turnArtifact.seenAt), desc(turnArtifact.createdAt));
+  return rows.map((row) => ({
+    id: row.id,
+    turnId: row.turnId,
+    kind: row.kind === "image" ? "image" : "file",
+    filename: row.filename,
+    sizeBytes: row.sizeBytes,
+    seenAt: row.seenAt ?? null,
+    createdAt: row.createdAt,
+  }));
+}
+
+export async function unseenArtifactCount(sessionId: string): Promise<number> {
+  await ensureArtifactStore();
+  const rows = await db
+    .select({ id: turnArtifact.id })
+    .from(turnArtifact)
+    .where(
+      and(eq(turnArtifact.sessionId, sessionId), isNull(turnArtifact.seenAt)),
+    );
+  return rows.length;
+}
+
+export async function markArtifactsSeen(
+  sessionId: string,
+  artifactIds: string[],
+): Promise<void> {
+  await ensureArtifactStore();
+  const ids = artifactIds.filter(Boolean);
+  if (!ids.length) return;
+  const now = new Date();
+  await db
+    .update(turnArtifact)
+    .set({ seenAt: now })
+    .where(
+      and(
+        eq(turnArtifact.sessionId, sessionId),
+        inArray(turnArtifact.id, ids),
+        isNull(turnArtifact.seenAt),
+      ),
+    );
 }
 
 export async function artifactForProxy(artifactId: string): Promise<{

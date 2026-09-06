@@ -14,7 +14,6 @@ import {
   pathBasename,
 } from "@/lib/initiative-title";
 import {
-  canonicalPosts,
   deriveNext,
   litSeatKeys,
   type InitiativeAttachment,
@@ -27,8 +26,10 @@ import {
 } from "@/lib/request-log";
 import { attachmentsForInitiative } from "@/server/artifacts";
 import { isCursorSeat } from "@/lib/seats";
+import { streamShowsCard } from "@/lib/stream";
 import { db } from "@/server/db/client";
 import {
+  destJob,
   initiative,
   queuedUtterance,
   voiceSession,
@@ -37,6 +38,8 @@ import {
   type InitiativeSource,
   type InitiativeStatus,
 } from "@/server/db/schema";
+import { ensureDestJobStore, fileDestJobInitiative } from "@/server/dest-job";
+import { listSessionStreams } from "@/server/stream";
 
 let initiativeStoreReady = false;
 
@@ -86,6 +89,10 @@ export async function ensureInitiativeStore(): Promise<void> {
   await db.execute(sql`
     ALTER TABLE travis.initiative
       ADD COLUMN IF NOT EXISTS title text NOT NULL DEFAULT ''
+  `);
+  await db.execute(sql`
+    ALTER TABLE travis.voice_turn
+      ADD COLUMN IF NOT EXISTS heard_at timestamptz
   `);
   await backfillEmptyTitles();
   initiativeStoreReady = true;
@@ -291,7 +298,56 @@ export async function ticketForHand(
       return stampLatestOnto(sessionId, row);
     }
   }
+  const inherited = await inheritOpenDestTicket(sessionId);
+  if (inherited) return stampLatestOnto(sessionId, inherited);
   return ensureViaTravis(sessionId);
+}
+
+/** Follow-on dest without id: last dest_job ticket, else last dest user stamp. */
+async function inheritOpenDestTicket(
+  sessionId: string,
+): Promise<Initiative | null> {
+  await ensureDestJobStore();
+  const [fromJob] = await db
+    .select({
+      id: initiative.id,
+      sessionId: initiative.sessionId,
+      foundingTurnId: initiative.foundingTurnId,
+      source: initiative.source,
+      status: initiative.status,
+      title: initiative.title,
+      createdAt: initiative.createdAt,
+      doneAt: initiative.doneAt,
+    })
+    .from(destJob)
+    .innerJoin(initiative, eq(destJob.initiativeId, initiative.id))
+    .where(
+      and(
+        eq(destJob.sessionId, sessionId),
+        eq(initiative.status, "open"),
+      ),
+    )
+    .orderBy(desc(destJob.createdAt))
+    .limit(1);
+  if (fromJob) return fromJob;
+
+  const dests = await db
+    .select({
+      initiativeId: voiceTurn.initiativeId,
+      seatKey: voiceTurn.seatKey,
+    })
+    .from(voiceTurn)
+    .where(
+      and(eq(voiceTurn.sessionId, sessionId), eq(voiceTurn.kind, "user")),
+    )
+    .orderBy(desc(voiceTurn.seq))
+    .limit(40);
+  for (const dest of dests) {
+    if (!dest.initiativeId || !isCursorSeat(dest.seatKey)) continue;
+    const row = await getInitiative(dest.initiativeId);
+    if (row && row.sessionId === sessionId && row.status === "open") return row;
+  }
+  return null;
 }
 
 /** No Travis founding line — the pass-on user row is the ticket. */
@@ -321,6 +377,24 @@ export async function stampPassOn(
   sessionId: string,
   params: { userTurnId?: string | null; queuedId?: string | null },
 ): Promise<Initiative | null> {
+  if (params.userTurnId) {
+    const [existing] = await db
+      .select()
+      .from(voiceTurn)
+      .where(eq(voiceTurn.id, params.userTurnId))
+      .limit(1);
+    if (existing?.initiativeId) {
+      await fileDestJobInitiative({
+        sessionId,
+        userTurnId: params.userTurnId,
+        initiativeId: existing.initiativeId,
+      });
+      if (params.queuedId) {
+        await stampQueued(params.queuedId, existing.initiativeId);
+      }
+      return getInitiative(existing.initiativeId);
+    }
+  }
   let row = await ensureViaTravis(sessionId);
   if (!row && params.userTurnId) {
     row = await ensureOnPassOn(sessionId, params.userTurnId);
@@ -328,6 +402,11 @@ export async function stampPassOn(
   if (!row) return null;
   if (params.userTurnId) await stampTurn(params.userTurnId, row.id);
   if (params.queuedId) await stampQueued(params.queuedId, row.id);
+  await fileDestJobInitiative({
+    sessionId,
+    userTurnId: params.userTurnId ?? null,
+    initiativeId: row.id,
+  });
   return row;
 }
 
@@ -619,9 +698,22 @@ export type InitiativeRead = {
   } | null;
   posts: Array<{
     id: string;
+    kind: string;
     seatKey: string | null;
     text: string;
     createdAt: Date;
+  }>;
+  destLines: Array<{
+    id: string;
+    seatKey: string | null;
+    text: string;
+    createdAt: Date;
+  }>;
+  streams: Array<{
+    id: string;
+    closeTurnId: string | null;
+    triggerText: string;
+    status: string;
   }>;
   next: ReturnType<typeof deriveNext>;
   attachments: InitiativeAttachment[];
@@ -638,9 +730,29 @@ export async function readInitiative(
   }
   const turns = await turnsForInitiative(row.id);
   const founding = turns.find((t) => t.id === row.foundingTurnId) ?? null;
-  const posts = canonicalPosts(
-    turns.filter((t) => t.kind === "agent_post" && isCursorSeat(t.seatKey)),
+  const destLines = turns.filter(
+    (t) => t.kind === "user" && isCursorSeat(t.seatKey),
   );
+  const posts = turns.filter(
+    (t) => t.kind === "agent_post" && isCursorSeat(t.seatKey),
+  );
+  const turnIds = new Set(turns.map((t) => t.id));
+  const streams = (await listSessionStreams(sessionId).catch(() => ({
+    live: [],
+    cards: [],
+  }))).cards
+    .filter((card) => streamShowsCard(card))
+    .filter(
+      (card) =>
+        turnIds.has(card.triggerTurnId) ||
+        (card.closeTurnId != null && turnIds.has(card.closeTurnId)),
+    )
+    .map((card) => ({
+      id: card.id,
+      closeTurnId: card.closeTurnId,
+      triggerText: card.triggerText,
+      status: card.status,
+    }));
   return {
     id: row.id,
     title: row.title,
@@ -658,10 +770,18 @@ export async function readInitiative(
       : null,
     posts: posts.map((p) => ({
       id: p.id,
+      kind: p.kind,
       seatKey: p.seatKey,
       text: p.text,
       createdAt: p.createdAt,
     })),
+    destLines: destLines.map((d) => ({
+      id: d.id,
+      seatKey: d.seatKey,
+      text: d.text,
+      createdAt: d.createdAt,
+    })),
+    streams,
     next: nextOf(row, turns),
     attachments: await attachmentsForInitiative(row.id),
   };
@@ -741,13 +861,29 @@ export function formatInitiativeRead(ticket: InitiativeRead): string {
   const next = ticket.next ? `Next: ${ticket.next}.` : "Done.";
   const title = ticket.title.trim() || "(no title)";
   const founding = ticket.founding?.text.replace(/\s+/g, " ").trim() ?? "";
-  const posts = ticket.posts.length
+  const dest = (ticket.destLines ?? [])
+    .filter((d) => d.id !== ticket.founding?.id)
+    .map(
+      (d) =>
+        `dest ${d.seatKey ?? "?"}: ${d.text.replace(/\s+/g, " ").trim().slice(0, 180)}`,
+    )
+    .join("\n");
+  const hasSeatPost = ticket.posts.some(
+    (p) => p.kind === "agent_post" || isCursorSeat(p.seatKey),
+  );
+  const streamLines = (ticket.streams ?? [])
+    .map((s) => `Stream: ${s.triggerText.replace(/\s+/g, " ").trim().slice(0, 180)}`)
+    .join("\n");
+  const posts = hasSeatPost
     ? ticket.posts
         .map((p) => `${p.seatKey ?? "?"}: ${p.text.replace(/\s+/g, " ").trim().slice(0, 180)}`)
         .join("\n")
-    : "No seat has posted on this ticket.";
+    : ticket.streams?.length
+      ? streamLines
+      : "No seat has posted on this ticket.";
   const files = formatLandedFiles(ticket.attachments);
-  return files
-    ? `${ticket.id}\n${title}\n${ticket.status}. ${founding}\n${posts}\n${files}\n${next}`
-    : `${ticket.id}\n${title}\n${ticket.status}. ${founding}\n${posts}\n${next}`;
+  const body = [founding, dest, posts, hasSeatPost ? streamLines : "", files]
+    .filter((line) => line && line.trim())
+    .join("\n");
+  return `${ticket.id}\n${title}\n${ticket.status}. ${body}\n${next}`;
 }
