@@ -39,7 +39,8 @@ jobs:
           fetch-depth: 0
       - name: Label the open PR for this push only
         env:
-          GH_TOKEN: ${{ secrets.WAKE_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
+          WAKE_GITHUB_TOKEN: ${{ secrets.WAKE_GITHUB_TOKEN }}
+          FALLBACK_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BEFORE: ${{ github.event.before }}
           AFTER: ${{ github.sha }}
           HEAD_REF: ${{ github.ref_name }}
@@ -48,8 +49,19 @@ jobs:
           RESEND_FROM_EMAIL: ${{ secrets.RESEND_FROM_EMAIL }}
         run: |
           set -euo pipefail
-          echo "Label actor:"
-          gh api user --jq .login || echo "(bot / no user)"
+          if [[ -n "${WAKE_GITHUB_TOKEN:-}" ]]; then
+            export GH_TOKEN="$WAKE_GITHUB_TOKEN"
+            if login=$(gh api user --jq .login 2>/dev/null); then
+              echo "Label actor: $login (WAKE_GITHUB_TOKEN)"
+            else
+              echo "WAKE_GITHUB_TOKEN rejected (401). Falling back to Actions bot."
+              export GH_TOKEN="$FALLBACK_GH_TOKEN"
+              echo "Label actor: github-actions[bot]"
+            fi
+          else
+            export GH_TOKEN="$FALLBACK_GH_TOKEN"
+            echo "Label actor: github-actions[bot] (no WAKE_GITHUB_TOKEN)"
+          fi
           if [[ "$BEFORE" == "0000000000000000000000000000000000000000" ]]; then
             files=$(git diff --name-only --diff-filter=A "$AFTER")
           else

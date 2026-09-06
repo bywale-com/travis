@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 00:19 UTC — Secret on. Re-push 074 so the Action tags as you. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 00:20 UTC — WAKE_GITHUB_TOKEN is on; GitHub said 401. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2228,3 +2228,11 @@ Action labels with repo secret **`WAKE_GITHUB_TOKEN`** (your PAT). Then the add 
 **Kind:** Process. Founder: I’ve added the secret.
 
 Re-push `HOTFIX-074` so the Action labels as him.
+
+---
+
+## 2026-09-06 00:20 UTC — Secret rejected (401)
+
+**Kind:** Honest. Founder added `WAKE_GITHUB_TOKEN`. Action [run](https://github.com/bywale-com/travis/actions/runs/34000989817): `gh: Bad credentials (HTTP 401)`. The name is on the repo. GitHub will not take the value. Not a permissions miss — the token itself.
+
+Do not paste the token here. New PAT, this repo in the list, replace the secret, say when. Then we re-push 074.
