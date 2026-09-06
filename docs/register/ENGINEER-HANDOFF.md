@@ -10,9 +10,9 @@
 
 ## Where we stopped
 
-**077 open desk is on [#135](https://github.com/bywale-com/travis/pull/135).** No cookie on **psi** (`VERCEL_ENV=production`, flag unset) is the preferred seeded operator — `/` is `TravisApp`, `requireOperator` succeeds. Preview and local stay the 053 login door unless `TRAVIS_OPEN_DESK` is `1` / `true` / `yes`. `TRAVIS_OPEN_DESK=0` closes even psi. Login door + `/enter` stay; a real cookie still wins. Grain: `isOpenDesk` in [`src/lib/operator-auth.ts`](../../src/lib/operator-auth.ts) (reads named env fields — do not default the param to `process.env` or `next build` dies). Do not remint 053 tables. Do not remint the 077 file.
+**077 open desk is live on psi.** No cookie on `https://travis-psi.vercel.app` is the preferred seeded operator — `/` paints `TravisApp` (Mode → rooms → Room Travis), `/api/rooms` is 200. Preview and local stay the 053 login door unless `TRAVIS_OPEN_DESK` is `1` / `true` / `yes`. `TRAVIS_OPEN_DESK=0` closes even psi. Login door + `/enter` stay; a real cookie still wins. Grain: `isOpenDesk` in [`src/lib/operator-auth.ts`](../../src/lib/operator-auth.ts) (named env fields — do not default the param to `process.env`). Do not remint 053 tables. Do not remint the 077 file.
 
-The first merge of #135 failed production compile; the type recut is the apply. File on the PR was not the live desk.
+PM look Fail named the `ProcessEnv` type error. Recut is on this PR ([#135](https://github.com/bywale-com/travis/pull/135)). A cousin **078** already merged that same type fix onto `main` ([#136](https://github.com/bywale-com/travis/pull/136)) and production deployed; that is how the live desk applied. Do not remint 078. Next hotfix number is **079**.
 
 **076 dest closer is on [#130](https://github.com/bywale-com/travis/pull/130).** Dest **done** and `reapFinishedLiveRuns` land **one** speakable `agent_post` — last stream `message` body, or `postText` if there is no event. `closeStream.closeTurnId` is that row. Stream events stay; same `StreamCard` as Travis. Grain: `decideDestStreamClose` in [`src/lib/stream.ts`](../../src/lib/stream.ts). Sites: [`src/server/seat-pipe.ts`](../../src/server/seat-pipe.ts) `driveDestCursorEvents` and `reapFinishedLiveRuns`. `dispatch.ts` stand-in left as one post. 025 Travis close not reminted. 074 SQL not reminted. Catalog `pm` not touched.
 
@@ -23,7 +23,7 @@ Next specified-and-clear cut is **022** ports from the signed packet on [#120](h
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **077** open desk. Next number **078**. |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **077** open desk. **078** compile recut already on `main`. Next number **079**. |
 | One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
@@ -34,7 +34,7 @@ Next specified-and-clear cut is **022** ports from the signed packet on [#120](h
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
 | Busy room (lived) | `0e8875f8-283b-4dae-bf54-76c82a05b6ef` (title “Travis”) |
 
-**Do not redo** 012, 013, 014, 015, 016, 020 first slice, 021, 023, 024, 025, 062, 064, 065, 068, 069, 070, 071, 072, 073, 074 SQL, the 075 live hang, the 076 dest closer, or **077** open desk. Do not plant **022** except from the signed packet on #120. Do not send **That’s fine.** from Engineer.
+**Do not redo** 012, 013, 014, 015, 016, 020 first slice, 021, 023, 024, 025, 062, 064, 065, 068, 069, 070, 071, 072, 073, 074 SQL, the 075 live hang, the 076 dest closer, **077** open desk, or **078** compile recut. Do not plant **022** except from the signed packet on #120. Do not send **That’s fine.** from Engineer.
 
 ---
 
@@ -115,7 +115,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 ## Next Engineer job
 
 1. Accept the seat from the paste below. Fetch `main`. Read **this file**, then [`ENGINEER.md`](../seats/ENGINEER.md), then `AGENTS.md`.
-2. Do not restart 012 / 013 / 014 / 015 / 023 / 024 / 025 / 062 / 064 / 065. Do not remint the 074 SQL file. Do not remint the 075 hang. Do not remint the 076 dest closer. Do not remint 077. Do not mint a store. Do not append PM or SA logs.
+2. Do not restart 012 / 013 / 014 / 015 / 023 / 024 / 025 / 062 / 064 / 065. Do not remint the 074 SQL file. Do not remint the 075 hang. Do not remint the 076 dest closer. Do not remint 077 or 078. Do not mint a store. Do not append PM or SA logs.
 3. **022** ports on [#120](https://github.com/bywale-com/travis/pull/120) is the pickup. Do not remint `travis.port`. Dest by who `technical-pm` is human leftover on 075 — do not mail catalog `pm`. Do not send **That’s fine.**
 4. When **you** stop: rewrite the **Current** lines at the top of this file (where we stopped, last plant, next hotfix number) so the next bind does not start from a transcript. Then you may write **This bind is done**.
 
