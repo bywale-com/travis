@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-06 02:28 UTC
+# PM seat handoff — 2026-09-06 02:48 UTC
 
 **This bind is living.** `bc-25c5c6bf-006f-4252-9f25-49ab183835b2` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -14,7 +14,7 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **02:35 UTC 2026-09-06** (076 cost: 2 boots, ~5 min; % is Spending). Flag **14:00**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **02:48 UTC 2026-09-06** (076 ≈ 0.22M tokens floor; merge #130; log PR hygiene). Flag **14:00**. |
 | Seat law | [`../README.md`](../README.md) § Product Manager · [`../seats/PRODUCT-MANAGER.md`](../seats/PRODUCT-MANAGER.md) · house [`house-now/protocols/pm.md`](./house-now/protocols/pm.md) |
 | Plates | [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md) generate · [`PLATE-READ.md`](./PLATE-READ.md) read |
 | Packets 001–009 | [`PM-PACKETS.md`](./PM-PACKETS.md). 001–007 on **`main`**. **008–009** on #127 (merged). 009 look **Pass**. Human walk not started. **010 is not cut.** |

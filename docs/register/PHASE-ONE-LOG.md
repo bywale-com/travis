@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:35 UTC — 076 cost: 2 boots, ~5 min, emerge. % of the 100% bar is Spending, not this seat. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:48 UTC — 076 ≈ 0.22M tokens floor (~0.015% of the 100% bar). Log PR hygiene. Merge #130. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2554,3 +2554,46 @@ This seat **cannot** read [Spending](https://cursor.com/dashboard/spending) or `
 **How you get the percent:** that bar before the next cut, and after emerge. Delta ÷ 100% = the hotfix. Two Grok-4.6 cloud-agent runs (max context) are the unit. Do not use this bind’s whole day as the numerator.
 
 Sept 3 stands: no cost dashboard. `getUsage` still named, not planted.
+
+---
+
+## 2026-09-06 02:48 UTC — 076 tokens vs 764M / 54%; log PR hygiene; merge #130
+
+**Kind:** Measure + process lock. Founder: finish the cost; merge what needs to merge. Not upset about 074 PR hygiene.
+
+**Founder (preserved):** usage in total is around … 764 something million tokens. … spending … about 54% of my total usage. … how many tokens did it cost to … run … 076? … If 764 … is 52% [54%] … what would that mean? … you left it in the 074 PR? … everything we’ve been talking about is in the 074 PR? … we’ve moved past 074 a long time ago. … Unless there is an active PR … you’re making your commits in that PR. It’s okay. … If there’s no active PR … create a PR for your logs … titled like what is relevant. … Just merge what needs to be merged.
+
+### 076 tokens (no `getUsage` — floor from the two transcripts)
+
+| Run | Unique chars (user+think+text+tool) | ÷ 4 ≈ tokens |
+|-----|--------------------------------------|--------------|
+| B `bc-3d6452cd` | 250,180 | **62.5k** |
+| C `bc-ac0a9930` | 624,686 | **156.2k** |
+| **076 chain** | 874,866 | **~219k** |
+
+Billed tokens are **at least** that. Context is replayed each turn (automation = max window; cache reads cheaper). This seat cannot confirm the billed number. A 10× replay would be ~2.2M. Do not treat 219k as `getUsage`.
+
+### His bar
+
+Used **764M** tokens = **54%** of included → 100% bar ≈ **1.415 billion** tokens (764 / 0.54).
+
+| 076 as | Floor 0.219M | If billed 2.2M |
+|--------|----------------|----------------|
+| Share of **100%** bar | **0.015%** | 0.16% |
+| Share of the **764M already used** | **0.029%** | 0.29% |
+
+### Dollar (list, Fast Grok 4.6)
+
+Cursor docs: Fast **$4 / M input**, **$1 / M cache**, **$12 / M output**. Cursor Models included — Spending may show bar, not an invoice line.
+
+Floor (treat 0.21M as input, 8k output): **about $0.90**. If 2.2M input Fast uncached: **about $9**. Cache-heavy: closer to **$2**. Not `getUsage`. Not this bind’s night.
+
+### Log PR hygiene (lock)
+
+An **active** packet or hotfix PR may take stamps that happen while that cut is live. 074 on #130 ran long; later 075 / 076 / talk rode it. Allowed that once.
+
+If there is **no** active cut PR: do **not** keep stamping on a finished hotfix. Open a short PR titled for the log (or the new cut). Next number still **077** / packet **010**.
+
+### Merge
+
+[#130](https://github.com/bywale-com/travis/pull/130) is the living pile (074 hang, 075 apply, 076 closer, house, this trail). Founder: merge what needs to be merged. Merge it.
