@@ -86,6 +86,12 @@ export function operatorLinkText(url: string): string {
   ].join("\n");
 }
 
+/** Open desk for plates / agents. Off unless TRAVIS_OPEN_DESK is 1/true/yes. */
+export function isOpenDesk(env: { TRAVIS_OPEN_DESK?: string } = process.env): boolean {
+  const v = env.TRAVIS_OPEN_DESK?.trim().toLowerCase();
+  return v === "1" || v === "true" || v === "yes";
+}
+
 export function tokenFromCookieHeader(header: string | null): string {
   if (!header) return "";
   for (const part of header.split(";")) {

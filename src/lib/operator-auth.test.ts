@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   OPERATOR_COOKIE,
+  isOpenDesk,
   isOperatorEmail,
   normalizeOperatorEmail,
   operatorLinkPath,
@@ -66,6 +67,15 @@ test("mail copy names the same link, not a code", () => {
   assert.match(body, /personal Travis link/);
   assert.match(body, /https:\/\/travis\.example\/enter\/tok/);
   assert.doesNotMatch(body, /password|one-time code/i);
+});
+
+test("open desk is off unless TRAVIS_OPEN_DESK is 1/true/yes", () => {
+  assert.equal(isOpenDesk({}), false);
+  assert.equal(isOpenDesk({ TRAVIS_OPEN_DESK: "" }), false);
+  assert.equal(isOpenDesk({ TRAVIS_OPEN_DESK: "0" }), false);
+  assert.equal(isOpenDesk({ TRAVIS_OPEN_DESK: "1" }), true);
+  assert.equal(isOpenDesk({ TRAVIS_OPEN_DESK: "true" }), true);
+  assert.equal(isOpenDesk({ TRAVIS_OPEN_DESK: "YES" }), true);
 });
 
 test("cookie header yields the token and ignores neighbors", () => {
