@@ -7,6 +7,7 @@ import { and, eq, inArray, isNull, sql } from "drizzle-orm";
 import {
   OPERATOR_COOKIE,
   OPERATOR_COOKIE_MAX_AGE,
+  isOpenDesk,
   isOperatorEmail,
   normalizeOperatorEmail,
   operatorRoomScope,
@@ -115,9 +116,31 @@ export function operatorFromRequest(req: Request): string {
   return tokenFromCookieHeader(req.headers.get("cookie"));
 }
 
+/** Preferred seeded operator when TRAVIS_OPEN_DESK is on. Else null. */
+export async function openDeskOperator(): Promise<Operator | null> {
+  if (!isOpenDesk()) return null;
+  await ensureOperatorStore();
+  const rows = await db
+    .select()
+    .from(operator)
+    .orderBy(operator.createdAt);
+  return preferredOperator(
+    rows,
+    seedOperatorEmails({
+      TRAVIS_OPERATOR_EMAIL: process.env.TRAVIS_OPERATOR_EMAIL,
+      TEST_EMAIL_TO: process.env.TEST_EMAIL_TO,
+    }),
+  );
+}
+
+export async function resolveOperator(token: string): Promise<Operator | null> {
+  const row = token.trim() ? await operatorByToken(token) : null;
+  if (row) return row;
+  return openDeskOperator();
+}
+
 export async function requireOperator(req: Request): Promise<Operator> {
-  const token = operatorFromRequest(req);
-  const row = token ? await operatorByToken(token) : null;
+  const row = await resolveOperator(operatorFromRequest(req));
   if (!row) throw new AuthError("Sign in first", 401);
   return row;
 }

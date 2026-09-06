@@ -10,6 +10,8 @@
 
 ## Where we stopped
 
+**077 open desk** — `TRAVIS_OPEN_DESK=1` makes no-cookie `/` and `requireOperator` the preferred seeded operator. Login door + `/enter` stay. Off unless the flag is on. Do not remint 053 tables.
+
 **076 dest closer is on [#130](https://github.com/bywale-com/travis/pull/130).** Dest **done** and `reapFinishedLiveRuns` land **one** speakable `agent_post` — last stream `message` body, or `postText` if there is no event. `closeStream.closeTurnId` is that row. Stream events stay; same `StreamCard` as Travis. Grain: `decideDestStreamClose` in [`src/lib/stream.ts`](../../src/lib/stream.ts). Sites: [`src/server/seat-pipe.ts`](../../src/server/seat-pipe.ts) `driveDestCursorEvents` and `reapFinishedLiveRuns`. `dispatch.ts` stand-in left as one post. 025 Travis close not reminted. 074 SQL not reminted. Catalog `pm` not touched.
 
 Human leftover on 075: dest **by who** (`technical-pm`) on the phone. Do not mail catalog `pm`.
@@ -19,7 +21,7 @@ Next specified-and-clear cut is **022** ports from the signed packet on [#120](h
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **076** planted on this PR. Next number **077**. |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **077** open desk. Next number **078**. |
 | One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
