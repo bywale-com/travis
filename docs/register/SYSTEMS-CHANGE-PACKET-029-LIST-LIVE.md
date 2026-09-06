@@ -1,21 +1,23 @@
-# SYSTEMS-CHANGE-PACKET-029 — Lists show now
+# SYSTEMS-CHANGE-PACKET-029 — The room stays live
 
 **Number:** `029` — next systems packet is `030`. Never reuse a number.  
 **Status:** **Signed.** Plant on this PR ([#144](https://github.com/bywale-com/travis/pull/144)).  
 **Seat:** Systems Analyst. Engineer pastes this. No leftover analysis.  
-**When:** 2026-09-06  
+**When:** 2026-09-06. **Recut same day** — first 029 (smarter poll) is void. This file is the cut.  
 **PM packet:** [`PM-PACKET-013-LIST-LIVE.md`](./PM-PACKET-013-LIST-LIVE.md)  
 **Test:** [`PM-PACKET-013-LIST-LIVE-TEST.md`](./PM-PACKET-013-LIST-LIVE-TEST.md)  
-**FACE (look, do not mint from PNG):** no new plates. Staples on living glass — Backlog **title** (index row and open ticket share it) · **lit** seats / **next** · room **title** on the index ([`SELECT-ROOM-FACE.md`](./SELECT-ROOM-FACE.md) L1) · Log tape. [`HOTFIX-057-BACKLOG-PLATES.md`](./HOTFIX-057-BACKLOG-PLATES.md) B1 / B6.  
-**Prior (do not remint):** **023** poll + SSE silence · **010** `travis.initiative` · **013** motion · **026** ticket read · **027** stay / heard · **012** OS house · **028** reserved for PM-012 on [#142](https://github.com/bywale-com/travis/pull/142)  
+**FACE (look, do not mint from PNG):** no new plates. Staples — ticket **title** (B1 and the open ticket) · **lit** / **next** · Log tape. [`HOTFIX-057-BACKLOG-PLATES.md`](./HOTFIX-057-BACKLOG-PLATES.md) B1 / B6.  
+**Prior (do not remint):** **023** `dest_job` / tape · send SSE helpers · **010** `travis.initiative` · **013** motion · **024** `travis.stream` · **027** stay · **012** OS house · **028** reserved for PM-012 on [#142](https://github.com/bywale-com/travis/pull/142)  
 **Flag (read-only):** PHASE-ONE-LOG **14:00 UTC 2026-08-25**.  
 **Trail:** [`SYSTEMS-ANALYST-LOG.md`](./SYSTEMS-ANALYST-LOG.md)
+
+023 §8.3 named SSE / LISTEN silence for a later bus. **This is that cut.** The room bus is open. Do not remint 023 tables.
 
 ---
 
 ## 1. Intent
 
-The phone already polls (023, 1–3s jitter). The tick downloads the whole `voice_turn` tape. Backlog is not on that tick; `listInitiatives` walks every ticket’s turns; a failed fetch **empties** the list. An open ticket and the rooms index are one-shot. This cut keeps the poll. Incremental tape after last `seq`. Backlog list is a list grain (title, status, lit, next) — one query, not N `turnsForInitiative`. The tick paints the **open door**. A failed GET keeps the last good rows. Foreground → one tick now. No new table. No websocket.
+The tape is durable (`voice_turn.seq`). Send/finalize SSE dies when **that** request ends. After that the phone polls the whole tape and guesses. Dest posts from another request never ride a wire. This cut gives the **room** one SSE: catch-up from the last `seq`, then stay open. Other-request writes (`insertTurn`, dest absorb, initiative, stream hang) `NOTIFY` that session. The wire emits. Poll is catch-up only while the wire is down. No new tape. No websocket.
 
 ---
 
@@ -23,147 +25,116 @@ The phone already polls (023, 1–3s jitter). The tick downloads the whole `voic
 
 ### Must
 
-- Lists he is looking at update without hard refresh: Log tape, Backlog index, open ticket, rooms index.
-- Failed fetch does not blank the glass. Last good rows stay.
-- Turns after the last `seq` on the tick. Merge. Full GET on enter-room and hard refresh only.
-- Backlog list paint does not load every ticket’s messages.
-- Opening a ticket still loads that thread. While that ticket is open, the tick refreshes **that** ticket.
-- App returns to the foreground → one tick now, not after the next jitter.
-- Same 1–3s `streamPollMs` jitter. Queue drain on the room tick stays.
+- While he is in the room (Log or Voice), the phone holds one session SSE.
+- A new turn, a backlog list change, a line on the open ticket, a stream card — an event on that wire. The glass applies it. No timer required to see it.
+- Connect / reconnect with the last `seq` (and the last list stamp). Server plays everything after that, then stays open. That is why they do not lose.
+- Dropped wire or failed GET keeps last good rows. Catch-up fills the gap.
+- Backlog list is titles / status / lit / next — not every ticket’s thread.
+- Dest-job / reap / other-request writes reach this wire (LISTEN/NOTIFY). Not a new tape.
+- Poll = fallback only: catch-up from last `seq` while the wire is down. Not the product.
 
 ### Must-not
 
-- Remint 023 tables. Invent a websocket / SSE / LISTEN/NOTIFY this packet (023 silence stands).
-- Remint 012 / 028. Remint `heard_at`, `reference_turn_id`, `travis.stream`, stay.
-- New table. New `voice_turn` column. New initiative column for lit/next.
-- Put Hear it / Skip **buttons** back (027).
-- `setBacklogRows([])` / `setTurns([])` / `setRooms([])` because one fetch died or the body lacked the array.
-- Invent product caps. Cousin PR.
+- Ship “smarter poll” as this packet (1–3s whole-tape tick as the way he sees a landing).
+- Remint `voice_turn`. Remint 023 tables. Remint 012 / 028.
+- Invent a websocket next to the SSE we already use.
+- Put Hear it / Skip **buttons** back.
+- `setBacklogRows([])` / `setTurns([])` because one fetch died or the body lacked the array.
+- New table. Cousin PR. Caps.
 
 ### Chain
 
-023 poll exists → tick covers the **open door** → incremental `voice_turn.seq` merge on the tape → cheap initiative list (title / status / lit / next) → ticket GET only while that ticket is open → rooms GET while on the index → failed GET keeps last good → visibility visible → tick now.
+`insertTurn` / initiative write / stream hang → `NOTIFY travis_room` (payload = `session_id`) → room SSE LISTENs → emit `turn` / `backlog` / `ticket` / `stream` → glass merges.
+
+Connect: `afterSeq` (or `Last-Event-ID`) → replay turns with `seq > afterSeq` → one cheap `backlog` snapshot → open ticket if asked → current stream cards → LISTEN.
+
+Wire down → one catch-up GET (`afterSeq` + cheap list) → reopen the wire. Last good stays in between.
 
 ### Silence (named — do not invent)
 
 | Silence | Why |
 |---------|-----|
-| **SSE / LISTEN/NOTIFY** | 023. Poll this packet. If the cheap list is still slow after plant, that bus is the next cut. |
-| **`voice_turn` in-place mutate (except streaming thought)** | No `updated_at`. Incremental is `seq > afterSeq`. Heard / stamp on an old row wait for enter-room / hard refresh. |
-| **Cross-device list** | This phone’s last good. Not a shared cursor row. |
+| **Websocket** | Slack-scale presence. We already stream dest over SSE. One room SSE. |
+| **Rooms index on this wire** | Lock is in-room. Index is one-shot + last good on leave/enter. Not a second bus. |
+| **`voice_turn` in-place mutate (except streaming thought)** | No `updated_at` on the tape. Resume is `seq > afterSeq` OR `thought_status = 'streaming'`. |
 | **028 / usable Log** | PM-012 on #142. Do not remint here. |
-| **Hear / Next / Skip as a table** | 007 / 027. Spoken invites stay. Buttons stay off. |
+| **Hear / Next / Skip as a table** | 007 / 027. Buttons stay off. |
 | **022** | Stand. |
+| **Cross-device cursor** | This phone’s last `seq`. Not a shared row. |
 
 ---
 
 ## 3. Requirements (extraction)
 
-From PM-013 + founder 14:48. Not a second invention.
+From PM-013 recut + founder 14:48 / 14:49. Not a second invention.
 
-1. Tick paints the open door. Do not wait for hard refresh.
-2. Failed GET keeps last good rows.
-3. Turns after last `seq`. Merge. Full GET on enter-room and hard refresh only.
-4. Backlog list is titles, status, who is lit — not every thread.
-5. Foreground → tick now.
-6. No websocket this cut.
+1. One room wire. Not a smarter poll.
+2. Resume from last `seq` — no loss.
+3. Never blank.
+4. List is a list.
+5. Poll = catch-up only.
 
-Plate staples (not scenery):
+Plate staples (not scenery): ticket **title** · **lit** / **next** · Log tape.
 
-- Ticket **title** — same string on B1 and the open ticket.
-- **Lit** seats and **next** (who is waiting).
-- Room **title** on the index.
-- Log tape rows (the messages).
-
-Do not build from scenery: “Untitled”, “Loading…”, “Nothing Travis is orchestrating yet.”, L1 `Om` / “another codebase”.
+Do not build from scenery: “Untitled”, “Loading…”, L1 `Om`.
 
 ---
 
 ## 4. Stood-up truth (quote, do not remint)
 
-### Poll
+### Send SSE dies with the request
 
-```167:169:src/lib/stream.ts
-/** Phone poll: 1–3s jitter. No new bus. */
-export function streamPollMs(random = Math.random()): number {
-  return 1000 + Math.floor(random * 2000);
+```69:78:src/server/seat-pipe.ts
+export function sse(event: string, data: unknown): string {
+  return `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
+}
+export function sseHeaders(): HeadersInit {
+  return {
+    "Content-Type": "text/event-stream; charset=utf-8",
+    "Cache-Control": "no-cache, no-transform",
+    Connection: "keep-alive",
+  };
 ```
 
-Room tick (`Room.tsx` L480–531): GET queue, then `refreshTurns(sid)` (whole tape), then drain. `catch { /* next tick retries */ }`. No backlog. No ticket. No rooms. Effect deps `session?.id` — **rooms index never ticks**.
+`POST /send` (`send/route.ts` L149–193): `ReadableStream` → `sseHeaders()` → `controller.close()` in `finally`. Same shape on finalize / drain / live transcript / hold. Auth is cookie (`operator.ts` `requireOwnedSession`).
 
-023: “Phone keeps 1–3s jitter poll. **SSE / LISTEN/NOTIFY is named silence**.”
+### Tape + seq
 
-### Turns GET — whole tape
+`insertTurn` (`seat-pipe.ts` L134–155) is the write: `nextTurnSeq` + insert. Dest absorb, Travis post, dest-job closer (`dest-job.ts` L201–202) all go through it. `voice_turn.seq` is `integer notNull`. No `(session_id, seq)` index.
 
-```20:24:src/app/api/session/[id]/turns/route.ts
-    const turns = await db
-      .select()
-      .from(voiceTurn)
-      .where(eq(voiceTurn.sessionId, id))
-      .orderBy(asc(voiceTurn.seq));
+### Other-request writes never ride send SSE
+
+Reap / timeout / a second dest run insert turns after the founder’s send stream has closed. Phone tick (`Room.tsx` L480–531) then GETs the **whole** `/turns` tape. `refreshTurns` does `setTurns(data.turns ?? [])`. `listInitiatives` N+1 `turnsForInitiative`. `loadBacklog` `catch { setBacklogRows([]); }`. Tick deps `session?.id`. `visibilitychange` only `resumeSendSounds`.
+
+### Postgres port (Neon session-mode)
+
+```7:19:src/server/db/pool.ts
+ * Neon session-mode pool_size is 15. Each serverless isolate that opens
+ * five idle-forever clients burns a third of the account. One client,
+ * and it goes back when idle.
+  prepare: false,
+  max: 1,
+  idle_timeout: 20,
+  max_lifetime: 60 * 5,
 ```
 
-Also `attachmentsForTurns(id)` (every artifact in the session), `listMotionCards`, `listSessionStreams`.
+Query client is drizzle/`postgres` max 1. **LISTEN cannot share that client** (it holds the connection). `NOTIFY` is a one-shot statement on the query client. `postgres` supports `LISTEN` on a **dedicated** client.
 
-`voice_turn.seq` is `integer notNull` (`schema.ts` L64). No `(session_id, seq)` index. `voice_turn_initiative_idx` exists (`initiative.ts` L81–83).
+No `maxDuration` is set on any route today. Send SSE already holds for a dest run. The room wire is longer — set `maxDuration` on **this** route only. Client reconnects with `afterSeq` when the function ends. Do not mint a second host.
 
-`refreshTurns` (`Room.tsx` L414–418):
-
-```
-const nextTurns = (data.turns ?? []) as Turn[];
-setTurns(nextTurns);
-```
-
-No `res.ok` guard. A 5xx / empty body **blanks** the tape. Tick catch only covers thrown fetch.
-
-Enter-room full GET: `attachSession` resume → `refreshTurns` (`Room.tsx` L1801, L1807). Hard refresh is that path (027 stay).
-
-### Backlog — N+1 + wipe
-
-`GET /api/session/:id/initiatives` → `listBacklog` → `listInitiatives` (`motion.ts` L410–423).
-
-```673:708:src/server/initiative.ts
-  const out: InitiativeListItem[] = [];
-  for (const row of rows) {
-    const turns = await turnsForInitiative(row.id);
-    // founding, posts, litSeatKeys, nextOf, optional q over every text
-  }
-```
-
-`turnsForInitiative` selects the ticket’s full `voice_turn` rows (`initiative.ts` L568–581). `q` also calls `artifactNamesForInitiative` per hit.
-
-`loadBacklog` (`Room.tsx` L907–937): `status=all`, no `q`. `catch { setBacklogRows([]); }`. Missing `items` / `initiatives` → `setBacklogRows([])`. `setBacklogLoading(true)` on every call.
-
-`openTicket` is one-shot `GET .../initiatives/:id`. Catch keeps last ticket. Not on the tick.
-
-List grain already on the row (`InitiativeListItem`): `title`, `status`, `foundingText`, `litSeatKeys`, `next`, `createdAt`. Face paints title · next word · `SeatMark` for lit (`BacklogIndex.tsx` L290–356). `litSeatKeys` / `deriveNext` need post/leg **ids and seat keys**, not message bodies (`src/lib/initiative.ts`).
-
-`listMotions` is already one `motion` select + `stepsForMotions` (`motion.ts` L388–401). Keep it.
-
-### Rooms — one-shot
-
-`loadRooms` (`Room.tsx` L1842–1847): GET `/api/rooms` → `listRoomsForOperator` (already cheap: sessions + members + lastAt). `setRooms(Array.isArray(data.rooms) ? data.rooms : [])` **then** throw if `!res.ok` — a failed body can empty the index. Mount only (`L2034–2048`). No poll.
-
-### Foreground
-
-```566:572:src/components/Room.tsx
-    const onVis = () => {
-      if (document.visibilityState === "visible") resumeSendSounds();
-    };
-    document.addEventListener("visibilitychange", onVis);
-```
-
-Sounds only. No tick.
+023 §8.3: “SSE / LISTEN/NOTIFY is named silence (later bus).” Opened here.
 
 ---
 
 ## 5. Stores / fields / contracts
 
-### Add — no new table. No new column.
+### Add — no new table. No new `voice_turn` column.
 
 | What | Law |
 |------|-----|
-| **`voice_turn_session_seq_idx`** | Index only. Signed SQL below. Isolate-once in `ensureInitiativeStore` **and** `migrate.ts`. Serves `afterSeq`. |
+| **`voice_turn_session_seq_idx`** | Index only. Resume `seq > afterSeq`. Signed SQL below. Isolate-once in `ensureInitiativeStore` **and** `migrate.ts`. |
+| **`GET /api/session/:id/events`** | New route. Cookie `requireOwnedSession`. Same `sse` / `sseHeaders`. Query: `afterSeq` (int), optional `ticketId`. Header `Last-Event-ID` wins if both set (`Last-Event-ID` = last turn `seq` as decimal). |
+| **`NOTIFY travis_room`** | Channel name locked. Payload = `session_id` (uuid text). Not a table. |
 
 Signed SQL:
 
@@ -172,29 +143,36 @@ CREATE INDEX IF NOT EXISTS voice_turn_session_seq_idx
   ON travis.voice_turn (session_id, seq);
 ```
 
-Do not remint `voice_turn`. Do not add `updated_at`. Do not mint a list-cursor table.
+Do not remint `voice_turn`. Do not add `updated_at` on the tape. Do not mint a bus table.
 
-### Change — runtime (existing columns / contracts)
+### Change — runtime
 
 | What | Law |
 |------|-----|
-| **`GET /api/session/:id/turns`** | Optional `afterSeq` (integer). Absent / unparsable → full tape (today). Present → `session_id = id AND (seq > afterSeq OR thought_status = 'streaming')`, `orderBy seq`. Attachments: only for returned turn ids (do not rescan the whole session’s `turn_artifact` on the incremental path). Cards + streams: still return (small). |
-| **`refreshTurns`** | If the face already has turns: `?afterSeq=` = max `seq` on the face. Merge by id (incoming replaces). Append new ids. Do not drop a row the delta omitted. Full GET (no query) on enter-room resume and on a real reload. `!res.ok` / thrown / missing `turns` array → **keep last**. Never `setTurns(data.turns ?? [])` on a bad body. |
-| **`listInitiatives` (no `q`)** | One `initiative` select (today). **One** `voice_turn` select for those ids: `id, seq, kind, seat_key, reference_turn_id, text` where `kind IN ('user','agent_post')`. Group in memory. `litSeatKeys` / `nextOf` / founding text unchanged. **Do not** call `turnsForInitiative` per row. **Do not** call `artifactNamesForInitiative`. |
-| **`listInitiatives` (with `q`)** | Same one-shot grain, then filter. One artifact-names query for the candidate ids (not per row). Spoken `list_initiatives` keeps `q`. Poll does not send `q`. |
-| **`listBacklog`** | Still `listMotions` + this list. `in_motion` unchanged. |
-| **Last good — backlog** | `loadBacklog`: only `setBacklogRows` when `res.ok` and `items` (or `initiatives`) is an array. `catch` / `!ok` / missing array → keep last. First paint with no last good may stay empty. Do not `setBacklogLoading(true)` on a poll refresh when rows already exist (no “Loading…” flash). |
-| **Last good — rooms** | Only `setRooms` when `res.ok` and `rooms` is an array. `catch` / `!ok` / missing array → keep last. |
-| **Tick — open door** | Same `streamPollMs` scheduler. Branch on what he is looking at: **Log / Voice (in room)** → queue (today) + incremental turns. **`door === "backlog"` and no ticket** → cheap list. **ticket open** → `GET .../initiatives/:id` (keep last on fail; already). **`plate === "index"`** → rooms list. Do not wait for `session?.id` to poll rooms. Do not refetch a closed door. |
-| **Foreground** | Existing `visibilitychange`: when `visible`, run **one tick now** (same function as the scheduler). Keep `resumeSendSounds`. |
+| **`notifyRoom(sessionId)`** | `SELECT pg_notify('travis_room', session_id)` on the **query** client. Call after: `insertTurn` (every kind); initiative hold / rename / done; `closeStream` / `failLiveStreamWithoutCard` / `openStream`; motion status write that `listBacklog` would show. Dest-job closer already `insertTurn`s — that notify is enough. |
+| **Room SSE — resume** | 1. Turns: `session_id = id AND (seq > afterSeq OR thought_status = 'streaming')`, `orderBy seq`. Each event: `id: <seq>` + `event: turn` + the turn grain + attachments for **that** id. 2. One `event: backlog` — cheap list snapshot (below). `listAt` = server `now()` ISO on that payload. 3. If `ticketId` present: one `event: ticket` (`readInitiative`). 4. One `event: stream` — current live + cards. 5. Then LISTEN (below). |
+| **Room SSE — listen** | Dedicated `postgres` client (not drizzle max-1). `LISTEN travis_room`. On notify: if payload ≠ this `session_id`, ignore. Else emit catch-up: new turns after the last seq **this connection already sent**; cheap `backlog` if list grain changed; `ticket` if `ticketId` still open; `stream` if cards/live changed. On client abort: `UNLISTEN`, close the listen client. Comment heartbeat (`: ping`) every 15s so proxies do not idle-kill. |
+| **`maxDuration`** | Export `800` (seconds) on this route only. When the function ends, client reconnects with last `seq`. Same cookie. |
+| **While the wire is open** | This function may `inspectAndNudgeQueue` / reap / `timeOutStaleDestJobs` for **this session** on a server interval (existing functions). Dest absorb emits via `insertTurn` → NOTIFY → this same wire (or direct emit if the write is in-process). Phone does **not** need the product tape-tick for dest to land. |
+| **Face — hold the wire** | In-room: `fetch` the events URL with cookies (not `EventSource` — auth is cookie on fetch today; stay consistent with send). Parse SSE like `consumeAgentStream`. Apply `turn` (merge by id, append new seq). Apply `backlog` (replace rows only if payload `items` is an array). Apply `ticket` if that ticket is still open. Apply `stream`. On error / close: keep last good; fallback catch-up; reopen with last `seq` + open `ticketId`. |
+| **`GET /turns?afterSeq=`** | Same incremental select as resume. Attachments for returned ids. Cards/streams on the payload. Full GET when the query is absent. **Fallback only** (wire down, or enter-room if the wire is not up yet). |
+| **`refreshTurns`** | Incremental merge when the face has turns. `!res.ok` / thrown / missing `turns` → keep last. Never `setTurns(data.turns ?? [])` on a bad body. Full GET on enter-room if no wire yet. |
+| **`listInitiatives` (no `q`)** | One `initiative` select. **One** `voice_turn` select for those ids: `id, seq, kind, seat_key, reference_turn_id, text` where `kind IN ('user','agent_post')`. Group in memory. `litSeatKeys` / `nextOf` / founding text unchanged. **Do not** call `turnsForInitiative` per row. **Do not** call `artifactNamesForInitiative`. |
+| **`listInitiatives` (with `q`)** | Same grain, then filter. One artifact-names query for candidate ids. Poll/fallback does not send `q`. |
+| **List stamp** | Named `listAt` on each `backlog` event (ISO). Client keeps it. Reconnect does **not** require `afterListAt` — resume always sends one snapshot (list is small). Optional `afterListAt`: server may skip the snapshot if no initiative/motion row is newer; skip is an optimization, not the no-loss path. Do not mint `initiative.updated_at` this packet (rename-while-down is covered by the resume snapshot). |
+| **Last good** | Turns / backlog / ticket / rooms: only replace when `ok` and the array (or ticket object) is present. `loadBacklog` must not `setBacklogRows([])` on catch. No `setBacklogLoading(true)` on a refresh when rows already exist. |
+| **Poll / tick** | While the room wire is **open**: do not refetch the whole tape on `streamPollMs`. Queue drain moves onto the wire (above). While the wire is **down**: one catch-up (`/turns?afterSeq=` + cheap list + open ticket) then retry the wire. Foreground `visible`: reconnect the wire now (last `seq`), do not wait for jitter. Keep `resumeSendSounds`. |
+| **Enter-room** | Full catch-up (turns + list if door open) then open the wire with that `seq`. 027 stay unchanged. |
+| **Rooms index** | Not on this wire. `loadRooms` last-good only. |
 
 ### Refuse
 
-- New table. New `voice_turn` / `initiative` column. List-cursor / watermark store.
-- Websocket, SSE bus, `LISTEN/NOTIFY`.
-- Remint 012 / 023 / 026 / 027 / 028.
+- New table. Bus table. New `voice_turn` column.
+- Websocket. Second socket product.
+- Smarter poll as the product (keep 1–3s whole-tape tick as how a landing shows).
+- Remint 012 / 023 / 024 / 027 / 028.
 - Hear / Skip buttons.
-- Caps. Cousin PR.
+- Cousin PR. Caps.
 
 ---
 
@@ -205,26 +183,31 @@ Do not remint `voice_turn`. Do not add `updated_at`. Do not mint a list-cursor t
 | Writer | When | What |
 |--------|------|------|
 | `ensureInitiativeStore` / `migrate.ts` | 029 plant, once | `voice_turn_session_seq_idx`. |
-| Existing pipe | dest / user / absorb | `voice_turn` inserts (`seq` grows). Unchanged. |
-| Face tick | jitter / foreground | GET only. No tape write. |
+| `insertTurn` | every tape insert | Row + `notifyRoom`. |
+| Initiative hold / rename / done | list change | Row + `notifyRoom`. |
+| Stream open / close / fail | hang | Stream row + `notifyRoom`. |
+| Motion status | backlog in-motion | Row + `notifyRoom`. |
+| Room SSE | in-room | LISTEN + emit. May reap this session. |
+| Face | apply events | Last `seq`, last `listAt`. No tape write. |
 
 ### Who reads
 
 | Reader | What |
 |--------|------|
-| Log / Voice | Incremental turns + cards/streams. Merge. |
-| Backlog index | Cheap list grain. |
-| Open ticket | `readInitiative` (full thread). |
-| Rooms index | `listRoomsForOperator`. |
+| Room SSE resume | `seq > afterSeq`, cheap list, optional ticket, streams. |
+| Log / Voice | `turn` / `stream` events. |
+| Backlog door | `backlog` event. |
+| Open ticket | `ticket` event + `turn` with that `initiative_id`. |
+| Fallback GET | Same grain, only while wire down. |
 
 ### Triggers (faceless)
 
-- New `voice_turn` insert → next incremental tick paints it on Log.
-- New / renamed / done initiative → next backlog tick paints the row.
-- New dest line on the open ticket → next ticket GET paints Messages.
-- New / renamed room → next index tick paints the row.
-- `visibilityState === "visible"` → one tick now.
-- Failed GET → last good stays. Next tick retries.
+- Tape insert on any request → NOTIFY → wire emits `turn`.
+- List write → NOTIFY → `backlog`.
+- Stream hang → NOTIFY → `stream`.
+- Function `maxDuration` / proxy drop → client reconnects with last `seq`.
+- `visibilityState === "visible"` → reopen wire now.
+- Failed GET / dropped wire → last good stays.
 
 ---
 
@@ -232,15 +215,18 @@ Do not remint `voice_turn`. Do not add `updated_at`. Do not mint a list-cursor t
 
 | Port | This packet |
 |------|-------------|
-| 023 `streamPollMs` | Real. Same jitter. |
-| `GET /turns` | Real. Add `afterSeq`. |
-| `GET /initiatives` | Real. Cheap list, no N+1. |
-| `GET /initiatives/:id` | Real. Ride the tick while open. |
-| `GET /api/rooms` | Real. Ride the tick on the index. |
-| SSE / LISTEN | **Silence.** Do not plant. |
-| 028 usable Log | **Other PR.** Do not remint. |
+| `sse` / `sseHeaders` | Real. Reuse. Do not remint send/finalize. |
+| `GET /api/session/:id/events` | **Real.** New. Room wire. |
+| `pg_notify` / `LISTEN travis_room` | **Real.** Dedicated listen client. Query client only NOTIFYs. |
+| Neon session-mode | Real. One listen client per open wire. Release on abort. Do not raise the query pool. |
+| `GET /turns?afterSeq=` | Real. Fallback + resume select. |
+| `GET /initiatives` cheap list | Real. |
+| Send / drain SSE | Real. Request-scoped. Unchanged. |
+| Phone `streamPollMs` tape tick | **Stand-in / fallback only** while the wire is down. |
+| Websocket | **Refuse.** |
+| 028 usable Log | **Other PR.** |
 
-No new Cursor puppet. Keys stay server-side.
+Keys stay server-side. Cookie auth on the events GET (same as `/turns`).
 
 ---
 
@@ -248,20 +234,19 @@ No new Cursor puppet. Keys stay server-side.
 
 Walk [`PM-PACKET-013-LIST-LIVE-TEST.md`](./PM-PACKET-013-LIST-LIVE-TEST.md) on psi, phone, room Travis.
 
-1. Log Type. Send `One-line note on the tape.` Do not refresh. Own line on the right, then reply or Stream, within one poll beat. Hard refresh to see it = miss.
-2. Open Backlog. Rows, not a long blank. A new or changed ticket appears without hard refresh.
-3. Open one ticket. Dest that ticket (or land a line). Do not leave. The new line shows.
-4. Backlog with rows. Wait one poll. List does not flash empty.
-5. Kill the initiatives GET (or 500). List stays. Rooms: same — a dead `/api/rooms` does not empty the index.
-6. Background the tab, come back. One tick now (list/tape moves without waiting the next jitter).
-7. Voice: no Hear / Skip buttons.
+1. Log Type. Send `One-line note on the tape.` Do not refresh. Do not wait three seconds. Own line on the right as soon as sent. Reply or Stream when it lands — not after a later refresh.
+2. Rooms, then enter Travis again. No hard-refresh. Lines from (1) still there. Nothing missing.
+3. Backlog open. Rows, not a blank flash. A new or changed ticket appears without hard refresh.
+4. Open ticket. A line lands. Stay. The line is on this ticket.
+5. Hard refresh to see a row = miss. Waiting out a poll guess to see a row = miss.
+6. Voice: no Hear / Skip buttons.
 
 ---
 
 ## 9. Out of scope
 
 - Remint 023–027. Hang uniqueness. `link` kind.
-- SSE / job bus. Canvas.
+- Websocket. Canvas. Rooms-index bus.
 - PM-012 / SCP-028 usable Log (#142).
 - Hear-queue table. Stay table.
 - Planting `src/` from this seat.
@@ -272,14 +257,15 @@ Walk [`PM-PACKET-013-LIST-LIVE-TEST.md`](./PM-PACKET-013-LIST-LIVE-TEST.md) on p
 
 On **this PR** ([#144](https://github.com/bywale-com/travis/pull/144)), in this order:
 
-1. Index `voice_turn_session_seq_idx` in `ensureInitiativeStore` + `migrate.ts`. Do not remint the table.
-2. `GET /turns?afterSeq=`. Incremental select + attachments for those ids. Cards/streams stay on the payload. Full GET when the query is absent.
-3. `refreshTurns`: incremental merge when the face has turns. Full GET on enter-room. Last good on fail. Never blank from `?? []`.
-4. `listInitiatives` without per-row `turnsForInitiative`. One grain query. `q` uses the same grain + one artifact-names query. Recut tests that assume N+1.
-5. Tick paints the open door: incremental turns in-room; cheap backlog when that door is open; ticket GET while a ticket is open; rooms list on the index (tick without `session.id`).
-6. Last good on backlog and rooms. No loading flash on poll refresh. `visibilitychange` → one tick now.
-7. Smoke the test sheet. Phone-first Log + Backlog. Do not put Hear / Skip buttons back.
+1. Index `voice_turn_session_seq_idx` in `ensureInitiativeStore` + `migrate.ts`.
+2. `notifyRoom(sessionId)` after `insertTurn`, initiative hold/rename/done, stream open/close/fail, motion status writes. `pg_notify('travis_room', session_id)` on the query client.
+3. `GET /api/session/:id/events` — cookie auth, `afterSeq` / `Last-Event-ID`, optional `ticketId`. Resume turns + one cheap `backlog` + optional `ticket` + `stream`. Then dedicated LISTEN client. `maxDuration = 800`. Heartbeat comments. Abort closes the listen client.
+4. While that SSE is open, this session may reap / nudge / timeout dest (existing functions). Those writes notify (or emit in-process).
+5. Face: hold the wire in-room. Merge events. Last good on drop. Reconnect with last `seq`. Foreground → reconnect now. **Do not** keep the 1–3s whole-tape tick as the product while the wire is up. Fallback catch-up only while down (`/turns?afterSeq=` + cheap list).
+6. `listInitiatives` without per-row `turnsForInitiative`. Recut tests that assume N+1.
+7. Last good on backlog / turns / ticket. No loading flash on refresh. No Hear / Skip buttons.
+8. Smoke the test sheet. Phone-first Log + Backlog. A landing must not wait out a poll guess.
 
-Do not remint 012 / 023 / 028. Do not mint a cousin. Do not plant a websocket.
+Do not remint 012 / 023 / 028. Do not mint a cousin. Do not plant a websocket. Do not ship smarter poll as this packet.
 
 Do not send **That’s fine.**
