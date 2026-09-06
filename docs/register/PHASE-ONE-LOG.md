@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 00:08 UTC — Action-as-bot has never woken A/B. C was you. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 00:10 UTC — Make the Action tag as you: WAKE_GITHUB_TOKEN. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2212,3 +2212,11 @@ This seat cannot write labels (403). The Action can. This push lands `HOTFIX-074
 - 074: first time the Action added `wake-engineer`. B did not start.
 
 So: bot-as-tagger is how the Action is written. It has not yet woken SA or Engineer. The working seats were push, or you.
+
+---
+
+## 2026-09-06 00:10 UTC — Make the tagger you (founder)
+
+**Kind:** Process. Founder: how can we try to make it me?
+
+Action labels with repo secret **`WAKE_GITHUB_TOKEN`** (your PAT). Then the add is `bywale-com`, same as C on #127. He pastes the secret on the repo. We re-push 074. Do not paste the token here.

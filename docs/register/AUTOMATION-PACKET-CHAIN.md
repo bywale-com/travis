@@ -50,6 +50,8 @@ Technical PM look+test
 
 Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml). It diffs **this push** (`before…after`), not the whole PR. No Cursor token until the label is added.
 
+**Who tags.** `GITHUB_TOKEN` is `github-actions[bot]`. Cursor’s label trigger has not woken A or B from that actor. Repo secret **`WAKE_GITHUB_TOKEN`** = a PAT for the GitHub user connected to the automations (you). Fine-grained: this repo, Issues read/write. The Action uses that for `gh pr edit` labels. Unset → bot (old path). Not `TRAVIS_GITHUB_TOKEN` (unfold). Do not paste the token in chat.
+
 **Hotfix path (skip SA).** Founder 2026-09-05: a hotfix is not a new Cursor automation. Same Action. Title the PR `Hotfix NNN — …`. This push lands `docs/register/HOTFIX-NNN-*.md` → label **`wake-engineer`** only. No `wake-sa`. Same **B** — that label already wakes Engineer. Nothing else to change.
 
 ```text
