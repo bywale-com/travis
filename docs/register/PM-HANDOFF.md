@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-06 09:43 UTC
+# PM seat handoff — 2026-09-06 09:52 UTC
 
 **This bind is living.** `bc-25c5c6bf-006f-4252-9f25-49ab183835b2` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -12,17 +12,18 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **09:43 UTC 2026-09-06**. Flag **14:00**. |
-| 011 | [`PM-PACKET-011-VOICE-TPM.md`](./PM-PACKET-011-VOICE-TPM.md) · test [`PM-PACKET-011-VOICE-TPM-TEST.md`](./PM-PACKET-011-VOICE-TPM-TEST.md). **Wake:** sa. SA **027**. |
-| Held | Travis as the PHASE-ONE trail — discussed, not locked. Canvas. Seat health. 022 on [#120](https://github.com/bywale-com/travis/pull/120). |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **09:52 UTC 2026-09-06**. Flag **14:00**. |
+| Travis | Conversational PM. [`TRAVIS-AS-PM.md`](./TRAVIS-AS-PM.md). One trail = this log. Write port not planted. |
+| 011 | [`PM-PACKET-011-VOICE-TPM.md`](./PM-PACKET-011-VOICE-TPM.md). **Wake:** sa. SA **027**. |
+| Held | Travis write-port to this log. Canvas. 022 on [#120](https://github.com/bywale-com/travis/pull/120). |
 
 ---
 
 ## Next PM job
 
-1. Accept. Read Current, then the newest stamp.
-2. 011 is go. SA 027 on this PR.
-3. Travis-as-logger: wait for his fork. Do not plant it.
+1. Accept. Read Current, then the newest stamp, then `TRAVIS-AS-PM.md`.
+2. 011 is go. Do not fold the write-port into 027.
+3. Dest Technical PM is the cut, not the vision partner.
 
 ---
 
@@ -33,4 +34,4 @@
 - Do not mint tables.
 - Do not append SYSTEMS-ANALYST-LOG.
 - Do not put Hear it / Skip buttons back.
-- Do not plant Travis-appends-PHASE-ONE-LOG.
+- Do not plant Travis-appends-PHASE-ONE-LOG in 027.

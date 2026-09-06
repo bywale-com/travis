@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 09:43 UTC — 011 go + recut; Travis-as-logger discussed, not planted. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 09:52 UTC — Travis is the conversational PM; one trail. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2769,3 +2769,17 @@ Today the trail is this file: founder wording, then what landed. The Technical P
 If he mostly talks to Travis, the detailed request has to survive **in the room** the way a stamp survives here: his words, polished, excerpts. That is pocket 8 — restatement hygiene. It is not yet “Travis appends PHASE-ONE-LOG.”
 
 Open: is Travis the **trail** (this log), a **room diary**, **initiative notes**, or still the Technical PM when dest’d? He asked to discuss that before we lock it. No store. No plant.
+
+---
+
+## 2026-09-06 09:52 UTC — Travis is the conversational PM (founder)
+
+**Kind:** Process lock. Not 027. Not a table.
+
+**Founder (preserved):** Travis is basically … very similar in behavior to like the technical PM … it has to be the technical PM. It is … not a technical PM … it's the PM. … the same way that you can go through the repo … when I reference something … similar process that Travis should take. … the room is usually like where it starts from. But, if not in the room … the logs, the repo logs, or the repo itself. I would almost rarely ask it for advice on the repo. I'm usually just … using the repo for reference. … ultimately, it's really just routing requests … sometimes I may just be talking with Travis. … we're setting the vision … that's not with … the PM, I'm doing that with Travis, in the hopes that it's capturing that in a place, that … the technical PM … has access to. So when it's … checking there, it can see that … there's no loss. … The process, that I'm not telling it to do, it just does. Just like I don't tell you to log.
+
+**Lock.** Travis is the PM he talks to. Dest Technical PM is the cut. One trail: this log. Read: room first, then this file / the repo as reference. Write unprompted when the talk is load-bearing — founder wording, then the lock. Not on dest-a-seat.
+
+**Canon:** [`TRAVIS-AS-PM.md`](./TRAVIS-AS-PM.md).
+
+**Not planted:** the port that lets Travis write this file. 011 / 027 stay the desk recut.
