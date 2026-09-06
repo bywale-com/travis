@@ -10,10 +10,23 @@ import {
   unheardReports,
 } from "./new-report";
 
-test("only speakable cursor posts are New", () => {
+test("only speakable non-Travis non-catalog-pm posts are New", () => {
   assert.equal(
     isNewReportTurn({ id: "1", kind: "agent_post", seatKey: "engineer" }),
     true,
+  );
+  assert.equal(
+    isNewReportTurn({
+      id: "2",
+      kind: "agent_post",
+      seatKey: "technical-pm",
+      label: "Technical PM",
+    }),
+    true,
+  );
+  assert.equal(
+    isNewReportTurn({ id: "pm", kind: "agent_post", seatKey: "pm" }),
+    false,
   );
   assert.equal(
     isNewReportTurn({
@@ -42,10 +55,14 @@ test("history before the baseline is not New", () => {
 });
 
 test("the chip names seats and never says waiting", () => {
-  assert.equal(newReportChip([{ seatKey: "engineer" }]), "1 new · Eng");
+  assert.equal(newReportChip([{ seatKey: "engineer" }]), "1 new · Engineer");
   assert.equal(
     newReportChip([{ seatKey: "engineer" }, { seatKey: "sa" }]),
-    "2 new · Eng, SA",
+    "2 new · Engineer, SA",
+  );
+  assert.equal(
+    newReportChip([{ seatKey: "technical-pm", label: "Technical PM" }]),
+    "1 new · Technical PM",
   );
   assert.equal(newReportChip([]), "");
   assert.equal(newReportChip([{ seatKey: "engineer" }]).includes("waiting"), false);

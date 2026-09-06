@@ -11,7 +11,8 @@ import {
 import { db } from "@/server/db/client";
 import { voiceSession } from "@/server/db/schema";
 import type { SeatKey } from "@/server/db/schema";
-import { MembershipError, openBindingForSeat } from "@/server/room-membership";
+import { MembershipError } from "@/server/room-membership";
+import { resolveDestBinding } from "@/server/dest-resolve";
 import { AuthError } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
 
@@ -52,8 +53,8 @@ export async function POST(
   }
 
   const binding =
-    (await openBindingForSeat(sessionId, seatKey)) ??
-    (await bindingForSeat(seatKey));
+    (await resolveDestBinding(sessionId, seatKey)) ??
+    (seatKey === "pm" ? null : await bindingForSeat(seatKey));
   if (!binding) {
     return NextResponse.json({ error: "Unknown dest" }, { status: 400 });
   }
@@ -69,9 +70,9 @@ export async function POST(
 
   return NextResponse.json({
     routerHandled: true,
-    activeSeatKey: seatKey,
+    activeSeatKey: binding.seatKey ?? seatKey,
     activeLabel: binding.label ?? seatKeyToLabel(seatKey),
-    destTravis: isTravisSeat(seatKey),
+    destTravis: isTravisSeat(binding.seatKey ?? seatKey),
     wired: travisIsWired(),
   });
 }

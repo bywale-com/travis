@@ -66,13 +66,16 @@ export function BacklogTicket({
   ticket,
   onBack,
   onOpenLog,
+  onReply,
 }: {
   t: Tokens;
   ticket: BacklogTicketData;
   onBack: () => void;
   onOpenLog: (turnId: string) => void;
+  onReply?: (turnId: string) => void;
 }) {
   const [door, setDoor] = useState<TicketDoor>("messages");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const title = ticket.title.trim() || ticket.founding?.text.trim() || "Untitled";
   const lit = ticket.posts
     .map((p) => p.seatKey)
@@ -183,14 +186,27 @@ export function BacklogTicket({
           >
             {ticket.founding ? (
               <div
+                onClick={() => setSelectedId(ticket.founding!.id)}
                 style={{
                   alignSelf: "flex-end",
                   maxWidth: "92%",
                   display: "flex",
+                  flexDirection: "column",
                   alignItems: "flex-end",
                   gap: 8,
+                  outline:
+                    selectedId === ticket.founding.id
+                      ? `1px solid ${t.border}`
+                      : undefined,
                 }}
               >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    gap: 8,
+                  }}
+                >
                 <span
                   aria-label="Initiative"
                   style={{
@@ -213,6 +229,22 @@ export function BacklogTicket({
                 >
                   {ticket.founding.text}
                 </div>
+                </div>
+                {selectedId === ticket.founding.id && onReply ? (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onReply(ticket.founding!.id);
+                    }}
+                    style={{
+                      ...quietLink(t),
+                      fontSize: TYPE.meta,
+                    }}
+                  >
+                    Reply
+                  </button>
+                ) : null}
               </div>
             ) : null}
 
@@ -221,12 +253,16 @@ export function BacklogTicket({
               .map((dest) => (
                 <div
                   key={dest.id}
+                  onClick={() => setSelectedId(dest.id)}
                   style={{
                     alignSelf: "flex-end",
                     maxWidth: "92%",
                     display: "flex",
+                    flexDirection: "column",
                     alignItems: "flex-end",
                     gap: 8,
+                    outline:
+                      selectedId === dest.id ? `1px solid ${t.border}` : undefined,
                   }}
                 >
                   <div
@@ -240,6 +276,21 @@ export function BacklogTicket({
                   >
                     {dest.text}
                   </div>
+                  {selectedId === dest.id && onReply ? (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onReply(dest.id);
+                      }}
+                      style={{
+                        ...quietLink(t),
+                        fontSize: TYPE.meta,
+                      }}
+                    >
+                      Reply
+                    </button>
+                  ) : null}
                 </div>
               ))}
 
@@ -270,7 +321,10 @@ export function BacklogTicket({
                       onOpen={() => onOpenLog(post.id)}
                     />
                   ))}
-                <div style={{ display: "flex", gap: 8 }}>
+                <div
+                  style={{ display: "flex", gap: 8 }}
+                  onClick={() => setSelectedId(post.id)}
+                >
                   <SeatMark seatKey={post.seatKey || "pm"} t={t} size={28} />
                   <div style={{ minWidth: 0, flex: 1 }}>
                     <div
@@ -281,10 +335,30 @@ export function BacklogTicket({
                         padding: "10px 14px",
                         fontSize: TYPE.body,
                         border: `1px solid ${t.border}`,
+                        outline:
+                          selectedId === post.id
+                            ? `1px solid ${t.border}`
+                            : undefined,
                       }}
                     >
                       <AgentPostBody text={post.text} t={t} />
                     </div>
+                    {selectedId === post.id && onReply ? (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onReply(post.id);
+                        }}
+                        style={{
+                          ...quietLink(t),
+                          fontSize: TYPE.meta,
+                          marginTop: 6,
+                        }}
+                      >
+                        Reply
+                      </button>
+                    ) : null}
                     {files.map((file) => (
                       <ArtifactQuiet key={file.id} t={t} file={file} />
                     ))}

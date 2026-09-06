@@ -8,7 +8,7 @@ import {
 } from "@/lib/absorb-text";
 import { wrapSelection } from "@/lib/composer-format";
 import { resumeSendSounds } from "@/lib/send-sounds";
-import type { SeatKey } from "@/server/db/schema";
+import { hideCatalogPm } from "@/lib/dest-glass";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
 import { SeatMark } from "@/components/QueueChrome";
@@ -70,9 +70,10 @@ export function LogComposer({
   disabled?: boolean;
   onSend: (args: {
     text: string;
-    chipSeatKeys: SeatKey[];
+    chipSeatKeys: string[];
   }) => Promise<void | boolean>;
 }) {
+  const destSeats = hideCatalogPm(seats);
   const [text, setText] = useState("");
   const [chips, setChips] = useState<RoomSeat[]>([]);
   const [mentionOpen, setMentionOpen] = useState(false);
@@ -302,7 +303,7 @@ export function LogComposer({
   const submit = async () => {
     haltMic();
     resumeSendSounds();
-    const chipSeatKeys = chips.map((c) => c.seatKey as SeatKey);
+    const chipSeatKeys = chips.map((c) => c.seatKey);
     const keptText = text;
     const keptChips = chips;
     setText("");
@@ -359,7 +360,7 @@ export function LogComposer({
     });
   };
 
-  const untagged = seats.filter(
+  const untagged = destSeats.filter(
     (seat) => !chips.some((c) => c.seatKey === seat.seatKey),
   );
 

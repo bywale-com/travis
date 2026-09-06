@@ -11,7 +11,7 @@ import { openaiErrorMessage, responsesText } from "@/lib/travis-openai";
 import { TRAVIS_TEXT_MODEL } from "@/lib/travis-models";
 
 const SUMMARY_SYSTEM =
-  "Condense this agent reply for someone listening on a phone. Lead with the outcome. Plain sentences, no headings, no lists, no code. Three sentences at most.";
+  "Condense this agent reply for someone listening on a phone. Lead with the outcome. Plain sentences, no headings, no lists, no code. Three sentences at most. Do not append do not read, don't read, full text is in the Log, or see the chat.";
 
 export async function summarizeSeatReply(text: string): Promise<string> {
   const key = process.env.OPENAI_API_KEY?.trim() ?? "";

@@ -1,6 +1,7 @@
 "use client";
 
 import { SeatMark } from "@/components/QueueChrome";
+import { hideCatalogPm } from "@/lib/dest-glass";
 import { isTravisSeat } from "@/lib/seats";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import { TYPE } from "@/theme/scale";
@@ -98,7 +99,7 @@ export function CreateRoom({
           >
             WHO IS IN AT BIRTH
           </p>
-          {catalog.map((seat) => {
+          {hideCatalogPm(catalog).map((seat) => {
             const travis = isTravisSeat(seat.seatKey);
             const on = travis || chosen.has(seat.id);
             return (

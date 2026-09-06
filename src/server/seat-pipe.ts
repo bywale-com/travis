@@ -32,6 +32,7 @@ import {
 } from "@/server/dest-job";
 import {
   closeStream,
+  failLiveStreamWithoutCard,
   liveStreamForBinding,
   maybeCloseTravisStream,
   messageBodies,
@@ -42,6 +43,7 @@ import {
   writeStreamThought,
 } from "@/server/stream";
 import { isOpenMember, requireOpenMember } from "@/server/room-membership";
+import { markUnheardBeforeSeq } from "@/server/serve";
 import {
   agentBinding,
   voiceTurn,
@@ -225,15 +227,28 @@ export async function insertUserTurn(
   prompt: string,
   seatKey: SeatKey,
   initiativeId?: string | null,
+  referenceTurnId?: string | null,
 ): Promise<VoiceTurn> {
-  return insertTurn(sessionId, {
+  let inherited = initiativeId ?? undefined;
+  if (referenceTurnId && !inherited) {
+    const [answered] = await db
+      .select({ initiativeId: voiceTurn.initiativeId })
+      .from(voiceTurn)
+      .where(eq(voiceTurn.id, referenceTurnId))
+      .limit(1);
+    inherited = answered?.initiativeId ?? undefined;
+  }
+  const row = await insertTurn(sessionId, {
     role: "user",
     kind: "user",
     seatKey,
     speakable: true,
     text: prompt,
-    initiativeId: initiativeId ?? undefined,
+    initiativeId: inherited,
+    referenceTurnId: referenceTurnId ?? undefined,
   });
+  await markUnheardBeforeSeq(sessionId, row.seq).catch(() => {});
+  return row;
 }
 
 /**
@@ -463,6 +478,7 @@ export async function pipeOneSend(params: {
   /** Fan-out shares one user turn across dests. */
   userTurn?: VoiceTurn;
   initiativeId?: string | null;
+  referenceTurnId?: string | null;
   /** SCP-015 role dest: never enqueue. Default true (person dest). */
   enqueueIfBusy?: boolean;
 }): Promise<{ ownedTerminal: boolean; queue?: QueueSnapshot; busy?: boolean }> {
@@ -504,7 +520,13 @@ export async function pipeOneSend(params: {
 
   const userTurn =
     params.userTurn ??
-    (await insertUserTurn(sessionId, prompt, seatKey, params.initiativeId));
+    (await insertUserTurn(
+      sessionId,
+      prompt,
+      seatKey,
+      params.initiativeId,
+      params.referenceTurnId,
+    ));
   send("matched", {
     matched: true,
     matchedPhrase: params.matchedPhrase,
@@ -744,11 +766,18 @@ async function driveDestCursorEvents(params: {
 
   const failed = donePayload?.mode === "error" || cancelled;
   if (streamId) {
-    await closeStream({
-      streamId,
-      status: failed ? "failed" : "completed",
-      closeTurnId: postTurn?.id ?? null,
-    });
+    if (destClose.action === "close" && postTurn) {
+      await closeStream({
+        streamId,
+        status: failed ? "failed" : "completed",
+        closeTurnId: postTurn.id,
+      });
+    } else {
+      await failLiveStreamWithoutCard({
+        sessionId,
+        bindingId: binding.id,
+      });
+    }
   }
   if (params.destJobId) {
     await markDestJob(params.destJobId, {
@@ -865,11 +894,18 @@ export async function reapFinishedLiveRuns(sessionId: string): Promise<void> {
     await releaseLiveRunIfMatch(binding.id, live.cursorRunId);
     const liveStream = await liveStreamForBinding(sessionId, binding.id);
     if (liveStream) {
-      await closeStream({
-        streamId: liveStream.id,
-        status: "completed",
-        closeTurnId: post?.id ?? null,
-      });
+      if (destClose.action === "close" && post) {
+        await closeStream({
+          streamId: liveStream.id,
+          status: "completed",
+          closeTurnId: post.id,
+        });
+      } else {
+        await failLiveStreamWithoutCard({
+          sessionId,
+          bindingId: binding.id,
+        });
+      }
     }
     await finishDestJobsForBinding({
       sessionId,
@@ -950,6 +986,7 @@ export async function sendOrEnqueue(params: {
   matchedPhrase?: string;
   userTurn?: VoiceTurn;
   initiativeId?: string | null;
+  referenceTurnId?: string | null;
   /** SCP-015 role dest: never enqueue. Default true (person dest). */
   enqueueIfBusy?: boolean;
 }): Promise<"queued" | "sent" | "busy"> {
@@ -988,6 +1025,7 @@ export async function sendOrEnqueueMany(params: {
   prompt: string;
   send: SendFn;
   userTurn?: VoiceTurn;
+  referenceTurnId?: string | null;
 }): Promise<void> {
   const { sessionId, bindings, prompt, send } = params;
   const cursorOnly = bindings.filter((b) => !isTravisSeat(b.seatKey));
@@ -1008,7 +1046,14 @@ export async function sendOrEnqueueMany(params: {
   const leadKey = (lead.seatKey ?? "pm") as SeatKey;
   const lastKey = (last.seatKey ?? "pm") as SeatKey;
   const userTurn =
-    params.userTurn ?? (await insertUserTurn(sessionId, prompt, leadKey));
+    params.userTurn ??
+    (await insertUserTurn(
+      sessionId,
+      prompt,
+      leadKey,
+      undefined,
+      params.referenceTurnId,
+    ));
   send("matched", {
     matched: true,
     userTurn,

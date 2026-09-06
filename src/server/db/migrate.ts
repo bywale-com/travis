@@ -527,6 +527,27 @@ async function main() {
       ADD COLUMN IF NOT EXISTS heard_at timestamptz
   `;
   await sql`
+    DO $$
+    BEGIN
+      IF COALESCE(
+        col_description('travis.voice_turn'::regclass, (
+          SELECT attnum FROM pg_attribute
+          WHERE attrelid = 'travis.voice_turn'::regclass
+            AND attname = 'heard_at'
+        )),
+        ''
+      ) NOT LIKE '%027-cutoff%' THEN
+        UPDATE travis.voice_turn
+        SET heard_at = created_at
+        WHERE heard_at IS NULL
+          AND kind = 'agent_post'
+          AND speakable = true
+          AND seat_key IS DISTINCT FROM 'travis';
+        COMMENT ON COLUMN travis.voice_turn.heard_at IS '027-cutoff';
+      END IF;
+    END $$
+  `;
+  await sql`
     ALTER TABLE travis.turn_artifact
       ADD COLUMN IF NOT EXISTS seen_at timestamptz
   `;
@@ -571,7 +592,7 @@ async function main() {
       )
   `;
 
-  console.log("travis schema + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion + SCP-015 sit + SCP-023 dest_job + SCP-024 stream + SCP-025 walk close + SCP-026 heard/seen ready");
+  console.log("travis schema + SCP-009 artifacts + SCP-010 title + SCP-012 OS house + SCP-013 motion + SCP-015 sit + SCP-023 dest_job + SCP-024 stream + SCP-025 walk close + SCP-026 heard/seen + SCP-027 cutoff ready");
   await sql.end();
 }
 

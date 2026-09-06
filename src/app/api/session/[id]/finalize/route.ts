@@ -16,7 +16,8 @@ import {
 } from "@/server/db/schema";
 import type { SeatKey } from "@/server/db/schema";
 import { noteTravisUnwired } from "@/server/travis-dest";
-import { MembershipError, openBindingForSeat, requireOpenMember } from "@/server/room-membership";
+import { MembershipError, requireOpenMember } from "@/server/room-membership";
+import { resolveDestBinding } from "@/server/dest-resolve";
 import { pipeTravisText } from "@/server/travis-reply";
 import { AuthError } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
@@ -29,7 +30,7 @@ import {
 } from "@/server/seat-pipe";
 import { serveInvite } from "@/server/serve";
 
-type Body = { utterance: string };
+type Body = { utterance: string; referenceTurnId?: string | null };
 
 async function bindingForSeat(seatKey: SeatKey) {
   const [row] = await db
@@ -62,6 +63,10 @@ export async function POST(
   }
   const body = (await req.json()) as Body;
   const utterance = body.utterance ?? "";
+  const referenceTurnId =
+    typeof body.referenceTurnId === "string" && body.referenceTurnId.trim()
+      ? body.referenceTurnId.trim()
+      : null;
 
   let [session] = await db
     .select()
@@ -112,7 +117,7 @@ export async function POST(
                   .limit(1)
               )[0]?.seatKey as SeatKey | undefined) ?? "pm"
             : "pm";
-      const binding = await openBindingForSeat(sessionId, targetKey);
+      const binding = await resolveDestBinding(sessionId, targetKey);
       if (parsed.action !== "stay" && binding) {
         await setActiveBinding(sessionId, binding.id);
         [session] = await db
@@ -156,7 +161,7 @@ export async function POST(
         needClarification: true,
       });
     }
-    const binding = await openBindingForSeat(sessionId, seatKey);
+    const binding = await resolveDestBinding(sessionId, seatKey);
     if (binding) await setActiveBinding(sessionId, binding.id);
     await db
       .update(voiceSession)
@@ -181,7 +186,7 @@ export async function POST(
   let prompt = collapseSpeechStutter(match.cleanedText.trim());
   const { seatKey: calledSeat, remainder } = parseCallByName(prompt);
   if (calledSeat) {
-    const binding = await openBindingForSeat(sessionId, calledSeat);
+    const binding = await resolveDestBinding(sessionId, calledSeat);
     if (!binding) {
       return Response.json(
         { error: "Dest is not an open member of this room" },
@@ -264,7 +269,12 @@ export async function POST(
           controller.enqueue(encoder.encode(sse(event, data)));
         };
         try {
-          await pipeTravisText({ sessionId, prompt: travisPrompt, send });
+          await pipeTravisText({
+            sessionId,
+            prompt: travisPrompt,
+            send,
+            referenceTurnId,
+          });
         } catch (err) {
           send("error", {
             error: err instanceof Error ? err.message : String(err),
@@ -306,6 +316,7 @@ export async function POST(
           prompt,
           send,
           matchedPhrase: match.matchedPhrase,
+          referenceTurnId,
         });
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);

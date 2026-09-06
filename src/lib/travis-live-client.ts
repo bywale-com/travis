@@ -24,6 +24,7 @@ export async function startTravisLive(opts: {
   onSeatStream: (res: Response) => void;
   onError: (msg: string) => void;
   onClose?: () => void;
+  getReferenceTurnId?: () => string | null;
 }): Promise<TravisLiveSession | null> {
   const tokenRes = await fetch(`/api/session/${opts.sessionId}/live/token`, {
     method: "POST",
@@ -74,7 +75,11 @@ export async function startTravisLive(opts: {
     const res = await fetch(`/api/session/${opts.sessionId}/live/transcript`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ role, text }),
+        body: JSON.stringify({
+          role,
+          text,
+          referenceTurnId: opts.getReferenceTurnId?.() ?? null,
+        }),
     });
     const ct = res.headers.get("content-type") ?? "";
     if (ct.includes("text/event-stream")) {

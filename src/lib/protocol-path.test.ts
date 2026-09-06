@@ -5,6 +5,7 @@ import {
   formatSeatRosterLine,
   parseSitProtocol,
   SIT_PROTOCOL_FILES,
+  SIT_ROLE_LABEL,
 } from "./protocol-path";
 
 test("pm sa engineer and full paths sit", () => {
@@ -42,6 +43,10 @@ test("travis WHERE logging and junk are refused", () => {
   assert.match(parseSitProtocol("/protocols/logging.md").reason ?? "", /not seat/);
   assert.match(parseSitProtocol("/protocols/pm").reason ?? "", /only hangs/);
   assert.match(parseSitProtocol("").reason ?? "", /Need a protocol/);
+});
+
+test("sit glass string for pm is Technical PM", () => {
+  assert.equal(SIT_ROLE_LABEL.pm, "Technical PM");
 });
 
 test("who is person dest; role seat without who is role dest", () => {

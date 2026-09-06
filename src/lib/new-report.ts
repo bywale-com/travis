@@ -5,14 +5,14 @@
  * the log. Travis names the seat. Google TTS is not that mouth.
  */
 
-import { isCursorSeat } from "./seats";
-import { seatShortLabel } from "./seat-mark";
+import { destGlassName, isCatalogPm } from "./dest-glass";
 
 export type NewReportTurn = {
   id: string;
   seq?: number;
   kind: string;
   seatKey?: string | null;
+  label?: string | null;
   speakable?: boolean;
   heardAt?: string | Date | null;
 };
@@ -26,7 +26,10 @@ export function isNewReportTurn(turn: NewReportTurn): boolean {
   if (turn.kind !== "agent_post") return false;
   if (turn.speakable === false) return false;
   if (turn.heardAt) return false;
-  return isCursorSeat(turn.seatKey);
+  if (!turn.seatKey) return false;
+  if (turn.seatKey === "travis") return false;
+  if (isCatalogPm(turn.seatKey)) return false;
+  return true;
 }
 
 /** Durable New — heard_at IS NULL. Replaces session newIds. */
@@ -50,26 +53,24 @@ export function newReportSeats(turns: NewReportTurn[]): NewSeat[] {
     const key = turn.seatKey;
     if (!key || seen.includes(key)) continue;
     seen.push(key);
-    out.push({ seatKey: key });
+    out.push({
+      seatKey: key,
+      ...(turn.label ? { label: turn.label } : {}),
+    });
   }
   return out;
 }
 
 export function newReportChip(seats: NewSeat[]): string {
   if (!seats.length) return "";
-  const names = seats.map((s) => seatShortLabel(s.seatKey, s.label));
+  const names = seats.map((s) => destGlassName(s.seatKey, s.label));
   if (seats.length === 1) return `1 new · ${names[0]}`;
   return `${seats.length} new · ${names.join(", ")}`;
 }
 
 export function newReportBeat(seats: NewSeat[]): string {
   if (!seats.length) return "";
-  const names = seats.map((s) => {
-    if (s.seatKey === "pm") return "PM";
-    if (s.seatKey === "sa") return "SA";
-    if (s.seatKey === "engineer") return "Engineer";
-    return seatShortLabel(s.seatKey, s.label);
-  });
+  const names = seats.map((s) => destGlassName(s.seatKey, s.label));
   if (names.length === 1) return `${names[0]} has something new.`;
   if (names.length === 2) return `${names[0]} and ${names[1]} have something new.`;
   return `${names.slice(0, -1).join(", ")}, and ${names[names.length - 1]} have something new.`;

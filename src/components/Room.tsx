@@ -25,7 +25,9 @@ import {
 } from "@/lib/ear";
 import { readJson } from "@/lib/http";
 import { isRequestTurn } from "@/lib/request-log";
+import { hideCatalogPm } from "@/lib/dest-glass";
 import {
+  isNewReportTurn,
   newCutTurnId,
   newReportChip,
   newReportSeats,
@@ -33,6 +35,15 @@ import {
 } from "@/lib/new-report";
 import { parseHearInvite } from "@/lib/offer";
 import { isTravisSeat, keepWorkAfterTravisCall } from "@/lib/seats";
+import {
+  applyScrollStay,
+  readStay,
+  scrollStayFromThread,
+  stayOnEnter,
+  stayOnLeave,
+  stayOnScroll,
+  type TravisStay,
+} from "@/lib/stay";
 import {
   playQueuedCue,
   playSendSwoosh,
@@ -76,7 +87,6 @@ import { streamPollMs, type StreamGrain } from "@/lib/stream";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
 import { TYPE } from "@/theme/scale";
-import type { SeatKey } from "@/server/db/schema";
 import { Button } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -326,6 +336,10 @@ export function Room({
   const [artifactFullId, setArtifactFullId] = useState<string | null>(null);
   const [sessionArtifacts, setSessionArtifacts] = useState<ArtifactRow[]>([]);
   const [roomsLoading, setRoomsLoading] = useState(true);
+  const [selectedTurnId, setSelectedTurnId] = useState<string | null>(null);
+  const [pendingReferenceTurnId, setPendingReferenceTurnId] = useState<
+    string | null
+  >(null);
 
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const committedRef = useRef("");
@@ -359,6 +373,10 @@ export function Room({
   const offeredKeyRef = useRef("");
   const pendingOfferRef = useRef(false);
   const seenInLogRef = useRef<Set<string>>(new Set());
+  const pendingStayScrollRef = useRef<TravisStay | null>(null);
+  const stayBootedRef = useRef(false);
+  const pendingRefTurnRef = useRef<string | null>(null);
+  const turnsRef = useRef<Turn[]>([]);
   const seenArtifactRef = useRef<Set<string>>(new Set());
   const drainingRef = useRef(false);
   const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -379,6 +397,8 @@ export function Room({
   busyRef.current = busy;
   presenceRef.current = presence;
   sessionRef.current = session;
+  turnsRef.current = turns;
+  pendingRefTurnRef.current = pendingReferenceTurnId;
 
   const applyQueue = useCallback((queue: { seats?: QueueSeatDto[] } | undefined) => {
     if (queue?.seats) setQueueSeats(queue.seats);
@@ -1009,6 +1029,7 @@ export function Room({
             void refreshSession(sid);
           },
           onError: (msg) => setError(msg),
+          getReferenceTurnId: () => pendingRefTurnRef.current,
           onClose: () => {
             liveRef.current = null;
             if (
@@ -1253,8 +1274,13 @@ export function Room({
         const res = await fetch(`/api/session/${sid}/finalize`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ utterance }),
+          body: JSON.stringify({
+            utterance,
+            referenceTurnId: pendingRefTurnRef.current,
+          }),
         });
+        setPendingReferenceTurnId(null);
+        pendingRefTurnRef.current = null;
         // The turn is away. Anything said from here on is a new turn and must
         // be allowed to reach the server even while this reply streams.
         sendingRef.current = false;
@@ -1357,7 +1383,7 @@ export function Room({
   );
 
   const sendTyped = useCallback(
-    async (args: { text: string; chipSeatKeys: SeatKey[] }) => {
+    async (args: { text: string; chipSeatKeys: string[] }) => {
       const sid = sessionIdRef.current;
       if (!sid) return false;
       const prompt = args.text.trim();
@@ -1384,8 +1410,13 @@ export function Room({
         const res = await fetch(`/api/session/${sid}/send`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(args),
+          body: JSON.stringify({
+            ...args,
+            referenceTurnId: pendingRefTurnRef.current,
+          }),
         });
+        setPendingReferenceTurnId(null);
+        pendingRefTurnRef.current = null;
         const ct = res.headers.get("content-type") ?? "";
         if (!ct.includes("text/event-stream")) {
           if (tempId) {
@@ -1758,6 +1789,7 @@ export function Room({
       logSubmodeRef.current = sub;
       setRoomSeats(asRoomSeats(s.seats));
       setPlate("room");
+      stayOnEnter(s.id, readStay());
       setDoor(null);
       clearDraft();
       if (s.status === "ended") {
@@ -1836,6 +1868,7 @@ export function Room({
   }, [clearDraft, stopLive, stopRecognition]);
 
   const leaveRoom = useCallback(() => {
+    stayOnLeave(sessionIdRef.current);
     teardownLocal();
     setPlate("index");
     void loadRooms().catch((e) => {
@@ -1854,7 +1887,10 @@ export function Room({
       });
       const data = await readJson<{ error?: string }>(res);
       if (!res.ok) throw new Error(data.error ?? "End failed");
-      if (sessionIdRef.current === id) teardownLocal();
+      if (sessionIdRef.current === id) {
+        stayOnLeave(id);
+        teardownLocal();
+      }
       setPlate("index");
       setSelectedRoomId(null);
       await loadRooms();
@@ -2011,6 +2047,16 @@ export function Room({
     };
   }, [loadCatalog, loadRooms]);
 
+  useEffect(() => {
+    if (roomsLoading || stayBootedRef.current) return;
+    stayBootedRef.current = true;
+    const stay = readStay();
+    if (stay?.plate === "room" && stay.sessionId) {
+      pendingStayScrollRef.current = stay;
+      void enterRoom(stay.sessionId);
+    }
+  }, [roomsLoading]);
+
   const togglePause = async () => {
     if (!session || presence === "ended" || presence === "speaking") return;
     resumeSendSounds();
@@ -2164,14 +2210,48 @@ export function Room({
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
           const id = entry.target.id.replace(/^turn-/, "");
-          if (id) seenInLogRef.current.add(id);
+          if (!id) continue;
+          seenInLogRef.current.add(id);
+          const turn = turnsRef.current.find((t) => t.id === id);
+          const sid = sessionIdRef.current;
+          if (turn && isNewReportTurn(turn) && sid) {
+            void fetch(`/api/session/${sid}/heard`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ turnIds: [id] }),
+            }).then(() => refreshTurns(sid));
+          }
         }
       },
       { threshold: 0.55 },
     );
     for (const node of nodes) io.observe(node);
     return () => io.disconnect();
-  }, [viewMode, threadTurns]);
+  }, [viewMode, threadTurns, refreshTurns]);
+
+  useEffect(() => {
+    const el = threadRef.current;
+    const sid = sessionIdRef.current;
+    if (!el || plate !== "room" || !sid) return;
+    const onScroll = () => {
+      const next = scrollStayFromThread(el);
+      stayOnScroll(sid, next.scrollTurnId, next.scrollOffsetPx);
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [plate, viewMode, session?.id]);
+
+  useEffect(() => {
+    const stay = pendingStayScrollRef.current;
+    const el = threadRef.current;
+    if (!stay?.scrollTurnId || !el || plate !== "room") return;
+    const ok = applyScrollStay(
+      el,
+      stay.scrollTurnId,
+      stay.scrollOffsetPx ?? 0,
+    );
+    if (ok) pendingStayScrollRef.current = null;
+  }, [turns, plate, viewMode]);
 
   const shellStyle = {
     minHeight: "100dvh",
@@ -2461,7 +2541,7 @@ export function Room({
                 minHeight: 52,
               }}
             >
-              {roomSeats.slice(0, 6).map((seat, i) => {
+              {hideCatalogPm(roomSeats).slice(0, 6).map((seat, i) => {
                 const key = seat.seatKey || seat.label;
                 const live = liveStreams.find(
                   (s) =>
@@ -2509,7 +2589,7 @@ export function Room({
                   </button>
                 );
               })}
-              {roomSeats.length > 6 ? (
+              {hideCatalogPm(roomSeats).length > 6 ? (
                 <button
                   type="button"
                   onClick={() => setDoor("roster")}
@@ -2522,7 +2602,7 @@ export function Room({
                     cursor: "pointer",
                   }}
                 >
-                  +{roomSeats.length - 6}
+                  +{hideCatalogPm(roomSeats).length - 6}
                 </button>
               ) : null}
             </div>
@@ -2589,7 +2669,14 @@ export function Room({
             </p>
             {(() => {
               const chip = newReportChip(
-                newReportSeats(turns.filter((t) => newIds.includes(t.id))),
+                newReportSeats(
+                  turns.filter((t) => newIds.includes(t.id)),
+                ).map((s) => ({
+                  ...s,
+                  label:
+                    roomSeats.find((r) => r.seatKey === s.seatKey)?.label ??
+                    s.label,
+                })),
               );
               return chip ? (
                 <div
@@ -2607,38 +2694,6 @@ export function Room({
                   >
                     {chip}
                   </p>
-                  <div style={{ display: "flex", justifyContent: "center", gap: 16, marginTop: 6 }}>
-                    <button
-                      type="button"
-                      onClick={() => void runHear("hear")}
-                      style={{
-                        border: "none",
-                        background: "none",
-                        color: t.accent,
-                        fontSize: TYPE.meta,
-                        cursor: "pointer",
-                        fontFamily: "inherit",
-                        padding: 0,
-                      }}
-                    >
-                      Hear
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => void runHear("skip")}
-                      style={{
-                        border: "none",
-                        background: "none",
-                        color: t.textMuted,
-                        fontSize: TYPE.meta,
-                        cursor: "pointer",
-                        fontFamily: "inherit",
-                        padding: 0,
-                      }}
-                    >
-                      Skip
-                    </button>
-                  </div>
                 </div>
               ) : runningLabel ? (
                 <p
@@ -2834,8 +2889,13 @@ export function Room({
                       ))}
                   <div
                     id={`turn-${turn.id}`}
+                    onClick={() => setSelectedTurnId(turn.id)}
                     style={{
                       alignSelf: isUser ? "flex-end" : "flex-start",
+                      outline:
+                        selectedTurnId === turn.id
+                          ? `1px solid ${t.border}`
+                          : undefined,
                       maxWidth: "92%",
                       display: "flex",
                       flexDirection: isUser ? "row" : "row",
@@ -3004,6 +3064,32 @@ export function Room({
                             Play reply
                           </button>
                         )}
+                        {selectedTurnId === turn.id ? (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setPendingReferenceTurnId(turn.id);
+                              pendingRefTurnRef.current = turn.id;
+                              setSelectedTurnId(null);
+                              if (viewMode === "log" && logSubmode !== "type") {
+                                void setLogInput("type");
+                              }
+                            }}
+                            style={{
+                              display: "block",
+                              marginTop: 8,
+                              border: "none",
+                              background: "transparent",
+                              color: t.accent,
+                              fontSize: 12,
+                              cursor: "pointer",
+                              padding: 0,
+                            }}
+                          >
+                            Reply
+                          </button>
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -3239,6 +3325,15 @@ export function Room({
           ticket={ticket}
           onBack={() => setTicket(null)}
           onOpenLog={openTurnInLog}
+          onReply={(turnId) => {
+            setPendingReferenceTurnId(turnId);
+            pendingRefTurnRef.current = turnId;
+            setTicket(null);
+            setDoor(null);
+            if (viewMode === "log" && logSubmode !== "type") {
+              void setLogInput("type");
+            }
+          }}
         />
       ) : null}
 
@@ -3392,6 +3487,31 @@ export function Room({
                   }}
                 >
                   Copy
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPendingReferenceTurnId(holdTurn.id);
+                    pendingRefTurnRef.current = holdTurn.id;
+                    setHoldTurn(null);
+                    if (viewMode === "log" && logSubmode !== "type") {
+                      void setLogInput("type");
+                    }
+                  }}
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    border: "none",
+                    background: "transparent",
+                    color: t.textPrimary,
+                    fontSize: TYPE.body,
+                    fontWeight: 500,
+                    textAlign: "left",
+                    padding: "12px 0",
+                    cursor: "pointer",
+                  }}
+                >
+                  Reply
                 </button>
                 <button
                   type="button"

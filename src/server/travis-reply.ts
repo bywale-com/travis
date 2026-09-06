@@ -16,11 +16,19 @@ export async function pipeTravisText(params: {
   prompt: string;
   send: Send;
   userTurn?: VoiceTurn;
+  referenceTurnId?: string | null;
 }): Promise<void> {
   const { sessionId, prompt, send } = params;
   const createdHere = !params.userTurn;
   const userTurn =
-    params.userTurn ?? (await insertUserTurn(sessionId, prompt, "travis"));
+    params.userTurn ??
+    (await insertUserTurn(
+      sessionId,
+      prompt,
+      "travis",
+      undefined,
+      params.referenceTurnId,
+    ));
   send("matched", {
     matched: true,
     userTurn,
