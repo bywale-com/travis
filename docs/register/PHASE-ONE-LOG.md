@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 00:06 UTC — Founder made the repo private; this seat still sees public. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 00:08 UTC — Action-as-bot has never woken A/B. C was you. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2195,3 +2195,20 @@ This seat cannot write labels (403). The Action can. This push lands `HOTFIX-074
 **Founder (preserved):** No. I did make it private.
 
 **This seat:** `gh` still reads `bywale-com/travis` as **public**. If he flipped it, it is public again from here, or this token is looking at the wrong lock. Believe the founder. Private-org webhook miss is real in Cursor’s forum. The 00:00 re-arm still did not boot B, and GitHub was showing public at that check.
+
+---
+
+## 2026-09-06 00:08 UTC — Has the Action always been the bot? (founder)
+
+**Kind:** Honest. Founder: you said what changed is who adds the label. Has it not always been the Action / GitHub Actions bot, with the other automations?
+
+**The Action, when it tags, has always been the bot.** That part did not change.
+
+**The boots we actually saw were not the Action tagging.**
+
+- A / B on 009: trigger was still **PR pushed**. Cursor saw the push, not a label. Last B 17:13.
+- C at 18:15: **you** added `wake-pm-look` / `pm-wake-look` on #127 (`bywale-com`). Not the bot. That is the look that ran.
+- The Action as bot on #127 only added `emerge` (19:07) — that is mail, not a Cursor seat.
+- 074: first time the Action added `wake-engineer`. B did not start.
+
+So: bot-as-tagger is how the Action is written. It has not yet woken SA or Engineer. The working seats were push, or you.
