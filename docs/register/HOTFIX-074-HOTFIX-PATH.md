@@ -23,6 +23,8 @@ Re-arm 2026-09-06 00:50 UTC: try the founder token again.
 
 Re-arm 2026-09-06 00:54 UTC: token should have Issues write. Tag as the founder.
 
+Re-arm 2026-09-06 01:13 UTC: new fine-grained PAT in the secret. Tag as the founder.
+
 ## Cut — house (already on this PR)
 
 Same Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml).

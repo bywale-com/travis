@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 01:12 UTC — Issues write is not enough for PR labels; need PR write too. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 01:13 UTC — New fine-grained PAT in the secret. Retry 074. Flag 14:00 stands.
 
 **How we maintain this log**
 
