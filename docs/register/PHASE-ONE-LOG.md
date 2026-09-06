@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:53 UTC — 076 billed 3.2M (B 1.9 + C 1.3) = ~0.23% of the included bar. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 03:02 UTC — Packet 010 cut: pockets 2+3+4. 3 and 4 specified. 2 waits on plates O1/O2. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2644,3 +2644,33 @@ If 3.2M were Fast input uncached: **~$13**. Cache-heavy: a few dollars. A little
 ### Hygiene
 
 [#130](https://github.com/bywale-com/travis/pull/130) merged. This stamp is a **log PR**, not a 074 rider. Next cut still **077** / packet **010**.
+
+---
+
+## 2026-09-06 03:02 UTC — Packet 010: pockets 2 + 3 + 4 (founder)
+
+**Kind:** Packet cut. Not planted. Canvas later. Pocket 1 (cost) is done.
+
+**Founder (preserved):** I want us to work on 3, 4, and 2. … maybe let’s do one at a time. … 3 and 4 I think go together. … we can do 2, 3, and 4 … because the tests are like very cohesive. … three is something we can diagnose … and have the engineer build … I think we can do two, three, and four in the same hotfix. … this would definitely be a packet. … output types … plates that naturally emerge … just needs plates, really. For three … less about plates. … you stated it very well. … four … we don't even really need plates. … lock that, and then … write … what we're trying to achieve for two, three, and four. … so we can create a proper packet.
+
+**Recut:** not a hotfix. **010.** SA **026**. Next hotfix still **077**.
+
+### What I needed from him
+
+**Plates for 2.** Two: **O1** Log (plate inline in the bubble) · **O2** Voice (how the plate shows up on the orb). Screenshot psi first. [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md). 3 and 4 do not wait on plates.
+
+Nothing else. Offer copy is already 02:28. Canvas stays later.
+
+### Achievement (written)
+
+[`PM-PACKET-010-SERVE.md`](./PM-PACKET-010-SERVE.md) · test [`PM-PACKET-010-SERVE-TEST.md`](./PM-PACKET-010-SERVE-TEST.md).
+
+| Pocket | Job | Status |
+|--------|-----|--------|
+| **2** Plates in chat + voice | Common type in the bubble, in order. Voice tells him it is there. | Store planted (062/064). Glass waits **O1 / O2**. |
+| **3** Ticket thread + query | Follow-on posts and streams on the ticket. Travis can read it. | Specified. SA ascribes stamp / stream hang. |
+| **4** Offer, don’t barge | Seat never talks first. Context + Hear / Skip. | Specified. 007 stays; do not remint C3/C4. |
+
+**3 makes 4 true.** One walk in the test spec.
+
+**Do not** wake Engineer until O1 / O2 signed **and** SA 026. 3 and 4 may be ascribed now.

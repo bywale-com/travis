@@ -16,5 +16,6 @@
 | 007 | [`PM-PACKET-007-HEAR-QUEUE.md`](./PM-PACKET-007-HEAR-QUEUE.md) | `main` — locked; Hear / Next / Skip still SA silence |
 | 008 | [`PM-PACKET-008-STREAM.md`](./PM-PACKET-008-STREAM.md) · test [`PM-PACKET-008-STREAM-TEST.md`](./PM-PACKET-008-STREAM-TEST.md) | [#126](https://github.com/bywale-com/travis/pull/126) — Stream locked; SA **024** planted |
 | 009 | [`PM-PACKET-009-STREAM-CLOSE.md`](./PM-PACKET-009-STREAM-CLOSE.md) · test [`PM-PACKET-009-STREAM-CLOSE-TEST.md`](./PM-PACKET-009-STREAM-CLOSE-TEST.md) · look [`PM-LOOK-009.md`](./PM-LOOK-009.md) | [#127](https://github.com/bywale-com/travis/pull/127) — close / card hang; SA **025**; look **Pass**; human walk open |
+| 010 | [`PM-PACKET-010-SERVE.md`](./PM-PACKET-010-SERVE.md) · test [`PM-PACKET-010-SERVE-TEST.md`](./PM-PACKET-010-SERVE-TEST.md) | Pockets **2 + 3 + 4** (plates, ticket thread, hear). **3 and 4 specified.** **2 waits on plates O1 / O2.** SA **026**. Not locked until O1 / O2 signed. |
 
 Next packet number follows the last cut. Do not reuse.
