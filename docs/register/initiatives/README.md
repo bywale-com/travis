@@ -38,6 +38,7 @@ A little context: what the pocket was, what changed, the PR. Point at the packet
 | 025 | [`025-stream-close/`](./025-stream-close/) | [#127](https://github.com/bywale-com/travis/pull/127) |
 | 026 | [`026-serve/`](./026-serve/) | [#134](https://github.com/bywale-com/travis/pull/134) |
 | 027 | [`027-voice-stay/`](./027-voice-stay/) | [#140](https://github.com/bywale-com/travis/pull/140) |
+| 028 | [`028-usable-chat/`](./028-usable-chat/) | [#142](https://github.com/bywale-com/travis/pull/142) |
 | 029 | [`029-list-live/`](./029-list-live/) | [#144](https://github.com/bywale-com/travis/pull/144) |
 
 ## Must-not

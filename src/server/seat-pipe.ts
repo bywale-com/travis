@@ -1039,6 +1039,7 @@ export async function sendOrEnqueueMany(params: {
       prompt,
       send,
       userTurn: params.userTurn,
+      referenceTurnId: params.referenceTurnId,
     });
     return;
   }

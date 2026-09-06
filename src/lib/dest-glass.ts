@@ -25,3 +25,30 @@ export function destGlassName(
   if (seatKey === "pm") return "Technical PM";
   return named || "that seat";
 }
+
+/** Quote staple — who wrote the referenced bubble. */
+export function quoteAuthorLabel(params: {
+  kind?: string | null;
+  seatKey?: string | null;
+  label?: string | null;
+}): string {
+  if (params.kind === "user") return "You";
+  const glass = destGlassName(params.seatKey, params.label);
+  if (glass !== "that seat") return glass;
+  return params.seatKey?.trim() || "that seat";
+}
+
+export function quoteRailText(params: {
+  authorLabel: string;
+  text: string;
+  max?: number;
+}): string {
+  const max = params.max ?? 120;
+  const clipped = params.text.slice(0, max);
+  const more = params.text.length > max ? "…" : "";
+  return `${params.authorLabel} — ${clipped}${more}`;
+}
+
+export function replyToLabel(authorLabel: string): string {
+  return `Reply to ${authorLabel}`;
+}

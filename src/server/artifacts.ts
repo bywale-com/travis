@@ -3,10 +3,12 @@
  * Do not remint initiative. Do not store the 15-minute URL.
  */
 
-import { and, asc, desc, eq, inArray, isNull, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, isNull, or, sql } from "drizzle-orm";
 import {
   artifactFilename,
   artifactKindFromPath,
+  imagePathsFromProcessBody,
+  markdownImageSrcs,
   parseCursorUpdatedAt,
   shouldHangArtifact,
 } from "@/lib/artifact-kind";
@@ -14,6 +16,8 @@ import type { InitiativeAttachment } from "@/lib/initiative";
 import { db } from "@/server/db/client";
 import {
   agentBinding,
+  stream,
+  streamEvent,
   turnArtifact,
   voiceSession,
   voiceTurn,
@@ -58,6 +62,61 @@ export async function ensureArtifactStore(): Promise<void> {
   artifactStoreReady = true;
 }
 
+async function hangPathOnPost(params: {
+  post: VoiceTurn;
+  binding: AgentBinding;
+  path: string;
+  sizeBytes?: number | null;
+  cursorUpdatedAt?: Date | null;
+  hungPaths: Set<string>;
+}): Promise<void> {
+  const path = params.path.trim();
+  if (!path || params.hungPaths.has(path)) return;
+  await db
+    .insert(turnArtifact)
+    .values({
+      turnId: params.post.id,
+      sessionId: params.post.sessionId,
+      bindingId: params.binding.id,
+      kind: artifactKindFromPath(path),
+      path,
+      filename: artifactFilename(path),
+      sizeBytes: params.sizeBytes ?? null,
+      cursorUpdatedAt: params.cursorUpdatedAt ?? null,
+    })
+    .onConflictDoNothing();
+  params.hungPaths.add(path);
+}
+
+async function processImagePathsForPost(params: {
+  postId: string;
+  bindingId: string;
+}): Promise<string[]> {
+  const rows = await db
+    .select({ body: streamEvent.body })
+    .from(streamEvent)
+    .innerJoin(stream, eq(streamEvent.streamId, stream.id))
+    .where(
+      and(
+        eq(streamEvent.kind, "process"),
+        or(
+          eq(stream.closeTurnId, params.postId),
+          and(
+            eq(stream.bindingId, params.bindingId),
+            isNull(stream.closeTurnId),
+          ),
+        ),
+      ),
+    );
+  const out: string[] = [];
+  for (const row of rows) {
+    for (const path of imagePathsFromProcessBody(row.body)) {
+      if (!out.includes(path)) out.push(path);
+    }
+  }
+  return out;
+}
+
 export async function harvestTurnArtifacts(params: {
   post: VoiceTurn | null;
   binding: AgentBinding;
@@ -67,19 +126,35 @@ export async function harvestTurnArtifacts(params: {
     await ensureArtifactStore();
     const post = params.post;
     if (!post || post.kind !== "agent_post") return;
-    if (!params.startedAt) return;
-    const agentId = params.binding.cursorAgentId?.trim() ?? "";
-    if (!agentId) return;
     const hung = await db
       .select({ path: turnArtifact.path })
       .from(turnArtifact)
-      .where(
-        and(
-          eq(turnArtifact.sessionId, post.sessionId),
-          eq(turnArtifact.bindingId, params.binding.id),
-        ),
-      );
+      .where(eq(turnArtifact.turnId, post.id));
     const hungPaths = new Set(hung.map((row) => row.path));
+
+    for (const path of markdownImageSrcs(post.text)) {
+      await hangPathOnPost({
+        post,
+        binding: params.binding,
+        path,
+        hungPaths,
+      });
+    }
+    for (const path of await processImagePathsForPost({
+      postId: post.id,
+      bindingId: params.binding.id,
+    })) {
+      await hangPathOnPost({
+        post,
+        binding: params.binding,
+        path,
+        hungPaths,
+      });
+    }
+
+    if (!params.startedAt) return;
+    const agentId = params.binding.cursorAgentId?.trim() ?? "";
+    if (!agentId) return;
     let items = await listCursorArtifacts(agentId);
     if (!items.length) {
       items = await listCursorArtifacts(agentId);
@@ -96,20 +171,14 @@ export async function harvestTurnArtifacts(params: {
       ) {
         continue;
       }
-      await db
-        .insert(turnArtifact)
-        .values({
-          turnId: post.id,
-          sessionId: post.sessionId,
-          bindingId: params.binding.id,
-          kind: artifactKindFromPath(item.path),
-          path: item.path,
-          filename: artifactFilename(item.path),
-          sizeBytes: item.sizeBytes,
-          cursorUpdatedAt: updatedAt,
-        })
-        .onConflictDoNothing();
-      hungPaths.add(item.path);
+      await hangPathOnPost({
+        post,
+        binding: params.binding,
+        path: item.path,
+        sizeBytes: item.sizeBytes,
+        cursorUpdatedAt: updatedAt,
+        hungPaths,
+      });
     }
   } catch (err) {
     console.error("[travis] artifact harvest failed:", err);

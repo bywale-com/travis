@@ -77,6 +77,23 @@ test("inline bold and italic drop the marks", () => {
   );
 });
 
+test("markdown images are omitted from text runs", () => {
+  const blocks = parseAgentPost(
+    "Here is the plate.\n\n![shot](docs/register/plates/shot.png)\n\nDone.",
+  );
+  const spoken = blocks
+    .flatMap((b) =>
+      b.type === "list"
+        ? b.items.flatMap((item) => item.map((p) => p.text))
+        : b.inlines.map((p) => p.text),
+    )
+    .join(" ");
+  assert.equal(spoken.includes("docs/register/plates/shot.png"), false);
+  assert.equal(spoken.includes("![shot]"), false);
+  assert.match(spoken, /Here is the plate/);
+  assert.match(spoken, /Done/);
+});
+
 test("http links stay text and split from punctuation", () => {
   const bits = parseInline("see https://travis.example/shot.png.");
   assert.equal(bits.some((p) => p.type === "link"), true);

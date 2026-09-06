@@ -17,14 +17,14 @@ import {
 import type { SeatKey } from "@/server/db/schema";
 import { noteTravisUnwired } from "@/server/travis-dest";
 import { MembershipError, requireOpenMember } from "@/server/room-membership";
-import { resolveDestBinding } from "@/server/dest-resolve";
+import { destBindingsForSend, resolveDestBinding } from "@/server/dest-resolve";
 import { pipeTravisText } from "@/server/travis-reply";
 import { AuthError } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
 import {
   enqueueOnSeat,
   seatHasActiveRun,
-  sendOrEnqueue,
+  sendOrEnqueueMany,
   sse,
   sseHeaders,
 } from "@/server/seat-pipe";
@@ -223,37 +223,56 @@ export async function POST(
     );
   }
 
-  const [binding] = await db
-    .select()
-    .from(agentBinding)
-    .where(eq(agentBinding.id, session!.activeBindingId))
-    .limit(1);
-
+  const decided = calledSeat
+    ? { kind: "send" as const, seatKeys: [calledSeat], prompt }
+    : { kind: "send" as const, seatKeys: [], prompt };
+  const dests = await destBindingsForSend({
+    sessionId,
+    decided,
+    referenceTurnId,
+  });
+  const [stickyRow] = dests.length
+    ? [dests[dests.length - 1]]
+    : await db
+        .select()
+        .from(agentBinding)
+        .where(eq(agentBinding.id, session!.activeBindingId))
+        .limit(1);
+  const binding = stickyRow;
   if (!binding) {
     return Response.json({ error: "No active binding" }, { status: 400 });
+  }
+  const bindings = dests.length ? dests : [binding];
+  if (dests.length) {
+    await setActiveBinding(sessionId, dests[dests.length - 1].id);
   }
 
   const seatKey = (binding.seatKey ?? "pm") as SeatKey;
   const seatLabel = binding.label ?? seatKeyToLabel(seatKey);
 
-  if (!isTravisSeat(seatKey)) {
-    try {
-      await requireOpenMember(sessionId, binding.id);
-    } catch (err) {
-      if (err instanceof MembershipError) {
-        return Response.json({ error: err.message }, { status: err.status });
+  try {
+    for (const dest of bindings) {
+      if (!isTravisSeat(dest.seatKey)) {
+        await requireOpenMember(sessionId, dest.id);
       }
-      throw err;
     }
+  } catch (err) {
+    if (err instanceof MembershipError) {
+      return Response.json({ error: err.message }, { status: err.status });
+    }
+    throw err;
   }
 
-  if (isTravisSeat(seatKey)) {
+  const travisBinds = bindings.filter((b) => isTravisSeat(b.seatKey));
+  const cursorBinds = bindings.filter((b) => !isTravisSeat(b.seatKey));
+
+  if (travisBinds.length) {
     await noteTravisUnwired(sessionId);
     const fromCall = calledSeat
       ? isVocativeOnlyCall(match.cleanedText, remainder.trim(), calledSeat)
       : false;
     const travisPrompt = fromCall || !prompt ? "" : prompt;
-    if (!travisPrompt) {
+    if (!travisPrompt && !cursorBinds.length) {
       return Response.json({
         matched: false,
         routerHandled: true,
@@ -262,35 +281,37 @@ export async function POST(
         activeLabel: seatLabel,
       });
     }
-    const encoder = new TextEncoder();
-    const stream = new ReadableStream({
-      async start(controller) {
-        const send = (event: string, data: unknown) => {
-          controller.enqueue(encoder.encode(sse(event, data)));
-        };
-        try {
-          await pipeTravisText({
-            sessionId,
-            prompt: travisPrompt,
-            send,
-            referenceTurnId,
-          });
-        } catch (err) {
-          send("error", {
-            error: err instanceof Error ? err.message : String(err),
-          });
-        } finally {
-          controller.close();
-        }
-      },
-    });
-    return new Response(stream, { headers: sseHeaders() });
+    if (travisPrompt && !cursorBinds.length) {
+      const encoder = new TextEncoder();
+      const stream = new ReadableStream({
+        async start(controller) {
+          const send = (event: string, data: unknown) => {
+            controller.enqueue(encoder.encode(sse(event, data)));
+          };
+          try {
+            await pipeTravisText({
+              sessionId,
+              prompt: travisPrompt,
+              send,
+              referenceTurnId,
+            });
+          } catch (err) {
+            send("error", {
+              error: err instanceof Error ? err.message : String(err),
+            });
+          } finally {
+            controller.close();
+          }
+        },
+      });
+      return new Response(stream, { headers: sseHeaders() });
+    }
   }
 
-  if (await seatHasActiveRun(binding)) {
+  if (cursorBinds.length === 1 && (await seatHasActiveRun(cursorBinds[0]))) {
     const queue = await enqueueOnSeat({
       sessionId,
-      binding,
+      binding: cursorBinds[0],
       text: prompt,
     });
     return Response.json({
@@ -298,8 +319,10 @@ export async function POST(
       queued: true,
       queue,
       matchedPhrase: match.matchedPhrase,
-      activeSeatKey: seatKey,
-      activeLabel: seatLabel,
+      activeSeatKey: (cursorBinds[0].seatKey ?? "pm") as SeatKey,
+      activeLabel: cursorBinds[0].label ?? seatKeyToLabel(
+        (cursorBinds[0].seatKey ?? "pm") as SeatKey,
+      ),
     });
   }
 
@@ -310,14 +333,23 @@ export async function POST(
         controller.enqueue(encoder.encode(sse(event, data)));
       };
       try {
-        await sendOrEnqueue({
-          sessionId,
-          binding,
-          prompt,
-          send,
-          matchedPhrase: match.matchedPhrase,
-          referenceTurnId,
-        });
+        if (travisBinds.length) {
+          await pipeTravisText({
+            sessionId,
+            prompt,
+            send,
+            referenceTurnId,
+          });
+        }
+        if (cursorBinds.length) {
+          await sendOrEnqueueMany({
+            sessionId,
+            bindings: cursorBinds,
+            prompt,
+            send,
+            referenceTurnId,
+          });
+        }
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         send("error", { error: msg });
