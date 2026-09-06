@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   OPERATOR_COOKIE,
+  isOpenDesk,
   isOperatorEmail,
   normalizeOperatorEmail,
   operatorLinkPath,
@@ -66,6 +67,25 @@ test("mail copy names the same link, not a code", () => {
   assert.match(body, /personal Travis link/);
   assert.match(body, /https:\/\/travis\.example\/enter\/tok/);
   assert.doesNotMatch(body, /password|one-time code/i);
+});
+
+test("open desk: explicit flag, else Vercel production only", () => {
+  assert.equal(isOpenDesk({}), false);
+  assert.equal(isOpenDesk({ TRAVIS_OPEN_DESK: "" }), false);
+  assert.equal(isOpenDesk({ TRAVIS_OPEN_DESK: "0" }), false);
+  assert.equal(isOpenDesk({ TRAVIS_OPEN_DESK: "1" }), true);
+  assert.equal(isOpenDesk({ TRAVIS_OPEN_DESK: "true" }), true);
+  assert.equal(isOpenDesk({ TRAVIS_OPEN_DESK: "YES" }), true);
+  assert.equal(isOpenDesk({ VERCEL_ENV: "production" }), true);
+  assert.equal(
+    isOpenDesk({ VERCEL_ENV: "production", TRAVIS_OPEN_DESK: "0" }),
+    false,
+  );
+  assert.equal(isOpenDesk({ VERCEL_ENV: "preview" }), false);
+  assert.equal(
+    isOpenDesk({ VERCEL_ENV: "preview", TRAVIS_OPEN_DESK: "1" }),
+    true,
+  );
 });
 
 test("cookie header yields the token and ignores neighbors", () => {

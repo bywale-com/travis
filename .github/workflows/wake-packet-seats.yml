@@ -1,6 +1,8 @@
 # Cheap gate in front of Cursor Automations.
 # GitHub path filter + this-push diff. No Cursor boot until a label lands.
 # Labels: wake-sa · wake-engineer · wake-pm-look · fail-look · emerge
+# Packet: this push lands PM-PACKET-NNN-*.md AND that file has **Wake:** sa
+#   → wake-sa. Missing / hold = wait. Filename alone is not the go.
 # Hotfix: this push lands HOTFIX-NNN-*.md → wake-engineer only (no wake-sa).
 # Label adds must be the founder (WAKE_GITHUB_TOKEN), not github-actions[bot].
 # Cursor's label trigger does not treat the Actions bot as the owner.
@@ -87,17 +89,41 @@ jobs:
           # "Hotfix NNN — …" (human tell). Skip SA. Do not re-wake Engineer
           # on later commits on the same PR (file not in this push).
           if echo "$files" | grep -E '^docs/register/HOTFIX-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$' | grep -q .; then
-            # Re-arm: label-added only fires on a fresh add. A leftover
-            # wake-engineer from an earlier push would otherwise stay silent.
-            gh pr edit "$pr" --remove-label wake-engineer || true
-            if gh pr edit "$pr" --add-label wake-engineer; then
-              echo "Hotfix. Labeled #$pr wake-engineer. No wake-sa."
+            # File plus title. Merging main into a packet PR brings HOTFIX
+            # files in this-push; that is not a hotfix cut.
+            title=$(gh pr view "$pr" --json title --jq .title)
+            if [[ "$title" == Hotfix\ * ]]; then
+              # Re-arm: label-added only fires on a fresh add. A leftover
+              # wake-engineer from an earlier push would otherwise stay silent.
+              gh pr edit "$pr" --remove-label wake-engineer || true
+              if gh pr edit "$pr" --add-label wake-engineer; then
+                echo "Hotfix. Labeled #$pr wake-engineer. No wake-sa."
+              else
+                echo "Hotfix. Could not add wake-engineer. Fine-grained PAT needs Issues write AND Pull requests write on this repo."
+              fi
             else
-              echo "Hotfix. Could not add wake-engineer. Fine-grained PAT needs Issues write AND Pull requests write on this repo."
+              echo "HOTFIX files in this push; PR title is not Hotfix ($title). No wake-engineer."
             fi
-          elif echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$'; then
-            gh pr edit "$pr" --add-label wake-sa
-            echo "Labeled #$pr wake-sa"
+          elif echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$' | grep -q .; then
+            # Filename is not the go. Prose "then SA" is not the go.
+            # Only an exact **Wake:** sa line on a packet in this push.
+            # Missing / hold / anything else = wait. No wake-sa.
+            go=""
+            while IFS= read -r pkt; do
+              [[ -z "$pkt" ]] && continue
+              if git show "$AFTER:$pkt" | grep -q '^\*\*Wake:\*\* sa[[:space:]]*$'; then
+                echo "$pkt has Wake: sa"
+                go=1
+              else
+                echo "$pkt is on hold (no **Wake:** sa). No wake-sa from this file."
+              fi
+            done < <(echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$')
+            if [[ -n "$go" ]]; then
+              gh pr edit "$pr" --add-label wake-sa
+              echo "Labeled #$pr wake-sa"
+            else
+              echo "Packet waiting. No wake-sa."
+            fi
           fi
 
           if echo "$files" | grep -E '^docs/register/SYSTEMS-CHANGE-PACKET-.+\.md$'; then

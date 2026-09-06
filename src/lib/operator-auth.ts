@@ -86,6 +86,25 @@ export function operatorLinkText(url: string): string {
   ].join("\n");
 }
 
+/**
+ * Open desk for plates / agents. Same rooms as the preferred operator.
+ * On when TRAVIS_OPEN_DESK is 1/true/yes, or when unset on Vercel production
+ * (psi). Off when the flag is 0/false/off/no. Cookie still wins.
+ */
+export function isOpenDesk(env?: {
+  TRAVIS_OPEN_DESK?: string;
+  VERCEL_ENV?: string;
+}): boolean {
+  const src = env ?? {
+    TRAVIS_OPEN_DESK: process.env.TRAVIS_OPEN_DESK,
+    VERCEL_ENV: process.env.VERCEL_ENV,
+  };
+  const v = src.TRAVIS_OPEN_DESK?.trim().toLowerCase();
+  if (v === "0" || v === "false" || v === "off" || v === "no") return false;
+  if (v === "1" || v === "true" || v === "yes") return true;
+  return src.VERCEL_ENV === "production";
+}
+
 export function tokenFromCookieHeader(header: string | null): string {
   if (!header) return "";
   for (const part of header.split(";")) {

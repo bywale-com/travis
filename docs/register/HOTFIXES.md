@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **077**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **079**. |
 | PR title | `Hotfix NNN — …` (human tell). Action: this push lands `HOTFIX-NNN-*.md` → `wake-engineer` only. No `wake-sa`. |
 | Test | Every hotfix gets a `HOTFIX-NNN-*-TEST.md` (same job as a packet test). Emerge mails that sheet. |
 
@@ -16,6 +16,8 @@
 
 | # | File | Cut |
 |---|------|-----|
+| 078 | [`HOTFIX-078-OPEN-DESK-BUILD.md`](./HOTFIX-078-OPEN-DESK-BUILD.md) | 077 typecheck: do not pass `process.env` as `isOpenDesk` default |
+| 077 | [`HOTFIX-077-OPEN-DESK.md`](./HOTFIX-077-OPEN-DESK.md) | `TRAVIS_OPEN_DESK` skips the login door; same operator rooms; 053 stays |
 | 076 | [`HOTFIX-076-SEAT-STREAM.md`](./HOTFIX-076-SEAT-STREAM.md) | Dest closer: one finished Log message; Stream card holds the rest |
 | 075 | [`HOTFIX-075-APPLY-HANG.md`](./HOTFIX-075-APPLY-HANG.md) | Apply 074 SQL; recut C + B so Look takes a hotfix and Engineer needs `DATABASE_URL` |
 | 074 | [`HOTFIX-074-HOTFIX-PATH.md`](./HOTFIX-074-HOTFIX-PATH.md) | Hotfix skips SA; Action wakes Engineer; hang this PM bind |

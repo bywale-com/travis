@@ -12,6 +12,10 @@
 
 **026 Serve is on [#134](https://github.com/bywale-com/travis/pull/134).** Follow-on dest inherits the last open dest ticket (`dest_job` then last dest user, then `ensureViaTravis`). `stampPassOn` does not retarget a dest line that already has `initiative_id`. Ticket Messages / `readInitiative` list dest lines + every cursor-seat post + completed Stream cards via existing hang. `heard_at` / `seen_at` are isolate-once + migrate, and both columns exist on live Travis Postgres. Offer copy is locked; Hear reuses `summarizeSeatReply`; Skip writes `heard_at`. Dest-job closer is `speakable=false`. First icon + Artifacts sheet + full. Do not remint 023–025. Do not remint hang SQL.
 
+**078 / 077 open desk** — on `main`. Production psi is open desk unless `TRAVIS_OPEN_DESK=0`. Do not remint 053 tables.
+
+**076 dest closer is on [#130](https://github.com/bywale-com/travis/pull/130).** Dest **done** and `reapFinishedLiveRuns` land **one** speakable `agent_post` — last stream `message` body, or `postText` if there is no event. `closeStream.closeTurnId` is that row. Stream events stay; same `StreamCard` as Travis. Grain: `decideDestStreamClose` in [`src/lib/stream.ts`](../../src/lib/stream.ts). Sites: [`src/server/seat-pipe.ts`](../../src/server/seat-pipe.ts) `driveDestCursorEvents` and `reapFinishedLiveRuns`. `dispatch.ts` stand-in left as one post. 025 Travis close not reminted. 074 SQL not reminted. Catalog `pm` not touched.
+
 Human leftover on 075: dest **by who** (`technical-pm`) on the phone. Do not mail catalog `pm`.
 
 Next specified-and-clear cut is **022** ports from the signed packet on [#120](https://github.com/bywale-com/travis/pull/120). Do not remint `travis.port`. Do not remint 023, 024, 025, 026, or 076. Do not remint the 074 SQL. Do not send **That’s fine.**
@@ -19,7 +23,7 @@ Next specified-and-clear cut is **022** ports from the signed packet on [#120](h
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **076** planted. Next number **077**. |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **078** on `main`. Next number **079**. |
 | One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
@@ -30,7 +34,7 @@ Next specified-and-clear cut is **022** ports from the signed packet on [#120](h
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
 | Busy room (lived) | `0e8875f8-283b-4dae-bf54-76c82a05b6ef` (title “Travis”) |
 
-**Do not redo** 012, 013, 014, 015, 016, 020 first slice, 021, 023, 024, 025, 026, 062, 064, 065, 068, 069, 070, 071, 072, 073, 074 SQL, the 075 live hang, or the 076 dest closer. Do not plant **022** except from the signed packet on #120. Do not send **That’s fine.** from Engineer.
+**Do not redo** 012, 013, 014, 015, 016, 020 first slice, 021, 023, 024, 025, 026, 062, 064, 065, 068, 069, 070, 071, 072, 073, 074 SQL, the 075 live hang, the 076 dest closer, or **077 / 078** open desk. Do not plant **022** except from the signed packet on #120. Do not send **That’s fine.** from Engineer.
 
 ---
 
@@ -111,7 +115,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 ## Next Engineer job
 
 1. Accept the seat from the paste below. Fetch `main`. Read **this file**, then [`ENGINEER.md`](../seats/ENGINEER.md), then `AGENTS.md`.
-2. Do not restart 012 / 013 / 014 / 015 / 023 / 024 / 025 / 026 / 062 / 064 / 065. Do not remint the 074 SQL file. Do not remint the 075 hang. Do not remint the 076 dest closer. Do not mint a store. Do not append PM or SA logs.
+2. Do not restart 012 / 013 / 014 / 015 / 023 / 024 / 025 / 026 / 062 / 064 / 065 / 077 / 078. Do not remint the 074 SQL file. Do not remint the 075 hang. Do not remint the 076 dest closer. Do not mint a store. Do not append PM or SA logs.
 3. **022** ports on [#120](https://github.com/bywale-com/travis/pull/120) is the pickup after 026 merges. Do not remint `travis.port`. Dest by who `technical-pm` is human leftover on 075 — do not mail catalog `pm`. Do not send **That’s fine.**
 4. When **you** stop: rewrite the **Current** lines at the top of this file (where we stopped, last plant, next hotfix number) so the next bind does not start from a transcript. Then you may write **This bind is done**.
 

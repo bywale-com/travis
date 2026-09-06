@@ -15,7 +15,9 @@
 Cursor Automations cannot trigger “when an agent finishes.” Closest documented seam: **SA commits the change packet on the packet PR → that push wakes Engineer.**
 
 ```text
-PM locks PM-PACKET-NNN on a PR
+PM writes PM-PACKET-NNN on a PR with **Wake:** hold  (or no Wake line)
+        ↓  plates, stamps, talk — Action does not label
+Founder go → PM flips that line to **Wake:** sa and pushes
         ↓  label wake-sa
 SA automation — full SA protocol
         ↓  label wake-engineer
@@ -26,6 +28,15 @@ Technical PM look + what it can test
         ↓  Pass → emerge. Action emails the *-TEST.md. Human walks that sheet.
 ```
 
+**Waiting is a line the Action greps.** Draft is not the hold — we keep PRs draft through plant. Chat prose (“then SA”, “don’t wake Engineer”) is not the hold. The filename `PM-PACKET-NNN` is not the hold. Exact line on the packet, whole line:
+
+```text
+**Wake:** hold
+**Wake:** sa
+```
+
+Missing = hold. Flip `hold` → `sa` and push: that is the get-go. One commit. No founder GitHub click. No fourth automation.
+
 **Same PR** is law. Do not open a cousin. Turn **off** “Pull request creation” on both automations if the UI lets you; the prompts also forbid it.
 
 A prompt gate **cannot** skip the bill. Official Cursor docs: automations **are** cloud agents; they use the model’s **maximum** context window; **there is no context-window toggle**; they are billed as cloud-agent usage. Every matching GitHub event boots a Max-mode agent, then the prompt speaks. Spin-up is already a model call with the fat system + automation prompt. Stopping in 30 seconds still paid that call. Today’s 27 boots were that, twice per stamp.
@@ -35,7 +46,8 @@ Cursor source-control triggers have **no path filter** (asked for; not shipped).
 **Redesign — cheap gate in GitHub, Cursor only when the label lands:**
 
 ```text
-push touches a real PM-PACKET-NNN (not *-TEST.md)
+this push touches a real PM-PACKET-NNN (not *-TEST.md)
+  AND that file has **Wake:** sa
         ↓  GitHub Action (no LLM)
 label  wake-sa
         ↓
@@ -48,7 +60,7 @@ Technical PM look+test
         Fail → label  fail-look  (loop)
 ```
 
-Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml). It diffs **this push** (`before…after`), not the whole PR. No Cursor token until the label is added.
+Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml). It diffs **this push** (`before…after`), not the whole PR. It greps `**Wake:** sa` on the packet at `after`. No Cursor token until the label is added. A packet on hold can sit on the PR; plates may edit it; no boot.
 
 **Who tags.** `GITHUB_TOKEN` is `github-actions[bot]`. Cursor’s label trigger has not woken A or B from that actor. Repo secret **`WAKE_GITHUB_TOKEN`** = a PAT for the GitHub user connected to the automations (you). Fine-grained: this repo, Issues read/write. The Action uses that for `gh pr edit` labels. Unset → bot (old path). Not `TRAVIS_GITHUB_TOKEN` (unfold). Do not paste the token in chat.
 
@@ -56,6 +68,7 @@ Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake
 
 ```text
 this push lands HOTFIX-NNN-*.md
+  AND the PR title starts with Hotfix
         ↓  GitHub Action (no LLM)
 label  wake-engineer     (no wake-sa)
         ↓
@@ -178,6 +191,7 @@ A clean future packet = **3 boots** if no loop; **3 + 2×N** if it loops N times
 
 - Do not mint a cousin PR.
 - Do not run SA because plates, FACE, the Phase One log, or a **hotfix** file moved.
+- Do not run SA because a `PM-PACKET-NNN` file exists. Run only when that file has `**Wake:** sa`.
 - Do not run Engineer because the PM stamped. A hotfix file **does** run Engineer.
 - Do not treat this as Travis product chrome. This is Cursor Automations waking seats.
-- Do not remint 023 / 024 / 025. Next SA packet is **026**. Next PM packet is **010**.
+- Do not remint 023 / 024 / 025 / 026. Next SA packet is **027**. Next PM packet is **011**.
