@@ -116,7 +116,7 @@ export function operatorFromRequest(req: Request): string {
   return tokenFromCookieHeader(req.headers.get("cookie"));
 }
 
-/** Preferred seeded operator when TRAVIS_OPEN_DESK is on. Else null. */
+/** Preferred seeded operator when the desk is open. Else null. */
 export async function openDeskOperator(): Promise<Operator | null> {
   if (!isOpenDesk()) return null;
   await ensureOperatorStore();

@@ -92,7 +92,10 @@ export function operatorLinkText(url: string): string {
  * (psi). Off when the flag is 0/false/off/no. Cookie still wins.
  */
 export function isOpenDesk(
-  env: { TRAVIS_OPEN_DESK?: string; VERCEL_ENV?: string } = process.env,
+  env: { TRAVIS_OPEN_DESK?: string; VERCEL_ENV?: string } = {
+    TRAVIS_OPEN_DESK: process.env.TRAVIS_OPEN_DESK,
+    VERCEL_ENV: process.env.VERCEL_ENV,
+  },
 ): boolean {
   const v = env.TRAVIS_OPEN_DESK?.trim().toLowerCase();
   if (v === "0" || v === "false" || v === "off" || v === "no") return false;

@@ -16,7 +16,7 @@
 
 | # | File | Cut |
 |---|------|-----|
-| 077 | [`HOTFIX-077-OPEN-DESK.md`](./HOTFIX-077-OPEN-DESK.md) | `TRAVIS_OPEN_DESK` skips the login door; same operator rooms; 053 stays |
+| 077 | [`HOTFIX-077-OPEN-DESK.md`](./HOTFIX-077-OPEN-DESK.md) | Unset on psi (or `TRAVIS_OPEN_DESK=1`) opens the desk; same operator rooms; 053 stays |
 | 076 | [`HOTFIX-076-SEAT-STREAM.md`](./HOTFIX-076-SEAT-STREAM.md) | Dest closer: one finished Log message; Stream card holds the rest |
 | 075 | [`HOTFIX-075-APPLY-HANG.md`](./HOTFIX-075-APPLY-HANG.md) | Apply 074 SQL; recut C + B so Look takes a hotfix and Engineer needs `DATABASE_URL` |
 | 074 | [`HOTFIX-074-HOTFIX-PATH.md`](./HOTFIX-074-HOTFIX-PATH.md) | Hotfix skips SA; Action wakes Engineer; hang this PM bind |

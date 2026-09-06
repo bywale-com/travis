@@ -4,6 +4,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-06** · Hotfix 077 · [PR #135](https://github.com/bywale-com/travis/pull/135) — No cookie on psi is the preferred operator’s desk (preview and local stay the login door unless the flag is on), because plate chrome needs a photo of the live app and a cousin host drifts.
 - **2026-09-06** · Hotfix 076 · [PR #130](https://github.com/bywale-com/travis/pull/130) — Dest done and reap land one finished seat bubble on the Log, and the Stream card hangs on that row, because 014 was dumping every dest chat onto the tape and only the last one got a card.
 - **2026-09-06** · Hotfix 075 · [PR #130](https://github.com/bywale-com/travis/pull/130) — The 074 hang SQL ran on live Travis Postgres and hung this Technical PM bind as `technical-pm` in room Travis (catalog `pm` untouched), because the file was already on the PR and the prior bind had no `DATABASE_URL`.
 - **2026-09-06** · Hotfix 074 · [PR #130](https://github.com/bywale-com/travis/pull/130) — A hotfix file wakes Engineer only, and hang SQL plants the living Technical PM as a new person in room Travis (not catalog `pm`), because dest-as-mail of a `bc-` is nobody and overwriting `pm` was the comic fail.
