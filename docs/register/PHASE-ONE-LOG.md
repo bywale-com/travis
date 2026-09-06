@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:00 UTC — Tech PM-centric room defined (alignment). Dest by who is the room. Role dest `pm` is the hole. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-06 02:10 UTC — Seat Stream same as Travis. Log gets only the finished message. Card holds the rest. No new plates. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2393,3 +2393,64 @@ Not tonight (held): hang tool (Travis’s). Seat health. A cousin room.
 - Do not plant a PM dashboard.
 
 **Ask:** Is room Travis the Tech PM-centric room (already hung here)? When you say “PM,” should that dest this bind, or only dest by name `technical-pm`?
+
+---
+
+## 2026-09-06 02:10 UTC — Seat Stream is Travis’s Stream (founder)
+
+**Kind:** Type B + founder lock. Not a packet until he says cut. No new plates.
+
+**Founder (preserved):** session logs… so freaking disorganized… first one that sent it to the PM seat, was my fault… forgot to tag Travis… second one I tagged Travis, and it did well… even though it said there was no technical PM, even though it found that there was a technical PM… that’s why the stream is so important… only Travis has a card. No one else… no chats populating in the log, but at the end, all those chats then just, boom, populate in the log. That’s not what we wanted. We wanted all the messages and exactly how the stream looks to be like that for everyone… When it’s completed, only the completed message, only the last message, essentially the finished message, is what appears in the logs. Everything else… should be inside the card… I wouldn’t even say we need to generate any plate for seat stream cards, it just has to look the way Travis’s looks.
+
+**Capability (held, not this cut):** everything he does in the Cursor chat should be inside Travis. Hang tool later. This stamp is the Stream miss, not that gap.
+
+**First dest:** his. Forgot to tag Travis. Role dest `pm` can still miss this bind (02:00). Second dest tagged Travis — person dest `technical-pm` is the path that seated this look.
+
+**Stood up (quote). Matches the boom.**
+
+Dest opens a stream and writes live events (`seat-pipe.ts` `openStream` / `writeStreamMessage` / thought / process). The Log stays empty while they work.
+
+At **done**, every stream `message` body is landed as a Log post:
+
+```696:711:src/server/seat-pipe.ts
+  const landed = streamId ? await messageBodies(streamId) : [];
+  const beats = landed.length
+    ? landed
+    : postText.trim()
+      ? [postText.trim()]
+      : cancelled || bareError
+        ? []
+        : ["Run finished (no assistant text)."];
+  for (const beat of beats) {
+    postTurn = await absorbStreamingAgentPost({
+      sessionId,
+      userTurnId: userTurn.id,
+      seatKey,
+      text: beat,
+    });
+  }
+```
+
+Then `closeStream` hangs the card on **the last** `postTurn` only. Intermediate beats sit on the Log with no card. That is the boom. 014 wanted Cursor-visible beats on the Log. 008 said the Log is completed turns. This walk chooses **008**.
+
+`StreamCard` in `Room.tsx` is not Travis-only — it hangs on `closeTurnId === turn.id`. `MotionCard` **is** Travis-only. “Only Travis has a card” is the pile of seat bubbles plus that 023 receipt, not a missing `StreamCard` component.
+
+No new plates. Same `StreamCard` / `StreamDoor` as Travis.
+
+### Lock (this stamp)
+
+- Everyone (Travis and every dest seat): live work is Stream. Door = glowing mark in In this room.
+- Done: **one** finished speakable `agent_post` on the Log. Card **above** that line. Card = the Stream (trigger + every event).
+- Do not dump stream messages onto the Log.
+
+### Specified and clear (packet when he says cut — **010**, SA **026**)
+
+1. Dest does not land `messageBodies` as Log rows. One closer post. Card on that id.
+2. Same Stream card chrome as Travis. No seat-stream plates.
+3. Do not remint `travis.stream`. Do not remint 023 MotionCard as this.
+
+### Specified but not clear
+
+014 beat-split vs this one-closer law — SA names the recut. Thought / process never were Log rows; they stay events. Whether a seat’s last Cursor bubble is the closer text is SA.
+
+**Ask:** cut **010**?
