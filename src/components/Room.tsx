@@ -420,7 +420,6 @@ export function Room({
   );
   const plateRef = useRef(plate);
   const doorRef = useRef(door);
-  const ticketIdRef = useRef<string | null>(null);
   const backlogRowsRef = useRef<BacklogItem[]>([]);
   const backlogViewRef = useRef(backlogView);
 
