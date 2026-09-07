@@ -47,6 +47,8 @@ export type ContextTurn = {
   kind: string;
   seatKey?: string | null;
   text: string;
+  /** Tape speakable flag. Dest-with-context reads this; Here clip does not. */
+  speakable?: boolean;
 };
 
 export type RunningNote = { seatLabel: string; elapsedMs: number };

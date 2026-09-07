@@ -4,6 +4,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-07** · SCP-030 · [PR #147](https://github.com/bywale-com/travis/pull/147) — Type is Deep Agents and dest-with-context sends the unclipped print plus the ask, because dest was mailing the wrap while Here clip killed the list.
+
 - **2026-09-06** · SCP-029 · [PR #144](https://github.com/bywale-com/travis/pull/144) — The room holds one SSE that resumes from last `seq` and other-request writes `NOTIFY travis_room`, a failed GET keeps last good rows, and poll is only catch-up while the wire is down, because a smarter whole-tape tick was still guessing.
 - **2026-09-06** · SCP-028 · [PR #142](https://github.com/bywale-com/travis/pull/142) — Reply dests that post’s author, pictures in the Cursor turn hang under that Log post, and ticket Reply stays on the ticket, because a reply ignored the pointer, harvest missed visible plates, and Messages dumped him on the room Log.
 - **2026-09-06** · SCP-027 · [PR #140](https://github.com/bywale-com/travis/pull/140) — New is only a landing after the cutoff, a reply hangs on that message, dest timeout does not eat the Stream card, refresh stays put, and glass dest is Technical PM, because stale New, missing reply, a null close, and a rooms-list dump were the lived desk.
