@@ -1,6 +1,6 @@
 /**
- * SCP-030 — Deep Agents hang on Type. Dest seats stay Cursor.
- * StateBackend only. Default task / execute omitted.
+ * SCP-031 — Deep Agents hang on Type. Dest seats stay Cursor.
+ * StateBackend /print.md + /roster.md. wrapModelCall hangs files, not the request.
  */
 
 import {
@@ -9,20 +9,19 @@ import {
   StateBackend,
 } from "deepagents/node";
 import { ChatOpenAI } from "@langchain/openai";
-import {
-  isAIMessage,
-  isHumanMessage,
-  type BaseMessage,
-} from "@langchain/core/messages";
+import { isAIMessage, type BaseMessage } from "@langchain/core/messages";
 import { createMiddleware, tool } from "langchain";
+import { formatRosterFact } from "@/lib/dest-with-context";
 import { TRAVIS_TEXT_MODEL } from "@/lib/travis-models";
-import { isDestWithContextAsk } from "@/lib/dest-with-context";
 import {
   TRAVIS_SYSTEM,
   TRAVIS_TOOL_DECLS,
   runTravisTool,
 } from "@/server/travis-tools";
-import { unclippedPrintFor } from "@/server/dest-with-context";
+import {
+  rosterFactFor,
+  unclippedPrintFor,
+} from "@/server/dest-with-context";
 
 registerHarnessProfile("openai", {
   excludedTools: ["task", "execute"],
@@ -53,13 +52,6 @@ function contentToText(content: unknown): string {
     })
     .join("")
     .trim();
-}
-
-function lastUserText(messages: BaseMessage[]): string {
-  for (let i = messages.length - 1; i >= 0; i--) {
-    if (isHumanMessage(messages[i])) return contentToText(messages[i].content);
-  }
-  return "";
 }
 
 function lastAssistantText(messages: unknown[]): string {
@@ -95,13 +87,35 @@ function wrapTravisTools(sessionId: string) {
   );
 }
 
-const destWithContextMiddleware = createMiddleware({
-  name: "dest-with-context",
-  wrapModelCall: async (request, handler) => {
-    void isDestWithContextAsk(lastUserText(request.messages));
-    return handler(request);
-  },
-});
+function kitFiles(print: string, roster: string) {
+  const now = new Date().toISOString();
+  const file = (content: string) => ({
+    content,
+    mimeType: "text/plain" as const,
+    created_at: now,
+    modified_at: now,
+  });
+  return {
+    "/print.md": file(print),
+    "/roster.md": file(roster),
+  };
+}
+
+function destKitMiddleware(sessionId: string) {
+  return createMiddleware({
+    name: "dest-with-context",
+    wrapModelCall: async (request, handler) => {
+      const print = await unclippedPrintFor(sessionId).catch(() => "");
+      const roster = await rosterFactFor(sessionId).catch(() =>
+        formatRosterFact(""),
+      );
+      const files = kitFiles(print, roster);
+      const state = request.state as { files?: Record<string, unknown> };
+      state.files = { ...(state.files ?? {}), ...files };
+      return handler(request);
+    },
+  });
+}
 
 function travisChatModel() {
   return new ChatOpenAI({
@@ -112,24 +126,15 @@ function travisChatModel() {
   });
 }
 
-function printFile(print: string) {
-  const now = new Date().toISOString();
-  return {
-    "/print.md": {
-      content: print,
-      mimeType: "text/plain" as const,
-      created_at: now,
-      modified_at: now,
-    },
-  };
-}
-
 export async function invokeDeepAgent(params: {
   sessionId: string;
   prompt: string;
   room: string;
 }): Promise<string> {
   const print = await unclippedPrintFor(params.sessionId).catch(() => "");
+  const roster = await rosterFactFor(params.sessionId).catch(() =>
+    formatRosterFact(""),
+  );
   const input = params.room
     ? `${params.room}\n\n${params.prompt}`
     : params.prompt;
@@ -138,12 +143,12 @@ export async function invokeDeepAgent(params: {
     systemPrompt: TRAVIS_SYSTEM,
     tools: wrapTravisTools(params.sessionId),
     backend: new StateBackend(),
-    middleware: [destWithContextMiddleware],
+    middleware: [destKitMiddleware(params.sessionId)],
     subagents: [],
   });
   const result = await agent.invoke({
     messages: [{ role: "user", content: input }],
-    files: printFile(print),
+    files: kitFiles(print, roster),
   });
   const messages = (result as { messages?: unknown[] }).messages ?? [];
   return lastAssistantText(messages);

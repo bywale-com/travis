@@ -637,21 +637,22 @@ export async function runTravisTool(params: {
     }
   }
 
-  const destFork =
-    name === "send_to_seat" || name === "dispatch_to_seat"
-      ? await destWithContextFor(sessionId).catch(() => null)
-      : null;
+  const destLeave =
+    name === "send_to_seat" || name === "dispatch_to_seat";
+  const destFork = destLeave
+    ? await destWithContextFor(sessionId).catch(() => null)
+    : null;
 
   const processEv = opened
     ? await startStreamProcess({
         streamId: opened.id,
-        tool: destFork ? "dest_with_context" : name,
-        body: destFork ? destFork.print : argsBody(args),
+        tool: destLeave ? "dest_with_context" : name,
+        body: destLeave ? (destFork?.print ?? "") : argsBody(args),
       }).catch(() => null)
     : null;
 
   const finish = async (result: ToolResult): Promise<ToolResult> => {
-    if (processEv && !destFork) {
+    if (processEv && !destLeave) {
       await finishStreamProcess({
         eventId: processEv.id,
         body: result.text,
