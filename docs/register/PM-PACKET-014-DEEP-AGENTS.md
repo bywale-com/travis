@@ -26,6 +26,8 @@
 
 > We all working towards deep agents right now, right? Like as a packet, right?
 
+> Calm down. Before we do that … where would I see the difference? Would I see a difference in the stream? … that's where we see how Jarvis is thinking what it's thinking about. Will I see a difference in the stream, in the content of the stream, and so on?
+
 ---
 
 ## What this packet is
@@ -43,6 +45,7 @@ Lived miss this morning: dest sent the **ask**, not the **context**. That dest-w
 3. **Here stays clipped.** `LINE_CAP` / `WINDOW_TURNS` / `WINDOW_CHAR_CAP` stay on Travis’s mouth (cost). Dest assembly and the harness filesystem read **unclipped** tape. Do not “fix” dest by unclipping Here.
 4. **Not a silver bullet.** The kit does not write the protocol. We write the forks. Dest to Technical PM / SA / Engineer is still a Cursor run unless SA ascribes that wire. A subagent with “include the chat” and no body is the same miss.
 5. **Log · Type first.** Voice parked this cut (012). Phone chrome unchanged. No Hear it / Skip buttons.
+6. **Stream chrome stays. Stream content changes.** 008 desk (live pane, Log card) is not recut. Events stay `message` / `process` / `thought`. What you read in **process** is the harness — this morning was `read_initiative` × 8 then a dest wrap. After this cut you should see dest-with-context as a process (the print in the dest body), not a mystery wrap. Do not mint a fourth event kind.
 
 Do not plant a second Travis. Do not mint `/protocols/technical-pm.md`. Do not remint 011–013.
 

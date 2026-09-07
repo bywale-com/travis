@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:12 UTC — Packet 014 Deep Agents. Wake hold. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:16 UTC — Stream content would change; chrome stays. 014 hold. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3096,3 +3096,17 @@ His own list was 2086 characters. Next turn it is `You said:` + 300. Dest `text`
 **Yes.** The packet is Deep Agents — Travis’s harness. [`PM-PACKET-014-DEEP-AGENTS.md`](./PM-PACKET-014-DEEP-AGENTS.md) · test [`PM-PACKET-014-DEEP-AGENTS-TEST.md`](./PM-PACKET-014-DEEP-AGENTS-TEST.md). SA **030**. **Wake:** hold until go.
 
 First fork in that harness: dest-with-context (this morning’s miss). Kit is not magic. Cost later. Do not remint 011–013.
+
+---
+
+## 2026-09-07 13:16 UTC — Stream is where you’d see it (founder)
+
+**Kind:** Face question. Same 014. **Wake:** hold. Flag 14:00 stands.
+
+**Founder (preserved):** If by 1st fork, and, dest with context, you mean, deep agents, okay, like we're, gonna, we're going to implement the, blockchain deep agents, then yes. … yes, I want us to immediately start working towards that. … But actually, you know what? Calm down. Before we do that if, let me just think. … where would I see the difference? Would I see a difference in the stream? … stream is the perfect word because that's where we see how Jarvis is thinking what it's thinking about. Will I see a difference in the stream, in the content of the stream, and so on?
+
+**LangChain Deep Agents** (not blockchain). Packet is that. Go not flipped.
+
+**Stream.** Chrome stays (008). Kinds stay `message` / `process` / `thought`. **Content of process would change** — that’s the harness you watch, same reason Cursor’s harness is visible. This morning: `read_initiative` × 8, `search_room` 185, dest wrap. After: dest-with-context should show as process whose body **is** the print, not “include the chat.” If Stream still only showed today’s wrap, you would not see the cut.
+
+**Ask.** Is that the difference you want on the glass? Then go.
