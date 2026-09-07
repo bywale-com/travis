@@ -16,7 +16,7 @@ A seat bound to a git repo writes only in its column.
 
 Engineer `src/` split: face `src/components/` + `src/components/plates/`; tokens `src/theme/` + `src/surfaces/`; grain `src/lib/`; machine `src/server/` + `src/server/db/`; HTTP `src/app/api/`. Tests sit next to grain as `src/lib/*.test.ts`.
 
-Everyone reads `docs/README.md`, `docs/register/`, `docs/build-foundation/`, `docs/method/`. Write only your trail.
+Everyone reads `docs/BUILD-PROTOCOL.md`, `docs/README.md`, `docs/register/`, `docs/build-foundation/`, `docs/method/`. Write only your trail.
 
 ## 2. Travis house (this tree)
 

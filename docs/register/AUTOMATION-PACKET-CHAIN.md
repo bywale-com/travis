@@ -1,5 +1,7 @@
 # Automation — packet → SA → Engineer (same PR)
 
+**Start here for the whole build:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md). This file is the cheap gate and the three automations.
+
 **Seat:** Technical PM. Founder lock 2026-09-05: when a packet lands, spin SA for the full process protocol; when SA completes, Engineer builds; **all on the same PR the packet was placed in.**
 
 **Parked-since:** PHASE-ONE-LOG **19:44 UTC 2026-08-25** (PM-only speak; auto SA / Engineer chain). This is that seam.

@@ -1,5 +1,7 @@
 # travis
 
+**How we build** (start to finish, one PR, three seats): [`docs/BUILD-PROTOCOL.md`](docs/BUILD-PROTOCOL.md).
+
 ## Implementation
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
@@ -80,6 +82,8 @@ Newest first. On completion of a packet or hotfix the Engineer **prepends** one 
 
 Travis is a **voice interface between you and Cursor** — speak instructions, hear replies, see images and artifacts when they cannot be spoken. Phone is the primary device. Cursor stays the execution surface; you never have to stare at it to stay in the loop.
 
+**How we build:** [`docs/BUILD-PROTOCOL.md`](docs/BUILD-PROTOCOL.md) — founder speaks → Technical PM packet → one PR → Systems Analyst → Engineer plants → look on this deployment → you walk the sheet → merge. Hotfix skips SA.
+
 **Agent seats** (paste-prompts + identity): [`docs/README.md`](docs/README.md) — Product Manager, Systems Analyst, and Engineer. Always-on for the Engineer: [`AGENTS.md`](AGENTS.md). Trails: [`docs/register/PHASE-ONE-LOG.md`](docs/register/PHASE-ONE-LOG.md) (PM/founder) · [`docs/register/SYSTEMS-ANALYST-LOG.md`](docs/register/SYSTEMS-ANALYST-LOG.md) (SA) · git + PRs (Engineer — do not append those logs).
 
 This repository starts as a **thin pipe** (v1): speech → Cursor agent run → stream → text-to-speech + chat pane. Triage / judgment is a later layer inside the same pipe, not a separate product.
@@ -114,8 +118,9 @@ Detailed seat READMEs: [`docs/seats/`](docs/seats/).
 
 | Doc | Job |
 |-----|-----|
+| [`docs/BUILD-PROTOCOL.md`](docs/BUILD-PROTOCOL.md) | **How we build** — scratch to merge |
 | [`docs/method/`](docs/method/) | How we think — decision constitution, two-column synthesis |
-| [`docs/build-foundation/`](docs/build-foundation/) | How we build — rudiments, surfaces, visual law |
+| [`docs/build-foundation/`](docs/build-foundation/) | How we build UI — rudiments, surfaces, visual law |
 | [`docs/build-foundation/PROJECT-BRIEF.md`](docs/build-foundation/PROJECT-BRIEF.md) | What to build next |
 
 ---
@@ -143,6 +148,7 @@ Open the app on a phone browser (or desktop Chrome). Say a done phrase (seeded: 
 ```
 src/                     # Next.js app (voice face + API)
 docs/
+  BUILD-PROTOCOL.md      # how we build, start to finish
   README.md              # seats front door (paste prompts)
   seats/                 # detailed PM / SA / Engineer READMEs
   method/                # portable Om Coda method

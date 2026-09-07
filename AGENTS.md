@@ -40,6 +40,7 @@ There is no third bucket called “cousin / later / I parked it.”
 
 | What | Where |
 |------|--------|
+| How we build | [`docs/BUILD-PROTOCOL.md`](docs/BUILD-PROTOCOL.md) |
 | PM trail + flagship | [`docs/register/PHASE-ONE-LOG.md`](docs/register/PHASE-ONE-LOG.md) · thesis [`docs/register/PHASE-ONE.md`](docs/register/PHASE-ONE.md) |
 | SA trail + packets | [`docs/register/SYSTEMS-ANALYST-LOG.md`](docs/register/SYSTEMS-ANALYST-LOG.md) · change packets under `docs/register/` when cut |
 | Engineer Current (pickup) | [`docs/register/ENGINEER-HANDOFF.md`](docs/register/ENGINEER-HANDOFF.md) |
