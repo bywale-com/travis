@@ -42,6 +42,7 @@ A little context: what the pocket was, what changed, the PR. Point at the packet
 | 029 | [`029-list-live/`](./029-list-live/) | [#144](https://github.com/bywale-com/travis/pull/144) |
 | 030 | [`030-deep-agents/`](./030-deep-agents/) | [#147](https://github.com/bywale-com/travis/pull/147) |
 | 031 | [`031-dest-harness/`](./031-dest-harness/) | [#154](https://github.com/bywale-com/travis/pull/154) |
+| 032 | [`032-compose/`](./032-compose/) | [#157](https://github.com/bywale-com/travis/pull/157) |
 
 ## Must-not
 
