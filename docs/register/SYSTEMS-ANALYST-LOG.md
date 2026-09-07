@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:40 UTC — **SCP-030 signed.** Deep Agents on Type; dest-with-context grain. PM-014 on [#147](https://github.com/bywale-com/travis/pull/147). Next number is **031**.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 16:55 UTC — **SCP-031 signed.** Dest harness recut: every dest send assembles ask + print. PM-015 on [#154](https://github.com/bywale-com/travis/pull/154). Next number is **032**.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -691,4 +691,37 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-030-DEEP-AGENTS.md`](./SYSTEMS-CHANGE-PACKET-030-DEEP-AGENTS.md)
 
 **Handoff:** Engineer plants 030 on **this same PR**. Next packet number is **031**. Do not remint 023–029. Do not remint 014 log-beats. Do not mint a cousin.
+
+---
+
+## 2026-09-07 16:55 UTC — SCP-031 dest harness recut (PM-015 on #154)
+
+**Kind:** Packet ascribe. Automation woke this seat. PM-015 + dest-harness test on this PR. No SYSTEMS-CHANGE-PACKET for dest harness recut was on the branch. 023–030 stay planted — not reminted. **015** disposable seats is a different packet — not this cut.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-015 lock + plates). Not PM. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** Every initiative and idea discussed in this chat goes alongside the dest prompt. Do not invent beside the kit. Cost fear later — file + dest mail once. Recut the dest path.
+
+**Staples (not scenery):** **Stream**. Process body = the **print**. Dest Log line = **ask + print**. **Technical PM** (seated dest, not a new person).
+
+**Quoted stood-up:**
+
+- `isDestWithContextAsk` / `MARKERS` (`dest-with-context.ts` L12–25). `destWithContextFor` returns null unless the last user hits that list and `unclippedPrint` finds a Travis speakable post.
+- Middleware `void isDestWithContextAsk(...)` then `handler(request)` (`travis-deep-agent.ts` L98–104). `/print.md` already seeded at invoke.
+- Dest rewrite only when that fork hits (`travis-tools.ts` L640–695).
+- `unclippedPrint` = last Travis speakable + last `WINDOW_TURNS` worthy, no `LINE_CAP`. `recentTurns` default `WINDOW_TURNS * 3`. `REQUEST_SCAN` 200 already stands.
+- `TRAVIS_SYSTEM` already dests `seat` with no `who`. 907 still created a person.
+
+**Ascribed:**
+
+1. **No remint** of 023–030 tables/columns. No filesystem table. No fourth Stream kind. No `/protocols/technical-pm.md`.
+2. **Drop the marker gate.** Dest leave always assembles last `kind=user` + dest print. Empty print → dest is the ask. Model wrap discarded.
+3. **Print source:** this session’s `isContextWorthy` `voice_turn` via `recentTurns(sessionId, REQUEST_SCAN)`. No `LINE_CAP`. No last-Travis-required. Here clip stays. Reuse `REQUEST_SCAN` — not a new cap.
+4. **`wrapModelCall`:** hang `/print.md` + `/roster.md` (`listSeatRoster` + named-dest lines). Do not inject print into the request. No phrase list.
+5. **Stream:** dest leave `tool=dest_with_context` `body` = the print. Do not overwrite with the receipt. Cheap `ok` is not dest.
+6. **Dest seats stay Cursor.** Do not remint `dest_job`. Live grain still runs in `runTravisTool`.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-031-DEST-HARNESS.md`](./SYSTEMS-CHANGE-PACKET-031-DEST-HARNESS.md)
+
+**Handoff:** Engineer plants 031 on **this same PR**. Next packet number is **032**. Do not remint 023–030. Do not remint 015 sit. Do not mint a cousin.
 
