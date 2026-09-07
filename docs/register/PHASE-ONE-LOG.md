@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 12:40 UTC — Last 2h on psi Log: Travis dest’d the capture, didn’t print. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 12:48 UTC — Founder recut: first list was fair; dest didn’t carry that context. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3006,3 +3006,23 @@ Face holds `GET /api/session/:id/events` with `afterSeq` / `Last-Event-ID`. Hear
 **Not this stamp:** Deep Agents. The initiative list. A table. A plant.
 
 **Ask.** Is that the problem you mean? Then Deep Agents.
+
+---
+
+## 2026-09-07 12:48 UTC — First list was fair; dest didn’t carry it (founder)
+
+**Kind:** Founder correction of the 12:40 stamp. Same thread. Flag 14:00 stands. Not a packet.
+
+**Founder (preserved):** Okay, so let me tell you how it, how the series of events appeared on my end. And you would see that this kind of matches. The 1st thing I said to Travis this morning, okay? The 1st command, because if you notice, I actually asked it twice this kind of, this kind of task. The 1st time I asked it, yes, there were some typographical errors. The transcription didn't, you know, send, it didn't, it didn't transcribe properly. And I was initially asking it, and I, I realized some of the things I even said didn't even capture, but the fuller message was exactly the message you see after, okay? Which was I want you to, you know, ask the technical PM to list out all the ideas and initiatives that we discussed yesterday that we haven't put into effect in order. Only about half of that message sent. So what did Travis do? And I think it did a good job. It actually just went through its, the initiatives in the room, unless you think it's not a good job, because maybe for some reason, fair? But I looked, I, I saw the stream, and it looked like it did a good job. It listed out, like, the bunch of initiatives and maybe ideas and so on, right? Then I noticed that, so what I did was in the 2nd message, what I asked it to do was, okay, what I was trying to ask it to tell it to do, by this message you're seeing of every discussed initiative. … of every discussed initiative that we've talked about in the chat, including the one I just, we just discussed here send all of that as context to the technical PM. And, that's like, so what did it do? That's the gap. He didn't do that, so that, yeah.
+
+**Recut (alignment, not the flag).** 12:40 called the first Stream “wrong object.” He is saying that first turn was truncated STT, fuller intent = ask Technical PM to list yesterday’s undelivered ideas in order, and Travis walking the room’s initiatives **was fair**. I do not hold “wrong object” on that first list.
+
+**The gap is the second send.** The list already sat on the tape (seq 882, 2086 characters). The dest (seq 886, 288 characters) is a wrap of the instruction:
+
+> Send to Technical PM: “Send what we've talked about in this chat…” Include the printed chat context and a summary of every discussed initiative…
+
+He said he would include the printed chat (seq 884). He dest’d the ask, not seq 882, not the chat, not “the one we just discussed here.” Hung on ticket `Backlog-management verbs`. Dead hang, then timeout. Technical PM never received the context.
+
+**Stood up.** `dispatch_to_seat` / `send_to_seat` `text` is the whole payload. There is no attach-context port. The print has to be **in** `text`. 011 pocket 8 already: dest send text is polish of the ask, not a paraphrase that drops the lock. This dest dropped the print.
+
+**Ask.** Gap locked as dest-without-the-context. First list stands. Deep Agents — go.
