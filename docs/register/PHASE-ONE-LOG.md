@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 19:10 UTC — Packet 017 lived redesign (After new law, both tries). Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 19:22 UTC — PM look 017 Pass. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3430,3 +3430,21 @@ First brief still counts.
 **Chopping block (plain).** Dest-gate reads the print and refuses dest when an earlier turn said “create.” Dest never leaves (`dest_job` = 0). Create dies on a local SDK folder on Vercel. A dest that never left minted a ticket. A new room hung a finished Technical PM. Retry dest send died as the same import error from this morning — 016 made that throw visible; it did not fix the hang. Dest assemble, list seats, and the first Type sends were correct. Do not remint 015 / 016. Do not restore Responses. Do not invent keywords.
 
 **Human leftover (other PR / later).** Re-paste Automation C. Dest glossary. Blocker letter. I do not plant `src/`.
+
+---
+
+## 2026-09-07 19:22 UTC — PM look 017 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`PM-PACKET-017-LIVED-REDESIGN.md`](./PM-PACKET-017-LIVED-REDESIGN.md) · SCP-033 · plant on [#159](https://github.com/bywale-com/travis/pull/159) (`6c18b33`). Sheet: [`PM-LOOK-017.md`](./PM-LOOK-017.md).
+
+**Look.** src/ matches the lock. Dest-gate classifies `destFork.ask`, not assembled. Create is Cloud `POST /v1/agents`. Ticket follows `insertDestJob`. Role dest hangs `livingSeated`. Type send stays `invokeDeepAgent` only. Dest assemble / print body / Hear / Skip buttons not reminted. Search for `Agent.create(` / `generateTravisTextViaResponses` / `sdk-agent-store` on the create path is empty.
+
+**Preview I opened:** `https://travis-git-cursor-packet-017-live-e9ccd9-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see Voice / Log / Type glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not Type the create sentence. I did not dest. I did not Talk.
+
+**Steps I could not do (human):** Vercel team SSO. Type create. Type dest. Confirm a `dest_job` row. Dest landing on the living Technical PM bind. Talk on a phone. Paying Cursor.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
