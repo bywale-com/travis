@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-07 12:50 UTC
+# PM seat handoff — 2026-09-07 13:00 UTC
 
 **This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -14,18 +14,17 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **12:50 UTC 2026-09-07**. Flag **14:00**. |
-| Last 2h | Problem: dest sent the ask, not the context. First list was fair. |
-| 013 | [`PM-PACKET-013-LIST-LIVE.md`](./PM-PACKET-013-LIST-LIVE.md). SA **029**. [#144](https://github.com/bywale-com/travis/pull/144) merged. `maxDuration` **60**. Walked A / B / C.1 on **psi Log**. C.2 not walked. |
-| 012 | [`PM-PACKET-012-USABLE-CHAT.md`](./PM-PACKET-012-USABLE-CHAT.md). SA **028**. [#142](https://github.com/bywale-com/travis/pull/142) merged. Do not remint. |
-| 011 | [`PM-PACKET-011-VOICE-TPM.md`](./PM-PACKET-011-VOICE-TPM.md). SA **027**. [#140](https://github.com/bywale-com/travis/pull/140) merged. Do not remint. |
-| Held | Hang this bind (dest `technical-pm` still mails the prior `bc-`). Travis write-port. Canvas. 022 on [#120](https://github.com/bywale-com/travis/pull/120). Grok Bot orchestra — discussed, not locked. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **13:00 UTC 2026-09-07**. Flag **14:00**. |
+| Problem | Harness. No process/protocol on every Travis message. Dest-without-context was the symptom. |
+| Deep Agents | Looked. LangGraph = runtime/forks. LangChain = loop. Deep Agents = harness (middleware every call). Not planted. |
+| 013 | [#144](https://github.com/bywale-com/travis/pull/144) merged. Psi Log A / B / C.1 walked. |
+| Held | Hang this bind. Travis write-port. Canvas. 022 on [#120](https://github.com/bywale-com/travis/pull/120). |
 
 ---
 
 ## Next PM job
 
-1. Deep Agents — founder’s deeper question. First list stands; dest-without-context is the gap.
+1. Founder: harness cut — Deep Agents vs LangGraph-only vs write the protocol here.
 2. Do not remint 011–013 / 027–029.
 3. Do not Pass a look that never opened the Log on psi.
 
@@ -39,3 +38,4 @@
 - Do not put Hear it / Skip buttons back.
 - Do not Pass a look that never opened the Log on psi.
 - Do not mint `/protocols/technical-pm.md`.
+- Do not plant LangChain because we looked.

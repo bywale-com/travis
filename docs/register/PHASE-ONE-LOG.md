@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 12:50 UTC — Problem: dest sent the ask, not the context. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:00 UTC — The harness is the problem. Deep Agents looked. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3036,3 +3036,29 @@ He said he would include the printed chat (seq 884). He dest’d the ask, not se
 **Founder (preserved):** by what I've just said, what do you, what can you see the problem as? Just state it clearly, man. It's not like, I don't need you like, look. It's just a very simple discussion. Look at the freaking, what everything I've just said, and what do you, what, what, what jumps out to you as the problem?
 
 **Problem.** You asked Travis to send the chat — including the list he had just made — to Technical PM as context. He sent Technical PM the request instead of that context.
+
+---
+
+## 2026-09-07 13:00 UTC — The harness is the problem (founder)
+
+**Kind:** Type A. Inflection: dest miss → no per-message protocol. Flag 14:00 stands. Not a packet. Not a plant.
+
+**Founder (preserved):** You're not getting it, you're not understanding me. Let me make it fucking simple for you. Why wouldn't you make that mistake? In fact, this is the whole conversation, conversation I need to have today, so that you can see why, what I'm talking about here. Why wouldn't you make this, I mean, actually, that's, that's the wrong, and I don't think it's quite a model problem, okay? Well, think, think about it. ChatGPT, Claude, even Cursor, I can always just, like, if, okay, I'll give an example, right? I can always just start back up in this chat, and this is actually the, not Claude, Cursor. Cursor is the perfect example because I can actually see their harness in real time and the architecture. Claude, you could say that, well, Claude is just feeding back every single thing that's in the, in the, in the chat log back into its context. Cursor appears to be a bit different in that regard, because I actually see it, it almost feels like a, like So, but, just to put it as simple and short, it's the harness that's the problem. We don't have a harness. Fuck, well, we have a harness in code, but it clearly is not working well enough, right? It's not, it's not even about being deterministic enough. It's about the process, the process of protocol that is like, is a process/protocol that fires every time on every message or every message that is, on every message actually. And then maybe depending on what the message is, you know, they're forks in the, in that process. That's, that's the whole reason I want to talk about deep agents today. … Deep agents, and, I was, I don't know why I've been not, I've been, trying not to like go, use langchain or blank, you know, something like that. … look into the if we're gonna use langchain or langchain graph or something like that, and deep agents. Just, look into that. And let's see if it's a solution for our problems, because Travis is still not fucking reliable.
+
+**Why I wouldn’t dest a cold instruction.** This Cursor bind still has the chat. Cursor’s harness re-runs on every message (visible). Claude stuffs the log. Travis does not.
+
+**What Travis actually is (quoted, not memory).** A system prompt (`TRAVIS_SYSTEM`) plus a tool loop. “Here” is a clipped window, not a protocol:
+
+```26:31:src/lib/room-context.ts
+export const LINE_CAP = 300;
+export const WINDOW_TURNS = 14;
+export const WINDOW_CHAR_CAP = 2600;
+```
+
+His own list was 2086 characters. Next turn it is `You said:` + 300. Dest `text` is the whole payload to a new Cursor person. Nothing in the loop *must* fire: classify this message → fork (answer / dest-with-context / …). House `/protocols` hang on seated people. They do not run on Travis’s every message.
+
+**Deep Agents (looked, not a lock).** LangChain’s name for a batteries-included **agent harness**. Stack they publish: **LangGraph** = runtime (state, checkpoints, graph = forks). **LangChain** `create_agent` = loop + middleware. **Deep Agents** = opinionated middleware on every model call (filesystem, summarization, subagents). Middleware is the “fires every time.” Graph nodes are the forks. Filesystem offload is why a 2k list would not die at `LINE_CAP`. Dest to Technical PM / SA / Engineer is still a Cursor run unless that wire changes — subagents are not that wire.
+
+**Not planted.** No LangChain in `src/`. No table. No packet.
+
+**Ask.** “Liang Cheng” — LangChain? If the harness is the cut: Deep Agents as the Travis loop, or LangGraph only (we write the protocol), or stay in this repo and make the per-message protocol ourselves.
