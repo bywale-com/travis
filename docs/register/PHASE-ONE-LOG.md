@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:32 UTC — dest prompt means chat tape + TP list, combined. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:34 UTC — seq 907: Travis created a PM instead of dest-with-context. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3342,4 +3342,14 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Founder (preserved):** every initiative and idea we discuss in this chat … send that alongside prompting them as well, the technical PM, to list out every idea and initiative we've discussed that hasn't yet been implemented. … It means every initiative I've discussed inside of these chat logs with Travis Send that alongside a prompt that asks the technical PM to also list out all the ideas and initiatives that we've discussed, and obviously it's so that we can combine both of those things.
 
 **Stood up.** Same reading. Tape from that chat + prompt to list what is not built. Combine. Not Travis listing the backlog and mailing the instruction.
+
+---
+
+## 2026-09-07 15:34 UTC — Seq 907: he created, he did not dest (founder)
+
+**Kind:** Lived miss. Tape quoted. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** because it didn't do that … Look at what it did in the logs.
+
+**Tape (room Travis, 15:02–15:03 UTC).** Seq **907** is the alongside line. Then: 908 “route that request cleanly.” 909 mute `Creating Technical PM.` Stream `create_agent` died `ENOENT` mkdir sdk-agent-store. 910 creation failed, offer Engineer. 911 you: there is already a Technical PM. 912 he said Technical PM is not a seated protocol he can send to. 913 `list_seats` — Technical PM **is** seated on `/protocols/pm.md`. **No dest_job after 15:00.** No print. No prompt to list. Grain never ran.
 
