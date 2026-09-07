@@ -7,6 +7,8 @@ import { eq } from "drizzle-orm";
 import {
   classifyDestPrompt,
   classifyOpenMember,
+  destClassifyText,
+  destLeaveRefused,
   hisWorkReceipt,
   nobodyReceipt,
 } from "@/lib/dest-gate";
@@ -15,7 +17,7 @@ import { isCursorSeat } from "@/lib/seats";
 import { seatKeyToLabel } from "@/lib/router";
 import { db } from "@/server/db/client";
 import { agentBinding, voiceSession } from "@/server/db/schema";
-import type { SeatKey } from "@/server/db/schema";
+import type { AgentBinding, SeatKey } from "@/server/db/schema";
 import {
   deleteQueuedItem,
   liveRunsForSession,
@@ -52,13 +54,14 @@ import {
 } from "@/server/room-membership";
 import { createAgentBinding } from "@/server/create-agent";
 import {
-  dispatchToRoleDest,
   listSeatRoster,
   openMemberByWho,
+  resolveRoleDest,
   SitError,
   sitAgent,
 } from "@/server/sit";
 import {
+  fileDestJobInitiative,
   insertDestJob,
   listOpenDestJobs,
   markDestJob,
@@ -451,27 +454,30 @@ async function handToDest(params: {
   seat: string;
   who: string;
   text: string;
-  initiativeId?: string | null;
+  ask: string;
+  ticketHint: string;
 }): Promise<ToolResult> {
-  const { sessionId, seat, who, text, initiativeId } = params;
-  const promptClass = classifyDestPrompt(text);
-  if (promptClass?.class === "his") {
-    return { ok: false, text: hisWorkReceipt() };
-  }
-  if (promptClass?.class === "nobody") {
+  const { sessionId, seat, who, text, ask, ticketHint } = params;
+  const promptClass = classifyDestPrompt(ask);
+  if (destLeaveRefused(promptClass)) {
+    if (promptClass?.class === "his") {
+      return { ok: false, text: hisWorkReceipt() };
+    }
     return {
       ok: false,
       text: nobodyReceipt({
-        hole: promptClass.hole ?? "unseat",
+        hole: promptClass?.hole ?? "unseat",
         label: who || seatKeyToLabel(seat as SeatKey),
       }),
     };
   }
 
+  let binding: AgentBinding;
+  let enqueueIfBusy: boolean | undefined;
   if (who) {
-    const binding = await openMemberByWho(sessionId, who);
-    const look = classifyOpenMember({ binding });
-    if (look.class !== "theirs" || !binding) {
+    const found = await openMemberByWho(sessionId, who);
+    const look = classifyOpenMember({ binding: found });
+    if (look.class !== "theirs" || !found) {
       return {
         ok: false,
         text: nobodyReceipt({
@@ -480,46 +486,26 @@ async function handToDest(params: {
         }),
       };
     }
-    if (binding.seatKey === "travis") {
+    if (found.seatKey === "travis") {
       return { ok: false, text: "Travis dest never uses the Cursor send path." };
     }
-    const job = await insertDestJob({
-      sessionId,
-      binding,
-      text,
-      initiativeId,
-      status: "created",
-    });
-    const outcome = await dispatchToSeat({
-      sessionId,
-      binding,
-      prompt: text,
-      initiativeId,
-    });
-    if (outcome.status === "started") {
-      await markDestJob(job.id, { status: "dispatched", heartbeat: true });
-    } else if (outcome.status === "error") {
-      await markDestJob(job.id, { status: "failed", done: outcome.error });
+    binding = found;
+  } else {
+    try {
+      binding = await resolveRoleDest({
+        sessionId,
+        role: seat as "pm" | "sa" | "engineer",
+      });
+    } catch (err) {
+      const label = seatKeyToLabel(seat as SeatKey);
+      if (err instanceof SitError) {
+        return { ok: false, text: nobodyReceipt({ hole: "spin", label }) };
+      }
+      return {
+        ok: false,
+        text: err instanceof Error ? err.message : String(err),
+      };
     }
-    if (outcome.status !== "error") {
-      await stampLatestPassOn(sessionId, binding.seatKey ?? who, text).catch(
-        () => {},
-      );
-    }
-    return {
-      ok: outcome.status !== "error",
-      text: dispatchReceipt(outcome),
-      sentToEngineer: binding.protocolPath === "/protocols/engineer.md",
-    };
-  }
-
-  try {
-    const { binding, outcome } = await dispatchToRoleDest({
-      sessionId,
-      role: seat as "pm" | "sa" | "engineer",
-      text,
-      initiativeId,
-    });
     const seated = classifyOpenMember({ binding });
     if (seated.class !== "theirs") {
       return {
@@ -530,53 +516,70 @@ async function handToDest(params: {
         }),
       };
     }
-    const job = await insertDestJob({
-      sessionId,
-      binding,
-      text,
-      initiativeId,
-      status: "created",
-    });
-    if (outcome.status === "started") {
-      await markDestJob(job.id, { status: "dispatched", heartbeat: true });
-    } else if (outcome.status === "error") {
-      await markDestJob(job.id, { status: "failed", done: outcome.error });
-      return {
-        ok: false,
-        text: dispatchReceipt(outcome),
-        sentToEngineer: seat === "engineer",
-      };
-    } else if (outcome.status === "busy") {
-      await markDestJob(job.id, {
-        status: "failed",
-        done: "busy — no idle seated dest",
-      });
-      return {
-        ok: false,
-        text: nobodyReceipt({
-          hole: "spin",
-          label: binding.label ?? seatKeyToLabel(seat as SeatKey),
-        }),
-      };
-    }
-    await stampLatestPassOn(sessionId, binding.seatKey ?? seat, text).catch(
-      () => {},
-    );
-    return {
-      ok: true,
-      text: dispatchReceipt(outcome),
-      sentToEngineer: seat === "engineer",
-    };
+    enqueueIfBusy = false;
+  }
+
+  const job = await insertDestJob({
+    sessionId,
+    binding,
+    text,
+    status: "created",
+  });
+
+  let ticket;
+  try {
+    ticket = await ticketForHand(sessionId, ticketHint, text);
   } catch (err) {
-    const label = seatKeyToLabel(seat as SeatKey);
-    if (err instanceof SitError) {
-      return { ok: false, text: nobodyReceipt({ hole: "spin", label }) };
+    if (err instanceof InitiativeError) {
+      return { ok: false, text: err.message };
     }
+    throw err;
+  }
+  if (ticket) {
+    await fileDestJobInitiative({
+      sessionId,
+      initiativeId: ticket.id,
+    });
+  }
+
+  const outcome = await dispatchToSeat({
+    sessionId,
+    binding,
+    prompt: text,
+    initiativeId: ticket?.id,
+    ...(enqueueIfBusy === false ? { enqueueIfBusy: false } : {}),
+  });
+  if (outcome.status === "started") {
+    await markDestJob(job.id, { status: "dispatched", heartbeat: true });
+  } else if (outcome.status === "error") {
+    await markDestJob(job.id, { status: "failed", done: outcome.error });
+  } else if (outcome.status === "busy" && enqueueIfBusy === false) {
+    await markDestJob(job.id, {
+      status: "failed",
+      done: "busy — no idle seated dest",
+    });
     return {
       ok: false,
-      text: err instanceof Error ? err.message : String(err),
+      text: nobodyReceipt({
+        hole: "spin",
+        label: binding.label ?? seatKeyToLabel(seat as SeatKey),
+      }),
     };
   }
+  if (outcome.status !== "error") {
+    await stampLatestPassOn(
+      sessionId,
+      binding.seatKey ?? (who || seat),
+      text,
+    ).catch(() => {});
+  }
+  return {
+    ok: outcome.status !== "error",
+    text: dispatchReceipt(outcome),
+    sentToEngineer: who
+      ? binding.protocolPath === "/protocols/engineer.md"
+      : seat === "engineer",
+  };
 }
 
 async function bindingForCursorSeat(seat: string) {
@@ -691,9 +694,11 @@ export async function runTravisTool(params: {
   if (name === "send_to_seat" || name === "dispatch_to_seat") {
     const seat = String(args.seat ?? "");
     const who = String(args.who ?? "").trim();
-    const text = destFork
+    const assembled = destFork
       ? destFork.assembled
       : String(args.text ?? "").trim();
+    const ask = destClassifyText(destFork?.ask, assembled);
+    const text = destFork ? destFork.assembled : ask;
     const kind = destKind({ seat, who });
     if (!text) {
       return { ok: false, text: "Need some text." };
@@ -704,15 +709,6 @@ export async function runTravisTool(params: {
     const dupeKey = who || seat;
     const dupe = await guardDuplicate(sessionId, name, dupeKey, text);
     if (dupe) return postHandReceipt(sessionId, dupe);
-    let prior;
-    try {
-      prior = await ticketForHand(sessionId, String(args.id ?? ""), text);
-    } catch (err) {
-      if (err instanceof InitiativeError) {
-        return postHandReceipt(sessionId, { ok: false, text: err.message });
-      }
-      throw err;
-    }
     return postHandReceipt(
       sessionId,
       await handToDest({
@@ -720,7 +716,8 @@ export async function runTravisTool(params: {
         seat,
         who,
         text,
-        initiativeId: prior?.id,
+        ask,
+        ticketHint: String(args.id ?? ""),
       }),
     );
   }

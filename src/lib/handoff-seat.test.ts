@@ -8,7 +8,8 @@ test("Engineer Current names where the last bind stopped", () => {
     "utf8",
   );
   assert.match(handoff, /This bind is done/);
-  assert.match(handoff, /bc-b3a72dfd-1d21-42d3-84ec-be3a62f6b3ad/);
+  assert.match(handoff, /bc-17e9d9d8-3ec2-4273-b024-8039864bc69a/);
+  assert.match(handoff, /033 lived redesign/);
   assert.match(handoff, /032 compose the send harness/);
   assert.match(handoff, /031 dest harness recut/);
   assert.match(handoff, /081 Voice uses the Type hang/);

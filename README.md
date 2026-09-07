@@ -6,6 +6,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-07** · SCP-033 · [PR #159](https://github.com/bywale-com/travis/pull/159) — Dest-gate reads the last ask, create is Cursor’s Cloud HTTP, a ticket follows a real `dest_job`, and a new room dests the living seated person, because After new law refused dest on the print, mkdir’d a local agent store, minted a ticket that never left, and hung a done Technical PM.
+
 - **2026-09-07** · SCP-032 · [PR #157](https://github.com/bywale-com/travis/pull/157) — Type send’s process is Deep Agents only, and the six-step Responses cousin is gone, because a silent catch was still inventing a second harness.
 
 - **2026-09-07** · Hotfix 081 · Voice Live thinks with the same Deep Agents hang as Type, and Realtime only hears and speaks, because the founder was smoking Voice and that mouth was still the old voice model.

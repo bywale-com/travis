@@ -46,6 +46,21 @@ export function classifyDestPrompt(
   return null;
 }
 
+/** SCP-033 — gate the last ask. Never the assembled dest print. */
+export function destClassifyText(
+  ask: string | undefined,
+  assembled: string,
+): string {
+  const a = (ask ?? "").trim();
+  return a || assembled.trim();
+}
+
+export function destLeaveRefused(
+  classified: { class: DestClass } | null,
+): boolean {
+  return classified?.class === "his" || classified?.class === "nobody";
+}
+
 export function classifyOpenMember(params: {
   binding: { protocolPath?: string | null; cursorAgentId?: string | null } | null;
 }): { class: DestClass; hole?: DestHole } {

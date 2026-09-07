@@ -6,6 +6,20 @@ export function isCatalogPm(seatKey: string | null | undefined): boolean {
   return seatKey === "pm";
 }
 
+export function isLivingCursorId(id: string | null | undefined): boolean {
+  return /^bc-[a-f0-9-]+$/i.test((id ?? "").trim());
+}
+
+/** SCP-033 — spin only when nobody living. Idle in this room wins. */
+export function roleDestPick(params: {
+  idleInRoomId: string | null;
+  livingId: string | null;
+}): "idle" | "living" | "spin" {
+  if (params.idleInRoomId) return "idle";
+  if (params.livingId) return "living";
+  return "spin";
+}
+
 export function hideCatalogPm<T extends { seatKey?: string | null }>(
   rows: T[],
 ): T[] {
