@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 14:22 UTC — anything to Travis dies. Psi = live app. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 14:32 UTC — PM look 079 Pass. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3237,3 +3237,21 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Psi** is house shorthand for the live Travis app: `https://travis-psi.vercel.app`. Not a product word. Not a mode. You do not have to say it.
 
 **Lock.** Sending **anything** to Travis — Voice or text — shows that banner. Same pipe: `pipeTravisText` → `createDeepAgent` after 014 merged. 079 recut to Voice + Talk + Type. Not Talk-only.
+
+---
+
+## 2026-09-07 14:32 UTC — PM look 079 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Hotfix:** [`HOTFIX-079-TALK-HTML-JSON.md`](./HOTFIX-079-TALK-HTML-JSON.md) · plant on [#149](https://github.com/bywale-com/travis/pull/149) (`3b0a166`). Sheet: [`PM-LOOK-HOTFIX-079.md`](./PM-LOOK-HOTFIX-079.md).
+
+**Look.** src/ matches the lock. Voice / Talk finalize and Type `/send` use `readJson` on non-SSE. SSE chunks use `parseJsonText` — banner never says `Unexpected token '<'`. `generateTravisText` lazy-loads Deep Agents after SSE headers. `jsonRoute` + `maxDuration = 60` on finalize / send. Dest-with-context grain not reminted. Hear / Skip buttons stay off. `src/lib/http.test.ts` — 10 pass.
+
+**Preview I opened:** `https://travis-git-cursor-hotfix-079-talk-395a25-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see Voice / Log / Talk glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not Talk. I did not Type. I did not Voice.
+
+**Steps I could not do (human):** Vercel team SSO. Talk on a phone. Type / Voice a short line. Confirm the orange banner after a real send.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
