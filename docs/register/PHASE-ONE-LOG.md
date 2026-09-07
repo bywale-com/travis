@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 12:48 UTC — Founder recut: first list was fair; dest didn’t carry that context. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 12:50 UTC — Problem: dest sent the ask, not the context. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3026,3 +3026,13 @@ He said he would include the printed chat (seq 884). He dest’d the ask, not se
 **Stood up.** `dispatch_to_seat` / `send_to_seat` `text` is the whole payload. There is no attach-context port. The print has to be **in** `text`. 011 pocket 8 already: dest send text is polish of the ask, not a paraphrase that drops the lock. This dest dropped the print.
 
 **Ask.** Gap locked as dest-without-the-context. First list stands. Deep Agents — go.
+
+---
+
+## 2026-09-07 12:50 UTC — The problem, stated (founder)
+
+**Kind:** Problem named. Same gap. Flag 14:00 stands.
+
+**Founder (preserved):** by what I've just said, what do you, what can you see the problem as? Just state it clearly, man. It's not like, I don't need you like, look. It's just a very simple discussion. Look at the freaking, what everything I've just said, and what do you, what, what, what jumps out to you as the problem?
+
+**Problem.** You asked Travis to send the chat — including the list he had just made — to Technical PM as context. He sent Technical PM the request instead of that context.

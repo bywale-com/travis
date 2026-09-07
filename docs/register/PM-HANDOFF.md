@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-07 12:48 UTC
+# PM seat handoff — 2026-09-07 12:50 UTC
 
 **This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -14,8 +14,8 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **12:48 UTC 2026-09-07**. Flag **14:00**. |
-| Last 2h | First Stream (room initiatives) was **fair**. Gap = second dest did not carry that list + chat as context to Technical PM. Deep Agents next. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **12:50 UTC 2026-09-07**. Flag **14:00**. |
+| Last 2h | Problem: dest sent the ask, not the context. First list was fair. |
 | 013 | [`PM-PACKET-013-LIST-LIVE.md`](./PM-PACKET-013-LIST-LIVE.md). SA **029**. [#144](https://github.com/bywale-com/travis/pull/144) merged. `maxDuration` **60**. Walked A / B / C.1 on **psi Log**. C.2 not walked. |
 | 012 | [`PM-PACKET-012-USABLE-CHAT.md`](./PM-PACKET-012-USABLE-CHAT.md). SA **028**. [#142](https://github.com/bywale-com/travis/pull/142) merged. Do not remint. |
 | 011 | [`PM-PACKET-011-VOICE-TPM.md`](./PM-PACKET-011-VOICE-TPM.md). SA **027**. [#140](https://github.com/bywale-com/travis/pull/140) merged. Do not remint. |
