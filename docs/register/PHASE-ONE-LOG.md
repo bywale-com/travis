@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 17:00 UTC — PM look 015 Pass (this seat). Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 17:45 UTC — entire build protocol, founder ask. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3348,3 +3348,13 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Steps I could not do (human):** Vercel team SSO. Type / Send in room Travis. Open Stream. Type `ok`. Talk on a phone. Dest landing on a live Technical PM bind.
 
 **Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-07 17:45 UTC — Entire build protocol (founder)
+
+**Kind:** House / method. Flag 14:00 stands. No new law. Not a plant.
+
+**Founder (preserved):** For everything you understand, I want you to, I want you to detail very, in a very, very precisely what our power we built. I'll say it again. I want you to detail, precisely, our entire build, protocol. Like how I, how we build stuff, from scratch, all the way to the end.
+
+**Stood up.** Answered in this bind from the seats, the packet chain, and the look law. Same path: founder speaks → Technical PM packet → one PR → wake SA → change packet → Engineer plants → look on this deployment → emerge → you walk the sheet → merge. Hotfix skips SA. No substitute flag.
