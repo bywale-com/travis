@@ -30,6 +30,22 @@ A new chat pastes the short block in [`docs/README.md`](./README.md), accepts th
 
 ---
 
+## Compose, don’t invent (law)
+
+The product is known. The hole is implementation: we have been designing and writing process that should already exist.
+
+**Novel code requires a reason. Commodity process requires justification for rebuilding.**
+
+Before a substantial primitive: what existing mature thing already provides it (open source, vendor, paid — all fine)? What is missing? Only the missing part is designed. The rest is setup and integration so it works for Travis. Cost is a thought, not the start.
+
+SA’s first question is not “here is our architecture.” It is “what already exists, and what is the smallest Travis-specific hang?”
+
+First incremental place: **the send harness** — when a line is sent, what process runs, in what order, given what case, around the model. That is not “the whole product.” It is the loop that fires on a send.
+
+Packet: [`PM-PACKET-016-COMPOSE.md`](./register/PM-PACKET-016-COMPOSE.md).
+
+---
+
 ## Path A — a full pocket (from scratch)
 
 This is how a new piece of product is built.

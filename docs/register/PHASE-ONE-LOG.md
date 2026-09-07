@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 17:50 UTC — build protocol emptied into docs/BUILD-PROTOCOL.md. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 18:25 UTC — compose don’t invent; packet 016 send harness. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3358,3 +3358,13 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Founder (preserved):** Just make sure that it's emptied and, and it should be findable in the README, in the repo, and then just merge, just merge immediately after you create these things.
 
 **Landed.** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md). Linked from repo `README.md`, `docs/README.md`, `AGENTS.md`. The whole path from a spoken lock to merge lives there. Merge this PR when it opens.
+
+---
+
+## 2026-09-07 18:25 UTC — Compose, don’t invent; start at the send harness (founder)
+
+**Kind:** Flag-adjacent law + packet. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** If we didn't know what we actually want to accomplish, we know what we want to accomplish very, very well. Okay, the problem has been implementation. … start from the place that it matters, which is the harness … when I send a message. What process happens? … in what order … what case … around the … model … find pre-existing implementations … write as little novel code. When I say novel code, I mean code where we have to like reverse engineer things. … leverage what already exists. And just write the integration code … I don't care. If it's open source or closed source or vendor or provider that we need to pay. … toss. In cost, as a as a thought … that's the gap. … doesn't … minimize what it is
+
+**Stood up.** Same reading. Product is known. The hole is inventing process that should already exist. Law in [`BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md). First incremental place: Type send → process around the model. Packet [`PM-PACKET-016-COMPOSE.md`](./PM-PACKET-016-COMPOSE.md). **Wake:** sa. SA **032**. This PR. Do not remint 015 dest mail. I do not plant `src/`.
