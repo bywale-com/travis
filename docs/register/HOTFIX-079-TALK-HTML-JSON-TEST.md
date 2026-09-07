@@ -1,9 +1,9 @@
 # Test spec — 079 Talk HTML as JSON
 
 **Hotfix:** [`HOTFIX-079-TALK-HTML-JSON.md`](./HOTFIX-079-TALK-HTML-JSON.md)  
-**Desk:** `https://travis-psi.vercel.app`  
+**Desk:** the live Travis app — `https://travis-psi.vercel.app`  
 **Room:** Travis  
-**Mode:** Log · Talk (the screenshot). Also Type once.
+**Mode:** Voice once, Log · Talk (the screenshot), Log · Type once. Sending anything to Travis was the miss.
 
 Fill **I saw** on this step before the next.
 
@@ -37,8 +37,20 @@ Fill **I saw** on this step before the next.
 
 ---
 
+## C. Voice send
+
+### C.1 One line on Voice
+
+**Do:** Voice. Send a short line to Travis.
+
+**Expect:** Same as A. Banner is not `Unexpected token '<'`.
+
+**I saw:**
+
+---
+
 ## After
 
-Voice: no Hear it / Skip **buttons**.
+No Hear it / Skip **buttons**.
 
 **Steps I could not do (human):** Talk on a phone.

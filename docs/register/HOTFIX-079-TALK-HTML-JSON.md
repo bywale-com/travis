@@ -16,13 +16,15 @@ Founder screenshot, Log · Talk, Carbon: Listening · Clear · Pause. Orange ban
 
 That is the phone parsing an **HTML page** as JSON. Not Stream. Not dest jargon.
 
-Talk finalize (and Type send) still call raw `res.json()` when the answer is not an event-stream. `readJson` already exists so this banner never says that.
+**Lived (founder):** sending **anything** to Travis — Voice or text (Talk / Type) — shows this banner.
 
-014 is on psi now. Talk to Travis still runs `pipeTravisText` → `generateTravisText` → `createDeepAgent`. An uncaught throw **before** SSE headers (module load, or POST throw) is a Next/Vercel HTML 500 — same banner.
+Voice finalize, Talk finalize, and Type `/send` still call raw `res.json()` when the answer is not an event-stream. `readJson` already exists so this banner never says that.
+
+014 is on the live Travis app (`travis-psi.vercel.app`). Every send to Travis runs `pipeTravisText` → `generateTravisText` → `createDeepAgent`. An uncaught throw **before** SSE headers (module load, or POST throw) is a Next/Vercel HTML 500 — same banner on Voice and text.
 
 ## Cut
 
-1. **Banner.** Non-SSE responses on Talk finalize, Type `/send`, and VoiceSession finalize use `readJson` (`src/lib/http.ts`). Catch still sets the banner. The line must name status / that it was not JSON — never `Unexpected token '<'`.
+1. **Banner.** Non-SSE responses on Voice finalize, Talk finalize, and Type `/send` use `readJson` (`src/lib/http.ts`). Catch still sets the banner. The line must name status / that it was not JSON — never `Unexpected token '<'`.
 2. **SSE parse.** `consumeAgentStream` / VoiceSession `JSON.parse(raw)` must not dump that parser string onto the banner if a chunk is not JSON.
 3. **The HTML.** Find why POST `/api/session/:id/finalize` or `/send` returned HTML after 014. Vercel runtime log for that 500 / function load. If Deep Agents import or invoke dies before SSE starts, catch and return JSON or SSE error — do not let Next render `<!DOCTYPE`. Keep dest-with-context grain. Do not remint 030. Do not unclip Here. If the hang needs `maxDuration` on finalize/send (Hobby cap is 60), set **60**, same as the room wire.
 
@@ -35,4 +37,4 @@ Talk finalize (and Type send) still call raw `res.json()` when the answer is not
 
 ## Verify
 
-Sheet: [`HOTFIX-079-TALK-HTML-JSON-TEST.md`](./HOTFIX-079-TALK-HTML-JSON-TEST.md). Psi Log · Talk. Banner never shows `Unexpected token '<'`. A real 500 names the failure. A good Talk line still sends.
+Sheet: [`HOTFIX-079-TALK-HTML-JSON-TEST.md`](./HOTFIX-079-TALK-HTML-JSON-TEST.md). Live Travis app. Voice, Talk, and Type. Banner never shows `Unexpected token '<'`. A real 500 names the failure. A good line to Travis still sends.

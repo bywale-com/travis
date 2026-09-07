@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 14:02 UTC — 079 Talk HTML as JSON. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 14:22 UTC — anything to Travis dies. Psi = live app. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3225,3 +3225,15 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Stood up.** That is the Talk error banner, not Stream. Raw `res.json()` on an HTML page. `readJson` already exists. 014 hang is live; Talk to Travis still hits `createDeepAgent`. An uncaught throw before SSE is a Next HTML 500 — same banner.
 
 **Cut:** [`HOTFIX-079-TALK-HTML-JSON.md`](./HOTFIX-079-TALK-HTML-JSON.md). Engineer: `readJson` on non-SSE; do not dump parser junk from SSE; find the 500; keep 030 grain. This PR. I do not plant `src/`.
+
+---
+
+## 2026-09-07 14:22 UTC — Anything to Travis (founder)
+
+**Kind:** Lived recut of 079. Flag 14:00 stands. Same [#149](https://github.com/bywale-com/travis/pull/149).
+
+**Founder (preserved):** Not quite sure what you mean by PSI specifically, but, it appeared just sending anything to Travis, whether via voice or text.
+
+**Psi** is house shorthand for the live Travis app: `https://travis-psi.vercel.app`. Not a product word. Not a mode. You do not have to say it.
+
+**Lock.** Sending **anything** to Travis — Voice or text — shows that banner. Same pipe: `pipeTravisText` → `createDeepAgent` after 014 merged. 079 recut to Voice + Talk + Type. Not Talk-only.
