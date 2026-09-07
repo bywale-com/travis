@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:36 UTC — 907 miss: create instead of dest; Deep Agents fork never ran. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:38 UTC — Deep Agents purpose is those three; 030 fork missed 907. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3364,4 +3364,16 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Why.** Glass says Technical PM. Catalog `pm` is unseated. `TRAVIS_SYSTEM` says unseated catalog slug = nobody → create and sit; never mail catalog `pm`. He heard “technical PM,” ran `create_agent`. Role dest `seat=pm` would have resolved to the idle seated Technical PM. He never called `send_to_seat`. Dest-with-context only rewrites dest `text` after that call, and only on marker phrases this line does not have. Middleware classifies and does nothing.
 
 **LangChain.** Yes — 014 / 030 was a process on every message, then the dest-with-context fork, so this send would leave as ask + print. The kit ran. The fork did not. Same miss class: context, tools, translating the task. Do not remint 030.
+
+---
+
+## 2026-09-07 15:38 UTC — Purpose of Deep Agents is those three (founder)
+
+**Kind:** Founder correction. Flag 14:00 stands. Not a remint. Not a plant.
+
+**Founder (preserved):** we just discussed, and you said that those three problems are going to be solved when we were working on deep agents. … So, what the hell are you talking about now? If not, what's the purpose of the deep agents then?
+
+**Lock (014 / 13:08, not a new story).** Context, tools, translating the task — that is the packet. Deep Agents is the harness on every message. Dest-with-context is the first fork: this send’s body is the chat plus the ask. “Kit is not magic” meant we write that fork. It did not mean the three stay unsolved.
+
+**907.** The purpose was this. The planted fork did not do it. That is a miss on 030’s job, not a different purpose. Do not remint unless he seats a recut.
 
