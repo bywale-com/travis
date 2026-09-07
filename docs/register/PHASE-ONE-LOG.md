@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:54 UTC — look must walk this deployment’s real sends, not src-only Pass. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 16:18 UTC — look-walk locked; re-paste C. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3432,4 +3432,18 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Founder (preserved):** I give you the go-ahead to let's work through this. but here's what I want to do actually before we do that. … technical PM, look, automation in cursor isn't doing enough … it's expensive for me to be the one discovering the gaps that could have been discovered by the PM. … The seat can test the app, just not every single feature. … it couldn't test the voice feature, but it can test the features that matter in this specific … Deployment … still testing the live app. Maybe … computer use … if it doesn't have to be computer use, it could be cheap … it can still test out real use cases
 
 **Stood up.** Same reading. Today the look quotes the plant, opens the preview, hits SSO, Passes “what this seat could do,” and you find the lived miss. Next: on this deployment, walk the sends that matter for that plant (Type, dest, tape). Voice stays human. Computer use only if a send cannot be done cheaper. Deep Agents recut waits. Ask if that aim is locked.
+
+---
+
+## 2026-09-07 16:18 UTC — Look-walk locked (founder go)
+
+**Kind:** House. Founder go. Flag 14:00 stands. Not a product plant. Deep Agents recut still waits.
+
+**Founder (preserved):** Yes go ahead
+
+**Landed.** [`LOOK-WALK.md`](./LOOK-WALK.md) · C prompt [`house-now/automations/pm-look.prompt.md`](./house-now/automations/pm-look.prompt.md) · protocol + chain. Verdict is Pass, Fail, or **No walk**. No “Pass for what this seat could do.” Emerge still greps Pass only.
+
+**Human leftover.** Re-paste Automation C at cursor.com/automations from the new prompt. I cannot Save + Activate.
+
+**Still waiting.** Deep Agents recut (print on every think, full mail on dest). Dest glossary. Blocker letter.
 

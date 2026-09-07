@@ -23,9 +23,10 @@ SA automation — full SA protocol
         ↓  label wake-engineer
 Engineer automation — full Engineer protocol
         ↓  label wake-pm-look  (src/ plant on a PR that already has packet + SCP)
-Technical PM look + what it can test
+Technical PM look + walk this deployment (LOOK-WALK.md)
         ↓  Fail → label fail-look (same PR)
-        ↓  Pass → emerge. Action emails the *-TEST.md. Human walks that sheet.
+        ↓  No walk → stop. No emerge. No fail-look
+        ↓  Pass → emerge. Action emails the *-TEST.md. Human may Talk.
 ```
 
 **Waiting is a line the Action greps.** Draft is not the hold — we keep PRs draft through plant. Chat prose (“then SA”, “don’t wake Engineer”) is not the hold. The filename `PM-PACKET-NNN` is not the hold. Exact line on the packet, whole line:
@@ -137,8 +138,8 @@ That push is the Engineer trigger.
 **Name:** `Travis — plant → PM look`  
 **Triggers (any):** Source control — **Pull request label changed**, label **`wake-pm-look`** (added). Not PR pushed.  
 **Repository:** `bywale-com/travis`  
-**Tools:** Memories **off**. Pull request creation **off**. **Computer use on** — look is the preview.  
-**Prompt:** paste [`house-now/automations/pm-look.prompt.md`](./house-now/automations/pm-look.prompt.md) in full. Re-paste after 075 — hotfix is enough; do not stop “no packets.”
+**Tools:** Memories **off**. Pull request creation **off**. **Computer use on** — only if a Type send cannot enter the host. Prefer a real send, then the tape.  
+**Prompt:** paste [`house-now/automations/pm-look.prompt.md`](./house-now/automations/pm-look.prompt.md) in full. Re-paste after the 2026-09-07 look-walk lock — no “Pass for what this seat could do.” Walk: [`LOOK-WALK.md`](./LOOK-WALK.md).
 
 This is the beat that can run on a **already planted** PR (009 / 025 on #127). SA and Engineer must not be re-woken for that.
 
@@ -147,7 +148,7 @@ This is the beat that can run on a **already planted** PR (009 / 025 on #127). S
 ## Save + Activate (human or local `/automate`)
 
 1. **A** / **B** stay label `wake-sa` / `wake-engineer`. **B** also gets a second trigger: Label added / `fail-look`. Hotfix does not get a new paste.
-2. Create **C**. Trigger: Label added / `wake-pm-look`. Computer use on. Memories off. PR creation off. Paste the PM-look prompt. Save + Activate.
+2. Create **C** (or re-paste). Trigger: Label added / `wake-pm-look`. Computer use on. Memories off. PR creation off. Paste the PM-look prompt (look-walk lock). Save + Activate.
 3. To run the first look on #127: add `wake-pm-look` once C is Active. Do not add `wake-sa` or `wake-engineer` — 025 is already planted.
 4. Later plants: Action adds `wake-pm-look` when this push touched `src/` on a PR that already has a packet + change packet, **or** `src/` / `ENGINEER-HANDOFF.md` on a PR that already has a `HOTFIX-NNN`.
 5. **Emerge letter (human).** When this push writes `PM-LOOK-NNN.md` or `PM-LOOK-HOTFIX-NNN.md` with **Verdict: Pass**, the same Action (no LLM) labels `emerge` and sends the letter (packet `*-TEST.md` or `HOTFIX-NNN-*-TEST.md`). Not Travis. Not a Cursor agent.
