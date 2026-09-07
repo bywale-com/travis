@@ -60,7 +60,7 @@ Technical PM look+test
         Fail → label  fail-look  (loop)
 ```
 
-Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml). It diffs **this push** (`before…after`), not the whole PR. It greps `**Wake:** sa` on the packet at `after`. No Cursor token until the label is added. A packet on hold can sit on the PR; plates may edit it; no boot.
+Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml). It diffs **this push** (`before…after`), not the whole PR. A new branch (`before` all zeros) diffs the tip commit — `git diff $after` on a clean checkout is empty and will not label. It greps `**Wake:** sa` on the packet at `after`. No Cursor token until the label is added. A packet on hold can sit on the PR; plates may edit it; no boot. If the PR is not open yet (push before create), it waits a few seconds.
 
 **Who tags.** `GITHUB_TOKEN` is `github-actions[bot]`. Cursor’s label trigger has not woken A or B from that actor. Repo secret **`WAKE_GITHUB_TOKEN`** = a PAT for the GitHub user connected to the automations (you). Fine-grained: this repo, Issues read/write. The Action uses that for `gh pr edit` labels. Unset → bot (old path). Not `TRAVIS_GITHUB_TOKEN` (unfold). Do not paste the token in chat.
 

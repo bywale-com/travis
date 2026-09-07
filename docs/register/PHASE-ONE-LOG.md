@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 16:25 UTC — packet 015 dest harness recut; Wake sa. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 16:42 UTC — 015 did not wake SA; first-push gate empty. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3318,3 +3318,15 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Lock (plain).** Dest body is the ask plus the print of this chat. No marker words. Long print lives in the kit file. Spoken window stays small. Full mail once on dest. When they name Technical PM, dest — do not create. Dest seats stay Cursor. Do not remint 011–013 / 027–029 / 030.
 
 **Human leftover (other PR / later).** Re-paste Automation C. Dest glossary. Blocker letter. I do not plant `src/`.
+
+---
+
+## 2026-09-07 16:42 UTC — 015 did not pick up (founder)
+
+**Kind:** House miss. Same 015. Flag 14:00 stands. Not a remint.
+
+**Founder (preserved):** Did, did, did it pick it up or not, man? I don't see anything.
+
+**It did not.** Action ran on the first push of the new branch. `before` was zeros. The file list compared the commit to a clean checkout and came back empty. No `wake-sa` label. No Systems Analyst. PR #154 has no labels.
+
+**Cut.** New-branch first push diffs the tip commit, not the worktree. Wait a few seconds if the PR is not open yet. This commit re-arms 015 so the label can land.

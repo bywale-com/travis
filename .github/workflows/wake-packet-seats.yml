@@ -66,14 +66,28 @@ jobs:
             echo "Label actor: github-actions[bot] (no WAKE_GITHUB_TOKEN)"
           fi
           if [[ "$BEFORE" == "0000000000000000000000000000000000000000" ]]; then
-            files=$(git diff --name-only --diff-filter=A "$AFTER")
+            # New branch. `git diff $AFTER` is worktree vs tip — empty on a
+            # clean checkout. Diff the tip commit itself.
+            if git rev-parse --verify "${AFTER}^" >/dev/null 2>&1; then
+              files=$(git diff --name-only "${AFTER}^" "$AFTER")
+            else
+              files=$(git diff-tree --no-commit-id --name-only -r "$AFTER")
+            fi
           else
             files=$(git diff --name-only "$BEFORE" "$AFTER")
           fi
           echo "This push:"
           echo "$files"
 
-          pr=$(gh pr list --head "$HEAD_REF" --state open --json number --jq '.[0].number // empty')
+          pr=""
+          for i in 1 2 3 4 5 6; do
+            pr=$(gh pr list --head "$HEAD_REF" --state open --json number --jq '.[0].number // empty')
+            if [[ -n "$pr" ]]; then
+              break
+            fi
+            echo "No open PR for $HEAD_REF yet. Wait ${i}."
+            sleep 5
+          done
           if [[ -z "$pr" ]]; then
             echo "No open PR for $HEAD_REF. Stop."
             exit 0

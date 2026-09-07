@@ -10,7 +10,8 @@
 **Builds on:** 014 / 030 planted. First fork still dest-with-context. This recut is how that fork fires.  
 **Next SA:** **031**.
 
-**Where:** this PR. SA and Engineer commit here. Do not open a cousin. Do not remint 011–013 / 027–029 / **030**.
+**Where:** this PR. SA and Engineer commit here. Do not open a cousin. Do not remint 011–013 / 027–029 / **030**.  
+First push of this branch did not label (`wake-sa` never landed). This commit re-arms that gate.
 
 ---
 
