@@ -97,6 +97,7 @@ import { isInTurnAutoFile, parseBacklogView } from "@/lib/motion";
 import { BoxError, proveBox, readBox, runBox, writeBox } from "@/server/travis-box";
 import { UnfoldError, unfoldRepo } from "@/server/travis-unfold";
 import { argsBody } from "@/lib/stream";
+import { destWithContextFor } from "@/server/dest-with-context";
 import {
   attachMotionToLiveStream,
   maybeCloseTravisStream,
@@ -636,16 +637,21 @@ export async function runTravisTool(params: {
     }
   }
 
+  const destFork =
+    name === "send_to_seat" || name === "dispatch_to_seat"
+      ? await destWithContextFor(sessionId).catch(() => null)
+      : null;
+
   const processEv = opened
     ? await startStreamProcess({
         streamId: opened.id,
-        tool: name,
-        body: argsBody(args),
+        tool: destFork ? "dest_with_context" : name,
+        body: destFork ? destFork.print : argsBody(args),
       }).catch(() => null)
     : null;
 
   const finish = async (result: ToolResult): Promise<ToolResult> => {
-    if (processEv) {
+    if (processEv && !destFork) {
       await finishStreamProcess({
         eventId: processEv.id,
         body: result.text,
@@ -684,7 +690,9 @@ export async function runTravisTool(params: {
   if (name === "send_to_seat" || name === "dispatch_to_seat") {
     const seat = String(args.seat ?? "");
     const who = String(args.who ?? "").trim();
-    const text = String(args.text ?? "").trim();
+    const text = destFork
+      ? destFork.assembled
+      : String(args.text ?? "").trim();
     const kind = destKind({ seat, who });
     if (!text) {
       return { ok: false, text: "Need some text." };

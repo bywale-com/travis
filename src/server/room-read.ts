@@ -43,6 +43,7 @@ export async function recentTurns(
       kind: voiceTurn.kind,
       seatKey: voiceTurn.seatKey,
       text: voiceTurn.text,
+      speakable: voiceTurn.speakable,
     })
     .from(voiceTurn)
     .where(eq(voiceTurn.sessionId, sessionId))
@@ -53,6 +54,7 @@ export async function recentTurns(
     kind: r.kind,
     seatKey: r.seatKey,
     text: r.text,
+    speakable: r.speakable,
     seatLabel: r.seatKey
       ? seatKeyToLabel(r.seatKey as SeatKey)
       : "Travis",

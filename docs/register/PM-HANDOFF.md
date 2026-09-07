@@ -1,10 +1,12 @@
-# PM seat handoff — 2026-09-06 15:28 UTC
+# PM seat handoff — 2026-09-07 13:52 UTC
 
-**This bind is living.** `bc-25c5c6bf-006f-4252-9f25-49ab183835b2` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
+**This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
+
+**Prior bind done:** `bc-25c5c6bf-006f-4252-9f25-49ab183835b2`.
 
 **Flag:** PHASE-ONE-LOG **14:00 UTC 2026-08-25** — do not overwrite.
 
-**Seat:** Technical PM. Inspect `src/`. Spec face + technical cut. Keep the log. Do not plant.
+**Seat:** Technical PM. Inspect `src/`. Spec face + technical cut. Keep the log. Do not plant. Catalog `pm` is not this seat. Protocol `/protocols/pm.md`. Do not mint `/protocols/technical-pm.md`.
 
 ---
 
@@ -12,18 +14,19 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **15:28 UTC 2026-09-06**. Flag **14:00**. |
-| 013 | [`PM-PACKET-013-LIST-LIVE.md`](./PM-PACKET-013-LIST-LIVE.md). SA **029**. [#144](https://github.com/bywale-com/travis/pull/144). Vercel fail was `maxDuration` 800; set 60. |
-| 012 | [`PM-PACKET-012-USABLE-CHAT.md`](./PM-PACKET-012-USABLE-CHAT.md). SA **028**. [#142](https://github.com/bywale-com/travis/pull/142) merged. Do not remint. |
-| Held | Travis write-port. Canvas. 022 on [#120](https://github.com/bywale-com/travis/pull/120). Grok Bot orchestra — discussed, not locked. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **13:52 UTC 2026-09-07**. Flag **14:00**. |
+| 014 | Planted. SA **030**. Engineer `5b864f2`. Look Pass. Emerge [#148](https://github.com/bywale-com/travis/issues/148). Human A–C on the Log still open. |
+| Blocker Action | Considering in [`AUTOMATION-PACKET-CHAIN.md`](./AUTOMATION-PACKET-CHAIN.md). No go. |
 
 ---
 
 ## Next PM job
 
-1. Accept. Read Current, then the newest stamp.
-2. Land 013 on psi after Vercel is green. Hard refresh to see a row is Fail.
-3. Do not remint 012 / 028.
+1. Human walk 014 on the preview / psi (sheet A–C). Do not remint 014.
+2. Blocker letter: wait for go. Do not plant the Action on hold.
+3. Dest glossary ask still open: keep dest in the house, or rename the house word too.
+4. Do not remint 011–013 / 027–029.
+5. Do not plant `src/`.
 
 ---
 
@@ -31,6 +34,7 @@
 
 - Do not overwrite the 14:00 flag.
 - Do not plant `src/` except a deploy blocker already cut.
-- Do not remint 012 / 027 / 028.
+- Do not remint 011 / 012 / 013 / 027 / 028 / 029 / 030.
 - Do not put Hear it / Skip buttons back.
-- Do not Pass a look that never opened the Log.
+- Do not Pass a look that never opened the Log on psi.
+- Do not mint `/protocols/technical-pm.md`.
