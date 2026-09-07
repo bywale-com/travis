@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:34 UTC — seq 907: Travis created a PM instead of dest-with-context. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:36 UTC — 907 miss: create instead of dest; Deep Agents fork never ran. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3352,4 +3352,16 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Founder (preserved):** because it didn't do that … Look at what it did in the logs.
 
 **Tape (room Travis, 15:02–15:03 UTC).** Seq **907** is the alongside line. Then: 908 “route that request cleanly.” 909 mute `Creating Technical PM.` Stream `create_agent` died `ENOENT` mkdir sdk-agent-store. 910 creation failed, offer Engineer. 911 you: there is already a Technical PM. 912 he said Technical PM is not a seated protocol he can send to. 913 `list_seats` — Technical PM **is** seated on `/protocols/pm.md`. **No dest_job after 15:00.** No print. No prompt to list. Grain never ran.
+
+---
+
+## 2026-09-07 15:36 UTC — Why 907, and yes that is why Deep Agents (founder)
+
+**Kind:** Type A. Same miss. Flag 14:00 stands. Not a remint. Not a plant.
+
+**Founder (preserved):** why did it interpret it that way? … isn't this why the fuck we've just worked so fucking hard on something? So, isn't this the whole reason why we've done the integration with Lang chain
+
+**Why.** Glass says Technical PM. Catalog `pm` is unseated. `TRAVIS_SYSTEM` says unseated catalog slug = nobody → create and sit; never mail catalog `pm`. He heard “technical PM,” ran `create_agent`. Role dest `seat=pm` would have resolved to the idle seated Technical PM. He never called `send_to_seat`. Dest-with-context only rewrites dest `text` after that call, and only on marker phrases this line does not have. Middleware classifies and does nothing.
+
+**LangChain.** Yes — 014 / 030 was a process on every message, then the dest-with-context fork, so this send would leave as ask + print. The kit ran. The fork did not. Same miss class: context, tools, translating the task. Do not remint 030.
 
