@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:44 UTC — not a keyword patch; use the kit’s middleware. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:46 UTC — planned recut in plain sentences; wait for go. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3402,4 +3402,14 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Ours stays ours.** Phone, dest to Cursor people, room tape. Dest seats stay Cursor — 030 silence, not a LangChain product.
 
 **Ask.** Recut 030 to use the kit’s `wrapModelCall` (print in the request, not MARKERS), or hold. I do not plant.
+
+---
+
+## 2026-09-07 15:46 UTC — Plan in plain sentences (founder)
+
+**Kind:** Face of the recut. Flag 14:00 stands. Not a plant. Wait for go.
+
+**Founder (preserved):** what are you planning on doing? … fuller, simpler sentences … unmissable and stop … speaking in code. Just fuller, simple sentences of the mechanism.
+
+**Plan.** Deep Agents already runs on every typed send. Its own hook runs before every think. We will use that hook to attach the unclipped chat to what Travis sees, every time, with no magic words. When he sends to Technical PM, the leaving message is your ask plus that chat, because Technical PM is a new person and only gets what we mail. We drop the keyword list. Dest stays Cursor. I do not plant until go.
 
