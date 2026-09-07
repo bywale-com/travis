@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 14:56 UTC — PM look 080 Pass. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 17:00 UTC — PM look 015 Pass (this seat). Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3300,5 +3300,51 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not Type. I did not Talk.
 
 **Steps I could not do (human):** Vercel team SSO. Type the lived line. A second send. Talk on a phone. Confirm an `agent_post` after a real send on this plant.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-07 16:25 UTC — Packet 015 dest harness recut (founder go)
+
+**Kind:** Packet. Founder go. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** We'll do that, we'll do that another, we'll do that afterwards. Just, you could feel free to go ahead on that recut though of the, the patients. That's what I meant to go ahead.
+
+**What he meant.** The dest recut. Look paste and the other tickets afterwards.
+
+**Landed.** [`PM-PACKET-015-DEST-HARNESS.md`](./PM-PACKET-015-DEST-HARNESS.md) · test [`PM-PACKET-015-DEST-HARNESS-TEST.md`](./PM-PACKET-015-DEST-HARNESS-TEST.md). **Wake:** sa. SA **031**. This PR.
+
+**Lock (plain).** Dest body is the ask plus the print of this chat. No marker words. Long print lives in the kit file. Spoken window stays small. Full mail once on dest. When they name Technical PM, dest — do not create. Dest seats stay Cursor. Do not remint 011–013 / 027–029 / 030.
+
+**Human leftover (other PR / later).** Re-paste Automation C. Dest glossary. Blocker letter. I do not plant `src/`.
+
+---
+
+## 2026-09-07 16:42 UTC — 015 did not pick up (founder)
+
+**Kind:** House miss. Same 015. Flag 14:00 stands. Not a remint.
+
+**Founder (preserved):** Did, did, did it pick it up or not, man? I don't see anything.
+
+**It did not.** Action ran on the first push of the new branch. `before` was zeros. The file list compared the commit to a clean checkout and came back empty. No `wake-sa` label. No Systems Analyst. PR #154 has no labels.
+
+**Cut.** New-branch first push diffs the tip commit, not the worktree. Wait a few seconds if the PR is not open yet. This commit re-arms 015 so the label can land.
+
+---
+
+## 2026-09-07 17:00 UTC — PM look 015 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`PM-PACKET-015-DEST-HARNESS.md`](./PM-PACKET-015-DEST-HARNESS.md) · SCP-031 · plant on [#154](https://github.com/bywale-com/travis/pull/154) (`3f69774`). Sheet: [`PM-LOOK-015.md`](./PM-LOOK-015.md).
+
+**Look.** src/ matches the lock. Marker gate gone. Every dest leave assembles ask + dest print (`REQUEST_SCAN` tape, no last-Travis-required). Kit hook hangs `/print.md` + `/roster.md`; does not inject the print into the think. Stream dest process body is the print. Here clip stands. No Hear / Skip buttons. Grain tests pass.
+
+**Preview I opened:** `https://travis-git-cursor-packet-015-dest-ba125c-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see Voice / Log / Type glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not Type the 907 line. I did not Talk.
+
+**Steps I could not do (human):** Vercel team SSO. Type / Send in room Travis. Open Stream. Type `ok`. Talk on a phone. Dest landing on a live Technical PM bind.
 
 **Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.

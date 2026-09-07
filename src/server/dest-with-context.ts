@@ -1,14 +1,16 @@
 /**
- * SCP-030 — load dest-with-context from unclipped tape.
+ * SCP-031 — load dest print from this session’s REQUEST_SCAN tape.
  */
 
+import { REQUEST_SCAN } from "@/lib/request-log";
 import {
   assembleDestWithContext,
-  isDestWithContextAsk,
+  formatRosterFact,
   unclippedPrint,
   type PrintTurn,
 } from "@/lib/dest-with-context";
 import { recentTurns } from "@/server/room-read";
+import { listSeatRoster } from "@/server/sit";
 
 export type DestWithContext = {
   ask: string;
@@ -16,22 +18,29 @@ export type DestWithContext = {
   assembled: string;
 };
 
+async function destPrintTurns(sessionId: string): Promise<PrintTurn[]> {
+  return (await recentTurns(sessionId, REQUEST_SCAN)) as PrintTurn[];
+}
+
 export async function unclippedPrintFor(sessionId: string): Promise<string> {
-  const turns = (await recentTurns(sessionId)) as PrintTurn[];
-  return unclippedPrint(turns);
+  return unclippedPrint(await destPrintTurns(sessionId));
 }
 
 export async function destWithContextFor(
   sessionId: string,
 ): Promise<DestWithContext | null> {
-  const turns = (await recentTurns(sessionId)) as PrintTurn[];
+  const turns = await destPrintTurns(sessionId);
   const lastUser = [...turns].reverse().find((t) => t.kind === "user");
-  if (!lastUser || !isDestWithContextAsk(lastUser.text)) return null;
+  if (!lastUser) return null;
   const print = unclippedPrint(turns);
-  if (!print.trim()) return null;
   return {
     ask: lastUser.text,
     print,
     assembled: assembleDestWithContext({ ask: lastUser.text, print }),
   };
+}
+
+export async function rosterFactFor(sessionId: string): Promise<string> {
+  const roster = await listSeatRoster(sessionId).catch(() => "");
+  return formatRosterFact(roster);
 }

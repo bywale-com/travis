@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-07 14:45 UTC
+# PM seat handoff — 2026-09-07 16:42 UTC
 
 **This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -14,19 +14,21 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **14:45 UTC 2026-09-07**. Flag **14:00**. |
-| 014 / 079 | Merged. Live app. 079 look Pass from `src/` — did not send. |
-| 080 | [`HOTFIX-080-DEEPAGENTS-ESM.md`](./HOTFIX-080-DEEPAGENTS-ESM.md) — two lived sends; ESM throw; mute status. This PR. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **16:42 UTC 2026-09-07**. Flag **14:00**. |
+| 014 / 079 / 080 | Merged. Live app. |
+| 015 dest recut | [`PM-PACKET-015-DEST-HARNESS.md`](./PM-PACKET-015-DEST-HARNESS.md) · **Wake:** sa · SA **031**. This PR. First push did not label. Re-arming. |
+| Look walk | Locked on [#153](https://github.com/bywale-com/travis/pull/153). Human re-pastes Automation C afterwards. |
 
 ---
 
 ## Next PM job
 
-1. Engineer plants 080. Then look **including a real send** if the preview allows. Do not Pass silence.
-2. Blocker letter: wait for go.
-3. Dest glossary ask still open.
-4. Do not remint 011–013 / 027–029 / 030.
-5. Do not plant `src/`.
+1. SA 031 on this PR. Engineer plants here. Do not remint 030.
+2. Founder re-pastes Automation C afterwards (`pm-look.prompt.md` on #153).
+3. Blocker letter: wait for go.
+4. Dest glossary ask still open.
+5. Do not remint 011–013 / 027–029 / 030.
+6. Do not plant `src/`.
 
 ---
 
@@ -36,5 +38,5 @@
 - Do not plant `src/` except a deploy blocker already cut.
 - Do not remint 011 / 012 / 013 / 027 / 028 / 029 / 030.
 - Do not put Hear it / Skip buttons back.
-- Do not Pass a look that never opened the Log on the live app.
+- Do not invent a second keyword list for dest.
 - Do not mint `/protocols/technical-pm.md`.

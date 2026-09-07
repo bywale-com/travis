@@ -1,43 +1,17 @@
 /**
- * SCP-030 — dest-with-context grain.
- * Here stays clipped. Dest / filesystem read unclipped tape.
+ * SCP-031 — dest-with-context grain.
+ * Here stays clipped. Dest / kit file is this session’s worthy tape.
  */
 
-import {
-  WINDOW_TURNS,
-  isContextWorthy,
-  type ContextTurn,
-} from "./room-context";
-
-const MARKERS = [
-  "as context",
-  "printed chat",
-  "send that list",
-  "including what we just",
-  "including the one we just",
-] as const;
+import { isContextWorthy, type ContextTurn } from "./room-context";
 
 export type PrintTurn = ContextTurn & { seatLabel?: string };
 
-export function isDestWithContextAsk(text: string): boolean {
-  const t = text.toLowerCase();
-  return MARKERS.some((m) => t.includes(m));
-}
-
-export function lastTravisSpeakablePost(turns: PrintTurn[]): PrintTurn | null {
-  for (let i = turns.length - 1; i >= 0; i--) {
-    const turn = turns[i];
-    if (
-      turn.kind === "agent_post" &&
-      turn.seatKey === "travis" &&
-      turn.speakable !== false &&
-      turn.text.trim()
-    ) {
-      return turn;
-    }
-  }
-  return null;
-}
+export const ROSTER_DEST_LINES = [
+  "Named dest to Technical PM, SA, or Engineer is send_to_seat or dispatch_to_seat with seat=pm|sa|engineer and no who.",
+  "Do not create_agent for that dest. Catalog pm is not this bind.",
+  "New PM is create_agent then sit_agent — only when they asked for a new person.",
+] as const;
 
 /** Labels on print lines — not describeTurn. */
 export function formatPrintLine(turn: PrintTurn): string {
@@ -53,28 +27,20 @@ export function formatPrintLine(turn: PrintTurn): string {
 }
 
 /**
- * Last Travis speakable post, full, then other worthy turns in the last
- * WINDOW_TURNS, raw text, no LINE_CAP. Does not duplicate that Travis post.
+ * Worthy turns in the look, chronological, raw text, no LINE_CAP,
+ * no WINDOW_CHAR_CAP, no last-Travis-required. Empty tape → "".
  */
 export function unclippedPrint(turns: PrintTurn[]): string {
-  const travis = lastTravisSpeakablePost(turns);
-  if (!travis) return "";
-
-  const window = turns.filter(isContextWorthy).slice(-WINDOW_TURNS);
-  const lines: string[] = [formatPrintLine(travis)];
-  let skippedTravis = false;
-  for (const turn of window) {
-    if (
-      !skippedTravis &&
-      turn.kind === "agent_post" &&
-      turn.seatKey === "travis" &&
-      turn.text === travis.text
-    ) {
-      skippedTravis = true;
-      continue;
-    }
-    if (!turn.text.trim()) continue;
-    lines.push(formatPrintLine(turn));
+  const seen = new Set<string>();
+  const lines: string[] = [];
+  for (const turn of turns) {
+    if (!isContextWorthy(turn)) continue;
+    const text = turn.text.trim();
+    if (!text) continue;
+    const line = formatPrintLine(turn);
+    if (seen.has(line)) continue;
+    seen.add(line);
+    lines.push(line);
   }
   return lines.join("\n");
 }
@@ -83,5 +49,14 @@ export function assembleDestWithContext(params: {
   ask: string;
   print: string;
 }): string {
-  return `${params.ask.trim()}\n\n${params.print}`;
+  const ask = params.ask.trim();
+  if (!params.print.trim()) return ask;
+  return `${ask}\n\n${params.print}`;
+}
+
+/** Kit `/roster.md` — roster plus named-dest fact. Not a classifier. */
+export function formatRosterFact(roster: string): string {
+  const body = roster.trim();
+  const fact = ROSTER_DEST_LINES.join("\n");
+  return body ? `${body}\n\n${fact}` : fact;
 }
