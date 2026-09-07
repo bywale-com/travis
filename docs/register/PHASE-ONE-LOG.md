@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 15:28 UTC — Vercel fail on 013 was maxDuration 800 on Hobby. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 12:20 UTC — Technical PM bind done. Successor pastes PM-HANDOFF. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2917,3 +2917,23 @@ Fix: Wake on its own line. That push is the get-go the go recut meant to be.
 **Kind:** Deploy. Same 013.
 
 Preview deploy `dpl_HDpcdWpPKqVMXTjAzbJMCirgERq8` failed. Local `next build` passed. The room wire exported `maxDuration = 800`. This team is Hobby. That number is over the plan. Resume from `seq` is the no-loss — the function does not need 800s. Set `60`. Client reconnects.
+
+---
+
+## 2026-09-07 12:20 UTC — Pass the Technical PM seat (founder)
+
+**Kind:** Seat handoff. Not a packet. Flag 14:00 stands. **This bind is done.**
+
+**Founder (preserved):**
+
+> Send what we've talked about in this chat, like when you print it out to me, when you are sending this request as well, so it can log that too.
+
+> Is your system message, and is this seat well documented in terms of protocols and process? This specific seat, this is a technical PM seat.
+
+> Just get your seat ready to be passed to another technical PM. That's what I mean, just, whatever is required to get this seat ready, so I can spin up another technical PM, do that.
+
+**Handoff:** [`PM-HANDOFF.md`](./PM-HANDOFF.md) — printed chat, initiatives in ideation order, paste for the new chat. Last bind `bc-25c5c6bf-006f-4252-9f25-49ab183835b2`. Hang still points here until Founder / Engineer rebinds the new `bc-`. Do not mail catalog `pm`. Do not mint `/protocols/technical-pm.md`.
+
+**Seat honest:** The job is written (`docs/README.md`, `docs/seats/PRODUCT-MANAGER.md`, `/protocols/pm.md`). Cloud always-on is Engineer `AGENTS.md`. A cold Cloud bind starts as Engineer unless the paste seats Technical PM. `/protocols/pm.md` now carries the locked line: you may be hung as `technical-pm`; catalog `pm` is not you.
+
+**Do not remint** 011–013 / 027–029. Next cut is **014** / hotfix **079** only from new lived smoke. Human walk of 012 and 013 on psi is still open.

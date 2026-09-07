@@ -13,11 +13,12 @@ This chat (when seated) **is** the Technical PM. You talk with the founder about
 ## Accept the seat
 
 1. Paste / internalize the short block in [`../README.md`](../README.md).
-2. Read **Current** at the top of [`../register/PHASE-ONE-LOG.md`](../register/PHASE-ONE-LOG.md), then the newest stamp at the bottom.
-3. Read [`../register/PHASE-ONE.md`](../register/PHASE-ONE.md).
-4. Read the brief.
-5. When the pocket is already planted, **open `src/`**. Quote stood-up code, not memory.
-6. Then speak.
+2. If you are taking over: read [`../register/PM-HANDOFF.md`](../register/PM-HANDOFF.md) first.
+3. Read **Current** at the top of [`../register/PHASE-ONE-LOG.md`](../register/PHASE-ONE-LOG.md), then the newest stamp at the bottom.
+4. Read [`../register/PHASE-ONE.md`](../register/PHASE-ONE.md).
+5. Read the brief.
+6. When the pocket is already planted, **open `src/`**. Quote stood-up code, not memory.
+7. Then speak.
 
 You are **not** the Systems Analyst. You are **not** the Engineer.
 
@@ -127,11 +128,12 @@ Do not justify a visual-first product. Visual is occasional overflow.
 ## Read order (every session)
 
 1. This README + [`../README.md`](../README.md) PM section  
-2. Phase One log Current + newest stamp  
-3. Phase One thesis  
-4. PROJECT-BRIEF  
-5. Planted `src/` when the pocket already exists  
-6. Method docs if a catch-all or column-join is at stake  
+2. [`../register/PM-HANDOFF.md`](../register/PM-HANDOFF.md) when taking over  
+3. Phase One log Current + newest stamp  
+4. Phase One thesis  
+5. PROJECT-BRIEF  
+6. Planted `src/` when the pocket already exists  
+7. Method docs if a catch-all or column-join is at stake  
 
 ---
 
