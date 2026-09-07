@@ -4,6 +4,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-07** · Hotfix 081 · Voice Live thinks with the same Deep Agents hang as Type, and Realtime only hears and speaks, because the founder was smoking Voice and that mouth was still the old voice model.
+
 - **2026-09-07** · SCP-031 · [PR #154](https://github.com/bywale-com/travis/pull/154) — Every dest leave mails the ask plus this chat’s print, the kit hangs `/print.md` and `/roster.md` without stuffing the room into a cheap think, and marker words are gone, because 907 said alongside / this chat and never dested.
 
 - **2026-09-07** · Hotfix 080 · [PR #151](https://github.com/bywale-com/travis/pull/151) — Type hangs Deep Agents from `deepagents/node` so Vercel require() is CJS, a kit throw falls back to the Responses loop, and a generate miss writes a Log status that says error, because the browser ESM died mute.

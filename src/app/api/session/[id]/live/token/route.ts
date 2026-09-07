@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { mintLiveToken, travisIsWired } from "@/server/travis-openai";
-import { TRAVIS_SYSTEM, TRAVIS_TOOL_DECLS } from "@/server/travis-tools";
+import { TRAVIS_SYSTEM } from "@/server/travis-tools";
 import { roomContextFor } from "@/server/room-read";
 import { db } from "@/server/db/client";
 import { voiceSession } from "@/server/db/schema";
@@ -39,7 +39,7 @@ export async function POST(
   if (!travisIsWired()) {
     return NextResponse.json({
       wired: false,
-      tools: TRAVIS_TOOL_DECLS,
+      tools: [],
       systemInstruction: TRAVIS_SYSTEM,
       here,
     });
@@ -55,7 +55,7 @@ export async function POST(
       token: minted.token,
       model: minted.model,
       handle: session.travisLiveHandle ?? "",
-      tools: TRAVIS_TOOL_DECLS,
+      tools: [],
       systemInstruction: TRAVIS_SYSTEM,
       here,
     });

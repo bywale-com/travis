@@ -57,6 +57,8 @@ export async function startTravisLive(opts: {
   let lastTravis = "";
   let userFlush: ReturnType<typeof setTimeout> | null = null;
   let pendingNotify: string | null = null;
+  let harnessBusy = false;
+  let skipNextTravisPersist = false;
   let stopFn: () => Promise<void> = async () => {};
   let sendEvent: (obj: unknown) => void = () => {};
 
@@ -93,8 +95,13 @@ export async function startTravisLive(opts: {
       serveSpeak?: string;
     }>(res);
     if (typeof data.serveSpeak === "string") {
-      if (data.serveSpeak.trim()) sendNotify(data.serveSpeak);
-      opts.onTravisText(data.serveSpeak);
+      if (role === "user") opts.onUserText(text);
+      if (data.serveSpeak.trim()) {
+        skipNextTravisPersist = true;
+        lastTravis = data.serveSpeak;
+        sendNotify(data.serveSpeak);
+        opts.onTravisText(data.serveSpeak);
+      }
       return data;
     }
     if (role === "user") opts.onUserText(text);
@@ -111,6 +118,7 @@ export async function startTravisLive(opts: {
     const said = collapseSpeechStutter(forced ?? userAcc);
     userAcc = "";
     if (!said) return;
+    sendEvent({ type: "response.cancel" });
     if (
       shouldDropHeardAsUser({
         heard: said,
@@ -120,12 +128,16 @@ export async function startTravisLive(opts: {
     ) {
       return;
     }
+    harnessBusy = true;
     void persist("user", said)
       .then((data) => {
         if (data?.stopLive) void stopFn();
       })
       .catch((e) => {
         opts.onError(e instanceof Error ? e.message : String(e));
+      })
+      .finally(() => {
+        harnessBusy = false;
       });
   };
 
@@ -158,29 +170,6 @@ export async function startTravisLive(opts: {
       return;
     }
     pendingNotify = line;
-  };
-
-  const runTools = async (
-    calls: Array<{ name: string; callId: string; args: Record<string, unknown> }>,
-  ) => {
-    for (const call of calls) {
-      const toolRes = await fetch(`/api/session/${opts.sessionId}/live/tool`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: call.name, args: call.args }),
-      });
-      const json = (await toolRes.json()) as { text?: string; here?: string };
-      sendEvent({
-        type: "conversation.item.create",
-        item: {
-          type: "function_call_output",
-          call_id: call.callId,
-          output: json.text ?? "",
-        },
-      });
-      if (json.here) pushHere(json.here);
-    }
-    sendEvent({ type: "response.create" });
   };
 
   pc.ontrack = (e) => {
@@ -238,12 +227,18 @@ export async function startTravisLive(opts: {
           continue;
         }
         if (action.op === "travis_delta") {
+          if (harnessBusy || skipNextTravisPersist) continue;
           travisAcc = absorbText(travisAcc, action.text).acc;
           continue;
         }
         if (action.op === "travis_flush") {
           const said = collapseSpeechStutter(travisAcc);
           travisAcc = "";
+          if (harnessBusy) continue;
+          if (skipNextTravisPersist) {
+            skipNextTravisPersist = false;
+            continue;
+          }
           if (said) {
             lastTravis = said;
             void persist("travis", said).catch((e) => {
@@ -252,7 +247,7 @@ export async function startTravisLive(opts: {
           }
           continue;
         }
-        if (action.op === "tools") void runTools(action.calls);
+        if (action.op === "tools") continue;
       }
     });
 
