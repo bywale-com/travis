@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 12:28 UTC — Successor bind. 013 A/B/C.1 on psi Log. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 12:40 UTC — Last 2h on psi Log: Travis dest’d the capture, didn’t print. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2966,3 +2966,43 @@ Face holds `GET /api/session/:id/events` with `afterSeq` / `Last-Event-ID`. Hear
 **Quoted plant:** room wire `maxDuration = 60` · `consumeRoomWire` / `/events` · no Hear/Skip buttons.
 
 **Ask.** The timed-out dest (printed chat + initiatives in ideation order) — still this successor’s job, or dead with that bind? C.2 leftover: a new line on an open ticket. Next specified plant on the Engineer trail is **022** on [#120](https://github.com/bywale-com/travis/pull/120) — not a go from this stamp.
+
+---
+
+## 2026-09-07 12:40 UTC — Last 2h on the Travis tape (founder)
+
+**Kind:** Lived miss. Type A (who captures) + Type B (this thread’s leaves). Flag 14:00 stands. Not a packet. Do not remint 011–013. Deep Agents held until we talk.
+
+**Founder (this chat):** Okay, so here's the task I want to do, right? 1st of all, I've been reading up on deep agents by Liang Cheng. But, you know, I have a deeper question. And, again, we're trying to fix Travis, right? Travis is not doing what we wanted to do, right? And, I want to see if you can identify the problem. I want you to look into the most recent chat session, effort to date specifically. so, UTC, so right now I think it's UTC like 12:33. So, I've only been, when I say today, I literally mean Within the last 2 h , look for any, look for the chat that we've talked about, discussions we've had, or rather the conversation I've had inside of Travis in the most recent chat, in the last 2 h , and I want to see if you can identify the problem there. And then we'll talk about what I've been thinking about with DeepAgent and a deeper question I have.
+
+**Tape (room Travis `0e8875f8-…`, 11:57–12:23 UTC).** Quoted, not a substitute flag.
+
+11:59 founder (STT):
+
+> yeah of every disgust in this every disgust idea in the OR initiative that we yet we still haven't built in order that we ideated it
+
+12:00 Travis: guessed “OR initiative” = open backlog. Listed eight tickets with invented titles mapped onto rows named `こう。` / `That's fine.` / `Okay, great.` Effort on that Stream: `read_initiative` × 8 + `search_room` 185. Wrong object.
+
+12:02 founder recut:
+
+> Of every discussed initiative, I mean on its end, because we talked about things personally, initiative idea in the order that we ideated it. But here's what I want you to do. I want you to send what we've talked about in this chat, like when you print it out to me, when you are sending this request as well, so it can log that too.
+
+12:02 Travis: “I'll line up a Technical PM handoff and include the printed chat context.” Dest `who=technical-pm`. Payload is the **instruction**, hung on ticket `Backlog-management verbs` — not the print. Receipt (Hotfix 039, `dispatchReceipt`): `Technical PM is now running it. Nothing came back yet — read_seat_reply once it lands.` Tool name in the Log.
+
+12:03 founder: `Travis`. Travis: I can check whether Technical PM has replied. Did not print. Did not log.
+
+12:04:38 `Technical PM timed out.` Dest job `69d8e3dc-…`. Cursor child `bc-f1532a12` named “Print this bind transcript” (12:04:43–12:05:00) — empty transcript, no print.
+
+12:10 prior TP (`bc-25c5c6bf`): “I'll find how dests to Technical PM are sent, then stamp the printed chat and send that same record.” Process. Not the print. Not the ideation-order list.
+
+12:23 (013 walk): `One-line note on the tape.` Travis recapped the old dest. Did not answer the line. `TRAVIS_SYSTEM`: do not recap the last turns; polish, do not paraphrase.
+
+**Problem (alignment, not the flag).** Travis did not fail as a chat that shows lines. The conversational-PM job failed in one thread:
+
+1. **Wrong object.** “Discussed, in the order we ideated it, on its end, personally” became the **backlog catalog**. Here / `list_initiatives` ate the ask.
+2. **Dest instead of capture.** He promised the print, dest’d the instruction, dest mailed a **dead** hang. [`TRAVIS-AS-PM.md`](./TRAVIS-AS-PM.md): Travis is the PM of the face; dest Technical PM is the cut. The write-port is still not planted — so the trail he wanted never lands unless dest lands, and dest didn’t.
+3. **Paraphrase / recap.** 011 pocket 8 already locked polish. This thread dropped the recut, leaked `read_seat_reply`, and answered a new line with the old dest.
+
+**Not this stamp:** Deep Agents. The initiative list. A table. A plant.
+
+**Ask.** Is that the problem you mean? Then Deep Agents.
