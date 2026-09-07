@@ -5,13 +5,14 @@ import { TRAVIS_SYSTEM, TRAVIS_TOOL_DECLS } from "@/server/travis-tools";
 import { roomContextFor } from "@/server/room-read";
 import { db } from "@/server/db/client";
 import { voiceSession } from "@/server/db/schema";
-import { AuthError } from "@/server/api-error";
+import { AuthError, jsonRoute } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
 
 export async function POST(
   req: Request,
   ctx: { params: Promise<{ id: string }> },
 ) {
+  return jsonRoute(async () => {
   const { id: sessionId } = await ctx.params;
   try {
     await requireOwnedSession(req, sessionId);
@@ -62,4 +63,5 @@ export async function POST(
     const msg = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ wired: false, error: msg }, { status: 500 });
   }
+  });
 }

@@ -4,6 +4,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-07** · Hotfix 079 · [PR #149](https://github.com/bywale-com/travis/pull/149) — Voice / Talk / Type send parse with `readJson`, a bad SSE chunk names the payload, and Deep Agents loads after SSE so a 014 throw is JSON or a stream error, because the phone was reading `<!DOCTYPE` as JSON.
+
 - **2026-09-07** · SCP-030 · [PR #147](https://github.com/bywale-com/travis/pull/147) — Type is Deep Agents and dest-with-context sends the unclipped print plus the ask, because dest was mailing the wrap while Here clip killed the list.
 
 - **2026-09-06** · SCP-029 · [PR #144](https://github.com/bywale-com/travis/pull/144) — The room holds one SSE that resumes from last `seq` and other-request writes `NOTIFY travis_room`, a failed GET keeps last good rows, and poll is only catch-up while the wire is down, because a smarter whole-tape tick was still guessing.

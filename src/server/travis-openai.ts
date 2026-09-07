@@ -14,7 +14,6 @@ import {
 import { TRAVIS_SYSTEM, TRAVIS_TOOL_DECLS } from "@/server/travis-tools";
 import { roomContextFor } from "@/server/room-read";
 import { runMotionRunner } from "@/server/motion";
-import { invokeDeepAgent } from "@/server/travis-deep-agent";
 
 export { TRAVIS_LIVE_MODEL, TRAVIS_TEXT_MODEL };
 
@@ -84,6 +83,10 @@ export async function generateTravisText(params: {
   }
   const room = await roomContextFor(params.sessionId).catch(() => "");
   try {
+    // Load after the send route has already returned SSE. A static import
+    // of deepagents on this module made finalize/send/live-token HTML 500
+    // at function load — the phone then parsed <!DOCTYPE as JSON.
+    const { invokeDeepAgent } = await import("@/server/travis-deep-agent");
     return await invokeDeepAgent({
       sessionId: params.sessionId,
       prompt: params.prompt,

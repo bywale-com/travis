@@ -19,7 +19,7 @@ import { noteTravisUnwired } from "@/server/travis-dest";
 import { MembershipError, requireOpenMember } from "@/server/room-membership";
 import { destBindingsForSend, resolveDestBinding } from "@/server/dest-resolve";
 import { pipeTravisText } from "@/server/travis-reply";
-import { AuthError } from "@/server/api-error";
+import { AuthError, jsonRoute } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
 import {
   enqueueOnSeat,
@@ -29,6 +29,9 @@ import {
   sseHeaders,
 } from "@/server/seat-pipe";
 import { serveInvite } from "@/server/serve";
+
+/** Hobby cap. Same as the room wire. Deep Agents invoke can outlast the default. */
+export const maxDuration = 60;
 
 type Body = { utterance: string; referenceTurnId?: string | null };
 
@@ -52,6 +55,7 @@ export async function POST(
   req: Request,
   ctx: { params: Promise<{ id: string }> },
 ) {
+  return jsonRoute(async () => {
   const { id: sessionId } = await ctx.params;
   try {
     await requireOwnedSession(req, sessionId);
@@ -360,4 +364,5 @@ export async function POST(
   });
 
   return new Response(stream, { headers: sseHeaders() });
+  });
 }

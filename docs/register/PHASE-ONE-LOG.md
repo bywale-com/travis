@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:52 UTC — 014 needs no new key. No blocker Action. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 14:32 UTC — PM look 079 Pass. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3187,3 +3187,71 @@ The kit is not a hosted LangChain product you subscribe to. It is a package. It 
 **Process (considering — same cheap Action, no LLM).** Usually Engineer. A blocker is: missing secret / founder paste, or specified-but-not-clear, or planted but will not work without you. Not Fail-look. Not human test (that is emerge). Engineer writes `docs/register/BLOCKER-NNN-*.md` on this PR (name the secret, never the value). Push → label `blocker` → issue assigned + same Resend as emerge. No Cursor boot. Founder pastes; then seats continue.
 
 **Ask.** Go on that Action (same three email secrets), or hold until the next lived miss?
+
+---
+
+## 2026-09-07 13:58 UTC — Talk banner: HTML parsed as JSON (founder screenshot)
+
+**Kind:** Lived miss on the face. Flag 14:00 stands. Not a plant. Not dest jargon.
+
+**Founder:** screenshot. Log · Talk bar: Listening · Clear · Pause (loud). Orange line: `Unexpected token '<', "<!DOCTYPE "... is not valid JSON`.
+
+**What that is.** Carbon Talk listen (`Room.tsx` Talk bar). The orange is the error banner (`dangerQuiet`), not Stream, not a dest chip. Pause is loud. The parser ate an **HTML page** (`<!DOCTYPE …`) and reported the first character.
+
+**Why the banner is ugly.** `readJson` already exists so HTML 500s say “Server did not return JSON (status): …” (`src/lib/http.ts`). Talk finalize and Type send still call raw `res.json()` when the answer is not an event-stream:
+
+```1306:1308:src/components/Room.tsx
+        const ct = res.headers.get("content-type") ?? "";
+        if (!ct.includes("text/event-stream")) {
+          const data = await res.json();
+```
+
+Same on Type `/send`. Catch writes `e.message` onto that banner.
+
+**What actually failed** is behind the HTML: the POST (`/finalize` on Talk, `/send` on Type) did not return JSON or SSE. Typical: Next/Vercel HTML 500, or a login/protection page. I could not read Travis Vercel runtime errors from this seat (403).
+
+**014.** Talk still runs the Type loop (`finalize` → `pipeTravisText` → `generateTravisText` → `createDeepAgent`). Sheet 014 is Log · Type. If this is the preview walk, this send dying is a plant miss — fail-look, not a new packet. If this is production psi, 014 is not merged; same banner, older pipe.
+
+**Ask.** Psi or the #147 preview? What did you send (list sentence, dest sentence, or Talk of something else)? Then fail-look 014, or a small banner hotfix (`readJson`) plus the real 500.
+
+---
+
+## 2026-09-07 14:02 UTC — 079: that banner is HTML as JSON (founder screenshot)
+
+**Kind:** Hotfix cut. Lived miss. Flag 14:00 stands. [#147](https://github.com/bywale-com/travis/pull/147) **merged** — 014 is on `main` / psi.
+
+**Founder:** screenshot only. Log · Talk: Listening · Clear · Pause. Orange: `Unexpected token '<', "<!DOCTYPE "... is not valid JSON`.
+
+**Stood up.** That is the Talk error banner, not Stream. Raw `res.json()` on an HTML page. `readJson` already exists. 014 hang is live; Talk to Travis still hits `createDeepAgent`. An uncaught throw before SSE is a Next HTML 500 — same banner.
+
+**Cut:** [`HOTFIX-079-TALK-HTML-JSON.md`](./HOTFIX-079-TALK-HTML-JSON.md). Engineer: `readJson` on non-SSE; do not dump parser junk from SSE; find the 500; keep 030 grain. This PR. I do not plant `src/`.
+
+---
+
+## 2026-09-07 14:22 UTC — Anything to Travis (founder)
+
+**Kind:** Lived recut of 079. Flag 14:00 stands. Same [#149](https://github.com/bywale-com/travis/pull/149).
+
+**Founder (preserved):** Not quite sure what you mean by PSI specifically, but, it appeared just sending anything to Travis, whether via voice or text.
+
+**Psi** is house shorthand for the live Travis app: `https://travis-psi.vercel.app`. Not a product word. Not a mode. You do not have to say it.
+
+**Lock.** Sending **anything** to Travis — Voice or text — shows that banner. Same pipe: `pipeTravisText` → `createDeepAgent` after 014 merged. 079 recut to Voice + Talk + Type. Not Talk-only.
+
+---
+
+## 2026-09-07 14:32 UTC — PM look 079 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Hotfix:** [`HOTFIX-079-TALK-HTML-JSON.md`](./HOTFIX-079-TALK-HTML-JSON.md) · plant on [#149](https://github.com/bywale-com/travis/pull/149) (`3b0a166`). Sheet: [`PM-LOOK-HOTFIX-079.md`](./PM-LOOK-HOTFIX-079.md).
+
+**Look.** src/ matches the lock. Voice / Talk finalize and Type `/send` use `readJson` on non-SSE. SSE chunks use `parseJsonText` — banner never says `Unexpected token '<'`. `generateTravisText` lazy-loads Deep Agents after SSE headers. `jsonRoute` + `maxDuration = 60` on finalize / send. Dest-with-context grain not reminted. Hear / Skip buttons stay off. `src/lib/http.test.ts` — 10 pass.
+
+**Preview I opened:** `https://travis-git-cursor-hotfix-079-talk-395a25-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see Voice / Log / Talk glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not Talk. I did not Type. I did not Voice.
+
+**Steps I could not do (human):** Vercel team SSO. Talk on a phone. Type / Voice a short line. Confirm the orange banner after a real send.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.

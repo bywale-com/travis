@@ -7,7 +7,7 @@ import { db } from "@/server/db/client";
 import { agentBinding, voiceSession } from "@/server/db/schema";
 import type { AgentBinding, SeatKey } from "@/server/db/schema";
 import { noteTravisUnwired } from "@/server/travis-dest";
-import { AuthError } from "@/server/api-error";
+import { AuthError, jsonRoute } from "@/server/api-error";
 import { MembershipError, requireOpenMember } from "@/server/room-membership";
 import { requireOwnedSession } from "@/server/operator";
 import { destBindingsForSend } from "@/server/dest-resolve";
@@ -33,11 +33,15 @@ async function setActiveBinding(sessionId: string, bindingId: string) {
     .where(eq(voiceSession.id, sessionId));
 }
 
+/** Hobby cap. Same as the room wire. Deep Agents invoke can outlast the default. */
+export const maxDuration = 60;
+
 /** Type-composer send — no done-phrase. Same pipe as voice. */
 export async function POST(
   req: Request,
   ctx: { params: Promise<{ id: string }> },
 ) {
+  return jsonRoute(async () => {
   const { id: sessionId } = await ctx.params;
   try {
     await requireOwnedSession(req, sessionId);
@@ -187,4 +191,5 @@ export async function POST(
   });
 
   return new Response(stream, { headers: sseHeaders() });
+  });
 }
