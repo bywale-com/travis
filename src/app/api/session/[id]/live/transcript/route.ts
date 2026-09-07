@@ -20,6 +20,10 @@ import { requireOwnedSession } from "@/server/operator";
 import { runMotionRunner } from "@/server/motion";
 import { roomContextFor } from "@/server/room-read";
 import { serveInvite } from "@/server/serve";
+import { pipeTravisText } from "@/server/travis-reply";
+import { liveShouldPipeTravis } from "@/lib/live-harness";
+
+export const maxDuration = 60;
 
 type Body = {
   role?: "user" | "travis";
@@ -160,6 +164,27 @@ export async function POST(
       turn: userTurn,
       switched: sticky?.seatKey ?? seatKey,
       stopLive: true,
+    });
+  }
+
+  if (liveShouldPipeTravis({ prompt, cursorDestCount: cursorDests.length })) {
+    let spoken = "";
+    await pipeTravisText({
+      sessionId,
+      prompt,
+      userTurn,
+      send: (event, data) => {
+        if (event !== "post_delta" || !data || typeof data !== "object") return;
+        const text = (data as { text?: unknown }).text;
+        if (typeof text === "string") spoken = text;
+      },
+    });
+    const here = await roomContextFor(sessionId).catch(() => "");
+    return NextResponse.json({
+      ok: true,
+      turn: userTurn,
+      serveSpeak: spoken,
+      here,
     });
   }
 

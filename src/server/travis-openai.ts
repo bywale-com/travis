@@ -56,15 +56,15 @@ export async function mintLiveToken(sessionId: string): Promise<{
 } | null> {
   const key = openaiKey();
   if (!key) return null;
-  // Live grows its own conversation, but it starts blank on every connect —
-  // including a reconnect after a drop. Seed it with the room.
+  // Live is ear + mouth. Think is generateTravisText (Deep Agents).
+  // Seed Here so a reconnect is not a blank room.
   const room = await roomContextFor(sessionId).catch(() => "");
   const res = await openaiFetch(
     "/v1/realtime/client_secrets",
     {
       session: realtimeSessionConfig({
         instructions: liveInstructions(TRAVIS_SYSTEM, room),
-        tools: TRAVIS_TOOL_DECLS,
+        tools: [],
       }),
     },
     { sessionId },
