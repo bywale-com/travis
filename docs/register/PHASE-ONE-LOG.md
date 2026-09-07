@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:52 UTC — 014 needs no new key. No blocker Action. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:58 UTC — Talk banner: HTML parsed as JSON. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3187,3 +3187,29 @@ The kit is not a hosted LangChain product you subscribe to. It is a package. It 
 **Process (considering — same cheap Action, no LLM).** Usually Engineer. A blocker is: missing secret / founder paste, or specified-but-not-clear, or planted but will not work without you. Not Fail-look. Not human test (that is emerge). Engineer writes `docs/register/BLOCKER-NNN-*.md` on this PR (name the secret, never the value). Push → label `blocker` → issue assigned + same Resend as emerge. No Cursor boot. Founder pastes; then seats continue.
 
 **Ask.** Go on that Action (same three email secrets), or hold until the next lived miss?
+
+---
+
+## 2026-09-07 13:58 UTC — Talk banner: HTML parsed as JSON (founder screenshot)
+
+**Kind:** Lived miss on the face. Flag 14:00 stands. Not a plant. Not dest jargon.
+
+**Founder:** screenshot. Log · Talk bar: Listening · Clear · Pause (loud). Orange line: `Unexpected token '<', "<!DOCTYPE "... is not valid JSON`.
+
+**What that is.** Carbon Talk listen (`Room.tsx` Talk bar). The orange is the error banner (`dangerQuiet`), not Stream, not a dest chip. Pause is loud. The parser ate an **HTML page** (`<!DOCTYPE …`) and reported the first character.
+
+**Why the banner is ugly.** `readJson` already exists so HTML 500s say “Server did not return JSON (status): …” (`src/lib/http.ts`). Talk finalize and Type send still call raw `res.json()` when the answer is not an event-stream:
+
+```1306:1308:src/components/Room.tsx
+        const ct = res.headers.get("content-type") ?? "";
+        if (!ct.includes("text/event-stream")) {
+          const data = await res.json();
+```
+
+Same on Type `/send`. Catch writes `e.message` onto that banner.
+
+**What actually failed** is behind the HTML: the POST (`/finalize` on Talk, `/send` on Type) did not return JSON or SSE. Typical: Next/Vercel HTML 500, or a login/protection page. I could not read Travis Vercel runtime errors from this seat (403).
+
+**014.** Talk still runs the Type loop (`finalize` → `pipeTravisText` → `generateTravisText` → `createDeepAgent`). Sheet 014 is Log · Type. If this is the preview walk, this send dying is a plant miss — fail-look, not a new packet. If this is production psi, 014 is not merged; same banner, older pipe.
+
+**Ask.** Psi or the #147 preview? What did you send (list sentence, dest sentence, or Talk of something else)? Then fail-look 014, or a small banner hotfix (`readJson`) plus the real 500.
