@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 15:28 UTC — Vercel fail on 013 was maxDuration 800 on Hobby. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 12:28 UTC — Successor bind. 013 A/B/C.1 on psi Log. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -2917,3 +2917,52 @@ Fix: Wake on its own line. That push is the get-go the go recut meant to be.
 **Kind:** Deploy. Same 013.
 
 Preview deploy `dpl_HDpcdWpPKqVMXTjAzbJMCirgERq8` failed. Local `next build` passed. The room wire exported `maxDuration = 800`. This team is Hobby. That number is over the plan. Resume from `seq` is the no-loss — the function does not need 800s. Set `60`. Client reconnects.
+
+---
+
+## 2026-09-07 12:24 UTC — Successor bind (this seat)
+
+**Kind:** Seat accept. Flag 14:00 stands. Not a packet. Do not remint 011–013 / 027–029.
+
+**Founder (this paste):** Technical PM. Not SA. Not Engineer. Catalog `pm` is not this seat. Same protocol: `/protocols/pm.md`. Do not mint `/protocols/technical-pm.md`. Read `PM-HANDOFF.md` first — **this bind is done; you are the successor.** Flag **14:00 UTC 2026-08-25**. Do not put Hear it / Skip buttons back. Do not Pass a look that never opened the Log on psi.
+
+**This bind:** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a`. Hung as `technical-pm` (or `technical-pm-N`). Protocol `/protocols/pm.md`.
+
+**Prior bind done:** `bc-25c5c6bf-006f-4252-9f25-49ab183835b2`. Handoff [`PM-HANDOFF.md`](./PM-HANDOFF.md) rewritten as living here.
+
+**Inspected, not memory.** `main` is `491e3ac` — merge of [#144](https://github.com/bywale-com/travis/pull/144) (013 / 029). Vercel on that PR is SUCCESS. `maxDuration` on the room wire is **60**, not 800:
+
+```17:18:src/app/api/session/[id]/events/route.ts
+/** Hobby cap. Resume from last seq when this function ends. */
+export const maxDuration = 60;
+```
+
+Face holds `GET /api/session/:id/events` with `afterSeq` / `Last-Event-ID`. Hear it / Skip **buttons** are not in `Room.tsx`. Spoken `Hear it?` invites stay in `offer.ts`. Hang SQL still names the **prior** bind only (`src/server/db/hang-technical-pm.sql`). Catalog `pm` is still a rooms member labeled `PM`. Dest `technical-pm` still mails `bc-25c5c6bf-…`.
+
+**Not planted.** No table. No `/protocols/technical-pm.md`.
+
+**Ask.** Hang this bind as `technical-pm` or `technical-pm-N`? I do not plant SQL. Next hotfix is **079** if that is a go.
+
+---
+
+## 2026-09-07 12:28 UTC — 013 on psi Log (this seat)
+
+**Kind:** Lived walk. Same 013. Not a remint of look 013. Flag 14:00 stands.
+
+**Desk:** `https://travis-psi.vercel.app` — production, open desk. Phone 430×932. Room Travis (`0e8875f8-283b-4dae-bf54-76c82a05b6ef`). Log · Type.
+
+**Opened the Log.** Mode door (“Pick a character, not a brightness.” Mission / Carbon). Rooms. Enter Travis. Talk | Type — Type selected. `← Back to voice`. Roster circles ENG · SA · TRV · TP. Compose: “Message the room.” No Hear it / Skip **buttons**. Play reply stays.
+
+**A.1 Send and see.** Typed `One-line note on the tape.` Send. Did not refresh. The line sat on the right at 12:23. Travis answered at 12:23 without a later refresh: “Technical PM was asked to log the printed chat context and every discussed initiative in ideation order; Engineer reported they would determine the routing and stamp that record.”
+
+**B.1 Leave and come back.** Leave → Rooms (“Travis” · 2m ago) → Enter. Did not hard-refresh. 12:23 lines still on the Log.
+
+**C.1 Backlog.** Opened Backlog. All / In motion / Initiatives. Rows showed at once — no empty flash. Titles on the glass included “Ok now we're going to work on image” · “Backlog-management verbs and obvious” · “That's fine.” · “It doesn't go to the PM anymore, just”. Close / ← Backlog returned to the room. 12:23 still there.
+
+**C.2 Ticket.** Opened “Ok now we're going to work on image”. Messages tab already had the founder line about image output in chat. Did **not** watch a new line land on that ticket. Not walked.
+
+**Already on the tape (not this send):** red “Technical PM timed out.” Stream card dest: send the printed chat and every discussed initiative in ideation order. Prior TP at 12:10 said they would stamp that record. That bind is dead.
+
+**Quoted plant:** room wire `maxDuration = 60` · `consumeRoomWire` / `/events` · no Hear/Skip buttons.
+
+**Ask.** The timed-out dest (printed chat + initiatives in ideation order) — still this successor’s job, or dead with that bind? C.2 leftover: a new line on an open ticket. Next specified plant on the Engineer trail is **022** on [#120](https://github.com/bywale-com/travis/pull/120) — not a go from this stamp.
