@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-07 13:00 UTC
+# PM seat handoff — 2026-09-07 13:08 UTC
 
 **This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -14,8 +14,8 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **13:00 UTC 2026-09-07**. Flag **14:00**. |
-| Problem | Harness. No process/protocol on every Travis message. Dest-without-context was the symptom. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **13:08 UTC 2026-09-07**. Flag **14:00**. |
+| Problem | Context / tools / translating the task. Not the model. LangChain is not a silver bullet. |
 | Deep Agents | Looked. LangGraph = runtime/forks. LangChain = loop. Deep Agents = harness (middleware every call). Not planted. |
 | 013 | [#144](https://github.com/bywale-com/travis/pull/144) merged. Psi Log A / B / C.1 walked. |
 | Held | Hang this bind. Travis write-port. Canvas. 022 on [#120](https://github.com/bywale-com/travis/pull/120). |
@@ -24,7 +24,7 @@
 
 ## Next PM job
 
-1. Founder: harness cut — Deep Agents vs LangGraph-only vs write the protocol here.
+1. Keep talking the harness. First lived fork: dest-with-context. Do not lock LangChain.
 2. Do not remint 011–013 / 027–029.
 3. Do not Pass a look that never opened the Log on psi.
 

@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:00 UTC — The harness is the problem. Deep Agents looked. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:08 UTC — Gap is context / tools / translating the task. LangChain is not a silver bullet. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3062,3 +3062,23 @@ His own list was 2086 characters. Next turn it is `You said:` + 300. Dest `text`
 **Not planted.** No LangChain in `src/`. No table. No packet.
 
 **Ask.** “Liang Cheng” — LangChain? If the harness is the cut: Deep Agents as the Travis loop, or LangGraph only (we write the protocol), or stay in this repo and make the per-message protocol ourselves.
+
+---
+
+## 2026-09-07 13:08 UTC — Not the model; not a silver bullet (founder)
+
+**Kind:** Type A. Gap named. LangChain confirmed. Not a lock. Flag 14:00 stands.
+
+**Founder (preserved):** Yes, precisely, I, I was referring to LangChain. But talk more about it, okay? … Travis is just too, like, it just, it doesn't work. It doesn't fucking work. … the gap is precisely that, Travis is like... It's not the model, obviously, cause, cause you know how we start, why, of course, why is it not the model? Because when I'm speaking with the model directly, it's smart. It understands everything I say. I can say a lot of things and doesn't miss a, a beat. The gap is in how it's accessing context. That's the gap. It's how it's accessing context and how it's leveraging the tools and how it's translating our, what we mean when we give it tasks. That's the, there's no more. … How it's, you know, using the context … that's where the, the harness part of it, part of it is. How can we ensure that … when we give it tasks to do, you know, it, it works in those tasks, coordinates with, coordinates those tasks, uses the, uses context appropriately, you know, uses the tool calls appropriately. Like, that's the real gap, I think. … let's not, let's not throw Lanxian as our own. That's the solution. That's the silver bullet. Is it the silver bullet? Come on.
+
+**Gap (his three, not a substitute flag).** Context access. Tool use. Translating the task. Not the model.
+
+**Why not the model.** Direct chat (this bind, Claude, ChatGPT) still has the conversation and a harness. Travis’s next turn clips his own 2086-char list to 300 (`LINE_CAP`). Dest is `text` only. Tools are optional. `TRAVIS_SYSTEM` hopes he translates “send that as context.” Hope is not a protocol.
+
+**LangChain is not the silver bullet.** Deep Agents is a harness kit: middleware every call, filesystem so a list can live off the window, graph forks, subagents. Installing it does not write the protocol. A dest to Technical PM is still a Cursor run unless we change that wire. A subagent that gets “include the printed chat” with no file is the same miss. Voice/Live is a different loop than `agent.invoke`. We could unclip `LINE_CAP` tomorrow and still dest a cold instruction. We could adopt Deep Agents and still dest a cold instruction.
+
+**What would actually have to exist (alignment).** A process that fires on every message, then forks: this is answer / this is dest-with-context / this is a tool. Context the fork needs is **in** the call — not hoped. That can be LangGraph + our protocol, Deep Agents + our protocol, or this repo’s loop + our protocol. The kit is not the protocol.
+
+**Not planted.** No LangChain. No packet. No table.
+
+**Ask.** Keep talking the harness, or name the first fork we would actually write (dest-with-context is the one we just lived).
