@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 18:45 UTC — **SCP-032 signed.** Compose the send harness: Deep Agents is the Type process; delete the Responses cousin. PM-016 on [#157](https://github.com/bywale-com/travis/pull/157). Next number is **033**.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 19:35 UTC — **SCP-033 signed.** Lived redesign from After new law: dest-gate on the ask, Cloud HTTP create, ticket after `dest_job`, living Technical PM, 080 hang without Responses. PM-017 on [#159](https://github.com/bywale-com/travis/pull/159). Next number is **034**.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -757,4 +757,37 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-032-COMPOSE.md`](./SYSTEMS-CHANGE-PACKET-032-COMPOSE.md)
 
 **Handoff:** Engineer plants 032 on **this same PR**. Next packet number is **033**. Do not remint 023–031. Do not remint dest mail. Do not mint a cousin.
+
+---
+
+## 2026-09-07 19:35 UTC — SCP-033 lived redesign (PM-017 on #159)
+
+**Kind:** Packet ascribe. Automation woke this seat. PM-017 + lived-redesign test on this PR. No SYSTEMS-CHANGE-PACKET for this redesign was on the branch. 023–032 stay planted — not reminted. **032** kit-only send and **031** dest assemble are different packets — not this remint.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-017 lock + plates). Not PM. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** Everything that went wrong — touched, not touched, or touched improperly — is on the chopping block. Novel code needs a reason. Commodity infrastructure needs justification for rebuilding. First brief still counts after #157 merged.
+
+**Staples (not scenery):** **Stream** · **Log** · **Type**. Dest Log line = **ask + print**. Technical PM = seated living person, not catalog `pm`.
+
+**Quoted stood-up:**
+
+- Gate: `isHisWork` / `HIS_WORK` (`dest-gate.ts` L17–35). `handToDest` classifies `text` (`travis-tools.ts` L457–459). Dest tool sets `text` = `destFork.assembled` (L691–696). `destWithContextFor` already has `ask` = last `kind=user` (`dest-with-context.ts` L29–40).
+- Create: `Agent.create` (`create-agent.ts` L229–248). Lived `ENOENT` `sdk-agent-store`. Dest artifacts already `GET https://api.cursor.com/v1/agents/{id}/artifacts` + Basic (`cursor-port.ts` L50–71). Official create is `POST /v1/agents` (`prompt.text` required; no-repo legal). Dest send stays `Agent.resume` + `send` (L392–399).
+- Ticket: `ticketForHand` before `handToDest` (L705–724). Fall-through `ensureViaTravis` → `insertOpen` (`initiative.ts` L255–264). Role path dispatches then inserts the job (L516–539). Who path inserts then dispatches.
+- Sit: `createStandInRoom` dumps every `active` bind (L198–239). `findIdleSeated` = this room, oldest idle of the path (`sit.ts` L63–76). `resolveRoleDest` spins when none idle (L191–201). 074 hang SQL still plants `bc-25c5c6bf-…`. Living is `bc-b64bcdbb-…` (PM-HANDOFF). `isCatalogPm` = `seat_key === "pm"`.
+- Type: `generateTravisText` is `invokeDeepAgent` only (`travis-openai.ts` L86–96). Retry dest send threw ESM before dest assembled. 080 `/node` hang + `serverExternalPackages` stand. 032 cousin stays deleted.
+
+**Ascribed:**
+
+1. **No remint** of 023–032 tables/columns. No filesystem table. No living-bind column. No `/protocols/technical-pm.md`. No Responses cousin. No `BLOCKER-033` — Cloud create exists on the dest host.
+2. **Dest-gate** classifies `destFork.ask`. Keep `HIS_WORK`. Do not add markers. Print stays in `assembled` / `payload.text`.
+3. **Create** = `POST /v1/agents` on cursor-port (same Basic). Delete `Agent.create`. No binding row without a `bc-` id. Dest send stays resume+send.
+4. **Ticket** after `insertDestJob`. Role path matches who: job → ticket → dispatch. Refuse → no ticket, no job.
+5. **Living sit** = newest `created_at` among active seated of that path with a `bc-` id, not catalog `pm`. `addMember` if missing. Spin only when nobody living. Stand-in room = Travis + living seated roles, not the catalog dump. No `bc-` constants in `src/` / migrate. Do not remint 074.
+6. **Type send** stays 032. Dropping `Agent.create` is the first hang fix. If ESM remains, fix 080. Do not restore Responses.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-033-LIVED-REDESIGN.md`](./SYSTEMS-CHANGE-PACKET-033-LIVED-REDESIGN.md)
+
+**Handoff:** Engineer plants 033 on **this same PR**. Next packet number is **034**. Do not remint 023–032. Do not remint dest mail. Do not remint 016. Do not mint a cousin.
 
