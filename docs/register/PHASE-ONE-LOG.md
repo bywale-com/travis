@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:32 UTC — PM look 014 Pass. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:52 UTC — 014 needs no new key. No blocker Action. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3158,3 +3158,32 @@ First fork in that harness: dest-with-context (this morning’s miss). Kit is no
 **Steps I could not do (human):** Vercel team SSO. Travis email link. Type / Send. Dest after a lived list. Stream process body. Talk on a phone. Dest landing on a live Technical PM bind.
 
 **Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-07 13:52 UTC — 014 needs nothing new; no blocker Action (founder)
+
+**Kind:** House + plant walk. Flag 14:00 stands. Not a plant. 014 already **emerge** ([#148](https://github.com/bywale-com/travis/issues/148)).
+
+**Founder (preserved):** I noticed … we don't have … any automation or action, or GitHub action for blockers. … this packet has been built. And I'm just surprised that … if there really isn't any need for anything like any keys or any secrets at all, like it's just good to go. How? … is it because it's open source? … How come deep agents need nothing from me … go through the implementation of the packet because If there is like, if there was a blocker … maybe it's just a blocker for the stuff to actually work properly … we need a way for that to be like routed back to me … we already have like a email action for when packets complete. … I still think we would need to work on a process for that protocol … if there's blockers usually it's at the engineer level.
+
+**014 is planted.** SA **030** · Engineer `5b864f2` · look Pass `7d065b6` · [#147](https://github.com/bywale-com/travis/pull/147). Type loop is `createDeepAgent().invoke`. Dest-with-context grain rewrites send text to ask + unclipped print. Stream `dest_with_context` body is the print. Here clip stays. Live unchanged. No new table.
+
+**Nothing new from you for this cut.** Not because Travis is open source (`package.json` is `"private": true`). Because Deep Agents **the library** is open source (npm `deepagents`, LangChain MIT) and the meters it uses are already on the desk:
+
+| Port | Already |
+|------|---------|
+| Type LLM | `OPENAI_API_KEY` + `TRAVIS_TEXT_MODEL` (same as before the hang) |
+| Dest to a seat | `CURSOR_API_KEY` (unchanged Cursor run) |
+| Store | no new table — no `DATABASE_URL` hang |
+| LangSmith / Tavily / Anthropic | not used. `langsmith` in `serverExternalPackages` is a peer so Next does not bundle it. No `LANGSMITH_API_KEY` required. |
+
+The kit is not a hosted LangChain product you subscribe to. It is a package. It still spends **your existing OpenAI** on every Type message. Cost later stands.
+
+**Walked (src/, not the phone).** Grain + `runTravisTool` rewrite are the dest fork. Middleware classifies and does not write the dest body — that is correct per 030 (payload must not depend on the model reading `/print.md`). Default `task` / `execute` omitted. `FilesystemBackend` refused. Human A–C on the Log is still [#148](https://github.com/bywale-com/travis/issues/148) — look Pass from `src/` + SSO is the house look, not the 014 sheet.
+
+**Blocker Action: you are right. There is none.** Wake packet seats labels: `wake-sa` · `wake-engineer` · `wake-pm-look` · `fail-look` · `emerge`. Emerge = look Pass → issue + Resend. Engineer today: if `DATABASE_URL` is unset, stop and write `ENGINEER-HANDOFF.md`. Specified-but-not-clear sits in that file. You only see it if you open the PR. No letter.
+
+**Process (considering — same cheap Action, no LLM).** Usually Engineer. A blocker is: missing secret / founder paste, or specified-but-not-clear, or planted but will not work without you. Not Fail-look. Not human test (that is emerge). Engineer writes `docs/register/BLOCKER-NNN-*.md` on this PR (name the secret, never the value). Push → label `blocker` → issue assigned + same Resend as emerge. No Cursor boot. Founder pastes; then seats continue.
+
+**Ask.** Go on that Action (same three email secrets), or hold until the next lived miss?

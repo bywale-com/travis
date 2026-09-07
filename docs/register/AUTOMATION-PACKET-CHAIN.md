@@ -175,6 +175,28 @@ Do not send this through Travis operator mail. Same vendor is fine. Same product
 
 ---
 
+## Blocker letter — founder paste time (considering)
+
+**Not planted.** Founder named the hole 2026-09-07: emerge exists; blockers do not. Hold until go.
+
+**When (Engineer, usually):** this push lands `docs/register/BLOCKER-NNN-*.md`. The plant or live effect needs something from the founder — a secret, a paste, or a specified-but-not-clear hole. Not Fail-look. Not human test (emerge). SA may write the same file if ascribe is blocked on a key.
+
+**What you get (same cheap Action, no LLM):**
+
+- Label `blocker` on the PR
+- Subject: `NNN blocked — needs you`
+- Floor: one GitHub issue, assigned to you
+- Mailbox: same `EMERGE_EMAIL` · `RESEND_API_KEY` · `RESEND_FROM_EMAIL`
+- Body names the secret / the hole. Never the value.
+
+**Must-not**
+
+- Do not boot a Cursor seat on `blocker`.
+- Do not invent a store to dodge the letter.
+- Do not treat emerge as the blocker path.
+
+---
+
 ## First measured sample — 009 (dirty)
 
 Window: packet file lands → `PM-LOOK` Pass. Count boots and wall, not dollars. Stamp: PHASE-ONE-LOG **18:29 UTC 2026-09-05**.
