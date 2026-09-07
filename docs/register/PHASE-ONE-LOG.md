@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:08 UTC — listed room tickets + this-bind ideas. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:22 UTC — founder + Travis capability inventory from src/. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3312,4 +3312,14 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Founder (preserved):** Every idea I've just said, right? Every idea that we've discussed, every initiative we've discussed inside of Travis, and especially the ideas that we've also discussed here outside, so in our logs and everything. I want you to locate and list them out here in, in the order that we've, we've discussed them.
 
 **Stood up.** Room tickets: seq **882** (12:00 UTC, 2086 chars) — he already called that first list fair. Store has one extra open row 882 skipped (`Clarify initiative creation`). This bind’s ideas are not those tickets. Listed in the reply. 080 plant is on this PR.
+
+---
+
+## 2026-09-07 15:22 UTC — Every capability, founder and Travis (founder)
+
+**Kind:** Capture + face inventory from `src/`. Same job as ticket `That's fine.` — not a remint, not a packet. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** Next thing I want you to do is I want you to list out in absolute freaking detail. Do not leave out a thing. … All of Travis's capabilities. Not just Travis's capabilities, but every single function, every single thing that is possible. Think about it as a user, everything I'm able to do, and everything that Travis is able to do. In many of these, you'll find out I and Travis are able to do the exact same things, i.e., … only difference is different mechanisms. Like, so I would use components and controls and … the UI … click path, but Travis would use his own tools … to accomplish the exact same thing.
+
+**Stood up.** 27 Travis tools in `TRAVIS_TOOL_DECLS`. Founder glass in `Room` + plates. Same write, two doors, named in the reply. Holes named: Hold is founder-only; sit / ticket Done / ticket rename are Travis (or API) with no glass; discard / reopen do not exist; house / box / unfold / prove / file_plan are Travis-only; Hear it / Skip buttons stay off. Do not remint 011–013 / 027–029 / 030. I do not plant `src/`.
 
