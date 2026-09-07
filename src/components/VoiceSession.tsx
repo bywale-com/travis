@@ -1,6 +1,7 @@
 "use client";
 
 import { matchConductorPhrase } from "@/lib/conductor";
+import { parseJsonText, readJson } from "@/lib/http";
 import { applyReadbackVoice } from "@/lib/speak-voice";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
@@ -127,7 +128,10 @@ export function VoiceSession({ t }: { t: Tokens }) {
 
         const ct = res.headers.get("content-type") ?? "";
         if (!ct.includes("text/event-stream")) {
-          const data = await res.json();
+          const data = await readJson<{
+            error?: string;
+            matched?: boolean;
+          }>(res);
           if (!res.ok) {
             setError(data.error ?? "Finalize failed");
           } else if (!data.matched) {
@@ -150,7 +154,7 @@ export function VoiceSession({ t }: { t: Tokens }) {
         let finalAssistantText = "";
 
         const handleEvent = async (event: string, raw: string) => {
-          const data = JSON.parse(raw) as Record<string, unknown>;
+          const data = parseJsonText<Record<string, unknown>>(raw, "stream event");
           if (event === "matched") {
             const userTurn = data.userTurn as Turn | undefined;
             if (userTurn) {

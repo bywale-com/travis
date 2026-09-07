@@ -52,6 +52,25 @@ export function describeServerError(err: unknown): string {
   return flat.length > MAX_ERROR ? `${flat.slice(0, MAX_ERROR)}…` : flat;
 }
 
+/**
+ * Parse a JSON string, or throw a line that names the payload — never
+ * `Unexpected token '<'`.
+ */
+export function parseJsonText<T>(raw: string, what = "payload"): T {
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    const flat = raw.replace(/\s+/g, " ").trim();
+    const snippet =
+      flat.length > SNIPPET ? `${flat.slice(0, SNIPPET)}…` : flat;
+    throw new Error(
+      snippet
+        ? `${what} was not JSON: ${snippet}`
+        : `${what} was empty, not JSON`,
+    );
+  }
+}
+
 /** Parse a JSON body, or throw an error that names the real failure. */
 export async function readJson<T>(res: Response): Promise<T> {
   const body = await res.text();

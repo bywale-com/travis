@@ -1,6 +1,7 @@
 "use client";
 
 import { absorbText, collapseSpeechStutter } from "@/lib/absorb-text";
+import { readJson } from "@/lib/http";
 import { shouldDropHeardAsUser } from "@/lib/thread-truth";
 import {
   interpretRealtimeEvent,
@@ -29,7 +30,7 @@ export async function startTravisLive(opts: {
   const tokenRes = await fetch(`/api/session/${opts.sessionId}/live/token`, {
     method: "POST",
   });
-  const tokenData = (await tokenRes.json()) as {
+  const tokenData = await readJson<{
     wired?: boolean;
     token?: string;
     model?: string;
@@ -37,7 +38,7 @@ export async function startTravisLive(opts: {
     systemInstruction?: string;
     here?: string;
     error?: string;
-  };
+  }>(tokenRes);
   if (!tokenData.wired || !tokenData.token) {
     if (tokenData.error) opts.onError(tokenData.error);
     opts.onUnwired();
@@ -86,11 +87,11 @@ export async function startTravisLive(opts: {
       opts.onSeatStream(res);
       return { stopLive: true };
     }
-    const data = (await res.json()) as {
+    const data = await readJson<{
       stopLive?: boolean;
       here?: string;
       serveSpeak?: string;
-    };
+    }>(res);
     if (typeof data.serveSpeak === "string") {
       if (data.serveSpeak.trim()) sendNotify(data.serveSpeak);
       opts.onTravisText(data.serveSpeak);
@@ -119,9 +120,13 @@ export async function startTravisLive(opts: {
     ) {
       return;
     }
-    void persist("user", said).then((data) => {
-      if (data?.stopLive) void stopFn();
-    });
+    void persist("user", said)
+      .then((data) => {
+        if (data?.stopLive) void stopFn();
+      })
+      .catch((e) => {
+        opts.onError(e instanceof Error ? e.message : String(e));
+      });
   };
 
   const audioEl = document.createElement("audio");
@@ -241,7 +246,9 @@ export async function startTravisLive(opts: {
           travisAcc = "";
           if (said) {
             lastTravis = said;
-            void persist("travis", said);
+            void persist("travis", said).catch((e) => {
+              opts.onError(e instanceof Error ? e.message : String(e));
+            });
           }
           continue;
         }

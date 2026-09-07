@@ -23,7 +23,7 @@ import {
   STT_ONEND_RETRY_MS,
   type EarState,
 } from "@/lib/ear";
-import { readJson } from "@/lib/http";
+import { parseJsonText, readJson } from "@/lib/http";
 import { isRequestTurn } from "@/lib/request-log";
 import {
   hideCatalogPm,
@@ -770,7 +770,7 @@ export function Room({
       let sawTerminal = false;
 
       const handleEvent = async (event: string, raw: string) => {
-        const data = JSON.parse(raw) as Record<string, unknown>;
+        const data = parseJsonText<Record<string, unknown>>(raw, "stream event");
 
         if (event === "queued") {
           if (!heardQueued) {
@@ -1305,7 +1305,16 @@ export function Room({
 
         const ct = res.headers.get("content-type") ?? "";
         if (!ct.includes("text/event-stream")) {
-          const data = await res.json();
+          const data = await readJson<{
+            error?: string;
+            queued?: boolean;
+            queue?: { seats?: QueueSeatDto[] };
+            serve?: { speak?: string };
+            routerHandled?: boolean;
+            destTravis?: boolean;
+            activeLabel?: string;
+            activeSeatKey?: string;
+          }>(res);
           if (data.queued) {
             playQueuedCue(sendSoundSurface());
             applyQueue(data.queue as { seats?: QueueSeatDto[] } | undefined);
@@ -1385,7 +1394,10 @@ export function Room({
         });
         const ct = res.headers.get("content-type") ?? "";
         if (!ct.includes("text/event-stream")) {
-          const data = await res.json();
+          const data = await readJson<{
+            error?: string;
+            queue?: { seats?: QueueSeatDto[] };
+          }>(res);
           applyQueue(data.queue as { seats?: QueueSeatDto[] } | undefined);
           if (!res.ok && data.error) setError(String(data.error));
           return;
@@ -1441,7 +1453,11 @@ export function Room({
           if (tempId) {
             setTurns((prev) => prev.filter((x) => x.id !== tempId));
           }
-          const data = await res.json();
+          const data = await readJson<{
+            error?: string;
+            routerHandled?: boolean;
+            queue?: { seats?: QueueSeatDto[] };
+          }>(res);
           if (data.routerHandled) await refreshSession(sid);
           applyQueue(data.queue as { seats?: QueueSeatDto[] } | undefined);
           if (!res.ok && data.error) {

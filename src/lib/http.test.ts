@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { describeBadResponse, describeServerError, readJson } from "./http";
+import {
+  describeBadResponse,
+  describeServerError,
+  parseJsonText,
+  readJson,
+} from "./http";
 
 function res(body: string, status = 200, statusText = ""): Response {
   return new Response(body, { status, statusText });
@@ -22,12 +27,25 @@ test("an empty 500 names the server, not the JSON parser", async () => {
   );
 });
 
+test("a stream HTML chunk names the payload, not Unexpected token", () => {
+  assert.throws(
+    () => parseJsonText("<!DOCTYPE html><h1>Internal Server Error</h1>", "stream event"),
+    (e: Error) => {
+      assert.match(e.message, /stream event was not JSON/);
+      assert.doesNotMatch(e.message, /Unexpected token/);
+      assert.doesNotMatch(e.message, /is not valid JSON/);
+      return true;
+    },
+  );
+});
+
 test("an HTML error page is quoted back, not swallowed", async () => {
   await assert.rejects(
     () => readJson(res("<!DOCTYPE html><h1>Internal Server Error</h1>", 500)),
     (e: Error) => {
       assert.match(e.message, /did not return JSON \(500\)/);
       assert.match(e.message, /Internal Server Error/);
+      assert.doesNotMatch(e.message, /Unexpected token/);
       return true;
     },
   );
