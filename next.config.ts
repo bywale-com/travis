@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: [
     "@cursor/sdk",
     "deepagents",
+    "deepagents/node",
     "langchain",
     "@langchain/core",
     "@langchain/langgraph",

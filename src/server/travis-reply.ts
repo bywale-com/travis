@@ -1,3 +1,4 @@
+import { travisGenerateMiss } from "@/lib/travis-miss";
 import { generateTravisText, travisIsWired } from "@/server/travis-openai";
 import { runMotionRunner } from "@/server/motion";
 import {
@@ -58,7 +59,10 @@ export async function pipeTravisText(params: {
     reply = (await generateTravisText({ sessionId, prompt })).trim();
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    const status = await insertStatusTurn(sessionId, `Travis: ${msg}`);
+    const status = await insertStatusTurn(
+      sessionId,
+      travisGenerateMiss(msg),
+    );
     await maybeCloseTravisStream({ sessionId, failed: true }).catch(() => {});
     send("done", {
       matched: true,

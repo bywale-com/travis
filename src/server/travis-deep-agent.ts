@@ -7,7 +7,7 @@ import {
   createDeepAgent,
   registerHarnessProfile,
   StateBackend,
-} from "deepagents";
+} from "deepagents/node";
 import { ChatOpenAI } from "@langchain/openai";
 import {
   isAIMessage,

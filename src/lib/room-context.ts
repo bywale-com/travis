@@ -1,3 +1,4 @@
+import { isVisibleLogStatus } from "./travis-miss";
 import { requestLogPointer } from "@/lib/request-log";
 
 /** Titles shown unasked. Oldest drop; the top of the pile stays. */
@@ -76,7 +77,7 @@ export function isCheckNarration(text: string): boolean {
 /** Thoughts and routine status are noise Travis should never pay for. */
 export function isContextWorthy(turn: ContextTurn): boolean {
   if (turn.kind === "agent_thought") return false;
-  if (turn.kind === "status") return /error/i.test(turn.text);
+  if (turn.kind === "status") return isVisibleLogStatus(turn.text);
   if (
     turn.kind === "agent_post" &&
     turn.seatKey === "travis" &&
