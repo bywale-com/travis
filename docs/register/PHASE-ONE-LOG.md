@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 18:38 UTC — PM look 016 Pass. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 18:45 UTC — 016 plant: kit only; why blockers. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3386,3 +3386,17 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Steps I could not do (human):** Vercel team SSO. Type the lived line. The 907 dest sentence. Talk on a phone. Confirm an `agent_post` after a real send on this plant.
 
 **Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-07 18:45 UTC — What 016 changed; why blockers (founder)
+
+**Kind:** Look at the plant + founder question. Flag 14:00 stands. Not a remint.
+
+**Founder (preserved):** something has been built. Look at it and, in what ways has it changed? Explain the mechanism to me. What is it leveraged? … how there are no blockers. Unless they are … Why do you think I, I, in a way, I'm looking forward to blockers?
+
+**Plant (#157, `fb3cec3`).** Type send no longer swallows a kit throw into a six-step Responses loop we wrote. `generateTravisText` is `invokeDeepAgent` only. Leveraged: LangChain Deep Agents (`createDeepAgent` from `deepagents/node`) — already hung in 030/080. Deleted: `generateTravisTextViaResponses` and the silent `catch`. Dest mail / Here clip / Live stay.
+
+**No blocker file.** The cut did not need a new key, a paid signup, or a founder paste. It deleted a cousin. Look hit SSO and emerged anyway. Blocker letter is still unplanted.
+
+**Alignment (not the flag).** Looking forward to a blocker is looking forward to the compose law actually hitting a seam: we found a thing that exists, and now we need you to set it up — not another process we invented so we would not have to ask.
