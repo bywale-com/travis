@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 14:45 UTC — two sends, mute ESM. 080. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 14:56 UTC — PM look 080 Pass. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3282,3 +3282,23 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 014 **was** “use the kit.” The unreliability is the hang: static import HTML 500, then lazy import ESM throw, then hide the throw. We did not need to invent another chat model. We needed the kit to actually run on this host, and a mouth if it doesn’t.
 
 **Cut:** [`HOTFIX-080-DEEPAGENTS-ESM.md`](./HOTFIX-080-DEEPAGENTS-ESM.md). Engineer: kit must answer; Responses fallback if it throws; miss visible on the Log. Do not remint 030. I do not plant `src/`. Same [#151](https://github.com/bywale-com/travis/pull/151).
+
+---
+
+## 2026-09-07 14:56 UTC — PM look 080 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Hotfix:** [`HOTFIX-080-DEEPAGENTS-ESM.md`](./HOTFIX-080-DEEPAGENTS-ESM.md) · plant on [#151](https://github.com/bywale-com/travis/pull/151) (`4db1f80`). Sheet: [`PM-LOOK-HOTFIX-080.md`](./PM-LOOK-HOTFIX-080.md).
+
+**Look.** src/ matches the lock. `createDeepAgent` from `deepagents/node`. `serverExternalPackages` includes that path. Import/invoke throw falls back to the six-step Responses loop. Generate miss is `Travis error: …` so the Log keeps it. Dest-with-context grain not reminted. Hear / Skip buttons stay off. `travis-miss` tests pass.
+
+**Tape.** `DATABASE_URL` set. Room `0e8875f8-…` seq 897–902 match the lock (vocative answered; two Type lines; mute ESM status). Latest is still 902. That is psi, not this unmerged plant.
+
+**Preview I opened:** `https://travis-git-cursor-hotfix-080-deep-22fe61-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see Voice / Log / Type glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not Type. I did not Talk.
+
+**Steps I could not do (human):** Vercel team SSO. Type the lived line. A second send. Talk on a phone. Confirm an `agent_post` after a real send on this plant.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
