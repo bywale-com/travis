@@ -1,7 +1,7 @@
 # Hotfix 080 — Deep Agents must answer on the live app
 
 **Number:** `080` — next engineer hotfix is `081`. Never reuse. Index: [`HOTFIXES.md`](./HOTFIXES.md).  
-**Seat:** Engineer. Lived smoke after [#149](https://github.com/bywale-com/travis/pull/149) / 079.  
+**Seat:** Engineer. Lived smoke after [#149](https://github.com/bywale-com/travis/pull/149) / 079. **PR:** [#151](https://github.com/bywale-com/travis/pull/151).  
 **When:** 2026-09-07  
 **PR title shape:** `Hotfix 080 — Deep Agents must answer`  
 **Test:** [`HOTFIX-080-DEEPAGENTS-ESM-TEST.md`](./HOTFIX-080-DEEPAGENTS-ESM-TEST.md)

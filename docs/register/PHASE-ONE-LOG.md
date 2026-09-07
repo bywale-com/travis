@@ -3281,4 +3281,4 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 
 014 **was** “use the kit.” The unreliability is the hang: static import HTML 500, then lazy import ESM throw, then hide the throw. We did not need to invent another chat model. We needed the kit to actually run on this host, and a mouth if it doesn’t.
 
-**Cut:** [`HOTFIX-080-DEEPAGENTS-ESM.md`](./HOTFIX-080-DEEPAGENTS-ESM.md). Engineer: kit must answer; Responses fallback if it throws; miss visible on the Log. Do not remint 030. I do not plant `src/`.
+**Cut:** [`HOTFIX-080-DEEPAGENTS-ESM.md`](./HOTFIX-080-DEEPAGENTS-ESM.md). Engineer: kit must answer; Responses fallback if it throws; miss visible on the Log. Do not remint 030. I do not plant `src/`. Same [#151](https://github.com/bywale-com/travis/pull/151).
