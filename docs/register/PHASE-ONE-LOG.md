@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:22 UTC — founder + Travis capability inventory from src/. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:30 UTC — how Travis should work that dest-with-context prompt (from src/, not tape). Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3322,4 +3322,14 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Founder (preserved):** Next thing I want you to do is I want you to list out in absolute freaking detail. Do not leave out a thing. … All of Travis's capabilities. Not just Travis's capabilities, but every single function, every single thing that is possible. Think about it as a user, everything I'm able to do, and everything that Travis is able to do. In many of these, you'll find out I and Travis are able to do the exact same things, i.e., … only difference is different mechanisms. Like, so I would use components and controls and … the UI … click path, but Travis would use his own tools … to accomplish the exact same thing.
 
 **Stood up.** 27 Travis tools in `TRAVIS_TOOL_DECLS`. Founder glass in `Room` + plates. Same write, two doors, named in the reply. Holes named: Hold is founder-only; sit / ticket Done / ticket rename are Travis (or API) with no glass; discard / reopen do not exist; house / box / unfold / prove / file_plan are Travis-only; Hear it / Skip buttons stay off. Do not remint 011–013 / 027–029 / 030. I do not plant `src/`.
+
+---
+
+## 2026-09-07 15:30 UTC — How Travis should work that prompt (founder)
+
+**Kind:** Protocol walk from `src/` + `TRAVIS_SYSTEM`. Not tape. Flag 14:00 stands. Not a plant. Do not remint 030.
+
+**Founder (preserved):** given this prompt I gave Travis: … every initiative and idea we've discussed in this chat, I would like to send that alongside prompting them as well, the technical PM, to list out every idea and initiative we've discussed that hasn't yet been implemented. … walk me step by step. How travis would … have … worked on this prompt exactly Don't check, and don't check the logs. Just answer it from what we have in the code and how we prompt the Travis.
+
+**Stood up.** That line is dest-with-context, not a backlog list. Walked in the reply from the grain + `TRAVIS_SYSTEM`. Marker list in `isDestWithContextAsk` does not include “alongside” / “this chat” — named as planted limit, not a remint. I did not query the room.
 
