@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:08 UTC — Gap is context / tools / translating the task. LangChain is not a silver bullet. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:12 UTC — Packet 014 Deep Agents. Wake hold. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3082,3 +3082,17 @@ His own list was 2086 characters. Next turn it is `You said:` + 300. Dest `text`
 **Not planted.** No LangChain. No packet. No table.
 
 **Ask.** Keep talking the harness, or name the first fork we would actually write (dest-with-context is the one we just lived).
+
+---
+
+## 2026-09-07 13:12 UTC — Packet 014 is Deep Agents (founder)
+
+**Kind:** Packet cut. **Wake:** hold. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** Wait, what do you mean no land chain plant? … I already know you are not the one to, okay I get it, maybe, okay my bad. But, it, we all work, just, just answer me very clearly here, okay? We all working towards deep agents right now, right? Like as a packet, right?
+
+**Clear.** “No plant” = this seat does not write `src/`. It is not “we are not doing Deep Agents.”
+
+**Yes.** The packet is Deep Agents — Travis’s harness. [`PM-PACKET-014-DEEP-AGENTS.md`](./PM-PACKET-014-DEEP-AGENTS.md) · test [`PM-PACKET-014-DEEP-AGENTS-TEST.md`](./PM-PACKET-014-DEEP-AGENTS-TEST.md). SA **030**. **Wake:** hold until go.
+
+First fork in that harness: dest-with-context (this morning’s miss). Kit is not magic. Cost later. Do not remint 011–013.
