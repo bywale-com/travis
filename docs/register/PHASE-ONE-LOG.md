@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:30 UTC — how Travis should work that dest-with-context prompt (from src/, not tape). Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:32 UTC — dest prompt means chat tape + TP list, combined. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3332,4 +3332,14 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Founder (preserved):** given this prompt I gave Travis: … every initiative and idea we've discussed in this chat, I would like to send that alongside prompting them as well, the technical PM, to list out every idea and initiative we've discussed that hasn't yet been implemented. … walk me step by step. How travis would … have … worked on this prompt exactly Don't check, and don't check the logs. Just answer it from what we have in the code and how we prompt the Travis.
 
 **Stood up.** That line is dest-with-context, not a backlog list. Walked in the reply from the grain + `TRAVIS_SYSTEM`. Marker list in `isDestWithContextAsk` does not include “alongside” / “this chat” — named as planted limit, not a remint. I did not query the room.
+
+---
+
+## 2026-09-07 15:32 UTC — Same reading (founder)
+
+**Kind:** Founder lock on the dest sentence. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** every initiative and idea we discuss in this chat … send that alongside prompting them as well, the technical PM, to list out every idea and initiative we've discussed that hasn't yet been implemented. … It means every initiative I've discussed inside of these chat logs with Travis Send that alongside a prompt that asks the technical PM to also list out all the ideas and initiatives that we've discussed, and obviously it's so that we can combine both of those things.
+
+**Stood up.** Same reading. Tape from that chat + prompt to list what is not built. Combine. Not Travis listing the backlog and mailing the instruction.
 
