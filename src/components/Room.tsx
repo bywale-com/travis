@@ -24,6 +24,7 @@ import {
   type EarState,
 } from "@/lib/ear";
 import { parseJsonText, readJson } from "@/lib/http";
+import { isVisibleLogStatus } from "@/lib/travis-miss";
 import { isRequestTurn } from "@/lib/request-log";
 import {
   hideCatalogPm,
@@ -2373,7 +2374,7 @@ export function Room({
         ? subtitle
         : "";
   const threadTurns = turns.filter((turn) => {
-    if (turn.kind === "status") return /error/i.test(turn.text);
+    if (turn.kind === "status") return isVisibleLogStatus(turn.text);
     if (
       turn.kind !== "user" &&
       turn.kind !== "agent_post" &&

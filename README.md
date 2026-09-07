@@ -4,6 +4,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-07** · Hotfix 080 · [PR #151](https://github.com/bywale-com/travis/pull/151) — Type hangs Deep Agents from `deepagents/node` so Vercel require() is CJS, a kit throw falls back to the Responses loop, and a generate miss writes a Log status that says error, because the browser ESM died mute.
+
 - **2026-09-07** · Hotfix 079 · [PR #149](https://github.com/bywale-com/travis/pull/149) — Voice / Talk / Type send parse with `readJson`, a bad SSE chunk names the payload, and Deep Agents loads after SSE so a 014 throw is JSON or a stream error, because the phone was reading `<!DOCTYPE` as JSON.
 
 - **2026-09-07** · SCP-030 · [PR #147](https://github.com/bywale-com/travis/pull/147) — Type is Deep Agents and dest-with-context sends the unclipped print plus the ask, because dest was mailing the wrap while Here clip killed the list.

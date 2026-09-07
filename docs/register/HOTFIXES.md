@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **080**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **081**. |
 | PR title | `Hotfix NNN — …` (human tell). Action: this push lands `HOTFIX-NNN-*.md` → `wake-engineer` only. No `wake-sa`. |
 | Test | Every hotfix gets a `HOTFIX-NNN-*-TEST.md` (same job as a packet test). Emerge mails that sheet. |
 
@@ -16,6 +16,7 @@
 
 | # | File | Cut |
 |---|------|-----|
+| 080 | [`HOTFIX-080-DEEPAGENTS-ESM.md`](./HOTFIX-080-DEEPAGENTS-ESM.md) | Deep Agents ESM on live send; mute status hid the miss. |
 | 079 | [`HOTFIX-079-TALK-HTML-JSON.md`](./HOTFIX-079-TALK-HTML-JSON.md) | Talk banner: HTML parsed as JSON. `readJson` + find the 500 after 014. |
 | 078 | [`HOTFIX-078-OPEN-DESK-BUILD.md`](./HOTFIX-078-OPEN-DESK-BUILD.md) | 077 typecheck: do not pass `process.env` as `isOpenDesk` default |
 | 077 | [`HOTFIX-077-OPEN-DESK.md`](./HOTFIX-077-OPEN-DESK.md) | `TRAVIS_OPEN_DESK` skips the login door; same operator rooms; 053 stays |
