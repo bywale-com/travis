@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-07 13:58 UTC
+# PM seat handoff — 2026-09-07 14:02 UTC
 
 **This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -14,20 +14,19 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **13:58 UTC 2026-09-07**. Flag **14:00**. |
-| 014 | Planted. SA **030**. Engineer `5b864f2`. Look Pass. Emerge [#148](https://github.com/bywale-com/travis/issues/148). Human A–C on the Log still open. |
-| Blocker Action | Considering in [`AUTOMATION-PACKET-CHAIN.md`](./AUTOMATION-PACKET-CHAIN.md). No go. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **14:02 UTC 2026-09-07**. Flag **14:00**. |
+| 014 | Merged [#147](https://github.com/bywale-com/travis/pull/147). On psi. Human A–C still open. |
+| 079 | [`HOTFIX-079-TALK-HTML-JSON.md`](./HOTFIX-079-TALK-HTML-JSON.md) — Talk banner HTML as JSON. This PR. |
 
 ---
 
 ## Next PM job
 
-1. Lived Talk banner: HTML parsed as JSON. Ask: psi or #147 preview? Then fail-look 014 or `readJson` hotfix + the real 500.
-2. Human walk 014 A–C still open ([#148](https://github.com/bywale-com/travis/issues/148)).
-3. Blocker letter: wait for go.
-4. Dest glossary ask still open.
-5. Do not remint 011–013 / 027–029 / 030.
-6. Do not plant `src/`.
+1. Engineer plants 079. Then look.
+2. Blocker letter: wait for go.
+3. Dest glossary ask still open.
+4. Do not remint 011–013 / 027–029 / 030.
+5. Do not plant `src/`.
 
 ---
 

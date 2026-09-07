@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:58 UTC — Talk banner: HTML parsed as JSON. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 14:02 UTC — 079 Talk HTML as JSON. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3213,3 +3213,15 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **014.** Talk still runs the Type loop (`finalize` → `pipeTravisText` → `generateTravisText` → `createDeepAgent`). Sheet 014 is Log · Type. If this is the preview walk, this send dying is a plant miss — fail-look, not a new packet. If this is production psi, 014 is not merged; same banner, older pipe.
 
 **Ask.** Psi or the #147 preview? What did you send (list sentence, dest sentence, or Talk of something else)? Then fail-look 014, or a small banner hotfix (`readJson`) plus the real 500.
+
+---
+
+## 2026-09-07 14:02 UTC — 079: that banner is HTML as JSON (founder screenshot)
+
+**Kind:** Hotfix cut. Lived miss. Flag 14:00 stands. [#147](https://github.com/bywale-com/travis/pull/147) **merged** — 014 is on `main` / psi.
+
+**Founder:** screenshot only. Log · Talk: Listening · Clear · Pause. Orange: `Unexpected token '<', "<!DOCTYPE "... is not valid JSON`.
+
+**Stood up.** That is the Talk error banner, not Stream. Raw `res.json()` on an HTML page. `readJson` already exists. 014 hang is live; Talk to Travis still hits `createDeepAgent`. An uncaught throw before SSE is a Next HTML 500 — same banner.
+
+**Cut:** [`HOTFIX-079-TALK-HTML-JSON.md`](./HOTFIX-079-TALK-HTML-JSON.md). Engineer: `readJson` on non-SSE; do not dump parser junk from SSE; find the 500; keep 030 grain. This PR. I do not plant `src/`.
