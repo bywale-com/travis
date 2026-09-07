@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 14:56 UTC — PM look 080 Pass. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 16:25 UTC — packet 015 dest harness recut; Wake sa. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3302,3 +3302,19 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Steps I could not do (human):** Vercel team SSO. Type the lived line. A second send. Talk on a phone. Confirm an `agent_post` after a real send on this plant.
 
 **Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-07 16:25 UTC — Packet 015 dest harness recut (founder go)
+
+**Kind:** Packet. Founder go. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** We'll do that, we'll do that another, we'll do that afterwards. Just, you could feel free to go ahead on that recut though of the, the patients. That's what I meant to go ahead.
+
+**What he meant.** The dest recut. Look paste and the other tickets afterwards.
+
+**Landed.** [`PM-PACKET-015-DEST-HARNESS.md`](./PM-PACKET-015-DEST-HARNESS.md) · test [`PM-PACKET-015-DEST-HARNESS-TEST.md`](./PM-PACKET-015-DEST-HARNESS-TEST.md). **Wake:** sa. SA **031**. This PR.
+
+**Lock (plain).** Dest body is the ask plus the print of this chat. No marker words. Long print lives in the kit file. Spoken window stays small. Full mail once on dest. When they name Technical PM, dest — do not create. Dest seats stay Cursor. Do not remint 011–013 / 027–029 / 030.
+
+**Human leftover (other PR / later).** Re-paste Automation C. Dest glossary. Blocker letter. I do not plant `src/`.
