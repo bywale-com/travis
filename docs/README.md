@@ -1,5 +1,7 @@
 # Travis docs — front door
 
+**How we build** (scratch to merge): [`BUILD-PROTOCOL.md`](./BUILD-PROTOCOL.md).
+
 This is the whole-repo map for `docs/`. Everything Travis is written down under here. Start with the seats below, then the orientation path.
 
 **Three seats for new chats** (paste the short block, then this file — or the detailed seat README — is the rest of the prompt):
@@ -126,10 +128,11 @@ You are the **third seat**. Technical PM and SA specify. You **implement** what 
 
 ## Orientation path (read in this order)
 
-1. **`method/00-INDEX.md`** — how we think. Then `method/DECISION-CONSTITUTION.md` and `method/TWO-COLUMN-SYNTHESIS.md`.
-2. **`build-foundation/`** — how we build. Start at `build-foundation/README.md` and `build-foundation/00-rudiments.md`, then `.cursor/rules/*.mdc`.
-3. **`register/`** — what the product is. Thesis [`register/PHASE-ONE.md`](./register/PHASE-ONE.md) · PM log · SA log · brief.
-4. **`seats/`** — detailed seat law when a chat is deep in one role.
+1. **[`BUILD-PROTOCOL.md`](./BUILD-PROTOCOL.md)** — how we build, from a spoken lock to merge.
+2. **`method/00-INDEX.md`** — how we think. Then `method/DECISION-CONSTITUTION.md` and `method/TWO-COLUMN-SYNTHESIS.md`.
+3. **`build-foundation/`** — UI rudiments. Start at `build-foundation/README.md` and `build-foundation/00-rudiments.md`, then `.cursor/rules/*.mdc`.
+4. **`register/`** — what the product is. Thesis [`register/PHASE-ONE.md`](./register/PHASE-ONE.md) · PM log · SA log · brief.
+5. **`seats/`** — detailed seat law when a chat is deep in one role.
 
 ---
 
@@ -137,6 +140,7 @@ You are the **third seat**. Technical PM and SA specify. You **implement** what 
 
 | Folder | What it is | Entry point |
 |---|---|---|
+| [`BUILD-PROTOCOL.md`](./BUILD-PROTOCOL.md) | House build protocol, start to finish | this file |
 | [`method/`](./method/) | Portable Om Coda operating doctrine | [`method/00-INDEX.md`](./method/00-INDEX.md) |
 | [`build-foundation/`](./build-foundation/) | Build method + rudiments + brief | [`build-foundation/README.md`](./build-foundation/README.md) |
 | [`register/`](./register/) | Product thesis + PM/SA trails | [`register/PHASE-ONE.md`](./register/PHASE-ONE.md) |

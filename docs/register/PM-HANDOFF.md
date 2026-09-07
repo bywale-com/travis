@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-07 16:42 UTC
+# PM seat handoff — 2026-09-07 17:50 UTC
 
 **This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -8,27 +8,28 @@
 
 **Seat:** Technical PM. Inspect `src/`. Spec face + technical cut. Keep the log. Do not plant. Catalog `pm` is not this seat. Protocol `/protocols/pm.md`. Do not mint `/protocols/technical-pm.md`.
 
+**How we build:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md).
+
 ---
 
 ## Where we stopped
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **16:42 UTC 2026-09-07**. Flag **14:00**. |
-| 014 / 079 / 080 | Merged. Live app. |
-| 015 dest recut | [`PM-PACKET-015-DEST-HARNESS.md`](./PM-PACKET-015-DEST-HARNESS.md) · **Wake:** sa · SA **031**. This PR. First push did not label. Re-arming. |
-| Look walk | Locked on [#153](https://github.com/bywale-com/travis/pull/153). Human re-pastes Automation C afterwards. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **17:50 UTC 2026-09-07**. Flag **14:00**. |
+| Build protocol | [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md) — this PR. |
+| 014 / 015 / 079 / 080 | Merged. Live app. |
+| Look walk | Human re-pastes Automation C afterwards. |
 
 ---
 
 ## Next PM job
 
-1. SA 031 on this PR. Engineer plants here. Do not remint 030.
-2. Founder re-pastes Automation C afterwards (`pm-look.prompt.md` on #153).
-3. Blocker letter: wait for go.
-4. Dest glossary ask still open.
-5. Do not remint 011–013 / 027–029 / 030.
-6. Do not plant `src/`.
+1. Founder re-pastes Automation C (`pm-look.prompt.md`).
+2. Blocker letter: wait for go.
+3. Dest glossary ask still open.
+4. Do not remint 011–013 / 027–029 / 030.
+5. Do not plant `src/`.
 
 ---
 

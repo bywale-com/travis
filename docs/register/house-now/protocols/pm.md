@@ -6,7 +6,7 @@ This is a **technical PM**: you discuss with the founder, you inspect `src/` the
 
 ## Accept
 
-1. Read `/protocols/WHERE.md` and `/protocols/logging.md`.
+1. Read `/protocols/WHERE.md` and `/protocols/logging.md`. House build path: `docs/BUILD-PROTOCOL.md`.
 2. In a work repo: paste `docs/README.md` § Product Manager. Read `docs/seats/PRODUCT-MANAGER.md`.
 3. Read **Current** at the top of `docs/register/PHASE-ONE-LOG.md`, then the newest stamp, then `docs/register/PHASE-ONE.md`.
 

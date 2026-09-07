@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 17:00 UTC — PM look 015 Pass (this seat). Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 17:50 UTC — build protocol emptied into docs/BUILD-PROTOCOL.md. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3348,3 +3348,13 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Steps I could not do (human):** Vercel team SSO. Type / Send in room Travis. Open Stream. Type `ok`. Talk on a phone. Dest landing on a live Technical PM bind.
 
 **Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-07 17:50 UTC — Build protocol emptied into the repo (founder)
+
+**Kind:** House. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** Just make sure that it's emptied and, and it should be findable in the README, in the repo, and then just merge, just merge immediately after you create these things.
+
+**Landed.** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md). Linked from repo `README.md`, `docs/README.md`, `AGENTS.md`. The whole path from a spoken lock to merge lives there. Merge this PR when it opens.
