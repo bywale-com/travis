@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:46 UTC — planned recut in plain sentences; wait for go. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:50 UTC — cost: dump every think is real; kit offloads. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3412,4 +3412,14 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Founder (preserved):** what are you planning on doing? … fuller, simpler sentences … unmissable and stop … speaking in code. Just fuller, simple sentences of the mechanism.
 
 **Plan.** Deep Agents already runs on every typed send. Its own hook runs before every think. We will use that hook to attach the unclipped chat to what Travis sees, every time, with no magic words. When he sends to Technical PM, the leaving message is your ask plus that chat, because Technical PM is a new person and only gets what we mail. We drop the keyword list. Dest stays Cursor. I do not plant until go.
+
+---
+
+## 2026-09-07 15:50 UTC — Cost fear (founder)
+
+**Kind:** Cost / context. Same recut. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** My fear is that this adds context bloats and models you know, takes up our cost. Is this fear unfounded? … how is cost managed in this kind of architecture? Is it even managed?
+
+**Stood up.** The fear is real if we paste the whole chat into every think. That is why the spoken window stays small. The kit manages cost by putting the long chat in a file, summarizing when history grows, and mailing the full chat only when dest leaves. We do not dump the room on every thought. Still OpenAI on each send. I do not plant until go.
 
