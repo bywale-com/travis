@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-06 15:05 UTC — **SCP-029 recut.** Room SSE + `seq` resume + `NOTIFY travis_room`. First 029 (smarter poll) is void. **028** planted on [#142](https://github.com/bywale-com/travis/pull/142). Next number is **030**.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:40 UTC — **SCP-030 signed.** Deep Agents on Type; dest-with-context grain. PM-014 on [#147](https://github.com/bywale-com/travis/pull/147). Next number is **031**.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -659,4 +659,36 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-029-LIST-LIVE.md`](./SYSTEMS-CHANGE-PACKET-029-LIST-LIVE.md) (recut in place).
 
 **Handoff:** Engineer plants **this** 029 on **this same PR**. Next packet number is **030**. Do not remint 023 tables. Do not mint 028 here. Do not mint a cousin.
+
+---
+
+## 2026-09-07 13:40 UTC — SCP-030 Deep Agents (PM-014 on #147)
+
+**Kind:** Packet ascribe. Automation woke this seat. PM-014 + dest-with-context test on this PR. No SYSTEMS-CHANGE-PACKET for Deep Agents was on the branch. 023–029 stay planted — not reminted. **014** log-beats is a different packet — not this cut.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-014 lock + plates). Not PM. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** The harness is the problem. A process fires on every message, then forks. Gap is context access, tools, translating the task — not the model. LangChain Deep Agents is that harness, not a silver bullet. Dest-with-context is the first fork: dest `text` is the print plus the ask. Here stays clipped. Stream chrome stays; process content is the harness. Log · Type first.
+
+**Staples (not scenery):** **Stream**. Process body = the **print** (the list). Dest Log line contains that list.
+
+**Quoted stood-up:**
+
+- Type: `generateTravisText` is OpenAI `/v1/responses` + clipped `roomContextFor` + 6× `runTravisTool` (`travis-openai.ts`). No `deepagents` in `package.json`.
+- Here: `LINE_CAP` 300 · `WINDOW_TURNS` 14 · `WINDOW_CHAR_CAP` 2600. `describeTurn` clips Travis’s own post. Store is full `voice_turn.text`.
+- Dest: `dispatchToSeat({ prompt })`. `dest_job.payload.text`. Model `text` straight through.
+- Stream: `startStreamProcess` then `finishStreamProcess` **overwrites body with the receipt**. Kinds `message` \| `process` \| `thought`.
+- Live: `mintLiveToken` / `/live/tool`. User turn lands before the Type loop (`pipeTravisText`).
+
+**Ascribed:**
+
+1. **No remint** of 023–029 tables/columns. No filesystem table. No fourth Stream kind. No `/protocols/technical-pm.md`.
+2. **Hang** npm `deepagents` `createDeepAgent` **inside** `generateTravisText` (Log · Type). Same signature. `StateBackend` `/print.md` = unclipped print, per invoke. `FilesystemBackend` refused. `task` / `execute` stubbed. Dest seats stay Cursor.
+3. **Dest-with-context grain** (not hope): `isDestWithContextAsk` on last `kind=user` → assemble ask + unclipped print (last Travis speakable `agent_post` full + `WINDOW_TURNS` raw) → that string is `insertDestJob` + `dispatchToSeat` `prompt`. Model wrap discarded. Before job/dispatch.
+4. **Stream:** `kind=process` `tool=dest_with_context` `body` = the print. Do not overwrite with the receipt.
+5. **Live:** library hang = named silence. Dest grain still runs if Live dests. Here clip stays.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-030-DEEP-AGENTS.md`](./SYSTEMS-CHANGE-PACKET-030-DEEP-AGENTS.md)
+
+**Handoff:** Engineer plants 030 on **this same PR**. Next packet number is **031**. Do not remint 023–029. Do not remint 014 log-beats. Do not mint a cousin.
 
