@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:38 UTC — Deep Agents purpose is those three; 030 fork missed 907. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:40 UTC — why 030 missed: fork is optional + phrase-gated. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3376,4 +3376,14 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Lock (014 / 13:08, not a new story).** Context, tools, translating the task — that is the packet. Deep Agents is the harness on every message. Dest-with-context is the first fork: this send’s body is the chat plus the ask. “Kit is not magic” meant we write that fork. It did not mean the three stay unsolved.
 
 **907.** The purpose was this. The planted fork did not do it. That is a miss on 030’s job, not a different purpose. Do not remint unless he seats a recut.
+
+---
+
+## 2026-09-07 15:40 UTC — Why the fork missed (founder)
+
+**Kind:** Cause. Same 030. Flag 14:00 stands. Not a remint. Not a plant.
+
+**Founder (preserved):** Okay, the question is why? Why? Why?
+
+**Cause.** The planted fork does not run the dest. It only rewrites dest `text` *after* he already called send, and only if the line contains `as context` / `printed chat` / `send that list` / `including what we just`. 907 said “alongside” / “this chat.” No match. Middleware classifies and does nothing. He called `create_agent`. Grain never ran. We wrote a phrase gate on an optional tool, not a fork that fires on “send this chat to Technical PM.”
 
