@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:20 UTC — 014 go. Wake sa. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:28 UTC — dest is house jargon, not industry. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3122,3 +3122,21 @@ First fork in that harness: dest-with-context (this morning’s miss). Kit is no
 **Packet spoken.** Stream chrome stays; process content is the harness. Technical cut quoted (`LINE_CAP` / `dispatchToSeat` `prompt` / Stream kinds). Test C is Stream.
 
 **Wake:** sa on its own line. This push is the get-go. SA **030**. Same PR. Do not remint 011–013. I do not plant `src/`.
+
+---
+
+## 2026-09-07 13:28 UTC — What dest means (founder)
+
+**Kind:** Glossary. Flag 14:00 stands. Not a packet. Not a plant. 014 still **Wake:** sa.
+
+**Founder (preserved):** What do you mean by "dest"? The word, I always see, I see it so often, D E S T. What, is that a term in, in the developer community or something? Like, what does that mean?
+
+**Not a general developer word.** Programmers sometimes shorten *destination* to dest (`src`/`dest`, dest folder). That is not why it is everywhere here.
+
+**House verb.** Dest = hand this line to a seated person (Technical PM, SA, Engineer) over Cursor. Travis’s tools are `send_to_seat` / `dispatch_to_seat`. The store is `dest_job`. “Dest-with-context” = that handoff’s body **is** the print, not “please include the chat.”
+
+**Why you hear D-E-S-T.** Seats and Travis’s Here block (`Dest Travis.`) talk it. Glass names are already people: Technical PM, SA, Engineer — `destGlassName`. In flight was already locked not to say “dest gate · in progress.”
+
+**On the glass you should hear send.** Send to Technical PM. Dest stays logs / tools / this trail.
+
+**Ask.** Keep dest in the house and say send on the face, or rename the house word too?
