@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:28 UTC — dest is house jargon, not industry. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:32 UTC — PM look 014 Pass. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3140,3 +3140,21 @@ First fork in that harness: dest-with-context (this morning’s miss). Kit is no
 **On the glass you should hear send.** Send to Technical PM. Dest stays logs / tools / this trail.
 
 **Ask.** Keep dest in the house and say send on the face, or rename the house word too?
+
+---
+
+## 2026-09-07 13:32 UTC — PM look 014 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`PM-PACKET-014-DEEP-AGENTS.md`](./PM-PACKET-014-DEEP-AGENTS.md) · SA **030** · plant on [#147](https://github.com/bywale-com/travis/pull/147) (`5b864f2`). Sheet: [`PM-LOOK-014.md`](./PM-LOOK-014.md).
+
+**Look.** src/ matches the lock. Type `generateTravisText` is `createDeepAgent().invoke` (LangChain Responses, same key / model). Dest-with-context grain rewrites `send_to_seat` / `dispatch_to_seat` to ask + unclipped print before `insertDestJob` / `dispatchToSeat`. Stream `tool=dest_with_context` body = the print; receipt does not overwrite. Here clip stands. Default `task` / `execute` omitted. Live unchanged. No new table. Hear / Skip buttons stay off. No remint of 011–013 / 023–029.
+
+**Preview I opened:** `https://travis-git-cursor-pm-successor-bind-be8a-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see Voice / Log / Stream glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not Send the list sentence. I did not dest. I did not open Stream.
+
+**Steps I could not do (human):** Vercel team SSO. Travis email link. Type / Send. Dest after a lived list. Stream process body. Talk on a phone. Dest landing on a live Technical PM bind.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
