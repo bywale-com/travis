@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:50 UTC — cost: dump every think is real; kit offloads. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:54 UTC — look must walk this deployment’s real sends, not src-only Pass. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3422,4 +3422,14 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Founder (preserved):** My fear is that this adds context bloats and models you know, takes up our cost. Is this fear unfounded? … how is cost managed in this kind of architecture? Is it even managed?
 
 **Stood up.** The fear is real if we paste the whole chat into every think. That is why the spoken window stays small. The kit manages cost by putting the long chat in a file, summarizing when history grows, and mailing the full chat only when dest leaves. We do not dump the room on every thought. Still OpenAI on each send. I do not plant until go.
+
+---
+
+## 2026-09-07 15:54 UTC — Look should find the gap, not the founder (founder)
+
+**Kind:** House / look beat. Deep Agents recut has go, held until this. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** I give you the go-ahead to let's work through this. but here's what I want to do actually before we do that. … technical PM, look, automation in cursor isn't doing enough … it's expensive for me to be the one discovering the gaps that could have been discovered by the PM. … The seat can test the app, just not every single feature. … it couldn't test the voice feature, but it can test the features that matter in this specific … Deployment … still testing the live app. Maybe … computer use … if it doesn't have to be computer use, it could be cheap … it can still test out real use cases
+
+**Stood up.** Same reading. Today the look quotes the plant, opens the preview, hits SSO, Passes “what this seat could do,” and you find the lived miss. Next: on this deployment, walk the sends that matter for that plant (Type, dest, tape). Voice stays human. Computer use only if a send cannot be done cheaper. Deep Agents recut waits. Ask if that aim is locked.
 
