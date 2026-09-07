@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-07 15:40 UTC
+# PM seat handoff — 2026-09-07 15:44 UTC
 
 **This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -14,7 +14,7 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **15:40 UTC 2026-09-07**. Flag **14:00**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **15:44 UTC 2026-09-07**. Flag **14:00**. |
 | 014 / 079 / 080 | Merged. Live app. 080 look Pass from `src/` — did not Type. |
 | Capability list | 15:22 stamp — founder click-paths vs 27 Travis tools. Ticket `That's fine.` still open. |
 
@@ -25,7 +25,7 @@
 1. Human Type send on 080 (live app) still leftover.
 2. Blocker letter: wait for go.
 3. Dest glossary ask still open.
-4. Capability inventory delivered (15:22). Dest-with-context protocol walk (15:30). Not a packet unless he seats a cut.
+4. 030 recut: use Deep Agents `wrapModelCall` (print in the request), not more MARKERS. Wait for go. Do not remint until then.
 5. Do not remint 011–013 / 027–029 / 030.
 6. Do not plant `src/`.
 

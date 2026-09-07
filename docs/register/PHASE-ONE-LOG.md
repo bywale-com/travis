@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:40 UTC — why 030 missed: fork is optional + phrase-gated. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 15:44 UTC — not a keyword patch; use the kit’s middleware. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3386,4 +3386,20 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Founder (preserved):** Okay, the question is why? Why? Why?
 
 **Cause.** The planted fork does not run the dest. It only rewrites dest `text` *after* he already called send, and only if the line contains `as context` / `printed chat` / `send that list` / `including what we just`. 907 said “alongside” / “this chat.” No match. Middleware classifies and does nothing. He called `create_agent`. Grain never ran. We wrote a phrase gate on an optional tool, not a fork that fires on “send this chat to Technical PM.”
+
+---
+
+## 2026-09-07 15:44 UTC — Don’t invent keywords; hang the kit (founder)
+
+**Kind:** Type A. Same 014/030. Flag 14:00 stands. Not a plant. No remint unless go.
+
+**Founder (preserved):** I don't give a shit about your solution … I care about how people are building stuff like what we're building … we're trying to invent too much. Let's see what's out there and then try to integrate that … Architecture is already out there. … optimizing for as little new, innovative code as possible, and like, integrating, what exists
+
+**Not planning.** A longer marker list. That is more of our code. Not the ask.
+
+**What exists (Deep Agents, already on the desk).** `createDeepAgent` ships filesystem, `wrapModelCall` (inject into every model request), summarization. Docs: customize by hanging data on that stack, not a cousin classifier. We seeded `/print.md` then wrote 030 “payload must not depend on the model reading it,” and a middleware that classifies and returns. That is us inventing beside the kit.
+
+**Ours stays ours.** Phone, dest to Cursor people, room tape. Dest seats stay Cursor — 030 silence, not a LangChain product.
+
+**Ask.** Recut 030 to use the kit’s `wrapModelCall` (print in the request, not MARKERS), or hold. I do not plant.
 
