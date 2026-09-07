@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 17:50 UTC — build protocol emptied into docs/BUILD-PROTOCOL.md. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 18:45 UTC — 016 plant: kit only; why blockers. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3358,3 +3358,45 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **Founder (preserved):** Just make sure that it's emptied and, and it should be findable in the README, in the repo, and then just merge, just merge immediately after you create these things.
 
 **Landed.** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md). Linked from repo `README.md`, `docs/README.md`, `AGENTS.md`. The whole path from a spoken lock to merge lives there. Merge this PR when it opens.
+
+---
+
+## 2026-09-07 18:25 UTC — Compose, don’t invent; start at the send harness (founder)
+
+**Kind:** Flag-adjacent law + packet. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** If we didn't know what we actually want to accomplish, we know what we want to accomplish very, very well. Okay, the problem has been implementation. … start from the place that it matters, which is the harness … when I send a message. What process happens? … in what order … what case … around the … model … find pre-existing implementations … write as little novel code. When I say novel code, I mean code where we have to like reverse engineer things. … leverage what already exists. And just write the integration code … I don't care. If it's open source or closed source or vendor or provider that we need to pay. … toss. In cost, as a as a thought … that's the gap. … doesn't … minimize what it is
+
+**Stood up.** Same reading. Product is known. The hole is inventing process that should already exist. Law in [`BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md). First incremental place: Type send → process around the model. Packet [`PM-PACKET-016-COMPOSE.md`](./PM-PACKET-016-COMPOSE.md). **Wake:** sa. SA **032**. This PR. Do not remint 015 dest mail. I do not plant `src/`.
+
+---
+
+## 2026-09-07 18:38 UTC — PM look 016 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`PM-PACKET-016-COMPOSE.md`](./PM-PACKET-016-COMPOSE.md) · SCP-032 · plant on [#157](https://github.com/bywale-com/travis/pull/157) (`fb3cec3`). Sheet: [`PM-LOOK-016.md`](./PM-LOOK-016.md).
+
+**Look.** src/ matches the lock. Type `generateTravisText` is `invokeDeepAgent` only. Responses cousin and the silent catch are gone. Kit throw reaches `pipeTravisText` → `travisGenerateMiss`. Dest assemble / `/print.md` / `/roster.md` / Here clip not reminted. Hear / Skip buttons stay off. Search for `generateTravisTextViaResponses` / `ran out of tool steps` is empty.
+
+**Preview I opened:** `https://travis-git-cursor-packet-016-comp-9065c4-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see Voice / Log / Type glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not Type `ok`. I did not dest. I did not Talk.
+
+**Steps I could not do (human):** Vercel team SSO. Type the lived line. The 907 dest sentence. Talk on a phone. Confirm an `agent_post` after a real send on this plant.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-07 18:45 UTC — What 016 changed; why blockers (founder)
+
+**Kind:** Look at the plant + founder question. Flag 14:00 stands. Not a remint.
+
+**Founder (preserved):** something has been built. Look at it and, in what ways has it changed? Explain the mechanism to me. What is it leveraged? … how there are no blockers. Unless they are … Why do you think I, I, in a way, I'm looking forward to blockers?
+
+**Plant (#157, `fb3cec3`).** Type send no longer swallows a kit throw into a six-step Responses loop we wrote. `generateTravisText` is `invokeDeepAgent` only. Leveraged: LangChain Deep Agents (`createDeepAgent` from `deepagents/node`) — already hung in 030/080. Deleted: `generateTravisTextViaResponses` and the silent `catch`. Dest mail / Here clip / Live stay.
+
+**No blocker file.** The cut did not need a new key, a paid signup, or a founder paste. It deleted a cousin. Look hit SSO and emerged anyway. Blocker letter is still unplanted.
+
+**Alignment (not the flag).** Looking forward to a blocker is looking forward to the compose law actually hitting a seam: we found a thing that exists, and now we need you to set it up — not another process we invented so we would not have to ask.

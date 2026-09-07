@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 16:55 UTC — **SCP-031 signed.** Dest harness recut: every dest send assembles ask + print. PM-015 on [#154](https://github.com/bywale-com/travis/pull/154). Next number is **032**.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 18:45 UTC — **SCP-032 signed.** Compose the send harness: Deep Agents is the Type process; delete the Responses cousin. PM-016 on [#157](https://github.com/bywale-com/travis/pull/157). Next number is **033**.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -724,4 +724,37 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-031-DEST-HARNESS.md`](./SYSTEMS-CHANGE-PACKET-031-DEST-HARNESS.md)
 
 **Handoff:** Engineer plants 031 on **this same PR**. Next packet number is **032**. Do not remint 023–030. Do not remint 015 sit. Do not mint a cousin.
+
+---
+
+## 2026-09-07 18:45 UTC — SCP-032 compose send harness (PM-016 on #157)
+
+**Kind:** Packet ascribe. Automation woke this seat. PM-016 + compose test on this PR. No SYSTEMS-CHANGE-PACKET for compose was on the branch. 023–031 stay planted — not reminted. **080** `deepagents/node` hang stays. Dest mail stays 031.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-016 lock + plates). Not PM. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** Why are we designing infrastructure that should already be solved. Mostly integration over what already exists. Find the send process — order, case, around the model. Write as little novel code. Open source, closed source, paid — all fine. Cost is a thought.
+
+**Staples (not scenery):** **Stream** · **Log** · **Type**. Dest Log line = **ask + print**.
+
+**Quoted stood-up:**
+
+- Type: `generateTravisText` dynamic-imports `invokeDeepAgent` (`createDeepAgent` from `deepagents/node`), then a silent `catch` runs `generateTravisTextViaResponses` — a six-step `/v1/responses` loop we authored (`travis-openai.ts` L94–184).
+- Kit hang already: `StateBackend` `/print.md` + `/roster.md`, `destKitMiddleware`, `wrapTravisTools` → `runTravisTool`, `registerHarnessProfile` excludes `task` / `execute`.
+- Dest: `destWithContextFor` always assembles last `kind=user` + print (`dest-with-context.ts` L29–40). `dest_job.payload.text` stands.
+- Stream: dest leave `tool=dest_with_context` `body` = print; no receipt overwrite. Kinds `message` \| `process` \| `thought`.
+- 080 mouth: `travisGenerateMiss` already on `pipeTravisText` throw.
+- Other mature loops (OpenAI Agents SDK, Vercel AI SDK steps, Mastra) exist. Remint of 030 is grind.
+
+**Ascribed:**
+
+1. **No remint** of 023–031 tables/columns. No filesystem table. No fourth Stream kind. No dest assemble recut.
+2. **Adopted primitive:** Deep Agents `createDeepAgent`. Already hung. Type send **is** that invoke.
+3. **Delete** `generateTravisTextViaResponses` and the inner `catch`. Kit throw → `travisGenerateMiss`. Keep 080 load hang (`deepagents/node`, `serverExternalPackages`, dynamic import).
+4. **Stay:** tape pipe, Here clip, Travis tools, 031 dest grain, 008 stream emit on those tool calls. Do not invent a `streamEvents` adapter.
+5. **Live:** library hang = named silence. Dest grain still runs if Live dests.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-032-COMPOSE.md`](./SYSTEMS-CHANGE-PACKET-032-COMPOSE.md)
+
+**Handoff:** Engineer plants 032 on **this same PR**. Next packet number is **033**. Do not remint 023–031. Do not remint dest mail. Do not mint a cousin.
 
