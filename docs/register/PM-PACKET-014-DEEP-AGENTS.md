@@ -4,7 +4,7 @@
 **Seat:** Technical PM. **SA** ascribes as **030**.  
 **When:** Named 2026-09-07.  
 **Status:** Specified.  
-**Wake:** hold
+**Wake:** sa
 **Test spec:** [`PM-PACKET-014-DEEP-AGENTS-TEST.md`](./PM-PACKET-014-DEEP-AGENTS-TEST.md)  
 **Flag:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) **14:00 UTC 2026-08-25**.  
 **Builds on:** 011 polish · dest `text` · Here / `LINE_CAP` · `dispatch_to_seat`.  
@@ -28,6 +28,8 @@
 
 > Calm down. Before we do that … where would I see the difference? Would I see a difference in the stream? … that's where we see how Jarvis is thinking what it's thinking about. Will I see a difference in the stream, in the content of the stream, and so on?
 
+> Okay, cool, no problem. Yeah, go ahead and speak in the packet. Thank you. And please don't forget our packet protocols, okay? It's very important. Yeah, go ahead.
+
 ---
 
 ## What this packet is
@@ -46,6 +48,33 @@ Lived miss this morning: dest sent the **ask**, not the **context**. That dest-w
 4. **Not a silver bullet.** The kit does not write the protocol. We write the forks. Dest to Technical PM / SA / Engineer is still a Cursor run unless SA ascribes that wire. A subagent with “include the chat” and no body is the same miss.
 5. **Log · Type first.** Voice parked this cut (012). Phone chrome unchanged. No Hear it / Skip buttons.
 6. **Stream chrome stays. Stream content changes.** 008 desk (live pane, Log card) is not recut. Events stay `message` / `process` / `thought`. What you read in **process** is the harness — this morning was `read_initiative` × 8 then a dest wrap. After this cut you should see dest-with-context as a process (the print in the dest body), not a mystery wrap. Do not mint a fourth event kind.
+
+## Technical cut (Engineer implements after SA)
+
+Quoted, not memory.
+
+Here clips Travis’s own list before the next turn:
+
+```26:31:src/lib/room-context.ts
+export const LINE_CAP = 300;
+export const WINDOW_TURNS = 14;
+export const WINDOW_CHAR_CAP = 2600;
+```
+
+Dest payload is `prompt` only:
+
+```38:45:src/server/dispatch.ts
+export async function dispatchToSeat(params: {
+  sessionId: string;
+  binding: AgentBinding;
+  prompt: string;
+```
+
+`send_to_seat` / `dispatch_to_seat` pass the model’s `text` straight through (`travis-tools.ts`). Stream events are `message` | `process` | `thought` (`src/lib/stream.ts`). `startStreamProcess` writes process.
+
+**Grain.** A dest-with-context helper reads **unclipped** tape (not `describeTurn` / `LINE_CAP`) and builds `prompt` = polish of the ask + the print. `dispatchToSeat` gets that string. A `process` event on this Stream names the dest fork; **body is the print** (enough to see the list), not `read_seat_reply once it lands`. Here / Live clip unchanged.
+
+LangChain Deep Agents is the harness that loop sits in (middleware every message, forks, filesystem so the print can live). SA ascribes where that library hangs on the planted OpenAI Type path. Do not swap Technical PM dest for a subagent.
 
 Do not plant a second Travis. Do not mint `/protocols/technical-pm.md`. Do not remint 011–013.
 
@@ -69,3 +98,4 @@ Ascribe, quote planted loop (`travis-openai.ts` / Live / `runTravisTool` / `disp
 2. Dest-with-context fork: who concatenates unclipped tape into `prompt` before Cursor. Grain, not hope.
 3. What stays Cursor dest vs Deep Agents subagent. Do not silently replace Technical PM dest with a subagent.
 4. No new table unless you mint one. `payload.text` is the dest body today.
+5. Stream: same `process` kind; dest-with-context body is the print. Do not remint `travis.stream` / `stream_event`. Live: same cut or named silence.

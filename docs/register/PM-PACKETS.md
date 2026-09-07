@@ -29,6 +29,6 @@ Draft is not the hold. “Then SA” in a sentence is not the hold.
 | 011 | [`PM-PACKET-011-VOICE-TPM.md`](./PM-PACKET-011-VOICE-TPM.md) · test [`PM-PACKET-011-VOICE-TPM-TEST.md`](./PM-PACKET-011-VOICE-TPM-TEST.md) | Voice New, reply thread, stay. **Wake:** sa. SA **027**. Planted. |
 | 012 | [`PM-PACKET-012-USABLE-CHAT.md`](./PM-PACKET-012-USABLE-CHAT.md) · test [`PM-PACKET-012-USABLE-CHAT-TEST.md`](./PM-PACKET-012-USABLE-CHAT-TEST.md) · story [`USABLE-CHAT.md`](./USABLE-CHAT.md) | Usable Log. Reply dests the author. Images in the post. SA **028**. [#142](https://github.com/bywale-com/travis/pull/142) merged. |
 | 013 | [`PM-PACKET-013-LIST-LIVE.md`](./PM-PACKET-013-LIST-LIVE.md) · test [`PM-PACKET-013-LIST-LIVE-TEST.md`](./PM-PACKET-013-LIST-LIVE-TEST.md) | Room stays live. Wire + resume. SA **029**. [#144](https://github.com/bywale-com/travis/pull/144) merged. Psi Log A / B / C.1 walked 2026-09-07. |
-| 014 | [`PM-PACKET-014-DEEP-AGENTS.md`](./PM-PACKET-014-DEEP-AGENTS.md) · test [`PM-PACKET-014-DEEP-AGENTS-TEST.md`](./PM-PACKET-014-DEEP-AGENTS-TEST.md) | Deep Agents harness. Dest-with-context first fork. **Wake:** hold. SA **030**. This PR. |
+| 014 | [`PM-PACKET-014-DEEP-AGENTS.md`](./PM-PACKET-014-DEEP-AGENTS.md) · test [`PM-PACKET-014-DEEP-AGENTS-TEST.md`](./PM-PACKET-014-DEEP-AGENTS-TEST.md) | Deep Agents harness. Dest-with-context first fork. **Wake:** sa. SA **030**. This PR. |
 
 Next packet number follows the last cut. Do not reuse.

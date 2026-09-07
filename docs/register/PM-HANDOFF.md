@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-07 13:16 UTC
+# PM seat handoff — 2026-09-07 13:20 UTC
 
 **This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -14,15 +14,14 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **13:16 UTC 2026-09-07**. Flag **14:00**. |
-| 014 | [`PM-PACKET-014-DEEP-AGENTS.md`](./PM-PACKET-014-DEEP-AGENTS.md). SA **030**. **Wake:** hold. Dest-with-context is the first fork. This PR. |
-| Gap | Context / tools / translating the task. Not the model. LangChain is not magic. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **13:20 UTC 2026-09-07**. Flag **14:00**. |
+| 014 | [`PM-PACKET-014-DEEP-AGENTS.md`](./PM-PACKET-014-DEEP-AGENTS.md). SA **030**. **Wake:** sa. Same PR. Dest-with-context first fork. Stream chrome stays. |
 
 ---
 
 ## Next PM job
 
-1. Founder go → flip **Wake:** hold to **Wake:** sa on 014 (own line) and push.
+1. SA 030 on this PR. Then Engineer. Then look.
 2. Do not remint 011–013 / 027–029.
 3. Do not plant `src/`.
 

@@ -61,6 +61,21 @@ Send that list as context to Technical PM, including what we just discussed here
 
 ---
 
+## C. Stream shows that dest
+
+### C.1 Open Stream
+
+**Do:** After B, open Stream (glow / In this room / the Stream card). Do not hard refresh.
+
+**Expect:** In this order:
+
+1. Stream is the 008 desk (live pane or Log card). Not a new chrome.
+2. A **process** row is dest-with-context. Its body includes the list from A — not only “include the printed chat” / `read_seat_reply`.
+
+**I saw:**
+
+---
+
 ## After
 
 Voice: no Hear it / Skip **buttons**.

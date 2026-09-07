@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:16 UTC — Stream content would change; chrome stays. 014 hold. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-07 13:20 UTC — 014 go. Wake sa. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3110,3 +3110,15 @@ First fork in that harness: dest-with-context (this morning’s miss). Kit is no
 **Stream.** Chrome stays (008). Kinds stay `message` / `process` / `thought`. **Content of process would change** — that’s the harness you watch, same reason Cursor’s harness is visible. This morning: `read_initiative` × 8, `search_room` 185, dest wrap. After: dest-with-context should show as process whose body **is** the print, not “include the chat.” If Stream still only showed today’s wrap, you would not see the cut.
 
 **Ask.** Is that the difference you want on the glass? Then go.
+
+---
+
+## 2026-09-07 13:20 UTC — 014 go (founder)
+
+**Kind:** Get-go. **Wake:** sa. Same 014. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** Okay, cool, no problem. Yeah, go ahead and speak in the packet. Thank you. And please don't forget our packet protocols, okay? It's very important. Yeah, go ahead.
+
+**Packet spoken.** Stream chrome stays; process content is the harness. Technical cut quoted (`LINE_CAP` / `dispatchToSeat` `prompt` / Stream kinds). Test C is Stream.
+
+**Wake:** sa on its own line. This push is the get-go. SA **030**. Same PR. Do not remint 011–013. I do not plant `src/`.
