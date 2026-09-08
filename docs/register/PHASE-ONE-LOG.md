@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-08 19:56 UTC — Last lived failures are the same two holes. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-08 23:25 UTC — What Travis means for him: walk back in; route-plus; interrupt; modify in motion. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3463,3 +3463,38 @@ First brief still counts.
 2. **Cursor / kit hung through a local serverless trick** — HTML 500, ESM import, `sdk-agent-store` mkdir.
 
 Not the model. Not a new face.
+
+---
+
+## 2026-09-08 23:25 UTC — What Travis means for him (founder)
+
+**Kind:** Type A / lived meaning. Flag 14:00 stands. Not a packet. Not a plant. Not a substitute flag.
+
+**Founder (preserved):**
+
+> … like that we're building Travis like it's a product that we're selling. We're not selling it. And yes, I wish I, I wish I could share Travis with everyone, but maybe I can't. Who, the person that needs Travis the most is freaking me.
+
+> First of all, it's not working, but we'll talk about how it's not working.
+
+> Usually when I'm coming into, to a room and I'm asking Travis, what the 1st thing I'm usually asking Travis with, and it's true in almost all the experiments, is Travis, where are we? What was the last thing we discussed? Or, what was the last thing we talked about? Or, where are we? When I'm coming to a chat for, into a room Usually, into a room, whether, even if it's a 20, 20-minute break, or, an hour break, or day, couple of days break, that's usually what I'm asking. So the question we're trying to ask ourselves is, how do we want it to interpret that, given the context, given specific, a specific kind of context? That's how, we're going to be able to evaluate if it's doing it properly. That's one, very common use case, that I'm going to be, almost always will happen with Travis.
+
+> If I, and most of the time I wanted to pick, I'm, I'm giving it bunch of things to like, it, like, just to process immediately, right? I'll give an example. So we're talking, and, I got an idea. Oh, Travis. Okay, I have an idea. I tell it, I might tell it the idea 1st in full, and I might then, after a response to it, telling me its opinion, I might then say, you know what? Okay, I want you to route that to the X seat, and I want you to add this as well with it. We need Travis to be able to take a request like that, and actually, you know, use it intelligently.
+
+> If I interrupted it right there, after I give it that initial request, that, that request, and I said something, oh, by the way, do this, as well, right? But to this other seat. And then maybe a couple minutes later, whether it That processor is still in the motion. I said, "Okay, so I just thought of a I just thought of a modification to all of those ideas. I know I'm going crazy here." And I, I relayed it. How does it take all of that? How is it processing all of that? That's the real architectural question. That's what Travis means for me. I don't give a shit what it means for the product. That's what it means for me right now.
+
+> So we want to identify, okay, what does it mean for Travis to actually, you know, process these requests, process these situations? How is it processing it? How does it accomplish our goals? And what are our goals? And I can tell you what our goals are clearly, but how can, what does it process for it to actually do this in a very reliable fashion? Okay? That's, I just don't want to forget, so I want to lay it down.
+
+**Laid down (his situations, not a generated list):**
+
+1. Walk back into a room after twenty minutes, an hour, a day, or a couple of days: **where are we / what was the last thing we discussed.** Evaluate by how it should interpret that given a specific kind of context.
+2. Life, back to back: idea in full → his opinion → **route that to seat X, and add this with it.**
+3. Interrupt that send: **by the way, do this as well — to this other seat.**
+4. A couple of minutes later, while that process is still in motion: **a modification to all of those ideas.**
+
+Not selling Travis. The person who needs it most is him. How it is not working: later.
+
+**How it processes today (alignment, not the flag).** Every Type line is a new think. He is handed a short Here card (about fourteen recent turns, each line cut at three hundred characters, whole card cut at twenty-six hundred) plus roster, in-motion count, and a few backlog titles. He is told: do not recap the last turns; if they ask beyond Here, search the request log. A send to a seat files a job and returns — it does not hold his mouth. Dest mail, when it leaves, is this ask plus the print. A later “by the way” or “modify all of those” is another new think. Nothing binds those lines into one process that still has the first idea, the add-on, the other seat, and the modification. Queue is only for a named person. Role send goes to the next idle seated person. In-motion is a glance, not “all of those.”
+
+**Not this stamp:** a packet. Goals (he will state them). How “where are we” should interpret after twenty minutes vs a day. How it is not working.
+
+**Ask.** State the goals. Then: after a twenty-minute break, what should “where are we” mean — last idea, last send still running, both, or something else? That is the evaluation he named.
