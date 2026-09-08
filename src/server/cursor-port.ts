@@ -53,6 +53,80 @@ function cursorBasicAuth(key: string): string {
   return `Basic ${Buffer.from(`${key}:`).toString("base64")}`;
 }
 
+function cursorHttpError(data: unknown, status: number): string {
+  if (data && typeof data === "object") {
+    const o = data as { message?: unknown; error?: unknown };
+    if (typeof o.message === "string" && o.message.trim()) {
+      return o.message.trim();
+    }
+    if (o.error && typeof o.error === "object") {
+      const m = (o.error as { message?: unknown }).message;
+      if (typeof m === "string" && m.trim()) return m.trim();
+    }
+    if (typeof o.error === "string" && o.error.trim()) return o.error.trim();
+  }
+  return `Cursor create failed (${status}).`;
+}
+
+function cursorAgentIdFromCreate(data: unknown): string {
+  if (!data || typeof data !== "object") return "";
+  const o = data as { id?: unknown; agent?: { id?: unknown } };
+  const raw =
+    typeof o.agent?.id === "string"
+      ? o.agent.id
+      : typeof o.id === "string"
+        ? o.id
+        : "";
+  const id = raw.trim();
+  return isCloudAgentId(id) ? id : "";
+}
+
+/** SCP-033 — Cloud HTTP create. Same host + Basic as artifacts. */
+export async function createCursorAgent(params: {
+  name: string;
+  prompt: string;
+  modelId?: string;
+  repository?: string;
+  ref?: string;
+}): Promise<string> {
+  const key = apiKey();
+  if (!key) {
+    throw new Error("CURSOR_API_KEY is missing. Cursor create cannot run.");
+  }
+  const body: Record<string, unknown> = {
+    name: params.name.trim().slice(0, 100),
+    prompt: { text: params.prompt },
+  };
+  if (params.modelId?.trim()) {
+    body.model = { id: params.modelId.trim() };
+  }
+  if (params.repository?.trim()) {
+    body.repos = [
+      {
+        url: params.repository.trim(),
+        ...(params.ref?.trim() ? { startingRef: params.ref.trim() } : {}),
+      },
+    ];
+  }
+  const res = await fetch(`${CURSOR_API}/v1/agents`, {
+    method: "POST",
+    headers: {
+      Authorization: cursorBasicAuth(key),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  const data: unknown = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(cursorHttpError(data, res.status));
+  }
+  const id = cursorAgentIdFromCreate(data);
+  if (!id) {
+    throw new Error("Cursor create returned no bc- id.");
+  }
+  return id;
+}
+
 export type CursorArtifactItem = {
   path: string;
   sizeBytes: number | null;

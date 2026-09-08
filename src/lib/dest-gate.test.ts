@@ -3,8 +3,10 @@ import test from "node:test";
 import {
   classifyDestPrompt,
   classifyOpenMember,
+  destClassifyText,
   destHeartbeatLabel,
   destHeartbeatState,
+  destLeaveRefused,
   hisWorkReceipt,
   isHisWork,
   nobodyReceipt,
@@ -16,6 +18,18 @@ test("create sit prove unfold are his, not mail", () => {
   assert.equal(isHisWork("unfold the work-repo template"), true);
   assert.deepEqual(classifyDestPrompt("create a new PM"), { class: "his" });
   assert.equal(classifyDestPrompt("look at the queue drain"), null);
+});
+
+test("dest classify reads the ask, not the assembled print", () => {
+  const ask =
+    "Send this to Technical PM: I am sending this from the Travis app.";
+  const assembled = `${ask}\n\nFounder: create another agent.`;
+  assert.match(assembled, /create another agent/);
+  assert.equal(classifyDestPrompt(destClassifyText(ask, assembled)), null);
+  assert.deepEqual(classifyDestPrompt("create a new PM"), { class: "his" });
+  assert.equal(destLeaveRefused({ class: "his" }), true);
+  assert.equal(destLeaveRefused({ class: "nobody" }), true);
+  assert.equal(destLeaveRefused(null), false);
 });
 
 test("deprecate without an unseat write is nobody", () => {

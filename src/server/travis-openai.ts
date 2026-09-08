@@ -88,6 +88,7 @@ export async function generateTravisText(params: {
     // at function load — the phone then parsed <!DOCTYPE as JSON.
     // 080: hang `deepagents/node` so Vercel require() hits CJS, not browser ESM.
     // 032: kit throw reaches pipeTravisText → travisGenerateMiss. No cousin.
+    // 033: create is HTTP — SDK create no longer loads on this send.
     const { invokeDeepAgent } = await import("@/server/travis-deep-agent");
     return await invokeDeepAgent({
       sessionId: params.sessionId,

@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 18:45 UTC — 016 plant: kit only; why blockers. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-08 19:56 UTC — Last lived failures are the same two holes. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3400,3 +3400,66 @@ Same on Type `/send`. Catch writes `e.message` onto that banner.
 **No blocker file.** The cut did not need a new key, a paid signup, or a founder paste. It deleted a cousin. Look hit SSO and emerged anyway. Blocker letter is still unplanted.
 
 **Alignment (not the flag).** Looking forward to a blocker is looking forward to the compose law actually hitting a seam: we found a thing that exists, and now we need you to set it up — not another process we invented so we would not have to ask.
+
+---
+
+## 2026-09-07 19:05 UTC — Merged 016 and tried again; first brief still counts (founder)
+
+**Kind:** Founder correction + tape. Flag 14:00 stands. Not a remint of 016.
+
+**Founder (preserved):** At the time I sent the 1st message, I hadn't merged the PR. True, but I've done, I've merged, I merged the PR, and I tried again. Look at the logs, okay? Everything I said in that 1st message, in that message just now, still counts, because look at the, look at the logs.
+
+**#157 merged 18:59:15 UTC.** Room After new law `38f491eb-…`. Same two asks at 19:00–19:01.
+
+**Retry tape.** Seq 15–18: create again. Same `ENOENT` `sdk-agent-store` mkdir. No person. Seq 19: dest to Technical PM. Seq 20: `Travis error: Cannot use import statement outside a module`. No `dest_with_context`. `dest_job` still **0**. Dead Technical PM bind still hung (`bc-25c5c6bf`). First dest ticket still open. No new ticket from the retry dest — the send died first.
+
+**016 did not touch dest-gate, dest leave, create, or new-room sit.** It deleted the Responses cousin. The dest send this time died at the kit hang (080 class), so dest never even assembled. First-try dest-gate refuse still stands: if dest had run, the print still said “create.”
+
+First brief still counts.
+
+---
+
+## 2026-09-07 19:10 UTC — Packet 017 lived redesign (founder go)
+
+**Kind:** Packet. Founder go. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved, first brief):** Look at the logs … Everything that went wrong in there, every system that was touched, or was supposed to be touched, that wasn't touched, or was touched improperly, I want a redesign. … rethink with our new law.
+
+**Landed.** [`PM-PACKET-017-LIVED-REDESIGN.md`](./PM-PACKET-017-LIVED-REDESIGN.md) · test [`PM-PACKET-017-LIVED-REDESIGN-TEST.md`](./PM-PACKET-017-LIVED-REDESIGN-TEST.md). **Wake:** sa. SA **033**. This PR.
+
+**Chopping block (plain).** Dest-gate reads the print and refuses dest when an earlier turn said “create.” Dest never leaves (`dest_job` = 0). Create dies on a local SDK folder on Vercel. A dest that never left minted a ticket. A new room hung a finished Technical PM. Retry dest send died as the same import error from this morning — 016 made that throw visible; it did not fix the hang. Dest assemble, list seats, and the first Type sends were correct. Do not remint 015 / 016. Do not restore Responses. Do not invent keywords.
+
+**Human leftover (other PR / later).** Re-paste Automation C. Dest glossary. Blocker letter. I do not plant `src/`.
+
+---
+
+## 2026-09-07 19:22 UTC — PM look 017 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`PM-PACKET-017-LIVED-REDESIGN.md`](./PM-PACKET-017-LIVED-REDESIGN.md) · SCP-033 · plant on [#159](https://github.com/bywale-com/travis/pull/159) (`6c18b33`). Sheet: [`PM-LOOK-017.md`](./PM-LOOK-017.md).
+
+**Look.** src/ matches the lock. Dest-gate classifies `destFork.ask`, not assembled. Create is Cloud `POST /v1/agents`. Ticket follows `insertDestJob`. Role dest hangs `livingSeated`. Type send stays `invokeDeepAgent` only. Dest assemble / print body / Hear / Skip buttons not reminted. Search for `Agent.create(` / `generateTravisTextViaResponses` / `sdk-agent-store` on the create path is empty.
+
+**Preview I opened:** `https://travis-git-cursor-packet-017-live-e9ccd9-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see Voice / Log / Type glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not Type the create sentence. I did not dest. I did not Talk.
+
+**Steps I could not do (human):** Vercel team SSO. Type create. Type dest. Confirm a `dest_job` row. Dest landing on the living Technical PM bind. Talk on a phone. Paying Cursor.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-08 19:56 UTC — Last 5–10 failures; same two holes (founder)
+
+**Kind:** Recap of lived tape. Flag 14:00 stands. Not a remint. Not a plant.
+
+**Founder (preserved):** Okay remind me, list out the last five, yoe ten failure modes. Why did, why did, why were they failures? I think it's all, almost been the exact same reasons, but yeah, last 5 to 10, failures
+
+**Yes.** Room Travis `0e8875f8-…` then After new law `38f491eb-…`, 2026-09-07. Same two holes:
+
+1. **Send does not leave with the chat** — wrap, gate, create-instead, dead person, ticket on the attempt.
+2. **Cursor / kit hung through a local serverless trick** — HTML 500, ESM import, `sdk-agent-store` mkdir.
+
+Not the model. Not a new face.

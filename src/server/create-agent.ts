@@ -1,11 +1,12 @@
 /**
- * SCP-011 — fix Agent.create SDK call shape + typed integration options.
- * model → { id }, cloud.repos with optional startingRef. No top-level repository/ref.
+ * SCP-011 options + SCP-033 Cloud HTTP create.
+ * Create is Cloud HTTP. No sdk-agent-store. No row without a bc- id.
  */
 import { eq } from "drizzle-orm";
 import { nextUniqueSlug, seatSlugFromLabel } from "@/lib/seat-slug";
 import { db } from "@/server/db/client";
 import { agentBinding } from "@/server/db/schema";
+import { createCursorAgent } from "@/server/cursor-port";
 import { ensureSitStore } from "@/server/sit-store";
 
 function apiKey(): string {
@@ -223,41 +224,13 @@ export async function createAgentBinding(opts: {
   const taken = new Set(rows.map((r) => r.seatKey));
   const seatKey = nextUniqueSlug(seatSlugFromLabel(label), taken);
 
-  let cursorAgentId = "";
-  const key = apiKey();
-  if (key) {
-    try {
-      const { Agent } = await import("@cursor/sdk");
-      const created = await Agent.create({
-        apiKey: key,
-        name: label,
-        model: opts.model ? { id: opts.model } : undefined,
-        cloud:
-          opts.repository || opts.ref
-            ? {
-                repos: opts.repository
-                  ? [
-                      {
-                        url: opts.repository,
-                        ...(opts.ref ? { startingRef: opts.ref } : {}),
-                      },
-                    ]
-                  : undefined,
-              }
-            : undefined,
-        prompt: `You are ${label}. You sit in a Travis room.`,
-      } as Record<string, unknown>);
-      const id =
-        created && typeof created === "object" && "id" in created
-          ? String((created as { id: string }).id)
-          : "";
-      if (id.startsWith("bc-")) cursorAgentId = id;
-    } catch (err) {
-      throw new Error(
-        err instanceof Error ? err.message : "Cursor would not create the agent.",
-      );
-    }
-  }
+  const cursorAgentId = await createCursorAgent({
+    name: label,
+    prompt: `You are ${label}. You sit in a Travis room.`,
+    modelId: opts.model,
+    repository: opts.repository,
+    ref: opts.ref,
+  });
 
   const [row] = await db
     .insert(agentBinding)

@@ -2,6 +2,7 @@
  * SCP-007 — room membership writes and reads. Packet grain only.
  */
 import { and, asc, eq, inArray, isNull, sql } from "drizzle-orm";
+import { SIT_PROTOCOL_FILES } from "@/lib/protocol-path";
 import {
   destAfterRemove,
   destOnCreate,
@@ -9,6 +10,7 @@ import {
 } from "@/lib/room-membership";
 import { orderRoomsByLastAt, packRoomRows } from "@/lib/room-list";
 import { clipRoomTitle } from "@/lib/room-title";
+import { livingSeated } from "@/server/living-seated";
 import { countOpenMotions } from "@/server/motion";
 import { db } from "@/server/db/client";
 import {
@@ -195,25 +197,27 @@ export async function travisBinding(): Promise<AgentBinding | null> {
   return row ?? null;
 }
 
-async function activeBindings(): Promise<AgentBinding[]> {
-  return db.select().from(agentBinding).where(eq(agentBinding.active, true));
-}
-
 export async function createStandInRoom(opts: {
   clientIp: string;
   operatorId: string;
   preferBinding: AgentBinding;
 }): Promise<VoiceSession> {
-  const catalog = await activeBindings();
-  if (!catalog.length) {
+  const travis = await travisBinding();
+  if (!travis) {
     throw new MembershipError("No agent_binding rows. Run db:seed.", 400);
   }
+  const seated: AgentBinding[] = [];
+  for (const path of SIT_PROTOCOL_FILES) {
+    const living = await livingSeated(path);
+    if (living && !seated.some((b) => b.id === living.id)) seated.push(living);
+  }
+  const catalog = [travis, ...seated.filter((b) => b.id !== travis.id)];
   const destId =
     destOnCreate({
       chosen: catalog.map((b) => ({ id: b.id, seatKey: b.seatKey })),
       standInPmId: opts.preferBinding.id,
-    }) ?? opts.preferBinding.id;
-  const dest = catalog.find((b) => b.id === destId) ?? opts.preferBinding;
+    }) ?? travis.id;
+  const dest = catalog.find((b) => b.id === destId) ?? travis;
 
   return db.transaction(async (tx) => {
     const [session] = await tx

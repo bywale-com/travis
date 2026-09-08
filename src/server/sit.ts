@@ -3,10 +3,12 @@
  * Role dest never enqueues.
  */
 import { eq } from "drizzle-orm";
+import { isCatalogPm, isLivingCursorId, roleDestPick } from "@/lib/dest-glass";
 import {
   formatSeatRosterLine,
   isSitProtocolRole,
   parseSitProtocol,
+  SIT_PROTOCOL_BY_ROLE,
   SIT_ROLE_LABEL,
   type SitProtocolRole,
 } from "@/lib/protocol-path";
@@ -15,10 +17,12 @@ import { isTravisSeat } from "@/lib/seats";
 import { createAgentBinding } from "@/server/create-agent";
 import { db } from "@/server/db/client";
 import { agentBinding, type AgentBinding } from "@/server/db/schema";
+import { livingSeated } from "@/server/living-seated";
 import { OsHouseError, readOs } from "@/server/os-house";
 import { getLiveRun } from "@/server/queue";
 import {
   addMember,
+  isOpenMember,
   MembershipError,
   openMembers,
   requireOpenMember,
@@ -65,15 +69,29 @@ export async function findIdleSeated(
   protocolPath: string,
 ): Promise<AgentBinding | null> {
   await ensureSitStore();
+  const living = await livingSeated(protocolPath);
   const members = await openMembers(sessionId);
-  for (const member of members) {
-    if (isTravisSeat(member.seatKey)) continue;
-    if (member.binding.protocolPath !== protocolPath) continue;
-    const live = await getLiveRun(member.binding.id);
-    if (live) continue;
-    return member.binding;
+  const seated = members.filter((member) => {
+    if (isTravisSeat(member.seatKey)) return false;
+    if (member.binding.protocolPath !== protocolPath) return false;
+    if (isCatalogPm(member.seatKey)) return false;
+    if (!isLivingCursorId(member.binding.cursorAgentId)) return false;
+    return true;
+  });
+  let prefer: AgentBinding | null = null;
+  if (living && seated.some((m) => m.binding.id === living.id)) {
+    prefer = living;
+  } else if (!living) {
+    prefer =
+      seated
+        .map((m) => m.binding)
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())[0] ??
+      null;
   }
-  return null;
+  if (!prefer) return null;
+  const live = await getLiveRun(prefer.id);
+  if (live) return null;
+  return prefer;
 }
 
 function harnessText(parts: Array<{ path: string; body: string }>): string {
@@ -185,8 +203,8 @@ async function spinSeatedRole(params: {
 }
 
 /**
- * Role dest: oldest idle seated of that path, else spin + sit.
- * Never returns a binding that already has a live-run row.
+ * Role dest: idle living in this room, else add the global living bind,
+ * else spin. Never dest a prior bind when a newer living one exists.
  */
 export async function resolveRoleDest(params: {
   sessionId: string;
@@ -195,8 +213,34 @@ export async function resolveRoleDest(params: {
   await ensureSitStore();
   const parsed = parseSitProtocol(params.role);
   if (!parsed.ok) throw new SitError(parsed.reason, 400);
+  const living = await livingSeated(parsed.path);
   const idle = await findIdleSeated(params.sessionId, parsed.path);
-  if (idle) return idle;
+  const pick = roleDestPick({
+    idleInRoomId: idle?.id ?? null,
+    livingId: living?.id ?? null,
+  });
+  if (pick === "idle" && idle) return idle;
+  if (pick === "living" && living) {
+    if (!(await isOpenMember(params.sessionId, living.id))) {
+      try {
+        await addMember(params.sessionId, living.id);
+      } catch (err) {
+        if (err instanceof MembershipError) {
+          throw new SitError(err.message, err.status);
+        }
+        throw err;
+      }
+    }
+    if (!(living.protocolPath ?? "").trim()) {
+      const sat = await sitBinding({
+        sessionId: params.sessionId,
+        binding: living,
+        protocol: parsed.role,
+      });
+      return sat.binding;
+    }
+    return living;
+  }
   return spinSeatedRole({ sessionId: params.sessionId, role: parsed.role });
 }
 
@@ -253,7 +297,11 @@ export async function dispatchToRoleDest(params: {
     initiativeId: params.initiativeId,
     enqueueIfBusy: false,
   });
-  if (outcome.status === "busy" || outcome.status === "queued") {
+  const living = await livingSeated(SIT_PROTOCOL_BY_ROLE[params.role]);
+  if (
+    (outcome.status === "busy" || outcome.status === "queued") &&
+    !living
+  ) {
     dest = await spinSeatedRole({
       sessionId: params.sessionId,
       role: params.role,
