@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-07 19:10 UTC
+# PM seat handoff — 2026-09-08 19:56 UTC
 
 **This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -16,8 +16,8 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **19:10 UTC 2026-09-07**. Flag **14:00**. |
-| 017 lived redesign | [`PM-PACKET-017-LIVED-REDESIGN.md`](./PM-PACKET-017-LIVED-REDESIGN.md) · **Wake:** sa · SA **033**. This PR. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **19:56 UTC 2026-09-08**. Flag **14:00**. |
+| 017 lived redesign | [`PM-PACKET-017-LIVED-REDESIGN.md`](./PM-PACKET-017-LIVED-REDESIGN.md) · SA **033** planted · look Pass. [#159](https://github.com/bywale-com/travis/pull/159). |
 | Tape | After new law `38f491eb-…` — first try 18:52–18:54; retry 19:00–19:01 after #157. dest_job still 0. |
 | 014 / 015 / 016 / 079 / 080 | Merged. Dest mail stays ask + print. Type send stays kit-only. |
 | Look walk | Human re-pastes Automation C afterwards. |

@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 19:22 UTC — PM look 017 Pass. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-08 19:56 UTC — Last lived failures are the same two holes. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3448,3 +3448,18 @@ First brief still counts.
 **Steps I could not do (human):** Vercel team SSO. Type create. Type dest. Confirm a `dest_job` row. Dest landing on the living Technical PM bind. Talk on a phone. Paying Cursor.
 
 **Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-08 19:56 UTC — Last 5–10 failures; same two holes (founder)
+
+**Kind:** Recap of lived tape. Flag 14:00 stands. Not a remint. Not a plant.
+
+**Founder (preserved):** Okay remind me, list out the last five, yoe ten failure modes. Why did, why did, why were they failures? I think it's all, almost been the exact same reasons, but yeah, last 5 to 10, failures
+
+**Yes.** Room Travis `0e8875f8-…` then After new law `38f491eb-…`, 2026-09-07. Same two holes:
+
+1. **Send does not leave with the chat** — wrap, gate, create-instead, dead person, ticket on the attempt.
+2. **Cursor / kit hung through a local serverless trick** — HTML 500, ESM import, `sdk-agent-store` mkdir.
+
+Not the model. Not a new face.
