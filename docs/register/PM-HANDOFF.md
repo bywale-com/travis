@@ -25,7 +25,7 @@
 
 ## Next Architect job
 
-1. SA 035 ascribes. Engineer hangs on this PR after that. Do not plant `src/` from this seat.
+1. SA 035 ascribes. Engineer’s **first plant** on 019: Live stays the ear (connect wait; no think on flush; do not relabel unwired). Then classify. Do not plant `src/` from this seat.
 2. Human walks 018 on the **live** Travis app (preview is unwired). Look Pass was SSO only.
 3. After 019 plants: Architect look + the 019 test sheet. Founder re-pastes Automation C if it is still leftover.
 4. Do not remint 011–018 / 027–034.

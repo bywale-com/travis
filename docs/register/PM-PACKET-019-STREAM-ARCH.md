@@ -346,12 +346,58 @@ Log · Type first. No Hear it / Skip buttons.
 5. **014–018 stay.** Dest body ask + print. Type think is Deep Agents only. Dest-gate on the last ask. Cloud create. Ticket after `dest_job`. Living seated person. Checkpointer + `thread_id = voice_session.id`.
 6. **Seat name.** Technical Architect. Protocol `/protocols/pm.md`. Catalog `pm` hidden.
 7. **Compose.** Novel code needs a reason. The reason for `stream-intent` and `stream-dispatch` is the three questions above. Everything else is a hang or a recut.
+8. **Live is the ear.** First plant on this packet, before classify. A spoken stretch on Voice + Travis must not fall to phone ear / “I’m done” because the think kit died or because a second connect returned false. Do not remint 036’s warning as the product. Do not remint 079 / 080 / 081 / 032.
+
+---
+
+## Lived miss — “Travis Live is down — phone ear. Say I’m done.”
+
+**Founder (2026-09-09):** Travis Live is down — phone ear. Say “I’m done”. Why are we still dealing with this problem over 4 patches?
+
+The line is [`Room.tsx`](../../src/components/Room.tsx) `armEar`: `connectLive` returned false, so the glass paints the 036 fallback and starts Web Speech. That is not a new product. It is the leftover when Live never stayed up.
+
+**The four patches (what each actually cut):**
+
+| Cut | What it treated | What it left |
+|-----|-----------------|--------------|
+| **036** | Live never armed (circular “already listening”). | Honest fallback: phone ear + “I’m done.” The warning became the glass. |
+| **079** | Think kit loaded with the token door. Phone parsed HTML as JSON. | Lazy-load inside `generateTravisText`. Token still imports that same module. |
+| **080** | Think kit ESM on Vercel. Type mute. | Type could answer. Ear unchanged. |
+| **081** | Voice mouth was still the Realtime model. | Every Live phrase flush runs the full Type think (`pipeTravisText` → Deep Agents, 60s). Ear and think share the Voice session. |
+
+032 / 034 hung the checkpointer on that same invoke. Heavier think on the same flush.
+
+**Why the fourth patch still leaves “I’m done”:**
+
+1. **081 put the Type think on every Live flush.** Transcript is the ear door. It now runs a 60s kit invoke. When that dies or times out, Realtime closes. `onClose` starts the phone recognizer. Next `armEar` sees Live gone and paints 036. We never split the ear from the think. We hung more think on Voice.
+2. **`connectLive` lies.** If a connect is already in flight, the next call returns `false`. `armEar` treats that as Live down and starts phone ear **while Live is still coming up**. Quoted:
+
+```1027:1028:src/components/Room.tsx
+      if (liveRef.current) return true;
+      if (liveConnectingRef.current) return false;
+```
+
+3. **Unwired is relabeled.** Token `wired: false` sets “Travis isn’t wired,” then `armEar` overwrites it with the 036 phone-ear line. Two holes, one shirt.
+
+**First plant (same PR, before classify):**
+
+- `connectLive` waits for the in-flight connect. It does not return false because someone else is connecting. A false must be a real miss (token, WebRTC, mic).
+- Unwired stays “Travis isn’t wired.” Do not paint phone-ear / “I’m done” over that.
+- Live transcript **does not** `pipeTravisText`. 081’s “Voice uses the Type hang” stays for **finalize** (the wrap), not for every flush. This is the 019 mouth-last lock, not a remint of dest mail or the kit.
+- Do not write a fifth cousin that only changes the subtitle.
 
 ---
 
 ## Technical cut (Engineer after SA)
 
 Quoted so the hang is not from memory.
+
+`connectLive` returns false while a connect is already running (this comes **out** — wait, do not start phone ear):
+
+```1027:1028:src/components/Room.tsx
+      if (liveRef.current) return true;
+      if (liveConnectingRef.current) return false;
+```
 
 Live flush already thinks (this comes **out** of the transcript door):
 

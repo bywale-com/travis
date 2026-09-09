@@ -15,7 +15,11 @@ Fill **I saw** on this step before the next.
 
 ## Before
 
-Open the live Travis app (not an unwired preview). Log. Type. There must be prior talk in the room.
+Open the live Travis app (not an unwired preview). The OpenAI key must be on that desk.
+
+**Voice first, once:** dest Travis. Talk. The glass must **not** say `Travis Live is down — phone ear. Say “I’m done”.` You must not need “I’m done” to send a line to Travis. If you see that line, this packet failed before A.
+
+Then Log. Type. There must be prior talk in the room.
 
 ---
 

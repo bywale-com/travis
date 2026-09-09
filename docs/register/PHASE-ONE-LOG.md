@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-09 19:28 UTC — PM look 019 Pass. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-09 20:35 UTC — Live still falls to phone ear / I’m done because four patches hung think on the ear. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3561,3 +3561,21 @@ Not the model. Not a new face.
 **Steps I could not do (human):** Vercel team SSO. Type the four sentences. Confirm dest leave + follow-up on the glass. Two seats seated. A dest still running when D fires. Talk on a phone. Paying Cursor.
 
 **Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-09 20:35 UTC — Live still phone ear / I’m done (founder)
+
+**Kind:** Lived miss. Same packet 019. Flag 14:00 stands. Not a plant. Not a fifth cousin.
+
+**Founder (preserved):** Travis Live is down — phone ear. Say “I’m done”. Why are we still dealing with this problem over 4 patches?
+
+**Why (inspect, not memory).** The line is `armEar` after `connectLive` returns false. 036 wrote that warning when Live never armed. 079 lazy-loaded the think kit because it crashed the token door (HTML as JSON). 080 fixed Type ESM. 081 put the Type think on **every Live phrase flush**. 032 / 034 made that invoke heavier. None of those made the ear its own door. They hung more think on Voice. When the think dies, Realtime closes, the phone recognizer starts, and the glass still says I’m done.
+
+**Second lie.** `connectLive` returns false if a connect is already in flight. `armEar` treats that as Live down and starts phone ear while Live is still coming up.
+
+**Third lie.** Token unwired (“Travis isn’t wired”) is overwritten by the same 036 shirt. 018 / 019 previews had no OpenAI key. The look never opened Voice. Production still has 081’s think-on-flush until 019 merges.
+
+**019 recut.** First plant, before classify: wait for the in-flight connect; do not relabel unwired; Live transcript does not `pipeTravisText`. 081’s Type hang stays on **finalize** (the wrap), not on every flush. Do not remint 036 / 079 / 080 / 081 / 032. Do not write a fifth subtitle patch.
+
+**I do not plant `src/`.**
