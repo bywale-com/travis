@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-09 19:05 UTC — 019 stream architecture; Technical PM is Technical Architect. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-09 19:28 UTC — PM look 019 Pass. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3543,3 +3543,21 @@ Not the model. Not a new face.
 **File plan (plain).** Three doors stay: live transcript starts/changes; Voice finalize wraps; Type send does both for that line. New: `stream-intent` (new / change / cancel / talk — pivots, then match open dests + the room thread) and `stream-dispatch` (only calls dest assemble, Cursor follow-up/cancel, LangGraph update on the thread we already hung). Mouth last. Realtime stays the ear — do not install Pipecat. Do not grow `motion.ts`. Do not remint 014–018 / 031–034.
 
 **I do not plant `src/`.** Glass name Technical Architect is in the packet for Engineer after SA.
+
+---
+
+## 2026-09-09 19:28 UTC — PM look 019 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`PM-PACKET-019-STREAM-ARCH.md`](./PM-PACKET-019-STREAM-ARCH.md) · SCP-035 · plant on [#163](https://github.com/bywale-com/travis/pull/163) (`1a86568`). Sheet: [`PM-LOOK-019.md`](./PM-LOOK-019.md).
+
+**Look.** src/ matches the lock. Classify is `stream-intent` (new / change / cancel / talk). Do is `stream-dispatch` — dest assemble, 034 follow-up, `cancelCursorRun`, `invokeDeepAgent({ mode: "update" })`. Live `liveShouldPipeTravis` is always false; transcript never `pipeTravisText`. Type send classifies then wraps. Finalize backup-Do once, then synthesizes. `parent_id` unused. No new table. Glass: `destGlassName` / `SIT_ROLE_LABEL.pm` / `seatKeyToLabel("pm")` → Technical Architect. Spoken “Technical Architect” and “Technical PM” both route to `pm`. Path `/protocols/pm.md`. Dest assemble / dest-gate-on-ask / Cloud create / checkpointer / 031–034 not reminted. No Pipecat. No Hear it / Skip buttons.
+
+**Preview I opened:** `https://travis-git-cursor-packet-019-stre-fa5be6-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see Voice / Log / Type glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not Type walk-back. I did not dest. I did not Talk.
+
+**Steps I could not do (human):** Vercel team SSO. Type the four sentences. Confirm dest leave + follow-up on the glass. Two seats seated. A dest still running when D fires. Talk on a phone. Paying Cursor.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
