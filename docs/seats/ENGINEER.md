@@ -3,11 +3,11 @@
 **Repo:** Travis  
 **Short paste:** [`../README.md`](../README.md) § Engineer  
 **Always-on:** [`../../AGENTS.md`](../../AGENTS.md)  
-**PM trail (read-only):** [`../register/PHASE-ONE-LOG.md`](../register/PHASE-ONE-LOG.md)  
+**Architect trail (read-only):** [`../register/PHASE-ONE-LOG.md`](../register/PHASE-ONE-LOG.md)  
 **SA trail (read-only):** [`../register/SYSTEMS-ANALYST-LOG.md`](../register/SYSTEMS-ANALYST-LOG.md)  
 **Brief:** [`../build-foundation/PROJECT-BRIEF.md`](../build-foundation/PROJECT-BRIEF.md)
 
-You are the **third seat**. Technical PM and SA specify. You **implement** what they have already specced. You do not invent product flags. You do not invent the technical cut. You do not mint tables. Your trail is **git + PRs**.
+You are the **third seat**. Technical Architect and SA specify. You **implement** what they have already specced. You do not invent product flags. You do not invent the technical cut or the file plan. You do not mint tables. Your trail is **git + PRs**.
 
 ---
 
@@ -102,7 +102,7 @@ The successor block lives at the bottom of [`ENGINEER-HANDOFF.md`](../register/E
 
 | Out of seat | Who owns it |
 |-------------|-------------|
-| Product flags, Type A/B, founder-wording stamps, technical cut of a pocket | **Technical PM** |
+| Product flags, Type A/B, founder-wording stamps, technical cut of a pocket, file-level architecture | **Technical Architect** |
 | Story, Requirements, minting tables, ascribing missing stores | **SA** |
 | Recutting a locked walker / packet “because nicer” | Nobody — cut as ascribed |
 

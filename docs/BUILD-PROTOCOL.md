@@ -18,9 +18,9 @@ They do not swap jobs.
 
 | Seat | Owns | Writes | Does not write |
 |------|------|--------|----------------|
-| **Technical PM** | Founder wording, Type A vs Type B, face + technical cut, plates, packet test, look | Phase One log, PM packets, plates, PM-LOOK, PM-HANDOFF | `src/`, tables, SA log |
+| **Technical Architect** | Founder wording, Type A vs Type B, face + technical cut + file architecture, plates, packet test, look | Phase One log, packets (`PM-PACKET-*`), plates, PM-LOOK, PM-HANDOFF | `src/`, tables, SA log |
 | **Systems Analyst** | Machine: Story → Requirements → stores, runtime, ports | SA log, SYSTEMS-CHANGE-PACKET, signed SQL when the packet cuts it | Phase One log, `src/` |
-| **Engineer** | Plant what PM and SA already specced | `src/`, git + PRs, ENGINEER-HANDOFF, initiative folder, hotfixes | PM log, SA log, stores nobody ascribed |
+| **Engineer** | Plant what Architect and SA already specced | `src/`, git + PRs, ENGINEER-HANDOFF, initiative folder, hotfixes | Architect log, SA log, stores nobody ascribed |
 
 A new chat pastes the short block in [`docs/README.md`](./README.md), accepts that identity, then reads **Current** on its trail.
 
@@ -54,13 +54,13 @@ This is how a new piece of product is built.
 
 You speak a lock, a lived miss, or an “I should be able to.” That talk lands in the Phase One log unless you mark a separate entry. Founder wording is captured as-is. Agent alignment is labeled as alignment, never as the flag.
 
-Technical PM inspects planted `src/` — quotes files, not memory. If the glass needs a picture, screenshot the live desk first, lock the chrome that already exists, paint only the new hole. Drift is trash. The written packet is the product; the plate keeps the look.
+Technical Architect inspects planted `src/` — quotes files, not memory. If the glass needs a picture, screenshot the live desk first, lock the chrome that already exists, paint only the new hole. Drift is trash. The written packet is the product; the plate keeps the look.
 
-If a store or field is missing, that is SA. PM names the hole. PM does not mint a table.
+If a store or field is missing, that is SA. Architect names the hole. Architect does not mint a table.
 
-### 2. Technical PM cuts a packet
+### 2. Technical Architect cuts a packet
 
-On **one** new branch and **one** open PR for this pocket (usually the Engineer opens it; PM may open it when the packet is the first commit):
+On **one** new branch and **one** open PR for this pocket (usually the Engineer opens it; Architect may open it when the packet is the first commit):
 
 - `docs/register/PM-PACKET-NNN-….md` — next PM number, never reuse. Face + technical cut. Quote planted code.
 - `docs/register/PM-PACKET-NNN-…-TEST.md` — always. Setup, exact sentences, ordered expects, **I saw** blanks. Scoped to this packet.
@@ -77,7 +77,7 @@ or no Wake line. Chat prose (“then SA”) is not the hold. The filename is not
 
 ### 3. Get-go
 
-When you say go, PM flips that line to exactly:
+When you say go, Architect flips that line to exactly:
 
 ```text
 **Wake:** sa
@@ -136,13 +136,13 @@ Engineer gates on this commit: a new SYSTEMS-CHANGE-PACKET (or a hotfix file, or
 
 If the cut needs live Travis Postgres: `DATABASE_URL` is a Cloud Agent runtime secret. Unset → stop and name it in the handoff; the file on the PR is not the hang. Set → run the existing SQL; do not remint it.
 
-Engineer prepends one Implementation line on the repo `README.md`, rewrites `ENGINEER-HANDOFF.md`, may add `docs/register/initiatives/<nnn>-<slug>/`. Commits, pushes **this branch**. Does not append PM or SA logs.
+Engineer prepends one Implementation line on the repo `README.md`, rewrites `ENGINEER-HANDOFF.md`, may add `docs/register/initiatives/<nnn>-<slug>/`. Commits, pushes **this branch**. Does not append Architect or SA logs.
 
-### 7. Technical PM look
+### 7. Technical Architect look
 
 The Action sees `src/` (or a hotfix hang) on a PR that already has the packet + change packet, and labels **`wake-pm-look`**.
 
-Automation **C** sits Technical PM on **this same PR**. Computer use may be on. PM does not plant.
+Automation **C** sits Technical Architect on **this same PR**. Computer use may be on. Architect does not plant.
 
 Two angles:
 
@@ -159,7 +159,7 @@ Locked verdicts:
 
 “Pass for what this seat could do” after only reading `src/` or hitting a login wall is **not** Pass. Voice stays human. Prefer a cheap Type send on the live tape over inventing a tester product.
 
-PM writes `docs/register/PM-LOOK-NNN.md`, stamps the Phase One log, pushes.
+Architect writes `docs/register/PM-LOOK-NNN.md`, stamps the Phase One log, pushes.
 
 ### 8. Emerge, then you
 
@@ -208,7 +208,7 @@ Blocker letter (mail when a plant needs a secret or a hole only you can fill) is
 
 | Seat | Trail |
 |------|--------|
-| PM | [`docs/register/PHASE-ONE-LOG.md`](./register/PHASE-ONE-LOG.md) — append-only; only **Current** moves |
+| Architect | [`docs/register/PHASE-ONE-LOG.md`](./register/PHASE-ONE-LOG.md) — append-only; only **Current** moves |
 | SA | [`docs/register/SYSTEMS-ANALYST-LOG.md`](./register/SYSTEMS-ANALYST-LOG.md) — same discipline |
 | Engineer | git + PRs · [`docs/register/ENGINEER-HANDOFF.md`](./register/ENGINEER-HANDOFF.md) |
 

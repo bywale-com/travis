@@ -2,7 +2,7 @@
 
 **Start here for the whole build:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md). This file is the cheap gate and the three automations.
 
-**Seat:** Technical PM. Founder lock 2026-09-05: when a packet lands, spin SA for the full process protocol; when SA completes, Engineer builds; **all on the same PR the packet was placed in.**
+**Seat:** Technical Architect. Founder lock 2026-09-05: when a packet lands, spin SA for the full process protocol; when SA completes, Engineer builds; **all on the same PR the packet was placed in.**
 
 **Parked-since:** PHASE-ONE-LOG **19:44 UTC 2026-08-25** (PM-only speak; auto SA / Engineer chain). This is that seam.
 
@@ -25,7 +25,7 @@ SA automation — full SA protocol
         ↓  label wake-engineer
 Engineer automation — full Engineer protocol
         ↓  label wake-pm-look  (src/ plant on a PR that already has packet + SCP)
-Technical PM look + what it can test
+Technical Architect look + what it can test
         ↓  Fail → label fail-look (same PR)
         ↓  Pass → emerge. Action emails the *-TEST.md. Human walks that sheet.
 ```
@@ -57,7 +57,7 @@ SA → SYSTEMS-CHANGE-PACKET → label  wake-engineer
         ↓
 Engineer plants src/ → label  wake-pm-look
         ↓
-Technical PM look+test
+Technical Architect look+test
         Pass → label emerge + letter (human test)
         Fail → label  fail-look  (loop)
 ```
@@ -78,7 +78,7 @@ Engineer plants the hotfix
         ↓  src/  or  ENGINEER-HANDOFF.md  (SQL-only hang may only touch the handoff)
 label  wake-pm-look
         ↓
-Technical PM look+test (hotfix is enough — no PM-packet, no SCP)
+Technical Architect look+test (hotfix is enough — no packet, no SCP)
         Fail → fail-look
         Pass → emerge + HOTFIX-NNN-*-TEST.md
 ```
@@ -134,7 +134,7 @@ That push is the Engineer trigger.
 
 ---
 
-## Automation C — Plant → Technical PM look+test
+## Automation C — Plant → Technical Architect look+test
 
 **Name:** `Travis — plant → PM look`  
 **Triggers (any):** Source control — **Pull request label changed**, label **`wake-pm-look`** (added). Not PR pushed.  

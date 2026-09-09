@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-09 17:10 UTC — 018 preview OPTIONS 400 is not the send; think is unwired. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-09 19:05 UTC — 019 stream architecture; Technical PM is Technical Architect. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3527,3 +3527,19 @@ Not the model. Not a new face.
 **The line.** Room Travis. Seq 2 `Hey Travis` 10:28 UTC (6:28 GMT-4). Status `Travis isn’t wired` (`speakable` false — Log hides it). Same status on later `travis` sends 17:00 / 17:04. `travisIsWired()` is `OPENAI_API_KEY` on that deployment. Preview does not have the key. Live app is the wired desk.
 
 **Ask.** Walk the live Travis app for 018, or put the OpenAI key on the preview. I do not plant the key.
+
+---
+
+## 2026-09-09 19:05 UTC — Model → file plan; seat is Technical Architect (founder)
+
+**Kind:** Packet. Architecture. Seat rename. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** This is model. I want a concrete implementation plan, down to the files (and what goes in — not code). We’re going to architect this. Also the Technical PM is now a Technical Architect, it retains everything the PM did but with the addition of architecture.
+
+**The walk (alignment).** One spoken stretch: walk-back, notes, a leave, a mid-stream change, another leave, then “I’m done.” Work starts before “I’m done.” A later line can change a job that already left. Tokens are clay. The shape is architecture.
+
+**Landed.** [`PM-PACKET-019-STREAM-ARCH.md`](./PM-PACKET-019-STREAM-ARCH.md) · test [`PM-PACKET-019-STREAM-ARCH-TEST.md`](./PM-PACKET-019-STREAM-ARCH-TEST.md). **Wake:** sa. SA **035**. Seat README [`../seats/TECHNICAL-ARCHITECT.md`](../seats/TECHNICAL-ARCHITECT.md). Protocol still `/protocols/pm.md`. Catalog `pm` still not this seat.
+
+**File plan (plain).** Three doors stay: live transcript starts/changes; Voice finalize wraps; Type send does both for that line. New: `stream-intent` (new / change / cancel / talk — pivots, then match open dests + the room thread) and `stream-dispatch` (only calls dest assemble, Cursor follow-up/cancel, LangGraph update on the thread we already hung). Mouth last. Realtime stays the ear — do not install Pipecat. Do not grow `motion.ts`. Do not remint 014–018 / 031–034.
+
+**I do not plant `src/`.** Glass name Technical Architect is in the packet for Engineer after SA.
