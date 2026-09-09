@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-07 19:35 UTC — **SCP-033 signed.** Lived redesign from After new law: dest-gate on the ask, Cloud HTTP create, ticket after `dest_job`, living Technical PM, 080 hang without Responses. PM-017 on [#159](https://github.com/bywale-com/travis/pull/159). Next number is **034**.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-09 00:55 UTC — **SCP-034 signed.** What exists for the life loop: LangGraph/Deep Agents thread on `voice_session.id`, Cursor follow-up on an open `dest_job` bind, dest print + `search_room` for walk-back. No Travis orchestrator. PM-018 on [#161](https://github.com/bywale-com/travis/pull/161). Next number is **035**.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -790,4 +790,36 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-033-LIVED-REDESIGN.md`](./SYSTEMS-CHANGE-PACKET-033-LIVED-REDESIGN.md)
 
 **Handoff:** Engineer plants 033 on **this same PR**. Next packet number is **034**. Do not remint 023–032. Do not remint dest mail. Do not remint 016. Do not mint a cousin.
+
+---
+
+## 2026-09-09 00:55 UTC — SCP-034 what exists (PM-018 on #161)
+
+**Kind:** Packet ascribe. Automation woke this seat. PM-018 + what-exists test on this PR. No SYSTEMS-CHANGE-PACKET for the life loop was on the branch. 023–033 stay planted — not reminted. **018** log-beats / hotfix Gemini are different numbers — not this cut.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-018 lock + 23:25 glass). Not PM. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** Looking for what already exists, cases whether identical or not. Not “get the engineer to create it.” Set the stage: how this is possible with what exists. Walk-back. Route-plus. Interrupt. Modify in motion.
+
+**Staples (not scenery):** **Stream** · **Log** · **Type**. Dest Log line = **ask + print**. Technical PM = seated living person.
+
+**Quoted stood-up:**
+
+- Type: `createDeepAgent` + `invoke` with `StateBackend`, dest kit middleware, `subagents: []`. No `checkpointer`. No `thread_id` (`travis-deep-agent.ts` L129–154).
+- Dest assemble: last `kind=user` + `unclippedPrint` (`dest-with-context.ts` L29–40). Here still `LINE_CAP` 300 / `WINDOW_TURNS` 14.
+- Dest send: `Agent.resume` + `send` (`cursor-port.ts` L466–473) = Cloud `POST /v1/agents/{id}/runs`. Busy → `isAgentBusyError` / enqueue or role-dest fail-as-spin (`dispatch.ts` L54–65 · `travis-tools.ts` ~519–567).
+- `dest_job.parent_id` exists (`dest-job.ts` L30). `insertDestJob` never sets it.
+- `search_room` / `work_in_flight` / `listOpenDestJobs` stand. `TRAVIS_SYSTEM` says do not recap.
+
+**Ascribed:**
+
+1. **No remint** of 023–033 tables/columns. No Travis thread/memory table. No Letta. No Temporal. No orchestrator. 032 refuse of a Travis checkpoint table stands — hang official `PostgresSaver` in schema `langgraph`.
+2. **Room thread** = Deep Agents checkpointer + `thread_id = voice_session.id`. Walk-back uses that + `/print.md` + `search_room`. Tape is the object.
+3. **New dest leave** stays 031 / 033. **Follow-up** when this session has an open `dest_job` for that living bind: same `bc-`, no spin, no create. Idle → send. Busy → Cursor 409 named (wait / race-retry / enqueue-on-that-bind).
+4. **Stop:** fresh think per send; enqueue-as-modify when the seat is idle; role-dest spin on an open living leave.
+5. `parent_id` unused this cut. `listOpenDestJobs` is “all of those.”
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-034-WHAT-EXISTS.md`](./SYSTEMS-CHANGE-PACKET-034-WHAT-EXISTS.md)
+
+**Handoff:** Engineer plants 034 on **this same PR**. Next packet number is **035**. Do not remint 023–033. Do not remint dest mail. Do not mint a cousin.
 
