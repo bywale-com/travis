@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-09 00:55 UTC — **SCP-034 signed.** What exists for the life loop: LangGraph/Deep Agents thread on `voice_session.id`, Cursor follow-up on an open `dest_job` bind, dest print + `search_room` for walk-back. No Travis orchestrator. PM-018 on [#161](https://github.com/bywale-com/travis/pull/161). Next number is **035**.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-09 19:05 UTC — **SCP-035 signed.** Stream architecture: classify is lib; Do is hang; mouth last. In-flight = open `dest_job` + LangGraph checkpoint. Change dest = follow-up on the same row (`parent_id` unused). Change Travis = later `invoke` on the same `thread_id`. Glass Technical Architect. PM-019 on [#163](https://github.com/bywale-com/travis/pull/163). Next number is **036**.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -822,4 +822,36 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-034-WHAT-EXISTS.md`](./SYSTEMS-CHANGE-PACKET-034-WHAT-EXISTS.md)
 
 **Handoff:** Engineer plants 034 on **this same PR**. Next packet number is **035**. Do not remint 023–033. Do not remint dest mail. Do not mint a cousin.
+
+---
+
+## 2026-09-09 19:05 UTC — SCP-035 stream architecture (PM-019 on #163)
+
+**Kind:** Packet ascribe. Automation woke this seat. PM-019 + stream-arch test on this PR. No SYSTEMS-CHANGE-PACKET for the start-before-wrap cut was on the branch. 023–034 stay planted — not reminted. **034** hung the thread + dest follow-up — not this remint.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-019 lock + 14:00 flag). Not Architect. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** Model. Concrete file plan. Tokens are clay. Work starts before “I’m done.” A later line can change a job that already left. Technical PM is Technical Architect.
+
+**Staples (not scenery):** **Stream** · **Log** · **Type**. Dest Log line = **ask + print**. Seat glass = **Technical Architect**.
+
+**Quoted stood-up:**
+
+- Open dests: `listOpenDestJobs` statuses `created` | `dispatched` | `in_progress` (`dest-job.ts` L131–145). `parent_id` column exists (L30); `insertDestJob` never sets it.
+- Thread: `PostgresSaver` schema `langgraph` + `invoke(..., { configurable: { thread_id: params.sessionId } })` (`travis-checkpointer.ts` · `travis-deep-agent.ts` L143–159).
+- Follow-up: `destPathForBind(open)` (`dest-follow.ts` L8–9). Cursor `resume` + `send`. Cancel: `cancelCursorRun`.
+- Live still full-pipes: `liveShouldPipeTravis` when no cursor dest (`live-harness.ts` L6–11) → `pipeTravisText` (`live/transcript/route.ts` L170–188).
+- Conductor = done-phrase only. Dest-gate has no *actually* / *wait*. Glass still `Technical PM`.
+
+**Ascribed:**
+
+1. **No mint.** In-flight is open `dest_job` + LangGraph checkpoint. No vector store. No event-bus table. No `travis.thread`.
+2. **`parent_id` unused.** Change dest = 034 follow-up on the **same** open row. Do not insert a child.
+3. **Travis change** = later `invoke` `mode: "update"` on the same `thread_id`. Do not hang `Command({ update })` / `updateState` / `interrupt_on`.
+4. **Classify** = `stream-intent` lib (pivots + match those lists + router seats). **Do** = `stream-dispatch` hang. Mouth last. Live never full-pipes.
+5. **Glass** = Technical Architect. Protocol `/protocols/pm.md`. Keep spoken Technical PM. Person label wins when it is a real name.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-035-STREAM-ARCH.md`](./SYSTEMS-CHANGE-PACKET-035-STREAM-ARCH.md)
+
+**Handoff:** Engineer plants 035 on **this same PR**. Next packet number is **036**. Do not remint 023–034. Do not remint dest mail. Do not mint a cousin.
 
