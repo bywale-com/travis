@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-09 00:55 UTC — PM look 018 Pass. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-09 17:10 UTC — 018 preview OPTIONS 400 is not the send; think is unwired. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3513,3 +3513,17 @@ Not the model. Not a new face.
 **Steps I could not do (human):** Vercel team SSO. Type the four sentences. Confirm dest leave + follow-up on the glass. Two seats seated. A dest still running when D fires. Talk on a phone. Paying Cursor.
 
 **Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
+
+---
+
+## 2026-09-09 17:10 UTC — 018 preview: OPTIONS 400; Hey Travis unwired (founder)
+
+**Kind:** Lived miss on the 018 preview. Flag 14:00 stands. Not a remint. Not a plant.
+
+**Founder:** Vercel log `OPTIONS /` **400** on `travis-git-cursor-packet-018-life-5fbbe1-…` (12:52 GMT-4). Plate: Log · Type · `Hey Travis` at 6:28. No reply on the glass.
+
+**OPTIONS / is not the send.** Path `/`. 8ms. No outgoing APIs. Homepage (`src/app/page.tsx`) reads cookies. Next has no OPTIONS handler on that page. Chrome / toolbar preflight. Not Type send.
+
+**The line.** Room Travis. Seq 2 `Hey Travis` 10:28 UTC (6:28 GMT-4). Status `Travis isn’t wired` (`speakable` false — Log hides it). Same status on later `travis` sends 17:00 / 17:04. `travisIsWired()` is `OPENAI_API_KEY` on that deployment. Preview does not have the key. Live app is the wired desk.
+
+**Ask.** Walk the live Travis app for 018, or put the OpenAI key on the preview. I do not plant the key.
