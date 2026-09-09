@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-08 19:56 UTC — Last lived failures are the same two holes. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-09 00:36 UTC — 018: what exists for the life loop. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3463,3 +3463,35 @@ First brief still counts.
 2. **Cursor / kit hung through a local serverless trick** — HTML 500, ESM import, `sdk-agent-store` mkdir.
 
 Not the model. Not a new face.
+
+---
+
+## 2026-09-08 23:25 UTC — What Travis means for him (founder)
+
+**Kind:** Type A / lived meaning. Flag 14:00 stands. Not a packet. Not a plant. Not a substitute flag.
+
+**Founder (preserved):**
+
+> Who, the person that needs Travis the most is freaking me.
+
+> Usually when I'm coming into, to a room … Travis, where are we? What was the last thing we discussed?
+
+> I want you to route that to the X seat, and I want you to add this as well with it. … oh, by the way, do this, as well, right? But to this other seat. … I just thought of a modification to all of those ideas. … How does it take all of that? That's the real architectural question. That's what Travis means for me.
+
+**Laid down.** Walk back in. Route-plus. Interrupt to another seat. Modify while in motion. Not selling Travis.
+
+---
+
+## 2026-09-09 00:36 UTC — What exists; set the stage (founder)
+
+**Kind:** Packet. Compose. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** Here's the real, here's how we build from this. … I'm looking for what already exists, what cases you can make for what exists, whether it, it matches identically or not. … I'm not looking for, oh, let's get the engineer to try to create it. … I want us to set the stage for the engineer, what the engineer is looking for. How, can this be made possible with what exists?
+
+**Landed.** [`PM-PACKET-018-WHAT-EXISTS.md`](./PM-PACKET-018-WHAT-EXISTS.md) · test [`PM-PACKET-018-WHAT-EXISTS-TEST.md`](./PM-PACKET-018-WHAT-EXISTS-TEST.md). **Wake:** sa. SA **034**. This PR.
+
+**Cases (alignment).** Deep Agents already hung — durable thread not hung (fresh invoke, no checkpointer). LangGraph interrupt/resume/update is the in-motion shape. Cursor `Agent.resume` + `send` / follow-up is the seat shape (already dest). Room tape + dest print + `search_room` are walk-back. Letta is the identical memory product if tape is not enough. Temporal-class workflows are the non-chat shape — do not open there.
+
+**Engineer looks for those ports.** Does not write a Travis orchestrator.
+
+**Human leftover.** Re-paste Automation C. Goals still unstated. I do not plant `src/`.
