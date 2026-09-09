@@ -11,7 +11,7 @@ export const SIT_PROTOCOL_FILES = [
 export type SitProtocolRole = "pm" | "sa" | "engineer";
 
 export const SIT_ROLE_LABEL: Record<SitProtocolRole, string> = {
-  pm: "Technical PM",
+  pm: "Technical Architect",
   sa: "SA",
   engineer: "Engineer",
 };

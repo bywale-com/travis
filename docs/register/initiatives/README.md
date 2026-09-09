@@ -45,6 +45,7 @@ A little context: what the pocket was, what changed, the PR. Point at the packet
 | 032 | [`032-compose/`](./032-compose/) | [#157](https://github.com/bywale-com/travis/pull/157) |
 | 033 | [`033-lived-redesign/`](./033-lived-redesign/) | [#159](https://github.com/bywale-com/travis/pull/159) |
 | 034 | [`034-what-exists/`](./034-what-exists/) | [#161](https://github.com/bywale-com/travis/pull/161) |
+| 035 | [`035-stream-arch/`](./035-stream-arch/) | [#163](https://github.com/bywale-com/travis/pull/163) |
 
 ## Must-not
 

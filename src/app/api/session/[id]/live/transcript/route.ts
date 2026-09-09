@@ -20,8 +20,10 @@ import { requireOwnedSession } from "@/server/operator";
 import { runMotionRunner } from "@/server/motion";
 import { roomContextFor } from "@/server/room-read";
 import { serveInvite } from "@/server/serve";
-import { pipeTravisText } from "@/server/travis-reply";
 import { liveShouldPipeTravis } from "@/lib/live-harness";
+import { streamIntent } from "@/lib/stream-intent";
+import { listOpenDestJobs } from "@/server/dest-job";
+import { dispatchStreamIntents } from "@/server/stream-dispatch";
 
 export const maxDuration = 60;
 
@@ -129,6 +131,9 @@ export async function POST(
       .where(eq(voiceSession.id, sessionId));
   }
   const prompt = decided.kind === "send" ? decided.prompt : "";
+  // 035 — helper stays explicit. Always false: mouth waits for finalize.
+  void liveShouldPipeTravis({ prompt, cursorDestCount: cursorDests.length });
+  const classifyPhrase = prompt || heard;
   if (prompt && cursorDests.length) {
     await runMotionRunner(sessionId);
     const encoder = new TextEncoder();
@@ -145,6 +150,16 @@ export async function POST(
             send,
             userTurn,
             referenceTurnId,
+          });
+          const openJobs = await listOpenDestJobs(sessionId).catch(() => []);
+          await dispatchStreamIntents({
+            sessionId,
+            phrase: classifyPhrase,
+            intents: streamIntent({ phrase: classifyPhrase, openJobs }),
+            skip: {
+              seatKeys: cursorDests.map((b) => b.seatKey),
+              bindingIds: cursorDests.map((b) => b.id),
+            },
           });
         } catch (err) {
           send("error", {
@@ -167,26 +182,12 @@ export async function POST(
     });
   }
 
-  if (liveShouldPipeTravis({ prompt, cursorDestCount: cursorDests.length })) {
-    let spoken = "";
-    await pipeTravisText({
-      sessionId,
-      prompt,
-      userTurn,
-      send: (event, data) => {
-        if (event !== "post_delta" || !data || typeof data !== "object") return;
-        const text = (data as { text?: unknown }).text;
-        if (typeof text === "string") spoken = text;
-      },
-    });
-    const here = await roomContextFor(sessionId).catch(() => "");
-    return NextResponse.json({
-      ok: true,
-      turn: userTurn,
-      serveSpeak: spoken,
-      here,
-    });
-  }
+  const openJobs = await listOpenDestJobs(sessionId).catch(() => []);
+  await dispatchStreamIntents({
+    sessionId,
+    phrase: classifyPhrase,
+    intents: streamIntent({ phrase: classifyPhrase, openJobs }),
+  }).catch(() => {});
 
   await runMotionRunner(sessionId);
   const here = await roomContextFor(sessionId).catch(() => "");

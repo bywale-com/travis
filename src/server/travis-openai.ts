@@ -75,6 +75,7 @@ export async function mintLiveToken(sessionId: string): Promise<{
 export async function generateTravisText(params: {
   sessionId: string;
   prompt: string;
+  mode?: "update" | "synthesize";
 }): Promise<string> {
   const key = openaiKey();
   if (!key) {
@@ -94,6 +95,7 @@ export async function generateTravisText(params: {
       sessionId: params.sessionId,
       prompt: params.prompt,
       room,
+      mode: params.mode ?? "synthesize",
     });
   } finally {
     await runMotionRunner(params.sessionId);

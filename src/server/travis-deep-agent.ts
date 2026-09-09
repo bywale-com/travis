@@ -128,18 +128,26 @@ function travisChatModel() {
   });
 }
 
+export type DeepAgentMode = "update" | "synthesize";
+
 export async function invokeDeepAgent(params: {
   sessionId: string;
   prompt: string;
   room: string;
+  mode?: DeepAgentMode;
 }): Promise<string> {
+  const mode = params.mode ?? "synthesize";
+  const prompt =
+    mode === "update"
+      ? `${params.prompt}\n\nThis is an in-flight update on this room thread. Do the work. Do not speak a wrap.`
+      : params.prompt;
   const print = await unclippedPrintFor(params.sessionId).catch(() => "");
   const roster = await rosterFactFor(params.sessionId).catch(() =>
     formatRosterFact(""),
   );
   const input = params.room
-    ? `${params.room}\n\n${params.prompt}`
-    : params.prompt;
+    ? `${params.room}\n\n${prompt}`
+    : prompt;
   const checkpointer = await travisCheckpointer();
   const agent = createDeepAgent({
     model: travisChatModel(),

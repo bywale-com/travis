@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { liveShouldPipeTravis } from "./live-harness";
 
-test("a spoken line to Travis pipes the Type hang", () => {
+test("a spoken line to Travis does not pipe on live flush", () => {
   assert.equal(
     liveShouldPipeTravis({ prompt: "are you able to do that now?", cursorDestCount: 0 }),
-    true,
+    false,
   );
 });
 

@@ -6,6 +6,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-09** · SCP-035 · [PR #163](https://github.com/bywale-com/travis/pull/163) — Live flush classifies and starts or changes work without speaking, Type send does that then wraps, Voice finalize only synthesizes (backup Do once), and glass dest is Technical Architect, because work waited for “I’m done” and the seat still said Technical PM.
+
 - **2026-09-09** · SCP-034 · [PR #161](https://github.com/bywale-com/travis/pull/161) — Type think is the same LangGraph thread as the room (`PostgresSaver` + `thread_id = voice_session.id`), and a later dest to a living bind with an open `dest_job` is Cursor follow-up on that same person, because walk-back was a blank invoke and modify was spin or enqueue instead of `resume` + `send`.
 
 - **2026-09-07** · SCP-033 · [PR #159](https://github.com/bywale-com/travis/pull/159) — Dest-gate reads the last ask, create is Cursor’s Cloud HTTP, a ticket follows a real `dest_job`, and a new room dests the living seated person, because After new law refused dest on the print, mkdir’d a local agent store, minted a ticket that never left, and hung a done Technical PM.

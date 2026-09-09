@@ -11,6 +11,9 @@ import { AuthError, jsonRoute } from "@/server/api-error";
 import { MembershipError, requireOpenMember } from "@/server/room-membership";
 import { requireOwnedSession } from "@/server/operator";
 import { destBindingsForSend } from "@/server/dest-resolve";
+import { listOpenDestJobs } from "@/server/dest-job";
+import { streamIntent } from "@/lib/stream-intent";
+import { dispatchStreamIntents } from "@/server/stream-dispatch";
 import { pipeTravisText } from "@/server/travis-reply";
 import {
   insertUserTurn,
@@ -139,11 +142,10 @@ export async function POST(
   }
 
   const prompt = collapseSpeechStutter(decided.prompt);
-  const bindings = destBindings.length ? destBindings : [active];
-  const travisBinds = bindings.filter((b) => isTravisSeat(b.seatKey));
-  const cursorBinds = bindings.filter((b) => !isTravisSeat(b.seatKey));
-
-  if (travisBinds.length) await noteTravisUnwired(sessionId);
+  const cursorBinds = destBindings.filter((b) => !isTravisSeat(b.seatKey));
+  if (destBindings.some((b) => isTravisSeat(b.seatKey))) {
+    await noteTravisUnwired(sessionId);
+  }
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
@@ -152,35 +154,40 @@ export async function POST(
         controller.enqueue(encoder.encode(sse(event, data)));
       };
       try {
-        const shared =
-          travisBinds.length && cursorBinds.length
-            ? await insertUserTurn(
-                sessionId,
-                prompt,
-                "travis",
-                undefined,
-                referenceTurnId,
-              )
-            : undefined;
-        if (travisBinds.length) {
-          await pipeTravisText({
-            sessionId,
-            prompt,
-            send,
-            userTurn: shared,
-            referenceTurnId,
-          });
-        }
+        const userTurn = await insertUserTurn(
+          sessionId,
+          prompt,
+          "travis",
+          undefined,
+          referenceTurnId,
+        );
         if (cursorBinds.length) {
           await sendOrEnqueueMany({
             sessionId,
             bindings: cursorBinds,
             prompt,
             send,
-            userTurn: shared,
+            userTurn,
             referenceTurnId,
           });
         }
+        const openJobs = await listOpenDestJobs(sessionId).catch(() => []);
+        await dispatchStreamIntents({
+          sessionId,
+          phrase: prompt,
+          intents: streamIntent({ phrase: prompt, openJobs }),
+          skip: {
+            seatKeys: cursorBinds.map((b) => b.seatKey),
+            bindingIds: cursorBinds.map((b) => b.id),
+          },
+        });
+        await pipeTravisText({
+          sessionId,
+          prompt,
+          send,
+          userTurn,
+          referenceTurnId,
+        });
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         send("error", { error: msg });
