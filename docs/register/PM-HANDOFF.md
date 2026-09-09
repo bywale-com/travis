@@ -1,4 +1,4 @@
-# PM seat handoff — 2026-09-09 00:36 UTC
+# PM seat handoff — 2026-09-09 17:10 UTC
 
 **This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical PM until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -16,8 +16,8 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **00:36 UTC 2026-09-09**. Flag **14:00**. |
-| 018 what exists | [`PM-PACKET-018-WHAT-EXISTS.md`](./PM-PACKET-018-WHAT-EXISTS.md) · **Wake:** sa · SA **034**. This PR. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **17:10 UTC 2026-09-09**. Flag **14:00**. |
+| 018 what exists | [`PM-PACKET-018-WHAT-EXISTS.md`](./PM-PACKET-018-WHAT-EXISTS.md) · SA **034** planted · look Pass. [#161](https://github.com/bywale-com/travis/pull/161). Preview think unwired (no OpenAI key). |
 | Meaning | Walk back in; route-plus; interrupt; modify in motion. Goals not yet stated. |
 | 017 | Merged [#159](https://github.com/bywale-com/travis/pull/159). |
 
@@ -25,7 +25,7 @@
 
 ## Next PM job
 
-1. SA 034 on this PR. Inventory the cases. Engineer hangs ports — does not create a process.
+1. Human walks 018 on the **live** Travis app (preview is unwired). Look Pass was SSO only.
 2. Founder may still state the goals / how “where are we” interprets after twenty minutes vs a day.
 3. Founder re-pastes Automation C afterwards.
 4. Do not remint 011–017 / 027–033.
