@@ -1,4 +1,4 @@
-# Architect seat handoff — 2026-09-09 19:05 UTC
+# Architect seat handoff — 2026-09-09 20:35 UTC
 
 **This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical Architect until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -16,7 +16,7 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **19:05 UTC 2026-09-09**. Flag **14:00**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **20:35 UTC 2026-09-09**. Flag **14:00**. |
 | 019 stream architecture | [`PM-PACKET-019-STREAM-ARCH.md`](./PM-PACKET-019-STREAM-ARCH.md) · test [`PM-PACKET-019-STREAM-ARCH-TEST.md`](./PM-PACKET-019-STREAM-ARCH-TEST.md). **Wake:** sa. SA **035**. |
 | 018 what exists | [`PM-PACKET-018-WHAT-EXISTS.md`](./PM-PACKET-018-WHAT-EXISTS.md) · SA **034** planted · look Pass. [#161](https://github.com/bywale-com/travis/pull/161). Preview think unwired (no OpenAI key). Walk 018 on the **live** app. |
 | Meaning | Walk back in; start leaves before “I’m done”; change in flight; wrap last. |
@@ -46,3 +46,4 @@
 - Do not mint `/protocols/technical-pm.md` or `/protocols/technical-architect.md`.
 - Do not design Travis as a product for sale.
 - Do not grow `motion.ts` into the in-flight board.
+- Do not write a fifth cousin that only changes the “Live is down / I’m done” subtitle.
