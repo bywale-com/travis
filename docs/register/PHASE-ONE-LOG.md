@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-09 00:36 UTC — 018: what exists for the life loop. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-09 00:55 UTC — PM look 018 Pass. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3495,3 +3495,21 @@ Not the model. Not a new face.
 **Engineer looks for those ports.** Does not write a Travis orchestrator.
 
 **Human leftover.** Re-paste Automation C. Goals still unstated. I do not plant `src/`.
+
+---
+
+## 2026-09-09 00:55 UTC — PM look 018 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`PM-PACKET-018-WHAT-EXISTS.md`](./PM-PACKET-018-WHAT-EXISTS.md) · SCP-034 · plant on [#161](https://github.com/bywale-com/travis/pull/161) (`037d4f0`). Sheet: [`PM-LOOK-018.md`](./PM-LOOK-018.md).
+
+**Look.** src/ matches the lock. Type invoke hangs official `PostgresSaver` (schema `langgraph`, own pool max 1) + `thread_id = voice_session.id`. Walk-back is thread + `/print.md` + `search_room`. Open `dest_job` for that living bind is Cursor follow-up — no spin, no create, no new job. Busy receipt names `agent_busy`. New leave stays 015 / 031 / 033. Dest assemble / dest-gate-on-ask / Cloud create / kit-only Type send not reminted. No `MemorySaver`. No Hear it / Skip buttons.
+
+**Preview I opened:** `https://travis-git-cursor-packet-018-life-5fbbe1-wale-omotayos-projects.vercel.app` — not psi. Phone viewport. Vercel SSO login. Did not sign in. Did not see Voice / Log / Type glass.
+
+**Test.** Walked the sheet as far as a cloud agent can. I saw the SSO wall. I did not Type walk-back. I did not dest. I did not Talk.
+
+**Steps I could not do (human):** Vercel team SSO. Type the four sentences. Confirm dest leave + follow-up on the glass. Two seats seated. A dest still running when D fires. Talk on a phone. Paying Cursor.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
