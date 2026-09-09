@@ -109,3 +109,12 @@ test("Travis is told dest is a job and catalog fallback is dead", () => {
   assert.match(TRAVIS_SYSTEM, /never a send to catalog pm/i);
   assert.equal(/blocks until that seat finishes/.test(TRAVIS_SYSTEM), false);
 });
+
+test("Travis may walk back from the thread and follow-up an open dest", () => {
+  assert.match(TRAVIS_SYSTEM, /where we are/);
+  assert.match(TRAVIS_SYSTEM, /\/print\.md/);
+  assert.match(TRAVIS_SYSTEM, /Do not recap unasked/);
+  assert.match(TRAVIS_SYSTEM, /open dest job/i);
+  assert.match(TRAVIS_SYSTEM, /agent_busy/);
+  assert.match(TRAVIS_SYSTEM, /do not spin, do not create/i);
+});

@@ -26,3 +26,14 @@ test("Type send stays invokeDeepAgent — no Responses cousin", () => {
   assert.equal(src.includes("generateTravisTextViaResponses"), false);
   assert.match(src, /invokeDeepAgent/);
 });
+
+test("dest follow-up pins an open dest_job bind — no new job, no spin", () => {
+  const src = readFileSync(
+    join(process.cwd(), "src/server/travis-tools.ts"),
+    "utf8",
+  );
+  assert.match(src, /destPathForBind/);
+  assert.match(src, /followUp/);
+  assert.match(src, /listOpenDestJobs/);
+  assert.doesNotMatch(src, /MemorySaver/);
+});

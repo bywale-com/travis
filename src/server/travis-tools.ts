@@ -12,7 +12,12 @@ import {
   hisWorkReceipt,
   nobodyReceipt,
 } from "@/lib/dest-gate";
-import { destKind } from "@/lib/protocol-path";
+import { destEnqueueIfBusy, destPathForBind } from "@/lib/dest-follow";
+import {
+  destKind,
+  isSitProtocolRole,
+  SIT_PROTOCOL_BY_ROLE,
+} from "@/lib/protocol-path";
 import { isCursorSeat } from "@/lib/seats";
 import { seatKeyToLabel } from "@/lib/router";
 import { db } from "@/server/db/client";
@@ -46,9 +51,11 @@ import {
 } from "@/server/room-read";
 import { insertAgentPostTurn } from "@/server/seat-pipe";
 import { summarizeSeatReply } from "@/server/travis-summarize";
+import { livingSeated } from "@/server/living-seated";
 import {
   addMember,
   endRoom,
+  isOpenMember,
   MembershipError,
   renameRoom,
 } from "@/server/room-membership";
@@ -474,6 +481,7 @@ async function handToDest(params: {
 
   let binding: AgentBinding;
   let enqueueIfBusy: boolean | undefined;
+  let followUp = false;
   if (who) {
     const found = await openMemberByWho(sessionId, who);
     const look = classifyOpenMember({ binding: found });
@@ -490,33 +498,87 @@ async function handToDest(params: {
       return { ok: false, text: "Travis dest never uses the Cursor send path." };
     }
     binding = found;
-  } else {
-    try {
-      binding = await resolveRoleDest({
-        sessionId,
-        role: seat as "pm" | "sa" | "engineer",
-      });
-    } catch (err) {
-      const label = seatKeyToLabel(seat as SeatKey);
-      if (err instanceof SitError) {
-        return { ok: false, text: nobodyReceipt({ hole: "spin", label }) };
+  } else if (isSitProtocolRole(seat)) {
+    const living = await livingSeated(SIT_PROTOCOL_BY_ROLE[seat]);
+    const open = living
+      ? (await listOpenDestJobs(sessionId)).some(
+          (row) => row.binding.id === living.id,
+        )
+      : false;
+    if (living && destPathForBind(open) === "follow-up") {
+      if (!(await isOpenMember(sessionId, living.id))) {
+        try {
+          await addMember(sessionId, living.id);
+        } catch (err) {
+          if (err instanceof MembershipError) {
+            return { ok: false, text: err.message };
+          }
+          throw err;
+        }
       }
-      return {
-        ok: false,
-        text: err instanceof Error ? err.message : String(err),
-      };
+      binding = living;
+      followUp = true;
+    } else {
+      try {
+        binding = await resolveRoleDest({
+          sessionId,
+          role: seat,
+        });
+      } catch (err) {
+        const label = seatKeyToLabel(seat as SeatKey);
+        if (err instanceof SitError) {
+          return { ok: false, text: nobodyReceipt({ hole: "spin", label }) };
+        }
+        return {
+          ok: false,
+          text: err instanceof Error ? err.message : String(err),
+        };
+      }
+      const seated = classifyOpenMember({ binding });
+      if (seated.class !== "theirs") {
+        return {
+          ok: false,
+          text: nobodyReceipt({
+            hole: seated.hole ?? "spin",
+            label: binding.label ?? seatKeyToLabel(seat as SeatKey),
+          }),
+        };
+      }
+      enqueueIfBusy = false;
     }
-    const seated = classifyOpenMember({ binding });
-    if (seated.class !== "theirs") {
-      return {
-        ok: false,
-        text: nobodyReceipt({
-          hole: seated.hole ?? "spin",
-          label: binding.label ?? seatKeyToLabel(seat as SeatKey),
-        }),
-      };
+  } else {
+    return { ok: false, text: "Need a role seat or a who." };
+  }
+
+  if (!followUp && destPathForBind(
+    (await listOpenDestJobs(sessionId)).some(
+      (row) => row.binding.id === binding.id,
+    ),
+  ) === "follow-up") {
+    followUp = true;
+  }
+
+  if (followUp) {
+    const outcome = await dispatchToSeat({
+      sessionId,
+      binding,
+      prompt: text,
+      enqueueIfBusy: destEnqueueIfBusy("follow-up"),
+    });
+    if (outcome.status !== "error") {
+      await stampLatestPassOn(
+        sessionId,
+        binding.seatKey ?? (who || seat),
+        text,
+      ).catch(() => {});
     }
-    enqueueIfBusy = false;
+    return {
+      ok: outcome.status !== "error",
+      text: dispatchReceipt({ ...outcome, followUp: true }),
+      sentToEngineer: who
+        ? binding.protocolPath === "/protocols/engineer.md"
+        : seat === "engineer",
+    };
   }
 
   const job = await insertDestJob({
@@ -1114,7 +1176,7 @@ export async function runTravisTool(params: {
 
 export const TRAVIS_SYSTEM = `You are Travis. You are in this room with the founder. Seats are disposable people, not forever-pm slugs. You are your own agent — not PM, SA, or Engineer.
 
-Speak short. One or two sentences unless they asked for a list. Do not narrate that you are about to check. If Here already names the ticket, answer. Do not recap the last turns. Do not pad. SAE, essay, “the SA” mean the Systems Analyst.
+Speak short. One or two sentences unless they asked for a list. Do not narrate that you are about to check. If Here already names the ticket, answer. Do not recap the last turns. When they ask where we are or what we discussed, answer from this thread, /print.md, and search_room. Do not recap unasked. Do not pad. SAE, essay, “the SA” mean the Systems Analyst.
 
 When restating the founder — a receipt, dest send text, or the next spoken or written line about what they asked — polish: keep the same points, keep their words, and drop in excerpts where a stamp would quote. Do not replace the request with a shorter paraphrase that drops a lock. Speak short applies to status and receipts, not to a restatement of the ask. send_to_seat and dispatch_to_seat text is that polish. Never run a seat-body gist on a founder line.
 
@@ -1134,7 +1196,7 @@ You can create a person with create_agent — a name, optional model and repo. S
 
 sit_agent hangs an open member on a protocol file (pm, sa, or engineer). That is the seated write. Re-sit overwrites and re-hands the protocol. You still cannot see a work repository after they sit.
 
-When the founder wants the PM, SA, or Engineer, send_to_seat or dispatch_to_seat with seat and no who. Route to an idle seated person of that protocol in this room. If they are busy, do not queue — sit the next one, or spin a new person, sit them, and send there. An unseated catalog slug is nobody — do not mail it. Create and sit, or offer Engineer. “New PM” is create_agent then sit_agent, or nobody. It is never a send to catalog pm. Deprecate with no unseat write is nobody. queued_utterance is only for a named person (who). When they add to a named ticket or say resend that one, pass id. Put the ticket title in the send text. Do not mint a new initiative from “yes that’s the one.” The addition stamps onto that ticket. The send receipt is whether it left. If the receipt says it failed, say that — do not say they have it.
+When the founder wants the PM, SA, or Engineer, send_to_seat or dispatch_to_seat with seat and no who. If this room already has an open dest job for that living person, follow-up that same bind — do not spin, do not create. Idle send. Busy is Cursor agent_busy — queue the follow-up on that same person. Otherwise route to an idle seated person of that protocol in this room. If they are busy and there is no open dest job, do not queue — sit the next one, or spin a new person, sit them, and send there. An unseated catalog slug is nobody — do not mail it. Create and sit, or offer Engineer. “New PM” is create_agent then sit_agent, or nobody. It is never a send to catalog pm. Deprecate with no unseat write is nobody. queued_utterance is only for a named person (who), or a follow-up that hit agent_busy. When they add to a named ticket or say resend that one, pass id. Put the ticket title in the send text. Do not mint a new initiative from “yes that’s the one.” The addition stamps onto that ticket. The send receipt is whether it left. If the receipt says it failed, say that — do not say they have it.
 
 rename_room names this room. Only when they ask. Do not invent a name for an untitled room. You cannot list or rename other rooms.
 
@@ -1144,7 +1206,7 @@ Report what the tools actually told you. Do not let a tool miss overwrite Here.
 
 send_to_seat and dispatch_to_seat are the same leave: file a dest job and return. The seat works. You stay with the founder. Create, sit, prove, unfold, box, and house are yours — refuse send and do them. Vacant, not seated, catalog-only, or a Cursor rebind is nobody — name the hole and offer Engineer. No mail. No retry. No guess.
 
-A named person runs one job at a time. Role dest goes to the next idle seated seat of that protocol instead of waiting. Different people do run at the same time.
+A named person runs one job at a time. An open dest job for that living bind is follow-up on the same person, even if they are busy. Role dest goes to the next idle seated seat of that protocol instead of waiting only when there is no open dest job. Different people do run at the same time.
 
 If you are asked what you are doing or why something is slow, call work_in_flight instead of guessing.
 

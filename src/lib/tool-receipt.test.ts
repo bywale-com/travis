@@ -136,3 +136,23 @@ test("a busy role dest does not claim it queued", () => {
   assert.match(text, /does not queue/);
   assert.doesNotMatch(text, /will go when/);
 });
+
+test("a follow-up that hits Cursor busy names agent_busy, not spin", () => {
+  assert.match(
+    dispatchReceipt({
+      status: "queued",
+      seatLabel: "Technical PM",
+      waitingAhead: 0,
+      followUp: true,
+    }),
+    /agent_busy/,
+  );
+  assert.match(
+    dispatchReceipt({ status: "busy", seatLabel: "Technical PM", followUp: true }),
+    /agent_busy/,
+  );
+  assert.doesNotMatch(
+    dispatchReceipt({ status: "busy", seatLabel: "Technical PM", followUp: true }),
+    /spin/,
+  );
+});

@@ -1,6 +1,7 @@
 /**
  * SCP-031 — Deep Agents hang on Type. Dest seats stay Cursor.
  * StateBackend /print.md + /roster.md. wrapModelCall hangs files, not the request.
+ * SCP-034 — official checkpointer + thread_id = voice_session.id.
  */
 
 import {
@@ -18,6 +19,7 @@ import {
   TRAVIS_TOOL_DECLS,
   runTravisTool,
 } from "@/server/travis-tools";
+import { travisCheckpointer } from "@/server/travis-checkpointer";
 import {
   rosterFactFor,
   unclippedPrintFor,
@@ -138,18 +140,23 @@ export async function invokeDeepAgent(params: {
   const input = params.room
     ? `${params.room}\n\n${params.prompt}`
     : params.prompt;
+  const checkpointer = await travisCheckpointer();
   const agent = createDeepAgent({
     model: travisChatModel(),
     systemPrompt: TRAVIS_SYSTEM,
     tools: wrapTravisTools(params.sessionId),
     backend: new StateBackend(),
+    checkpointer,
     middleware: [destKitMiddleware(params.sessionId)],
     subagents: [],
   });
-  const result = await agent.invoke({
-    messages: [{ role: "user", content: input }],
-    files: kitFiles(print, roster),
-  });
+  const result = await agent.invoke(
+    {
+      messages: [{ role: "user", content: input }],
+      files: kitFiles(print, roster),
+    },
+    { configurable: { thread_id: params.sessionId } },
+  );
   const messages = (result as { messages?: unknown[] }).messages ?? [];
   return lastAssistantText(messages);
 }
