@@ -28,6 +28,8 @@
 
 > Does locking in this workflow—where the agent generates the runtime test and listens to PostHog/Vercel telemetry before handing off the build—give you the clear blueprint you were looking for?
 
+> Isn't there something we can do … inside of Vercel … rather than have Cursor … triage with Vercel … We can write the tests, but if there's anything inside of Vercel to implement those tests on the deployment … and then … send us back a signal … so that Cursor doesn't have … to do it.
+
 > This is what Gemini and I are thinking. As the architect how should we put this into practice?
 
 ---
@@ -43,9 +45,9 @@
 | “Manual smoke on the phone-first face” | Written. Almost never done by a cloud Engineer. |
 | Architect look (Automation C) | After the plant. Often SSO wall. “Steps I could not do: Talk on a phone.” Pass-for-what-this-seat-could-do has emerged. |
 
-There is no Playwright script in this repo. Playwright appears only as a transitive lockfile name. There is no PostHog. The only GitHub Action is the cheap seat-wake. Vercel previews exist. This seat can already read Vercel build logs and runtime errors. Nobody is required to do that before “done.”
+There is no Playwright script in this repo. Playwright appears only as a transitive lockfile name. There is no PostHog. The only GitHub Action is the cheap seat-wake. Vercel previews exist. Deployment Checks are not hung. Nobody is required to hit the doors before “done.”
 
-You are the runtime sensor. That is the void.
+You are the runtime sensor. That is the void. Cursor sitting in Vercel MCP after every plant is the same void with extra steps.
 
 ---
 
@@ -60,9 +62,9 @@ For Travis that means, for the pocket being planted:
 1. The preview (or local server) is **up**.
 2. A test the Engineer wrote **hit those doors** (HTTP and/or a headless browser).
 3. The answers were the locked ones (JSON, 200, Live connect wait, unwired stays unwired, flush does not full-think, wrap is finalize).
-4. Vercel (and PostHog **if** SA hangs it) show **no new uncaught exception** on those routes for that deploy.
+4. **This deploy’s Deployment Check is green** — our door test ran **on that URL** and painted the check. Vercel (and PostHog **if** SA hangs it) show **no new uncaught exception** on those routes.
 
-Done is all four. Syntax is not done. `npm test` green is not done. A look that could not open Voice is not done.
+Done is all four. Syntax is not done. `npm test` green is not done. A Cursor agent who opened Vercel MCP and read logs is not done. A look that could not open Voice is not done.
 
 ---
 
@@ -75,9 +77,9 @@ No box in that diagram is Travis. Each is one slice.
 | Agent writes the feature | Plant `src/` | Engineer | Unchanged |
 | Agent writes the runtime test | Proves **this pocket’s doors** | Lib tests only. Packet `*-TEST.md` is a human sheet. | A runnable test next to the plant. Same PR. |
 | Headless sandbox | Drive the running app without his thumbs | Vercel preview. No Playwright in-repo. | Playwright (or the same HTTP client) **against the preview URL**. Synthetic POSTs to `live/token`, `live/transcript`, `finalize`, `send`. **Not** a fake microphone first. |
-| Vercel observability | Build fail, 500, runtime error on that deploy | Previews + logs. MCP can read them. | Engineer **must** read this deploy’s build + runtime errors before waking the look. |
+| Vercel observability | Build fail, 500, runtime error on that deploy | Previews + logs. MCP can read them. | **Not** the sensor. Logs are for a red check. The sensor is the Deployment Check. |
 | PostHog | Console, network, session replay while the headless run happens | **Nothing.** | SA’s first question: do Vercel errors + the test’s own asserts cover the contract? If yes, PostHog is named silence this cut. If no (need console/replay the test cannot see), hang PostHog as a **port**. Paid is allowed. Cost is a thought. Do not invent a Travis telemetry table. |
-| Auto-patch loop | Agent reads the miss, plants again, re-runs | Fail look → Engineer | Same loop. The sensor is the test + Vercel, not the founder. |
+| Auto-patch loop | Agent reads the miss, plants again, re-runs | Fail look → Engineer | Same loop. The sensor is the **check**, not the founder and not Cursor-in-Vercel. |
 | His preview click | Like the experience | Emerge letter | Stays. He is not the first person to find a 500. |
 
 Do not put Travis or Cursor as a widget inside the phone while someone taps. Do not farm a phone. Do not inject a real mic in v1 of this cut.
@@ -90,11 +92,11 @@ Do not put Travis or Cursor as a widget inside the phone while someone taps. Do 
 
 | File | What goes in |
 |------|----------------|
-| `docs/BUILD-PROTOCOL.md` § Engineer | Done = plant + **this pocket’s** runtime test executed against a running app + Vercel (and PostHog if hung) quiet on those doors. `npm test` stays. It is not enough. |
-| `docs/seats/ENGINEER.md` § Verify | Same contract. Quote the preview URL and the test command in `ENGINEER-HANDOFF.md`. If the preview has no OpenAI key, the test must assert **unwired**, not pretend Live is up. |
-| `docs/register/house-now/protocols/engineer.md` | Must: runtime-verify the doors this cut touched. Must-not: wake look while the runtime test did not run. |
-| `docs/seats/TECHNICAL-ARCHITECT.md` | Look is glass + “do I like it” **after** Engineer’s runtime test is green. Architect is not the runtime sensor. “Pass for what this seat could do” after only `src/` or SSO is **not** Pass. |
-| `docs/BUILD-PROTOCOL.md` § Look | Recut: Voice stays a **human like**. Mechanism of Voice is Engineer’s test of the doors. Do not treat a login wall as emerge. |
+| `docs/BUILD-PROTOCOL.md` § Engineer | Done = plant + **this pocket’s** runtime test executed **on the deploy** + the Deployment Check green. `npm test` stays. It is not enough. Cursor does not triage Vercel. |
+| `docs/seats/ENGINEER.md` § Verify | Same contract. Quote the preview URL, the check name, and green/red in `ENGINEER-HANDOFF.md`. If the preview has no OpenAI key, the test must assert **unwired**, not pretend Live is up. |
+| `docs/register/house-now/protocols/engineer.md` | Must: the Deployment Check is the signal. Must-not: wake look while the check is not green; do not MCP-triage Vercel. |
+| `docs/seats/TECHNICAL-ARCHITECT.md` | Look is glass + “do I like it” **after** the check is green. Architect is not the runtime sensor. “Pass for what this seat could do” after only `src/` or SSO is **not** Pass. |
+| `docs/BUILD-PROTOCOL.md` § Look | Recut: Voice stays a **human like**. Mechanism of Voice is the Deployment Check. Do not treat a login wall as emerge. |
 
 ### 2. Mechanism tests (hang `npm test`)
 
@@ -115,18 +117,36 @@ Do not put Travis or Cursor as a widget inside the phone while someone taps. Do 
 | | `POST …/live/transcript` — does not full-pipe Travis think (019). 2xx or the locked JSON. |
 | | `POST …/finalize` with “I’m done” — wrap door, not the ear. |
 | | Optional Playwright page: Voice + Travis, subtitle is **not** `Travis Live is down — phone ear. Say “I’m done”.` when wired. When unwired, subtitle is **Travis isn’t wired**, not the phone-ear shirt. |
-| `package.json` | Script `test:runtime`. Engineer runs it. CI later if SA says the preview URL is available to Actions. |
-| `.github/workflows/wake-packet-seats.yml` | Do **not** turn this Action into the sandbox. It stays the cheap label gate. A second workflow may run `test:runtime` when a preview URL exists — SA ascribes. |
+| `package.json` | Script `test:runtime`. Engineer may run it locally while planting. **Done** is the same script on the deploy, painted as a check. |
+| `.github/workflows/runtime-doors.yml` — **new** (name SA may keep or recut) | Official Vercel hang. Listens for `repository_dispatch` type **`vercel.deployment.ready`**. Runs `test:runtime` against that deployment URL. Reports with `vercel/repository-dispatch/actions/status@v1`. That paint **is** the signal. |
+| `.github/workflows/wake-packet-seats.yml` | Do **not** turn this Action into the sandbox. It stays the cheap label gate. |
 
 Mic injection is **named silence**. The transcript and finalize POSTs **are** the Voice mechanism.
 
-### 4. Telemetry (listen before handoff)
+### 4. The signal lives on the deploy (not in Cursor)
+
+Vercel does **not** run Playwright as a first-party product inside the app host. Vercel **does** have the gate: **Deployment Checks**. Production alias waits until required checks pass. Preview can require them too.
+
+Official hang (compose — do not invent a Travis widget):
+
+1. We write the door tests (`test:runtime`).
+2. Vercel builds the preview and fires `vercel.deployment.ready` (not the deprecated `deployment_status`).
+3. GitHub Actions runs **our** tests **on that URL**.
+4. The Action paints a check with `vercel/repository-dispatch/actions/status@v1`.
+5. That check is the signal. Green → look may sit. Red → Engineer plants again on this PR. Cursor does not open Vercel MCP on every plant to “see if it worked.”
+
+SSO killed the 018 / 019 looks. The hang for that is `VERCEL_AUTOMATION_BYPASS_SECRET` + `x-vercel-protection-bypass`, so the Action can hit a protected preview. SA ascribes the secret. Do not turn protection off for the world.
+
+Marketplace (Checkly, Endform, Autonoma) can run Playwright and paint the same check. Paid. Cost is a thought. Hang official Checks + our tests first. Marketplace only if SA says Actions cannot see the preview.
+
+`vercel curl` and runtime logs are a probe after a red check. They are not the suite. Vercel Agent is PR review / incidents. It is not the test runner.
 
 | File | What goes in |
 |------|----------------|
-| `docs/register/ENGINEER-HANDOFF.md` | For every plant: preview URL; `test` + `test:runtime` result; Vercel deploy id; “runtime errors on these routes: none / listed.” |
-| Vercel | Already the sandbox. Engineer reads **this** deploy’s build log and runtime errors (CLI or the Vercel tools). Uncaught on `/api/session/*/live/*`, `/send`, `/finalize` is a fail. |
-| PostHog | Only if SA ascribes the port. Project key server-side. Capture during `test:runtime`. Agent reads the last session’s exceptions. Do not mint `travis.posthog`. Do not hang it “because the diagram had it.” |
+| Vercel project → Deployment Checks | Require the `runtime-doors` check (exact name SA ascribes). Production alias waits. Preview required if SA says so. |
+| `VERCEL_AUTOMATION_BYPASS_SECRET` | Repo + Vercel project secret so the Action can open an SSO preview. |
+| `docs/register/ENGINEER-HANDOFF.md` | For every plant: preview URL; deploy id; **check name + green/red**; `npm test`. If the check is pending, look does not sit. |
+| PostHog | Only if SA ascribes the port. Project key server-side. Capture during `test:runtime`. Do not mint `travis.posthog`. Do not hang it “because the diagram had it.” |
 
 ### 5. The loop
 
@@ -134,10 +154,9 @@ Mic injection is **named silence**. The transcript and finalize POSTs **are** th
 Architect packet (face + doors to prove)
         → SA ascribes stores + ports (Playwright hang, PostHog or silence)
         → Engineer plants + writes this pocket’s runtime test
-        → Runs test against preview
-        → Reads Vercel (and PostHog if hung)
-        → Miss → plant again (same PR). No founder.
-        → Green → handoff names the proof
+        → Vercel deploys → Action runs the test on that URL → check paints
+        → Red check → plant again (same PR). Cursor wakes on red, not on every deploy.
+        → Green check → handoff names the check
         → Architect look (glass / like)
         → You walk the phone because you like it, not because it 500s
 ```
@@ -150,20 +169,20 @@ Fail look still exists. It should become rare. It is not the first sensor.
 
 You open the preview to see if you like it. You do not open it to discover Live is down.
 
-Engineer does not hand you a build that has not hit its own doors.
+We write the tests. Vercel’s check runs them on the deployment and paints green or red. Cursor is not the person who sits in Vercel and asks whether it worked.
 
 ---
 
 ## Lock
 
-1. **Engineer owns runtime verification.** Tester ∈ Engineer. No Tester seat. No Travis-in-the-browser widget.
-2. **Done = code + this pocket’s runtime test + executed on a running app + host quiet.** Lib `npm test` stays and is not enough.
+1. **Engineer owns the tests.** Tester ∈ Engineer. No Tester seat. No Travis-in-the-browser widget.
+2. **Done = code + this pocket’s runtime test + that test ran on the deploy + the Deployment Check is green.** Lib `npm test` stays and is not enough.
 3. **Voice somehow = the three doors + the connect contract.** Synthetic POST. Playwright on the subtitle only when wired/unwired is known. No mic farm.
-4. **Vercel is the sandbox we already have.** Read this deploy. Do not invent a second host.
-5. **PostHog is a port, not a given.** SA’s first line: what Vercel + the test already see vs what they cannot. Hang or name silence. Paid is allowed.
-6. **Architect look is not the runtime sensor.** Recut “Voice stays human” to “Voice *like* stays human; Voice *doors* are Engineer.”
+4. **The signal is the Vercel Deployment Check, not Cursor.** We write the tests. Vercel fires when the deploy is ready. Actions (or a Marketplace check) run them on that URL and paint. Cursor wakes on **red**, not to triage every plant.
+5. **PostHog is a port, not a given.** SA’s first line: what the door test + the check already see vs what they cannot. Hang or name silence. Paid is allowed.
+6. **Architect look is not the runtime sensor.** Recut “Voice stays human” to “Voice *like* stays human; Voice *doors* are the check.”
 7. **019 stays.** Transcript does not full-pipe. Connect wait. Unwired is unwired. This packet is how those facts get proven without you.
-8. **Compose.** Hang Playwright as a test runner if we need a browser. Hang fetch if HTTP is enough. Do not write a Travis orchestrator that reimplements retry.
+8. **Compose.** Hang official Deployment Checks + GitHub Actions. Hang Playwright as a runner if we need a browser. Hang fetch if HTTP is enough. Marketplace (Checkly / Endform) only if Actions cannot see the preview. Do not write a Travis orchestrator. Do not have Cursor MCP-walk Vercel instead of the check.
 
 ---
 
@@ -193,18 +212,20 @@ Lib tests do not include the doors:
     "test": "tsx --test src/lib/*.test.ts src/server/db/*.test.ts",
 ```
 
-**Grain.** SA ascribes: Playwright vs fetch-only for `test:runtime`; PostHog port or silence; whether Actions can see the preview URL; no new Travis table. Engineer hangs those. Extract `live-connect`. Do not remint 031–035.
+**Grain.** SA ascribes: Playwright vs fetch-only for `test:runtime`; official Checks + Actions vs Marketplace; bypass secret for SSO previews; whether the check is required on preview as well as production; PostHog port or silence; no new Travis table. Engineer hangs those. Extract `live-connect`. Do not remint 031–035.
 
 ---
 
 ## Must / must-not
 
-- Engineer may not wake look until the runtime test ran or a named blocker (no preview URL, no key — and then the test asserts unwired).
+- Engineer may not wake look until the Deployment Check is green, or a named blocker (no preview URL, no key — and then the test asserts unwired).
 - Do not invent PostHog because a diagram had it.
 - Do not put Hear it / Skip buttons back.
 - Do not remint dest assemble, dest-gate, checkpointer, stream-intent.
 - Do not farm a phone or inject a real microphone in this cut.
 - Do not turn the wake Action into a test runner.
+- Do not have Cursor sit in Vercel MCP and call that runtime verification.
+- Do not turn protection off for the world so a test can get in. Hang the bypass secret.
 
 ---
 
@@ -212,8 +233,10 @@ Lib tests do not include the doors:
 
 Ascribe. Quote the Room connect lie and `package.json` `test`. Compose.
 
-1. Inventory: Vercel preview + logs vs PostHog vs Playwright. Identical or adjacent. Cost as a thought.
+1. Inventory: Deployment Checks + `vercel.deployment.ready` + Actions vs Marketplace (Checkly / Endform). Identical or adjacent. Cost as a thought. Compose: official Checks first.
 2. Name the primitive for `test:runtime` (Playwright official, or fetch). Hang, do not write a Travis browser.
-3. PostHog: hang as port, or named silence because Vercel + asserts are enough this cut.
-4. CI: second workflow or Engineer-only until preview URL is available. Do not overload wake-packet-seats.
-5. Do not remint 031–035 / `dest_job` / 019 classify.
+3. Hang `VERCEL_AUTOMATION_BYPASS_SECRET` so the Action can hit an SSO preview. Do not drop Vercel Authentication for everyone.
+4. Name the check (suggested `runtime-doors`). Required on production. Preview required — yes or no, and why.
+5. PostHog: hang as port, or named silence because the door test + the check are enough this cut.
+6. Do not overload `wake-packet-seats.yml`. Second workflow only.
+7. Do not remint 031–035 / `dest_job` / 019 classify.

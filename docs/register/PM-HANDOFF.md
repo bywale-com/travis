@@ -1,4 +1,4 @@
-# Architect seat handoff — 2026-09-10 03:20 UTC
+# Architect seat handoff — 2026-09-10 03:45 UTC
 
 **This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical Architect until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -8,7 +8,7 @@
 
 **Seat:** Technical Architect (was Technical PM — same seat, architecture added). Inspect `src/`. Spec face + technical cut + file-level architecture. Keep the log. Do not plant. Catalog `pm` is not this seat. Protocol `/protocols/pm.md`. Do not mint `/protocols/technical-pm.md` or `/protocols/technical-architect.md`.
 
-**How we build:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md) — including **Compose, don’t invent** and **runtime verification**.
+**How we build:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md) — including **Compose, don’t invent** and **runtime verification**. The signal is the Vercel Deployment Check, not Cursor.
 
 ---
 
@@ -16,18 +16,18 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **03:20 UTC 2026-09-10**. Flag **14:00**. |
-| 020 runtime verify | [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md) · test [`PM-PACKET-020-RUNTIME-VERIFY-TEST.md`](./PM-PACKET-020-RUNTIME-VERIFY-TEST.md). **Wake:** sa. SA **036**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **03:45 UTC 2026-09-10**. Flag **14:00**. |
+| 020 runtime verify | [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md) · test [`PM-PACKET-020-RUNTIME-VERIFY-TEST.md`](./PM-PACKET-020-RUNTIME-VERIFY-TEST.md). Recut: **Checks, not Cursor triage**. **Wake:** sa. SA **036**. |
 | 019 stream architecture | [`PM-PACKET-019-STREAM-ARCH.md`](./PM-PACKET-019-STREAM-ARCH.md). SA **035**. [#163](https://github.com/bywale-com/travis/pull/163). |
-| Meaning | Engineer owns the runtime loop. You like the preview. You are not the first 500. |
+| Meaning | We write the door tests. Vercel fires when the deploy is ready. The check paints green or red. Cursor wakes on red. You like the preview. You are not the first 500. |
 
 ---
 
 ## Next Architect job
 
-1. SA 036 ascribes Playwright vs fetch, PostHog port or silence. Engineer hangs on this PR. Do not plant `src/` from this seat.
+1. SA 036 ascribes: Playwright vs fetch; official Checks + Actions vs Marketplace; bypass secret; preview-required or not; PostHog port or silence. Engineer hangs on this PR. Do not plant `src/` from this seat.
 2. 019 first plant (Live as the ear) still stands on [#163](https://github.com/bywale-com/travis/pull/163). Do not remint.
-3. Do not mint a Tester seat. Do not invent PostHog because a diagram had it.
+3. Do not mint a Tester seat. Do not invent PostHog because a diagram had it. Do not have Cursor MCP-walk Vercel instead of the check.
 4. Do not remint 011–019 / 027–035.
 
 ---
@@ -45,3 +45,4 @@
 - Do not mint `/protocols/technical-pm.md` or `/protocols/technical-architect.md`.
 - Do not farm a phone or inject a real microphone in 020.
 - Do not write a fifth cousin that only changes the “Live is down / I’m done” subtitle.
+- Do not turn Vercel Authentication off for the world so a test can get in.

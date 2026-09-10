@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-10 03:20 UTC — 020 runtime verification. Engineer owns the loop. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-10 03:45 UTC — 020 recut: the signal is the Vercel Deployment Check, not Cursor. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3607,5 +3607,21 @@ Not the model. Not a new face.
 **Landed.** [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md) · test [`PM-PACKET-020-RUNTIME-VERIFY-TEST.md`](./PM-PACKET-020-RUNTIME-VERIFY-TEST.md). **Wake:** sa. SA **036**.
 
 **Practice.** Done = plant + this pocket’s runtime test against the preview + Vercel quiet. Voice somehow = token / transcript / finalize / send + the connect contract. No mic farm. Playwright or fetch — SA names the hang. PostHog is a **port**, not a given: hang only if Vercel + the test cannot see the miss. Architect look is like, after proof. Do not remint 019.
+
+**I do not plant `src/`.**
+
+---
+
+## 2026-09-10 03:45 UTC — Vercel runs the tests; Cursor is not the triage (founder)
+
+**Kind:** Packet recut. How we build. Same 020. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** Isn't there something we can do … inside of Vercel … rather than have Cursor … triage with Vercel … We can write the tests, but if there's anything inside of Vercel to implement those tests on the deployment … and then … send us back a signal … so that Cursor doesn't have … to do it.
+
+**What Vercel actually has.** Deployment Checks — first-party gate. Production alias waits until required checks pass. Official hang: deploy ready → GitHub `repository_dispatch` type `vercel.deployment.ready` → Action runs **our** door tests on that URL → paints with `vercel/repository-dispatch/actions/status@v1`. Marketplace (Checkly / Endform) can paint the same check. Vercel does **not** run Playwright as a built-in host product. Vercel Agent is not the runner. `vercel curl` is a probe after red, not the suite.
+
+**Practice locked.** We write the tests. Vercel fires when the deploy is up. The Action (or Marketplace) runs them **on that URL**. The check is the signal. Cursor wakes on **red**. Engineer does not sit in Vercel MCP on every plant. SSO hang is `VERCEL_AUTOMATION_BYPASS_SECRET` — do not turn protection off for the world.
+
+**Landed.** Recut [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md) · test sheet · `BUILD-PROTOCOL` · Engineer / Architect seats. **Wake:** sa. SA **036** ascribes Checks vs Marketplace, bypass secret, preview-required or not.
 
 **I do not plant `src/`.**

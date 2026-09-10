@@ -7,15 +7,16 @@
 
 Fill **I saw** on this step before the next.
 
-**Pass** = Engineer’s runtime test ran against a running app for this cut; Vercel is quiet on the doors; you did not have to find a 500.  
+**Pass** = this deploy’s Deployment Check (`runtime-doors`, or the name SA ascribes) is green; you did not have to find a 500.  
 **Pass from `src/` only is a miss.**  
+**A Cursor agent who only read Vercel logs is a miss.**  
 **You being the first person to see “Live is down — phone ear” is a miss.**
 
 ---
 
 ## Before
 
-Open the **Engineer handoff** on this PR. It must name: preview URL, `npm test` result, `test:runtime` result, deploy id, runtime errors on the session doors.
+Open the **Engineer handoff** on this PR. It must name: preview URL, deploy id, **Deployment Check name + green**, `npm test`. The check is the proof the doors ran on that URL.
 
 **I saw:**
 
