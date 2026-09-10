@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-10 19:50 UTC — 020 first plant: live-connect wait + unwired named. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-10 20:30 UTC — 020 one-time retro test list; Playwright is silence. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3713,3 +3713,17 @@ Not the model. Not a new face.
 **Start.** List slowness was 013 / #144 — already planted. The issue still in the phone is Live-down: in-flight connect returned false; unwired got the phone-ear shirt. That is the first plant.
 
 **Planted.** `src/lib/live-connect.ts` + tests. `Room.tsx` waits on in-flight; unwired stays **Travis isn’t wired**. Same PR [#165](https://github.com/bywale-com/travis/pull/165). Do not remint dest / 031–035. Walks + Action still wait on SA **036**.
+
+---
+
+## 2026-09-10 20:30 UTC — Retro fill is once, now; Playwright is not the suite (founder)
+
+**Kind:** Packet recut. Same 020. Flag 14:00 stands.
+
+**Founder (preserved):** retrospective fill is for right now, retrospectively filling what else should go inside the test list outside of what the main agenda in the current packet were working in. There should be no additional retro filling after this first one (theoretically). … as for Playwright since you said its not core … exactly what benefit was it going to add precisely?
+
+**Lock.** Retro is **this once**. Agenda stays Voice wrap + Type send. Fill now: Type-send tape step; walk **come-back** (open, write, open again, same sitting); walk **type-dest** (dest line on tape, leave on queue, not the seat’s essay). Then later packets only add forward. 019 stretch is 019’s add, not this fill.
+
+**Playwright benefit (entire):** HTTP never loads `Room.tsx`, so it cannot read the subtitle. A browser robot could read **Travis isn’t wired** on the preview, or record a video of this packet’s walk. The unwired **rule** is already `npm test`. Named silence. Not on the list.
+
+**Landed.** Recut [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md). **Wake:** sa. SA **036**. Engineer plants the retro walks on [#165](https://github.com/bywale-com/travis/pull/165).
