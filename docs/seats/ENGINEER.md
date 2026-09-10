@@ -62,10 +62,14 @@ v1 surfaces everything **readable** from the assistant stream.
 - **Do not** read thinking/tool spam aloud (hygiene, not triage).  
 - **Do not** invent triage judgment (what’s “worth” saying) until PM/SA lock v2.
 
-### 5. Verify
+### 5. Verify (runtime — you own this)
 
-- Run the project build once scripts exist.  
-- Manual smoke on the phone-first face at distinct screens / turns.  
+- Run the project build. Run `npm test`. That is not done.
+- Write **this pocket’s** runtime test. Execute it against a running app (this PR’s preview, or local).
+- Read **this** Vercel deploy’s build log and runtime errors on the doors you touched. PostHog only if SA hung it.
+- If the preview has no OpenAI key, the test asserts **unwired**. It does not pretend Live is up.
+- Name the proof on [`ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md): preview URL, commands, deploy id, errors.
+- You are the tester. The founder is not the first sensor.
 - Do not commit `.tmp-plates/`, `.env`, or secrets.
 
 ### 6. Your trail

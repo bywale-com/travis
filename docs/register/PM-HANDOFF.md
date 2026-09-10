@@ -1,4 +1,4 @@
-# Architect seat handoff — 2026-09-10 01:25 UTC
+# Architect seat handoff — 2026-09-10 03:20 UTC
 
 **This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical Architect until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -8,7 +8,7 @@
 
 **Seat:** Technical Architect (was Technical PM — same seat, architecture added). Inspect `src/`. Spec face + technical cut + file-level architecture. Keep the log. Do not plant. Catalog `pm` is not this seat. Protocol `/protocols/pm.md`. Do not mint `/protocols/technical-pm.md` or `/protocols/technical-architect.md`.
 
-**How we build:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md) — including **Compose, don’t invent**.
+**How we build:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md) — including **Compose, don’t invent** and **runtime verification**.
 
 ---
 
@@ -16,20 +16,19 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **01:25 UTC 2026-09-10**. Flag **14:00**. |
-| 019 stream architecture | [`PM-PACKET-019-STREAM-ARCH.md`](./PM-PACKET-019-STREAM-ARCH.md) · test [`PM-PACKET-019-STREAM-ARCH-TEST.md`](./PM-PACKET-019-STREAM-ARCH-TEST.md). **Wake:** sa. SA **035**. |
-| 018 what exists | [`PM-PACKET-018-WHAT-EXISTS.md`](./PM-PACKET-018-WHAT-EXISTS.md) · SA **034** planted · look Pass. [#161](https://github.com/bywale-com/travis/pull/161). Preview think unwired (no OpenAI key). Walk 018 on the **live** app. |
-| Meaning | Walk back in; start leaves before “I’m done”; change in flight; wrap last. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **03:20 UTC 2026-09-10**. Flag **14:00**. |
+| 020 runtime verify | [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md) · test [`PM-PACKET-020-RUNTIME-VERIFY-TEST.md`](./PM-PACKET-020-RUNTIME-VERIFY-TEST.md). **Wake:** sa. SA **036**. |
+| 019 stream architecture | [`PM-PACKET-019-STREAM-ARCH.md`](./PM-PACKET-019-STREAM-ARCH.md). SA **035**. [#163](https://github.com/bywale-com/travis/pull/163). |
+| Meaning | Engineer owns the runtime loop. You like the preview. You are not the first 500. |
 
 ---
 
 ## Next Architect job
 
-1. Founder named the gap: Engineer builds from the inside; tester ∈ Engineer; automate the mechanism, including Voice doors. Not a packet until he locks it. Do not mint a Tester seat.
-2. SA 035 ascribes 019. Engineer’s first plant: Live stays the ear. Then classify. Do not plant `src/` from this seat.
-3. Human walks 018 on the **live** Travis app (preview is unwired). Look Pass was SSO only.
-4. After 019 plants: Architect look + the 019 test sheet. Founder re-pastes Automation C if it is still leftover.
-5. Do not remint 011–018 / 027–034.
+1. SA 036 ascribes Playwright vs fetch, PostHog port or silence. Engineer hangs on this PR. Do not plant `src/` from this seat.
+2. 019 first plant (Live as the ear) still stands on [#163](https://github.com/bywale-com/travis/pull/163). Do not remint.
+3. Do not mint a Tester seat. Do not invent PostHog because a diagram had it.
+4. Do not remint 011–019 / 027–035.
 
 ---
 
@@ -37,13 +36,12 @@
 
 - Do not overwrite the 14:00 flag.
 - Do not plant `src/` except a deploy blocker already cut.
-- Do not remint 011–018 / 027–034.
-- Do not tell Engineer to invent a Travis orchestrator.
+- Do not remint 011–019 / 027–035.
+- Do not tell Engineer to invent a Travis orchestrator or a Travis telemetry table.
 - Do not install Pipecat as Travis.
 - Do not put Hear it / Skip buttons back.
 - Do not invent a second keyword list for dest.
 - Do not restore the Responses cousin.
 - Do not mint `/protocols/technical-pm.md` or `/protocols/technical-architect.md`.
-- Do not design Travis as a product for sale.
-- Do not grow `motion.ts` into the in-flight board.
+- Do not farm a phone or inject a real microphone in 020.
 - Do not write a fifth cousin that only changes the “Live is down / I’m done” subtitle.

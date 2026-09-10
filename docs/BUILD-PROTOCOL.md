@@ -136,28 +136,30 @@ Engineer gates on this commit: a new SYSTEMS-CHANGE-PACKET (or a hotfix file, or
 
 If the cut needs live Travis Postgres: `DATABASE_URL` is a Cloud Agent runtime secret. Unset → stop and name it in the handoff; the file on the PR is not the hang. Set → run the existing SQL; do not remint it.
 
-Engineer prepends one Implementation line on the repo `README.md`, rewrites `ENGINEER-HANDOFF.md`, may add `docs/register/initiatives/<nnn>-<slug>/`. Commits, pushes **this branch**. Does not append Architect or SA logs.
+**Runtime verification (definition of done).** Syntax is not done. `npm test` is not done. Engineer writes **this pocket’s** runtime test, executes it against a **running** app (this PR’s preview, or local), and reads **this** Vercel deploy’s build + runtime errors on the doors that cut touched. Unwired previews must assert unwired — not pretend Live is up. PostHog only if SA hung that port. Miss → plant again on this PR. The founder is not the first sensor.
+
+Engineer names the proof on `ENGINEER-HANDOFF.md` (preview URL, test commands, deploy id, errors). Then prepends one Implementation line on the repo `README.md`, rewrites the rest of the handoff, may add `docs/register/initiatives/<nnn>-<slug>/`. Commits, pushes **this branch**. Does not append Architect or SA logs. Does not wake look until that proof is named or a blocker is named.
 
 ### 7. Technical Architect look
 
-The Action sees `src/` (or a hotfix hang) on a PR that already has the packet + change packet, and labels **`wake-pm-look`**.
+The Action sees `src/` (or a hotfix hang) on a PR that already has the packet + change packet, **and** Engineer named the runtime proof, and labels **`wake-pm-look`**.
 
-Automation **C** sits Technical Architect on **this same PR**. Computer use may be on. Architect does not plant.
+Automation **C** sits Technical Architect on **this same PR**. Computer use may be on. Architect does not plant. Architect is **not** the runtime sensor.
 
 Two angles:
 
-1. **Look** — quote the lock against the plant. Open **this PR’s preview**, not production, unless the PR is already merged. Phone-first.
-2. **Test** — walk the packet test sheet. Fill **I saw**. Name **Steps I could not do** (Talk on a phone, SSO you cannot pass). Do not pretend.
+1. **Look** — quote the lock against the plant. Open **this PR’s preview**, not production, unless the PR is already merged. Phone-first. Engineer’s runtime test must already be green (or the named blocker).
+2. **Like** — walk the packet test sheet as experience. Fill **I saw**. Name **Steps I could not do** (Talk on a phone, SSO you cannot pass). Do not pretend.
 
 Locked verdicts:
 
 | Verdict | Meaning | What happens |
 |---------|---------|--------------|
-| **Pass** | Walked the sends that matter on **this deployment**; tape matches the lock | Emerge |
+| **Pass** | Walked what you could; tape matches the lock; Engineer already runtime-verified the doors | Emerge |
 | **Fail** | Plant or walk missed the lock | Label `fail-look` → Engineer, same PR |
 | **No walk** | Could not send (SSO wall, no Type). Not a Pass | No emerge. No fail-look |
 
-“Pass for what this seat could do” after only reading `src/` or hitting a login wall is **not** Pass. Voice stays human. Prefer a cheap Type send on the live tape over inventing a tester product.
+“Pass for what this seat could do” after only reading `src/` or hitting a login wall is **not** Pass. Voice **like** stays human. Voice **doors** are Engineer’s runtime test. Do not invent a tester product.
 
 Architect writes `docs/register/PM-LOOK-NNN.md`, stamps the Phase One log, pushes.
 

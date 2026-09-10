@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-10 01:25 UTC — Gap: no engineer building Travis from the inside. Mechanism tests are Engineer. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-10 03:20 UTC — 020 runtime verification. Engineer owns the loop. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3593,3 +3593,19 @@ Not the model. Not a new face.
 **Alignment (not the flag).** Tester is not a new Cursor seat. Tester is Engineer. Inside-out: the plant includes a mechanism test that can fail the build. Architect specs what must be true. Architect look is “did the glass match” after that test is already green — not the first time the ear is proven. Voice automation tests the **doors** (wanted ear, connect wait, unwired stays unwired, flush does not think, “I’m done” is finalize). It does not farm a phone or replay the live mouth. Do not invent a tester product. Hang `npm test`. Extract what `Room.tsx` still holds so the lie can fail in CI.
 
 **Not a lock until he says so.** Packet 020 would be this law. I do not wake SA on a thought.
+
+---
+
+## 2026-09-10 03:20 UTC — Runtime verification into practice (founder)
+
+**Kind:** Packet. How we build. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** Actually, it's not even that difficult. It's actually very simple. Runtime verification. Right now, doesn't the engineer do it? … What is it runtime verifying? … Vercel and PostHog act as the unified Telemetry & Verification Harness. … definition of done isn't writing the syntax. … I wrote the headless test that simulates the user. I executed the test against the runtime. … By the time you open the Vercel Preview link, you aren't testing to see if it works; you're just verifying that you like the experience. … As the architect how should we put this into practice?
+
+**Answer (inspect).** The spun Engineer does **not** runtime-verify. Build + lib `npm test` + a look that often cannot Talk. You are the sensor. Runtime verification is: this cut’s **doors**, on a **running** app, did the locked thing, and the host did not 500 / HTML-as-JSON / lie. Not “do you like Voice.”
+
+**Landed.** [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md) · test [`PM-PACKET-020-RUNTIME-VERIFY-TEST.md`](./PM-PACKET-020-RUNTIME-VERIFY-TEST.md). **Wake:** sa. SA **036**.
+
+**Practice.** Done = plant + this pocket’s runtime test against the preview + Vercel quiet. Voice somehow = token / transcript / finalize / send + the connect contract. No mic farm. Playwright or fetch — SA names the hang. PostHog is a **port**, not a given: hang only if Vercel + the test cannot see the miss. Architect look is like, after proof. Do not remint 019.
+
+**I do not plant `src/`.**

@@ -27,7 +27,8 @@ PHASE-ONE-LOG. SYSTEMS-ANALYST-LOG. Stores you were not given. A role at create.
 - Product face = Voice / Log / Backlog, phone-first.
 - Keys stay server-side. Supported Cursor path only (`@cursor/sdk` / Cloud Agents API).
 - Tokens, surfaces, overlay escape, parametric elimination.
-- Verify the face. A hang/SQL cut: the verify query, not a glass preview. File on the PR is not the live row. `DATABASE_URL` is a Cloud Agent runtime secret — unset → stop and name it; do not remint the SQL. Do not commit `.env` or secrets.
+- Verify the **doors this cut touched**, at runtime, on a running app. `npm test` is not enough. Name the proof on `ENGINEER-HANDOFF.md`. Do not wake look until that proof exists or a blocker is named.
+- A hang/SQL cut: the verify query, not a glass preview. File on the PR is not the live row. `DATABASE_URL` is a Cloud Agent runtime secret — unset → stop and name it; do not remint the SQL. Do not commit `.env` or secrets.
 
 ## Must-not
 
