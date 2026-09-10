@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-10 20:39 UTC — glass walk is the extra protocol; not silence. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-10 22:45 UTC — PM look 084 Fail. type-dest still 504s. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3741,3 +3741,21 @@ Not the model. Not a new face.
 **Lock.** `unwired-glass.spec.ts` (Playwright) is on the agenda and in `test:runtime`. Open Voice on this URL. Subtitle is **Travis isn’t wired**, not the phone-ear shirt. No mic. SA ascribes how the browser carries bypass + cookie, not whether we hang the walk. Retro list stands. Do not call the glass walk optional again.
 
 **Landed.** Recut packet + look sheet. **Wake:** sa. SA **036**. Engineer hangs the glass walk on [#165](https://github.com/bywale-com/travis/pull/165).
+
+---
+
+## 2026-09-10 22:45 UTC — PM look 084 Fail (this seat)
+
+**Kind:** Look + what this seat could test. Hotfix. Not a new packet. Flag 14:00 stands.
+
+**Packet:** [`HOTFIX-084-TYPE-DEST-TIMEOUT.md`](./HOTFIX-084-TYPE-DEST-TIMEOUT.md) · none (hotfix) · plant on [#169](https://github.com/bywale-com/travis/pull/169) (`f0740a8`). Sheet: [`PM-LOOK-HOTFIX-084.md`](./PM-LOOK-HOTFIX-084.md).
+
+**Look.** The four file cuts match the lock: `isSitProtocolRole` → `resolveRoleDest`; `handProtocol` is `dispatchToSeat` / `enqueueIfBusy: false`; send and finalize enqueue `: ping`; queue assert allows `queue.seats`. Hang — no glass. `DATABASE_URL` set; hotfix named no row.
+
+**Walk I queried:** Action [`34538652026`](https://github.com/bywale-com/travis/actions/runs/34538652026) on this plant (`f0740a8`), not psi. `come-back` / `type-send` / `voice-wrap` passed. `type-dest` failed at 62.2s — status not in 200–499. Same hang as `34537172870`.
+
+**Test.** `npm test` here: 464 pass. Sheet step 2 is that doors run. `type-dest` did not pass.
+
+**Steps I could not do (human):** Talk on a phone.
+
+**Verdict:** Fail. `fail-look` on [#169](https://github.com/bywale-com/travis/pull/169). Engineer recuts the 504 on the same PR. No cousin.
