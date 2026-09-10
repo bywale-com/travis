@@ -44,4 +44,3 @@ jobs:
         uses: vercel/repository-dispatch/actions/status@v1
         with:
           name: runtime-doors
-          status: ${{ job.status }}
