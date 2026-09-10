@@ -1,6 +1,8 @@
-# Engineer seat handoff — 2026-09-09
+# Engineer seat handoff — 2026-09-10
 
-**This bind is done.** Last Engineer: `bc-445017ca-7ddc-4af4-bc83-e1e666695ac9`. The next bind pastes the block at the bottom. Do not start from a transcript.
+**This bind is done.** Last Engineer: `bc-445017ca-7ddc-4af4-bc83-e1e666695ac9`. Prior: `bc-26131d8d-741b-4566-89b3-df312e8e48e1`. The next bind pastes the block at the bottom. Do not start from a transcript.
+
+**020 first plant (this PR):** `src/lib/live-connect.ts` — in-flight connect **waits**; unwired keeps **Travis isn’t wired**; a real miss still gets the phone-ear shirt. Room hangs those rules. `npm test` covers the three lies. Next hotfix number **082**. Do not remint dest assemble / 031–035.
 
 **Trail:** git + PRs. **One PR per initiative.** Do **not** append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
 

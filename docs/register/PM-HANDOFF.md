@@ -1,4 +1,4 @@
-# Architect seat handoff — 2026-09-10 15:05 UTC
+# Architect seat handoff — 2026-09-10 19:50 UTC
 
 **This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical Architect until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -16,7 +16,8 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **15:05 UTC 2026-09-10**. Flag **14:00 2026-08-25**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **19:50 UTC 2026-09-10**. Flag **14:00 2026-08-25**. |
+| 020 first plant | `src/lib/live-connect.ts` on [#165](https://github.com/bywale-com/travis/pull/165). In-flight waits. Unwired named. |
 | 020 runtime verify | [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md). **`npm test` = lib. `test:runtime` = walks on the preview.** Action runs both. **Wake:** sa. SA **036**. |
 | 019 stream architecture | [`PM-PACKET-019-STREAM-ARCH.md`](./PM-PACKET-019-STREAM-ARCH.md). SA **035**. [#163](https://github.com/bywale-com/travis/pull/163). |
 

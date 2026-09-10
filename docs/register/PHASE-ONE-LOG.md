@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-10 15:05 UTC — Gemini’s walk is aligned; stuffing it into `npm test` is not. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-10 19:50 UTC — 020 first plant: live-connect wait + unwired named. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3701,3 +3701,15 @@ Not the model. Not a new face.
 **Landed.** Recut packet 020 Gemini table. **Wake:** sa. SA **036**.
 
 **I do not plant `src/`.**
+
+---
+
+## 2026-09-10 19:50 UTC — Push code: live-connect first plant (founder)
+
+**Kind:** First plant on 020. Flag 14:00 stands.
+
+**Founder (preserved):** enough of just … architecture talk. … let's push out some code today. … We were having some issues, right? Perf, I think that's the perfect place to start
+
+**Start.** List slowness was 013 / #144 — already planted. The issue still in the phone is Live-down: in-flight connect returned false; unwired got the phone-ear shirt. That is the first plant.
+
+**Planted.** `src/lib/live-connect.ts` + tests. `Room.tsx` waits on in-flight; unwired stays **Travis isn’t wired**. Same PR [#165](https://github.com/bywale-com/travis/pull/165). Do not remint dest / 031–035. Walks + Action still wait on SA **036**.

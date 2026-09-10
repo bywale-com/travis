@@ -23,6 +23,12 @@ import {
   STT_ONEND_RETRY_MS,
   type EarState,
 } from "@/lib/ear";
+import {
+  decideLiveConnect,
+  liveMissSubtitle,
+  waitForLiveConnect,
+  type LiveConnectMiss,
+} from "@/lib/live-connect";
 import { parseJsonText, readJson } from "@/lib/http";
 import { isVisibleLogStatus } from "@/lib/travis-miss";
 import { isRequestTurn } from "@/lib/request-log";
@@ -671,6 +677,7 @@ export function Room({
   );
 
   const liveConnectingRef = useRef(false);
+  const lastConnectMissRef = useRef<LiveConnectMiss | null>(null);
   const armEarGenRef = useRef(0);
   const armEarRef = useRef<() => Promise<void>>(async () => {});
 
@@ -1024,14 +1031,27 @@ export function Room({
 
   const connectLive = useCallback(
     async (sid: string): Promise<boolean> => {
-      if (liveRef.current) return true;
-      if (liveConnectingRef.current) return false;
+      const decision = decideLiveConnect({
+        alreadyUp: Boolean(liveRef.current),
+        connecting: liveConnectingRef.current,
+      });
+      if (decision === "already-up") return true;
+      if (decision === "wait") {
+        return waitForLiveConnect({
+          isConnecting: () => liveConnectingRef.current,
+          isUp: () => Boolean(liveRef.current),
+        });
+      }
       liveConnectingRef.current = true;
+      lastConnectMissRef.current = null;
       setSubtitle("Talking with Travis…");
+      let sawUnwired = false;
       try {
         const handle = await startTravisLive({
           sessionId: sid,
           onUnwired: () => {
+            sawUnwired = true;
+            lastConnectMissRef.current = "unwired";
             setSubtitle("Travis isn’t wired");
             void refreshTurns(sid);
           },
@@ -1062,13 +1082,16 @@ export function Room({
         });
         if (!handle) {
           liveRef.current = null;
+          lastConnectMissRef.current = sawUnwired ? "unwired" : "miss";
           return false;
         }
         liveRef.current = handle;
+        lastConnectMissRef.current = null;
         haltRecognition();
         return true;
       } catch (e) {
         liveRef.current = null;
+        lastConnectMissRef.current = sawUnwired ? "unwired" : "miss";
         setError(e instanceof Error ? e.message : String(e));
         return false;
       } finally {
@@ -1811,7 +1834,8 @@ export function Room({
       const ok = await connectLive(sid);
       if (gen !== armEarGenRef.current) return;
       if (ok) return;
-      setSubtitle("Travis Live is down — phone ear. Say “I’m done”.");
+      const reason = lastConnectMissRef.current ?? "miss";
+      setSubtitle(liveMissSubtitle(reason));
     }
 
     startRecognitionRef.current();
