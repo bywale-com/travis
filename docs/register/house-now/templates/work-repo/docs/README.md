@@ -4,7 +4,7 @@ Three seats. Paste the short block, then this file.
 
 | Seat | Trail they write |
 |------|------------------|
-| Product Manager | `docs/register/PHASE-ONE-LOG.md` |
+| Technical Architect | `docs/register/PHASE-ONE-LOG.md` |
 | Systems Analyst | `docs/register/SYSTEMS-ANALYST-LOG.md` |
 | Engineer | git + PRs · one PR per initiative · `ENGINEER-HANDOFF.md` · `initiatives/` · `HOTFIX-NNN` |
 

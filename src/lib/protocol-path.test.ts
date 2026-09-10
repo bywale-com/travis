@@ -45,8 +45,8 @@ test("travis WHERE logging and junk are refused", () => {
   assert.match(parseSitProtocol("").reason ?? "", /Need a protocol/);
 });
 
-test("sit glass string for pm is Technical PM", () => {
-  assert.equal(SIT_ROLE_LABEL.pm, "Technical PM");
+test("sit glass string for pm is Technical Architect", () => {
+  assert.equal(SIT_ROLE_LABEL.pm, "Technical Architect");
 });
 
 test("who is person dest; role seat without who is role dest", () => {

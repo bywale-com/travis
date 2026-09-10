@@ -2,7 +2,7 @@
 
 **Start here for the whole build:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md). This file is the cheap gate and the three automations.
 
-**Seat:** Technical PM. Founder lock 2026-09-05: when a packet lands, spin SA for the full process protocol; when SA completes, Engineer builds; **all on the same PR the packet was placed in.**
+**Seat:** Technical Architect. Founder lock 2026-09-05: when a packet lands, spin SA for the full process protocol; when SA completes, Engineer builds; **all on the same PR the packet was placed in.**
 
 **Parked-since:** PHASE-ONE-LOG **19:44 UTC 2026-08-25** (PM-only speak; auto SA / Engineer chain). This is that seam.
 
@@ -25,7 +25,7 @@ SA automation — full SA protocol
         ↓  label wake-engineer
 Engineer automation — full Engineer protocol
         ↓  label wake-pm-look  (src/ plant on a PR that already has packet + SCP)
-Technical PM look + what it can test
+Technical Architect look + what it can test
         ↓  Fail → label fail-look (same PR)
         ↓  Pass → emerge. Action emails the *-TEST.md. Human walks that sheet.
 ```
@@ -57,7 +57,7 @@ SA → SYSTEMS-CHANGE-PACKET → label  wake-engineer
         ↓
 Engineer plants src/ → label  wake-pm-look
         ↓
-Technical PM look+test
+Technical Architect look+test
         Pass → label emerge + letter (human test)
         Fail → label  fail-look  (loop)
 ```
@@ -78,7 +78,7 @@ Engineer plants the hotfix
         ↓  src/  or  ENGINEER-HANDOFF.md  (SQL-only hang may only touch the handoff)
 label  wake-pm-look
         ↓
-Technical PM look+test (hotfix is enough — no PM-packet, no SCP)
+Technical Architect look+test (hotfix is enough — no packet, no SCP)
         Fail → fail-look
         Pass → emerge + HOTFIX-NNN-*-TEST.md
 ```
@@ -134,7 +134,7 @@ That push is the Engineer trigger.
 
 ---
 
-## Automation C — Plant → Technical PM look+test
+## Automation C — Plant → Technical Architect look+test
 
 **Name:** `Travis — plant → PM look`  
 **Triggers (any):** Source control — **Pull request label changed**, label **`wake-pm-look`** (added). Not PR pushed.  
@@ -152,7 +152,7 @@ This is the beat that can run on a **already planted** PR (009 / 025 on #127). S
 2. Create **C**. Trigger: Label added / `wake-pm-look`. Computer use on. Memories off. PR creation off. Paste the PM-look prompt. Save + Activate.
 3. To run the first look on #127: add `wake-pm-look` once C is Active. Do not add `wake-sa` or `wake-engineer` — 025 is already planted.
 4. Later plants: Action adds `wake-pm-look` when this push touched `src/` on a PR that already has a packet + change packet, **or** `src/` / `ENGINEER-HANDOFF.md` on a PR that already has a `HOTFIX-NNN`.
-5. **Emerge letter (human).** When this push writes `PM-LOOK-NNN.md` or `PM-LOOK-HOTFIX-NNN.md` with **Verdict: Pass**, the same Action (no LLM) labels `emerge` and sends the letter (packet `*-TEST.md` or `HOTFIX-NNN-*-TEST.md`). Not Travis. Not a Cursor agent.
+5. **Emerge letter (human).** When this push writes `PM-LOOK-NNN.md` or `PM-LOOK-HOTFIX-NNN.md` with **Verdict: Pass**, **and** the runtime Deployment Check is green, the same Action (no LLM) labels `emerge` and sends the letter (packet `*-TEST.md` or `HOTFIX-NNN-*-TEST.md`) plus the **recording of this packet’s walk only**. Not Travis. Not a Cursor agent. Do not emerge on a red check.
 
 ---
 
@@ -167,6 +167,9 @@ Founder lock 2026-09-05: emerge is silent unless something lands in the inbox. W
 - Subject: `NNN emerged — walk this sheet` (packet) or `Hotfix NNN emerged — walk this sheet`
 - First lines: finished / human test / PR / preview
 - The document: that packet’s `PM-PACKET-NNN-*-TEST.md` or that hotfix’s `HOTFIX-NNN-*-TEST.md` **verbatim**. Not a summary. Not the look sheet.
+- The recording: Playwright video of **this packet’s walk** (the use the packet named). Not a recording of every cumulative walk. Tests still all ran; emerge only shows this cut.
+
+**When not:** look Pass on a red or pending Deployment Check. That is not emerge. Engineer is still in the loop.
 
 **How (cheap, same Action):**
 

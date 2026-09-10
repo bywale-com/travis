@@ -11,6 +11,8 @@ const nextConfig: NextConfig = {
     "@langchain/langgraph",
     "@langchain/openai",
     "@langchain/langgraph-checkpoint",
+    "@langchain/langgraph-checkpoint-postgres",
+    "pg",
     "langsmith",
     "openai",
   ],

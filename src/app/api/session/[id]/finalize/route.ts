@@ -7,7 +7,7 @@ import {
   parseDeadManResponse,
   seatKeyToLabel,
 } from "@/lib/router";
-import { isTravisSeat, isVocativeOnlyCall } from "@/lib/seats";
+import { isTravisSeat } from "@/lib/seats";
 import { db } from "@/server/db/client";
 import {
   agentBinding,
@@ -16,18 +16,14 @@ import {
 } from "@/server/db/schema";
 import type { SeatKey } from "@/server/db/schema";
 import { noteTravisUnwired } from "@/server/travis-dest";
-import { MembershipError, requireOpenMember } from "@/server/room-membership";
-import { destBindingsForSend, resolveDestBinding } from "@/server/dest-resolve";
+import { resolveDestBinding } from "@/server/dest-resolve";
+import { listOpenDestJobs } from "@/server/dest-job";
+import { streamIntent } from "@/lib/stream-intent";
+import { dispatchStreamIntents } from "@/server/stream-dispatch";
 import { pipeTravisText } from "@/server/travis-reply";
 import { AuthError, jsonRoute } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
-import {
-  enqueueOnSeat,
-  seatHasActiveRun,
-  sendOrEnqueueMany,
-  sse,
-  sseHeaders,
-} from "@/server/seat-pipe";
+import { sse, sseHeaders } from "@/server/seat-pipe";
 import { serveInvite } from "@/server/serve";
 
 /** Hobby cap. Same as the room wire. Deep Agents invoke can outlast the default. */
@@ -218,117 +214,10 @@ export async function POST(
         activeLabel: binding?.label ?? seatKeyToLabel(calledSeat),
       });
     }
-    return Response.json(
-      {
-        matched: true,
-        error: "Conductor matched but no prompt text left after routing strip.",
-      },
-      { status: 400 },
-    );
   }
 
-  const decided = calledSeat
-    ? { kind: "send" as const, seatKeys: [calledSeat], prompt }
-    : { kind: "send" as const, seatKeys: [], prompt };
-  const dests = await destBindingsForSend({
-    sessionId,
-    decided,
-    referenceTurnId,
-  });
-  const [stickyRow] = dests.length
-    ? [dests[dests.length - 1]]
-    : await db
-        .select()
-        .from(agentBinding)
-        .where(eq(agentBinding.id, session!.activeBindingId))
-        .limit(1);
-  const binding = stickyRow;
-  if (!binding) {
-    return Response.json({ error: "No active binding" }, { status: 400 });
-  }
-  const bindings = dests.length ? dests : [binding];
-  if (dests.length) {
-    await setActiveBinding(sessionId, dests[dests.length - 1].id);
-  }
-
-  const seatKey = (binding.seatKey ?? "pm") as SeatKey;
-  const seatLabel = binding.label ?? seatKeyToLabel(seatKey);
-
-  try {
-    for (const dest of bindings) {
-      if (!isTravisSeat(dest.seatKey)) {
-        await requireOpenMember(sessionId, dest.id);
-      }
-    }
-  } catch (err) {
-    if (err instanceof MembershipError) {
-      return Response.json({ error: err.message }, { status: err.status });
-    }
-    throw err;
-  }
-
-  const travisBinds = bindings.filter((b) => isTravisSeat(b.seatKey));
-  const cursorBinds = bindings.filter((b) => !isTravisSeat(b.seatKey));
-
-  if (travisBinds.length) {
-    await noteTravisUnwired(sessionId);
-    const fromCall = calledSeat
-      ? isVocativeOnlyCall(match.cleanedText, remainder.trim(), calledSeat)
-      : false;
-    const travisPrompt = fromCall || !prompt ? "" : prompt;
-    if (!travisPrompt && !cursorBinds.length) {
-      return Response.json({
-        matched: false,
-        routerHandled: true,
-        destTravis: true,
-        activeSeatKey: seatKey,
-        activeLabel: seatLabel,
-      });
-    }
-    if (travisPrompt && !cursorBinds.length) {
-      const encoder = new TextEncoder();
-      const stream = new ReadableStream({
-        async start(controller) {
-          const send = (event: string, data: unknown) => {
-            controller.enqueue(encoder.encode(sse(event, data)));
-          };
-          try {
-            await pipeTravisText({
-              sessionId,
-              prompt: travisPrompt,
-              send,
-              referenceTurnId,
-            });
-          } catch (err) {
-            send("error", {
-              error: err instanceof Error ? err.message : String(err),
-            });
-          } finally {
-            controller.close();
-          }
-        },
-      });
-      return new Response(stream, { headers: sseHeaders() });
-    }
-  }
-
-  if (cursorBinds.length === 1 && (await seatHasActiveRun(cursorBinds[0]))) {
-    const queue = await enqueueOnSeat({
-      sessionId,
-      binding: cursorBinds[0],
-      text: prompt,
-    });
-    return Response.json({
-      matched: true,
-      queued: true,
-      queue,
-      matchedPhrase: match.matchedPhrase,
-      activeSeatKey: (cursorBinds[0].seatKey ?? "pm") as SeatKey,
-      activeLabel: cursorBinds[0].label ?? seatKeyToLabel(
-        (cursorBinds[0].seatKey ?? "pm") as SeatKey,
-      ),
-    });
-  }
+  const wrapPrompt = prompt || "I'm done.";
+  const classifyPhrase = prompt || match.cleanedText.trim() || wrapPrompt;
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
@@ -337,23 +226,19 @@ export async function POST(
         controller.enqueue(encoder.encode(sse(event, data)));
       };
       try {
-        if (travisBinds.length) {
-          await pipeTravisText({
-            sessionId,
-            prompt,
-            send,
-            referenceTurnId,
-          });
-        }
-        if (cursorBinds.length) {
-          await sendOrEnqueueMany({
-            sessionId,
-            bindings: cursorBinds,
-            prompt,
-            send,
-            referenceTurnId,
-          });
-        }
+        const openJobs = await listOpenDestJobs(sessionId).catch(() => []);
+        await dispatchStreamIntents({
+          sessionId,
+          phrase: classifyPhrase,
+          intents: streamIntent({ phrase: classifyPhrase, openJobs }),
+          backupOnly: true,
+        });
+        await pipeTravisText({
+          sessionId,
+          prompt: wrapPrompt,
+          send,
+          referenceTurnId,
+        });
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         send("error", { error: msg });

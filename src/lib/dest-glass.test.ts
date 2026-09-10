@@ -37,9 +37,10 @@ test("catalog pm is hidden; Technical PM person stays", () => {
 });
 
 test("glass name is the person label, never catalog PM", () => {
-  assert.equal(destGlassName("pm"), "Technical PM");
-  assert.equal(destGlassName("pm", "PM"), "Technical PM");
-  assert.equal(destGlassName("technical-pm", "Technical PM"), "Technical PM");
+  assert.equal(destGlassName("pm"), "Technical Architect");
+  assert.equal(destGlassName("pm", "PM"), "Technical Architect");
+  assert.equal(destGlassName("technical-pm", "Technical PM"), "Technical Architect");
+  assert.equal(destGlassName("pm", "Pat"), "Pat");
   assert.equal(destGlassName("engineer"), "Engineer");
 });
 
@@ -54,7 +55,7 @@ test("quote names who — author label, then clipped text", () => {
       seatKey: "technical-pm",
       label: "Technical PM",
     }),
-    "Technical PM",
+    "Technical Architect",
   );
   assert.equal(quoteAuthorLabel({ kind: "user", seatKey: "engineer" }), "You");
   assert.equal(

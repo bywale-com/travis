@@ -32,11 +32,13 @@ export function destGlassName(
   label?: string | null,
 ): string {
   const named = label?.trim();
-  if (named && named !== "PM") return named;
+  if (named && named !== "PM" && named !== "Technical PM") return named;
   if (seatKey === "engineer") return "Engineer";
   if (seatKey === "sa") return "SA";
   if (seatKey === "travis") return "Travis";
-  if (seatKey === "pm") return "Technical PM";
+  if (seatKey === "pm" || named === "PM" || named === "Technical PM") {
+    return "Technical Architect";
+  }
   return named || "that seat";
 }
 

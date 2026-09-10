@@ -56,7 +56,11 @@ export async function pipeTravisText(params: {
 
   let reply = "";
   try {
-    reply = (await generateTravisText({ sessionId, prompt })).trim();
+    reply = (await generateTravisText({
+      sessionId,
+      prompt,
+      mode: "synthesize",
+    })).trim();
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     const status = await insertStatusTurn(

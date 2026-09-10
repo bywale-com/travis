@@ -8,12 +8,15 @@ import {
   parseHearInvite,
 } from "./offer";
 
-test("seat word is Engineer / Technical PM / SA or the binding label", () => {
+test("seat word is Engineer / Technical Architect / SA or the binding label", () => {
   assert.equal(offerSeatWord("engineer"), "Engineer");
-  assert.equal(offerSeatWord("pm"), "Technical PM");
+  assert.equal(offerSeatWord("pm"), "Technical Architect");
   assert.equal(offerSeatWord("sa"), "SA");
   assert.equal(offerSeatWord("other", "Pat"), "Pat");
-  assert.equal(offerSeatWord("technical-pm", "Technical PM"), "Technical PM");
+  assert.equal(
+    offerSeatWord("technical-pm", "Technical PM"),
+    "Technical Architect",
+  );
 });
 
 test("context is the title or that other thing", () => {

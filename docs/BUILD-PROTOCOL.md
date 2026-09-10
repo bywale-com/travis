@@ -18,9 +18,9 @@ They do not swap jobs.
 
 | Seat | Owns | Writes | Does not write |
 |------|------|--------|----------------|
-| **Technical PM** | Founder wording, Type A vs Type B, face + technical cut, plates, packet test, look | Phase One log, PM packets, plates, PM-LOOK, PM-HANDOFF | `src/`, tables, SA log |
+| **Technical Architect** | Founder wording, Type A vs Type B, face + technical cut + file architecture, plates, packet test, look | Phase One log, packets (`PM-PACKET-*`), plates, PM-LOOK, PM-HANDOFF | `src/`, tables, SA log |
 | **Systems Analyst** | Machine: Story → Requirements → stores, runtime, ports | SA log, SYSTEMS-CHANGE-PACKET, signed SQL when the packet cuts it | Phase One log, `src/` |
-| **Engineer** | Plant what PM and SA already specced | `src/`, git + PRs, ENGINEER-HANDOFF, initiative folder, hotfixes | PM log, SA log, stores nobody ascribed |
+| **Engineer** | Plant what Architect and SA already specced | `src/`, git + PRs, ENGINEER-HANDOFF, initiative folder, hotfixes | Architect log, SA log, stores nobody ascribed |
 
 A new chat pastes the short block in [`docs/README.md`](./README.md), accepts that identity, then reads **Current** on its trail.
 
@@ -54,13 +54,13 @@ This is how a new piece of product is built.
 
 You speak a lock, a lived miss, or an “I should be able to.” That talk lands in the Phase One log unless you mark a separate entry. Founder wording is captured as-is. Agent alignment is labeled as alignment, never as the flag.
 
-Technical PM inspects planted `src/` — quotes files, not memory. If the glass needs a picture, screenshot the live desk first, lock the chrome that already exists, paint only the new hole. Drift is trash. The written packet is the product; the plate keeps the look.
+Technical Architect inspects planted `src/` — quotes files, not memory. If the glass needs a picture, screenshot the live desk first, lock the chrome that already exists, paint only the new hole. Drift is trash. The written packet is the product; the plate keeps the look.
 
-If a store or field is missing, that is SA. PM names the hole. PM does not mint a table.
+If a store or field is missing, that is SA. Architect names the hole. Architect does not mint a table.
 
-### 2. Technical PM cuts a packet
+### 2. Technical Architect cuts a packet
 
-On **one** new branch and **one** open PR for this pocket (usually the Engineer opens it; PM may open it when the packet is the first commit):
+On **one** new branch and **one** open PR for this pocket (usually the Engineer opens it; Architect may open it when the packet is the first commit):
 
 - `docs/register/PM-PACKET-NNN-….md` — next PM number, never reuse. Face + technical cut. Quote planted code.
 - `docs/register/PM-PACKET-NNN-…-TEST.md` — always. Setup, exact sentences, ordered expects, **I saw** blanks. Scoped to this packet.
@@ -77,7 +77,7 @@ or no Wake line. Chat prose (“then SA”) is not the hold. The filename is not
 
 ### 3. Get-go
 
-When you say go, PM flips that line to exactly:
+When you say go, Architect flips that line to exactly:
 
 ```text
 **Wake:** sa
@@ -136,36 +136,38 @@ Engineer gates on this commit: a new SYSTEMS-CHANGE-PACKET (or a hotfix file, or
 
 If the cut needs live Travis Postgres: `DATABASE_URL` is a Cloud Agent runtime secret. Unset → stop and name it in the handoff; the file on the PR is not the hang. Set → run the existing SQL; do not remint it.
 
-Engineer prepends one Implementation line on the repo `README.md`, rewrites `ENGINEER-HANDOFF.md`, may add `docs/register/initiatives/<nnn>-<slug>/`. Commits, pushes **this branch**. Does not append PM or SA logs.
+**Runtime verification (definition of done).** Syntax is not done. `npm test` is not done. Engineer **adds or extends** a sequential walk in `src/runtime/walks/` (named after the human use, not the packet). Vercel’s Deployment Check runs **every walk** on this deploy’s URL and paints green or red. That check is the signal. A walk is send, wait, next beat, same room. Cursor does not sit in Vercel MCP and call the walk “done.” Unwired previews must assert unwired — not pretend Live is up. Do not write on the founder’s living tape. PostHog only if SA hung that port. Red check → plant again on this PR. The founder is not the first sensor.
 
-### 7. Technical PM look
+Engineer names the proof on `ENGINEER-HANDOFF.md` (preview URL, deploy id, **check name + green/red**). Then prepends one Implementation line on the repo `README.md`, rewrites the rest of the handoff, may add `docs/register/initiatives/<nnn>-<slug>/`. Commits, pushes **this branch**. Does not append Architect or SA logs. Does not wake look until the check is green or a blocker is named.
 
-The Action sees `src/` (or a hotfix hang) on a PR that already has the packet + change packet, and labels **`wake-pm-look`**.
+### 7. Technical Architect look
 
-Automation **C** sits Technical PM on **this same PR**. Computer use may be on. PM does not plant.
+The Action sees `src/` (or a hotfix hang) on a PR that already has the packet + change packet, **and** Engineer named the runtime proof, and labels **`wake-pm-look`**.
+
+Automation **C** sits Technical Architect on **this same PR**. Computer use may be on. Architect does not plant. Architect is **not** the runtime sensor.
 
 Two angles:
 
-1. **Look** — quote the lock against the plant. Open **this PR’s preview**, not production, unless the PR is already merged. Phone-first.
-2. **Test** — walk the packet test sheet. Fill **I saw**. Name **Steps I could not do** (Talk on a phone, SSO you cannot pass). Do not pretend.
+1. **Look** — quote the lock against the plant. Open **this PR’s preview**, not production, unless the PR is already merged. Phone-first. This deploy’s Deployment Check must already be green (or the named blocker).
+2. **Like** — walk the packet test sheet as experience. Fill **I saw**. Name **Steps I could not do** (Talk on a phone, SSO you cannot pass). Do not pretend.
 
 Locked verdicts:
 
 | Verdict | Meaning | What happens |
 |---------|---------|--------------|
-| **Pass** | Walked the sends that matter on **this deployment**; tape matches the lock | Emerge |
+| **Pass** | Walked what you could; tape matches the lock; this deploy’s door check is already green | Emerge |
 | **Fail** | Plant or walk missed the lock | Label `fail-look` → Engineer, same PR |
 | **No walk** | Could not send (SSO wall, no Type). Not a Pass | No emerge. No fail-look |
 
-“Pass for what this seat could do” after only reading `src/` or hitting a login wall is **not** Pass. Voice stays human. Prefer a cheap Type send on the live tape over inventing a tester product.
+“Pass for what this seat could do” after only reading `src/` or hitting a login wall is **not** Pass. Voice **like** stays human. Voice **doors** are the Deployment Check. Do not invent a tester product. Do not have Cursor triage Vercel instead of the check.
 
-PM writes `docs/register/PM-LOOK-NNN.md`, stamps the Phase One log, pushes.
+Architect writes `docs/register/PM-LOOK-NNN.md`, stamps the Phase One log, pushes.
 
 ### 8. Emerge, then you
 
-If the look file has `**Verdict:** Pass`, the Action (no model) labels **`emerge`**, opens a GitHub issue assigned to you with the test sheet verbatim, and emails that sheet when `EMERGE_EMAIL` + Resend secrets exist. That is house mail, not Travis.
+If the look file has `**Verdict:** Pass` **and** this deploy’s Deployment Check is green (build, `npm test`, every E2E walk), the Action (no model) labels **`emerge`**, opens a GitHub issue assigned to you with the test sheet verbatim, and emails that sheet when `EMERGE_EMAIL` + Resend secrets exist. Attach the **Playwright recording of this packet’s walk only** — the use this cut was solving — not a replay of the whole cumulative suite. That is house mail, not Travis.
 
-You walk the same sheet on the phone. SSO, Talk, a typed sentence are yours.
+No emerge on a red or pending check. You walk the same sheet on the phone. SSO, Talk, a typed sentence are yours. The recording is so you see what already passed for this packet, not so you become the first sensor.
 
 ### 9. Merge
 
@@ -208,7 +210,7 @@ Blocker letter (mail when a plant needs a secret or a hole only you can fill) is
 
 | Seat | Trail |
 |------|--------|
-| PM | [`docs/register/PHASE-ONE-LOG.md`](./register/PHASE-ONE-LOG.md) — append-only; only **Current** moves |
+| Architect | [`docs/register/PHASE-ONE-LOG.md`](./register/PHASE-ONE-LOG.md) — append-only; only **Current** moves |
 | SA | [`docs/register/SYSTEMS-ANALYST-LOG.md`](./register/SYSTEMS-ANALYST-LOG.md) — same discipline |
 | Engineer | git + PRs · [`docs/register/ENGINEER-HANDOFF.md`](./register/ENGINEER-HANDOFF.md) |
 

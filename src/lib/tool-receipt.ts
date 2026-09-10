@@ -45,16 +45,21 @@ export function sendReceipt(o: SendOutcome): string {
  */
 export function dispatchReceipt(
   o:
-    | { status: "started"; seatLabel: string }
-    | { status: "queued"; seatLabel: string; waitingAhead: number }
-    | { status: "stand-in"; seatLabel: string }
-    | { status: "busy"; seatLabel: string }
-    | { status: "error"; seatLabel: string; error: string },
+    | { status: "started"; seatLabel: string; followUp?: boolean }
+    | { status: "queued"; seatLabel: string; waitingAhead: number; followUp?: boolean }
+    | { status: "stand-in"; seatLabel: string; followUp?: boolean }
+    | { status: "busy"; seatLabel: string; followUp?: boolean }
+    | { status: "error"; seatLabel: string; error: string; followUp?: boolean },
 ): string {
   if (o.status === "started") {
     return `${o.seatLabel} is now running it. Nothing came back yet — read_seat_reply once it lands.`;
   }
   if (o.status === "queued") {
+    if (o.followUp) {
+      return o.waitingAhead > 0
+        ? `Queued follow-up for ${o.seatLabel} (agent_busy) behind ${o.waitingAhead} already waiting.`
+        : `Queued follow-up for ${o.seatLabel} — Cursor agent_busy. Same person.`;
+    }
     return o.waitingAhead > 0
       ? `Queued for ${o.seatLabel} behind ${o.waitingAhead} already waiting. It will go when that seat frees up.`
       : `Queued for ${o.seatLabel} — that seat is busy right now. It will go when the seat frees up.`;
@@ -63,6 +68,9 @@ export function dispatchReceipt(
     return `${o.seatLabel} is not wired to a Cursor agent, so nothing ran.`;
   }
   if (o.status === "busy") {
+    if (o.followUp) {
+      return `${o.seatLabel} is agent_busy. Follow-up waits on that same person.`;
+    }
     return `${o.seatLabel} is busy. Role dest does not queue — spin a next seat.`;
   }
   return `Could not start ${o.seatLabel}: ${o.error}`;

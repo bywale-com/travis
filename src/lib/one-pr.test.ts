@@ -17,7 +17,7 @@ test("one PR per initiative is written where seats will see it", () => {
   const eng = read("docs/seats/ENGINEER.md");
   assert.match(eng, /One PR per initiative/);
 
-  const pm = read("docs/seats/PRODUCT-MANAGER.md");
+  const pm = read("docs/seats/TECHNICAL-ARCHITECT.md");
   assert.match(pm, /One PR/);
   assert.match(pm, /Engineer.s open initiative PR/);
 

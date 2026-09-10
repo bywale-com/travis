@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { parseCallByName, parseDeadManResponse, seatKeyToShort } from "./router";
+import {
+  parseCallByName,
+  parseDeadManResponse,
+  seatKeyToLabel,
+  seatKeyToShort,
+  seatMentions,
+} from "./router";
 
 test("call-by-name accepts punctuation separator", () => {
   const r = parseCallByName("Engineer — pull the brief");
@@ -75,6 +81,12 @@ test("Technical PM and technical product manager are the pm role", () => {
   assert.equal(
     parseCallByName("hey technical product manager look").seatKey,
     "pm",
+  );
+  assert.equal(parseCallByName("Technical Architect look").seatKey, "pm");
+  assert.equal(seatKeyToLabel("pm"), "Technical Architect");
+  assert.deepEqual(
+    seatMentions("Send that to Technical Architect. Engineer as well."),
+    ["pm", "engineer"],
   );
 });
 

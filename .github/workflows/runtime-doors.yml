@@ -1,0 +1,46 @@
+# Deployment Check: Vercel hangs `vercel.deployment.ready` until this job
+# paints. Do not fold this into wake-packet-seats.yml — that file wakes seats.
+# Official hang: https://vercel.com/docs/deployment-checks
+name: Runtime doors
+
+on:
+  repository_dispatch:
+    types: [vercel.deployment.ready]
+
+permissions:
+  contents: read
+  statuses: write
+
+jobs:
+  runtime-doors:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout the commit this deploy built
+        uses: vercel/repository-dispatch/actions/checkout@v1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lib unit tests
+        run: npm test
+
+      - name: Sequential walks on this URL
+        env:
+          RUNTIME_BASE_URL: ${{ github.event.client_payload.url }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          TRAVIS_TEST_OPERATOR_COOKIE: ${{ secrets.TRAVIS_TEST_OPERATOR_COOKIE }}
+        run: |
+          test -n "$RUNTIME_BASE_URL" || { echo "missing deploy URL"; exit 1; }
+          npm run test:runtime
+
+      - name: Paint the Vercel Deployment Check
+        if: always()
+        uses: vercel/repository-dispatch/actions/status@v1
+        with:
+          name: runtime-doors
+          status: ${{ job.status }}

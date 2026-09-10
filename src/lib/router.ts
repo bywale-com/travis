@@ -12,19 +12,38 @@ const SEAT_ALIASES: Record<string, SeatKey> = {
   engineer: "engineer",
   eng: "engineer",
   travis: "travis",
+  "technical architect": "pm",
   "technical pm": "pm",
   "technical product manager": "pm",
 };
 
-/** Spoken / STT forms. Longer Technical PM names before PM. Travis last. */
+/** Spoken / STT forms. Longer Technical Architect / PM names before PM. Travis last. */
 const SEAT_NAME =
-  "Technical Product Manager|Technical PM|Systems Analyst|Engineer|Eng|P\\.M\\.?|PM|SA|Travis";
+  "Technical Architect|Technical Product Manager|Technical PM|Systems Analyst|Engineer|Eng|P\\.M\\.?|PM|SA|Travis";
 
 export function seatKeyToLabel(key: SeatKey): string {
-  if (key === "pm") return "Technical PM";
+  if (key === "pm") return "Technical Architect";
   if (key === "sa") return "SA";
   if (key === "travis") return "Travis";
   return "Engineer";
+}
+
+/** Cursor seats named in the phrase. Not classify. “the engineer” stays a noun. */
+export function seatMentions(
+  utterance: string,
+): Array<"pm" | "sa" | "engineer"> {
+  const keys: Array<"pm" | "sa" | "engineer"> = [];
+  const re = new RegExp(
+    `(?<!\\b(?:the|a|an|our|your)\\s)(${SEAT_NAME})\\b`,
+    "gi",
+  );
+  for (const m of utterance.matchAll(re)) {
+    const key = seatFromToken(m[1] ?? "");
+    if (key === "pm" || key === "sa" || key === "engineer") {
+      if (!keys.includes(key)) keys.push(key);
+    }
+  }
+  return keys;
 }
 
 /** Plate chips use Eng, not the full table label. Unknown seats use the label. */

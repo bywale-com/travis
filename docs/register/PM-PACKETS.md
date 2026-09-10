@@ -1,6 +1,6 @@
 ﻿# PM packets — index
 
-**Seat:** Product Manager.  
+**Seat:** Technical Architect (packet filenames stay `PM-PACKET-*`).  
 **Law:** Packets land on the Engineer’s open initiative PR. There is no living `pm/packets` cousin.
 
 **Wake.** Each packet carries one machine line the Action greps:
@@ -32,6 +32,9 @@ Draft is not the hold. “Then SA” in a sentence is not the hold.
 | 014 | [`PM-PACKET-014-DEEP-AGENTS.md`](./PM-PACKET-014-DEEP-AGENTS.md) · test [`PM-PACKET-014-DEEP-AGENTS-TEST.md`](./PM-PACKET-014-DEEP-AGENTS-TEST.md) | Deep Agents harness. Dest-with-context first fork. SA **030**. [#147](https://github.com/bywale-com/travis/pull/147) merged. |
 | 015 | [`PM-PACKET-015-DEST-HARNESS.md`](./PM-PACKET-015-DEST-HARNESS.md) · test [`PM-PACKET-015-DEST-HARNESS-TEST.md`](./PM-PACKET-015-DEST-HARNESS-TEST.md) | Dest harness recut. Assemble on every dest send. Kit file, not keywords. SA **031**. [#154](https://github.com/bywale-com/travis/pull/154) merged. |
 | 016 | [`PM-PACKET-016-COMPOSE.md`](./PM-PACKET-016-COMPOSE.md) · test [`PM-PACKET-016-COMPOSE-TEST.md`](./PM-PACKET-016-COMPOSE-TEST.md) | Compose the send harness. Type send is Deep Agents only. SA **032**. [#157](https://github.com/bywale-com/travis/pull/157) merged. |
-| 017 | [`PM-PACKET-017-LIVED-REDESIGN.md`](./PM-PACKET-017-LIVED-REDESIGN.md) · test [`PM-PACKET-017-LIVED-REDESIGN-TEST.md`](./PM-PACKET-017-LIVED-REDESIGN-TEST.md) | Lived redesign from After new law (both tries). **Wake:** sa. SA **033**. This PR. |
+| 017 | [`PM-PACKET-017-LIVED-REDESIGN.md`](./PM-PACKET-017-LIVED-REDESIGN.md) · test [`PM-PACKET-017-LIVED-REDESIGN-TEST.md`](./PM-PACKET-017-LIVED-REDESIGN-TEST.md) | Lived redesign from After new law. SA **033**. [#159](https://github.com/bywale-com/travis/pull/159) merged. |
+| 018 | [`PM-PACKET-018-WHAT-EXISTS.md`](./PM-PACKET-018-WHAT-EXISTS.md) · test [`PM-PACKET-018-WHAT-EXISTS-TEST.md`](./PM-PACKET-018-WHAT-EXISTS-TEST.md) | What exists for the life loop. SA **034**. [#161](https://github.com/bywale-com/travis/pull/161). |
+| 019 | [`PM-PACKET-019-STREAM-ARCH.md`](./PM-PACKET-019-STREAM-ARCH.md) · test [`PM-PACKET-019-STREAM-ARCH-TEST.md`](./PM-PACKET-019-STREAM-ARCH-TEST.md) | Stream architecture + seat is Technical Architect. SA **035**. [#163](https://github.com/bywale-com/travis/pull/163). |
+| 020 | [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md) · test [`PM-PACKET-020-RUNTIME-VERIFY-TEST.md`](./PM-PACKET-020-RUNTIME-VERIFY-TEST.md) | Runtime verification. Engineer owns the loop. **Wake:** sa. SA **036**. This PR. |
 
 Next packet number follows the last cut. Do not reuse.

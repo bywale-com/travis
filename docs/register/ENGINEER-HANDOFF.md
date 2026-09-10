@@ -1,6 +1,8 @@
-# Engineer seat handoff — 2026-09-07
+# Engineer seat handoff — 2026-09-10
 
-**This bind is done.** Last Engineer: `bc-17e9d9d8-3ec2-4273-b024-8039864bc69a`. The next bind pastes the block at the bottom. Do not start from a transcript.
+**This bind is done.** Last Engineer: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a`. Prior: `bc-445017ca-7ddc-4af4-bc83-e1e666695ac9`. The next bind pastes the block at the bottom. Do not start from a transcript.
+
+**020 runtime verify (this PR / merged):** `src/lib/live-connect.ts` — in-flight connect **waits**; unwired keeps **Travis isn’t wired**; a real miss still gets the phone-ear shirt. Room hangs those rules. `npm test` covers the three lies. **Walks planted:** `src/runtime/desk.ts` + `doors.ts` + `walks/voice-wrap.spec.ts` + `type-send.spec.ts` + `come-back.spec.ts` + `type-dest.spec.ts`; `npm run test:runtime`; Action `.github/workflows/runtime-doors.yml` on `vercel.deployment.ready` paints check `runtime-doors`. Operator resolution accepts email (`test-runner@travis.internal`) with isolated room scope (`ownerId === viewerIds[0]`). Merged on [PR #165](https://github.com/bywale-com/travis/pull/165). Next hotfix number **082**. Do not remint dest assemble / 031–035.
 
 **Trail:** git + PRs. **One PR per initiative.** Do **not** append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
 
@@ -10,11 +12,15 @@
 
 ## Where we stopped
 
-**033 lived redesign is planted on [#159](https://github.com/bywale-com/travis/pull/159).** Dest-gate classifies `destFork.ask` (last `kind=user`), not `assembled`. Create is `POST https://api.cursor.com/v1/agents` via the existing cursor-port host + Basic auth — `Agent.create` is gone from `createAgentBinding`. No binding row without a `bc-` id. `handToDest` order is classify → resolve living → `insertDestJob` → `ticketForHand` → `fileDestJobInitiative` → `dispatchToSeat`. Role dest uses `livingSeated` / `roleDestPick`; spin only when nobody living. `createStandInRoom` hangs Travis + one living seated per `/protocols/pm.md` · `/protocols/sa.md` · `/protocols/engineer.md`. Type send stays `invokeDeepAgent` only. Do not remint 031 / 032 / `dest_job` / 074 SQL. Human look+test is [`PM-PACKET-017-LIVED-REDESIGN-TEST.md`](./PM-PACKET-017-LIVED-REDESIGN-TEST.md) on Log · Type after this lands on psi.
+**035 stream architecture is planted on [#163](https://github.com/bywale-com/travis/pull/163).** Classify is `src/lib/stream-intent.ts` (new / change / cancel / talk). Do is `src/server/stream-dispatch.ts` — hangs dest assemble, 034 follow-up, `cancelCursorRun`, and `invokeDeepAgent({ mode: "update" })`. Mouth is last. Live `liveShouldPipeTravis` is always false; transcript dest-by-name still leaves, then dispatches the rest, never `pipeTravisText`. Type send writes the tape, files chip / call-by-name dests, dispatches remaining intents, then synthesizes. Finalize strips the done-phrase, backup-Do once if a leave never started, then synthesizes. `parent_id` unused. No new table. Glass: `destGlassName` / `SIT_ROLE_LABEL.pm` / `seatKeyToLabel("pm")` → **Technical Architect**. Spoken “Technical Architect” and “Technical PM” both route to `pm`. Path `/protocols/pm.md`. Grain tests + `next build` passed. Human look+test is [`PM-PACKET-019-STREAM-ARCH-TEST.md`](./PM-PACKET-019-STREAM-ARCH-TEST.md) on Log · Type after this lands on psi. Do not remint dest assemble, dest-gate-on-ask, Cloud create, `dest_job`, checkpointer, or 031–034.
+
+**034 what exists is planted on [#161](https://github.com/bywale-com/travis/pull/161).** Type `invokeDeepAgent` hangs official `PostgresSaver` (`schema langgraph`, own `pg.Pool` max 1) and invokes with `thread_id = voice_session.id`. Walk-back may answer from that thread + `/print.md` + `search_room`; Here stays clipped. Dest: if `listOpenDestJobs` has an open row for the living bind, follow-up that same `bc-` (`dispatchToSeat` / `streamCursorReply`); no spin, no create, no new `dest_job`. Idle → send. Busy → enqueue on that bind; receipt names `agent_busy`. New leave (no open job) stays 015 / 031 / 033. Do not remint dest assemble, dest-gate-on-ask, Cloud create, `dest_job`, or Type Responses.
+
+**033 lived redesign is planted on [#159](https://github.com/bywale-com/travis/pull/159).** Dest-gate classifies `destFork.ask` (last `kind=user`), not `assembled`. Create is `POST https://api.cursor.com/v1/agents` via the existing cursor-port host + Basic auth — `Agent.create` is gone from `createAgentBinding`. No binding row without a `bc-` id. `handToDest` order is classify → resolve living → `insertDestJob` → `ticketForHand` → `fileDestJobInitiative` → `dispatchToSeat`. Role dest uses `livingSeated` / `roleDestPick`; spin only when nobody living. `createStandInRoom` hangs Travis + one living seated per `/protocols/pm.md` · `/protocols/sa.md` · `/protocols/engineer.md`. Type send stays `invokeDeepAgent` only. Do not remint 031 / 032 / `dest_job` / 074 SQL.
 
 **032 compose the send harness is planted on [#157](https://github.com/bywale-com/travis/pull/157).** Type `generateTravisText` is `invokeDeepAgent` only. `generateTravisTextViaResponses` and the silent catch are gone. A kit throw reaches `pipeTravisText` → `travisGenerateMiss`. Dest assemble, `/print.md`, `/roster.md`, Here clip, and `dest_job` were not reminted. Do not remint 032.
 
-**081 Voice uses the Type hang is planted.** A spoken line to Travis on Live runs `pipeTravisText` → Deep Agents. Realtime is ear + mouth. Do not remint dest grain.
+**081 Voice uses the Type hang is planted.** A spoken line to Travis on Live runs `pipeTravisText` → Deep Agents. Realtime is ear + mouth. 035 took the live full-pipe out; do not put it back. Do not remint dest grain.
 
 **031 dest harness recut is on `main` via [#154](https://github.com/bywale-com/travis/pull/154).** Every dest leave assembles ask + dest print. Marker words are gone. `/print.md` and `/roster.md` hang on Type. Dest seats stay Cursor. Do not remint 031.
 
@@ -36,7 +42,7 @@
 
 Human leftover on 075: dest **by who** (`technical-pm`) on the phone still stands as leftover, not a remint. Do not mail catalog `pm`.
 
-Do not remint 012 / 023–032 or the 074 SQL. Do not remint **033**. Do not remint **079**. Do not remint **080**. Do not remint **081**. Do not send **That’s fine.**
+Do not remint 012 / 023–034 or the 074 SQL. Do not remint **035**. Do not remint **079**. Do not remint **080**. Do not remint **081**. Do not send **That’s fine.**
 
 | What | Where |
 |------|--------|
@@ -46,13 +52,13 @@ Do not remint 012 / 023–032 or the 074 SQL. Do not remint **033**. Do not remi
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
 | Face | Phone-first Voice / Log / Backlog. Smoke there. |
-| Last plant | **033 lived redesign** · [#159](https://github.com/bywale-com/travis/pull/159). Prior: **032 compose the send harness** · [#157](https://github.com/bywale-com/travis/pull/157). **081 Voice uses the Type hang**. **031 dest harness recut** · [#154](https://github.com/bywale-com/travis/pull/154). **080 Deep Agents must answer** · [#151](https://github.com/bywale-com/travis/pull/151). **079 Talk HTML as JSON** · [#149](https://github.com/bywale-com/travis/pull/149). **030 Deep Agents** · [#147](https://github.com/bywale-com/travis/pull/147) (on `main`). **029 Lists show now** · [#144](https://github.com/bywale-com/travis/pull/144). **027 Voice stay** · [#140](https://github.com/bywale-com/travis/pull/140). **026 Serve** · [#134](https://github.com/bywale-com/travis/pull/134). **076 dest closer** · [#130](https://github.com/bywale-com/travis/pull/130). **075** live hang · same PR. **074** SQL file · same PR. **025** · [#127](https://github.com/bywale-com/travis/pull/127). **024** · [#126](https://github.com/bywale-com/travis/pull/126). **023** · [#123](https://github.com/bywale-com/travis/pull/123). Open: **022** · [#120](https://github.com/bywale-com/travis/pull/120). |
+| Last plant | **035 stream architecture** · [#163](https://github.com/bywale-com/travis/pull/163). Prior: **034 what exists** · [#161](https://github.com/bywale-com/travis/pull/161). **033 lived redesign** · [#159](https://github.com/bywale-com/travis/pull/159). **032 compose the send harness** · [#157](https://github.com/bywale-com/travis/pull/157). **081 Voice uses the Type hang**. **031 dest harness recut** · [#154](https://github.com/bywale-com/travis/pull/154). **080 Deep Agents must answer** · [#151](https://github.com/bywale-com/travis/pull/151). **079 Talk HTML as JSON** · [#149](https://github.com/bywale-com/travis/pull/149). **030 Deep Agents** · [#147](https://github.com/bywale-com/travis/pull/147) (on `main`). **029 Lists show now** · [#144](https://github.com/bywale-com/travis/pull/144). **027 Voice stay** · [#140](https://github.com/bywale-com/travis/pull/140). **026 Serve** · [#134](https://github.com/bywale-com/travis/pull/134). **076 dest closer** · [#130](https://github.com/bywale-com/travis/pull/130). **075** live hang · same PR. **074** SQL file · same PR. **025** · [#127](https://github.com/bywale-com/travis/pull/127). **024** · [#126](https://github.com/bywale-com/travis/pull/126). **023** · [#123](https://github.com/bywale-com/travis/pull/123). Open: **022** · [#120](https://github.com/bywale-com/travis/pull/120). |
 | Prior plants | 065 · [#108](https://github.com/bywale-com/travis/pull/108) · 015 · [#107](https://github.com/bywale-com/travis/pull/107) · 064 · [#102](https://github.com/bywale-com/travis/pull/102) · **Hotfix 062** · [#98](https://github.com/bywale-com/travis/pull/98) |
 | Motion | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) |
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
 | Busy room (lived) | `0e8875f8-283b-4dae-bf54-76c82a05b6ef` (title “Travis”) |
 
-**Do not redo** 012, 013, 014, 015, 016, 020 first slice, 021, 023, 024, 025, 026, 027, **029**, **030**, **031**, **032**, **033**, **081**, 062, 064, 065, 068, 069, 070, 071, 072, 073, 074 SQL, the 075 live hang, the 076 dest closer, the 027 cutoff write, the 029 index, **077 / 078** open desk, **079**, or **080**. Do not plant **022** except from the signed packet on #120. Do not remint dest-with-context grain. Do not remint the Deep Agents `/node` hang. Do not remint Cloud HTTP create. Do not send **That’s fine.** from Engineer.
+**Do not redo** 012, 013, 014, 015, 016, 020 first slice, 021, 023, 024, 025, 026, 027, **029**, **030**, **031**, **032**, **033**, **034**, **035**, **081**, 062, 064, 065, 068, 069, 070, 071, 072, 073, 074 SQL, the 075 live hang, the 076 dest closer, the 027 cutoff write, the 029 index, **077 / 078** open desk, **079**, or **080**. Do not plant **022** except from the signed packet on #120. Do not remint dest-with-context grain. Do not remint the Deep Agents `/node` hang. Do not remint Cloud HTTP create. Do not remint the LangGraph `langgraph` checkpointer. Do not remint `stream-intent` / `stream-dispatch`. Do not send **That’s fine.** from Engineer.
 
 ---
 
@@ -109,6 +115,8 @@ Create-agent prompt is still the one-line stub. Do not paste a seat block at cre
 - Dest-with-context: every dest leave is the ask plus the print. Kit file, not marker words. Here stays clipped (031).
 - Type send’s process is the Deep Agents kit. No Responses cousin (032).
 - Dest-gate reads the last ask. Create is Cloud HTTP. Ticket follows `dest_job`. New room dests the living seated person (033).
+- Same room = same Travis thread. Open dest_job for that living bind is Cursor follow-up, not spin (034).
+- Work starts on the phrase. Live flush does not speak the wrap. Type send classifies then wraps. Voice finalize synthesizes. Glass is Technical Architect (035).
 
 ---
 
@@ -126,8 +134,8 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 
 | Gap | Why it is blocked |
 |-----|-------------------|
-| Live / Realtime as a second brain | 032 / 081: Voice think is Deep Agents. Realtime is ear + mouth. Do not remint dest-gate. |
-| LangGraph checkpoint table | 030 silence. Per-invoke StateBackend only. |
+| Live / Realtime as a second brain | 032 / 081 / 035: Voice think waits for finalize. Realtime is ear + mouth. Do not remint dest-gate. |
+| LangGraph checkpoint table | 030 silence. Official saver + later invoke. No `Command` / `updateState`. |
 | Deep Agents `task` as dest | Dest is Cursor. Kit is not that wire. |
 | Other harness forks | Type process is Deep Agents. Do not invent a catalog. |
 | Live visuals (Gemini patterns) | Write-back [`ENGINEER-LIVE-VISUALS.md`](./ENGINEER-LIVE-VISUALS.md). Job table + `parent_id` + push bus not planted. Canvas store not ascribed. |
@@ -143,14 +151,16 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 | 031 psi walk | [`PM-PACKET-015-DEST-HARNESS-TEST.md`](./PM-PACKET-015-DEST-HARNESS-TEST.md) after that PR is on psi. Grain tests are not that walk. |
 | 032 psi walk | [`PM-PACKET-016-COMPOSE-TEST.md`](./PM-PACKET-016-COMPOSE-TEST.md) after this PR is on psi. Grain + compile are not that walk. |
 | 033 psi walk | [`PM-PACKET-017-LIVED-REDESIGN-TEST.md`](./PM-PACKET-017-LIVED-REDESIGN-TEST.md) after this PR is on psi. Grain + compile are not that walk. |
+| 034 psi walk | [`PM-PACKET-018-WHAT-EXISTS-TEST.md`](./PM-PACKET-018-WHAT-EXISTS-TEST.md) after this PR is on psi. Grain + compile are not that walk. |
+| 035 psi walk | [`PM-PACKET-019-STREAM-ARCH-TEST.md`](./PM-PACKET-019-STREAM-ARCH-TEST.md) after this PR is on psi. Grain + compile are not that walk. |
 
 ---
 
 ## Next Engineer job
 
 1. Accept the seat from the paste below. Fetch `main`. Read **this file**, then [`ENGINEER.md`](../seats/ENGINEER.md), then `AGENTS.md`.
-2. Do not restart 012 / 013 / 014 / 015 / 023 / 024 / 025 / 026 / 027 / **029** / **030** / **031** / **032** / **033** / **081** / 062 / 064 / 065 / 077 / 078 / **079** / **080**. Do not remint the 074 SQL file. Do not remint the 075 hang. Do not remint the 076 dest closer. Do not remint the 027 cutoff. Do not remint the 029 index. Do not remint dest-with-context grain, the Deep Agents `/node` hang, or Cloud HTTP create. Do not mint a store. Do not append PM or SA logs.
-3. **022** ports on [#120](https://github.com/bywale-com/travis/pull/120) is the pickup after 033 merges. Do not remint `travis.port`. Dest by who `technical-pm` is human leftover on 075 — do not mail catalog `pm`. Do not send **That’s fine.**
+2. Do not restart 012 / 013 / 014 / 015 / 023 / 024 / 025 / 026 / 027 / **029** / **030** / **031** / **032** / **033** / **034** / **035** / **081** / 062 / 064 / 065 / 077 / 078 / **079** / **080**. Do not remint the 074 SQL file. Do not remint the 075 hang. Do not remint the 076 dest closer. Do not remint the 027 cutoff. Do not remint the 029 index. Do not remint dest-with-context grain, the Deep Agents `/node` hang, Cloud HTTP create, the LangGraph `langgraph` checkpointer, or stream-intent / stream-dispatch. Do not mint a store. Do not append PM or SA logs.
+3. **022** ports on [#120](https://github.com/bywale-com/travis/pull/120) is the pickup after 035 merges. Do not remint `travis.port`. Dest by who `technical-pm` is human leftover on 075 — do not mail catalog `pm`. Do not send **That’s fine.**
 4. When **you** stop: rewrite the **Current** lines at the top of this file (where we stopped, last plant, next hotfix number) so the next bind does not start from a transcript. Then you may write **This bind is done**.
 
 ---
@@ -160,7 +170,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 ```text
 You are Travis’s Engineer (full-stack implementer). Read docs/README.md “Engineer — identity” and accept it. Read repo-root AGENTS.md (always-on). You are not the Product Manager. You are not the Systems Analyst. Product face = voice/chat pipe (phone-first). Do not overwrite PHASE-ONE-LOG founder wording. Do not mint tables. Do not hard-code data into the SPA. Do not ship API keys to the client. Specified-and-clear: build it. Specified-but-blocked on PM or SA: name why; do not invent. Detailed: docs/seats/ENGINEER.md.
 
-You are a NEW bind. The last Engineer was bc-17e9d9d8-3ec2-4273-b024-8039864bc69a. They handed off. Read docs/register/ENGINEER-HANDOFF.md first.
+You are a NEW bind. The last Engineer was bc-445017ca-7ddc-4af4-bc83-e1e666695ac9. They handed off. Read docs/register/ENGINEER-HANDOFF.md first.
 
 Then, in order:
 1. docs/register/ENGINEER-HANDOFF.md — where we stopped, planted, leftover, locks.

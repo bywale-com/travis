@@ -62,7 +62,7 @@ test("the chip names seats and never says waiting", () => {
   );
   assert.equal(
     newReportChip([{ seatKey: "technical-pm", label: "Technical PM" }]),
-    "1 new · Technical PM",
+    "1 new · Technical Architect",
   );
   assert.equal(newReportChip([]), "");
   assert.equal(newReportChip([{ seatKey: "engineer" }]).includes("waiting"), false);

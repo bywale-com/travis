@@ -1,6 +1,7 @@
 /**
  * SCP-031 — Deep Agents hang on Type. Dest seats stay Cursor.
  * StateBackend /print.md + /roster.md. wrapModelCall hangs files, not the request.
+ * SCP-034 — official checkpointer + thread_id = voice_session.id.
  */
 
 import {
@@ -18,6 +19,7 @@ import {
   TRAVIS_TOOL_DECLS,
   runTravisTool,
 } from "@/server/travis-tools";
+import { travisCheckpointer } from "@/server/travis-checkpointer";
 import {
   rosterFactFor,
   unclippedPrintFor,
@@ -126,30 +128,43 @@ function travisChatModel() {
   });
 }
 
+export type DeepAgentMode = "update" | "synthesize";
+
 export async function invokeDeepAgent(params: {
   sessionId: string;
   prompt: string;
   room: string;
+  mode?: DeepAgentMode;
 }): Promise<string> {
+  const mode = params.mode ?? "synthesize";
+  const prompt =
+    mode === "update"
+      ? `${params.prompt}\n\nThis is an in-flight update on this room thread. Do the work. Do not speak a wrap.`
+      : params.prompt;
   const print = await unclippedPrintFor(params.sessionId).catch(() => "");
   const roster = await rosterFactFor(params.sessionId).catch(() =>
     formatRosterFact(""),
   );
   const input = params.room
-    ? `${params.room}\n\n${params.prompt}`
-    : params.prompt;
+    ? `${params.room}\n\n${prompt}`
+    : prompt;
+  const checkpointer = await travisCheckpointer();
   const agent = createDeepAgent({
     model: travisChatModel(),
     systemPrompt: TRAVIS_SYSTEM,
     tools: wrapTravisTools(params.sessionId),
     backend: new StateBackend(),
+    checkpointer,
     middleware: [destKitMiddleware(params.sessionId)],
     subagents: [],
   });
-  const result = await agent.invoke({
-    messages: [{ role: "user", content: input }],
-    files: kitFiles(print, roster),
-  });
+  const result = await agent.invoke(
+    {
+      messages: [{ role: "user", content: input }],
+      files: kitFiles(print, roster),
+    },
+    { configurable: { thread_id: params.sessionId } },
+  );
   const messages = (result as { messages?: unknown[] }).messages ?? [];
   return lastAssistantText(messages);
 }

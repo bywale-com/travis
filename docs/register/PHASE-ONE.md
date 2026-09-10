@@ -1,7 +1,7 @@
 # Phase One — thesis
 
 **Product:** Travis  
-**Seat trail (PM):** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md)  
+**Seat trail (Technical Architect):** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md)  
 **Seat trail (SA):** [`SYSTEMS-ANALYST-LOG.md`](./SYSTEMS-ANALYST-LOG.md)  
 **Seats:** [`../README.md`](../README.md)
 
