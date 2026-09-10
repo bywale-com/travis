@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-10 20:39 UTC — glass walk is the extra protocol; not silence. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-10 23:02 UTC — PM look Hotfix 085 Pass; emerged. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3741,3 +3741,21 @@ Not the model. Not a new face.
 **Lock.** `unwired-glass.spec.ts` (Playwright) is on the agenda and in `test:runtime`. Open Voice on this URL. Subtitle is **Travis isn’t wired**, not the phone-ear shirt. No mic. SA ascribes how the browser carries bypass + cookie, not whether we hang the walk. Retro list stands. Do not call the glass walk optional again.
 
 **Landed.** Recut packet + look sheet. **Wake:** sa. SA **036**. Engineer hangs the glass walk on [#165](https://github.com/bywale-com/travis/pull/165).
+
+---
+
+## 2026-09-10 23:02 UTC — PM look 085 Pass (this seat)
+
+**Kind:** Look + what this seat could test. Not a new packet. Flag 14:00 stands.
+
+**Hotfix:** [`HOTFIX-085-TYPE-DEST-RECUT.md`](./HOTFIX-085-TYPE-DEST-RECUT.md) · plant on [#170](https://github.com/bywale-com/travis/pull/170) (`5f56447`; handoff `b0f126a`). Sheet: [`PM-LOOK-HOTFIX-085.md`](./PM-LOOK-HOTFIX-085.md).
+
+**Look.** src/ matches the lock. Switch stays JSON and resolves dest on the way out. Regular send returns SSE first; `destBindingsForSend` runs inside `start` after `: ping` and the user turn. Chip dests use `dispatchToSeat` write-and-leave (`enqueueIfBusy: false` on sit roles). `sseHeaders()` has `X-Accel-Buffering: no`. Hang cut — no glass. `DATABASE_URL` is set; hotfix named no tape row; I did not query psi as this unmerged plant.
+
+**Preview I opened:** `https://travis-git-cursor-hotfix-085-type-489ee8-wale-omotayos-projects.vercel.app` — not psi. Vercel SSO. Did not sign in. Did not see Voice / Log / Type glass.
+
+**Test.** `npm test` 464 pass. `runtime-doors` run [`34540106986`](https://github.com/bywale-com/travis/actions/runs/34540106986) on this head: come-back, type-dest (5.75s), type-send, voice-wrap — 4 pass. I did not Talk.
+
+**Steps I could not do (human):** Vercel team SSO. Talk on a phone. Type a dest line on the live desk.
+
+**Verdict:** Pass for what this seat could do. Emerged. Human may walk the same sheet. No `fail-look`.
