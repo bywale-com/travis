@@ -1,6 +1,6 @@
 # Engineer seat handoff — 2026-09-10
 
-**This bind is done.** Last Engineer: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a`. Prior: `bc-445017ca-7ddc-4af4-bc83-e1e666695ac9`. The next bind pastes the block at the bottom. Do not start from a transcript.
+**This bind is done.** Last Engineer: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a`. Prior: `bc-445017ca-7ddc-4af4-bc83-e1e666695ac9`. Prior: `bc-26131d8d-741b-4566-89b3-df312e8e48e1`. The next bind pastes the block at the bottom. Do not start from a transcript.
 
 **020 runtime verify (this PR / merged):** `src/lib/live-connect.ts` — in-flight connect **waits**; unwired keeps **Travis isn’t wired**; a real miss still gets the phone-ear shirt. Room hangs those rules. `npm test` covers the three lies. **Walks planted:** `src/runtime/desk.ts` + `doors.ts` + `walks/voice-wrap.spec.ts` + `type-send.spec.ts` + `come-back.spec.ts` + `type-dest.spec.ts`; `npm run test:runtime`; Action `.github/workflows/runtime-doors.yml` on `vercel.deployment.ready` paints check `runtime-doors`. Operator resolution accepts email (`test-runner@travis.internal`) with isolated room scope (`ownerId === viewerIds[0]`). Merged on [PR #165](https://github.com/bywale-com/travis/pull/165). Next hotfix number **082**. Do not remint dest assemble / 031–035.
 
@@ -47,7 +47,7 @@ Do not remint 012 / 023–034 or the 074 SQL. Do not remint **035**. Do not remi
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **081** Voice Type hang. Next number **082**. |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **082** Runtime doors Action permissions. Next number **083**. |
 | One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
