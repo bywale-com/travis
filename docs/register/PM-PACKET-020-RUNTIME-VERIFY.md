@@ -66,7 +66,7 @@ It is not static analysis. It is not a throwaway unit test for the plant. It is 
 For Travis that means, on **this** deploy’s URL:
 
 1. The preview is **up**.
-2. The **whole** runtime suite walks the app (HTTP like the phone after the ear).
+2. The **whole** runtime suite walks the app (HTTP like the phone after the ear, **and** the glass the human sees).
 3. Each walk waited. Later beats saw the same session. The tape after a phrase includes that phrase. The answers were the locked ones (JSON, 200, unwired stays unwired, flush does not full-think, wrap is finalize, Type is not HTML-as-JSON).
 4. **This deploy’s Deployment Check is green** — those walks ran **on that URL** and painted the check.
 
@@ -80,8 +80,9 @@ Voice on a phone is not a function. It is also not a mystery. By the time Travis
 
 | Kind | Where | What it proves | When it runs |
 |------|--------|----------------|--------------|
-| **Lib** | `src/lib/*.test.ts` | Pure rules: `wantedEar`, `liveShouldPipeTravis` is false, conductor phrase, stream-intent. The connect **lie** once it is extracted from `Room.tsx`. | `npm test` on the Engineer’s plant, and again in the same Action. Fast. No preview. **Not** the human walk. |
-| **E2E walks** | `src/runtime/walks/*.spec.ts` | A representative use of the **running** preview. One session. Send, wait, next. Door contracts are asserts **inside** the steps. | **Every** Vercel deploy, whole folder. Cumulative. |
+| **Lib** | `src/lib/*.test.ts` | Pure rules. The connect helper. **Not** the painted glass. | `npm test`. Fast. No preview. |
+| **Door walks** | `src/runtime/walks/*.spec.ts` (fetch) | A representative use after the ear: one session, send, wait, next. | **Every** deploy. Cumulative. |
+| **Glass walk** | `src/runtime/walks/unwired-glass.spec.ts` (Playwright) | What the running page writes on the subtitle. HTTP cannot see this. That is why the extra protocol exists. | **Same** `test:runtime`, same URL, own room. No microphone. |
 
 `npm test` already has dozens of lib cases. Those stay. They never saw the 079 HTML 500, because that 500 only exists when Next is serving the route. They never saw Live-down on the glass, because that string is set in `armEar` after `connectLive` returns false. Isolated door files that each open a room and return are a **slice**. They are not the architecture we initiate. The architecture is the walk.
 
@@ -109,8 +110,9 @@ A walk exists because **this seat named it**, the same way a packet names the hu
 
 1. **Voice wrap** — open a room, arm token, speak a line, wait, see it on the tape, speak a second line in the **same** room, wait, say you’re done.
 2. **Type send** — open a sitting, Type one line, wait for the send door. Type has no “I’m done.”
+3. **Unwired glass** — open Voice **in a browser** on this deploy. Read the subtitle. It says **Travis isn’t wired**. It does **not** say the phone-ear shirt. No mic. This is not a paper test. This is the extra protocol. `npm test` on `liveMissSubtitle` is not this walk. A token JSON of `wired: false` is not this walk.
 
-Lived misses that are **steps on those walks**, not new files: never HTML (079); transcript to Travis is JSON `ok`, not a think-stream; the tape after a phrase includes that phrase.
+Lived misses that are **steps on the door walks**, not new files: never HTML (079); transcript to Travis is JSON `ok`, not a think-stream; the tape after a phrase includes that phrase.
 
 ### One-time retrospective fill (now — then never again)
 
@@ -126,19 +128,16 @@ Already on the phone. Already broke. Not the agenda above. Add these on this PR.
 
 - Talk listen uses the same finalize door as Voice wrap.
 - A second read of the tape is already inside Voice wrap.
-- Unwired subtitle paint is the lib rule (`liveMissSubtitle`). Not a walk unless we later want a robot to read the glass (see Playwright below).
 - 019 one-spoken-stretch classify / change-a-leave / walk-back — **019 adds**, not this fill.
 - Backlog chrome, Stream card placement, Hear, plates — like, or a later packet’s add.
 
-**Playwright is not how tests are determined and not on this list.**
-
-What it would add, precisely: the HTTP walk never loads `Room.tsx`, so it cannot see the subtitle string after `armEar`. A browser robot could open Voice on the preview and read that the glass says **Travis isn’t wired**, not the phone-ear shirt. It could also record a short video of **this packet’s** walk for the emerge letter. That is the entire benefit. The unwired **rule** already fails in `npm test`. You still look at the glass after the check is green. If we do not need a robot to read the subtitle or a video on the letter, Playwright adds nothing. Named silence.
+**Playwright is the extra protocol.** Door walks cannot load `Room.tsx`. They cannot see the subtitle. Lib tests cannot see the subtitle. If the glass walk is missing, **you** are the sensor for the Lived Live-down shirt — the void this packet exists to close. Engineer hangs `unwired-glass.spec.ts` in `test:runtime`. SA ascribes how the browser gets onto an SSO preview (bypass + test-operator cookie), not whether we hang the walk. A video of this walk for the letter is the same runner, not a second reason.
 
 ---
 
 ## E2E architecture (initiate this)
 
-This is not a Travis orchestrator. It is a small **desk client** plus **walks**. Hang `node:test`. The runner’s `await` **is** the clock. Do not invent a process engine.
+This is not a Travis orchestrator. It is a small **desk client** plus **walks**. Hang `node:test` for door walks. Hang Playwright for the glass walk. Both are `test:runtime`. The runner’s `await` **is** the clock. Do not invent a process engine.
 
 ```
 Vercel preview URL
@@ -152,7 +151,8 @@ GitHub Action (vercel.deployment.ready)
                 ├── walks/voice-wrap.spec.ts     room A  ── sequential
                 ├── walks/type-send.spec.ts      room B  ── sequential
                 ├── walks/come-back.spec.ts      room C  ── sequential  (retro)
-                └── walks/type-dest.spec.ts      room D  ── sequential  (retro)
+                ├── walks/type-dest.spec.ts      room D  ── sequential  (retro)
+                └── walks/unwired-glass.spec.ts  room E  ── sequential  (Playwright)
 ```
 
 **Parallel across walks. Never parallel inside a walk.** Voice wrap and Type send may run at the same time because they are different `session.id`s. Inside Voice wrap, transcript two does not fire until transcript one has returned and the tape has been read. If the runner fails a step, it stops **that** walk and reports the step, the expected contract, and the body it got. Other walks still run (their own rooms).
@@ -206,13 +206,15 @@ That is orchestration. There is no other clock. `await` on fetch, then `await` o
 
 `src/runtime/walks/type-dest.spec.ts` — retro. Type a dest-to-seat line. Not HTML. Line on tape. Queue or tape shows a leave. Do not wait for the seat.
 
+`src/runtime/walks/unwired-glass.spec.ts` — Playwright. Open Voice on this URL. Subtitle is **Travis isn’t wired**, not the phone-ear shirt. No mic. If this file is missing, the extra protocol is missing.
+
 ### How we initiate (order of plant, not a cousin PR)
 
-1. SA ascribes: test operator secret, bypass secret, how far finalize waits (headers vs full stream). Playwright is silence.
+1. SA ascribes: test operator secret, bypass secret, how the Playwright browser carries those onto an SSO preview, how far finalize waits (headers vs full stream).
 2. Engineer plants `desk.ts` + `doors.ts` + `voice-wrap.spec.ts` on this PR. That **is** the E2E architecture standing up. One walk is enough to prove the runner waits.
 3. Same PR: `type-send.spec.ts`.
-4. Same PR: retro walks `come-back` + `type-dest`, and the Type-send tape step. No Playwright glass.
-5. `package.json` script `test:runtime` runs `src/runtime/walks/*.spec.ts`.
+4. Same PR: retro walks `come-back` + `type-dest`, the Type-send tape step, and **`unwired-glass.spec.ts` (Playwright)**. The glass walk is not optional.
+5. `package.json` script `test:runtime` runs the door walks **and** the Playwright glass walk. One command. The check runs that command.
 6. `.github/workflows/runtime-doors.yml` on `vercel.deployment.ready`. Check paints.
 7. Later packets only **add** walks or steps.
 
@@ -304,6 +306,7 @@ Do not put Travis or Cursor as a widget inside the phone while someone taps. Do 
 | `src/runtime/walks/type-send.spec.ts` — **new** | Own room. Type one line. Wait. Never HTML. Retro: line on the tape. |
 | `src/runtime/walks/come-back.spec.ts` — **new** (retro) | Open, write, open again, same sitting. |
 | `src/runtime/walks/type-dest.spec.ts` — **new** (retro) | Type dest-to-seat. Leave started. Not the seat’s essay. |
+| `src/runtime/walks/unwired-glass.spec.ts` — **new** (Playwright) | Open Voice. Subtitle is unwired, not the shirt. This is the extra protocol. |
 | `package.json` | Script `test:runtime` runs `src/runtime/walks/*.spec.ts`. |
 | `.github/workflows/runtime-doors.yml` — **new** (name SA may keep or recut) | `repository_dispatch` type **`vercel.deployment.ready`**. `npm test` then `test:runtime` against that URL. Reports with `vercel/repository-dispatch/actions/status@v1`. |
 | `.github/workflows/wake-packet-seats.yml` | Do **not** turn this Action into the sandbox. It stays the cheap label gate. |
@@ -334,7 +337,7 @@ Marketplace (Checkly, Endform, Autonoma) can run Playwright and paint the same c
 | `VERCEL_AUTOMATION_BYPASS_SECRET` | Repo + Vercel project secret so the Action can open an SSO preview. |
 | Test operator cookie | Not the seed inbox. Own rooms. Must not resume the founder’s tape. SA names the secret. |
 | `docs/register/ENGINEER-HANDOFF.md` | For every plant: preview URL; deploy id; **check name + green/red**; `npm test`; which **walks** were added. If the check is pending or red, look does not sit. |
-| Packet walk recording | Optional. Silence is the default. If we ever want a video, it is this packet’s walk only. |
+| Packet walk recording | Playwright video of **this packet’s** walk (`unwired-glass` / voice-wrap). Action artifact. Not every walk. |
 | PostHog | Only if SA ascribes the port. Do not mint `travis.posthog`. Do not hang it “because the diagram had it.” |
 
 ### 5. The loop
@@ -368,15 +371,15 @@ A walk is a use of the app: one room, send, wait, next beat. We keep those walks
 1. **Engineer owns the tests.** Tester ∈ Engineer. No Tester seat. No Travis-in-the-browser widget.
 2. **The suite is cumulative E2E walks.** Every deploy runs **all** walks, not only the pocket that just landed. Engineer **adds** a walk or a step. Engineer does not mint a packet-named spec. Engineer does not hit four doors in parallel on one session.
 3. **Done = code + walks added or extended + the whole walk suite ran on the deploy + the Deployment Check is green.** Lib `npm test` stays and is not enough.
-4. **Voice somehow = a sequential walk after the ear.** Token, transcript, tape, second line, finalize. No mic farm. No Realtime session as the proof. Connect wait is a lib extract. Playwright is silence unless we later want a robot to read the subtitle or a video on the letter.
+4. **Voice somehow = door walks after the ear, plus the glass walk.** Token, transcript, tape, second line, finalize. No mic farm. No Realtime session as the proof. Connect wait is a lib extract. Playwright reads the subtitle on the running page. That is not optional. That is the extra protocol.
 5. **The signal is the Vercel Deployment Check, not Cursor.** Cursor wakes on **red**.
 6. **Do not write on his tape.** Test operator, own rooms. Shared `travis` schema is why.
 7. **PostHog is a port, not a given.** Hang or name silence.
 8. **Architect look is not the runtime sensor.** Voice *like* stays human. Voice *walks* are the check.
 9. **019 stays.** Transcript does not full-pipe. Connect wait. Unwired is unwired. Gemini’s “wired false → phone-ear shirt” is inverted. Do not plant it.
-10. **Compose.** Hang official Deployment Checks + GitHub Actions + fetch `await`. Playwright is not required for the suite. Marketplace only if Actions cannot see the preview. Do not write a Travis orchestrator or a Scenario Graph engine. Do not have Cursor MCP-walk Vercel instead of the check.
+10. **Compose.** Hang official Deployment Checks + GitHub Actions + fetch `await` + Playwright for glass. Marketplace only if Actions cannot see the preview. Do not write a Travis orchestrator or a Scenario Graph engine. Do not have Cursor MCP-walk Vercel instead of the check.
 11. **No emerge until all ends are green.** Build, `npm test`, and every E2E walk. Look Pass on a red check is not emerge.
-12. **Emerge recording is this packet’s walk only.** Cumulative suite still ran. A video is optional (Playwright) and only this packet’s walk — not the whole pile. Silence is fine.
+12. **Emerge recording is this packet’s walk only.** Cumulative suite still ran. The letter attaches the sheet plus the Playwright recording of **this packet’s** glass/door walk — not a replay of every past walk.
 
 ---
 
@@ -470,7 +473,7 @@ Lib tests do not include the doors:
 
 Open desk on production resumes the preferred operator’s room. Preview `VERCEL_ENV` is not production, so `isOpenDesk()` is false unless `TRAVIS_OPEN_DESK` is on. Cookie still wins. Schema is shared.
 
-**Grain.** SA ascribes: test-operator secret (not seed inbox); official Checks + Actions vs Marketplace; bypass secret; whether the check is required on preview as well as production; how far send/finalize wait (headers vs full stream); PostHog port or silence; no new Travis table; runner is `node:test` + fetch. Playwright is silence. Engineer hangs those. Extract `live-connect`. Plant desk + doors + the agenda walks + the one-time retro list. Do not remint 031–035.
+**Grain.** SA ascribes: test-operator secret (not seed inbox); official Checks + Actions vs Marketplace; bypass secret; how Playwright carries bypass + cookie onto the preview; whether the check is required on preview as well as production; how far send/finalize wait (headers vs full stream); PostHog port or silence; no new Travis table; runner is `node:test` + fetch for door walks and Playwright for glass. Engineer hangs those. Extract `live-connect`. Plant desk + doors + agenda walks + retro list + **unwired-glass**. Do not remint 031–035.
 
 ---
 
@@ -489,7 +492,7 @@ Open desk on production resumes the preferred operator’s room. Preview `VERCEL
 - Do not turn protection off for the world so a test can get in. Hang the bypass secret.
 - Do not POST runtime tests as the open-desk production operator. That is his tape.
 - Do not label `emerge` while the Deployment Check is red or pending.
-- Do not attach a recording of every walk. A video is optional and only this packet’s walk.
+- Do not attach a recording of every walk. Attach this packet’s walk.
 
 ---
 
@@ -498,12 +501,12 @@ Open desk on production resumes the preferred operator’s room. Preview `VERCEL
 Ascribe. Quote the Room connect lie, `travis-live-client.ts` token + transcript POSTs, `package.json` `test`, and `isOpenDesk`. Compose.
 
 1. Inventory: Deployment Checks + `vercel.deployment.ready` + Actions vs Marketplace (Checkly / Endform). Identical or adjacent. Cost as a thought. Compose: official Checks first.
-2. Runtime primitive: **fetch + `await`**. Playwright is silence. Do not hang a Scenario Graph engine. Do not hang `/tests/doors/01_`.
+2. Runtime primitive: **fetch + `await`** for door walks. **Playwright** for the glass walk (`unwired-glass`). Both in `test:runtime`. Do not hang a Scenario Graph engine. Do not hang `/tests/doors/01_`.
 3. Test operator: hang a login cookie for an email **not** on `TRAVIS_OPERATOR_EMAIL` / `TEST_EMAIL_TO`, so `operatorRoomScope` gives own rooms. Each walk `openRoom()`s its own session. Do not use open desk. Do not write on the founder’s tape. Do not mint a test table.
 4. Hang `VERCEL_AUTOMATION_BYPASS_SECRET` so the Action can hit an SSO preview. Do not drop Vercel Authentication for everyone.
 5. Name the check (suggested `runtime-doors`). Required on production. Preview required — yes or no, and why.
 6. Send / finalize: headers + first bytes vs wait the Deep Agents stream. Cost and duration as a thought. Prefer the cheap door unless a lived miss needs the stream.
-7. Packet-walk **recording**: optional. Default silence. If hung later, only this packet’s walk.
+7. Packet-walk **recording**: Playwright video of the walk this packet named (`unwired-glass`). Attach on emerge. Not the whole suite.
 8. PostHog: hang as port, or named silence because the door test + the check are enough this cut.
 9. Do not overload `wake-packet-seats.yml`. Second workflow only. Emerge Action must not fire on a red Deployment Check.
 10. Do not remint 031–035 / `dest_job` / 019 classify.

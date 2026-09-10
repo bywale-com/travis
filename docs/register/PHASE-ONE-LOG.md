@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-10 20:30 UTC — 020 one-time retro test list; Playwright is silence. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-10 20:39 UTC — glass walk is the extra protocol; not silence. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3727,3 +3727,17 @@ Not the model. Not a new face.
 **Playwright benefit (entire):** HTTP never loads `Room.tsx`, so it cannot read the subtitle. A browser robot could read **Travis isn’t wired** on the preview, or record a video of this packet’s walk. The unwired **rule** is already `npm test`. Named silence. Not on the list.
 
 **Landed.** Recut [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md). **Wake:** sa. SA **036**. Engineer plants the retro walks on [#165](https://github.com/bywale-com/travis/pull/165).
+
+---
+
+## 2026-09-10 20:39 UTC — Glass walk is the extra protocol (founder)
+
+**Kind:** Packet recut. Same 020. Flag 14:00 stands. Correction of 20:30 silence.
+
+**Founder (preserved):** Are you kidding? The entire point of an extra test protocol is this….how could you have glossed over this gap like it was trivial
+
+**Miss.** This seat named Playwright silence. Paper `liveMissSubtitle` plus the token door are not the painted subtitle. Without the glass walk, he is still the sensor for Live-down on the glass — the void 020 exists to close.
+
+**Lock.** `unwired-glass.spec.ts` (Playwright) is on the agenda and in `test:runtime`. Open Voice on this URL. Subtitle is **Travis isn’t wired**, not the phone-ear shirt. No mic. SA ascribes how the browser carries bypass + cookie, not whether we hang the walk. Retro list stands. Do not call the glass walk optional again.
+
+**Landed.** Recut packet + look sheet. **Wake:** sa. SA **036**. Engineer hangs the glass walk on [#165](https://github.com/bywale-com/travis/pull/165).

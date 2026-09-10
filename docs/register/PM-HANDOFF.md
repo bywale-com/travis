@@ -1,4 +1,4 @@
-# Architect seat handoff — 2026-09-10 20:30 UTC
+# Architect seat handoff — 2026-09-10 20:39 UTC
 
 **This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical Architect until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -16,16 +16,16 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **20:30 UTC 2026-09-10**. Flag **14:00 2026-08-25**. |
-| 020 first plant | `src/lib/live-connect.ts` + walks + Action on [#165](https://github.com/bywale-com/travis/pull/165). In-flight waits. Unwired named. |
-| 020 runtime verify | [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md). Agenda: Voice wrap + Type send. **One-time retro (now):** Type-send tape step, `come-back`, `type-dest`. Then no more retro. Playwright silence. **Wake:** sa. SA **036**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **20:39 UTC 2026-09-10**. Flag **14:00 2026-08-25**. |
+| 020 first plant | `src/lib/live-connect.ts` + door walks + Action on [#165](https://github.com/bywale-com/travis/pull/165). In-flight waits. Unwired named. |
+| 020 runtime verify | [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md). Agenda: Voice wrap + Type send + **unwired glass (Playwright)**. Retro: Type-send tape, `come-back`, `type-dest`. Glass walk is the extra protocol — not silence. **Wake:** sa. SA **036**. |
 | 019 stream architecture | [`PM-PACKET-019-STREAM-ARCH.md`](./PM-PACKET-019-STREAM-ARCH.md). SA **035**. [#163](https://github.com/bywale-com/travis/pull/163). |
 
 ---
 
 ## Next Architect job
 
-1. SA 036 ascribes secrets and Checks. Playwright is silence. Engineer plants the retro walks on this PR. Do not plant `src/` from this seat.
+1. SA 036 ascribes secrets, Checks, and how Playwright carries bypass + cookie. Engineer hangs `unwired-glass` plus the retro walks on this PR. Do not plant `src/` from this seat.
 2. 019 first plant still stands on [#163](https://github.com/bywale-com/travis/pull/163). Do not remint.
 3. Do not emerge on a red check. Do not attach a recording of every walk.
 4. Do not remint 011–019 / 027–035.

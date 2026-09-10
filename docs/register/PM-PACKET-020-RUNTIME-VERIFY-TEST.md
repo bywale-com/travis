@@ -11,7 +11,7 @@ Fill **I saw** on this step before the next.
 **Pass from `src/` only is a miss.**  
 **A Cursor agent who only read Vercel logs is a miss.**  
 **Four disconnected door POSTs that never waited on one room are a miss.**  
-**You being the first person to see “Live is down — phone ear” is a miss.**
+**You being the first person to see “Live is down — phone ear” is a miss.** The glass walk in `test:runtime` had to fail first.
 
 ---
 
@@ -61,6 +61,6 @@ Open the **Engineer handoff** on this PR. It must name: preview URL, deploy id, 
 
 ## After
 
-You walked to see if you like it. The breaks were already the Engineer’s. The letter’s recording is this packet’s walk, not the whole suite.
+You walked to see if you like it. The breaks were already the Engineer’s — including the subtitle. The letter’s recording is this packet’s walk, not the whole suite.
 
 **Steps I could not do (human):** Talk on a phone. Paying Cursor. SSO.
