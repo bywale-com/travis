@@ -307,7 +307,8 @@ Marketplace (Checkly, Endform, Autonoma) can run Playwright and paint the same c
 | Vercel project → Deployment Checks | Require the `runtime-doors` check (exact name SA ascribes). Production alias waits. Preview required if SA says so. |
 | `VERCEL_AUTOMATION_BYPASS_SECRET` | Repo + Vercel project secret so the Action can open an SSO preview. |
 | Test operator cookie | Not the seed inbox. Own rooms. Must not resume the founder’s tape. SA names the secret. |
-| `docs/register/ENGINEER-HANDOFF.md` | For every plant: preview URL; deploy id; **check name + green/red**; `npm test`; which cases were **added**. If the check is pending, look does not sit. |
+| `docs/register/ENGINEER-HANDOFF.md` | For every plant: preview URL; deploy id; **check name + green/red**; `npm test`; which **walks** were added. If the check is pending or red, look does not sit. |
+| Packet walk recording | Playwright video of the walk this packet named (e.g. 020 → `voice-wrap` / unwired glass). Action artifact. Emerge letter attaches **that** file, not every walk. SA ascribes the hang. |
 | PostHog | Only if SA ascribes the port. Do not mint `travis.posthog`. Do not hang it “because the diagram had it.” |
 
 ### 5. The loop
@@ -316,10 +317,11 @@ Marketplace (Checkly, Endform, Autonoma) can run Playwright and paint the same c
 Architect packet (face + doors to prove)
         → SA ascribes stores + ports (Playwright hang, test operator, PostHog or silence)
         → Engineer plants + adds or extends a walk in src/runtime/walks/ (and lib extract if the lie is client)
-        → Vercel deploys → Action runs the whole suite on that URL → check paints
-        → Red check → plant again (same PR). Cursor wakes on red, not on every deploy.
-        → Green check → handoff names the check
-        → Architect look (glass / like)
+        → Vercel deploys → GitHub Action runs lib tests + every walk on that URL → check paints
+        → Any red (build, unit, or a walk) → Cursor Engineer keeps going. Same PR. Errors are the loop.
+        → All green → look may sit
+        → Fail look → Engineer again
+        → Pass look → emerge: the sheet + a recording of **this packet’s walk only**
         → You walk the phone because you like it, not because it 500s
 ```
 
@@ -331,7 +333,7 @@ Fail look still exists. It should become rare. It is not the first sensor.
 
 You open the preview to see if you like it. You do not open it to discover Live is down.
 
-A walk is a use of the app: one room, send, wait, next beat. We keep those walks and only add to them. Every deploy runs every walk on the new URL. The walk is not a person talking into a mic. It is the same HTTP the phone already makes after the ear has a sentence, in the same order you would. Vercel’s check paints green or red. Cursor is not the person who sits in Vercel and asks whether it worked.
+A walk is a use of the app: one room, send, wait, next beat. We keep those walks and only add to them. Every deploy runs every walk on the new URL. You do not get an emerge letter until build, unit tests, and every walk are green. The letter’s recording is only this packet’s walk — the thing this cut was solving — not a replay of the whole pile.
 
 ---
 
@@ -346,7 +348,23 @@ A walk is a use of the app: one room, send, wait, next beat. We keep those walks
 7. **PostHog is a port, not a given.** Hang or name silence.
 8. **Architect look is not the runtime sensor.** Voice *like* stays human. Voice *walks* are the check.
 9. **019 stays.** Transcript does not full-pipe. Connect wait. Unwired is unwired. Gemini’s “wired false → phone-ear shirt” is inverted. Do not plant it.
-10. **Compose.** Hang official Deployment Checks + GitHub Actions + fetch `await`. Hang Playwright for glass. Marketplace only if Actions cannot see the preview. Do not write a Travis orchestrator or a Scenario Graph engine. Do not have Cursor MCP-walk Vercel instead of the check.
+10. **Compose.** Hang official Deployment Checks + GitHub Actions + fetch `await`. Hang Playwright for glass **and** for the packet-walk recording. Marketplace only if Actions cannot see the preview. Do not write a Travis orchestrator or a Scenario Graph engine. Do not have Cursor MCP-walk Vercel instead of the check.
+11. **No emerge until all ends are green.** Build, `npm test`, and every E2E walk. Look Pass on a red check is not emerge.
+12. **Emerge recording is this packet’s walk only.** Cumulative suite still ran. The letter attaches the sheet plus a Playwright recording of the walk this packet named — not a replay of every past walk.
+
+---
+
+## Who runs the runtime test (brief)
+
+Not Travis. Not Cursor as the everyday runner. Not the Architect look.
+
+1. Engineer pushes the plant.
+2. Vercel builds the preview. When that URL is actually up, Vercel fires `vercel.deployment.ready`.
+3. **GitHub Actions** (workflow `runtime-doors.yml`, a GitHub-hosted runner, no model) checks out the commit, runs `npm test`, then runs `test:runtime` against that preview URL (bypass header + test-operator cookie). That job **is** the runtime tester.
+4. It paints a Vercel Deployment Check. Red → Cursor Engineer wakes and keeps going. Green → look may sit.
+5. Look Pass + still green → emerge letter: the packet sheet + a recording of **this packet’s** walk (Playwright video of the walk the packet named). House mail, not Travis.
+
+Engineer may run the same commands locally while planting. That is rehearsal. The gate is the Action on the deploy.
 
 ---
 
@@ -416,6 +434,8 @@ Open desk on production resumes the preferred operator’s room. Preview `VERCEL
 - Do not have Cursor sit in Vercel MCP and call that runtime verification.
 - Do not turn protection off for the world so a test can get in. Hang the bypass secret.
 - Do not POST runtime tests as the open-desk production operator. That is his tape.
+- Do not label `emerge` while the Deployment Check is red or pending.
+- Do not attach a recording of every walk. Attach this packet’s walk.
 
 ---
 
@@ -424,11 +444,12 @@ Open desk on production resumes the preferred operator’s room. Preview `VERCEL
 Ascribe. Quote the Room connect lie, `travis-live-client.ts` token + transcript POSTs, `package.json` `test`, and `isOpenDesk`. Compose.
 
 1. Inventory: Deployment Checks + `vercel.deployment.ready` + Actions vs Marketplace (Checkly / Endform). Identical or adjacent. Cost as a thought. Compose: official Checks first.
-2. Runtime primitive: **fetch + `await`** for the Voice wrap and Type walks. Playwright **only** for the unwired-glass walk, or named silence this cut. Do not hang a Scenario Graph engine. Do not hang `/tests/doors/01_`.
+2. Runtime primitive: **fetch + `await`** for the Voice wrap and Type walks. Playwright for the unwired-glass walk **and** for the packet-walk recording (video of the walk the packet named). Or named silence this cut for glass/recording, and then emerge has no video until hung. Do not hang a Scenario Graph engine. Do not hang `/tests/doors/01_`.
 3. Test operator: hang a login cookie for an email **not** on `TRAVIS_OPERATOR_EMAIL` / `TEST_EMAIL_TO`, so `operatorRoomScope` gives own rooms. Each walk `openRoom()`s its own session. Do not use open desk. Do not write on the founder’s tape. Do not mint a test table.
 4. Hang `VERCEL_AUTOMATION_BYPASS_SECRET` so the Action can hit an SSO preview. Do not drop Vercel Authentication for everyone.
 5. Name the check (suggested `runtime-doors`). Required on production. Preview required — yes or no, and why.
 6. Send / finalize: headers + first bytes vs wait the Deep Agents stream. Cost and duration as a thought. Prefer the cheap door unless a lived miss needs the stream.
-7. PostHog: hang as port, or named silence because the door test + the check are enough this cut.
-8. Do not overload `wake-packet-seats.yml`. Second workflow only.
-9. Do not remint 031–035 / `dest_job` / 019 classify.
+7. Packet-walk **recording**: Playwright video of the walk the packet named. Attach on emerge. Not a recording of the whole cumulative suite.
+8. PostHog: hang as port, or named silence because the door test + the check are enough this cut.
+9. Do not overload `wake-packet-seats.yml`. Second workflow only. Emerge Action must not fire on a red Deployment Check.
+10. Do not remint 031–035 / `dest_job` / 019 classify.

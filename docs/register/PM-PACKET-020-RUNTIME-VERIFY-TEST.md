@@ -61,6 +61,6 @@ Open the **Engineer handoff** on this PR. It must name: preview URL, deploy id, 
 
 ## After
 
-You walked to see if you like it. The breaks were already the Engineer’s.
+You walked to see if you like it. The breaks were already the Engineer’s. The letter’s recording is this packet’s walk, not the whole suite.
 
 **Steps I could not do (human):** Talk on a phone. Paying Cursor. SSO.

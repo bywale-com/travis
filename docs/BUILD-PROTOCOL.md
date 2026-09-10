@@ -165,9 +165,9 @@ Architect writes `docs/register/PM-LOOK-NNN.md`, stamps the Phase One log, pushe
 
 ### 8. Emerge, then you
 
-If the look file has `**Verdict:** Pass`, the Action (no model) labels **`emerge`**, opens a GitHub issue assigned to you with the test sheet verbatim, and emails that sheet when `EMERGE_EMAIL` + Resend secrets exist. That is house mail, not Travis.
+If the look file has `**Verdict:** Pass` **and** this deploy’s Deployment Check is green (build, `npm test`, every E2E walk), the Action (no model) labels **`emerge`**, opens a GitHub issue assigned to you with the test sheet verbatim, and emails that sheet when `EMERGE_EMAIL` + Resend secrets exist. Attach the **Playwright recording of this packet’s walk only** — the use this cut was solving — not a replay of the whole cumulative suite. That is house mail, not Travis.
 
-You walk the same sheet on the phone. SSO, Talk, a typed sentence are yours.
+No emerge on a red or pending check. You walk the same sheet on the phone. SSO, Talk, a typed sentence are yours. The recording is so you see what already passed for this packet, not so you become the first sensor.
 
 ### 9. Merge
 

@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-10 13:58 UTC — 020 recut: E2E walks; sequential; tests determined by the packet. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-10 14:55 UTC — 020: no emerge until all tests green; letter recording is this packet’s walk. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3657,5 +3657,19 @@ Not the model. Not a new face.
 **Initiate.** SA ascribes secrets. Engineer plants desk + doors + Voice wrap first on this PR. Then Type send. Then glass or named silence. Action on `vercel.deployment.ready`. Do not invent a Travis orchestrator. The runner’s `await` is the clock.
 
 **Landed.** Recut [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md). **Wake:** sa. SA **036**.
+
+**I do not plant `src/`.**
+
+---
+
+## 2026-09-10 14:55 UTC — Loop until green; emerge recording is this packet’s walk (founder)
+
+**Kind:** Packet recut. How we build. Same 020. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** as long as errors keep … populating, the engineer keeps working, and the engineer can see errors both on the static code, unit tests, and now end-to-end … if our workflow works, I shouldn't get any emerge packet until it passes on all ends … What should accompany the emerge packet is a recording of … what that packet was actually solving. … the test is cumulative … However, the purpose of that packet is one thing … the recording will only need to be testing what that packet was about. … What agent is actually running, doing the runtime test exactly?
+
+**Answer.** Runner is **GitHub Actions**, not Cursor and not Travis. Vercel says the preview is up → Action runs `npm test` + every walk → check paints. Red (build, unit, or a walk) → Cursor Engineer. All green → look. Pass look → emerge: sheet + Playwright video of **this packet’s walk only**.
+
+**Landed.** Recut packet 020 · `BUILD-PROTOCOL` § Emerge · [`AUTOMATION-PACKET-CHAIN.md`](./AUTOMATION-PACKET-CHAIN.md). **Wake:** sa. SA **036**.
 
 **I do not plant `src/`.**
