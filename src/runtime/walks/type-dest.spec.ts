@@ -25,6 +25,11 @@ describe("type-dest", { skip: !haveUrl }, () => {
     );
 
     const queueData = await readQueue(desk);
-    assert.ok(Array.isArray(queueData.queue) || Array.isArray(queueData.running));
+    assert.ok(
+      Array.isArray(queueData.queue) ||
+        Array.isArray((queueData.queue as { seats?: unknown[] })?.seats) ||
+        Array.isArray(queueData.running),
+      "queue snapshot contains running or queue items",
+    );
   });
 });

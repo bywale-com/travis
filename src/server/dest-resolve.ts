@@ -4,6 +4,7 @@
  */
 import { and, eq } from "drizzle-orm";
 import { isTravisSeat } from "@/lib/seats";
+import { isSitProtocolRole } from "@/lib/protocol-path";
 import { authorDestKeyFromTurn, mergeReplyDestKeys } from "@/lib/reply-dest";
 import type { TypedDest } from "@/lib/typed-dest";
 import type { AgentBinding } from "@/server/db/schema";
@@ -16,9 +17,9 @@ export async function resolveDestBinding(
   sessionId: string,
   destKey: string,
 ): Promise<AgentBinding | null> {
-  if (destKey === "pm") {
+  if (isSitProtocolRole(destKey)) {
     try {
-      return await resolveRoleDest({ sessionId, role: "pm" });
+      return await resolveRoleDest({ sessionId, role: destKey });
     } catch (err) {
       if (err instanceof SitError) return null;
       throw err;
