@@ -54,6 +54,6 @@ One PR per initiative. Engineer opens it. Other seats commit on that branch. Lef
 
 ## Verify
 
-- Follow whatever scripts land in `package.json` once the app is planted.
-- Manual smoke on the phone-first voice/chat face.
+- Follow whatever scripts land in `package.json` once the app is planted. `npm test` is not done.
+- Runtime-verify **this pocket’s doors** on a running app (preview or local). Read this Vercel deploy’s errors. The founder is not the first sensor.
 - Do not commit `.tmp-plates/`, `.env`, or secrets.
