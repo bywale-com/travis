@@ -6,6 +6,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-10** · Hotfix 083 · [PR #168](https://github.com/bywale-com/travis/pull/168) — Vercel status Action drops invalid status input and handoff paste retains prior bind, because the status action detects job status automatically and the handoff test checks the prior bind.
+
 - **2026-09-10** · Hotfix 082 · [PR #167](https://github.com/bywale-com/travis/pull/167) — Runtime doors Action adds `actions: read` permission and handoff preserves the full bind chain, because painting Vercel status queries jobs and the test expects the preceding bind.
 
 - **2026-09-10** · 020 runtime verify · [PR #165](https://github.com/bywale-com/travis/pull/165) — Desk, doors, voice-wrap, type-send, come-back, and type-dest hang as `test:runtime` on the deploy URL, operator resolves test email to isolated rooms, and a Deployment Check paints `runtime-doors`, because lib `npm test` never used the app.
