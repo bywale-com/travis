@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-10 14:55 UTC — 020: no emerge until all tests green; letter recording is this packet’s walk. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-10 15:00 UTC — `npm test` is lib only; `test:runtime` is the walk. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3671,5 +3671,19 @@ Not the model. Not a new face.
 **Answer.** Runner is **GitHub Actions**, not Cursor and not Travis. Vercel says the preview is up → Action runs `npm test` + every walk → check paints. Red (build, unit, or a walk) → Cursor Engineer. All green → look. Pass look → emerge: sheet + Playwright video of **this packet’s walk only**.
 
 **Landed.** Recut packet 020 · `BUILD-PROTOCOL` § Emerge · [`AUTOMATION-PACKET-CHAIN.md`](./AUTOMATION-PACKET-CHAIN.md). **Wake:** sa. SA **036**.
+
+**I do not plant `src/`.**
+
+---
+
+## 2026-09-10 15:00 UTC — npm test is lib; test:runtime is the walk (founder)
+
+**Kind:** Packet recut. Same 020. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** Checks out the commit and runs npm test. So, npm test is not a unit test? … npm test is … what accomplishes what we're trying to achieve here?
+
+**Answer (inspect).** No. `package.json` `test` is `tsx --test src/lib/*.test.ts src/server/db/*.test.ts`. Unit / lib. No preview. It does not walk Voice. The walk is a **second** script, `test:runtime`, not planted yet: `src/runtime/walks/*.spec.ts` against the preview URL. The Action runs both. I glossed them as one line. They are two jobs.
+
+**Landed.** Recut “Who runs” on [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md). **Wake:** sa. SA **036**.
 
 **I do not plant `src/`.**

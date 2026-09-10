@@ -358,13 +358,26 @@ A walk is a use of the app: one room, send, wait, next beat. We keep those walks
 
 Not Travis. Not Cursor as the everyday runner. Not the Architect look.
 
+There are **two commands**. They are not the same thing.
+
+| Command | What it is today | What it proves |
+|---------|------------------|----------------|
+| `npm test` | Already in `package.json`: `tsx --test src/lib/*.test.ts src/server/db/*.test.ts` | **Unit / lib only.** Functions. No preview. No Voice walk. 079’s HTML 500 cannot fail here. |
+| `npm run test:runtime` | **New.** Not planted yet. Runs `src/runtime/walks/*.spec.ts` | **The use of the app.** Hits this deploy’s URL. Send, wait, next beat. This is the runtime verification. |
+
+The GitHub Action runs **both**, in order, after Vercel says the preview is up:
+
 1. Engineer pushes the plant.
 2. Vercel builds the preview. When that URL is actually up, Vercel fires `vercel.deployment.ready`.
-3. **GitHub Actions** (workflow `runtime-doors.yml`, a GitHub-hosted runner, no model) checks out the commit, runs `npm test`, then runs `test:runtime` against that preview URL (bypass header + test-operator cookie). That job **is** the runtime tester.
-4. It paints a Vercel Deployment Check. Red → Cursor Engineer wakes and keeps going. Green → look may sit.
-5. Look Pass + still green → emerge letter: the packet sheet + a recording of **this packet’s** walk (Playwright video of the walk the packet named). House mail, not Travis.
+3. **GitHub Actions** (workflow `runtime-doors.yml`, a GitHub-hosted runner, no model) checks out the commit.
+4. It runs `npm test` — the lib pile. Fast. If this is red, stop. Engineer wakes. This is **not** the walk.
+5. It runs `npm run test:runtime` **against that preview URL** (bypass header + test-operator cookie). This is the tester that uses the app. If a walk is red, stop. Engineer wakes.
+6. Both green → it paints the Vercel Deployment Check green. Look may sit.
+7. Look Pass + still green → emerge letter: the packet sheet + a recording of **this packet’s** walk.
 
-Engineer may run the same commands locally while planting. That is rehearsal. The gate is the Action on the deploy.
+Do not read “the Action runs npm test” as “npm test is the E2E.” `npm test` stays and is not the thing we were missing. `test:runtime` is.
+
+Engineer may run both locally while planting. That is rehearsal. The gate is the Action on the deploy.
 
 ---
 
