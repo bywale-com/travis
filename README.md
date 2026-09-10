@@ -6,6 +6,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-10** · 020 walks · [PR #165](https://github.com/bywale-com/travis/pull/165) — Desk, doors, voice-wrap, and type-send hang as `test:runtime` on the deploy URL, and a Deployment Check paints `runtime-doors`, because lib `npm test` never used the app.
+
 - **2026-09-10** · 020 first plant · [PR #165](https://github.com/bywale-com/travis/pull/165) — Live connect waits when a connect is already in flight, and unwired keeps “Travis isn’t wired” instead of the phone-ear shirt, because in-flight false was Live-down.
 
 - **2026-09-09** · SCP-035 · [PR #163](https://github.com/bywale-com/travis/pull/163) — Live flush classifies and starts or changes work without speaking, Type send does that then wraps, Voice finalize only synthesizes (backup Do once), and glass dest is Technical Architect, because work waited for “I’m done” and the seat still said Technical PM.
