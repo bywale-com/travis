@@ -62,11 +62,16 @@ export async function finalize(
 export async function send(
   desk: Desk,
   text: string,
+  options?: { chipSeatKeys?: string[]; chipSeatKey?: string },
 ): Promise<{ kind: ReturnType<typeof contentKind>; status: number }> {
   const { res, kind } = await doorFetch(`/api/session/${desk.sessionId}/send`, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ text }),
+    body: JSON.stringify({
+      text,
+      chipSeatKeys: options?.chipSeatKeys,
+      chipSeatKey: options?.chipSeatKey,
+    }),
   });
   if (kind === "sse") {
     void res.body?.cancel();

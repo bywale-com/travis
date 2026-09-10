@@ -107,3 +107,17 @@ export async function readTurns(desk: Desk, afterSeq?: number): Promise<
     seq: Number(t.seq ?? 0),
   }));
 }
+
+export async function readQueue(desk: Desk): Promise<{
+  queue: unknown[];
+  drainable: unknown[];
+  running: { seatKey?: string; label?: string; text?: string; jobId?: string }[];
+}> {
+  const { res, bodyText, kind } = await doorFetch(
+    `/api/session/${desk.sessionId}/queue`,
+  );
+  if (kind !== "json") {
+    throw new Error(`queue expected JSON, got ${kind} (${res.status})`);
+  }
+  return JSON.parse(bodyText);
+}
