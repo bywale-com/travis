@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **085**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **086**. |
 | PR title | `Hotfix NNN — …` (human tell). Action: this push lands `HOTFIX-NNN-*.md` → `wake-engineer` only. No `wake-sa`. |
 | Test | Every hotfix gets a `HOTFIX-NNN-*-TEST.md` (same job as a packet test). Emerge mails that sheet. |
 
@@ -16,6 +16,7 @@
 
 | # | File | Cut |
 |---|------|-----|
+| 085 | [`HOTFIX-085-TYPE-DEST-RECUT.md`](./HOTFIX-085-TYPE-DEST-RECUT.md) | SSE before dest resolve, write-and-leave chip dispatch, and X-Accel-Buffering on type send. |
 | 084 | [`HOTFIX-084-TYPE-DEST-TIMEOUT.md`](./HOTFIX-084-TYPE-DEST-TIMEOUT.md) | Role dest resolution + handProtocol write-and-leave to prevent 504 on runtime walks. |
 | 083 | [`HOTFIX-083-RUNTIME-DOORS-ACTION-STATUS.md`](./HOTFIX-083-RUNTIME-DOORS-ACTION-STATUS.md) | Vercel status Action input fix + handoff paste prior bind. |
 | 082 | [`HOTFIX-082-RUNTIME-DOORS-PERMISSIONS.md`](./HOTFIX-082-RUNTIME-DOORS-PERMISSIONS.md) | Runtime doors Action permissions (`actions: read`) + handoff chain test. |
