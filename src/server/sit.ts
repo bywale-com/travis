@@ -27,7 +27,7 @@ import {
   openMembers,
   requireOpenMember,
 } from "@/server/room-membership";
-import { sendOrEnqueue, seatHasActiveRun } from "@/server/seat-pipe";
+import { seatHasActiveRun } from "@/server/seat-pipe";
 import { ensureSitStore } from "@/server/sit-store";
 
 export class SitError extends Error {
@@ -124,11 +124,11 @@ async function handProtocol(
 ): Promise<void> {
   const files = await readSitFiles(protocolPath);
   const prompt = harnessText(files);
-  await sendOrEnqueue({
+  await dispatchToSeat({
     sessionId,
     binding,
     prompt,
-    send: () => {},
+    enqueueIfBusy: false,
   });
 }
 

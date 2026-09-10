@@ -47,7 +47,7 @@ Do not remint 012 / 023–034 or the 074 SQL. Do not remint **035**. Do not remi
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **083** Vercel status Action input. Next number **084**. |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **084** Role dest timeout fix. Next number **085**. |
 | One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
