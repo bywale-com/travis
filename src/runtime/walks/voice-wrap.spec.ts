@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { openRoom, readTurns, runtimeBaseUrl } from "../desk.ts";
-import { finalize, token, transcript } from "../doors.ts";
+import { openRoom, readTurns, runtimeBaseUrl } from "../desk";
+import { finalize, token, transcript } from "../doors";
 
 const FIRST = "are you able to do that now?";
 const SECOND = "and also put this on the tape";

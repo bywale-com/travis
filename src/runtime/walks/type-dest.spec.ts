@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { openRoom, readQueue, readTurns, runtimeBaseUrl } from "../desk.ts";
-import { send } from "../doors.ts";
+import { openRoom, readQueue, readTurns, runtimeBaseUrl } from "../desk";
+import { send } from "../doors";
 
 const haveUrl = Boolean(runtimeBaseUrl());
 
