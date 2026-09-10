@@ -136,7 +136,7 @@ Engineer gates on this commit: a new SYSTEMS-CHANGE-PACKET (or a hotfix file, or
 
 If the cut needs live Travis Postgres: `DATABASE_URL` is a Cloud Agent runtime secret. Unset → stop and name it in the handoff; the file on the PR is not the hang. Set → run the existing SQL; do not remint it.
 
-**Runtime verification (definition of done).** Syntax is not done. `npm test` is not done. Engineer writes **this pocket’s** runtime test. Vercel’s Deployment Check runs that test **on this deploy’s URL** and paints green or red. That check is the signal. Cursor does not sit in Vercel MCP and call the walk “done.” Unwired previews must assert unwired — not pretend Live is up. PostHog only if SA hung that port. Red check → plant again on this PR. The founder is not the first sensor.
+**Runtime verification (definition of done).** Syntax is not done. `npm test` is not done. Engineer **adds** cases to the cumulative suite in `src/runtime/` (door named, not packet named). Vercel’s Deployment Check runs **that whole suite** on this deploy’s URL and paints green or red. That check is the signal. Cursor does not sit in Vercel MCP and call the walk “done.” Unwired previews must assert unwired — not pretend Live is up. Do not write on the founder’s living tape. PostHog only if SA hung that port. Red check → plant again on this PR. The founder is not the first sensor.
 
 Engineer names the proof on `ENGINEER-HANDOFF.md` (preview URL, deploy id, **check name + green/red**). Then prepends one Implementation line on the repo `README.md`, rewrites the rest of the handoff, may add `docs/register/initiatives/<nnn>-<slug>/`. Commits, pushes **this branch**. Does not append Architect or SA logs. Does not wake look until the check is green or a blocker is named.
 

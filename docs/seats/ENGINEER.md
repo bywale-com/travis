@@ -65,10 +65,11 @@ v1 surfaces everything **readable** from the assistant stream.
 ### 5. Verify (runtime — you own this)
 
 - Run the project build. Run `npm test`. That is not done.
-- Write **this pocket’s** runtime test. You may run it locally while planting. **Done** is the same test on this deploy, painted as a Vercel Deployment Check.
+- **Add** cases to the cumulative suite in `src/runtime/` (files named after the door). Do not mint a packet-named spec. Do not drop yesterday’s cases. You may run `test:runtime` locally while planting. **Done** is the **whole** suite on this deploy, painted as a Vercel Deployment Check.
 - Do not sit in Vercel MCP and call that runtime verification. Logs are for a **red** check. PostHog only if SA hung it.
 - If the preview has no OpenAI key, the test asserts **unwired**. It does not pretend Live is up.
-- Name the proof on [`ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md): preview URL, deploy id, **check name + green/red**.
+- Do not POST as the founder’s open-desk room. Use the test operator SA ascribed.
+- Name the proof on [`ENGINEER-HANDOFF.md`](../register/ENGINEER-HANDOFF.md): preview URL, deploy id, **check name + green/red**, which cases you added.
 - You own the tests. The check is the signal. The founder is not the first sensor.
 - Do not commit `.tmp-plates/`, `.env`, or secrets.
 

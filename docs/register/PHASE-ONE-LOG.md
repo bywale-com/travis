@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-10 03:45 UTC — 020 recut: the signal is the Vercel Deployment Check, not Cursor. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-10 13:25 UTC — 020 recut: cumulative door suite; simulate Voice by posting the text the ear would have posted. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3623,5 +3623,23 @@ Not the model. Not a new face.
 **Practice locked.** We write the tests. Vercel fires when the deploy is up. The Action (or Marketplace) runs them **on that URL**. The check is the signal. Cursor wakes on **red**. Engineer does not sit in Vercel MCP on every plant. SSO hang is `VERCEL_AUTOMATION_BYPASS_SECRET` — do not turn protection off for the world.
 
 **Landed.** Recut [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md) · test sheet · `BUILD-PROTOCOL` · Engineer / Architect seats. **Wake:** sa. SA **036** ascribes Checks vs Marketplace, bypass secret, preview-required or not.
+
+**I do not plant `src/`.**
+
+---
+
+## 2026-09-10 13:25 UTC — Cumulative suite; simulate Voice as the POST after the ear (founder)
+
+**Kind:** Packet recut. How we build. Same 020. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** Exactly how is it going to write the test? Because … every single time the deployment runs, it's going to run our tests. Why? Because … we don't know what if a deployment has broken things that existed in the past. So, really, the tests are … cumulative … We keep adding to the same tests … And it's a very different kind of test … I really want to see how … we're going to simulate some of these tests … go deeper.
+
+**Answer (inspect).** Lib `npm test` is already cumulative for functions. It never saw 079’s HTML 500 or the Live-down shirt, because those only exist on a running app. Runtime is a second pile: `src/runtime/token.spec.ts`, `transcript.spec.ts`, `finalize.spec.ts`, `send.spec.ts`, and glass if Playwright is hung. Engineer **adds** a case to the file named after the door. Every deploy runs the **whole** folder. Packet-named specs are a miss.
+
+**How Voice is simulated.** The phone turns sound into text, then posts. `startTravisLive` already `POST`s `/live/token` and `/live/transcript`. Finalize already `POST`s `/finalize`. Type already `POST`s `/send`. The suite posts those same bodies. No microphone. No Realtime WebRTC as the proof. Playwright only reads the subtitle after `armEar` (unwired ≠ phone-ear shirt). The in-flight connect lie comes out of `Room.tsx` into a lib test, because it is not on the wire.
+
+**Must not.** Shared schema `travis` — do not open-desk as him. Test operator, own rooms. Do not assert Travis’s opinion. Assert the door: JSON vs HTML, wired vs unwired, transcript to Travis is not SSE think.
+
+**Landed.** Recut [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md). **Wake:** sa. SA **036** ascribes test operator, Playwright this cut or silence, how far send/finalize wait.
 
 **I do not plant `src/`.**
