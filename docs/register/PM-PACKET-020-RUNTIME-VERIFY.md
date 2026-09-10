@@ -379,6 +379,21 @@ Do not read “the Action runs npm test” as “npm test is the E2E.” `npm te
 
 Engineer may run both locally while planting. That is rehearsal. The gate is the Action on the deploy.
 
+### Gemini’s `npm test` paragraph — aligned or not
+
+The **walk** is aligned: a live preview URL, `await`, one room, next beat after the tape updates. That is `test:runtime`.
+
+These sentences are **not** our hang. Do not plant them.
+
+| Gemini said | Inspect / lock |
+|-------------|----------------|
+| `npm test` is configured to run the sequential walks against the live URL | **No.** `package.json` `test` is already lib unit tests. We do not overwrite it. Walks are `npm run test:runtime`. `npm test` is a generic script **name**, yes — and in this repo that name is already taken. |
+| Instead of isolated unit tests, the script launches the walk | **No.** We keep unit tests. The Action runs lib **then** walks. Two commands. |
+| The script launches the exact walk file the Engineer wrote for **that packet** | **No.** Every deploy runs **every** walk. This packet’s walk is the **emerge recording**, not the only thing the Action runs. |
+| Sample URLs: `GET ${PREVIEW_URL}/live/token`, `POST …/finalize` with `{ roomId }` | **No.** Real doors: `POST /api/session/:id/live/token`, `POST /api/session/:id/live/transcript` with `{ role: "user", text }`, `GET /api/session/:id/turns`, `POST /api/session/:id/finalize` with `{ utterance }`. Engineer hangs `doors.ts` on those, not Gemini’s paths. |
+
+One sentence: traditional `npm test` in **this** repo tests functions on paper; `test:runtime` is the automated user on the live preview. Gemini merged those two names. We do not.
+
 ---
 
 ## Technical cut (Engineer after SA)

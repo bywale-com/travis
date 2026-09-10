@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-10 15:00 UTC — `npm test` is lib only; `test:runtime` is the walk. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-10 15:05 UTC — Gemini’s walk is aligned; stuffing it into `npm test` is not. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3685,5 +3685,19 @@ Not the model. Not a new face.
 **Answer (inspect).** No. `package.json` `test` is `tsx --test src/lib/*.test.ts src/server/db/*.test.ts`. Unit / lib. No preview. It does not walk Voice. The walk is a **second** script, `test:runtime`, not planted yet: `src/runtime/walks/*.spec.ts` against the preview URL. The Action runs both. I glossed them as one line. They are two jobs.
 
 **Landed.** Recut “Who runs” on [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md). **Wake:** sa. SA **036**.
+
+**I do not plant `src/`.**
+
+---
+
+## 2026-09-10 15:05 UTC — Gemini walk aligned; npm test name is not (founder)
+
+**Kind:** Packet recut. Same 020. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** Gemini: npm test is not a fixed type … in the system we just designed, npm test is configured to run your custom sequential walks against a live, deployed URL. … Does seeing how the script uses await to hit the live preview URL bridge the gap …? Is that aligned with what you're describing?
+
+**Answer.** The walk is aligned (`await`, one room, live preview, tape before the next beat). Stuffing that into `npm test` is not — that name already means lib unit tests in this repo. The Action runs **every** walk, not only this packet’s file (that file is the emerge recording). Gemini’s sample paths (`/live/token`, `{ roomId }`) are not the planted doors.
+
+**Landed.** Recut packet 020 Gemini table. **Wake:** sa. SA **036**.
 
 **I do not plant `src/`.**
