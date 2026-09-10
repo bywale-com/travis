@@ -7,17 +7,17 @@
 
 Fill **I saw** on this step before the next.
 
-**Pass** = this deploy’s Deployment Check (`runtime-doors`, or the name SA ascribes) is green because the **whole** cumulative suite ran on that URL; you did not have to find a 500.  
+**Pass** = this deploy’s Deployment Check (`runtime-doors`, or the name SA ascribes) is green because **every sequential walk** ran on that URL; you did not have to find a 500.  
 **Pass from `src/` only is a miss.**  
 **A Cursor agent who only read Vercel logs is a miss.**  
-**A green check that only ran this pocket’s new case is a miss.**  
+**Four disconnected door POSTs that never waited on one room are a miss.**  
 **You being the first person to see “Live is down — phone ear” is a miss.**
 
 ---
 
 ## Before
 
-Open the **Engineer handoff** on this PR. It must name: preview URL, deploy id, **Deployment Check name + green**, `npm test`, and which runtime cases were **added**. The check is the proof the **whole** door suite ran on that URL.
+Open the **Engineer handoff** on this PR. It must name: preview URL, deploy id, **Deployment Check name + green**, `npm test`, and which **walks** were added or extended. The check is the proof the **whole** walk suite ran on that URL.
 
 **I saw:**
 

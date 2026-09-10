@@ -55,5 +55,5 @@ One PR per initiative. Engineer opens it. Other seats commit on that branch. Lef
 ## Verify
 
 - Follow whatever scripts land in `package.json` once the app is planted. `npm test` is not done.
-- Add cases to the cumulative `src/runtime/` suite. Every deploy runs the whole suite on that URL. The Vercel Deployment Check is the signal. Do not sit in Vercel MCP and call that done. The founder is not the first sensor.
+- Add or extend sequential walks in `src/runtime/walks/`. Every deploy runs every walk on that URL. Same room: send, wait, next. The Vercel Deployment Check is the signal. Do not sit in Vercel MCP and call that done. The founder is not the first sensor.
 - Do not commit `.tmp-plates/`, `.env`, or secrets.

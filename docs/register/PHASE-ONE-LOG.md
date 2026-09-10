@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-10 13:25 UTC — 020 recut: cumulative door suite; simulate Voice by posting the text the ear would have posted. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-10 13:58 UTC — 020 recut: E2E walks; sequential; tests determined by the packet. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3641,5 +3641,21 @@ Not the model. Not a new face.
 **Must not.** Shared schema `travis` — do not open-desk as him. Test operator, own rooms. Do not assert Travis’s opinion. Assert the door: JSON vs HTML, wired vs unwired, transcript to Travis is not SSE think.
 
 **Landed.** Recut [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md). **Wake:** sa. SA **036** ascribes test operator, Playwright this cut or silence, how far send/finalize wait.
+
+**I do not plant `src/`.**
+
+---
+
+## 2026-09-10 13:58 UTC — E2E walks: sequential, determined by the packet (founder)
+
+**Kind:** Packet recut. How we build. Same 020. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** These tests are not unit tests. … it's a use of the app. … you have to send the thing and then wait for the response back and then do the next thing … some things might even be tied to previous … conversation. … how is all that being orchestrated? … how are the tests determined? … How do [I] initiate to an E2E architecture? Walk me through the architecture you're thinking.
+
+**Answer (inspect).** Gemini’s sequential scenario is the walk. Isolated `/tests/doors/01_token` files that never share a session are not. Tests are determined by this seat’s packet sheet and by lived misses — not by a Scenario Graph engine inside Travis. Orchestration is `await`: `desk.ts` holds one `session.id`; `doors.ts` posts like the phone; `walks/voice-wrap.spec.ts` is open → token → transcript → `GET /turns` → second transcript same room → turns again → finalize. Parallel only across walks (different rooms). Gemini inverted the glass: wired false is **Travis isn’t wired**, not the phone-ear shirt.
+
+**Initiate.** SA ascribes secrets. Engineer plants desk + doors + Voice wrap first on this PR. Then Type send. Then glass or named silence. Action on `vercel.deployment.ready`. Do not invent a Travis orchestrator. The runner’s `await` is the clock.
+
+**Landed.** Recut [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md). **Wake:** sa. SA **036**.
 
 **I do not plant `src/`.**

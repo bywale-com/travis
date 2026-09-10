@@ -27,7 +27,7 @@ PHASE-ONE-LOG. SYSTEMS-ANALYST-LOG. Stores you were not given. A role at create.
 - Product face = Voice / Log / Backlog, phone-first.
 - Keys stay server-side. Supported Cursor path only (`@cursor/sdk` / Cloud Agents API).
 - Tokens, surfaces, overlay escape, parametric elimination.
-- Verify the **doors this cut touched** by **adding** cases to the cumulative `src/runtime/` suite. Every deploy runs the **whole** suite. The Vercel Deployment Check is the signal. `npm test` is not enough. Do not MCP-triage Vercel on every plant. Do not write on the founder’s tape. Name the check on `ENGINEER-HANDOFF.md`. Do not wake look until it is green or a blocker is named.
+- Verify by **adding or extending** a sequential walk in `src/runtime/walks/`. Every deploy runs **every walk**. Same room: send, wait, next. The Vercel Deployment Check is the signal. `npm test` is not enough. Do not MCP-triage Vercel on every plant. Do not write on the founder’s tape. Name the check on `ENGINEER-HANDOFF.md`. Do not wake look until it is green or a blocker is named.
 - A hang/SQL cut: the verify query, not a glass preview. File on the PR is not the live row. `DATABASE_URL` is a Cloud Agent runtime secret — unset → stop and name it; do not remint the SQL. Do not commit `.env` or secrets.
 
 ## Must-not
