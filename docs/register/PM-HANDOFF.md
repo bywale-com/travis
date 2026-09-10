@@ -1,4 +1,4 @@
-# Architect seat handoff — 2026-09-09 20:35 UTC
+# Architect seat handoff — 2026-09-10 01:25 UTC
 
 **This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical Architect until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
@@ -16,7 +16,7 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **20:35 UTC 2026-09-09**. Flag **14:00**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **01:25 UTC 2026-09-10**. Flag **14:00**. |
 | 019 stream architecture | [`PM-PACKET-019-STREAM-ARCH.md`](./PM-PACKET-019-STREAM-ARCH.md) · test [`PM-PACKET-019-STREAM-ARCH-TEST.md`](./PM-PACKET-019-STREAM-ARCH-TEST.md). **Wake:** sa. SA **035**. |
 | 018 what exists | [`PM-PACKET-018-WHAT-EXISTS.md`](./PM-PACKET-018-WHAT-EXISTS.md) · SA **034** planted · look Pass. [#161](https://github.com/bywale-com/travis/pull/161). Preview think unwired (no OpenAI key). Walk 018 on the **live** app. |
 | Meaning | Walk back in; start leaves before “I’m done”; change in flight; wrap last. |
@@ -25,11 +25,11 @@
 
 ## Next Architect job
 
-1. SA 035 ascribes. Engineer’s **first plant** on 019: Live stays the ear (connect wait; no think on flush; do not relabel unwired). Then classify. Do not plant `src/` from this seat.
-2. Human walks 018 on the **live** Travis app (preview is unwired). Look Pass was SSO only.
-3. After 019 plants: Architect look + the 019 test sheet. Founder re-pastes Automation C if it is still leftover.
-4. Do not remint 011–018 / 027–034.
-5. Do not plant `src/`.
+1. Founder named the gap: Engineer builds from the inside; tester ∈ Engineer; automate the mechanism, including Voice doors. Not a packet until he locks it. Do not mint a Tester seat.
+2. SA 035 ascribes 019. Engineer’s first plant: Live stays the ear. Then classify. Do not plant `src/` from this seat.
+3. Human walks 018 on the **live** Travis app (preview is unwired). Look Pass was SSO only.
+4. After 019 plants: Architect look + the 019 test sheet. Founder re-pastes Automation C if it is still leftover.
+5. Do not remint 011–018 / 027–034.
 
 ---
 

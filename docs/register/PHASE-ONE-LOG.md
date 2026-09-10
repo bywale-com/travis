@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-09 20:35 UTC — Live still falls to phone ear / I’m done because four patches hung think on the ear. Flag 14:00 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-10 01:25 UTC — Gap: no engineer building Travis from the inside. Mechanism tests are Engineer. Flag 14:00 stands.
 
 **How we maintain this log**
 
@@ -3579,3 +3579,17 @@ Not the model. Not a new face.
 **019 recut.** First plant, before classify: wait for the in-flight connect; do not relabel unwired; Live transcript does not `pipeTravisText`. 081’s Type hang stays on **finalize** (the wrap), not on every flush. Do not remint 036 / 079 / 080 / 081 / 032. Do not write a fifth subtitle patch.
 
 **I do not plant `src/`.**
+
+---
+
+## 2026-09-10 01:25 UTC — Engineer builds from the inside; tester is Engineer (founder)
+
+**Kind:** Type A. How we build. Flag 14:00 stands. Not a plant. Not a fourth seat.
+
+**Founder (preserved):** I just realized the gap inside of Travis right now as I sits. The gap is that we don't actually have an engineer building Travis. What does an engineer do? An engineer would build Travis from the inside out. We're trying to build Travis from the outside in. In what place is it the product manager that finds bugs in the app? No, it's the tester. Who is part of the engineering department? Every single thing that's being built inside of Travis, we need to find a way where the automation of the test is possible. Including voice, somehow. What is important is testing the mechanism. Well, it's not the only important thing, but if nothing, that's something. Thoughts?
+
+**What is already true.** Engineer verify is “run the build” and “manual smoke on the phone-first face.” Architect look walks a sheet after the plant; Voice is named as human; “Pass for what this seat could do” after a login wall has been treated as emerge. `npm test` already runs dozens of lib tests (`ear`, `conductor`, `live-harness`, `stream-intent`). It does not run the Voice doors (`connectLive`, token, `armEar`). The protocol line “Voice stays human… over inventing a tester product” is the outside-in we have been doing.
+
+**Alignment (not the flag).** Tester is not a new Cursor seat. Tester is Engineer. Inside-out: the plant includes a mechanism test that can fail the build. Architect specs what must be true. Architect look is “did the glass match” after that test is already green — not the first time the ear is proven. Voice automation tests the **doors** (wanted ear, connect wait, unwired stays unwired, flush does not think, “I’m done” is finalize). It does not farm a phone or replay the live mouth. Do not invent a tester product. Hang `npm test`. Extract what `Room.tsx` still holds so the lie can fail in CI.
+
+**Not a lock until he says so.** Packet 020 would be this law. I do not wake SA on a thought.
