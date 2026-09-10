@@ -28,11 +28,12 @@ test("one PR per initiative is written where seats will see it", () => {
   assert.match(index, /HOTFIX-070-GLANCE-TRUTH/);
   assert.match(index, /HOTFIX-071-PASS-ON/);
   assert.match(index, /HOTFIX-072-STALE-MOTION/);
-  assert.match(index, /Next: \*\*082\*\*/);
   assert.match(index, /HOTFIX-073-TECHNICAL-PM/);
   assert.match(index, /HOTFIX-076-SEAT-STREAM/);
   assert.match(index, /HOTFIX-080-DEEPAGENTS-ESM/);
   assert.match(index, /HOTFIX-081-VOICE-DEEP-AGENTS/);
+  assert.match(index, /HOTFIX-082-RUNTIME-DOORS-PERMISSIONS/);
+  assert.match(index, /Next: \*\*083\*\*/);
 
   const house =
     read("docs/register/house-now/protocols/engineer.md") +
