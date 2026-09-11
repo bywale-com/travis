@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-11 14:40 UTC — Hotfix 086 PM look Pass; runtime-doors correctly red on preview (generate miss), not false green. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-11 15:06 UTC — Hotfix 088 PM look Pass; red doors skips `fail-look` on unwired / Cursor hard limit; B stops on founder ops. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3755,3 +3755,17 @@ Not the model. Not a new face.
 **Test.** `npm test` 472/472. `runtime-doors` CI 0/5 on preview — correct failure, not false green. Fail-look step planted; live on merge. [`PM-LOOK-HOTFIX-086.md`](./PM-LOOK-HOTFIX-086.md) **Verdict: Pass**. No `fail-look`.
 
 **Emerged.** Human may walk [`HOTFIX-086-RUNTIME-IS-THE-APP-TEST.md`](./HOTFIX-086-RUNTIME-IS-THE-APP-TEST.md) on preview after SSO.
+
+---
+
+## 2026-09-11 15:06 UTC — Hotfix 088 PM look Pass (Technical PM)
+
+**Kind:** Hotfix look. Flag 14:00 2026-08-25 stands. Not a plant.
+
+**Cut.** [`HOTFIX-088-FAIL-LOOK-OPS-SKIP.md`](./HOTFIX-088-FAIL-LOOK-OPS-SKIP.md) on [PR #174](https://github.com/bywale-com/travis/pull/174). Red `runtime-doors` tees the walk log; unwired / Cursor hard limit → no `fail-look`; engineer miss still fresh-adds. B prompt stops on founder ops.
+
+**Look.** Plant matches both cuts. Grep order correct against real tape shapes from 086 walks. No preview (hang). `DATABASE_URL` unset.
+
+**Test.** Simulated walk miss lines for unwired, hard limit, `Cannot use import`, and `did not speak`. [`PM-LOOK-HOTFIX-088.md`](./PM-LOOK-HOTFIX-088.md) **Verdict: Pass**. No `fail-look`.
+
+**Emerged.** Human may walk [`HOTFIX-088-FAIL-LOOK-OPS-SKIP-TEST.md`](./HOTFIX-088-FAIL-LOOK-OPS-SKIP-TEST.md) after merge when a live red doors run proves the skip.
