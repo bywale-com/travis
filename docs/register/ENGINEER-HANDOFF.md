@@ -2,7 +2,7 @@
 
 **This bind is living.** Last prior bind: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a`. Do not start from a transcript.
 
-**086 runtime is the app (this PR):** Walks wait for the mouth. Red `runtime-doors` fresh-adds `fail-look` (`WAKE_GITHUB_TOKEN`) so B recuts. Prompt recut in `house-now/automations/sa-complete-engineer.prompt.md` — human Save+Activate. Action hangs on merge (`repository_dispatch` uses `main`). Next hotfix **087**. Playwright glass still SA 036. Signal is `runtime-doors`.
+**086 runtime is the app (this PR):** Walks wait for the mouth. Deep Agents hangs on lazy `createRequire()` (`travis-deep-agent.ts`, `travis-checkpointer.ts`) so Vercel does not webpack `import()` ESM. Type send writes `Dest error:` when `dispatchToSeat` returns error. Red `runtime-doors` fresh-adds `fail-look` (`WAKE_GITHUB_TOKEN`) so B recuts. Prompt recut in `house-now/automations/sa-complete-engineer.prompt.md` — human Save+Activate. Action hangs on merge (`repository_dispatch` uses `main`). Next hotfix **087**. Playwright glass still SA 036. Signal is `runtime-doors`. **type-dest** may still fail on Cursor hard-limit billing — that is not this cut.
 
 **085 type-dest recut (merged):** Type send returns SSE and writes the user turn before role dest resolve; chip dests dispatch write-and-leave (`dispatchToSeat` with `enqueueIfBusy: false` on role dests); SSE headers include `X-Accel-Buffering: no`. Merged on [PR #170](https://github.com/bywale-com/travis/pull/170).
 
