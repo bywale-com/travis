@@ -28,8 +28,8 @@ Engineer automation — full Engineer protocol
 Technical Architect look + what it can test
         ↓  Fail → label fail-look (same PR)
         ↓  Pass → emerge. Action emails the *-TEST.md. Human walks that sheet.
-runtime-doors red → Action fresh-adds fail-look (WAKE_GITHUB_TOKEN) → same B
-        (skip if the miss is unwired or Cursor hard limit — founder ops)
+runtime-doors red → Engineer miss: Action fresh-adds fail-look (WAKE_GITHUB_TOKEN) → same B
+                 → ops miss (unwired / Cursor hard limit): GitHub issue + house mail, no B
 ```
 
 **Waiting is a line the Action greps.** Draft is not the hold — we keep PRs draft through plant. Chat prose (“then SA”, “don’t wake Engineer”) is not the hold. The filename `PM-PACKET-NNN` is not the hold. Exact line on the packet, whole line:

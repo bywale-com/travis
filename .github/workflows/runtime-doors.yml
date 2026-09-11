@@ -1,7 +1,7 @@
 # Deployment Check: Vercel hangs `vercel.deployment.ready` until this job
 # paints. Do not fold this into wake-packet-seats.yml — that file wakes seats.
 # Official hang: https://vercel.com/docs/deployment-checks
-# Red → fail-look unless the tape is founder ops (unwired / Cursor hard limit).
+# Red → fail-look on an Engineer miss. Founder ops (unwired / Cursor hard limit) → house issue, not B.
 name: Runtime doors
 
 on:
@@ -50,24 +50,19 @@ jobs:
         with:
           name: runtime-doors
 
-      - name: Fresh-add fail-look on the open PR
+      - name: After a red check — Engineer loop or house issue
         if: failure()
         env:
           WAKE_GITHUB_TOKEN: ${{ secrets.WAKE_GITHUB_TOKEN }}
           FALLBACK_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEPLOY_SHA: ${{ github.event.client_payload.git.sha }}
+          DEPLOY_URL: ${{ github.event.client_payload.url }}
           WALK_LOG: ${{ runner.temp }}/walks.txt
+          EMERGE_EMAIL: ${{ secrets.EMERGE_EMAIL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_FROM_EMAIL: ${{ secrets.RESEND_FROM_EMAIL }}
         run: |
           set -euo pipefail
-          log="${WALK_LOG:-}"
-          if [[ -f "$log" ]]; then
-            if grep -qE "Cannot use import|did not speak|run error on tape: Travis" "$log"; then
-              echo "Engineer miss on tape. fail-look."
-            elif grep -qE "isn.t wired|hard limit" "$log"; then
-              echo "Founder ops miss (unwired or Cursor hard limit). No fail-look."
-              exit 0
-            fi
-          fi
           if [[ -n "${WAKE_GITHUB_TOKEN:-}" ]]; then
             export GH_TOKEN="$WAKE_GITHUB_TOKEN"
             if login=$(gh api user --jq .login 2>/dev/null); then
@@ -75,21 +70,91 @@ jobs:
             else
               echo "WAKE_GITHUB_TOKEN rejected (401). Falling back to Actions bot."
               export GH_TOKEN="$FALLBACK_GH_TOKEN"
-              echo "Label actor: github-actions[bot] — B will not see this add."
+              echo "Label actor: github-actions[bot]"
             fi
           else
             export GH_TOKEN="$FALLBACK_GH_TOKEN"
-            echo "Label actor: github-actions[bot] (no WAKE_GITHUB_TOKEN) — B will not see this add."
+            echo "Label actor: github-actions[bot] (no WAKE_GITHUB_TOKEN)"
+          fi
+
+          log="${WALK_LOG:-}"
+          ops=""
+          if [[ -f "$log" ]]; then
+            if grep -qE "Cannot use import|did not speak|run error on tape: Travis" "$log"; then
+              ops=""
+            elif grep -qiE "hard limit" "$log"; then
+              ops="hard-limit"
+            elif grep -qiE "isn.t wired" "$log"; then
+              ops="unwired"
+            fi
           fi
 
           sha="${DEPLOY_SHA:-}"
+          pr=""
+          if [[ -n "$sha" ]]; then
+            pr=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${sha}/pulls" \
+              --jq '[.[] | select(.state=="open")][0].number // empty')
+          fi
+          run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
+          if [[ -n "$ops" ]]; then
+            if [[ "$ops" == "hard-limit" ]]; then
+              title="runtime-doors: Cursor hard limit — dest cannot leave"
+              subject="runtime-doors red — Cursor hard limit (dest cannot leave)"
+              cause="Cursor Cloud create is at the hard limit (need ≥ \$2 remaining). Dest cannot leave."
+              do_line="Raise spend at https://www.cursor.com/dashboard?tab=settings"
+            else
+              title="runtime-doors: Travis isn't wired — OPENAI_API_KEY missing on this deploy"
+              subject="runtime-doors red — Travis isn't wired (OPENAI_API_KEY)"
+              cause="OPENAI_API_KEY is missing on this Vercel deploy. Repo .env is not loaded."
+              do_line="Set OPENAI_API_KEY on Vercel for Preview and Production."
+            fi
+            clip=$(grep -E "Dest error:|isn't wired|isn.t wired|hard limit|type-dest:" "$log" | head -n 8 || true)
+            letter=$(mktemp)
+            {
+              echo "runtime-doors is red. This is house mail. Not Travis."
+              echo
+              echo "Cause: ${cause}"
+              echo "Do: ${do_line}"
+              echo "Engineer cannot recut this. Check stays red until the house move lands. No fail-look (no B)."
+              echo
+              echo "Deploy: ${DEPLOY_URL:-unknown}"
+              echo "Walk: ${run_url}"
+              if [[ -n "$pr" ]]; then
+                echo "PR: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/pull/${pr}"
+              fi
+              echo
+              echo '```'
+              echo "$clip"
+              echo '```'
+            } > "$letter"
+            existing=$(gh issue list --state open --limit 50 --json number,title \
+              --jq "[.[] | select(.title==\"${title}\") | .number][0] // empty")
+            opened=""
+            if [[ -z "$existing" ]]; then
+              issue=$(gh issue create --title "$title" --body-file "$letter" --assignee bywale-com \
+                || gh issue create --title "$title" --body-file "$letter")
+              echo "Opened $issue"
+              opened=1
+            else
+              gh issue comment "$existing" --body-file "$letter"
+              echo "Commented on #$existing"
+            fi
+            if [[ -n "$opened" && -n "$pr" ]]; then
+              gh pr comment "$pr" --body-file "$letter" || true
+            fi
+            if [[ -n "$opened" ]]; then
+              python3 .github/scripts/send-runtime-doors-letter.py "$letter" "$subject"
+            fi
+            rm -f "$letter"
+            echo "No fail-look."
+            exit 0
+          fi
+
           if [[ -z "$sha" ]]; then
             echo "No client_payload.git.sha. No fail-look."
             exit 0
           fi
-
-          pr=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${sha}/pulls" \
-            --jq '[.[] | select(.state=="open")][0].number // empty')
           if [[ -z "$pr" ]]; then
             echo "No open PR for $sha. No fail-look."
             exit 0
