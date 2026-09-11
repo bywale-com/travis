@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-11 14:40 UTC — Hotfix 086 PM look Pass; runtime-doors correctly red on preview (generate miss), not false green. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-11 15:15 UTC — Hotfix 089 PM look Pass; ops-red doors notify the house (issue + one mail), Engineer miss still fail-looks. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3755,3 +3755,17 @@ Not the model. Not a new face.
 **Test.** `npm test` 472/472. `runtime-doors` CI 0/5 on preview — correct failure, not false green. Fail-look step planted; live on merge. [`PM-LOOK-HOTFIX-086.md`](./PM-LOOK-HOTFIX-086.md) **Verdict: Pass**. No `fail-look`.
 
 **Emerged.** Human may walk [`HOTFIX-086-RUNTIME-IS-THE-APP-TEST.md`](./HOTFIX-086-RUNTIME-IS-THE-APP-TEST.md) on preview after SSO.
+
+---
+
+## 2026-09-11 15:15 UTC — Hotfix 089 PM look Pass (Technical PM)
+
+**Kind:** Hotfix look. Flag 14:00 2026-08-25 stands. Not a plant.
+
+**Cut.** [`HOTFIX-089-DOORS-OPS-NOTIFY.md`](./HOTFIX-089-DOORS-OPS-NOTIFY.md) on [PR #175](https://github.com/bywale-com/travis/pull/175). Builds on 088: ops-red (`unwired` / Cursor hard limit) opens or comments a house issue, mails once on first open with the miss subject, no `fail-look`. Engineer generate miss still fresh-adds `fail-look`. `send-runtime-doors-letter.py` shares Resend secrets; subject is not emerge.
+
+**Look.** Plant matches all three cuts. No glass (workflow hang). `DATABASE_URL` unset — not SQL.
+
+**Test.** Static walk of [`HOTFIX-089-DOORS-OPS-NOTIFY-TEST.md`](./HOTFIX-089-DOORS-OPS-NOTIFY-TEST.md): ops vs Engineer classification, one-mail-on-open, repeat-comment-only, fail-look path preserved. Did not trigger live `repository_dispatch`. [`PM-LOOK-HOTFIX-089.md`](./PM-LOOK-HOTFIX-089.md) **Verdict: Pass**. No `fail-look`.
+
+**Emerged.** Human may walk the same sheet after merge.
