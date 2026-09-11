@@ -1,7 +1,7 @@
 # Deployment Check: Vercel hangs `vercel.deployment.ready` until this job
 # paints. Do not fold this into wake-packet-seats.yml — that file wakes seats.
 # Official hang: https://vercel.com/docs/deployment-checks
-# Red → fail-look unless the tape is founder ops (unwired / Cursor hard limit).
+# Red → fail-look always. Engineer triages plant vs founder ops (021 circuit breaker).
 name: Runtime doors
 
 on:
@@ -59,15 +59,6 @@ jobs:
           WALK_LOG: ${{ runner.temp }}/walks.txt
         run: |
           set -euo pipefail
-          log="${WALK_LOG:-}"
-          if [[ -f "$log" ]]; then
-            if grep -qE "Cannot use import|did not speak|run error on tape: Travis" "$log"; then
-              echo "Engineer miss on tape. fail-look."
-            elif grep -qE "isn.t wired|hard limit" "$log"; then
-              echo "Founder ops miss (unwired or Cursor hard limit). No fail-look."
-              exit 0
-            fi
-          fi
           if [[ -n "${WAKE_GITHUB_TOKEN:-}" ]]; then
             export GH_TOKEN="$WAKE_GITHUB_TOKEN"
             if login=$(gh api user --jq .login 2>/dev/null); then

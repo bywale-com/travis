@@ -22,7 +22,7 @@ describe("come-back", { skip: !haveUrl }, () => {
     }
     assertThinkWorked(turns1, "come-back before leave", sent);
 
-    const desk2 = await openRoom();
+    const desk2 = await openRoom(desk1);
     if (desk2.sessionId !== desk1.sessionId) {
       failUse(
         "come-back",

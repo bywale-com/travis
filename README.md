@@ -6,6 +6,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-11** · Packet 021 recut · [PR #177](https://github.com/bywale-com/travis/pull/177) — Circuit breaker: dumb doors always fail-look, 087 ESM fix, blocker hold for Cursor hard limit, because combined plant + founder ops failures looped agents and 088 silenced red without notifying the team.
+
 - **2026-09-11** · Hotfix 088 · [PR #174](https://github.com/bywale-com/travis/pull/174) — Red `runtime-doors` does not `fail-look` Cursor hard limit or unwired, because Engineer cannot recut founder ops and the loop kept booting B.
 
 - **2026-09-11** · Hotfix 086 · [PR #171](https://github.com/bywale-com/travis/pull/171) — Runtime walks wait for Travis to speak, and a red `runtime-doors` fresh-adds `fail-look`, because `?? · run error` on Type still painted the check green.

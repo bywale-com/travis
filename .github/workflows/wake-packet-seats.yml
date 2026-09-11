@@ -18,10 +18,13 @@ on:
       - "docs/register/SYSTEMS-CHANGE-PACKET-*.md"
       - "docs/register/PM-LOOK-*.md"
       - "docs/register/HOTFIX-*.md"
+      - "docs/register/BLOCKER-*.md"
       - "docs/register/ENGINEER-HANDOFF.md"
       - "src/**"
       - ".github/workflows/wake-packet-seats.yml"
       - ".github/scripts/**"
+  pull_request:
+    types: [unlabeled]
   workflow_dispatch:
     inputs:
       nnn:
@@ -98,6 +101,25 @@ jobs:
           gh label create wake-pm-look --color CCCCCC --description "Cursor: wake Technical PM look+test" 2>/dev/null || true
           gh label create fail-look --color CCCCCC --description "Cursor: Engineer loop after PM look Fail" 2>/dev/null || true
           gh label create emerge --color CCCCCC --description "PM look Pass — human test" 2>/dev/null || true
+          gh label create blocker --color B60205 --description "Founder ops block — remove when cleared to redeploy" 2>/dev/null || true
+
+          # Circuit breaker (021): blocker file → label, sleep automations, mail founder.
+          if echo "$files" | grep -E '^docs/register/BLOCKER-[0-9]+-.+\.md$' | grep -q .; then
+            blocker=$(echo "$files" | grep -E '^docs/register/BLOCKER-[0-9]+-.+\.md$' | head -n 1)
+            gh pr edit "$pr" --remove-label fail-look || true
+            gh pr edit "$pr" --remove-label wake-engineer || true
+            gh pr edit "$pr" --remove-label wake-pm-look || true
+            if gh pr edit "$pr" --add-label blocker; then
+              echo "Labeled #$pr blocker ($blocker)."
+            fi
+            cause=$(sed -n 's/^# Blocker [0-9]* — //p' "$blocker" | head -n 1)
+            pocket=$(sed -n 's/^\*\*Pocket:\*\* //p' "$blocker" | head -n 1)
+            if [[ -n "${EMERGE_EMAIL:-}" && -n "${RESEND_API_KEY:-}" && -n "${RESEND_FROM_EMAIL:-}" ]]; then
+              python3 .github/scripts/send-blocker-letter.py "${pocket:-Packet}" "${cause:-founder ops}" "$blocker"
+            else
+              echo "No EMERGE_EMAIL + RESEND. Blocker file is the letter."
+            fi
+          fi
 
           # Hotfix pickup: this push lands HOTFIX-NNN-*.md. Title the PR
           # "Hotfix NNN — …" (human tell). Skip SA. Do not re-wake Engineer
@@ -242,6 +264,28 @@ jobs:
               fi
             fi
           fi
+
+  release-blocker:
+    if: github.event_name == 'pull_request' && github.event.action == 'unlabeled' && github.event.label.name == 'blocker'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.WAKE_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
+      - name: Redeploy after founder cleared blocker
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "Circuit breaker release — redeploy after blocker cleared"
+          git push origin "HEAD:${HEAD_REF}"
+          echo "Empty commit pushed. Vercel will rebuild."
 
   emerge-now:
     if: github.event_name == 'workflow_dispatch'

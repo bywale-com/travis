@@ -4,6 +4,7 @@
  * until SA ascribes a second operator or a create-new door.
  */
 
+import { randomUUID } from "node:crypto";
 import { OPERATOR_COOKIE } from "@/lib/operator-auth";
 import type { TapeTurn } from "./app-worked";
 import { assertNotHtml, contentKind } from "./not-html";
@@ -27,12 +28,17 @@ function testOperatorCookie(): string {
   return process.env.TRAVIS_TEST_OPERATOR_COOKIE?.trim() ?? "";
 }
 
-function headers(): Headers {
+/** Isolated operator email — not on the seed list, so each walk owns its own pile. */
+function walkOperatorToken(): string {
+  return `runtime-${randomUUID()}@travis.internal`;
+}
+
+function headersForDesk(desk?: Pick<Desk, "operatorToken">): Headers {
   const h = new Headers();
   const bypass = process.env.VERCEL_AUTOMATION_BYPASS_SECRET?.trim();
   if (bypass) h.set("x-vercel-protection-bypass", bypass);
-  const cookie = testOperatorCookie();
-  if (cookie) h.set("cookie", `${OPERATOR_COOKIE}=${cookie}`);
+  const cookie = desk?.operatorToken ?? testOperatorCookie();
+  if (cookie) h.set("cookie", `${OPERATOR_COOKIE}=${encodeURIComponent(cookie)}`);
   return h;
 }
 
@@ -47,11 +53,12 @@ function requireOwnRooms(): void {
 export async function doorFetch(
   path: string,
   init: RequestInit = {},
+  desk?: Pick<Desk, "operatorToken">,
 ): Promise<{ res: Response; bodyText: string; kind: ReturnType<typeof contentKind> }> {
   const base = runtimeBaseUrl();
   if (!base) throw new Error("RUNTIME_BASE_URL is not set.");
   requireOwnRooms();
-  const h = headers();
+  const h = headersForDesk(desk);
   const extra = init.headers;
   if (extra) {
     const e = new Headers(extra);
@@ -69,12 +76,17 @@ export async function doorFetch(
 
 export type Desk = {
   sessionId: string;
+  /** Walk-scoped operator cookie (email). Concurrent CI jobs must not share one pile. */
+  operatorToken: string;
 };
 
-export async function openRoom(): Promise<Desk> {
-  const { res, bodyText, kind } = await doorFetch("/api/session", {
-    method: "POST",
-  });
+export async function openRoom(desk?: Pick<Desk, "operatorToken">): Promise<Desk> {
+  const operatorToken = desk?.operatorToken ?? walkOperatorToken();
+  const { res, bodyText, kind } = await doorFetch(
+    "/api/session",
+    { method: "POST" },
+    { operatorToken },
+  );
   if (kind !== "json") {
     throw new Error(`openRoom expected JSON, got ${kind} (${res.status})`);
   }
@@ -88,14 +100,12 @@ export async function openRoom(): Promise<Desk> {
       `openRoom had no session.id (${res.status}): ${data.error ?? bodyText.slice(0, 140)}`,
     );
   }
-  return { sessionId: id };
+  return { sessionId: id, operatorToken };
 }
 
-/** End the live sitting and open a new one. Walks must not share a tape. */
+/** Fresh isolated room for one walk. No End+open — unique operator avoids cross-job stomp. */
 export async function openFreshRoom(): Promise<Desk> {
-  const live = await openRoom();
-  await endSession(live);
-  return openRoom();
+  return openRoom({ operatorToken: walkOperatorToken() });
 }
 
 export async function endSession(desk: Desk): Promise<void> {
@@ -106,6 +116,7 @@ export async function endSession(desk: Desk): Promise<void> {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ status: "ended" }),
     },
+    desk,
   );
   if (res.status === 404) return;
   if (kind !== "json") {
@@ -120,6 +131,8 @@ export async function readTurns(desk: Desk, afterSeq?: number): Promise<TapeTurn
   const q = afterSeq != null ? `?afterSeq=${afterSeq}` : "";
   const { res, bodyText, kind } = await doorFetch(
     `/api/session/${desk.sessionId}/turns${q}`,
+    {},
+    desk,
   );
   if (kind !== "json") {
     throw new Error(`turns expected JSON, got ${kind} (${res.status})`);
@@ -151,6 +164,8 @@ export async function readQueue(desk: Desk): Promise<{
 }> {
   const { res, bodyText, kind } = await doorFetch(
     `/api/session/${desk.sessionId}/queue`,
+    {},
+    desk,
   );
   if (kind !== "json") {
     throw new Error(`queue expected JSON, got ${kind} (${res.status})`);
