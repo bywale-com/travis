@@ -6,6 +6,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-11** · preview after handoffs · [PR #179](https://github.com/bywale-com/travis/pull/179) — Vercel preview is opt-in after seat labels and blocker are gone, because a preview during SA / Engineer / PM Look / fail-look was waking another Engineer on every push.
+
 - **2026-09-11** · fail-look recut #179 · [PR #179](https://github.com/bywale-com/travis/pull/179) — `deepagents-node.ts` loads `deepagents/node` via `createRequire` so Vercel hits CJS not ESM, and `BLOCKER-001` holds Cursor hard-limit on type-dest, because runtime walks red on import errors and founder ops cannot be recut in code.
 
 - **2026-09-11** · SCP-036 circuit breaker · [PR #179](https://github.com/bywale-com/travis/pull/179) — Full-audit walks, Engineer triage with BLOCKER hold + `[vercel skip]`, blocker mail, and deploy-hook release replace Action-side regex triage, because doomed redeploy loops and silent red checks hid founder ops failures.

@@ -28,9 +28,9 @@ Fill **I saw** on each step.
 **Expect:**
 - Engineer patches code in `src/`.
 - Engineer writes `docs/register/BLOCKER-021-*.md` naming the exact limit and direct dashboard URL.
-- Engineer commits with `[skip ci]` in the message.
+- Engineer commits **without** the preview green-light tag.
 - Vercel does **not** initiate a deployment build.
-- PR is labeled `blocker`. Labels `fail-look` and `wake-engineer` are removed.
+- PR is labeled `blocker`. Seat wake labels are removed.
 - Founder receives blocker email via Resend (`EMERGE_EMAIL`).
 
 **I saw:**
@@ -44,7 +44,8 @@ Fill **I saw** on each step.
 2. Founder removes the `blocker` label from the PR.
 
 **Expect:**
-- The deployment action triggers a fresh deployment/walk.
+- If no handoff labels remain, Action empty-commits the preview green-light tag.
+- Vercel builds that commit only.
 - Walks run against the unblocked environment.
 - With code fixed and platform unblocked, `runtime-doors` paints green.
 

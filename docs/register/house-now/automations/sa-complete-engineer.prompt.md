@@ -26,8 +26,8 @@ fi
 - Else → newest failed `runtime-doors` log for this PR. Triage every failure:
   - **Bucket A (plant / code):** fix in `src/`. Verify with `npm test`.
   - **Bucket B (founder ops):** Cursor hard limit, unwired preview, missing secrets — file `docs/register/BLOCKER-NNN-*.md` with cause, action, URL, tape excerpt.
-- If **any Bucket B:** commit code fixes + blocker with **`[vercel skip]`** so Vercel does not rebuild into the same wall (do not use `[skip ci]` — that silences GitHub Actions too). Push stops here; Action labels `blocker` and mails the founder.
-- If **Bucket A only:** push normally. Do not stop for a missing PM-LOOK.
+- If **any Bucket B:** commit code fixes + blocker **without** the preview green-light tag. Do not use `[skip ci]` — that silences GitHub Actions too. Preview is opt-in; this push will not deploy. Push stops here; Action labels `blocker` and mails the founder.
+- If **Bucket A only:** push **without** the preview green-light tag. Do not stop for a missing PM-LOOK. An Action may add `wake-pm-look`. Vercel stays skipped until handoff labels and `blocker` are gone.
 
 **Else** run this and nothing else:
 
@@ -96,7 +96,7 @@ Print the verify query the hotfix named (ids, paths, membership). Then the hang 
 - `docs/register/initiatives/<nnn>-<slug>/` if this pocket needs the folder — on **this** PR.
 - Hotfix files only if this cut is actually a hotfix (it is not, when a packet woke you).
 
-Commit and push to **this PR’s head branch**.
+Commit and push to **this PR’s head branch**. Do **not** put `[vercel build]` in any seat commit. Preview is an Action empty commit after `wake-sa` / `wake-engineer` / `wake-pm-look` / `fail-look` / `blocker` are all off.
 
 ## You do not write
 

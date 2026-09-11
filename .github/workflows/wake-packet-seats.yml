@@ -4,6 +4,10 @@
 # Packet: this push lands PM-PACKET-NNN-*.md AND that file has **Wake:** sa
 #   → wake-sa. Missing / hold = wait. Filename alone is not the go.
 # Hotfix: this push lands HOTFIX-NNN-*.md → wake-engineer only (no wake-sa).
+# One seat label at a time — adding a wake strips the others.
+# blocker already on the PR → no new seat labels (hold).
+# Preview is opt-in: after handoff labels and blocker are gone, empty-commit
+# the green-light tag. Seat commits must not carry that tag.
 # Label adds must be the founder (WAKE_GITHUB_TOKEN), not github-actions[bot].
 # Cursor's label trigger does not treat the Actions bot as the owner.
 # Pass → emerge letter (issue + optional email). Not Travis. No LLM.
@@ -103,6 +107,21 @@ jobs:
           gh label create emerge --color CCCCCC --description "PM look Pass — human test" 2>/dev/null || true
           gh label create blocker --color CCCCCC --description "Founder ops hold — automations sleep" 2>/dev/null || true
 
+          strip_seats_except() {
+            keep="${1:-}"
+            for l in wake-sa wake-engineer wake-pm-look fail-look; do
+              if [[ "$l" != "$keep" ]]; then
+                gh pr edit "$pr" --remove-label "$l" || true
+              fi
+            done
+          }
+          add_seat() {
+            lab="$1"
+            strip_seats_except "$lab"
+            gh pr edit "$pr" --remove-label "$lab" || true
+            gh pr edit "$pr" --add-label "$lab"
+          }
+
           # Blocker hold: this push lands BLOCKER-NNN-*.md (not *-RESOLVED).
           # Label blocker, strip seat wakes, mail founder. No wake-engineer.
           blocker_file=""
@@ -116,6 +135,7 @@ jobs:
           done < <(echo "$files" | grep -E '^docs/register/BLOCKER-[0-9]+-.+\.md$' || true)
           if [[ -n "$blocker_file" ]]; then
             gh pr edit "$pr" --remove-label fail-look || true
+            gh pr edit "$pr" --remove-label wake-sa || true
             gh pr edit "$pr" --remove-label wake-engineer || true
             gh pr edit "$pr" --remove-label wake-pm-look || true
             gh pr edit "$pr" --remove-label blocker || true
@@ -133,6 +153,12 @@ jobs:
             exit 0
           fi
 
+          if gh pr view "$pr" --json labels --jq '.labels[].name' | grep -qx blocker; then
+            strip_seats_except ""
+            echo "blocker already on #$pr. Stripped leftover seat labels. No new wakes."
+            exit 0
+          fi
+
           # Hotfix pickup: this push lands HOTFIX-NNN-*.md. Title the PR
           # "Hotfix NNN — …" (human tell). Skip SA. Do not re-wake Engineer
           # on later commits on the same PR (file not in this push).
@@ -143,8 +169,7 @@ jobs:
             if [[ "$title" == Hotfix\ * ]]; then
               # Re-arm: label-added only fires on a fresh add. A leftover
               # wake-engineer from an earlier push would otherwise stay silent.
-              gh pr edit "$pr" --remove-label wake-engineer || true
-              if gh pr edit "$pr" --add-label wake-engineer; then
+              if add_seat wake-engineer; then
                 echo "Hotfix. Labeled #$pr wake-engineer. No wake-sa."
               else
                 echo "Hotfix. Could not add wake-engineer. Fine-grained PAT needs Issues write AND Pull requests write on this repo."
@@ -167,7 +192,7 @@ jobs:
               fi
             done < <(echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$')
             if [[ -n "$go" ]]; then
-              gh pr edit "$pr" --add-label wake-sa
+              add_seat wake-sa
               echo "Labeled #$pr wake-sa"
             else
               echo "Packet waiting. No wake-sa."
@@ -175,13 +200,13 @@ jobs:
           fi
 
           if echo "$files" | grep -E '^docs/register/SYSTEMS-CHANGE-PACKET-.+\.md$'; then
-            gh pr edit "$pr" --add-label wake-engineer
+            add_seat wake-engineer
             echo "Labeled #$pr wake-engineer"
           fi
 
           for f in $(echo "$files" | grep -E '^docs/register/PM-LOOK-.+\.md$' || true); do
             if git show "$AFTER:$f" | grep -q '^\*\*Verdict:\*\* Fail'; then
-              gh pr edit "$pr" --add-label fail-look
+              add_seat fail-look
               echo "Labeled #$pr fail-look"
               break
             fi
@@ -235,6 +260,7 @@ jobs:
                 echo "$missing"
               fi
             } > "$letter"
+            strip_seats_except ""
             gh pr edit "$pr" --add-label emerge && echo "Labeled #$pr emerge" || echo "Could not label emerge"
             existing=$(gh issue list --state all --search "${issue_title} in:title" --json number --jq '.[0].number // empty')
             if [[ -z "$existing" ]]; then
@@ -263,37 +289,71 @@ jobs:
           if echo "$files" | grep -qE '^(src/|docs/register/ENGINEER-HANDOFF\.md$)'; then
             pr_files=$(gh pr view "$pr" --json files --jq '.files[].path')
             if echo "$pr_files" | grep -qE '^docs/register/HOTFIX-[0-9]+-.+\.md$'; then
-              gh pr edit "$pr" --remove-label wake-pm-look || true
-              if gh pr edit "$pr" --add-label wake-pm-look; then
+              if add_seat wake-pm-look; then
                 echo "Labeled #$pr wake-pm-look (hotfix plant)"
               else
                 echo "Could not add wake-pm-look."
               fi
             elif echo "$pr_files" | grep -qE '^docs/register/SYSTEMS-CHANGE-PACKET-'; then
               if echo "$pr_files" | grep -qE '^docs/register/PM-PACKET-[0-9]'; then
-                gh pr edit "$pr" --add-label wake-pm-look
+                add_seat wake-pm-look
                 echo "Labeled #$pr wake-pm-look"
               fi
             fi
           fi
 
+  preview-when-clear:
+    needs: [label]
+    if: github.event_name == 'push' && github.ref != 'refs/heads/main' && needs.label.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.WAKE_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
+      - name: Green-light preview when handoffs are done
+        env:
+          GH_TOKEN: ${{ secrets.WAKE_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
+          HEAD_REF: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          pr=""
+          for i in 1 2 3 4 5 6; do
+            pr=$(gh pr list --head "$HEAD_REF" --state open --json number --jq '.[0].number // empty')
+            if [[ -n "$pr" ]]; then
+              break
+            fi
+            sleep 5
+          done
+          if [[ -z "$pr" ]]; then
+            echo "No open PR for $HEAD_REF. No green light."
+            exit 0
+          fi
+          sh .github/scripts/preview-when-clear.sh "$pr" "$HEAD_REF"
+
   blocker-release:
     if: github.event_name == 'pull_request' && github.event.action == 'unlabeled' && github.event.label.name == 'blocker'
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
+      pull-requests: read
     steps:
-      - name: Redeploy preview after blocker cleared
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.WAKE_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
+      - name: Green-light preview after blocker cleared
         env:
-          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+          GH_TOKEN: ${{ secrets.WAKE_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
           set -euo pipefail
-          if [[ -z "${VERCEL_DEPLOY_HOOK_URL:-}" ]]; then
-            echo "VERCEL_DEPLOY_HOOK_URL not set. Redeploy manually or set the hook secret."
-            exit 0
-          fi
-          curl -fsS -X POST "$VERCEL_DEPLOY_HOOK_URL"
-          echo "Deploy hook fired."
+          sh .github/scripts/preview-when-clear.sh "$PR" "$HEAD_REF"
 
   emerge-now:
     if: github.event_name == 'workflow_dispatch'

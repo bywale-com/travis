@@ -19,4 +19,4 @@ door kind=sse status=200
 sse events: message,error
 ```
 
-Other walks on the same deploy also failed with `Travis error: Cannot use import statement outside a module` — Bucket A fix landed in `src/server/deepagents-node.ts` on this branch. After the limit is raised, remove the `blocker` label to redeploy and re-run walks.
+Other walks on the same deploy also failed with `Travis error: Cannot use import statement outside a module` — Bucket A fix landed in `src/server/deepagents-node.ts` on this branch. After the limit is raised, remove the `blocker` label. If no handoff labels remain, Action empty-commits the preview green-light tag and walks re-run.
