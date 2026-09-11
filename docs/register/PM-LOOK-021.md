@@ -4,13 +4,13 @@
 **Change packet:** SYSTEMS-CHANGE-PACKET-036
 **PR:** https://github.com/bywale-com/travis/pull/180
 **Preview:** none (no glass — GitHub Actions + Vercel preview gate + register markdown)
-**Verdict:** Fail
+**Verdict:** Pass
 
 ## Look
 
 **Lock (PM-021 / SCP-036).** Dumb runner, intelligent seat. Preview is opt-in: `[vercel build]` on this commit’s message only; production always builds. Handoff/hold labels (`wake-sa` · `wake-engineer` · `wake-pm-look` · `fail-look` · `blocker`) block preview green-light and block fresh `fail-look` during triage. Full-audit walks: `npm run test:runtime` runs all specs sequentially; tee full tape; no bash log classification in Actions. Engineer triages Bucket A (plant) vs Bucket B (founder ops). Bucket B → `BLOCKER-NNN-*.md`, commit without green-light tag, Action labels `blocker`, strips seat wakes, mails via Resend. Founder removes `blocker` → `blocker-release` → empty-commit green light when clear. No blocker Postgres table. Do not use `[skip ci]` on seat commits. FACE: no new plates.
 
-**Plant (`62389d50`, this PR).** Engineer handoff names **036 circuit breaker on #180**. The 021 infrastructure cut is planted and quotes clean against the lock.
+**Plant (`0e76de8`, this PR).** Engineer handoff names **036 circuit breaker on #180**. Recut after prior Fail: `handoff-seat.test.ts` now asserts the living-handoff contract instead of the old bind-id chain. Plant quotes clean against the lock.
 
 Law 0 — preview gate:
 
@@ -68,7 +68,7 @@ Law 2 — Engineer triage prompt:
 - If **any Bucket B:** commit code fixes + blocker **without** the preview green-light tag.
 ```
 
-Law 3 — blocker hold + mail (was missing at SA sign; now planted):
+Law 3 — blocker hold + mail:
 
 ```125:154:.github/workflows/wake-packet-seats.yml
           # Blocker hold: this push lands BLOCKER-NNN-*.md (not *-RESOLVED).
@@ -78,9 +78,9 @@ Law 3 — blocker hold + mail (was missing at SA sign; now planted):
 
 `.github/scripts/send-blocker-letter.py` parses Cause / Required action / Resolve at / Tape excerpt; subject `[BLOCKER] …`; Resend to `EMERGE_EMAIL`. `AUTOMATION-PACKET-CHAIN.md` § Blocker updated to **planted**.
 
-Contract tests — `src/lib/circuit-breaker.test.ts`: **10/10 pass** on this bind (ignore script, preview-when-clear label list, runtime-doors handoff skip, Engineer prompt law, blocker mailer wiring).
+Contract tests — `src/lib/circuit-breaker.test.ts`: **10/10 pass**. `src/lib/handoff-seat.test.ts`: living-handoff shape asserted (`This bind is living|done`, 036 current, 088/086 merged trail, next hotfix **089**, paste block).
 
-**Miss.** Engineer handoff claims `npm test` passes. Full suite on this bind: **481 pass / 1 fail**. `src/lib/handoff-seat.test.ts` — “Engineer Current names where the last bind stopped” — fails because `ENGINEER-HANDOFF.md` was rewritten for 021 without preserving the strings that test asserts (`This bind is done`, bind id `bc-26131d8d…`, numbered pocket trail, `You are a NEW bind`, etc.). Same test **passes on `main`**. This PR broke it. Bucket A plant miss; contradicts the handoff verify line.
+**Verify on this bind:** `npm test` — **482/482 pass**. Prior Fail (`handoff-seat.test.ts` red) is closed by the recut.
 
 **Glass.** SCP-036 names no new plates. I did not open production psi. No preview glass to judge for this cut.
 
@@ -99,14 +99,10 @@ Walked from [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BR
 
 **Automated verify on this bind:**
 - `npx tsx --test src/lib/circuit-breaker.test.ts` — 10/10 pass.
-- `npm test` — 481/482 pass; **1 fail** (`handoff-seat.test.ts` as above).
+- `npm test` — 482/482 pass.
 
-**Steps I could not do (human):** Simulate a live walk tape with mixed Bucket A + B failures. Engineer triage on a real red `runtime-doors` deploy. Founder ops (Cursor spend, Vercel secrets). Remove `blocker` and confirm preview rebuild + green check. Talk on a phone. Those are the human’s. I do not fail the look for Talk or for §2–§3 live CI — but I **do** fail for the `npm test` miss the Engineer claimed was green.
+**Steps I could not do (human):** Simulate a live walk tape with mixed Bucket A + B failures. Engineer triage on a real red `runtime-doors` deploy. Founder ops (Cursor spend, Vercel secrets). Remove `blocker` and confirm preview rebuild + green check. Talk on a phone. Those are the human’s. I do not fail the look for Talk or for §2–§3 live CI.
 
 ## Loop
 
-**Fail.** Engineer must recut on **same PR #180**:
-1. Fix `src/lib/handoff-seat.test.ts` and/or `docs/register/ENGINEER-HANDOFF.md` so `npm test` is fully green again (update the test to the new living-handoff shape, or restore required pickup strings while keeping 021 Current).
-2. Re-run `npm test` before pushing; do not claim pass while `handoff-seat` is red.
-
-No cousin PR. No `[vercel build]` on the recut commit.
+**Pass.** Emerged for what this seat could do. Human may walk the same sheet on preview after handoffs clear and Action green-lights `[vercel build]`. Same PR #180. No cousin.
