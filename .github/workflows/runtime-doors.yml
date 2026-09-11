@@ -1,7 +1,7 @@
 # Deployment Check: Vercel hangs `vercel.deployment.ready` until this job
 # paints. Do not fold this into wake-packet-seats.yml — that file wakes seats.
 # Official hang: https://vercel.com/docs/deployment-checks
-# Red → fresh-add fail-look (WAKE_GITHUB_TOKEN). Same Engineer loop as look Fail.
+# Red → fail-look unless the tape is founder ops (unwired / Cursor hard limit).
 name: Runtime doors
 
 on:
@@ -34,13 +34,15 @@ jobs:
         run: npm test
 
       - name: Sequential walks on this URL
+        id: walks
         env:
           RUNTIME_BASE_URL: ${{ github.event.client_payload.url }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
           TRAVIS_TEST_OPERATOR_COOKIE: ${{ secrets.TRAVIS_TEST_OPERATOR_COOKIE }}
         run: |
           test -n "$RUNTIME_BASE_URL" || { echo "missing deploy URL"; exit 1; }
-          npm run test:runtime
+          set -o pipefail
+          npm run test:runtime 2>&1 | tee "$RUNNER_TEMP/walks.txt"
 
       - name: Paint the Vercel Deployment Check
         if: always()
@@ -54,8 +56,18 @@ jobs:
           WAKE_GITHUB_TOKEN: ${{ secrets.WAKE_GITHUB_TOKEN }}
           FALLBACK_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEPLOY_SHA: ${{ github.event.client_payload.git.sha }}
+          WALK_LOG: ${{ runner.temp }}/walks.txt
         run: |
           set -euo pipefail
+          log="${WALK_LOG:-}"
+          if [[ -f "$log" ]]; then
+            if grep -qE "Cannot use import|did not speak|run error on tape: Travis" "$log"; then
+              echo "Engineer miss on tape. fail-look."
+            elif grep -qE "isn.t wired|hard limit" "$log"; then
+              echo "Founder ops miss (unwired or Cursor hard limit). No fail-look."
+              exit 0
+            fi
+          fi
           if [[ -n "${WAKE_GITHUB_TOKEN:-}" ]]; then
             export GH_TOKEN="$WAKE_GITHUB_TOKEN"
             if login=$(gh api user --jq .login 2>/dev/null); then

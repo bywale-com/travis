@@ -13,7 +13,9 @@ Do **not** accept the seat. Do **not** read `AGENTS.md`, seat protocols, handoff
 
 **If `fail-look` is on this PR:** skip the file gate. Continue.
 - A `PM-LOOK-*.md` with **Verdict: Fail** → recut that.
-- Else → newest failed `runtime-doors` log for this PR. Recut that miss. Do not stop for a missing PM-LOOK.
+- Else → newest failed `runtime-doors` log for this PR.
+  - Cursor **hard limit** / `$2` / **Travis isn’t wired** → **stop**. Founder ops. Do not commit. Do not push.
+  - Else recut that miss. Do not stop for a missing PM-LOOK.
 
 **Else** run this and nothing else:
 

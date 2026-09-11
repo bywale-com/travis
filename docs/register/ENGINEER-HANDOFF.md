@@ -1,10 +1,12 @@
 # Engineer seat handoff — 2026-09-11
 
-**This bind is done.** Last Engineer: `bc-890ea6f8-f775-40a0-a022-1f8ded50c130`. Prior: fail-look recut on probe [#173](https://github.com/bywale-com/travis/pull/173). Prior: `bc-26131d8d-741b-4566-89b3-df312e8e48e1`. The next bind pastes the block at the bottom. Do not start from a transcript.
+**This bind is done.** Last Engineer: `bc-29f50fee-3d5c-4fcc-b1b5-5fb2a99e4e41`. Prior: `bc-890ea6f8-f775-40a0-a022-1f8ded50c130`. Prior: fail-look recut on probe [#173](https://github.com/bywale-com/travis/pull/173). The next bind pastes the block at the bottom. Do not start from a transcript.
 
-**087 ESM recut on probe #173:** `next.config.ts` webpack alias `deepagents/node` → `dist/node.cjs` (removed from `serverExternalPackages` so Vercel does not `import()` ESM). Type send writes `Dest error:` when `dispatchToSeat` returns error. CI run [`34613335252`](https://github.com/bywale-com/travis/actions/runs/34613335252): think-walks green (voice-wrap, type-send, come-back). **type-dest** still red on Cursor hard-limit billing — founder dashboard, not Engineer. Next hotfix number **088** if this merges separately. Handoff test restored required bind chain.
+**087 recut on probe #173:** `next.config.ts` webpack alias `deepagents/node` → `dist/node.cjs`. Type send writes `Dest error:` on dispatch miss. `openFreshRoom` mints `runtime-{uuid}@travis.internal` per walk so parallel runtime-doors jobs do not end each other's sessions. Run [`34613335252`](https://github.com/bywale-com/travis/actions/runs/34613335252): think-walks green when not stomped. **type-dest** red on Cursor hard limit — founder ops; **088** on `main` skips `fail-look` for that. Next hotfix number **089**.
 
-**086 runtime is the app (merged [#171](https://github.com/bywale-com/travis/pull/171)):** Walks wait for the mouth. Red `runtime-doors` fresh-adds `fail-look`. Action on `main`. Playwright glass still SA 036. Signal is `runtime-doors`.
+**088 fail-look skip (merged [#174](https://github.com/bywale-com/travis/pull/174)):** Red doors does not `fail-look` unwired or Cursor hard limit. B prompt: stop, do not push.
+
+**086 runtime is the app (merged [#171](https://github.com/bywale-com/travis/pull/171)):** Walks wait for the mouth. Red `runtime-doors` fresh-adds `fail-look` for Engineer misses. Playwright glass still SA 036.
 
 **085 type-dest recut (merged):** Type send returns SSE and writes the user turn before role dest resolve; chip dests dispatch write-and-leave (`dispatchToSeat` with `enqueueIfBusy: false` on role dests); SSE headers include `X-Accel-Buffering: no`. Merged on [PR #170](https://github.com/bywale-com/travis/pull/170).
 
@@ -20,7 +22,7 @@
 
 ## Where we stopped
 
-**Probe #173 fail-look recut — ESM fix verified on preview.** Run [`34613335252`](https://github.com/bywale-com/travis/actions/runs/34613335252): 4/5 walks pass. Think-walks no longer hit `Cannot use import statement outside a module`. type-dest red: `Dest error: You need to increase your hard limit…` — billing, not code. Prior run [`34612643665`](https://github.com/bywale-com/travis/actions/runs/34612643665) had five red. **Do not merge #173 as product** — probe; cherry src/ to formal Hotfix 087 on `main` when human is satisfied.
+**Probe #173 — ESM + walk isolation recut.** Think-walks green on [`34613335252`](https://github.com/bywale-com/travis/actions/runs/34613335252) when deploy checks do not overlap; run [`34613885273`](https://github.com/bywale-com/travis/actions/runs/34613885273) showed session-ended 400s from shared `test-runner` cookie across parallel jobs — fixed with per-walk operator email. type-dest still red on Cursor hard limit (088 skip on `main`). **Do not merge #173 as product** — probe; cherry src/ to formal Hotfix 087 on `main` when human is satisfied.
 
 **035 stream architecture is planted on [#163](https://github.com/bywale-com/travis/pull/163).** Classify is `src/lib/stream-intent.ts` (new / change / cancel / talk). Do is `src/server/stream-dispatch.ts` — hangs dest assemble, 034 follow-up, `cancelCursorRun`, and `invokeDeepAgent({ mode: "update" })`. Mouth is last. Live `liveShouldPipeTravis` is always false; transcript dest-by-name still leaves, then dispatches the rest, never `pipeTravisText`. Type send writes the tape, files chip / call-by-name dests, dispatches remaining intents, then synthesizes. Finalize strips the done-phrase, backup-Do once if a leave never started, then synthesizes. `parent_id` unused. No new table. Glass: `destGlassName` / `SIT_ROLE_LABEL.pm` / `seatKeyToLabel("pm")` → **Technical Architect**. Spoken “Technical Architect” and “Technical PM” both route to `pm`. Path `/protocols/pm.md`. Grain tests + `next build` passed. Human look+test is [`PM-PACKET-019-STREAM-ARCH-TEST.md`](./PM-PACKET-019-STREAM-ARCH-TEST.md) on Log · Type after this lands on psi. Do not remint dest assemble, dest-gate-on-ask, Cloud create, `dest_job`, checkpointer, or 031–034.
 
@@ -57,7 +59,7 @@ Do not remint 012 / 023–034 or the 074 SQL. Do not remint **035**. Do not remi
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **087** ESM recut on #173. Next hotfix number **088**. |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **087** recut on #173. **088** merged. Next hotfix number **089**. |
 | One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
@@ -113,8 +115,8 @@ Create-agent prompt is still the one-line stub. Do not paste a seat block at cre
 ## Next Engineer job
 
 1. Accept the seat from the paste below. Fetch `main`. Read **this file**, then [`ENGINEER.md`](../seats/ENGINEER.md), then `AGENTS.md`.
-2. Think-walks are green on #173 preview. Cherry src/ to formal Hotfix 087 PR on `main` when human wants product merge.
-3. type-dest red on Cursor billing: name it; do not invent.
+2. Preview runtime-doors on #173 should show think-walks green; type-dest may stay red (founder billing — 088 skips fail-look). Cherry src/ to formal Hotfix 087 on `main` when human wants product merge.
+3. type-dest red on Cursor billing: founder dashboard; do not invent.
 4. When **you** stop: rewrite the **Current** lines at the top of this file (where we stopped, last plant, next hotfix number) so the next bind does not start from a transcript.
 
 ---
@@ -124,7 +126,7 @@ Create-agent prompt is still the one-line stub. Do not paste a seat block at cre
 ```text
 You are Travis’s Engineer (full-stack implementer). Read docs/README.md “Engineer — identity” and accept it. Read repo-root AGENTS.md (always-on). You are not the Product Manager. You are not the Systems Analyst. Product face = voice/chat pipe (phone-first). Do not overwrite PHASE-ONE-LOG founder wording. Do not mint tables. Do not hard-code data into the SPA. Do not ship API keys to the client. Specified-and-clear: build it. Specified-but-blocked on PM or SA: name why; do not invent. Detailed: docs/seats/ENGINEER.md.
 
-You are a NEW bind. The last Engineer was bc-890ea6f8-f775-40a0-a022-1f8ded50c130 (prior: bc-26131d8d-741b-4566-89b3-df312e8e48e1). They handed off. Read docs/register/ENGINEER-HANDOFF.md first.
+You are a NEW bind. The last Engineer was bc-29f50fee-3d5c-4fcc-b1b5-5fb2a99e4e41 (prior: bc-890ea6f8-f775-40a0-a022-1f8ded50c130). They handed off. Read docs/register/ENGINEER-HANDOFF.md first.
 
 Then, in order:
 1. docs/register/ENGINEER-HANDOFF.md — where we stopped, planted, leftover, locks.

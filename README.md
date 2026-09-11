@@ -6,7 +6,9 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
-- **2026-09-11** · Hotfix 087 recut · [PR #173](https://github.com/bywale-com/travis/pull/173) — Deep Agents bundles as CJS via a webpack alias and dest dispatch errors land on the tape, because think-walks were red on `Cannot use import statement outside a module` on Vercel preview.
+- **2026-09-11** · Hotfix 087 recut · [PR #173](https://github.com/bywale-com/travis/pull/173) — Walks mint an isolated operator per room so concurrent runtime-doors jobs do not end each other's sessions, and Deep Agents bundles as CJS via a webpack alias, because parallel deploy checks were red on session-ended 400s and think-walks hit ESM on Vercel preview.
+
+- **2026-09-11** · Hotfix 088 · [PR #174](https://github.com/bywale-com/travis/pull/174) — Red `runtime-doors` does not `fail-look` Cursor hard limit or unwired, because Engineer cannot recut founder ops and the loop kept booting B.
 
 - **2026-09-11** · Hotfix 086 · [PR #171](https://github.com/bywale-com/travis/pull/171) — Runtime walks wait for Travis to speak, and a red `runtime-doors` fresh-adds `fail-look`, because `?? · run error` on Type still painted the check green.
 
