@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-11 14:40 UTC — Hotfix 086 PM look Pass; runtime-doors correctly red on preview (generate miss), not false green. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-11 16:20 UTC — Packet 021 circuit breaker specified; full-audit walks, Engineer triage, blocker hold, and unblock switch. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3755,3 +3755,25 @@ Not the model. Not a new face.
 **Test.** `npm test` 472/472. `runtime-doors` CI 0/5 on preview — correct failure, not false green. Fail-look step planted; live on merge. [`PM-LOOK-HOTFIX-086.md`](./PM-LOOK-HOTFIX-086.md) **Verdict: Pass**. No `fail-look`.
 
 **Emerged.** Human may walk [`HOTFIX-086-RUNTIME-IS-THE-APP-TEST.md`](./HOTFIX-086-RUNTIME-IS-THE-APP-TEST.md) on preview after SSO.
+
+---
+
+## 2026-09-11 16:20 UTC — Packet 021: Circuit breaker, full-audit walks, and blocker hold (founder)
+
+**Kind:** Packet. How we build. Flag 14:00 stands. Not a plant.
+
+**Founder (preserved):** The concept is not to try to fix everything, it’s identify the cause and fix it if it needs a fix and do whatever else is necessary to bridge the gap... Why would we state a clear failure as not a failure? It’s obviously a failure, just not a code failure... How about do something that notifies the team of the issue and problem huh? Think about it: an engineer plants something, pushes, Vercel builds, it runs the walk. The walk is cumulative, and each packet itself, if it’s not a fix to one of the things already in the walk, should add a new walk... It’s not that on the 1st failure in the walk, it sends back immediately. Why would it be that? No. It needs to complete everything so it can count and get all the failures, and then send back in the loop for the engineer to build. And then the engineer is who is going to say: "Oh, okay, this failure is not a code failure, this is for the founder to deal with. Oh, this is definitely a plant error, let me fix that." And then before it even pushes back: it has these other things that need to be sorted out that are founder errors. Before it says, "Okay, Vercel, you're good to build again." Because if Vercel builds again before those are done, it's going to come back for sure as failures. A waste of time and tokens... Before the packet is even going ready to be built on Vercel after the engineer has built its own side of the equation, the founder must fix his side before the deployment is initiated again.
+
+**Answer (inspect).** Models tried to turn GitHub Actions bash regexes into a triage classifier. That made bash drop notifications (silent red on $2 Cursor limit) or push code fixes immediately into guaranteed walk failures (infinite B-loop). Actions is a dumb sensor. Engineer is the triage brain.
+
+**Practice locked.**
+1. **Full-Audit Walk:** `test:runtime` runs all specs sequentially to completion; no fail-fast; full tape recorded.
+2. **Action is Pure Sensor:** Red walk adds `fail-look` to wake Engineer with the complete tape. No bash classification.
+3. **Engineer Triage:** Engineer classifies every tape failure into Bucket A (Plant/Code Miss) vs Bucket B (Founder Ops / Platform Blocker).
+4. **Circuit Breaker & Hold:** If Bucket B is non-empty: Engineer fixes code, writes `BLOCKER-021-*.md`, commits with `[skip ci]` so Vercel does not build, and stops. Action labels PR `blocker`, silences agent automations, and emails the founder via Resend.
+5. **Resume Switch (Option A):** Founder clears blocker, removes `blocker` label on PR. Removal releases the hold and triggers the deployment.
+
+**Landed.** [`PM-PACKET-021-CIRCUIT-BREAKER.md`](./PM-PACKET-021-CIRCUIT-BREAKER.md) · test [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md). **Wake:** sa. SA **036** / **037**.
+
+**I do not plant `src/`.**
+

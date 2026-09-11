@@ -16,9 +16,9 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **20:39 UTC 2026-09-10**. Flag **14:00 2026-08-25**. |
-| 020 first plant | `src/lib/live-connect.ts` + door walks + Action on [#165](https://github.com/bywale-com/travis/pull/165). In-flight waits. Unwired named. |
-| 020 runtime verify | [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md). Agenda: Voice wrap + Type send + **unwired glass (Playwright)**. Retro: Type-send tape, `come-back`, `type-dest`. Glass walk is the extra protocol — not silence. **Wake:** sa. SA **036**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **16:20 UTC 2026-09-11**. Flag **14:00 2026-08-25**. |
+| 021 circuit breaker | [`PM-PACKET-021-CIRCUIT-BREAKER.md`](./PM-PACKET-021-CIRCUIT-BREAKER.md). Full-audit walks (no fail-fast), Engineer triage into code miss vs founder blocker, `[skip ci]` circuit breaker hold, house blocker mail, and label `blocker` unblock switch. **Wake:** sa. SA **036** / **037**. |
+| 020 runtime verify | [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md). Agenda: Voice wrap + Type send + **unwired glass (Playwright)**. Retro: Type-send tape, `come-back`, `type-dest`. Glass walk is the extra protocol — not silence. **Wake:** sa. SA **036**. [#165](https://github.com/bywale-com/travis/pull/165) merged. |
 | 019 stream architecture | [`PM-PACKET-019-STREAM-ARCH.md`](./PM-PACKET-019-STREAM-ARCH.md). SA **035**. [#163](https://github.com/bywale-com/travis/pull/163). |
 
 ---
