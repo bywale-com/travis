@@ -13,3 +13,10 @@ export function travisGenerateMiss(message: string): string {
   if (isVisibleLogStatus(msg)) return `Travis: ${msg}`;
   return `Travis error: ${msg}`;
 }
+
+/** Dest throw before leave. Same Log rule: the miss must say error or Room hides it. */
+export function destLeaveMiss(message: string): string {
+  const msg = message.replace(/\s+/g, " ").trim() || "leave failed";
+  if (isVisibleLogStatus(msg)) return msg;
+  return `Dest error: ${msg}`;
+}

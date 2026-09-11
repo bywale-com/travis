@@ -13,5 +13,5 @@
    - `type-dest` — leave started. Do not wait for the Engineer essay. Do not fail dest on Travis wrap.
    - `voice-wrap` — two lines + I’m done; wrap is a Travis mouth. Unwired is red.
    - `come-back` — same `session.id`; line still there; that send also worked.
-3. Glass: a generate miss reads `Travis · Travis error: …`, not `?? · run error`.
+3. Glass: a generate miss reads `Travis · Travis error: …`, not `?? · run error`. A dest throw before leave reads `Dest error: …` on the tape, not SSE-only.
 4. I saw: ________

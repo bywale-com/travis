@@ -1,4 +1,5 @@
 import { eq } from "drizzle-orm";
+import { destLeaveMiss } from "@/lib/travis-miss";
 import { collapseSpeechStutter } from "@/lib/absorb-text";
 import { isSitProtocolRole } from "@/lib/protocol-path";
 import { resolveTypedSend, uniqueSeatKeys } from "@/lib/typed-dest";
@@ -17,7 +18,7 @@ import { dispatchToSeat } from "@/server/dispatch";
 import { streamIntent } from "@/lib/stream-intent";
 import { dispatchStreamIntents } from "@/server/stream-dispatch";
 import { pipeTravisText } from "@/server/travis-reply";
-import { insertUserTurn, sse, sseHeaders } from "@/server/seat-pipe";
+import { insertStatusTurn, insertUserTurn, sse, sseHeaders } from "@/server/seat-pipe";
 
 type Body = {
   text?: string;
@@ -190,6 +191,12 @@ export async function POST(
         });
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
+        const destSeat = (decided.seatKeys.find((k) => !isTravisSeat(k)) ??
+          decided.seatKeys[0] ??
+          "travis") as SeatKey;
+        await insertStatusTurn(sessionId, destLeaveMiss(msg), destSeat).catch(
+          () => {},
+        );
         send("error", { error: msg });
       } finally {
         controller.close();
