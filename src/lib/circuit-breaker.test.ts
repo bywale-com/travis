@@ -89,6 +89,7 @@ test("wake-packet-seats: one seat at a time; green light after clear", () => {
   assert.match(yml, /preview-when-clear:/);
   assert.match(yml, /preview-when-clear\.sh/);
   assert.doesNotMatch(yml, /VERCEL_DEPLOY_HOOK_URL/);
+  assert.doesNotMatch(yml, /--remove-label blocker/);
 });
 
 test("runtime-doors does not fail-look during handoff", () => {

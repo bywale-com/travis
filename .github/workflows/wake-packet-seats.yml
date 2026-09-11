@@ -138,7 +138,8 @@ jobs:
             gh pr edit "$pr" --remove-label wake-sa || true
             gh pr edit "$pr" --remove-label wake-engineer || true
             gh pr edit "$pr" --remove-label wake-pm-look || true
-            gh pr edit "$pr" --remove-label blocker || true
+            # Do not remove blocker to re-arm. That unlabeled event is the
+            # founder-release trigger and would race a green-light commit.
             if gh pr edit "$pr" --add-label blocker; then
               echo "Labeled #$pr blocker (hold)."
             else
