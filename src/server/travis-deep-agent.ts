@@ -4,16 +4,12 @@
  * SCP-034 — official checkpointer + thread_id = voice_session.id.
  */
 
-import {
-  createDeepAgent,
-  registerHarnessProfile,
-  StateBackend,
-} from "deepagents/node";
 import { ChatOpenAI } from "@langchain/openai";
 import { isAIMessage, type BaseMessage } from "@langchain/core/messages";
 import { createMiddleware, tool } from "langchain";
 import { formatRosterFact } from "@/lib/dest-with-context";
 import { TRAVIS_TEXT_MODEL } from "@/lib/travis-models";
+import { deepagentsNode } from "@/server/deepagents-node";
 import {
   TRAVIS_SYSTEM,
   TRAVIS_TOOL_DECLS,
@@ -25,14 +21,21 @@ import {
   unclippedPrintFor,
 } from "@/server/dest-with-context";
 
-registerHarnessProfile("openai", {
-  excludedTools: ["task", "execute"],
-  generalPurposeSubagent: { enabled: false },
-});
-registerHarnessProfile(`openai:${TRAVIS_TEXT_MODEL}`, {
-  excludedTools: ["task", "execute"],
-  generalPurposeSubagent: { enabled: false },
-});
+let harnessProfilesRegistered = false;
+
+function ensureHarnessProfiles() {
+  if (harnessProfilesRegistered) return;
+  const { registerHarnessProfile } = deepagentsNode();
+  registerHarnessProfile("openai", {
+    excludedTools: ["task", "execute"],
+    generalPurposeSubagent: { enabled: false },
+  });
+  registerHarnessProfile(`openai:${TRAVIS_TEXT_MODEL}`, {
+    excludedTools: ["task", "execute"],
+    generalPurposeSubagent: { enabled: false },
+  });
+  harnessProfilesRegistered = true;
+}
 
 function asArgs(input: unknown): Record<string, unknown> {
   if (input && typeof input === "object" && !Array.isArray(input)) {
@@ -136,6 +139,8 @@ export async function invokeDeepAgent(params: {
   room: string;
   mode?: DeepAgentMode;
 }): Promise<string> {
+  ensureHarnessProfiles();
+  const { createDeepAgent, StateBackend } = deepagentsNode();
   const mode = params.mode ?? "synthesize";
   const prompt =
     mode === "update"

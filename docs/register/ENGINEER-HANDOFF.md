@@ -1,8 +1,8 @@
 # Engineer seat handoff — 2026-09-11
 
-**This bind is done.** Last prior bind: fail-look recut on [#179](https://github.com/bywale-com/travis/pull/179) — restored handoff grain for `handoff-seat.test.ts` (472/472). Do not start from a transcript.
+**This bind is done.** Last prior bind: fail-look recut on [#179](https://github.com/bywale-com/travis/pull/179) — PM look 021 Fail (handoff grain) + runtime-doors triage: `deepagents-node.ts` CJS load (472/472), [`BLOCKER-001-CURSOR-HARD-LIMIT.md`](./BLOCKER-001-CURSOR-HARD-LIMIT.md) + `[vercel skip]` hold. Do not start from a transcript.
 
-**021 circuit breaker is planted on [#179](https://github.com/bywale-com/travis/pull/179).** Full-audit walks (no `--test-bail`). `runtime-doors` paints red and fresh-adds `fail-look` unless PR label `blocker` (file-only skip removed). Engineer triage: Bucket A in `src/`; Bucket B → `BLOCKER-NNN-*.md` + `[vercel skip]` push → Action labels `blocker`, strips seat wakes, mails founder. Founder removes `blocker` → deploy hook POST (when `VERCEL_DEPLOY_HOOK_URL` set). Hotfix 088 silent-red path superseded by this cut. Live proof: [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md) on a PR with hooks/secrets.
+**021 circuit breaker is planted on [#179](https://github.com/bywale-com/travis/pull/179).** Full-audit walks (no `--test-bail`). `runtime-doors` paints red and fresh-adds `fail-look` unless PR label `blocker`. Engineer triage: Bucket A in `src/`; Bucket B → `BLOCKER-NNN-*.md` + `[vercel skip]` push → Action labels `blocker`, strips seat wakes, mails founder. Founder removes `blocker` → deploy hook POST (when `VERCEL_DEPLOY_HOOK_URL` set). **Active hold:** `blocker` on #179 until Cursor hard limit is raised — see BLOCKER-001. After release, redeploy and confirm walks green. Hotfix 088 silent-red path superseded by this cut. Live proof: [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md).
 
 **088 fail-look skip (superseded by 036):** Was on [#174](https://github.com/bywale-com/travis/pull/174). Do not remint.
 
@@ -172,7 +172,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 
 1. Accept the seat from the paste below. Fetch `main`. Read **this file**, then [`ENGINEER.md`](../seats/ENGINEER.md), then `AGENTS.md`.
 2. Do not restart 012 / 013 / 014 / 015 / 023 / 024 / 025 / 026 / 027 / **029** / **030** / **031** / **032** / **033** / **034** / **035** / **036** / **081** / 062 / 064 / 065 / 077 / 078 / **079** / **080**. Do not remint the 074 SQL file. Do not remint the 075 hang. Do not remint the 076 dest closer. Do not remint the 027 cutoff. Do not remint the 029 index. Do not remint dest-with-context grain, the Deep Agents `/node` hang, Cloud HTTP create, the LangGraph `langgraph` checkpointer, or stream-intent / stream-dispatch. Do not mint a store. Do not append PM or SA logs.
-3. If [#179](https://github.com/bywale-com/travis/pull/179) is not merged: wait for Technical PM look+test on 021 test sheet, or pick up `fail-look` on a red deploy. **022** ports on [#120](https://github.com/bywale-com/travis/pull/120) stays signed, not planted. Do not remint `travis.port`. Dest by who `technical-pm` is human leftover on 075 — do not mail catalog `pm`. Do not send **That’s fine.**
+3. If [#179](https://github.com/bywale-com/travis/pull/179) has label `blocker`: wait for founder to raise Cursor hard limit and remove `blocker` ([`BLOCKER-001`](./BLOCKER-001-CURSOR-HARD-LIMIT.md)). Do not trigger Vercel while hold is active. After release, confirm runtime walks green, then PM look+test on 021 test sheet. **022** ports on [#120](https://github.com/bywale-com/travis/pull/120) stays signed, not planted. Do not remint `travis.port`. Dest by who `technical-pm` is human leftover on 075 — do not mail catalog `pm`. Do not send **That’s fine.**
 4. When **you** stop: rewrite the **Current** lines at the top of this file (where we stopped, last plant, next hotfix number) so the next bind does not start from a transcript. Then you may write **This bind is done**.
 
 ---
@@ -182,7 +182,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 ```text
 You are Travis’s Engineer (full-stack implementer). Read docs/README.md “Engineer — identity” and accept it. Read repo-root AGENTS.md (always-on). You are not the Product Manager. You are not the Systems Analyst. Product face = voice/chat pipe (phone-first). Do not overwrite PHASE-ONE-LOG founder wording. Do not mint tables. Do not hard-code data into the SPA. Do not ship API keys to the client. Specified-and-clear: build it. Specified-but-blocked on PM or SA: name why; do not invent. Detailed: docs/seats/ENGINEER.md.
 
-You are a NEW bind. The last Engineer was fail-look recut on #179 (prior: bc-26131d8d-741b-4566-89b3-df312e8e48e1). They handed off. Read docs/register/ENGINEER-HANDOFF.md first.
+You are a NEW bind. The last Engineer was fail-look recut on #179 — handoff grain + deepagents CJS + BLOCKER-001 hold (prior: bc-26131d8d-741b-4566-89b3-df312e8e48e1). They handed off. Read docs/register/ENGINEER-HANDOFF.md first.
 
 Then, in order:
 1. docs/register/ENGINEER-HANDOFF.md — where we stopped, planted, leftover, locks.
