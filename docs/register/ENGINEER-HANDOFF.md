@@ -1,8 +1,8 @@
 # Engineer seat handoff — 2026-09-11
 
-**This bind is living.** Last prior bind: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a`. Do not start from a transcript.
+**This bind is done.** Last bind: `bc-587a0020-c3c6-4648-853f-dd36d5e1ee82`. Prior: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a`. Do not start from a transcript.
 
-**088 fail-look skip (this PR):** Red doors does not `fail-look` unwired or Cursor hard limit. B prompt: stop, do not push. Next hotfix **089**. 087 mouth recut lives on [#173](https://github.com/bywale-com/travis/pull/173).
+**088 fail-look skip (planted · [#174](https://github.com/bywale-com/travis/pull/174)):** Red doors does not `fail-look` unwired or Cursor hard limit. B prompt: stop, do not push. TA look Pass ([`PM-LOOK-HOTFIX-088.md`](./PM-LOOK-HOTFIX-088.md)). Human: re-paste B; merge for live Action skip. Next hotfix **089**. 087 mouth recut lives on [#173](https://github.com/bywale-com/travis/pull/173).
 
 **086 runtime is the app (merged):** Walks wait for the mouth. Red `runtime-doors` fresh-adds `fail-look` (`WAKE_GITHUB_TOKEN`) so B recuts. Merged [#171](https://github.com/bywale-com/travis/pull/171).
 
