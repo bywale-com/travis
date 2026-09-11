@@ -3777,3 +3777,17 @@ Not the model. Not a new face.
 
 **I do not plant `src/`.**
 
+---
+
+## 2026-09-11 21:55 UTC — PM look 021 Fail: circuit breaker planted; handoff broke lib test (Technical Architect)
+
+**Kind:** PM look. Flag 14:00 stands.
+
+**Look.** SCP-036 six paste items planted on [#179](https://github.com/bywale-com/travis/pull/179): `runtime-doors.yml` label-only blocker skip (file-only skip removed), `wake-packet-seats.yml` BLOCKER hold + release + mail, `send-blocker-letter.py`, Engineer prompt Bucket A/B triage, full-audit README lines. No glass. **Fail:** `npm test` 471/472 — `handoff-seat.test.ts` after `ENGINEER-HANDOFF.md` rewrite dropped locked prose.
+
+**Test.** Step 1 partial (config + local five-suite run). Steps 2–3 need live hooks/secrets/founder — not walked here.
+
+**Loop.** Engineer restores handoff grain for 472/472. [`PM-LOOK-021.md`](./PM-LOOK-021.md) **Verdict: Fail**. `fail-look` on #179.
+
+**I do not plant `src/`.**
+
