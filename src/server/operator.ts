@@ -133,9 +133,27 @@ export async function openDeskOperator(): Promise<Operator | null> {
   );
 }
 
-export async function resolveOperator(token: string): Promise<Operator | null> {
-  const row = token.trim() ? await operatorByToken(token) : null;
-  if (row) return row;
+export async function resolveOperator(tokenOrEmail: string): Promise<Operator | null> {
+  const value = tokenOrEmail.trim();
+  if (value) {
+    const row = await operatorByToken(value);
+    if (row) return row;
+    if (isOperatorEmail(value)) {
+      const byEmail = await operatorByEmail(value);
+      if (byEmail) return byEmail;
+      // Auto-create unknown test/operator email on valid format
+      const [created] = await db
+        .insert(operator)
+        .values({
+          email: normalizeOperatorEmail(value),
+          loginToken: newLoginToken(),
+        })
+        .onConflictDoNothing()
+        .returning();
+      if (created) return created;
+      return operatorByEmail(value);
+    }
+  }
   return openDeskOperator();
 }
 

@@ -222,6 +222,7 @@ export async function POST(
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
+      controller.enqueue(encoder.encode(": ping\n\n"));
       const send = (event: string, data: unknown) => {
         controller.enqueue(encoder.encode(sse(event, data)));
       };

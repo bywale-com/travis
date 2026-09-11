@@ -152,7 +152,7 @@ This is the beat that can run on a **already planted** PR (009 / 025 on #127). S
 2. Create **C**. Trigger: Label added / `wake-pm-look`. Computer use on. Memories off. PR creation off. Paste the PM-look prompt. Save + Activate.
 3. To run the first look on #127: add `wake-pm-look` once C is Active. Do not add `wake-sa` or `wake-engineer` — 025 is already planted.
 4. Later plants: Action adds `wake-pm-look` when this push touched `src/` on a PR that already has a packet + change packet, **or** `src/` / `ENGINEER-HANDOFF.md` on a PR that already has a `HOTFIX-NNN`.
-5. **Emerge letter (human).** When this push writes `PM-LOOK-NNN.md` or `PM-LOOK-HOTFIX-NNN.md` with **Verdict: Pass**, the same Action (no LLM) labels `emerge` and sends the letter (packet `*-TEST.md` or `HOTFIX-NNN-*-TEST.md`). Not Travis. Not a Cursor agent.
+5. **Emerge letter (human).** When this push writes `PM-LOOK-NNN.md` or `PM-LOOK-HOTFIX-NNN.md` with **Verdict: Pass**, **and** the runtime Deployment Check is green, the same Action (no LLM) labels `emerge` and sends the letter (packet `*-TEST.md` or `HOTFIX-NNN-*-TEST.md`) plus the **recording of this packet’s walk only**. Not Travis. Not a Cursor agent. Do not emerge on a red check.
 
 ---
 
@@ -167,6 +167,9 @@ Founder lock 2026-09-05: emerge is silent unless something lands in the inbox. W
 - Subject: `NNN emerged — walk this sheet` (packet) or `Hotfix NNN emerged — walk this sheet`
 - First lines: finished / human test / PR / preview
 - The document: that packet’s `PM-PACKET-NNN-*-TEST.md` or that hotfix’s `HOTFIX-NNN-*-TEST.md` **verbatim**. Not a summary. Not the look sheet.
+- The recording: Playwright video of **this packet’s walk** (the use the packet named). Not a recording of every cumulative walk. Tests still all ran; emerge only shows this cut.
+
+**When not:** look Pass on a red or pending Deployment Check. That is not emerge. Engineer is still in the loop.
 
 **How (cheap, same Action):**
 

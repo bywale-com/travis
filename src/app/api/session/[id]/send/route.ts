@@ -1,5 +1,6 @@
 import { eq } from "drizzle-orm";
 import { collapseSpeechStutter } from "@/lib/absorb-text";
+import { isSitProtocolRole } from "@/lib/protocol-path";
 import { resolveTypedSend, uniqueSeatKeys } from "@/lib/typed-dest";
 import { seatKeyToLabel } from "@/lib/router";
 import { isTravisSeat } from "@/lib/seats";
@@ -12,15 +13,11 @@ import { MembershipError, requireOpenMember } from "@/server/room-membership";
 import { requireOwnedSession } from "@/server/operator";
 import { destBindingsForSend } from "@/server/dest-resolve";
 import { listOpenDestJobs } from "@/server/dest-job";
+import { dispatchToSeat } from "@/server/dispatch";
 import { streamIntent } from "@/lib/stream-intent";
 import { dispatchStreamIntents } from "@/server/stream-dispatch";
 import { pipeTravisText } from "@/server/travis-reply";
-import {
-  insertUserTurn,
-  sendOrEnqueueMany,
-  sse,
-  sseHeaders,
-} from "@/server/seat-pipe";
+import { insertUserTurn, sse, sseHeaders } from "@/server/seat-pipe";
 
 type Body = {
   text?: string;
@@ -61,7 +58,7 @@ export async function POST(
     text: body.text ?? "",
   });
 
-  let [session] = await db
+  const [session] = await db
     .select()
     .from(voiceSession)
     .where(eq(voiceSession.id, sessionId))
@@ -82,43 +79,47 @@ export async function POST(
     typeof body.referenceTurnId === "string" && body.referenceTurnId.trim()
       ? body.referenceTurnId.trim()
       : null;
-  const destBindings: AgentBinding[] = await destBindingsForSend({
-    sessionId,
-    decided,
-    referenceTurnId,
-  });
-
-  try {
-    for (const dest of destBindings) {
-      await requireOpenMember(sessionId, dest.id);
-    }
-  } catch (err) {
-    if (err instanceof MembershipError) {
-      return Response.json({ error: err.message }, { status: err.status });
-    }
-    throw err;
-  }
-
-  const sticky = destBindings[destBindings.length - 1];
-  if (sticky) {
-    await setActiveBinding(sessionId, sticky.id);
-    [session] = await db
-      .select()
-      .from(voiceSession)
-      .where(eq(voiceSession.id, sessionId))
-      .limit(1);
-  }
 
   const [active] = await db
     .select()
     .from(agentBinding)
-    .where(eq(agentBinding.id, session!.activeBindingId))
+    .where(eq(agentBinding.id, session.activeBindingId))
     .limit(1);
 
   if (!active) {
     return Response.json({ error: "No active binding" }, { status: 400 });
   }
-  if (!destBindings.length) {
+
+  // Switch is JSON. Resolve dest here. Send must not — role dest can spin.
+  if (decided.kind === "switch") {
+    const destBindings: AgentBinding[] = await destBindingsForSend({
+      sessionId,
+      decided,
+      referenceTurnId,
+    });
+    try {
+      for (const dest of destBindings) {
+        await requireOpenMember(sessionId, dest.id);
+      }
+    } catch (err) {
+      if (err instanceof MembershipError) {
+        return Response.json({ error: err.message }, { status: err.status });
+      }
+      throw err;
+    }
+    const sticky = destBindings[destBindings.length - 1];
+    if (sticky) await setActiveBinding(sessionId, sticky.id);
+    const bound = sticky ?? active;
+    const seatKey = (bound.seatKey ?? "pm") as SeatKey;
+    return Response.json({
+      matched: false,
+      routerHandled: true,
+      activeSeatKey: seatKey,
+      activeLabel: bound.label ?? seatKeyToLabel(seatKey),
+    });
+  }
+
+  if (!decided.seatKeys.length && !referenceTurnId) {
     try {
       await requireOpenMember(sessionId, active.id);
     } catch (err) {
@@ -129,27 +130,12 @@ export async function POST(
     }
   }
 
-  const seatKey = (active.seatKey ?? "pm") as SeatKey;
-  const seatLabel = active.label ?? seatKeyToLabel(seatKey);
-
-  if (decided.kind === "switch") {
-    return Response.json({
-      matched: false,
-      routerHandled: true,
-      activeSeatKey: seatKey,
-      activeLabel: seatLabel,
-    });
-  }
-
   const prompt = collapseSpeechStutter(decided.prompt);
-  const cursorBinds = destBindings.filter((b) => !isTravisSeat(b.seatKey));
-  if (destBindings.some((b) => isTravisSeat(b.seatKey))) {
-    await noteTravisUnwired(sessionId);
-  }
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
+      controller.enqueue(encoder.encode(": ping\n\n"));
       const send = (event: string, data: unknown) => {
         controller.enqueue(encoder.encode(sse(event, data)));
       };
@@ -161,16 +147,30 @@ export async function POST(
           undefined,
           referenceTurnId,
         );
-        if (cursorBinds.length) {
-          await sendOrEnqueueMany({
-            sessionId,
-            bindings: cursorBinds,
-            prompt,
-            send,
-            userTurn,
-            referenceTurnId,
-          });
+        const destBindings: AgentBinding[] = await destBindingsForSend({
+          sessionId,
+          decided,
+          referenceTurnId,
+        });
+        for (const dest of destBindings) {
+          await requireOpenMember(sessionId, dest.id);
         }
+        const sticky = destBindings[destBindings.length - 1];
+        if (sticky) await setActiveBinding(sessionId, sticky.id);
+        if (destBindings.some((b) => isTravisSeat(b.seatKey))) {
+          await noteTravisUnwired(sessionId);
+        }
+        const cursorBinds = destBindings.filter((b) => !isTravisSeat(b.seatKey));
+        await Promise.allSettled(
+          cursorBinds.map((binding) =>
+            dispatchToSeat({
+              sessionId,
+              binding,
+              prompt,
+              enqueueIfBusy: isSitProtocolRole(binding.seatKey) ? false : undefined,
+            }),
+          ),
+        );
         const openJobs = await listOpenDestJobs(sessionId).catch(() => []);
         await dispatchStreamIntents({
           sessionId,

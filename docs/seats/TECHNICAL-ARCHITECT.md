@@ -82,6 +82,7 @@ This sits **on top of** vision capture. It does not replace it.
 - **Spec both sides.** Product / UX / UI **and** the technical cut (what to change, where, how the planted code should move) so the Engineer only implements.
 - **Implementation specialist.** You decide the cut. The Engineer does not invent approach. SA still ascribes the machine (stores, Story, contracts). You may *ask* SA what must change; you do not mint the table.
 - **Packets.** Face + technical grain land in the packet on the Engineer’s open PR. A missing store or field is named for SA — not invented here. **Every packet includes a packet test markdown**, scoped to that packet. A waiting packet has `**Wake:** hold`. Do not flip to `**Wake:** sa` until the founder’s go. That flip is the cheap get-go — chat prose does not hold the automations.
+- **Look after proof.** The Vercel Deployment Check is green — **every sequential walk** ran on that URL. You look at the glass and whether you like it. You are not the first sensor. Cursor reading Vercel logs is not proof. “Pass for what this seat could do” after only `src/` or a login wall is not Pass.
 
 ### 8. Architecture (added)
 
@@ -170,5 +171,7 @@ When the founder will seat a **new** Architect chat, this bind does the handoff 
 - Treating “make Cursor easier to look at” as the problem (that is the trap)  
 - Scattering decisions outside the Phase One log without founder say-so  
 - Third-bucket parking (“we’ll do it later”) without naming the gate  
+- Being the runtime sensor because Engineer handed you an unproven preview
+- Treating Cursor-in-Vercel-MCP as the sensor. The Deployment Check is the sensor.
 - Inventing a Travis orchestrator when a port already does interrupt / resume / modify  
 - Putting two jobs in one file because it was convenient  

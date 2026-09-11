@@ -6,6 +6,18 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-10** · Hotfix 085 · [PR #170](https://github.com/bywale-com/travis/pull/170) — Type send returns SSE and writes the tape before role dest resolve, chip dests use write-and-leave, and SSE adds X-Accel-Buffering, because dest spin plus a held Cursor pipe still 504'd type-dest on runtime verification.
+
+- **2026-09-10** · Hotfix 084 · [PR #169](https://github.com/bywale-com/travis/pull/169) — Role dest resolves all sit roles, sit handoff dispatches write-and-leave, and SSE emits an immediate ping, because type-dest walk hit a 504 Gateway Timeout while synchronously waiting on agent completion.
+
+- **2026-09-10** · Hotfix 083 · [PR #168](https://github.com/bywale-com/travis/pull/168) — Vercel status Action drops invalid status input and handoff paste retains prior bind, because the status action detects job status automatically and the handoff test checks the prior bind.
+
+- **2026-09-10** · Hotfix 082 · [PR #167](https://github.com/bywale-com/travis/pull/167) — Runtime doors Action adds `actions: read` permission and handoff preserves the full bind chain, because painting Vercel status queries jobs and the test expects the preceding bind.
+
+- **2026-09-10** · 020 runtime verify · [PR #165](https://github.com/bywale-com/travis/pull/165) — Desk, doors, voice-wrap, type-send, come-back, and type-dest hang as `test:runtime` on the deploy URL, operator resolves test email to isolated rooms, and a Deployment Check paints `runtime-doors`, because lib `npm test` never used the app.
+
+- **2026-09-10** · 020 first plant · [PR #165](https://github.com/bywale-com/travis/pull/165) — Live connect waits when a connect is already in flight, and unwired keeps “Travis isn’t wired” instead of the phone-ear shirt, because in-flight false was Live-down.
+
 - **2026-09-09** · SCP-035 · [PR #163](https://github.com/bywale-com/travis/pull/163) — Live flush classifies and starts or changes work without speaking, Type send does that then wraps, Voice finalize only synthesizes (backup Do once), and glass dest is Technical Architect, because work waited for “I’m done” and the seat still said Technical PM.
 
 - **2026-09-09** · SCP-034 · [PR #161](https://github.com/bywale-com/travis/pull/161) — Type think is the same LangGraph thread as the room (`PostgresSaver` + `thread_id = voice_session.id`), and a later dest to a living bind with an open `dest_job` is Cursor follow-up on that same person, because walk-back was a blank invoke and modify was spin or enqueue instead of `resume` + `send`.

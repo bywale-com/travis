@@ -136,36 +136,38 @@ Engineer gates on this commit: a new SYSTEMS-CHANGE-PACKET (or a hotfix file, or
 
 If the cut needs live Travis Postgres: `DATABASE_URL` is a Cloud Agent runtime secret. Unset → stop and name it in the handoff; the file on the PR is not the hang. Set → run the existing SQL; do not remint it.
 
-Engineer prepends one Implementation line on the repo `README.md`, rewrites `ENGINEER-HANDOFF.md`, may add `docs/register/initiatives/<nnn>-<slug>/`. Commits, pushes **this branch**. Does not append Architect or SA logs.
+**Runtime verification (definition of done).** Syntax is not done. `npm test` is not done. Engineer **adds or extends** a sequential walk in `src/runtime/walks/` (named after the human use, not the packet). Vercel’s Deployment Check runs **every walk** on this deploy’s URL and paints green or red. That check is the signal. A walk is send, wait, next beat, same room. Cursor does not sit in Vercel MCP and call the walk “done.” Unwired previews must assert unwired — not pretend Live is up. Do not write on the founder’s living tape. PostHog only if SA hung that port. Red check → plant again on this PR. The founder is not the first sensor.
+
+Engineer names the proof on `ENGINEER-HANDOFF.md` (preview URL, deploy id, **check name + green/red**). Then prepends one Implementation line on the repo `README.md`, rewrites the rest of the handoff, may add `docs/register/initiatives/<nnn>-<slug>/`. Commits, pushes **this branch**. Does not append Architect or SA logs. Does not wake look until the check is green or a blocker is named.
 
 ### 7. Technical Architect look
 
-The Action sees `src/` (or a hotfix hang) on a PR that already has the packet + change packet, and labels **`wake-pm-look`**.
+The Action sees `src/` (or a hotfix hang) on a PR that already has the packet + change packet, **and** Engineer named the runtime proof, and labels **`wake-pm-look`**.
 
-Automation **C** sits Technical Architect on **this same PR**. Computer use may be on. Architect does not plant.
+Automation **C** sits Technical Architect on **this same PR**. Computer use may be on. Architect does not plant. Architect is **not** the runtime sensor.
 
 Two angles:
 
-1. **Look** — quote the lock against the plant. Open **this PR’s preview**, not production, unless the PR is already merged. Phone-first.
-2. **Test** — walk the packet test sheet. Fill **I saw**. Name **Steps I could not do** (Talk on a phone, SSO you cannot pass). Do not pretend.
+1. **Look** — quote the lock against the plant. Open **this PR’s preview**, not production, unless the PR is already merged. Phone-first. This deploy’s Deployment Check must already be green (or the named blocker).
+2. **Like** — walk the packet test sheet as experience. Fill **I saw**. Name **Steps I could not do** (Talk on a phone, SSO you cannot pass). Do not pretend.
 
 Locked verdicts:
 
 | Verdict | Meaning | What happens |
 |---------|---------|--------------|
-| **Pass** | Walked the sends that matter on **this deployment**; tape matches the lock | Emerge |
+| **Pass** | Walked what you could; tape matches the lock; this deploy’s door check is already green | Emerge |
 | **Fail** | Plant or walk missed the lock | Label `fail-look` → Engineer, same PR |
 | **No walk** | Could not send (SSO wall, no Type). Not a Pass | No emerge. No fail-look |
 
-“Pass for what this seat could do” after only reading `src/` or hitting a login wall is **not** Pass. Voice stays human. Prefer a cheap Type send on the live tape over inventing a tester product.
+“Pass for what this seat could do” after only reading `src/` or hitting a login wall is **not** Pass. Voice **like** stays human. Voice **doors** are the Deployment Check. Do not invent a tester product. Do not have Cursor triage Vercel instead of the check.
 
 Architect writes `docs/register/PM-LOOK-NNN.md`, stamps the Phase One log, pushes.
 
 ### 8. Emerge, then you
 
-If the look file has `**Verdict:** Pass`, the Action (no model) labels **`emerge`**, opens a GitHub issue assigned to you with the test sheet verbatim, and emails that sheet when `EMERGE_EMAIL` + Resend secrets exist. That is house mail, not Travis.
+If the look file has `**Verdict:** Pass` **and** this deploy’s Deployment Check is green (build, `npm test`, every E2E walk), the Action (no model) labels **`emerge`**, opens a GitHub issue assigned to you with the test sheet verbatim, and emails that sheet when `EMERGE_EMAIL` + Resend secrets exist. Attach the **Playwright recording of this packet’s walk only** — the use this cut was solving — not a replay of the whole cumulative suite. That is house mail, not Travis.
 
-You walk the same sheet on the phone. SSO, Talk, a typed sentence are yours.
+No emerge on a red or pending check. You walk the same sheet on the phone. SSO, Talk, a typed sentence are yours. The recording is so you see what already passed for this packet, not so you become the first sensor.
 
 ### 9. Merge
 
