@@ -5,7 +5,10 @@
  */
 
 import { OPERATOR_COOKIE } from "@/lib/operator-auth";
+import type { TapeTurn } from "./app-worked";
 import { assertNotHtml, contentKind } from "./not-html";
+
+export type { TapeTurn };
 
 export function runtimeBaseUrl(): string {
   const raw =
@@ -88,9 +91,32 @@ export async function openRoom(): Promise<Desk> {
   return { sessionId: id };
 }
 
-export async function readTurns(desk: Desk, afterSeq?: number): Promise<
-  { text: string; role: string; seq: number }[]
-> {
+/** End the live sitting and open a new one. Walks must not share a tape. */
+export async function openFreshRoom(): Promise<Desk> {
+  const live = await openRoom();
+  await endSession(live);
+  return openRoom();
+}
+
+export async function endSession(desk: Desk): Promise<void> {
+  const { res, bodyText, kind } = await doorFetch(
+    `/api/session/${desk.sessionId}`,
+    {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ status: "ended" }),
+    },
+  );
+  if (res.status === 404) return;
+  if (kind !== "json") {
+    throw new Error(`endSession expected JSON, got ${kind} (${res.status})`);
+  }
+  if (!res.ok) {
+    throw new Error(`endSession ${res.status}: ${bodyText.slice(0, 140)}`);
+  }
+}
+
+export async function readTurns(desk: Desk, afterSeq?: number): Promise<TapeTurn[]> {
   const q = afterSeq != null ? `?afterSeq=${afterSeq}` : "";
   const { res, bodyText, kind } = await doorFetch(
     `/api/session/${desk.sessionId}/turns${q}`,
@@ -99,11 +125,21 @@ export async function readTurns(desk: Desk, afterSeq?: number): Promise<
     throw new Error(`turns expected JSON, got ${kind} (${res.status})`);
   }
   const data = JSON.parse(bodyText) as {
-    turns?: { text?: string; role?: string; seq?: number }[];
+    turns?: {
+      text?: string;
+      role?: string;
+      kind?: string;
+      seatKey?: string | null;
+      speakable?: boolean;
+      seq?: number;
+    }[];
   };
   return (data.turns ?? []).map((t) => ({
     text: String(t.text ?? ""),
     role: String(t.role ?? ""),
+    kind: String(t.kind ?? ""),
+    seatKey: t.seatKey ?? null,
+    speakable: t.speakable !== false,
     seq: Number(t.seq ?? 0),
   }));
 }

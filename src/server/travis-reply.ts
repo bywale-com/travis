@@ -38,7 +38,7 @@ export async function pipeTravisText(params: {
   });
 
   if (!travisIsWired()) {
-    const status = await insertStatusTurn(sessionId, "Travis isn’t wired");
+    const status = await insertStatusTurn(sessionId, "Travis isn’t wired", "travis");
     await maybeCloseTravisStream({ sessionId, failed: true }).catch(() => {});
     send("done", {
       matched: true,
@@ -66,6 +66,7 @@ export async function pipeTravisText(params: {
     const status = await insertStatusTurn(
       sessionId,
       travisGenerateMiss(msg),
+      "travis",
     );
     await maybeCloseTravisStream({ sessionId, failed: true }).catch(() => {});
     send("done", {

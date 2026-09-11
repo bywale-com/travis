@@ -1,13 +1,14 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { openRoom, readQueue, readTurns, runtimeBaseUrl } from "../desk";
+import { appWorkedReason } from "../app-worked";
+import { openFreshRoom, readQueue, readTurns, runtimeBaseUrl } from "../desk";
 import { send } from "../doors";
 
 const haveUrl = Boolean(runtimeBaseUrl());
 
 describe("type-dest", { skip: !haveUrl }, () => {
-  it("sending work to a seat is never HTML, writes turn, and enqueues dest", async () => {
-    const desk = await openRoom();
+  it("dest to a seat starts a leave, and Travis mouth last does not die", async () => {
+    const desk = await openFreshRoom();
     assert.ok(desk.sessionId.length > 0);
 
     const destPrompt = "Engineer, inspect the runtime verification check.";
@@ -23,6 +24,10 @@ describe("type-dest", { skip: !haveUrl }, () => {
       turns.some((t) => t.text.includes("inspect the runtime verification")),
       "dest prompt landed on the tape",
     );
+    const mouth = appWorkedReason(turns);
+    if (mouth) {
+      throw new Error(`type-dest Travis mouth: ${mouth}`);
+    }
 
     const queueData = await readQueue(desk);
     assert.ok(

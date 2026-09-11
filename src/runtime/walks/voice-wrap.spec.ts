@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { openRoom, readTurns, runtimeBaseUrl } from "../desk";
+import { assertAppWorked } from "../app-worked";
+import { openFreshRoom, readTurns, runtimeBaseUrl } from "../desk";
 import { finalize, token, transcript } from "../doors";
 
 const FIRST = "are you able to do that now?";
@@ -8,8 +9,8 @@ const SECOND = "and also put this on the tape";
 const haveUrl = Boolean(runtimeBaseUrl());
 
 describe("voice-wrap", { skip: !haveUrl }, () => {
-  it("opens one room, takes a token, writes two user turns, then finalize is a stream not HTML", async () => {
-    const desk = await openRoom();
+  it("two spoken lines, then I’m done — wrap is a Travis mouth, not a run error", async () => {
+    const desk = await openFreshRoom();
     assert.ok(desk.sessionId.length > 0);
 
     const tok = await token(desk);
@@ -40,5 +41,8 @@ describe("voice-wrap", { skip: !haveUrl }, () => {
     const fin = await finalize(desk, "I'm done");
     assert.ok(fin.status >= 200 && fin.status < 500);
     assert.ok(fin.kind === "sse" || fin.kind === "json", `finalize must not be HTML, got ${fin.kind}`);
+
+    const afterWrap = await readTurns(desk);
+    assertAppWorked(afterWrap, "voice-wrap");
   });
 });

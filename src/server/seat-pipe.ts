@@ -457,10 +457,12 @@ export async function absorbLiveTravisPost(
 export async function insertStatusTurn(
   sessionId: string,
   text: string,
+  seatKey?: SeatKey | null,
 ): Promise<VoiceTurn> {
   return insertTurn(sessionId, {
     role: "status",
     kind: "status",
+    seatKey: seatKey ?? undefined,
     speakable: false,
     text,
   });

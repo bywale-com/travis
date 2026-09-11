@@ -32,5 +32,5 @@ export async function noteTravisUnwired(sessionId: string): Promise<void> {
     .orderBy(desc(voiceTurn.seq))
     .limit(1);
   if (last?.kind === "status" && /isn.t wired/i.test(last.text)) return;
-  await insertStatusTurn(sessionId, "Travis isn’t wired");
+  await insertStatusTurn(sessionId, "Travis isn’t wired", "travis");
 }

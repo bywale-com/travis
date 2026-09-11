@@ -36,7 +36,8 @@ test("one PR per initiative is written where seats will see it", () => {
   assert.match(index, /HOTFIX-083-RUNTIME-DOORS-ACTION-STATUS/);
   assert.match(index, /HOTFIX-084-TYPE-DEST-TIMEOUT/);
   assert.match(index, /HOTFIX-085-TYPE-DEST-RECUT/);
-  assert.match(index, /Next: \*\*086\*\*/);
+  assert.match(index, /HOTFIX-086-RUNTIME-IS-THE-APP/);
+  assert.match(index, /Next: \*\*087\*\*/);
 
   const house =
     read("docs/register/house-now/protocols/engineer.md") +

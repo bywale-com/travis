@@ -3044,7 +3044,7 @@ export function Room({
                         letterSpacing: 0.2,
                       }}
                     >
-                      {`${seatKeyToShort(turn.seatKey)} · run error`}
+                      {`${seatKeyToShort(turn.seatKey)} · ${turn.text.trim() || "run error"}`}
                     </div>
                   );
                 }

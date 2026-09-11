@@ -6,6 +6,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-11** · Hotfix 086 · [PR pending] — Runtime walks wait for Travis to speak, walk-back is seeded, and a generate miss fails the check, because `?? · run error` on Type still painted `runtime-doors` green.
+
 - **2026-09-10** · Hotfix 085 · [PR #170](https://github.com/bywale-com/travis/pull/170) — Type send returns SSE and writes the tape before role dest resolve, chip dests use write-and-leave, and SSE adds X-Accel-Buffering, because dest spin plus a held Cursor pipe still 504'd type-dest on runtime verification.
 
 - **2026-09-10** · Hotfix 084 · [PR #169](https://github.com/bywale-com/travis/pull/169) — Role dest resolves all sit roles, sit handoff dispatches write-and-leave, and SSE emits an immediate ping, because type-dest walk hit a 504 Gateway Timeout while synchronously waiting on agent completion.

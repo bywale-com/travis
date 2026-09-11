@@ -1,6 +1,51 @@
 import { contentKind } from "./not-html";
 import { doorFetch, type Desk } from "./desk";
 
+async function consumeSse(
+  res: Response,
+): Promise<{ events: string[]; error?: string }> {
+  const reader = res.body?.getReader();
+  if (!reader) return { events: [] };
+  const dec = new TextDecoder();
+  let buf = "";
+  const events: string[] = [];
+  let error: string | undefined;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      let sep = buf.indexOf("\n\n");
+      while (sep >= 0) {
+        const chunk = buf.slice(0, sep);
+        buf = buf.slice(sep + 2);
+        let event = "message";
+        const dataLines: string[] = [];
+        for (const line of chunk.split("\n")) {
+          if (line.startsWith("event:")) event = line.slice(6).trim();
+          else if (line.startsWith("data:")) dataLines.push(line.slice(5).trimStart());
+        }
+        if (chunk.trim()) events.push(event);
+        if (event === "error") {
+          error = dataLines.join("\n") || "sse error";
+        }
+        if (event === "done" || event === "error") {
+          await reader.cancel().catch(() => {});
+          return { events, error };
+        }
+        sep = buf.indexOf("\n\n");
+      }
+    }
+  } finally {
+    try {
+      reader.releaseLock();
+    } catch {
+      /* already released after cancel */
+    }
+  }
+  return { events, error };
+}
+
 export async function token(desk: Desk): Promise<{
   wired: boolean;
   status: number;
@@ -44,7 +89,12 @@ export async function transcript(
 export async function finalize(
   desk: Desk,
   utterance: string,
-): Promise<{ kind: ReturnType<typeof contentKind>; status: number }> {
+): Promise<{
+  kind: ReturnType<typeof contentKind>;
+  status: number;
+  events: string[];
+  error?: string;
+}> {
   const { res, kind } = await doorFetch(
     `/api/session/${desk.sessionId}/finalize`,
     {
@@ -54,16 +104,22 @@ export async function finalize(
     },
   );
   if (kind === "sse") {
-    void res.body?.cancel();
+    const consumed = await consumeSse(res);
+    return { kind, status: res.status, ...consumed };
   }
-  return { kind, status: res.status };
+  return { kind, status: res.status, events: [] };
 }
 
 export async function send(
   desk: Desk,
   text: string,
   options?: { chipSeatKeys?: string[]; chipSeatKey?: string },
-): Promise<{ kind: ReturnType<typeof contentKind>; status: number }> {
+): Promise<{
+  kind: ReturnType<typeof contentKind>;
+  status: number;
+  events: string[];
+  error?: string;
+}> {
   const { res, kind } = await doorFetch(`/api/session/${desk.sessionId}/send`, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -74,7 +130,8 @@ export async function send(
     }),
   });
   if (kind === "sse") {
-    void res.body?.cancel();
+    const consumed = await consumeSse(res);
+    return { kind, status: res.status, ...consumed };
   }
-  return { kind, status: res.status };
+  return { kind, status: res.status, events: [] };
 }
