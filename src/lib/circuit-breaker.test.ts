@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
@@ -118,4 +120,58 @@ test("Engineer prompt never green-lights a seat commit", () => {
   assert.match(prompt, /Never use the exact subject `Preview \[vercel build\]`/);
   assert.doesNotMatch(prompt, /\[vercel skip\]/);
   assert.doesNotMatch(prompt, /\[skip ci\] so Vercel/);
+});
+
+test("blocker mailer exists and wake workflow invokes it", () => {
+  const yml = read(".github/workflows/wake-packet-seats.yml");
+  const script = read(".github/scripts/send-blocker-letter.py");
+  assert.match(yml, /send-blocker-letter\.py/);
+  assert.match(script, /EMERGE_EMAIL/);
+  assert.match(script, /RESEND_API_KEY/);
+  assert.match(script, /\[BLOCKER\]/);
+  assert.doesNotMatch(yml, /VERCEL_DEPLOY_HOOK_URL/);
+});
+
+test("blocker mailer shapes subject from markdown without Resend", () => {
+  const dir = mkdtempSync(join(tmpdir(), "blocker-"));
+  const blocker = join(dir, "BLOCKER-021-cursor-limit.md");
+  writeFileSync(
+    blocker,
+    `# Blocker 021 — Cursor hard limit
+
+**Pocket** Packet 021 circuit breaker · PR #181
+
+**Cause**
+Background Agent create hit the $2 hard spend limit on preview.
+
+**Required action**
+1. Top up Cursor spend at the dashboard.
+
+**URL**
+https://www.cursor.com/dashboard?tab=settings
+
+**Tape excerpt**
+\`\`\`
+hard limit reached
+\`\`\`
+`,
+    "utf8",
+  );
+  const script = fileURLToPath(
+    new URL("../../.github/scripts/send-blocker-letter.py", import.meta.url),
+  );
+  const run = spawnSync("python3", [script, blocker], {
+    env: {
+      ...process.env,
+      EMERGE_EMAIL: "",
+      RESEND_API_KEY: "",
+      RESEND_FROM_EMAIL: "",
+    },
+    encoding: "utf8",
+  });
+  assert.equal(run.status, 0, run.stderr + run.stdout);
+  assert.match(
+    run.stdout,
+    /\[BLOCKER\] Packet 021 circuit breaker · PR #181 blocked — Background Agent create hit the \$2 hard spend limit on preview\./,
+  );
 });
