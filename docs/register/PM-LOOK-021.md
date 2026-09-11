@@ -4,7 +4,7 @@
 **Change packet:** SYSTEMS-CHANGE-PACKET-036  
 **PR:** https://github.com/bywale-com/travis/pull/181  
 **Preview:** none (desk is GitHub Actions + Vercel preview gate — no phone glass; Vercel check **Canceled by Ignored Build Step** while `wake-pm-look` is on — correct opt-in hold)  
-**Verdict:** Fail
+**Verdict:** Pass
 
 ## Look
 
@@ -65,9 +65,11 @@ done
 
 **Cumulative walks** — `package.json` `"test:runtime": "tsx --test --test-concurrency=1 src/runtime/walks/*.spec.ts"` (no `--test-bail`); five specs on branch.
 
+**Handoff sync** — `src/lib/handoff-seat.test.ts` matches Current: **This bind is done** / `bc-7c4413e3-0e0a-4028-b018-a6fe9970e754`.
+
 **Opened / queried:** PR checks on #181 — Vercel preview **Canceled by Ignored Build Step** (expected while handoff label on). Did not open production psi. No `DATABASE_URL` — no SQL row (none specified).
 
-**Look angle:** Plant matches the 036 lock. Missing mailer from SA inventory is now planted. Hotfix 088 bash-regex skip path is gone from `runtime-doors.yml`.
+**Look angle:** Plant matches the 036 lock. Hotfix 088 bash-regex skip path is gone from `runtime-doors.yml`.
 
 ## Test
 
@@ -75,7 +77,7 @@ done
 
 ### 1. Full-Audit Walks (No Fail-Fast)
 
-**I saw (static):** `test:runtime` uses `--test-concurrency=1` without `--test-bail`. Five walk specs exist. `runtime-doors.yml` pipes full output to `$RUNNER_TEMP/walks.txt`. Could not run live walk suite against a preview deploy URL in this bind (no green-light deploy; preview canceled by ignore step).
+**I saw (static):** `test:runtime` uses `--test-concurrency=1` without `--test-bail`. Five walk specs exist (`come-back`, `type-dest`, `type-send`, `type-walk-back`, `voice-wrap`). `runtime-doors.yml` pipes full output to `$RUNNER_TEMP/walks.txt`. Could not run live walk suite against a preview deploy URL in this bind (no green-light deploy; preview canceled by ignore step).
 
 ### 2. Engineer Triage & Circuit Breaker Hold
 
@@ -88,7 +90,7 @@ done
 ### Lib verify
 
 - `npx tsx --test src/lib/circuit-breaker.test.ts` — **10/10 pass**.
-- `npm test` (full lib suite) — **481/482 pass, 1 fail**: `src/lib/handoff-seat.test.ts` — `Engineer Current names where the last bind stopped` expects `/This bind is done/` and bind `bc-26131d8d-741b-4566-89b3-df312e8e48e1`; current `ENGINEER-HANDOFF.md` says **This bind is living** with bind `bc-6e07d481-16ec-4459-9a78-54fa691514ef`. Handoff also claims “`npm test` green” — false on this branch.
+- `npm test` (full lib suite) — **482/482 pass** (handoff-seat test synced with Current handoff).
 
 **Steps I could not do (human):**
 
@@ -99,4 +101,4 @@ done
 
 ## Loop
 
-**Fail — Test.** Circuit breaker chain matches lock; lib proof for 021 is green. Full `npm test` is not — Engineer updated `ENGINEER-HANDOFF.md` without updating `src/lib/handoff-seat.test.ts` (or finishing bind per handoff law). Bring handoff test and Current lines in sync so `npm test` is fully green on #181. Do not remint vercel gate, blocker workflow, mailer, or circuit-breaker tests. Same PR. No cousin.
+**Pass — emerged.** Circuit breaker chain matches 036 lock; lib proof green; full `npm test` green after handoff-seat recut. Human may walk the same sheet on merge + preview deploy. Same PR. No cousin.
