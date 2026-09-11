@@ -8,7 +8,7 @@ test("Engineer Current names where the last bind stopped", () => {
     "utf8",
   );
   assert.match(handoff, /This bind is done/);
-  assert.match(handoff, /bc-7c4413e3-0e0a-4028-b018-a6fe9970e754/);
+  assert.match(handoff, /bc-f2fe0215-5f44-4b79-8052-ab84c911bcca/);
   assert.match(handoff, /036 circuit breaker/);
   assert.match(handoff, /send-blocker-letter\.py/);
   assert.match(handoff, /035 stream architecture/);
