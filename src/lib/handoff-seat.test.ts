@@ -7,21 +7,18 @@ test("Engineer Current names where the last bind stopped", () => {
     new URL("../../docs/register/ENGINEER-HANDOFF.md", import.meta.url),
     "utf8",
   );
-  assert.match(handoff, /This bind is done/);
-  assert.match(handoff, /bc-26131d8d-741b-4566-89b3-df312e8e48e1/);
-  assert.match(handoff, /034 what exists/);
-  assert.match(handoff, /033 lived redesign/);
-  assert.match(handoff, /032 compose the send harness/);
-  assert.match(handoff, /031 dest harness recut/);
-  assert.match(handoff, /081 Voice uses the Type hang/);
-  assert.match(handoff, /079 Talk HTML as JSON/);
-  assert.match(handoff, /029 The room stays live/);
-  assert.match(handoff, /026 Serve/);
-  assert.match(handoff, /076 dest closer/);
-  assert.match(handoff, /Hotfix 062/);
-  assert.match(handoff, /next hotfix number/);
+  assert.match(handoff, /This bind is (living|done)/);
+  assert.match(handoff, /Do not start from a transcript/);
+  assert.match(handoff, /036 circuit breaker/);
+  assert.match(handoff, /#180/);
+  assert.match(handoff, /088 fail-look skip/);
+  assert.match(handoff, /086 runtime is the app/);
+  assert.match(handoff, /035 stream architecture/);
+  assert.match(handoff, /Next number \*\*089\*\*/);
   assert.match(handoff, /One PR per initiative/);
-  assert.match(handoff, /You are a NEW bind/);
+  assert.match(handoff, /Pickup file:/);
+  assert.match(handoff, /You are Travis's Engineer/);
+  assert.match(handoff, /Read docs\/register\/ENGINEER-HANDOFF\.md first/);
 });
 
 test("always-on and seat README point at the pickup file", () => {

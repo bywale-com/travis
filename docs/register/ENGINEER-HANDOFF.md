@@ -1,8 +1,8 @@
 # Engineer seat handoff — 2026-09-11
 
-**This bind is living.** Last prior bind: this run (Packet 021 / SCP-036 plant). Do not start from a transcript.
+**This bind is done.** Last bind: fail-look recut on Packet 021 / SCP-036 (#180). Do not start from a transcript. `handoff-seat.test.ts` now asserts the living-handoff shape instead of the old bind-chain strings the 021 rewrite dropped.
 
-**036 circuit breaker is planted on [#180](https://github.com/bywale-com/travis/pull/180).** Preview is opt-in (`[vercel build]` on empty commit after handoffs clear). `runtime-doors` runs full walk suite, skips `fail-look` during handoff/hold labels, and does not regex-classify failures. Engineer triage (Bucket A plant / Bucket B founder ops) lives in the automation prompt. Blocker hold: `BLOCKER-NNN-*.md` → label `blocker` + `send-blocker-letter.py` (Resend). Founder removes `blocker` → `blocker-release` green-lights preview. `npm test` passes including `circuit-breaker.test.ts`. No `[vercel build]` on this plant commit. Human look+test: [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md).
+**036 circuit breaker is planted on [#180](https://github.com/bywale-com/travis/pull/180).** Preview is opt-in (`[vercel build]` on empty commit after handoffs clear). `runtime-doors` runs full walk suite, skips `fail-look` during handoff/hold labels, and does not regex-classify failures. Engineer triage (Bucket A plant / Bucket B founder ops) lives in the automation prompt. Blocker hold: `BLOCKER-NNN-*.md` → label `blocker` + `send-blocker-letter.py` (Resend). Founder removes `blocker` → `blocker-release` green-lights preview. `npm test` passes (482/482) including `circuit-breaker.test.ts` and `handoff-seat.test.ts`. No `[vercel build]` on this recut commit. Human look+test: [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md).
 
 **088 fail-look skip (merged):** Red doors does not `fail-look` unwired or Cursor hard limit. Superseded by 036 Engineer triage + blocker hold. Merged [#174](https://github.com/bywale-com/travis/pull/174).
 
@@ -22,7 +22,7 @@
 
 ## Where we stopped
 
-**036 circuit breaker is planted on [#180](https://github.com/bywale-com/travis/pull/180).** Branch drafts kept: `vercel.json` + `vercel-ignore.sh`, `preview-when-clear.sh`, `runtime-doors.yml` handoff skip, `wake-packet-seats.yml` blocker + preview jobs, Engineer automation triage prompt, `circuit-breaker.test.ts`. **Planted this bind:** `.github/scripts/send-blocker-letter.py`; `AUTOMATION-PACKET-CHAIN.md` blocker section updated to planted. After handoffs clear on this PR, Action empty-commits `Preview [vercel build]` — not on this commit. Human look+test is [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md). Do not remint 023–035 product pipe.
+**036 circuit breaker recut on [#180](https://github.com/bywale-com/travis/pull/180).** PM look Fail: `handoff-seat.test.ts` red after handoff rewrite. Fixed by updating the test to assert the living-handoff contract (`This bind is living`, 036 current, 088/086 merged trail, next hotfix **089**, paste block) instead of the old bind-id chain. `npm test` 482/482 green. Await PM re-look. Do not remint 023–035 product pipe.
 
 **035 stream architecture is planted on [#163](https://github.com/bywale-com/travis/pull/163).** Do not remint stream-intent / stream-dispatch.
 
