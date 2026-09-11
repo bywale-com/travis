@@ -53,6 +53,7 @@ export async function token(desk: Desk): Promise<{
   const { res, bodyText, kind } = await doorFetch(
     `/api/session/${desk.sessionId}/live/token`,
     { method: "POST" },
+    desk,
   );
   if (kind !== "json") {
     throw new Error(`token expected JSON, got ${kind} (${res.status})`);
@@ -75,6 +76,7 @@ export async function transcript(
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ role: "user", text }),
     },
+    desk,
   );
   if (kind === "sse") {
     return { ok: false, kind, status: res.status };
@@ -102,6 +104,7 @@ export async function finalize(
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ utterance }),
     },
+    desk,
   );
   if (kind === "sse") {
     const consumed = await consumeSse(res);
@@ -120,15 +123,19 @@ export async function send(
   events: string[];
   error?: string;
 }> {
-  const { res, kind } = await doorFetch(`/api/session/${desk.sessionId}/send`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      text,
-      chipSeatKeys: options?.chipSeatKeys,
-      chipSeatKey: options?.chipSeatKey,
-    }),
-  });
+  const { res, kind } = await doorFetch(
+    `/api/session/${desk.sessionId}/send`,
+    {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        text,
+        chipSeatKeys: options?.chipSeatKeys,
+        chipSeatKey: options?.chipSeatKey,
+      }),
+    },
+    desk,
+  );
   if (kind === "sse") {
     const consumed = await consumeSse(res);
     return { kind, status: res.status, ...consumed };

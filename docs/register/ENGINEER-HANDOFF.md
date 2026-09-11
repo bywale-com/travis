@@ -1,8 +1,10 @@
 # Engineer seat handoff — 2026-09-11
 
-**This bind is living.** Last prior bind: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a`. Do not start from a transcript.
+**This bind is done.** Last Engineer: this bind (`fail-look` recut on [#175](https://github.com/bywale-com/travis/pull/175)). Prior: `bc-251dafe7-dd4c-4070-875a-456dc0778e5e` (089 ops notify planted). Do not start from a transcript.
 
-**089 ops notify (planted on [#175](https://github.com/bywale-com/travis/pull/175)):** Red `runtime-doors` on unwired / Cursor hard limit opens a house issue, comments the open PR once, and mails the miss on first open. No `fail-look`. Same issue is the living thread; repeat reds comment only. Live after merge. Next hotfix **090**. 087 mouth recut lives on [#173](https://github.com/bywale-com/travis/pull/173).
+**089 fail-look recut (this PR):** Preview `runtime-doors` at run [`34615245672`](https://github.com/bywale-com/travis/actions/runs/34615245672) failed think-walks with `Travis error: Cannot use import statement outside a module` and added `fail-look`. Recut: `travis-deep-agent.ts` loads Deep Agents with `createRequire` + `require("deepagents/node")`; walks mint an isolated `runtime-{uuid}@travis.internal` operator per room; type send writes `Dest error:` on dispatch miss. **type-dest** may stay red on Cursor hard limit — founder ops; **088** + **089** skip `fail-look` for that. Wait for preview `runtime-doors` on this push.
+
+**089 ops notify (same PR):** Red `runtime-doors` on unwired / Cursor hard limit opens a house issue, comments the open PR once, and mails the miss on first open. No `fail-look`. Same issue is the living thread; repeat reds comment only. Live after merge. Next hotfix **090**.
 
 **088 fail-look skip (merged):** Red doors does not `fail-look` unwired or Cursor hard limit. Merged [#174](https://github.com/bywale-com/travis/pull/174).
 
@@ -21,6 +23,8 @@
 ---
 
 ## Where we stopped
+
+**089 on [#175](https://github.com/bywale-com/travis/pull/175).** Ops notify (088 follow-on) is planted. This bind recut the `fail-look` miss from preview deploy: Deep Agents ESM on Vercel + walk operator isolation. `npm test` and `npm run build` pass locally. **Do not merge until preview `runtime-doors` is green or only ops-red (hard limit / unwired) with no `fail-look`.**
 
 **035 stream architecture is planted on [#163](https://github.com/bywale-com/travis/pull/163).** Classify is `src/lib/stream-intent.ts` (new / change / cancel / talk). Do is `src/server/stream-dispatch.ts` — hangs dest assemble, 034 follow-up, `cancelCursorRun`, and `invokeDeepAgent({ mode: "update" })`. Mouth is last. Live `liveShouldPipeTravis` is always false; transcript dest-by-name still leaves, then dispatches the rest, never `pipeTravisText`. Type send writes the tape, files chip / call-by-name dests, dispatches remaining intents, then synthesizes. Finalize strips the done-phrase, backup-Do once if a leave never started, then synthesizes. `parent_id` unused. No new table. Glass: `destGlassName` / `SIT_ROLE_LABEL.pm` / `seatKeyToLabel("pm")` → **Technical Architect**. Spoken “Technical Architect” and “Technical PM” both route to `pm`. Path `/protocols/pm.md`. Grain tests + `next build` passed. Human look+test is [`PM-PACKET-019-STREAM-ARCH-TEST.md`](./PM-PACKET-019-STREAM-ARCH-TEST.md) on Log · Type after this lands on psi. Do not remint dest assemble, dest-gate-on-ask, Cloud create, `dest_job`, checkpointer, or 031–034.
 
