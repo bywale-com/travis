@@ -6,7 +6,7 @@
 # repository_dispatch always runs THIS FILE FROM main. The blocker → no
 # fail-look skip must live on main or a later deploy re-wakes Engineer.
 # Walks still run. The check still paints red. Engineer is not re-woken
-# while BLOCKER-*.md or the `blocker` label is on.
+# while the PR label `blocker` is on.
 name: Runtime doors
 
 on:
@@ -81,12 +81,6 @@ jobs:
           sha="${DEPLOY_SHA:-}"
           if [[ -z "$sha" ]]; then
             echo "No client_payload.git.sha. No fail-look."
-            exit 0
-          fi
-
-          # Checkout is at DEPLOY_SHA — blocker file on this commit means hold is active.
-          if compgen -G "docs/register/BLOCKER-[0-9]*-*.md" > /dev/null; then
-            echo "Blocker file on deploy commit. No fail-look."
             exit 0
           fi
 

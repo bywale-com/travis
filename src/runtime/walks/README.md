@@ -1,6 +1,6 @@
 # Walks — every use that is the app
 
-Seeded files run on every deploy (`npm run test:runtime`). A row with no file is a named hole, not a green. A walk names **one use** and that use’s **outcome**. Completeness is this list plus grain tests, not an oracle that tries to catch every error.
+Seeded files run on every deploy (`npm run test:runtime`). **Full-audit law:** every spec in this folder runs to completion; do not add `--test-bail`. A row with no file is a named hole, not a green. A walk names **one use** and that use’s **outcome**. Completeness is this list plus grain tests, not an oracle that tries to catch every error.
 
 | Use on the phone | Walk | Pass | Fail |
 |---|---|---|---|

@@ -9,7 +9,7 @@ If a use is on the phone, a walk here is that use. The Deployment Check `runtime
 - A generate miss / `kind=status` that says error **fails**. Do not grade whether the reply was clever.
 - Dest to a Cursor seat: the **leave started**. Do not wait for that seat’s essay. Do not fail dest on Travis wrap.
 - On fail: dump the tape and SSE events. That is the report.
-- One test-operator cookie resumes one live room. The suite runs **sequentially**. Each walk starts a fresh sitting (`End` + open) except the come-back resume beat.
+- One test-operator cookie resumes one live room. The suite runs **sequentially** and **full-audit** — every walk spec runs to completion; no `--test-bail`. Each walk starts a fresh sitting (`End` + open) except the come-back resume beat.
 - Do not invent a Scenario Graph. Add a walk when the app gains a use. Named error-path walks when that miss is lived.
 
 Inventory: [`walks/README.md`](./walks/README.md).

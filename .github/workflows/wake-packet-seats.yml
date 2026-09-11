@@ -1,6 +1,6 @@
 # Cheap gate in front of Cursor Automations.
 # GitHub path filter + this-push diff. No Cursor boot until a label lands.
-# Labels: wake-sa · wake-engineer · wake-pm-look · fail-look · emerge
+# Labels: wake-sa · wake-engineer · wake-pm-look · fail-look · emerge · blocker
 # Packet: this push lands PM-PACKET-NNN-*.md AND that file has **Wake:** sa
 #   → wake-sa. Missing / hold = wait. Filename alone is not the go.
 # Hotfix: this push lands HOTFIX-NNN-*.md → wake-engineer only (no wake-sa).
@@ -12,12 +12,15 @@
 name: Wake packet seats
 
 on:
+  pull_request:
+    types: [unlabeled]
   push:
     paths:
       - "docs/register/PM-PACKET-*.md"
       - "docs/register/SYSTEMS-CHANGE-PACKET-*.md"
       - "docs/register/PM-LOOK-*.md"
       - "docs/register/HOTFIX-*.md"
+      - "docs/register/BLOCKER-*.md"
       - "docs/register/ENGINEER-HANDOFF.md"
       - "src/**"
       - ".github/workflows/wake-packet-seats.yml"
@@ -98,6 +101,37 @@ jobs:
           gh label create wake-pm-look --color CCCCCC --description "Cursor: wake Technical PM look+test" 2>/dev/null || true
           gh label create fail-look --color CCCCCC --description "Cursor: Engineer loop after PM look Fail" 2>/dev/null || true
           gh label create emerge --color CCCCCC --description "PM look Pass — human test" 2>/dev/null || true
+          gh label create blocker --color CCCCCC --description "Founder ops hold — automations sleep" 2>/dev/null || true
+
+          # Blocker hold: this push lands BLOCKER-NNN-*.md (not *-RESOLVED).
+          # Label blocker, strip seat wakes, mail founder. No wake-engineer.
+          blocker_file=""
+          while IFS= read -r bf; do
+            [[ -z "$bf" ]] && continue
+            if [[ "$bf" == *-RESOLVED.md ]]; then
+              continue
+            fi
+            blocker_file="$bf"
+            break
+          done < <(echo "$files" | grep -E '^docs/register/BLOCKER-[0-9]+-.+\.md$' || true)
+          if [[ -n "$blocker_file" ]]; then
+            gh pr edit "$pr" --remove-label fail-look || true
+            gh pr edit "$pr" --remove-label wake-engineer || true
+            gh pr edit "$pr" --remove-label wake-pm-look || true
+            gh pr edit "$pr" --remove-label blocker || true
+            if gh pr edit "$pr" --add-label blocker; then
+              echo "Labeled #$pr blocker (hold)."
+            else
+              echo "Could not add blocker label."
+            fi
+            if [[ -n "${EMERGE_EMAIL:-}" && -n "${RESEND_API_KEY:-}" && -n "${RESEND_FROM_EMAIL:-}" ]]; then
+              python3 .github/scripts/send-blocker-letter.py "$blocker_file"
+            else
+              echo "No EMERGE_EMAIL + RESEND_API_KEY + RESEND_FROM_EMAIL. Blocker label only."
+            fi
+            echo "Blocker hold active. No further seat labels on this push."
+            exit 0
+          fi
 
           # Hotfix pickup: this push lands HOTFIX-NNN-*.md. Title the PR
           # "Hotfix NNN — …" (human tell). Skip SA. Do not re-wake Engineer
@@ -242,6 +276,24 @@ jobs:
               fi
             fi
           fi
+
+  blocker-release:
+    if: github.event_name == 'pull_request' && github.event.action == 'unlabeled' && github.event.label.name == 'blocker'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Redeploy preview after blocker cleared
+        env:
+          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${VERCEL_DEPLOY_HOOK_URL:-}" ]]; then
+            echo "VERCEL_DEPLOY_HOOK_URL not set. Redeploy manually or set the hook secret."
+            exit 0
+          fi
+          curl -fsS -X POST "$VERCEL_DEPLOY_HOOK_URL"
+          echo "Deploy hook fired."
 
   emerge-now:
     if: github.event_name == 'workflow_dispatch'
