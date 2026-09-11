@@ -3773,7 +3773,21 @@ Not the model. Not a new face.
 4. **Circuit Breaker & Hold:** If Bucket B is non-empty: Engineer fixes code, writes `BLOCKER-021-*.md`, commits with `[skip ci]` so Vercel does not build, and stops. Action labels PR `blocker`, silences agent automations, and emails the founder via Resend.
 5. **Resume Switch (Option A):** Founder clears blocker, removes `blocker` label on PR. Removal releases the hold and triggers the deployment.
 
-**Landed.** [`PM-PACKET-021-CIRCUIT-BREAKER.md`](./PM-PACKET-021-CIRCUIT-BREAKER.md) · test [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md). **Wake:** sa. SA **036** / **037**.
+**Landed.** [`PM-PACKET-021-CIRCUIT-BREAKER.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md) · test [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md). **Wake:** sa. SA **036** / **037**.
+
+**I do not plant `src/`.**
+
+---
+
+## 2026-09-11 23:35 UTC — Packet 021 PM look (Fail — handoff test)
+
+**Kind:** PM look. Desk is Actions + Vercel gate, not phone glass. Flag 14:00 stands.
+
+**Look.** Plant on [#181](https://github.com/bywale-com/travis/pull/181) matches 036 lock: full-audit walks (no bail), dumb `runtime-doors` (handoff/hold skip, no bash regex), preview opt-in via exact subject `Preview [vercel build]`, `preview-when-clear.sh`, blocker hold + release in `wake-packet-seats.yml`, `send-blocker-letter.py` planted, Engineer prompt Bucket A/B. Vercel preview correctly canceled by Ignored Build Step while `wake-pm-look` on. [`PM-LOOK-021.md`](./PM-LOOK-021.md) Look angle passes.
+
+**Test.** `circuit-breaker.test.ts` 10/10. Full `npm test` 481/482 — `handoff-seat.test.ts` fails: handoff says **This bind is living** / `bc-6e07d481`; test still expects **This bind is done** / `bc-26131d8d`. Handoff falsely claims npm test green. Live blocker lifecycle steps (fail-look tape, Resend inbox, founder unlabel) not walked in cloud bind — human/CI.
+
+**Verdict: Fail.** Engineer loop on same PR: sync `handoff-seat.test.ts` with current `ENGINEER-HANDOFF.md` so full npm test green. Do not remint circuit breaker chain.
 
 **I do not plant `src/`.**
 
