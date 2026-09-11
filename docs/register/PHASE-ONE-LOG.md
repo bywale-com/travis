@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-11 16:20 UTC — Packet 021 circuit breaker specified; full-audit walks, Engineer triage, blocker hold, and unblock switch. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-11 16:45 UTC — Packet 021 circuit breaker planted and PM look Pass; BLOCKER-001 hold active until founder clears Cursor $2. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3776,4 +3776,18 @@ Not the model. Not a new face.
 **Landed.** [`PM-PACKET-021-CIRCUIT-BREAKER.md`](./PM-PACKET-021-CIRCUIT-BREAKER.md) · test [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md). **Wake:** sa. SA **036** / **037**.
 
 **I do not plant `src/`.**
+
+---
+
+## 2026-09-11 16:45 UTC — Packet 021 PM look Pass; circuit breaker hold active
+
+**Kind:** PM look + test. Flag 14:00 stands.
+
+**Plant.** [#177](https://github.com/bywale-com/travis/pull/177) · `d3c6757`. 021 / SCP-036 circuit breaker: dumb `runtime-doors` (088 bash skip removed), full-audit walks, Engineer triage, `BLOCKER-001` + `[vercel skip]` hold, Resend blocker mail, `release-blocker` on unlabel.
+
+**Look.** Plant matches lock. No product glass — architectural CI cut. CI run 34621326711: all 5 walks ran to completion (0/5 on deploy `4e335fe` — ESM + Cursor limit). Blocker gate 34622075977: labeled `blocker`, Resend 200.
+
+**Test.** [`PM-LOOK-021.md`](./PM-LOOK-021.md) **Verdict: Pass**. Steps 1–2 walked from sheet. Step 3 (founder clears limit, removes `blocker`, green redeploy) is human.
+
+**Emerged.** Human walks [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md) after BLOCKER-001 cleared. No `fail-look`.
 
