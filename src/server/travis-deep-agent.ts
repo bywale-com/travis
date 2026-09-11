@@ -2,14 +2,20 @@
  * SCP-031 — Deep Agents hang on Type. Dest seats stay Cursor.
  * StateBackend /print.md + /roster.md. wrapModelCall hangs files, not the request.
  * SCP-034 — official checkpointer + thread_id = voice_session.id.
- * 080/086 — next.config aliases deepagents/node → dist/node.cjs for Vercel.
+ * 087 — runtime require("deepagents/node") hits CJS; static import() resolves ESM on Vercel.
  */
 
-import {
-  createDeepAgent,
-  registerHarnessProfile,
-  StateBackend,
-} from "deepagents/node";
+import { createRequire } from "node:module";
+
+const requireDeepAgents = createRequire(import.meta.url);
+
+type DeepAgentsNode = typeof import("deepagents/node");
+
+function deepAgentsNode(): DeepAgentsNode {
+  return requireDeepAgents("deepagents/node") as DeepAgentsNode;
+}
+
+const { createDeepAgent, registerHarnessProfile, StateBackend } = deepAgentsNode();
 import { ChatOpenAI } from "@langchain/openai";
 import { isAIMessage, type BaseMessage } from "@langchain/core/messages";
 import { createMiddleware, tool } from "langchain";
