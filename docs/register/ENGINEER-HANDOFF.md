@@ -12,6 +12,8 @@
 
 **021 fail-look recut (2026-09-11, fail-look loop):** Run [34629445893](https://github.com/bywale-com/travis/actions/runs/34629445893): 4/5 pass, `type-dest` Cursor hard limit — **Bucket B only.** Root cause of re-added `fail-look`: `repository_dispatch` runs `runtime-doors` from **main**, which lacks blocker skip until #177 merges. Recut: filesystem BLOCKER check + label check in `runtime-doors.yml`; `wake-packet-seats` strips wake labels on every push while `blocker` active. Refreshed BLOCKER-001. Pushed `[vercel skip]`.
 
+**021 fail-look recut (2026-09-11, automation wake):** Run [34630079165](https://github.com/bywale-com/travis/actions/runs/34630079165): same tape — 4/5 pass, `type-dest` Cursor hard limit — **Bucket B only.** No plant miss. `runtime-doors` on main still fresh-adds `fail-look` (skip logic lives on #177 until merge). Refreshed BLOCKER-001; pushed `[vercel skip]` → `wake-packet-seats` strips `fail-look` while `blocker` active.
+
 **088 fail-look skip (superseded on #177):** 021 replaces bash-regex skip with Engineer triage + blocker hold. 088 remains on `main` until #177 merges.
 
 **086 runtime is the app (merged):** Walks wait for the mouth. Red `runtime-doors` fresh-adds `fail-look`. Merged [#171](https://github.com/bywale-com/travis/pull/171).

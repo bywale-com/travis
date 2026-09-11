@@ -6,6 +6,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-11** · Packet 021 recut · [PR #177](https://github.com/bywale-com/travis/pull/177) — BLOCKER-001 refreshed for run 34630079165 (4/5 pass, type-dest hard limit), pushed `[vercel skip]` to strip re-added `fail-look`, because `repository_dispatch` still runs main workflow until #177 merges.
 - **2026-09-11** · Packet 021 recut · [PR #177](https://github.com/bywale-com/travis/pull/177) — filesystem BLOCKER check in `runtime-doors`, push-time label strip while `blocker` active, BLOCKER-001 refreshed for run 34629445893, because `repository_dispatch` runs main workflow and re-added `fail-look` on the same Cursor hard limit.
 - **2026-09-11** · Packet 021 recut · [PR #177](https://github.com/bywale-com/travis/pull/177) — `runtime-doors` skips `fail-look` when `blocker` is active; BLOCKER-001 refreshed for 4/5 pass tape, because hold retrigger kept waking Engineer on the same Cursor hard limit.
 

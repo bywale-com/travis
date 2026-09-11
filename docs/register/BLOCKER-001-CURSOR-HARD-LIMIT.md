@@ -10,7 +10,7 @@
 
 ## What failed on the tape
 
-Latest: `runtime-doors` run [34629445893](https://github.com/bywale-com/travis/actions/runs/34629445893) — full-audit walk suite on preview deploy (`b364100`). **4 pass, 1 fail.**
+Latest: `runtime-doors` run [34630079165](https://github.com/bywale-com/travis/actions/runs/34630079165) — full-audit walk suite on preview deploy (`cae1714`). **4 pass, 1 fail.**
 
 | Walk | Result |
 |------|--------|
