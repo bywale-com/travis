@@ -111,3 +111,22 @@ test("Engineer prompt never green-lights a seat commit", () => {
   assert.doesNotMatch(prompt, /\[vercel skip\]/);
   assert.doesNotMatch(prompt, /\[skip ci\] so Vercel/);
 });
+
+test("send-blocker-letter.py parses blocker markdown contract", () => {
+  const py = read(".github/scripts/send-blocker-letter.py");
+  assert.match(py, /send-blocker-letter\.py BLOCKER_FILE/);
+  assert.match(py, /\[BLOCKER\]/);
+  assert.match(py, /EMERGE_EMAIL/);
+  assert.match(py, /RESEND_API_KEY/);
+  assert.match(py, /Cause:/);
+  assert.match(py, /Required action:/);
+  assert.match(py, /Resolve at:/);
+  assert.match(py, /Tape excerpt:/);
+});
+
+test("wake-packet-seats invokes send-blocker-letter on BLOCKER push", () => {
+  const yml = read(".github/workflows/wake-packet-seats.yml");
+  assert.match(yml, /send-blocker-letter\.py/);
+  assert.match(yml, /BLOCKER-\[0-9\]\+-/);
+  assert.match(yml, /blocker-release:/);
+});

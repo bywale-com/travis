@@ -188,25 +188,26 @@ Do not send this through Travis operator mail. Same vendor is fine. Same product
 
 ---
 
-## Blocker letter — founder paste time (considering)
+## Blocker letter — founder paste time (planted)
 
-**Not planted.** Founder named the hole 2026-09-07: emerge exists; blockers do not. Hold until go.
+**Planted 021 / SCP-036.** Same cheap Action as emerge — no LLM. Script: `.github/scripts/send-blocker-letter.py`.
 
-**When (Engineer, usually):** this push lands `docs/register/BLOCKER-NNN-*.md`. The plant or live effect needs something from the founder — a secret, a paste, or a specified-but-not-clear hole. Not Fail-look. Not human test (emerge). SA may write the same file if ascribe is blocked on a key.
+**When (Engineer, usually):** this push lands `docs/register/BLOCKER-NNN-*.md` (not `*-RESOLVED.md`). The plant or live effect needs something from the founder — a secret, a paste, or a specified-but-not-clear hole. Not Fail-look. Not human test (emerge). SA may write the same file if ascribe is blocked on a key.
 
-**What you get (same cheap Action, no LLM):**
+**What you get:**
 
-- Label `blocker` on the PR
-- Subject: `NNN blocked — needs you`
-- Floor: one GitHub issue, assigned to you
+- Label `blocker` on the PR; seat wakes stripped
+- Subject: `[BLOCKER] <Pocket> blocked — <Cause>`
 - Mailbox: same `EMERGE_EMAIL` · `RESEND_API_KEY` · `RESEND_FROM_EMAIL`
-- Body names the secret / the hole. Never the value.
+- Body: cause, required action, resolve URL, tape excerpt. Never the secret value.
+- Founder removes `blocker` label → `blocker-release` job → green-light empty commit when no other handoff/hold labels remain
 
 **Must-not**
 
 - Do not boot a Cursor seat on `blocker`.
 - Do not invent a store to dodge the letter.
 - Do not treat emerge as the blocker path.
+- Do not put `[vercel build]` on the blocker commit.
 
 ---
 

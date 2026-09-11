@@ -6,6 +6,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-11** · SCP-036 · [PR #180](https://github.com/bywale-com/travis/pull/180) — Circuit breaker plants `send-blocker-letter.py`, preview opt-in via `[vercel build]`, and full-audit walk triage without Action regex classification, because doomed Vercel reloops and silent red checks needed Engineer brain plus founder hold.
+
 - **2026-09-11** · Hotfix 088 · [PR #174](https://github.com/bywale-com/travis/pull/174) — Red `runtime-doors` does not `fail-look` Cursor hard limit or unwired, because Engineer cannot recut founder ops and the loop kept booting B.
 
 - **2026-09-11** · Hotfix 086 · [PR #171](https://github.com/bywale-com/travis/pull/171) — Runtime walks wait for Travis to speak, and a red `runtime-doors` fresh-adds `fail-look`, because `?? · run error` on Type still painted the check green.
