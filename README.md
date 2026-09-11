@@ -6,7 +6,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
-- **2026-09-11** · Hotfix 089 · this PR — Red `runtime-doors` on Cursor hard limit or unwired opens a house issue and mails the miss, because 088 left the check red and did not tell the team.
+- **2026-09-11** · Hotfix 089 · [PR #175](https://github.com/bywale-com/travis/pull/175) — Red `runtime-doors` on Cursor hard limit or unwired opens a house issue and mails the miss, because 088 left the check red and did not tell the team.
 
 - **2026-09-11** · Hotfix 088 · [PR #174](https://github.com/bywale-com/travis/pull/174) — Red `runtime-doors` does not `fail-look` Cursor hard limit or unwired, because Engineer cannot recut founder ops and the loop kept booting B.
 

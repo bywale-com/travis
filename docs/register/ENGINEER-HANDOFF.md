@@ -2,7 +2,7 @@
 
 **This bind is living.** Last prior bind: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a`. Do not start from a transcript.
 
-**089 ops notify (this PR):** Red doors on unwired / Cursor hard limit opens a house issue and mails the miss. No `fail-look`. Next hotfix **090**. 087 mouth recut lives on [#173](https://github.com/bywale-com/travis/pull/173).
+**089 ops notify (this PR [#175](https://github.com/bywale-com/travis/pull/175)):** Red doors on unwired / Cursor hard limit opens a house issue and mails the miss. No `fail-look`. Next hotfix **090**. 087 mouth recut lives on [#173](https://github.com/bywale-com/travis/pull/173).
 
 **088 fail-look skip (merged):** Red doors does not `fail-look` unwired or Cursor hard limit. Merged [#174](https://github.com/bywale-com/travis/pull/174).
 
