@@ -9,13 +9,18 @@ const nextConfig: NextConfig = {
     "langchain",
     "@langchain/core",
     "@langchain/langgraph",
+    "@langchain/langgraph-sdk",
     "@langchain/openai",
     "@langchain/langgraph-checkpoint",
     "@langchain/langgraph-checkpoint-postgres",
     "pg",
     "langsmith",
     "openai",
+    "zod",
   ],
+  experimental: {
+    esmExternals: false,
+  },
   outputFileTracingRoot: path.join(__dirname),
 };
 

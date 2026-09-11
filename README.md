@@ -6,6 +6,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-11** · SCP-036 blocker · [PR #180](https://github.com/bywale-com/travis/pull/180) — Deep Agents and checkpointer load via runtime `require()` CJS entrypoints, and `BLOCKER-021` holds for Cursor hard limit, because webpack `import()` on mixed packages threw ESM on Vercel and type-dest hit spend.
+
 - **2026-09-11** · SCP-036 recut · [PR #180](https://github.com/bywale-com/travis/pull/180) — `handoff-seat.test.ts` asserts the living-handoff contract so `npm test` is fully green after the 021 handoff rewrite, because PM look Fail caught a false verify claim.
 
 - **2026-09-11** · SCP-036 · [PR #180](https://github.com/bywale-com/travis/pull/180) — Circuit breaker plants `send-blocker-letter.py`, preview opt-in via `[vercel build]`, and full-audit walk triage without Action regex classification, because doomed Vercel reloops and silent red checks needed Engineer brain plus founder hold.

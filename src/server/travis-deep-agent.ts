@@ -2,16 +2,11 @@
  * SCP-031 — Deep Agents hang on Type. Dest seats stay Cursor.
  * StateBackend /print.md + /roster.md. wrapModelCall hangs files, not the request.
  * SCP-034 — official checkpointer + thread_id = voice_session.id.
+ * 080 hang: require() CJS entrypoints at runtime — webpack import() on mixed packages
+ * picked ESM .js on Vercel and threw "Cannot use import statement outside a module".
  */
 
-import {
-  createDeepAgent,
-  registerHarnessProfile,
-  StateBackend,
-} from "deepagents/node";
-import { ChatOpenAI } from "@langchain/openai";
-import { isAIMessage, type BaseMessage } from "@langchain/core/messages";
-import { createMiddleware, tool } from "langchain";
+import { createRequire } from "node:module";
 import { formatRosterFact } from "@/lib/dest-with-context";
 import { TRAVIS_TEXT_MODEL } from "@/lib/travis-models";
 import {
@@ -25,14 +20,50 @@ import {
   unclippedPrintFor,
 } from "@/server/dest-with-context";
 
-registerHarnessProfile("openai", {
-  excludedTools: ["task", "execute"],
-  generalPurposeSubagent: { enabled: false },
-});
-registerHarnessProfile(`openai:${TRAVIS_TEXT_MODEL}`, {
-  excludedTools: ["task", "execute"],
-  generalPurposeSubagent: { enabled: false },
-});
+const require = createRequire(import.meta.url);
+
+type Kit = {
+  createDeepAgent: typeof import("deepagents/node").createDeepAgent;
+  registerHarnessProfile: typeof import("deepagents/node").registerHarnessProfile;
+  StateBackend: typeof import("deepagents/node").StateBackend;
+  ChatOpenAI: typeof import("@langchain/openai").ChatOpenAI;
+  isAIMessage: typeof import("@langchain/core/messages").isAIMessage;
+  createMiddleware: typeof import("langchain").createMiddleware;
+  tool: typeof import("langchain").tool;
+};
+
+let kit: Kit | null = null;
+let profilesRegistered = false;
+
+function loadKit(): Kit {
+  if (!kit) {
+    const deepagents = require("deepagents/node") as typeof import("deepagents/node");
+    const openai = require("@langchain/openai") as typeof import("@langchain/openai");
+    const messages = require("@langchain/core/messages") as typeof import("@langchain/core/messages");
+    const langchain = require("langchain") as typeof import("langchain");
+    kit = {
+      createDeepAgent: deepagents.createDeepAgent,
+      registerHarnessProfile: deepagents.registerHarnessProfile,
+      StateBackend: deepagents.StateBackend,
+      ChatOpenAI: openai.ChatOpenAI,
+      isAIMessage: messages.isAIMessage,
+      createMiddleware: langchain.createMiddleware,
+      tool: langchain.tool,
+    };
+  }
+  if (!profilesRegistered) {
+    kit.registerHarnessProfile("openai", {
+      excludedTools: ["task", "execute"],
+      generalPurposeSubagent: { enabled: false },
+    });
+    kit.registerHarnessProfile(`openai:${TRAVIS_TEXT_MODEL}`, {
+      excludedTools: ["task", "execute"],
+      generalPurposeSubagent: { enabled: false },
+    });
+    profilesRegistered = true;
+  }
+  return kit;
+}
 
 function asArgs(input: unknown): Record<string, unknown> {
   if (input && typeof input === "object" && !Array.isArray(input)) {
@@ -56,19 +87,26 @@ function contentToText(content: unknown): string {
     .trim();
 }
 
-function lastAssistantText(messages: unknown[]): string {
+function lastAssistantText(
+  messages: unknown[],
+  isAIMessage: Kit["isAIMessage"],
+): string {
   for (let i = messages.length - 1; i >= 0; i--) {
     const m = messages[i];
-    if (m && typeof m === "object" && isAIMessage(m as BaseMessage)) {
-      return contentToText((m as BaseMessage).content);
+    if (
+      m &&
+      typeof m === "object" &&
+      isAIMessage(m as Parameters<Kit["isAIMessage"]>[0])
+    ) {
+      return contentToText((m as { content: unknown }).content);
     }
   }
   return "";
 }
 
-function wrapTravisTools(sessionId: string) {
+function wrapTravisTools(sessionId: string, toolFn: Kit["tool"]) {
   return TRAVIS_TOOL_DECLS.map((decl) =>
-    tool(
+    toolFn(
       async (input: unknown) => {
         const result = await runTravisTool({
           sessionId,
@@ -103,7 +141,10 @@ function kitFiles(print: string, roster: string) {
   };
 }
 
-function destKitMiddleware(sessionId: string) {
+function destKitMiddleware(
+  sessionId: string,
+  createMiddleware: Kit["createMiddleware"],
+) {
   return createMiddleware({
     name: "dest-with-context",
     wrapModelCall: async (request, handler) => {
@@ -119,15 +160,6 @@ function destKitMiddleware(sessionId: string) {
   });
 }
 
-function travisChatModel() {
-  return new ChatOpenAI({
-    model: TRAVIS_TEXT_MODEL,
-    apiKey: process.env.OPENAI_API_KEY?.trim() ?? "",
-    useResponsesApi: true,
-    reasoning: { effort: "low" },
-  });
-}
-
 export type DeepAgentMode = "update" | "synthesize";
 
 export async function invokeDeepAgent(params: {
@@ -136,6 +168,15 @@ export async function invokeDeepAgent(params: {
   room: string;
   mode?: DeepAgentMode;
 }): Promise<string> {
+  const {
+    createDeepAgent,
+    StateBackend,
+    ChatOpenAI,
+    isAIMessage,
+    createMiddleware,
+    tool: toolFn,
+  } = loadKit();
+
   const mode = params.mode ?? "synthesize";
   const prompt =
     mode === "update"
@@ -150,12 +191,17 @@ export async function invokeDeepAgent(params: {
     : prompt;
   const checkpointer = await travisCheckpointer();
   const agent = createDeepAgent({
-    model: travisChatModel(),
+    model: new ChatOpenAI({
+      model: TRAVIS_TEXT_MODEL,
+      apiKey: process.env.OPENAI_API_KEY?.trim() ?? "",
+      useResponsesApi: true,
+      reasoning: { effort: "low" },
+    }),
     systemPrompt: TRAVIS_SYSTEM,
-    tools: wrapTravisTools(params.sessionId),
+    tools: wrapTravisTools(params.sessionId, toolFn),
     backend: new StateBackend(),
     checkpointer,
-    middleware: [destKitMiddleware(params.sessionId)],
+    middleware: [destKitMiddleware(params.sessionId, createMiddleware)],
     subagents: [],
   });
   const result = await agent.invoke(
@@ -166,5 +212,5 @@ export async function invokeDeepAgent(params: {
     { configurable: { thread_id: params.sessionId } },
   );
   const messages = (result as { messages?: unknown[] }).messages ?? [];
-  return lastAssistantText(messages);
+  return lastAssistantText(messages, isAIMessage);
 }
