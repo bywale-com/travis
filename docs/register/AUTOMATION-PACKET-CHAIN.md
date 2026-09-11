@@ -28,6 +28,7 @@ Engineer automation — full Engineer protocol
 Technical Architect look + what it can test
         ↓  Fail → label fail-look (same PR)
         ↓  Pass → emerge. Action emails the *-TEST.md. Human walks that sheet.
+runtime-doors red → Action fresh-adds fail-look (WAKE_GITHUB_TOKEN) → same B
 ```
 
 **Waiting is a line the Action greps.** Draft is not the hold — we keep PRs draft through plant. Chat prose (“then SA”, “don’t wake Engineer”) is not the hold. The filename `PM-PACKET-NNN` is not the hold. Exact line on the packet, whole line:
@@ -130,7 +131,7 @@ That push is the Engineer trigger.
 **Triggers (any):** Source control — **Label added** **`wake-engineer`** **and** **Label added** **`fail-look`**. Both lowercase. Not PR pushed. Not a third automation. Hotfix uses the same `wake-engineer` tag.  
 **Repository:** `bywale-com/travis`  
 **Tools:** Memories **off**. Pull request creation **off**.  
-**Prompt:** paste [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md) in full. Re-paste after 075 — planted = live effect; `DATABASE_URL` named.
+**Prompt:** paste [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md) in full. Re-paste after 086 — `fail-look` from red `runtime-doors` recuts the walk miss; do not wait for a Fail `PM-LOOK`.
 
 ---
 

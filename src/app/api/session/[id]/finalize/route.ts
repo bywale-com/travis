@@ -23,7 +23,8 @@ import { dispatchStreamIntents } from "@/server/stream-dispatch";
 import { pipeTravisText } from "@/server/travis-reply";
 import { AuthError, jsonRoute } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
-import { sse, sseHeaders } from "@/server/seat-pipe";
+import { destLeaveMiss } from "@/lib/travis-miss";
+import { insertStatusTurn, sse, sseHeaders } from "@/server/seat-pipe";
 import { serveInvite } from "@/server/serve";
 
 /** Hobby cap. Same as the room wire. Deep Agents invoke can outlast the default. */
@@ -242,6 +243,9 @@ export async function POST(
         });
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
+        await insertStatusTurn(sessionId, destLeaveMiss(msg), "travis").catch(
+          () => {},
+        );
         send("error", { error: msg });
       } finally {
         controller.close();

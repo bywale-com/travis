@@ -1,30 +1,41 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { openRoom, readTurns, runtimeBaseUrl } from "../desk";
+import { assertThinkWorked, failUse } from "../app-worked";
+import { openFreshRoom, openRoom, readTurns, runtimeBaseUrl } from "../desk";
 import { send } from "../doors";
 
 const haveUrl = Boolean(runtimeBaseUrl());
 
 describe("come-back", { skip: !haveUrl }, () => {
-  it("re-opening the desk resumes the existing room and preserves turns", async () => {
-    const desk1 = await openRoom();
+  it("re-opening the desk resumes the existing room and preserves a working turn", async () => {
+    const desk1 = await openFreshRoom();
     assert.ok(desk1.sessionId.length > 0);
 
     const text = "Persistent note across visits.";
-    const sent = await send(desk1, text);
-    assert.ok(sent.status >= 200 && sent.status < 500);
-
+    const sent = await send(desk1, text, { chipSeatKeys: ["travis"] });
     const turns1 = await readTurns(desk1);
-    assert.ok(turns1.some((t) => t.text.includes(text)));
+    if (!(sent.status >= 200 && sent.status < 500)) {
+      failUse("come-back before leave", `send was ${sent.kind} ${sent.status}`, turns1, sent);
+    }
+    if (!turns1.some((t) => t.text.includes(text))) {
+      failUse("come-back before leave", "line never landed", turns1, sent);
+    }
+    assertThinkWorked(turns1, "come-back before leave", sent);
 
-    // Emulate navigating away / refreshing and reopening the session
     const desk2 = await openRoom();
-    assert.equal(desk2.sessionId, desk1.sessionId, "same session resumed");
+    if (desk2.sessionId !== desk1.sessionId) {
+      failUse(
+        "come-back",
+        `second open minted ${desk2.sessionId}, not ${desk1.sessionId}`,
+        await readTurns(desk2),
+      );
+    }
 
     const turns2 = await readTurns(desk2);
-    assert.ok(
-      turns2.some((t) => t.text.includes(text)),
-      "turns preserved after coming back",
-    );
+    if (!turns2.some((t) => t.text.includes(text))) {
+      failUse("come-back after return", "line gone after resume", turns2);
+    }
+    assertThinkWorked(turns2, "come-back after return");
+    assert.ok(true);
   });
 });

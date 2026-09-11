@@ -5,11 +5,17 @@ This run was started by a Cursor Automation because **`wake-engineer`** or **`fa
 If this wake is a label **removed**, or neither `wake-engineer` nor `fail-look` is on the PR: **stop**.
 
 - `wake-engineer` — SA just landed a change packet, **or** this PR is a **hotfix** (title `Hotfix NNN` / `HOTFIX-NNN` file). Skip SA.
-- `fail-look` — Technical Architect look+test failed. Recut on this PR. All lowercase.
+- `fail-look` — Technical Architect look+test failed, **or** `runtime-doors` is red. Recut on this PR. All lowercase.
 
 ## First action — gate, then stop or continue
 
-Do **not** accept the seat. Do **not** read `AGENTS.md`, seat protocols, handoffs, or `src/`. Run this and nothing else:
+Do **not** accept the seat. Do **not** read `AGENTS.md`, seat protocols, handoffs, or `src/`.
+
+**If `fail-look` is on this PR:** skip the file gate. Continue.
+- A `PM-LOOK-*.md` with **Verdict: Fail** → recut that.
+- Else → newest failed `runtime-doors` log for this PR. Recut that miss. Do not stop for a missing PM-LOOK.
+
+**Else** run this and nothing else:
 
 ```text
 git diff --name-only HEAD~1
@@ -31,9 +37,9 @@ If this wake is `wake-engineer` on a SYSTEMS-CHANGE-PACKET that is already plant
 
 If this wake is `wake-engineer` on a **hotfix**: “already planted” means the **live effect** the hotfix named, not a file sitting on the PR. A SQL file committed is not a hang applied. If the file exists and the live row / effect does not: **continue**. Do that apply. Do not remint the file.
 
-If this wake is `fail-look`: do **not** stop for “already planted.” Recut what `PM-LOOK-*.md` named. Same PR.
+If this wake is `fail-look`: do **not** stop for “already planted.” Recut the Fail look or the red `runtime-doors` miss. Same PR.
 
-If a later GitHub follow-up arrives on this same run (synchronize, ready_for_review, Vercel preview, merge) and this commit still has no new SYSTEMS-CHANGE-PACKET, no new `HOTFIX-[0-9]*-*.md`, and no Fail `PM-LOOK`: stop in one sentence. Do not re-read the protocol. Do not stay subscribed in labor.
+If a later GitHub follow-up arrives on this same run (synchronize, ready_for_review, Vercel preview, merge): `fail-look` still on the PR → stay and recut. Else if this commit still has no new SYSTEMS-CHANGE-PACKET, no new `HOTFIX-[0-9]*-*.md`, and no Fail `PM-LOOK`: stop in one sentence. Do not re-read the protocol. Do not stay subscribed in labor.
 
 ## Live database (hang / SQL apply)
 

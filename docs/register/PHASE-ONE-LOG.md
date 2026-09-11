@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-10 20:39 UTC — glass walk is the extra protocol; not silence. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-11 14:40 UTC — Hotfix 086 PM look Pass; runtime-doors correctly red on preview (generate miss), not false green. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3741,3 +3741,17 @@ Not the model. Not a new face.
 **Lock.** `unwired-glass.spec.ts` (Playwright) is on the agenda and in `test:runtime`. Open Voice on this URL. Subtitle is **Travis isn’t wired**, not the phone-ear shirt. No mic. SA ascribes how the browser carries bypass + cookie, not whether we hang the walk. Retro list stands. Do not call the glass walk optional again.
 
 **Landed.** Recut packet + look sheet. **Wake:** sa. SA **036**. Engineer hangs the glass walk on [#165](https://github.com/bywale-com/travis/pull/165).
+
+---
+
+## 2026-09-11 14:40 UTC — Hotfix 086 PM look Pass (Technical PM)
+
+**Kind:** Hotfix look. Flag 14:00 2026-08-25 stands. Not a plant.
+
+**Cut.** [`HOTFIX-086-RUNTIME-IS-THE-APP.md`](./HOTFIX-086-RUNTIME-IS-THE-APP.md) on [PR #171](https://github.com/bywale-com/travis/pull/171). Walks wait for the mouth; dest scores leave; SSE to terminal; fresh sitting; `seatKey` on status; `Dest error:` on tape; red `runtime-doors` fresh-adds `fail-look` after merge.
+
+**Look.** Plant matches all eight cuts. Preview SSO wall. CI tape on deploy `842d347b` shows `status/travis` + `Travis error: …` — not `?? · run error`. Walks correctly red on Deep Agents ESM generate miss (086 does not remint `/node`).
+
+**Test.** `npm test` 472/472. `runtime-doors` CI 0/5 on preview — correct failure, not false green. Fail-look step planted; live on merge. [`PM-LOOK-HOTFIX-086.md`](./PM-LOOK-HOTFIX-086.md) **Verdict: Pass**. No `fail-look`.
+
+**Emerged.** Human may walk [`HOTFIX-086-RUNTIME-IS-THE-APP-TEST.md`](./HOTFIX-086-RUNTIME-IS-THE-APP-TEST.md) on preview after SSO.
