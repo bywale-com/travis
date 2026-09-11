@@ -8,12 +8,15 @@
 # that release still builds.
 
 set -u
+# Only the Vercel-provided message for THIS commit. Do not fall back to
+# `git log` — that can see a parent whose subject merely names the tag.
 msg="${VERCEL_GIT_COMMIT_MESSAGE:-}"
-if [ -z "$msg" ] && command -v git >/dev/null 2>&1; then
-  msg=$(git log -1 --pretty=%B 2>/dev/null || true)
+if [ -z "$msg" ]; then
+  echo "vercel-ignore: build (no VERCEL_GIT_COMMIT_MESSAGE)"
+  exit 1
 fi
 if echo "$msg" | grep -q '\[vercel skip\]'; then
-  echo "vercel-ignore: skip ([vercel skip] in commit message)"
+  echo "vercel-ignore: skip (tag in this commit message)"
   exit 0
 fi
 echo "vercel-ignore: build"

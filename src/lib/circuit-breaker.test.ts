@@ -36,4 +36,10 @@ test("[vercel skip] in the commit message skips the Vercel build", () => {
     encoding: "utf8",
   });
   assert.equal(build.status, 1, build.stderr + build.stdout);
+
+  const noMsg = spawnSync("sh", [ignoreScript], {
+    env: { ...process.env, VERCEL_GIT_COMMIT_MESSAGE: "" },
+    encoding: "utf8",
+  });
+  assert.equal(noMsg.status, 1, noMsg.stderr + noMsg.stdout);
 });
