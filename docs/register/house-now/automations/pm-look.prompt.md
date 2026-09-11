@@ -19,9 +19,10 @@ fi
 ```
 
 1. Confirm `wake-pm-look` is on this PR.
-2. List `docs/register/HOTFIX-[0-9]*-*.md` on this PR, **excluding** `*-TEST.md`. If one exists: this is a **hotfix look**. A hotfix is enough. There will be **no** `PM-PACKET` and **no** SYSTEMS-CHANGE-PACKET. That is not a miss. **Do not stop** with “no packets,” “no PM packet,” or “gate failed.” Continue.
-3. Else list `docs/register/PM-PACKET-[0-9]*-*.md` on this PR (exclude `*-TEST.md`) and `docs/register/SYSTEMS-CHANGE-PACKET-*.md`. If there is no PM packet, or no change packet: **stop**. One sentence. This branch is **only** when step 2 found no hotfix.
-4. Plant check (do not invent a packet requirement):
+2. **Blocker check:** Check if the PR has the `blocker` label, or if any `docs/register/BLOCKER-[0-9]*-*.md` is active. If `blocker` is present: **stop immediately**. One sentence: PR is under blocker hold. PM Look never runs while a blocker is active.
+3. List `docs/register/HOTFIX-[0-9]*-*.md` on this PR, **excluding** `*-TEST.md`. If one exists: this is a **hotfix look**. A hotfix is enough. There will be **no** `PM-PACKET` and **no** SYSTEMS-CHANGE-PACKET. That is not a miss. **Do not stop** with “no packets,” “no PM packet,” or “gate failed.” Continue.
+4. Else list `docs/register/PM-PACKET-[0-9]*-*.md` on this PR (exclude `*-TEST.md`) and `docs/register/SYSTEMS-CHANGE-PACKET-*.md`. If there is no PM packet, or no change packet: **stop**. One sentence. This branch is **only** when step 3 found no hotfix.
+5. Plant check (do not invent a packet requirement):
    - Hotfix: Engineer has written for this hotfix — `ENGINEER-HANDOFF.md` names it, or `src/` for this cut exists (SQL file counts). If Engineer has not started: **stop**. One sentence: hotfix not planted. Not “no packets.”
    - Packet: `src/` and `ENGINEER-HANDOFF.md` match the change packet. If not: **stop**. One sentence.
 

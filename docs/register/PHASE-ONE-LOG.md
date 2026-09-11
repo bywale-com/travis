@@ -3779,7 +3779,7 @@ Not the model. Not a new face.
 
 ---
 
-## 2026-09-11 16:45 UTC — Packet 021 PM look Pass; circuit breaker hold active
+## 2026-09-11 16:45 UTC — Packet 021 PM look Hold (founder ops blocker active)
 
 **Kind:** PM look + test. Flag 14:00 stands.
 
@@ -3787,7 +3787,7 @@ Not the model. Not a new face.
 
 **Look.** Plant matches lock. No product glass — architectural CI cut. CI run 34621326711: all 5 walks ran to completion (0/5 on deploy `4e335fe` — ESM + Cursor limit). Blocker gate 34622075977: labeled `blocker`, Resend 200.
 
-**Test.** [`PM-LOOK-021.md`](./PM-LOOK-021.md) **Verdict: Pass**. Steps 1–2 walked from sheet. Step 3 (founder clears limit, removes `blocker`, green redeploy) is human.
+**Test.** [`PM-LOOK-021.md`](./PM-LOOK-021.md) **Verdict: Hold**. Steps 1–2 walked from sheet. Step 3 (founder clears limit, removes `blocker`, green redeploy) is human. Cannot emerge while PR is under active blocker hold.
 
-**Emerged.** Human walks [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md) after BLOCKER-001 cleared. No `fail-look`.
+**Hold.** Human clears BLOCKER-001 ($2 Cursor hard limit) and unlabels `blocker` to release redeploy. No `emerge` while blocker is active. No `fail-look`.
 
