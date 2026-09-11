@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-09 19:05 UTC — **SCP-035 signed.** Stream architecture: classify is lib; Do is hang; mouth last. In-flight = open `dest_job` + LangGraph checkpoint. Change dest = follow-up on the same row (`parent_id` unused). Change Travis = later `invoke` on the same `thread_id`. Glass Technical Architect. PM-019 on [#163](https://github.com/bywale-com/travis/pull/163). Next number is **036**.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-11 22:30 UTC — **SCP-036 signed.** Circuit breaker: full-audit walks, Engineer triage (Bucket A/B), preview opt-in `[vercel build]`, blocker git contract + label + Resend mail. No blocker table. PM-021 on [#180](https://github.com/bywale-com/travis/pull/180). Next number is **037**.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -854,4 +854,37 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-035-STREAM-ARCH.md`](./SYSTEMS-CHANGE-PACKET-035-STREAM-ARCH.md)
 
 **Handoff:** Engineer plants 035 on **this same PR**. Next packet number is **036**. Do not remint 023–034. Do not remint dest mail. Do not mint a cousin.
+
+---
+
+## 2026-09-11 22:30 UTC — SCP-036 Circuit breaker (PM-021 on #180)
+
+**Kind:** Packet ascribe. Automation woke this seat. PM-021 + circuit-breaker test on this PR. No SYSTEMS-CHANGE-PACKET for 021 was on the branch. 023–035 stay planted — not reminted. **021** worker (`SYSTEMS-CHANGE-PACKET-021-WORKER.md`) is a different number — not this cut.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-021 lock + three architecture laws). Not PM. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** Do not deploy into known wall-failures. GitHub Actions is a dumb runner — not the triage brain. Walks run to completion; Engineer reads the full tape. Bucket B (founder ops) halts preview until cleared. Notify the team. Before Vercel builds again, founder side must be sorted.
+
+**Staples (not scenery):** **runtime-doors** · **fail-look** · **blocker** · **`[vercel build]`** green light.
+
+**Quoted stood-up (branch draft + main):**
+
+- `test:runtime` = `tsx --test --test-concurrency=1 src/runtime/walks/*.spec.ts` — five walks, sequential.
+- Main `runtime-doors` already teed full tape; branch adds handoff/hold skip (`wake-sa` … `blocker`) before fresh-add `fail-look`. Removes blocker-file-on-checkout skip — label list is the hold contract.
+- Branch drafts: `vercel.json` + `vercel-ignore.sh` (preview opt-in), `preview-when-clear.sh`, `wake-packet-seats.yml` blocker + `blocker-release`, `circuit-breaker.test.ts`, Engineer prompt Bucket A/B.
+- **Missing at sign:** `.github/scripts/send-blocker-letter.py` (workflow references it; file not on branch).
+- Emerge mail already uses `EMERGE_EMAIL` · `RESEND_API_KEY` · `RESEND_FROM_EMAIL` (`send-emerge-letter.py`).
+
+**Ascribed:**
+
+1. **Refuse mint** of `travis.initiative` / `travis.motion` / any blocker table. Blocker = git markdown + PR label `blocker` + Resend. Named silence explicit.
+2. **Preview contract:** `ignoreCommand` reads `VERCEL_GIT_COMMIT_MESSAGE` for `[vercel build]`; production always builds. Seat commits must not carry the tag. Do not use `[skip ci]`.
+3. **Handoff/hold set:** `wake-sa` · `wake-engineer` · `wake-pm-look` · `fail-look` · `blocker`. While any on PR: no fresh `fail-look`, no green-light empty commit.
+4. **Full-audit:** existing runner; no Action fail-fast; no bash log classification. All failures → Engineer when PR idle.
+5. **Engineer triage:** Bucket A fix `src/`; Bucket B write `BLOCKER-NNN-*.md` (minimum shape in packet), push without green light, stop. Action labels `blocker`, strips seat wakes, mails founder.
+6. **Release:** founder removes `blocker` label → `pull_request` `unlabeled` → `preview-when-clear.sh` → empty commit `Preview [vercel build]` when no handoff labels remain.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md`](./SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md)
+
+**Handoff:** Engineer plants 036 on **this same PR** — finish `send-blocker-letter.py`; keep branch drafts. Next packet number is **037**. Do not remint 023–035. Do not mint a cousin.
 
