@@ -2,7 +2,7 @@
 
 **This bind is living.** Last prior bind: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a`. Do not start from a transcript.
 
-**089 ops notify (this PR [#175](https://github.com/bywale-com/travis/pull/175)):** Red doors on unwired / Cursor hard limit opens a house issue and mails the miss. No `fail-look`. Next hotfix **090**. 087 mouth recut lives on [#173](https://github.com/bywale-com/travis/pull/173).
+**089 ops notify (planted on [#175](https://github.com/bywale-com/travis/pull/175)):** Red `runtime-doors` on unwired / Cursor hard limit opens a house issue, comments the open PR once, and mails the miss on first open. No `fail-look`. Same issue is the living thread; repeat reds comment only. Live after merge. Next hotfix **090**. 087 mouth recut lives on [#173](https://github.com/bywale-com/travis/pull/173).
 
 **088 fail-look skip (merged):** Red doors does not `fail-look` unwired or Cursor hard limit. Merged [#174](https://github.com/bywale-com/travis/pull/174).
 
@@ -57,7 +57,7 @@ Do not remint 012 / 023–034 or the 074 SQL. Do not remint **035**. Do not remi
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **086** Runtime is the app. Next number **087**. |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **089** Ops notify. Next number **090**. |
 | One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
