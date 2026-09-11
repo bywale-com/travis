@@ -121,6 +121,16 @@ jobs:
             fi
           fi
 
+          # Blocker hold active — strip wake labels runtime-doors may have re-added
+          # (repository_dispatch runs workflow from main until #177 merges).
+          pr_labels=$(gh pr view "$pr" --json labels --jq '.labels[].name')
+          if echo "$pr_labels" | grep -q '^blocker$'; then
+            gh pr edit "$pr" --remove-label fail-look || true
+            gh pr edit "$pr" --remove-label wake-engineer || true
+            gh pr edit "$pr" --remove-label wake-pm-look || true
+            echo "PR #$pr blocker active. Stripped fail-look / wake-engineer / wake-pm-look."
+          fi
+
           # Hotfix pickup: this push lands HOTFIX-NNN-*.md. Title the PR
           # "Hotfix NNN — …" (human tell). Skip SA. Do not re-wake Engineer
           # on later commits on the same PR (file not in this push).

@@ -79,6 +79,12 @@ jobs:
             exit 0
           fi
 
+          # Checkout is at DEPLOY_SHA — blocker file on this commit means hold is active.
+          if compgen -G "docs/register/BLOCKER-[0-9]*-*.md" > /dev/null; then
+            echo "Blocker file on deploy commit. No fail-look."
+            exit 0
+          fi
+
           pr=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${sha}/pulls" \
             --jq '[.[] | select(.state=="open")][0].number // empty')
           if [[ -z "$pr" ]]; then
