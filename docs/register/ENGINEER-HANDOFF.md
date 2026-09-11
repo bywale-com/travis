@@ -1,18 +1,12 @@
 # Engineer seat handoff — 2026-09-11
 
-**This bind is done.** Last prior bind: `bc-c3986494-c045-4b4c-8d86-dafc49fa918a` (Cursor Automation fail-look). Prior: `bc-749b9dd2-168c-4e3a-ae24-cfe8b8cff07d`. Do not start from a transcript.
+**This bind is done.** `bc-80927f96-ec7a-4ce0-9716-abfc5c7118a0` (Chat titles loop architecture state). Prior architecture bind `bc-55b9ef64-f1be-4a3d-b9ab-f86fd949b205` died mid-loop. Engineer seat bind remains `bc-749b9dd2-168c-4e3a-ae24-cfe8b8cff07d` (Travis CI PR merges). Do not start from a transcript.
 
-**036 SA ascribe landed (this PR):** [`SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md`](./SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md) signed — git-level blocker contract (markdown + PR labels), no new DB tables. Plant from 021 recut already matches: dumb `runtime-doors`, full-audit walks, Engineer triage prompts, `BLOCKER-*.md` + `blocker` label hold, Resend mail, unlabel redeploy.
+**021 loop break (this sitting):** Two gates. (1) `runtime-doors.yml` on **main** still walks and paints red; it does **not** add `fail-look` while `BLOCKER-*.md` or `blocker` is on. (2) `vercel.json` `ignoreCommand` makes `[vercel skip]` cancel the Vercel Git hook **before** a preview exists. `strip-fail-look-under-blocker` now sets `GH_REPO` so `gh` works without a checkout. Same PR [#177](https://github.com/bywale-com/travis/pull/177).
 
-**021 fail-look recut (2026-09-11, automation wake):** Run [34630538050](https://github.com/bywale-com/travis/actions/runs/34630538050): 4/5 pass, `type-dest` Cursor hard limit — **Bucket B only.** Root cause of re-added `fail-look`: `repository_dispatch` runs `runtime-doors` from **main** (no blocker skip until #177 merges). Recut: `strip-fail-look-under-blocker` job on `fail-look` label add while `blocker` active; refreshed BLOCKER-001. Pushed `[vercel skip]`.
+**036 SA ascribe landed (this PR):** [`SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md`](./SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md) signed — git-level blocker contract (markdown + PR labels), no new DB tables.
 
-**021 fail-look recut (prior):** Runs 34621326711–34630079165 — Bucket A ESM fix (087), Bucket B Cursor hard limit. Blocker skip in `runtime-doors.yml` on #177; push-time strip in `wake-packet-seats`. See git log on #177.
-
-**088 fail-look skip (superseded on #177):** 021 replaces bash-regex skip with Engineer triage + blocker hold. 088 remains on `main` until #177 merges.
-
-**086 runtime is the app (merged):** Walks wait for the mouth. Red `runtime-doors` fresh-adds `fail-look`. Merged [#171](https://github.com/bywale-com/travis/pull/171).
-
-**085 type-dest recut (merged):** Type send returns SSE and writes the user turn before role dest resolve. Merged [#170](https://github.com/bywale-com/travis/pull/170).
+**088 fail-look skip (superseded):** 021 replaces bash-regex skip with Engineer triage + blocker hold.
 
 **Trail:** git + PRs. **One PR per initiative.** Do **not** append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
 
@@ -22,7 +16,7 @@
 
 ## Where we stopped
 
-**021 / 036 circuit breaker planted on [#177](https://github.com/bywale-com/travis/pull/177).** Bucket A done (4/5 walks green; ESM fix confirmed). **Still blocked:** `type-dest` needs Cursor Background Agent hard limit ≥ $2. Do not remove `blocker` until limit is topped up. When cleared, remove `blocker` → `release-blocker` redeploys → all 5 walks should pass. `strip-fail-look-under-blocker` breaks the automation loop until #177 merges (main `runtime-doors` still lacks skip). Then Technical Architect look+test per [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md).
+**021 / 036 circuit breaker on [#177](https://github.com/bywale-com/travis/pull/177).** Loop break planted: skip on main `runtime-doors` + real `[vercel skip]`. **Still blocked:** `type-dest` needs Cursor Background Agent hard limit ≥ $2. Do not remove `blocker` until that is topped up. When cleared, remove `blocker` → `release-blocker` empty commit **without** `[vercel skip]` → walks run. Then Technical Architect look+test per [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md).
 
 **035 stream architecture is planted on [#163](https://github.com/bywale-com/travis/pull/163).** Do not remint stream-intent / stream-dispatch.
 

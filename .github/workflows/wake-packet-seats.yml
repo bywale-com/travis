@@ -296,6 +296,7 @@ jobs:
         env:
           WAKE_GITHUB_TOKEN: ${{ secrets.WAKE_GITHUB_TOKEN }}
           FALLBACK_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
           PR: ${{ github.event.pull_request.number }}
         run: |
           set -euo pipefail
