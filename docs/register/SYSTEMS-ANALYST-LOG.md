@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-09 19:05 UTC — **SCP-035 signed.** Stream architecture: classify is lib; Do is hang; mouth last. In-flight = open `dest_job` + LangGraph checkpoint. Change dest = follow-up on the same row (`parent_id` unused). Change Travis = later `invoke` on the same `thread_id`. Glass Technical Architect. PM-019 on [#163](https://github.com/bywale-com/travis/pull/163). Next number is **036**.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-11 21:45 UTC — **SCP-036 signed.** Circuit breaker: full-audit walks, Engineer triage, git-level BLOCKER hold + label switch, blocker mail, deploy-hook release. No DB mint. PM-021 on [#179](https://github.com/bywale-com/travis/pull/179). Next number is **037**.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -854,4 +854,37 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-035-STREAM-ARCH.md`](./SYSTEMS-CHANGE-PACKET-035-STREAM-ARCH.md)
 
 **Handoff:** Engineer plants 035 on **this same PR**. Next packet number is **036**. Do not remint 023–034. Do not remint dest mail. Do not mint a cousin.
+
+---
+
+## 2026-09-11 21:45 UTC — SCP-036 circuit breaker (PM-021 on #179)
+
+**Kind:** Packet ascribe. Automation woke this seat. PM-021 + circuit-breaker test on this PR. No SYSTEMS-CHANGE-PACKET for 021 was on the branch. 023–035 stay planted — not reminted. **021** worker is a different packet — not this cut.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-021 lock + founder lock). Not PM. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** GitHub Actions is a dumb runner. Complete the full walk tape before sending back. Engineer triages plant vs founder ops. Do not redeploy into known wall-failures. File a blocker, `[skip ci]`, notify the team, hold until the founder clears ops and removes the `blocker` label.
+
+**Quoted stood-up:**
+
+- `npm run test:runtime` = `tsx --test --test-concurrency=1 src/runtime/walks/*.spec.ts` — five cumulative specs; Node default is no bail.
+- `runtime-doors.yml` tees full tape; paints Vercel check; fresh-adds `fail-look` on failure; partial 021 already skips fail-look when BLOCKER file **or** `blocker` label (Engineer must drop file-only skip).
+- No bash regex triage in `.github/workflows/` today (Hotfix 088 path dead).
+- `wake-packet-seats.yml` has emerge mail (`send-emerge-letter.py`) but **no** BLOCKER path, **no** `blocker` label job, **no** release-on-unlabel.
+- `sa-complete-engineer.prompt.md` still says hard limit / unwired → stop without commit — contradicts 021.
+- `travis.initiative` / `travis.motion` exist for product work — wrong grain for deploy holds.
+
+**Ascribed:**
+
+1. **Refuse DB mint.** Blocker = `docs/register/BLOCKER-NNN-*.md` + PR label `blocker` + Resend mail. Not `initiative` / `motion`.
+2. **Active hold = label `blocker`.** BLOCKER file is audit content. fail-look skip uses **label only** — not file alone after founder unblocks.
+3. **Full-audit** — document all specs run; refuse `--test-bail`. Tape already teed.
+4. **Engineer triage** — Bucket A fix in `src/`; Bucket B → BLOCKER file + `[skip ci]` push; no Action regex.
+5. **Blocker letter** — `send-blocker-letter.py`; same Resend secrets; label `blocker`; strip `fail-look` / `wake-engineer` / `wake-pm-look`.
+6. **Release** — `pull_request` `unlabeled` `blocker` → POST `VERCEL_DEPLOY_HOOK_URL` when set; else log manual redeploy.
+7. **Recut** `sa-complete-engineer.prompt.md` fail-look path to match circuit breaker.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md`](./SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md)
+
+**Handoff:** Engineer plants 036 on **this same PR**. Next packet number is **037**. Do not remint 023–035. Do not mint a cousin.
 
