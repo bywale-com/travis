@@ -10,7 +10,7 @@
 
 ## What failed on the tape
 
-Latest: `runtime-doors` run [34628487426](https://github.com/bywale-com/travis/actions/runs/34628487426) — full-audit walk suite on preview deploy after blocker release (`9308927`). **4 pass, 1 fail.**
+Latest: `runtime-doors` run [34628934780](https://github.com/bywale-com/travis/actions/runs/34628934780) — full-audit walk suite on preview deploy (`01d326f` hold retrigger). **4 pass, 1 fail.**
 
 | Walk | Result |
 |------|--------|

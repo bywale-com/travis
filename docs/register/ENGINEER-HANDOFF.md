@@ -8,6 +8,8 @@
 
 **021 fail-look recut (2026-09-11, post-release):** Founder cleared `blocker`; release redeploy ran. Run [34628487426](https://github.com/bywale-com/travis/actions/runs/34628487426): 4/5 pass (ESM fix confirmed). Only `type-dest` still fails on Cursor $2 hard limit — **Bucket B only**. Refreshed BLOCKER-001, pushed `[vercel skip]` to re-hold.
 
+**021 fail-look recut (2026-09-11, hold retrigger):** Run [34628934780](https://github.com/bywale-com/travis/actions/runs/34628934780): same tape — 4/5 pass, `type-dest` Cursor hard limit. **Bucket B only.** Refreshed BLOCKER-001; `runtime-doors` now skips `fail-look` when `blocker` label is active (021 circuit breaker law). Pushed `[vercel skip]`.
+
 **088 fail-look skip (superseded on #177):** 021 replaces bash-regex skip with Engineer triage + blocker hold. 088 remains on `main` until #177 merges.
 
 **086 runtime is the app (merged):** Walks wait for the mouth. Red `runtime-doors` fresh-adds `fail-look`. Merged [#171](https://github.com/bywale-com/travis/pull/171).
@@ -22,7 +24,7 @@
 
 ## Where we stopped
 
-**021 / 036 circuit breaker planted on [#177](https://github.com/bywale-com/travis/pull/177).** Bucket A done (4/5 walks green). **Still blocked:** `type-dest` needs Cursor Background Agent hard limit ≥ $2. Do not remove `blocker` until limit is topped up — release already proved the limit is still short. When cleared, remove `blocker` → `release-blocker` redeploys → all 5 walks should pass. Then Technical Architect look+test per [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md).
+**021 / 036 circuit breaker planted on [#177](https://github.com/bywale-com/travis/pull/177).** Bucket A done (4/5 walks green; ESM fix confirmed). **Still blocked:** `type-dest` needs Cursor Background Agent hard limit ≥ $2. Do not remove `blocker` until limit is topped up. When cleared, remove `blocker` → `release-blocker` redeploys → all 5 walks should pass. `runtime-doors` no longer fresh-adds `fail-look` while `blocker` is active. Then Technical Architect look+test per [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md).
 
 **035 stream architecture is planted on [#163](https://github.com/bywale-com/travis/pull/163).** Do not remint stream-intent / stream-dispatch.
 
