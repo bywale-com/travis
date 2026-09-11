@@ -60,8 +60,14 @@ SA → SYSTEMS-CHANGE-PACKET → label  wake-engineer
 Engineer plants src/ → label  wake-pm-look
         ↓
 Technical Architect look+test
-        Pass → label emerge + letter (human test)
+        Pass → strip seat labels + emerge + letter (human test)
         Fail → label  fail-look  (loop)
+        ↓  when wake-sa / wake-engineer / wake-pm-look / fail-look / blocker are all off
+Action empty-commit Preview [vercel build]  (no LLM)
+        ↓
+Vercel preview → runtime-doors
+        red → fail-look on an idle PR
+        (skip fail-look while any of those labels is still on)
 ```
 
 Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml). It diffs **this push** (`before…after`), not the whole PR. A new branch (`before` all zeros) diffs the tip commit — `git diff $after` on a clean checkout is empty and will not label. It greps `**Wake:** sa` on the packet at `after`. No Cursor token until the label is added. A packet on hold can sit on the PR; plates may edit it; no boot. If the PR is not open yet (push before create), it waits a few seconds.

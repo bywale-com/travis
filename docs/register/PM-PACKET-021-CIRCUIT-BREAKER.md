@@ -50,6 +50,17 @@ The **Engineer is the triage brain**. The Engineer reads the tape, fixes code, d
 
 ## The Three Architecture Laws
 
+### Law 0: Preview only after handoffs
+Vercel **preview** is opt-in. Default skip. Production always builds.
+
+The green light is the commit-message tag `[vercel build]`. Seat commits (SA, Engineer plant, PM Look, fail-look recut, BLOCKER hold) **must not** include that tag. None of those seats need a preview to do their job.
+
+Handoff / hold in process = the PR has any of: `wake-sa` · `wake-engineer` · `wake-pm-look` · `fail-look` · `blocker`. One seat label at a time (adding a wake strips the others).
+
+When those labels are gone, a cheap Action empty-commits `Preview [vercel build]`. Then Vercel may build. Then `runtime-doors` may `fail-look` — on an idle PR, so Engineer picks up a quiet desk.
+
+Do **not** use `[skip ci]` as the skip. That silences GitHub Actions (labeling) as well as Vercel.
+
 ### Law 1: Full-Audit Walks (No Fail-Fast)
 The cumulative walk runner (`npm run test:runtime`) runs **all** walk specs to completion.
 - It does not abort on the first failing assertion.
@@ -65,22 +76,25 @@ The Engineer fixes all Bucket A code misses in `src/` and verifies them locally 
 
 ### Law 3: The Circuit Breaker & Hold
 If Bucket B has any items:
-1. **Do not redeploy.** The Engineer must **NOT** push a commit that triggers a Vercel build.
+1. **Do not green-light preview.** The Engineer must **NOT** put `[vercel build]` on the commit. Default skip already holds Vercel.
 2. **File the Blocker:** The Engineer writes `docs/register/BLOCKER-NNN-*.md` detailing:
    - Exactly what failed on the tape.
    - The exact action required by the founder.
    - Direct link to resolve (e.g. `https://www.cursor.com/dashboard?tab=settings` or Vercel Environment Variables).
-3. **Commit with `[skip ci]`:** The Engineer stages `src/` and the blocker file, and commits with `[skip ci]` (or `[skip vercel]`) so Vercel does not build.
-4. **House Blocker Letter:** GitHub Action detects the blocker file on push, labels the PR `blocker`, removes any `fail-look` / `wake-engineer` / `wake-pm-look` labels, and sends an email via Resend to `EMERGE_EMAIL`.
-5. **Circuit Breaker Release (Option A):**
+3. **Push the hold:** Stage `src/` and the blocker file. Commit **without** the green-light tag (do not use `[skip ci]` — that silences GitHub Actions).
+4. **House Blocker Letter:** GitHub Action detects the blocker file on push, labels the PR `blocker`, removes seat wakes, and sends an email via Resend to `EMERGE_EMAIL`.
+5. **Circuit Breaker Release:**
    - The founder resolves the blocker (tops up the $2 limit, sets the secret).
    - The founder removes the `blocker` label from the PR.
-   - Removing the `blocker` label triggers the redeployment workflow.
-   - Vercel builds the deployment with the code fixes already in place; all walks run against the unblocked environment.
+   - If no handoff labels remain, Action empty-commits the green-light tag. Vercel builds the code already on the branch.
 
 ---
 
 ## File Responsibilities (Architecture Plan)
+
+### 0. Preview gate
+- `vercel.json` `ignoreCommand` + `.github/scripts/vercel-ignore.sh`: preview skip unless this commit’s message contains `[vercel build]`. Production always builds.
+- `.github/scripts/preview-when-clear.sh`: empty-commit that tag when handoff/hold labels are gone.
 
 ### 1. Verification Runner (Dumb Sensor)
 - `.github/workflows/runtime-doors.yml`:
@@ -97,7 +111,7 @@ If Bucket B has any items:
     - Remove `fail-look`, `wake-engineer`, and `wake-pm-look` so automations sleep.
     - Run `.github/scripts/send-blocker-letter.py` to notify the founder.
   - On `pull_request` event with action `unlabeled` and label `blocker`:
-    - Trigger Vercel preview deployment or wake the check to run against the updated environment.
+    - If no handoff labels remain, empty-commit the green-light tag (same as post-handoff).
 
 ### 3. Blocker Mailer
 - `.github/scripts/send-blocker-letter.py`:
@@ -110,7 +124,7 @@ If Bucket B has any items:
   - Reads full tape.
   - If tape contains external ops blockers:
     - Writes `docs/register/BLOCKER-NNN-*.md`.
-    - Commits code fixes with `[skip ci]`.
+    - Commits code fixes **without** the green-light tag.
     - Halts without re-triggering Vercel.
 
 ---
@@ -123,6 +137,6 @@ The Systems Analyst must ascribe:
    - If git-level, name the silence explicitly.
 2. **Trigger Contracts:**
    - Exact GitHub Action trigger contract for label `blocker` removal (resuming the deployment).
-   - Vercel deployment trigger contract (API deploy hook vs commit push without `[skip ci]`).
+   - Vercel deployment trigger contract: preview only when a commit message contains the green-light tag; production always builds.
 3. **Write Systems Change Packet:**
    - Deliver `SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md` on this PR branch.
