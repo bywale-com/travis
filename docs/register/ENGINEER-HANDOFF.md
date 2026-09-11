@@ -1,6 +1,6 @@
 # Engineer seat handoff — 2026-09-11
 
-**This bind is living.** Last prior bind: `bc-6e07d481-16ec-4459-9a78-54fa691514ef`. Do not start from a transcript.
+**This bind is done.** Last bind: `bc-7c4413e3-0e0a-4028-b018-a6fe9970e754`. Do not start from a transcript.
 
 **036 circuit breaker is planted on [#181](https://github.com/bywale-com/travis/pull/181).** Full-audit walks (`npm run test:runtime`, no bail); dumb `runtime-doors` (all handoff/hold labels skip fresh `fail-look`); preview opt-in via exact subject `Preview [vercel build]` (`vercel.json` + `vercel-ignore.sh`); green-light empty commit via `preview-when-clear.sh` when labels clear; blocker hold on `BLOCKER-NNN-*.md` push (label + strip seats + Resend mail); `send-blocker-letter.py` planted; lib proof in `src/lib/circuit-breaker.test.ts`. Engineer prompt documents Bucket A/B triage. **Merge to `main`** so `repository_dispatch` runs handoff-aware `runtime-doors`. Human look+test: [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md). Do not remint Hotfix 088 bash-regex skip path.
 
@@ -22,7 +22,7 @@
 
 ## Where we stopped
 
-**036 circuit breaker planted on [#181](https://github.com/bywale-com/travis/pull/181).** Engineer planted `.github/scripts/send-blocker-letter.py` (Resend, same secrets as emerge; exit 0 when secrets missing). Extended `src/lib/circuit-breaker.test.ts` (mailer exists, workflow invokes it, subject shaping dry-run). Rest of chain already on branch: `vercel.json`, `vercel-ignore.sh`, `preview-when-clear.sh`, `wake-packet-seats.yml` blocker/preview jobs, `runtime-doors.yml` handoff skip, Engineer automation Bucket A/B law. `npm test` green (including circuit-breaker tests). **Awaiting merge to `main`** and human walk [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md). Do not remint 020 walks, 035 stream, or Hotfix 088 regex path.
+**036 circuit breaker planted on [#181](https://github.com/bywale-com/travis/pull/181).** Engineer planted `.github/scripts/send-blocker-letter.py` (Resend, same secrets as emerge; exit 0 when secrets missing). Extended `src/lib/circuit-breaker.test.ts` (mailer exists, workflow invokes it, subject shaping dry-run). Rest of chain already on branch: `vercel.json`, `vercel-ignore.sh`, `preview-when-clear.sh`, `wake-packet-seats.yml` blocker/preview jobs, `runtime-doors.yml` handoff skip, Engineer automation Bucket A/B law. **fail-look recut:** synced `src/lib/handoff-seat.test.ts` with Current handoff so full `npm test` is green (482/482). **Awaiting merge to `main`** and human walk [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md). Do not remint 020 walks, 035 stream, or Hotfix 088 regex path.
 
 **035 stream architecture is planted on [#163](https://github.com/bywale-com/travis/pull/163).** Classify is `src/lib/stream-intent.ts` (new / change / cancel / talk). Do is `src/server/stream-dispatch.ts` — hangs dest assemble, 034 follow-up, `cancelCursorRun`, and `invokeDeepAgent({ mode: "update" })`. Mouth is last. Live `liveShouldPipeTravis` is always false; transcript dest-by-name still leaves, then dispatches the rest, never `pipeTravisText`. Type send writes the tape, files chip / call-by-name dests, dispatches remaining intents, then synthesizes. Finalize strips the done-phrase, backup-Do once if a leave never started, then synthesizes. `parent_id` unused. No new table. Glass: `destGlassName` / `SIT_ROLE_LABEL.pm` / `seatKeyToLabel("pm")` → **Technical Architect**. Spoken "Technical Architect" and "Technical PM" both route to `pm`. Path `/protocols/pm.md`. Grain tests + `next build` passed. Human look+test is [`PM-PACKET-019-STREAM-ARCH-TEST.md`](./PM-PACKET-019-STREAM-ARCH-TEST.md) on Log · Type after this lands on psi. Do not remint dest assemble, dest-gate-on-ask, Cloud create, `dest_job`, checkpointer, or 031–034.
 
@@ -54,7 +54,7 @@
 ```text
 You are Travis's Engineer (full-stack implementer). Read docs/README.md "Engineer — identity" and accept it. Read repo-root AGENTS.md (always-on). You are not the Product Manager. You are not the Systems Analyst. Product face = voice/chat pipe (phone-first). Do not overwrite PHASE-ONE-LOG founder wording. Do not mint tables. Do not hard-code data into the SPA. Do not ship API keys to the client. Specified-and-clear: build it. Specified-but-blocked on PM or SA: name why; do not invent. Detailed: docs/seats/ENGINEER.md.
 
-You are a NEW bind. The last Engineer was bc-6e07d481-16ec-4459-9a78-54fa691514ef (prior: bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a). They handed off. Read docs/register/ENGINEER-HANDOFF.md first.
+You are a NEW bind. The last Engineer was bc-7c4413e3-0e0a-4028-b018-a6fe9970e754 (prior: bc-6e07d481-16ec-4459-9a78-54fa691514ef). They handed off. Read docs/register/ENGINEER-HANDOFF.md first.
 
 Then, in order:
 1. docs/register/ENGINEER-HANDOFF.md — where we stopped, planted, leftover, locks.

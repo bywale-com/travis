@@ -6,6 +6,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-11** · SCP-036 fail-look recut · [PR #181](https://github.com/bywale-com/travis/pull/181) — Synced `handoff-seat.test.ts` with Current `ENGINEER-HANDOFF.md` so full `npm test` is green, because PM look 021 failed on stale bind assertions while handoff claimed tests passed.
+
 - **2026-09-11** · SCP-036 circuit breaker · [PR #181](https://github.com/bywale-com/travis/pull/181) — Full-audit walks stay dumb, preview is opt-in, Engineer triages Bucket A/B, and `send-blocker-letter.py` mails founder on hold, because bash-regex triage hid red failures and doomed Vercel reloops.
 
 - **2026-09-11** · Hotfix 088 · [PR #174](https://github.com/bywale-com/travis/pull/174) — Red `runtime-doors` does not `fail-look` Cursor hard limit or unwired, because Engineer cannot recut founder ops and the loop kept booting B.
