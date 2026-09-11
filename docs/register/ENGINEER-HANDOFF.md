@@ -1,8 +1,8 @@
 # Engineer seat handoff — 2026-09-11
 
-**This bind is done.** `bc-80927f96-ec7a-4ce0-9716-abfc5c7118a0` (Chat titles loop architecture state). Prior architecture bind `bc-55b9ef64-f1be-4a3d-b9ab-f86fd949b205` died mid-loop. Engineer seat bind remains `bc-749b9dd2-168c-4e3a-ae24-cfe8b8cff07d` (Travis CI PR merges). Do not start from a transcript.
+**This bind is done.** `bc-63e90d55-1b25-4d85-94d7-9a07ecfca2c1` (fail-look wake on #177 — triaged, no recut). Prior binds `bc-80927f96`, `bc-749b9dd2`. Do not start from a transcript.
 
-**021 loop break (this sitting):** Two gates. (1) `runtime-doors.yml` on **main** still walks and paints red; it does **not** add `fail-look` while `BLOCKER-*.md` or `blocker` is on. (2) `vercel.json` `ignoreCommand` makes `[vercel skip]` cancel the Vercel Git hook **before** a preview exists. `strip-fail-look-under-blocker` now sets `GH_REPO` so `gh` works without a checkout. Same PR [#177](https://github.com/bywale-com/travis/pull/177).
+**021 loop break (verified this sitting):** `runtime-doors` run [34642008907](https://github.com/bywale-com/travis/actions/runs/34642008907) on deploy `2d8ce08` — walks red (Bucket B `type-dest` hard limit), **Blocker file on deploy commit. No fail-look.** Loop holds. Two gates: (1) `runtime-doors.yml` on **main** walks and paints red but does **not** add `fail-look` while `BLOCKER-*.md` or `blocker` is on. (2) `vercel.json` `ignoreCommand` reads only `VERCEL_GIT_COMMIT_MESSAGE` for `[vercel skip]`. Same PR [#177](https://github.com/bywale-com/travis/pull/177).
 
 **036 SA ascribe landed (this PR):** [`SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md`](./SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md) signed — git-level blocker contract (markdown + PR labels), no new DB tables.
 
@@ -16,7 +16,7 @@
 
 ## Where we stopped
 
-**021 / 036 circuit breaker on [#177](https://github.com/bywale-com/travis/pull/177).** Loop break planted: skip on main `runtime-doors` + real `[vercel skip]`. **Still blocked:** `type-dest` needs Cursor Background Agent hard limit ≥ $2. Do not remove `blocker` until that is topped up. When cleared, remove `blocker` → `release-blocker` empty commit **without** `[vercel skip]` → walks run. Then Technical Architect look+test per [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md).
+**021 / 036 circuit breaker on [#177](https://github.com/bywale-com/travis/pull/177).** Loop break planted and verified (34642008907). **Still blocked:** `type-dest` needs Cursor Background Agent hard limit ≥ $2 ([`BLOCKER-001`](./BLOCKER-001-CURSOR-HARD-LIMIT.md)). Do not remove `blocker` until topped up. When cleared, remove `blocker` → `release-blocker` empty commit **without** `[vercel skip]` → walks run. Then Technical Architect look+test per [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md).
 
 **035 stream architecture is planted on [#163](https://github.com/bywale-com/travis/pull/163).** Do not remint stream-intent / stream-dispatch.
 
