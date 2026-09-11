@@ -16,7 +16,7 @@ Do **not** accept the seat. Do **not** read `AGENTS.md`, seat protocols, handoff
 - Else → newest failed `runtime-doors` log for this PR. Triage every failure:
   - **Bucket A (plant / code):** fix in `src/`. Verify with `npm test`.
   - **Bucket B (founder ops):** Cursor hard limit, unwired preview, missing secrets — file `docs/register/BLOCKER-NNN-*.md` with cause, action, URL, tape excerpt.
-- If **any Bucket B:** commit code fixes + blocker with **`[skip ci]`** so Vercel does not rebuild into the same wall. Push stops here; Action labels `blocker` and mails the founder.
+- If **any Bucket B:** commit code fixes + blocker with **`[vercel skip]`** so Vercel does not rebuild into the same wall (do not use `[skip ci]` — that silences GitHub Actions too). Push stops here; Action labels `blocker` and mails the founder.
 - If **Bucket A only:** push normally. Do not stop for a missing PM-LOOK.
 
 **Else** run this and nothing else:

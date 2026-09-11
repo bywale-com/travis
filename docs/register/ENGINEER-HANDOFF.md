@@ -2,7 +2,7 @@
 
 **This bind is done.** Last prior bind: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a`. Do not start from a transcript.
 
-**021 fail-look recut (this PR):** Red `runtime-doors` run 34621326711 — Bucket A: ESM on think-walks (087 recut: `createRequire("deepagents/node")`, isolated walk operator). Bucket B: `type-dest` Cursor hard limit → [`BLOCKER-001-CURSOR-HARD-LIMIT.md`](./BLOCKER-001-CURSOR-HARD-LIMIT.md). Pushed with `[skip ci]`. Founder tops up $2, removes `blocker` label → empty commit redeploys. Circuit breaker planted: dumb doors always fail-look; `wake-packet-seats` labels blocker + mails; unlabel triggers redeploy.
+**021 fail-look recut (this PR):** Red `runtime-doors` run 34621326711 — Bucket A: ESM on think-walks (087 recut: `createRequire("deepagents/node")`, isolated walk operator). Bucket B: `type-dest` Cursor hard limit → [`BLOCKER-001-CURSOR-HARD-LIMIT.md`](./BLOCKER-001-CURSOR-HARD-LIMIT.md). Pushed with `[vercel skip]` (GH Actions must run to label blocker; `[skip ci]` silences that too). Founder tops up $2, removes `blocker` label → empty commit redeploys. Circuit breaker planted: dumb doors always fail-look; `wake-packet-seats` labels blocker + mails; unlabel triggers redeploy.
 
 **088 fail-look skip (superseded on #177):** 021 replaces bash-regex skip with Engineer triage + blocker hold. 088 remains on `main` until #177 merges.
 
