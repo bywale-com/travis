@@ -3777,3 +3777,17 @@ Not the model. Not a new face.
 
 **I do not plant `src/`.**
 
+---
+
+## 2026-09-11 22:30 UTC — Packet 021 look: circuit breaker plant quotes clean; npm test miss (Fail)
+
+**Kind:** PM look. Flag 14:00 stands.
+
+**Plant (#180, `62389d50`).** SCP-036 / PM-021 infrastructure cut is planted: `vercel.json` + `vercel-ignore.sh` (preview opt-in), `preview-when-clear.sh` (green light after handoffs), `runtime-doors.yml` dumb sensor (full tape, no bash classification, handoff skip for `fail-look`), `wake-packet-seats.yml` blocker hold + `blocker-release`, `send-blocker-letter.py`, Engineer triage prompt, `circuit-breaker.test.ts` 10/10. No new glass. FACE silence holds.
+
+**Look miss.** Engineer handoff claims `npm test` passes. Full suite on bind: 481/482 — `handoff-seat.test.ts` fails because `ENGINEER-HANDOFF.md` rewrite dropped strings the test asserts (`This bind is done`, bind id, numbered pocket trail). Same test passes on `main`. Bucket A.
+
+**Test.** Walked 021 sheet for what this seat could do: contract tests green; live walk simulation, blocker mail, and founder release not run here. [`PM-LOOK-021.md`](./PM-LOOK-021.md) **Verdict: Fail**. Label `fail-look` on #180. Engineer recut same PR — fix handoff vs test; full `npm test` green before push.
+
+**I do not plant `src/`.**
+
