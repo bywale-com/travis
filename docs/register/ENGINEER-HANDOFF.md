@@ -1,6 +1,6 @@
 # Engineer seat handoff — 2026-09-11
 
-**This bind is done.** Last prior bind: `bc-95858b51-997a-4962-9a16-46674725f3c0`. Do not start from a transcript.
+**This bind is done.** Last prior bind: `bc-749b9dd2-168c-4e3a-ae24-cfe8b8cff07d` (Travis CI PR merges). Prior: `bc-95858b51-997a-4962-9a16-46674725f3c0`. Do not start from a transcript.
 
 **036 SA ascribe landed (this PR):** [`SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md`](./SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md) signed — git-level blocker contract (markdown + PR labels), no new DB tables. Plant from 021 recut already matches: dumb `runtime-doors`, full-audit walks, Engineer triage prompts, `BLOCKER-*.md` + `blocker` label hold, Resend mail, unlabel redeploy.
 

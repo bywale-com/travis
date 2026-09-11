@@ -197,14 +197,14 @@ async function main() {
     UPDATE travis.agent_binding
     SET
       label = 'Engineer',
-      cursor_agent_id = 'bc-94804572-3a2f-4075-b290-a95c73730bd3',
+      cursor_agent_id = 'bc-749b9dd2-168c-4e3a-ae24-cfe8b8cff07d',
       runtime = 'cloud',
       active = true
     WHERE seat_key = 'engineer'
   `;
   await sql`
     INSERT INTO travis.agent_binding (seat_key, label, cursor_agent_id, runtime, active)
-    SELECT 'engineer', 'Engineer', 'bc-94804572-3a2f-4075-b290-a95c73730bd3', 'cloud', true
+    SELECT 'engineer', 'Engineer', 'bc-749b9dd2-168c-4e3a-ae24-cfe8b8cff07d', 'cloud', true
     WHERE NOT EXISTS (SELECT 1 FROM travis.agent_binding WHERE seat_key = 'engineer')
   `;
 
