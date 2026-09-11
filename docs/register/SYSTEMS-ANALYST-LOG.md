@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-09 19:05 UTC — **SCP-035 signed.** Stream architecture: classify is lib; Do is hang; mouth last. In-flight = open `dest_job` + LangGraph checkpoint. Change dest = follow-up on the same row (`parent_id` unused). Change Travis = later `invoke` on the same `thread_id`. Glass Technical Architect. PM-019 on [#163](https://github.com/bywale-com/travis/pull/163). Next number is **036**.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-11 23:30 UTC — **SCP-036 signed.** Circuit breaker: full-audit walks; dumb `runtime-doors`; Engineer Bucket A/B triage; git-level `BLOCKER-NNN-*.md` + PR label `blocker`; preview opt-in via exact green-light subject; Resend blocker mail (Engineer plants `send-blocker-letter.py`). PM-021 on [#181](https://github.com/bywale-com/travis/pull/181). Next number is **037**.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -854,4 +854,35 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-035-STREAM-ARCH.md`](./SYSTEMS-CHANGE-PACKET-035-STREAM-ARCH.md)
 
 **Handoff:** Engineer plants 035 on **this same PR**. Next packet number is **036**. Do not remint 023–034. Do not remint dest mail. Do not mint a cousin.
+
+---
+
+## 2026-09-11 23:30 UTC — SCP-036 Circuit breaker (PM-021 on #181)
+
+**Kind:** Packet ascribe. Automation woke this seat. PM-021 + circuit-breaker test on this PR. No SYSTEMS-CHANGE-PACKET for 021 was on the branch. 023–035 stay planted — not reminted.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-021 lock). Not PM. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** GitHub Actions is a dumb runner — not the triage brain. Walks run to completion and count every failure. Engineer reads the full tape, fixes plant errors, names founder/platform blockers, and must not green-light preview while Bucket B remains. Notify the team. Preview only after handoffs and blocker are clear.
+
+**Quoted stood-up (this branch):**
+
+- `npm run test:runtime` = `tsx --test --test-concurrency=1 src/runtime/walks/*.spec.ts` — cumulative, no bail.
+- `runtime-doors.yml` tees full tape; `fail-look` only when PR lacks `wake-sa` / `wake-engineer` / `wake-pm-look` / `fail-look` / `blocker`. No bash failure-classification grep.
+- `vercel.json` + `vercel-ignore.sh`: preview builds only when first commit line is exactly `Preview [vercel build]`; production always builds.
+- `preview-when-clear.sh` + `wake-packet-seats.yml` jobs: green-light after handoffs clear; `blocker-release` on `unlabeled blocker`.
+- Blocker push path labels `blocker`, strips seats, calls `send-blocker-letter.py` — **script not on disk yet**.
+- `src/lib/circuit-breaker.test.ts` + updated `sa-complete-engineer.prompt.md` Bucket A/B law.
+
+**Ascribed:**
+
+1. **Refuse Travis mint.** Blocker = `docs/register/BLOCKER-NNN-*.md` + PR label `blocker` + optional Resend. Not `travis.initiative` / `travis.motion`.
+2. **Full-audit stands.** Do not add `--test-bail`. Red check + complete tape + idle-PR `fail-look`.
+3. **Engineer triage.** Bucket A = plant/code in `src/`. Bucket B = Cursor hard limit, missing preview secrets, unreachable ops — file blocker, commit without green-light tag, no `[skip ci]`.
+4. **Trigger contracts signed:** push `BLOCKER-*` → hold; `blocker` on PR → sleep automations + skip fail-look + skip preview; founder removes `blocker` → green-light empty commit; Vercel ignoreCommand reads first line only.
+5. **Engineer remainder:** plant `send-blocker-letter.py` (Resend, same secrets as emerge); extend lib test; merge `runtime-doors` handoff skip to `main`.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md`](./SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md)
+
+**Handoff:** Engineer plants 036 on **this same PR**. Next packet number is **037**. Do not remint 023–035. Do not mint a cousin.
 
