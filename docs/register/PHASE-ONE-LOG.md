@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-11 16:20 UTC — Packet 021 circuit breaker specified; full-audit walks, Engineer triage, blocker hold, and unblock switch. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-11 22:30 UTC — Packet 021 plant on #180; PM look Fail (`handoff-seat.test.ts` red after handoff rewrite). Circuit-breaker cut quotes clean; Engineer recut same PR. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
