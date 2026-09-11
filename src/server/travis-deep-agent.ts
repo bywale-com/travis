@@ -2,10 +2,17 @@
  * SCP-031 — Deep Agents hang on Type. Dest seats stay Cursor.
  * StateBackend /print.md + /roster.md. wrapModelCall hangs files, not the request.
  * SCP-034 — official checkpointer + thread_id = voice_session.id.
- * 080/086 — lazy createRequire() so Vercel does not webpack import() ESM.
+ * 080/086 — next.config aliases deepagents/node → dist/node.cjs for Vercel.
  */
 
-import type { BaseMessage } from "@langchain/core/messages";
+import {
+  createDeepAgent,
+  registerHarnessProfile,
+  StateBackend,
+} from "deepagents/node";
+import { ChatOpenAI } from "@langchain/openai";
+import { isAIMessage, type BaseMessage } from "@langchain/core/messages";
+import { createMiddleware, tool } from "langchain";
 import { formatRosterFact } from "@/lib/dest-with-context";
 import { TRAVIS_TEXT_MODEL } from "@/lib/travis-models";
 import {
@@ -19,56 +26,14 @@ import {
   unclippedPrintFor,
 } from "@/server/dest-with-context";
 
-type DeepAgentsNode = typeof import("deepagents/node");
-type LangchainOpenAI = typeof import("@langchain/openai");
-type LangchainCoreMessages = typeof import("@langchain/core/messages");
-type Langchain = typeof import("langchain");
-
-type DeepKit = {
-  createDeepAgent: DeepAgentsNode["createDeepAgent"];
-  StateBackend: DeepAgentsNode["StateBackend"];
-  ChatOpenAI: LangchainOpenAI["ChatOpenAI"];
-  isAIMessage: LangchainCoreMessages["isAIMessage"];
-  createMiddleware: Langchain["createMiddleware"];
-  tool: Langchain["tool"];
-};
-
-let kitReady: DeepKit | null = null;
-
-function loadKit(): DeepKit {
-  if (kitReady) return kitReady;
-  // Lazy runtime require — webpack must not replace this with import().
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { createRequire } = require("node:module") as typeof import("node:module");
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const path = require("node:path") as typeof import("node:path");
-  const req = createRequire(path.join(process.cwd(), "package.json"));
-  const {
-    createDeepAgent,
-    registerHarnessProfile,
-    StateBackend,
-  } = req("deepagents/node") as DeepAgentsNode;
-  registerHarnessProfile("openai", {
-    excludedTools: ["task", "execute"],
-    generalPurposeSubagent: { enabled: false },
-  });
-  registerHarnessProfile(`openai:${TRAVIS_TEXT_MODEL}`, {
-    excludedTools: ["task", "execute"],
-    generalPurposeSubagent: { enabled: false },
-  });
-  const { ChatOpenAI } = req("@langchain/openai") as LangchainOpenAI;
-  const { isAIMessage } = req("@langchain/core/messages") as LangchainCoreMessages;
-  const { createMiddleware, tool } = req("langchain") as Langchain;
-  kitReady = {
-    createDeepAgent,
-    StateBackend,
-    ChatOpenAI,
-    isAIMessage,
-    createMiddleware,
-    tool,
-  };
-  return kitReady;
-}
+registerHarnessProfile("openai", {
+  excludedTools: ["task", "execute"],
+  generalPurposeSubagent: { enabled: false },
+});
+registerHarnessProfile(`openai:${TRAVIS_TEXT_MODEL}`, {
+  excludedTools: ["task", "execute"],
+  generalPurposeSubagent: { enabled: false },
+});
 
 function asArgs(input: unknown): Record<string, unknown> {
   if (input && typeof input === "object" && !Array.isArray(input)) {
@@ -92,10 +57,7 @@ function contentToText(content: unknown): string {
     .trim();
 }
 
-function lastAssistantText(
-  messages: unknown[],
-  isAIMessage: LangchainCoreMessages["isAIMessage"],
-): string {
+function lastAssistantText(messages: unknown[]): string {
   for (let i = messages.length - 1; i >= 0; i--) {
     const m = messages[i];
     if (m && typeof m === "object" && isAIMessage(m as BaseMessage)) {
@@ -105,12 +67,9 @@ function lastAssistantText(
   return "";
 }
 
-function wrapTravisTools(
-  sessionId: string,
-  toolFn: Langchain["tool"],
-) {
+function wrapTravisTools(sessionId: string) {
   return TRAVIS_TOOL_DECLS.map((decl) =>
-    toolFn(
+    tool(
       async (input: unknown) => {
         const result = await runTravisTool({
           sessionId,
@@ -145,10 +104,7 @@ function kitFiles(print: string, roster: string) {
   };
 }
 
-function destKitMiddleware(
-  sessionId: string,
-  createMiddleware: Langchain["createMiddleware"],
-) {
+function destKitMiddleware(sessionId: string) {
   return createMiddleware({
     name: "dest-with-context",
     wrapModelCall: async (request, handler) => {
@@ -164,6 +120,15 @@ function destKitMiddleware(
   });
 }
 
+function travisChatModel() {
+  return new ChatOpenAI({
+    model: TRAVIS_TEXT_MODEL,
+    apiKey: process.env.OPENAI_API_KEY?.trim() ?? "",
+    useResponsesApi: true,
+    reasoning: { effort: "low" },
+  });
+}
+
 export type DeepAgentMode = "update" | "synthesize";
 
 export async function invokeDeepAgent(params: {
@@ -172,14 +137,6 @@ export async function invokeDeepAgent(params: {
   room: string;
   mode?: DeepAgentMode;
 }): Promise<string> {
-  const {
-    createDeepAgent,
-    StateBackend,
-    ChatOpenAI,
-    isAIMessage,
-    createMiddleware,
-    tool,
-  } = loadKit();
   const mode = params.mode ?? "synthesize";
   const prompt =
     mode === "update"
@@ -194,17 +151,12 @@ export async function invokeDeepAgent(params: {
     : prompt;
   const checkpointer = await travisCheckpointer();
   const agent = createDeepAgent({
-    model: new ChatOpenAI({
-      model: TRAVIS_TEXT_MODEL,
-      apiKey: process.env.OPENAI_API_KEY?.trim() ?? "",
-      useResponsesApi: true,
-      reasoning: { effort: "low" },
-    }),
+    model: travisChatModel(),
     systemPrompt: TRAVIS_SYSTEM,
-    tools: wrapTravisTools(params.sessionId, tool),
+    tools: wrapTravisTools(params.sessionId),
     backend: new StateBackend(),
     checkpointer,
-    middleware: [destKitMiddleware(params.sessionId, createMiddleware)],
+    middleware: [destKitMiddleware(params.sessionId)],
     subagents: [],
   });
   const result = await agent.invoke(
@@ -215,5 +167,5 @@ export async function invokeDeepAgent(params: {
     { configurable: { thread_id: params.sessionId } },
   );
   const messages = (result as { messages?: unknown[] }).messages ?? [];
-  return lastAssistantText(messages, isAIMessage);
+  return lastAssistantText(messages);
 }
