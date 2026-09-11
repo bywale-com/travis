@@ -6,6 +6,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-11** · Hotfix 087 recut · [PR #173](https://github.com/bywale-com/travis/pull/173) — Deep Agents bundles as CJS via a webpack alias and dest dispatch errors land on the tape, because think-walks were red on `Cannot use import statement outside a module` on Vercel preview.
+
 - **2026-09-11** · Hotfix 086 · [PR #171](https://github.com/bywale-com/travis/pull/171) — Runtime walks wait for Travis to speak, and a red `runtime-doors` fresh-adds `fail-look`, because `?? · run error` on Type still painted the check green.
 
 - **2026-09-10** · Hotfix 085 · [PR #170](https://github.com/bywale-com/travis/pull/170) — Type send returns SSE and writes the tape before role dest resolve, chip dests use write-and-leave, and SSE adds X-Accel-Buffering, because dest spin plus a held Cursor pipe still 504'd type-dest on runtime verification.

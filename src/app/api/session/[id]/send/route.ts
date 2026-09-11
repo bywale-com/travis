@@ -162,7 +162,7 @@ export async function POST(
           await noteTravisUnwired(sessionId);
         }
         const cursorBinds = destBindings.filter((b) => !isTravisSeat(b.seatKey));
-        await Promise.allSettled(
+        const dispatchResults = await Promise.allSettled(
           cursorBinds.map((binding) =>
             dispatchToSeat({
               sessionId,
@@ -172,6 +172,16 @@ export async function POST(
             }),
           ),
         );
+        for (let i = 0; i < cursorBinds.length; i++) {
+          const row = dispatchResults[i];
+          if (row.status !== "fulfilled" || row.value.status !== "error") continue;
+          const seatKey = (cursorBinds[i].seatKey ?? "pm") as SeatKey;
+          await insertStatusTurn(
+            sessionId,
+            destLeaveMiss(row.value.error),
+            seatKey,
+          ).catch(() => {});
+        }
         const openJobs = await listOpenDestJobs(sessionId).catch(() => []);
         await dispatchStreamIntents({
           sessionId,
