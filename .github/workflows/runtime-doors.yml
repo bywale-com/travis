@@ -1,6 +1,7 @@
 # Deployment Check: Vercel hangs `vercel.deployment.ready` until this job
 # paints. Do not fold this into wake-packet-seats.yml — that file wakes seats.
 # Official hang: https://vercel.com/docs/deployment-checks
+# Red → fresh-add fail-look (WAKE_GITHUB_TOKEN). Same Engineer loop as look Fail.
 name: Runtime doors
 
 on:
@@ -11,6 +12,8 @@ permissions:
   contents: read
   statuses: write
   actions: read
+  pull-requests: write
+  issues: write
 
 jobs:
   runtime-doors:
@@ -44,3 +47,47 @@ jobs:
         uses: vercel/repository-dispatch/actions/status@v1
         with:
           name: runtime-doors
+
+      - name: Fresh-add fail-look on the open PR
+        if: failure()
+        env:
+          WAKE_GITHUB_TOKEN: ${{ secrets.WAKE_GITHUB_TOKEN }}
+          FALLBACK_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEPLOY_SHA: ${{ github.event.client_payload.git.sha }}
+        run: |
+          set -euo pipefail
+          if [[ -n "${WAKE_GITHUB_TOKEN:-}" ]]; then
+            export GH_TOKEN="$WAKE_GITHUB_TOKEN"
+            if login=$(gh api user --jq .login 2>/dev/null); then
+              echo "Label actor: $login (WAKE_GITHUB_TOKEN)"
+            else
+              echo "WAKE_GITHUB_TOKEN rejected (401). Falling back to Actions bot."
+              export GH_TOKEN="$FALLBACK_GH_TOKEN"
+              echo "Label actor: github-actions[bot] — B will not see this add."
+            fi
+          else
+            export GH_TOKEN="$FALLBACK_GH_TOKEN"
+            echo "Label actor: github-actions[bot] (no WAKE_GITHUB_TOKEN) — B will not see this add."
+          fi
+
+          sha="${DEPLOY_SHA:-}"
+          if [[ -z "$sha" ]]; then
+            echo "No client_payload.git.sha. No fail-look."
+            exit 0
+          fi
+
+          pr=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${sha}/pulls" \
+            --jq '[.[] | select(.state=="open")][0].number // empty')
+          if [[ -z "$pr" ]]; then
+            echo "No open PR for $sha. No fail-look."
+            exit 0
+          fi
+
+          gh label create fail-look --color CCCCCC --description "Cursor: Engineer loop after PM look Fail" 2>/dev/null || true
+          gh pr edit "$pr" --remove-label fail-look || true
+          if gh pr edit "$pr" --add-label fail-look; then
+            echo "Labeled #$pr fail-look (fresh add)."
+          else
+            echo "Could not add fail-look on #$pr."
+            exit 1
+          fi

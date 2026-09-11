@@ -14,4 +14,5 @@
    - `voice-wrap` — two lines + I’m done; wrap is a Travis mouth. Unwired is red.
    - `come-back` — same `session.id`; line still there; that send also worked.
 3. Glass: a generate miss reads `Travis · Travis error: …`, not `?? · run error`. A dest throw before leave reads `Dest error: …` on the tape, not SSE-only.
-4. I saw: ________
+4. Red `runtime-doors` (after this workflow is on `main`): PR gets a fresh `fail-look`. B boots. No GitHub issue.
+5. I saw: ________

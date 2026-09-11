@@ -27,5 +27,6 @@ Runtime verification exists so that screen never reaches the phone. If a use is 
 5. Walks recut to wait for the completion signal. Seed `type-walk-back.spec.ts` (two Travis posts). Dest scores the leave, not Travis wrap.
 6. `insertStatusTurn` stamps `seatKey`. Glass paints the miss text, not a mute `run error`.
 7. Type send / finalize dest throw writes a Log-visible status (`Dest error: …`). Do not leave that miss on SSE only.
+8. Red `runtime-doors` fresh-adds `fail-look` (`WAKE_GITHUB_TOKEN`). Same B as look Fail. Recut B prompt so that label recuts the walk miss — do not wait for a Fail `PM-LOOK`.
 
-Do not remint dest assemble, stream-intent, Deep Agents `/node`, or 035. Do not plant Playwright until SA 036 ascribes the browser secrets. Recut `runtime-doors` on preview was 0/5: think-walks named unwired (`OPENAI_API_KEY` missing on that URL); dest named Cursor hard-limit throw, no leave. Do not thin the walks.
+Do not remint dest assemble, stream-intent, Deep Agents `/node`, or 035. Do not plant Playwright until SA 036 ascribes the browser secrets. `repository_dispatch` runs the workflow on `main` — this Action hang is live after merge. Human re-pastes B.

@@ -55,5 +55,5 @@ One PR per initiative. Engineer opens it. Other seats commit on that branch. Lef
 ## Verify
 
 - Follow whatever scripts land in `package.json` once the app is planted. `npm test` is not done.
-- Add or extend sequential walks in `src/runtime/walks/`. Inventory: [`src/runtime/README.md`](src/runtime/README.md). If a use is the app, the walk waits for the mouth — a generate miss is red. Every deploy runs every walk on that URL. Same sitting: send, wait, next. Suite is sequential (one cookie, one live room). The Vercel Deployment Check is the signal. Do not sit in Vercel MCP and call that done. The founder is not the first sensor.
+- Add or extend sequential walks in `src/runtime/walks/`. Inventory: [`src/runtime/README.md`](src/runtime/README.md). If a use is the app, the walk waits for the mouth — a generate miss is red. Every deploy runs every walk on that URL. Same sitting: send, wait, next. Suite is sequential (one cookie, one live room). The Vercel Deployment Check is the signal. Red `runtime-doors` fresh-adds `fail-look` so Engineer recuts. Do not sit in Vercel MCP and call that done. The founder is not the first sensor.
 - Do not commit `.tmp-plates/`, `.env`, or secrets.
