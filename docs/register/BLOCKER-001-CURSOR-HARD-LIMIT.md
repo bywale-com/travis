@@ -10,13 +10,17 @@
 
 ## What failed on the tape
 
-`runtime-doors` run [34621326711](https://github.com/bywale-com/travis/actions/runs/34621326711) — full-audit walk suite on preview deploy `4e335fe`.
+Latest: `runtime-doors` run [34628487426](https://github.com/bywale-com/travis/actions/runs/34628487426) — full-audit walk suite on preview deploy after blocker release (`9308927`). **4 pass, 1 fail.**
 
-| Walk | Failure |
-|------|---------|
-| `type-dest` | Dest error: You need to increase your hard limit. Background Agent requires at least $2 remaining until your hard limit. |
+| Walk | Result |
+|------|--------|
+| `come-back` | pass |
+| `type-dest` | **fail** — Dest error: You need to increase your hard limit. Background Agent requires at least $2 remaining until your hard limit. |
+| `type-send` | pass |
+| `type-walk-back` | pass |
+| `voice-wrap` | pass |
 
-Four think-walks (`come-back`, `type-send`, `type-walk-back`, `voice-wrap`) also failed with `Travis error: Cannot use import statement outside a module` — **Bucket A plant miss**. Fixed on this branch (087 recut: runtime `require("deepagents/node")`).
+Prior run [34621326711](https://github.com/bywale-com/travis/actions/runs/34621326711) also had ESM failures on think-walks — **Bucket A plant miss**, fixed on this branch (087 recut: runtime `require("deepagents/node")`). Only `type-dest` remains blocked on Cursor billing.
 
 ---
 

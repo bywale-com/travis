@@ -6,6 +6,8 @@
 
 **021 fail-look recut (this PR):** Red `runtime-doors` run 34621326711 — Bucket A: ESM on think-walks (087 recut: `createRequire("deepagents/node")`, isolated walk operator). Bucket B: `type-dest` Cursor hard limit → [`BLOCKER-001-CURSOR-HARD-LIMIT.md`](./BLOCKER-001-CURSOR-HARD-LIMIT.md). Pushed with `[vercel skip]`. Founder tops up $2, removes `blocker` label → empty commit redeploys.
 
+**021 fail-look recut (2026-09-11, post-release):** Founder cleared `blocker`; release redeploy ran. Run [34628487426](https://github.com/bywale-com/travis/actions/runs/34628487426): 4/5 pass (ESM fix confirmed). Only `type-dest` still fails on Cursor $2 hard limit — **Bucket B only**. Refreshed BLOCKER-001, pushed `[vercel skip]` to re-hold.
+
 **088 fail-look skip (superseded on #177):** 021 replaces bash-regex skip with Engineer triage + blocker hold. 088 remains on `main` until #177 merges.
 
 **086 runtime is the app (merged):** Walks wait for the mouth. Red `runtime-doors` fresh-adds `fail-look`. Merged [#171](https://github.com/bywale-com/travis/pull/171).
@@ -20,7 +22,7 @@
 
 ## Where we stopped
 
-**021 / 036 circuit breaker planted on [#177](https://github.com/bywale-com/travis/pull/177).** Waiting on founder: Cursor Background Agent hard limit ($2). Remove `blocker` label when cleared — `release-blocker` pushes empty commit and Vercel rebuilds. Then Technical Architect look+test per [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md).
+**021 / 036 circuit breaker planted on [#177](https://github.com/bywale-com/travis/pull/177).** Bucket A done (4/5 walks green). **Still blocked:** `type-dest` needs Cursor Background Agent hard limit ≥ $2. Do not remove `blocker` until limit is topped up — release already proved the limit is still short. When cleared, remove `blocker` → `release-blocker` redeploys → all 5 walks should pass. Then Technical Architect look+test per [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md).
 
 **035 stream architecture is planted on [#163](https://github.com/bywale-com/travis/pull/163).** Do not remint stream-intent / stream-dispatch.
 
