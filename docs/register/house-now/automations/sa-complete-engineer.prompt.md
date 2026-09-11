@@ -96,7 +96,7 @@ Print the verify query the hotfix named (ids, paths, membership). Then the hang 
 - `docs/register/initiatives/<nnn>-<slug>/` if this pocket needs the folder — on **this** PR.
 - Hotfix files only if this cut is actually a hotfix (it is not, when a packet woke you).
 
-Commit and push to **this PR’s head branch**. Do **not** put `[vercel build]` in any seat commit. Preview is an Action empty commit after `wake-sa` / `wake-engineer` / `wake-pm-look` / `fail-look` / `blocker` are all off.
+Commit and push to **this PR’s head branch**. Never use the exact subject `Preview [vercel build]` — that line is the Action’s green light after `wake-sa` / `wake-engineer` / `wake-pm-look` / `fail-look` / `blocker` are all off. Do not put that phrase in the body as a charm.
 
 ## You do not write
 

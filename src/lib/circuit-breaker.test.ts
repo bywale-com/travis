@@ -24,7 +24,7 @@ test("vercel.json ignoreCommand hangs the skip script", () => {
   assert.equal(json.ignoreCommand, "sh .github/scripts/vercel-ignore.sh");
 });
 
-test("preview skips unless this commit has [vercel build]", () => {
+test("preview skips unless the subject is exactly the Action green light", () => {
   const skip = runIgnore({
     VERCEL_ENV: "preview",
     VERCEL_GIT_COMMIT_MESSAGE: "SA-036 packet",
@@ -42,6 +42,13 @@ test("preview skips unless this commit has [vercel build]", () => {
     VERCEL_GIT_COMMIT_MESSAGE: "hold [vercel skip]",
   });
   assert.equal(namedSkip.status, 0, namedSkip.stderr + namedSkip.stdout);
+
+  const mention = runIgnore({
+    VERCEL_ENV: "preview",
+    VERCEL_GIT_COMMIT_MESSAGE:
+      "Plant send-blocker-letter.py\n\nNo [vercel build] on this commit.\n",
+  });
+  assert.equal(mention.status, 0, mention.stderr + mention.stdout);
 
   const go = runIgnore({
     VERCEL_ENV: "preview",
@@ -63,6 +70,7 @@ test("ignoreCommand reads only VERCEL_GIT_COMMIT_MESSAGE", () => {
   assert.doesNotMatch(sh, /git log/);
   assert.match(sh, /VERCEL_GIT_COMMIT_MESSAGE/);
   assert.match(sh, /VERCEL_ENV/);
+  assert.match(sh, /NR==1/);
 });
 
 test("preview-when-clear waits on handoff and hold labels", () => {
@@ -107,7 +115,7 @@ test("Engineer prompt never green-lights a seat commit", () => {
     "docs/register/house-now/automations/sa-complete-engineer.prompt.md",
   );
   assert.match(prompt, /without.*preview green-light tag/);
-  assert.match(prompt, /Do \*\*not\*\* put `\[vercel build\]`/);
+  assert.match(prompt, /Never use the exact subject `Preview \[vercel build\]`/);
   assert.doesNotMatch(prompt, /\[vercel skip\]/);
   assert.doesNotMatch(prompt, /\[skip ci\] so Vercel/);
 });

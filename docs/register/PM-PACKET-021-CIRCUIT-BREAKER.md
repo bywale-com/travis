@@ -53,11 +53,11 @@ The **Engineer is the triage brain**. The Engineer reads the tape, fixes code, d
 ### Law 0: Preview only after handoffs
 Vercel **preview** is opt-in. Default skip. Production always builds.
 
-The green light is the commit-message tag `[vercel build]`. Seat commits (SA, Engineer plant, PM Look, fail-look recut, BLOCKER hold) **must not** include that tag. None of those seats need a preview to do their job.
+The green light is an Action empty commit whose **first line is exactly** `Preview [vercel build]`. A seat commit that *names* the tag in the body — including “No `[vercel build]`” — must not build. That substring match is how #180 leaked a preview during PM Look. Seat subjects must not be that line.
 
 Handoff / hold in process = the PR has any of: `wake-sa` · `wake-engineer` · `wake-pm-look` · `fail-look` · `blocker`. One seat label at a time (adding a wake strips the others).
 
-When those labels are gone, a cheap Action empty-commits `Preview [vercel build]`. Then Vercel may build. Then `runtime-doors` may `fail-look` — on an idle PR, so Engineer picks up a quiet desk.
+When those labels are gone, a cheap Action empty-commits that exact subject. Then Vercel may build. Then `runtime-doors` may `fail-look` — on an idle PR, so Engineer picks up a quiet desk.
 
 Do **not** use `[skip ci]` as the skip. That silences GitHub Actions (labeling) as well as Vercel.
 
