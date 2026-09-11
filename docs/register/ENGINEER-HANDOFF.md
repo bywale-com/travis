@@ -1,8 +1,10 @@
 # Engineer seat handoff — 2026-09-11
 
-**This bind is living.** Last prior bind: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a`. Do not start from a transcript.
+**This bind is done.** Last prior bind: this run (`fail-look` on probe [#173](https://github.com/bywale-com/travis/pull/173)). Do not start from a transcript.
 
-**086 runtime is the app (this PR):** Walks wait for the mouth. Red `runtime-doors` fresh-adds `fail-look` (`WAKE_GITHUB_TOKEN`) so B recuts. Prompt recut in `house-now/automations/sa-complete-engineer.prompt.md` — human Save+Activate. Action hangs on merge (`repository_dispatch` uses `main`). Next hotfix **087**. Playwright glass still SA 036. Signal is `runtime-doors`.
+**Probe #173 fail-look loop (verified):** CI run [`34611990221`](https://github.com/bywale-com/travis/actions/runs/34611990221) on deploy `405414b` — `0` pass / `5` fail on preview URL, then **fresh-added `fail-look`** on [#173](https://github.com/bywale-com/travis/pull/173) via `WAKE_GITHUB_TOKEN` (actor `bywale-com`). B woke. Loop works. No `src/` recut on this bind — walk misses are specified-but-not-clear (see table below).
+
+**086 runtime is the app (merged [#171](https://github.com/bywale-com/travis/pull/171)):** Walks wait for the mouth. Red `runtime-doors` fresh-adds `fail-look`. Action on `main`. Next hotfix **087** (Deep Agents ESM on preview generate — do not remint `/node` on 086). Playwright glass still SA 036. Signal is `runtime-doors`.
 
 **085 type-dest recut (merged):** Type send returns SSE and writes the user turn before role dest resolve; chip dests dispatch write-and-leave (`dispatchToSeat` with `enqueueIfBusy: false` on role dests); SSE headers include `X-Accel-Buffering: no`. Merged on [PR #170](https://github.com/bywale-com/travis/pull/170).
 
@@ -17,6 +19,8 @@
 ---
 
 ## Where we stopped
+
+**Probe #173 fail-look loop — verified, no plant.** Empty commit on [#173](https://github.com/bywale-com/travis/pull/173) so preview deploy runs `runtime-doors` against an open PR. Run [`34611990221`](https://github.com/bywale-com/travis/actions/runs/34611990221): five walks red; `fail-look` fresh-added; B woke. **086 glass is correct** — tape rows are `status/travis` + `Travis error: …` (think-walks) and `status/engineer` + `Dest error: …` (type-dest billing miss), not `?? · run error`. **No recut here:** think-walks die on Deep Agents ESM (`Cannot use import statement outside a module`) — 086/080 lock says do not remint `/node`; needs **087** or founder. type-dest dies on Cursor hard limit ($2 remaining) — founder billing, not Engineer. `npm test` 472 pass / 0 fail in this bind. Close probe when human is satisfied; do not cousin.
 
 **035 stream architecture is planted on [#163](https://github.com/bywale-com/travis/pull/163).** Classify is `src/lib/stream-intent.ts` (new / change / cancel / talk). Do is `src/server/stream-dispatch.ts` — hangs dest assemble, 034 follow-up, `cancelCursorRun`, and `invokeDeepAgent({ mode: "update" })`. Mouth is last. Live `liveShouldPipeTravis` is always false; transcript dest-by-name still leaves, then dispatches the rest, never `pipeTravisText`. Type send writes the tape, files chip / call-by-name dests, dispatches remaining intents, then synthesizes. Finalize strips the done-phrase, backup-Do once if a leave never started, then synthesizes. `parent_id` unused. No new table. Glass: `destGlassName` / `SIT_ROLE_LABEL.pm` / `seatKeyToLabel("pm")` → **Technical Architect**. Spoken “Technical Architect” and “Technical PM” both route to `pm`. Path `/protocols/pm.md`. Grain tests + `next build` passed. Human look+test is [`PM-PACKET-019-STREAM-ARCH-TEST.md`](./PM-PACKET-019-STREAM-ARCH-TEST.md) on Log · Type after this lands on psi. Do not remint dest assemble, dest-gate-on-ask, Cloud create, `dest_job`, checkpointer, or 031–034.
 
@@ -140,6 +144,8 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 
 | Gap | Why it is blocked |
 |-----|-------------------|
+| Deep Agents ESM on preview generate | Think-walks red with `Travis error: Cannot use import statement outside a module` on every preview deploy (CI run [`34611990221`](https://github.com/bywale-com/travis/actions/runs/34611990221)). 080 hung `deepagents/node`; 032 removed Responses fallback. 086 lock: do not remint `/node`. Needs **087** cut or founder deps fix — not this probe bind. |
+| Cursor API hard limit on dest walks | type-dest red: `Dest error: You need to increase your hard limit…` ($2 remaining). Founder billing on Cursor dashboard — not Engineer plant. Tape + seatKey are correct. |
 | Live / Realtime as a second brain | 032 / 081 / 035: Voice think waits for finalize. Realtime is ear + mouth. Do not remint dest-gate. |
 | LangGraph checkpoint table | 030 silence. Official saver + later invoke. No `Command` / `updateState`. |
 | Deep Agents `task` as dest | Dest is Cursor. Kit is not that wire. |
@@ -165,8 +171,8 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 ## Next Engineer job
 
 1. Accept the seat from the paste below. Fetch `main`. Read **this file**, then [`ENGINEER.md`](../seats/ENGINEER.md), then `AGENTS.md`.
-2. Do not restart 012 / 013 / 014 / 015 / 023 / 024 / 025 / 026 / 027 / **029** / **030** / **031** / **032** / **033** / **034** / **035** / **081** / 062 / 064 / 065 / 077 / 078 / **079** / **080**. Do not remint the 074 SQL file. Do not remint the 075 hang. Do not remint the 076 dest closer. Do not remint the 027 cutoff. Do not remint the 029 index. Do not remint dest-with-context grain, the Deep Agents `/node` hang, Cloud HTTP create, the LangGraph `langgraph` checkpointer, or stream-intent / stream-dispatch. Do not mint a store. Do not append PM or SA logs.
-3. **086** is the living cut: walks are the app. Do not thin them back to header-only. **022** ports on [#120](https://github.com/bywale-com/travis/pull/120) stays signed, not planted. Do not remint `travis.port`. Dest by who `technical-pm` is human leftover on 075 — do not mail catalog `pm`. Do not send **That’s fine.**
+2. Do not restart 012 / 013 / 014 / 015 / 023 / 024 / 025 / 026 / 027 / **029** / **030** / **031** / **032** / **033** / **034** / **035** / **081** / 062 / 064 / 065 / 077 / 078 / **079** / **080** / **086**. Do not remint the 074 SQL file. Do not remint the 075 hang. Do not remint the 076 dest closer. Do not remint the 027 cutoff. Do not remint the 029 index. Do not remint dest-with-context grain, the Deep Agents `/node` hang, Cloud HTTP create, the LangGraph `langgraph` checkpointer, or stream-intent / stream-dispatch. Do not mint a store. Do not append PM or SA logs.
+3. **087** is next if founder wants green walks: Deep Agents must answer on preview (ESM hang recut — see 080/032 locks). **022** ports on [#120](https://github.com/bywale-com/travis/pull/120) stays signed, not planted. Do not remint `travis.port`. Dest by who `technical-pm` is human leftover on 075 — do not mail catalog `pm`. Do not send **That’s fine.**
 4. When **you** stop: rewrite the **Current** lines at the top of this file (where we stopped, last plant, next hotfix number) so the next bind does not start from a transcript. Then you may write **This bind is done**.
 
 ---
