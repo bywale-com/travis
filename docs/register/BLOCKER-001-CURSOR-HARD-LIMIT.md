@@ -3,7 +3,8 @@
 **PR:** [#177](https://github.com/bywale-com/travis/pull/177)  
 **Pocket:** Packet 021 — Circuit breaker  
 **When:** 2026-09-11  
-**Status:** Open — founder action required
+**Status:** Open — founder action required  
+**Hold:** deploy skipped via `[vercel skip]` until this is cleared
 
 ---
 
