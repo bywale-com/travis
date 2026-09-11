@@ -6,6 +6,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-11** · Hotfix 088 · [PR #174](https://github.com/bywale-com/travis/pull/174) — Red `runtime-doors` does not `fail-look` Cursor hard limit or unwired, because Engineer cannot recut founder ops and the loop kept booting B.
+
 - **2026-09-11** · Hotfix 086 · [PR #171](https://github.com/bywale-com/travis/pull/171) — Runtime walks wait for Travis to speak, and a red `runtime-doors` fresh-adds `fail-look`, because `?? · run error` on Type still painted the check green.
 
 - **2026-09-10** · Hotfix 085 · [PR #170](https://github.com/bywale-com/travis/pull/170) — Type send returns SSE and writes the tape before role dest resolve, chip dests use write-and-leave, and SSE adds X-Accel-Buffering, because dest spin plus a held Cursor pipe still 504'd type-dest on runtime verification.
