@@ -11,6 +11,16 @@ If this wake is a label **removed**, or neither `wake-engineer` nor `fail-look` 
 
 Do **not** accept the seat. Do **not** read `AGENTS.md`, seat protocols, handoffs, or `src/`.
 
+**Ensure you are on the PR branch:**
+Cursor Automations boot onto a temporary branch with your workspace checkout defaulting to `main`. You **must** switch to the PR's head branch first:
+```bash
+PR_BRANCH=$(gh pr view --json headRefName --jq .headRefName 2>/dev/null || true)
+if [ -n "$PR_BRANCH" ]; then
+  git checkout "$PR_BRANCH" 2>/dev/null || git checkout -b "$PR_BRANCH" "origin/$PR_BRANCH" 2>/dev/null || true
+  git pull origin "$PR_BRANCH" 2>/dev/null || true
+fi
+```
+
 **If `fail-look` is on this PR:** skip the file gate. Continue.
 - A `PM-LOOK-*.md` with **Verdict: Fail** → recut that.
 - Else → newest failed `runtime-doors` log for this PR. Triage every failure:
@@ -21,13 +31,12 @@ Do **not** accept the seat. Do **not** read `AGENTS.md`, seat protocols, handoff
 
 **Else** run this and nothing else:
 
-```text
-git diff --name-only HEAD~1
+```bash
+git diff --name-only origin/main...HEAD
 ```
+(If `origin/main` is not available, use `git diff --name-only HEAD~1` or `git diff --name-only --diff-filter=A HEAD`).
 
-If `HEAD~1` does not exist, use `git diff --name-only --diff-filter=A HEAD`.
-
-**Run only if this commit** added or materially revised **one of**:
+**Run only if this PR branch** added or materially revised **one of**:
 
 1. `docs/register/SYSTEMS-CHANGE-PACKET-*.md` (SA just completed), **or**
 2. `docs/register/HOTFIX-[0-9]*-*.md` excluding `*-TEST.md` (hotfix — no SA), **or**

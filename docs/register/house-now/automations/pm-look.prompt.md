@@ -6,7 +6,17 @@ If this wake is a label **removed**, or `wake-pm-look` is not on the PR: **stop*
 
 ## First action — gate, then stop or continue
 
-Do **not** accept the seat. Do **not** read the Phase One log yet. Run this and nothing else:
+Do **not** accept the seat. Do **not** read the Phase One log yet.
+
+**Ensure you are on the PR branch:**
+Cursor Automations boot onto a temporary branch with your workspace checkout defaulting to `main`. You **must** switch to the PR's head branch first:
+```bash
+PR_BRANCH=$(gh pr view --json headRefName --jq .headRefName 2>/dev/null || true)
+if [ -n "$PR_BRANCH" ]; then
+  git checkout "$PR_BRANCH" 2>/dev/null || git checkout -b "$PR_BRANCH" "origin/$PR_BRANCH" 2>/dev/null || true
+  git pull origin "$PR_BRANCH" 2>/dev/null || true
+fi
+```
 
 1. Confirm `wake-pm-look` is on this PR.
 2. List `docs/register/HOTFIX-[0-9]*-*.md` on this PR, **excluding** `*-TEST.md`. If one exists: this is a **hotfix look**. A hotfix is enough. There will be **no** `PM-PACKET` and **no** SYSTEMS-CHANGE-PACKET. That is not a miss. **Do not stop** with “no packets,” “no PM packet,” or “gate failed.” Continue.

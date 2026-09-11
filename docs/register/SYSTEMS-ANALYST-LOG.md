@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-09 19:05 UTC — **SCP-035 signed.** Stream architecture: classify is lib; Do is hang; mouth last. In-flight = open `dest_job` + LangGraph checkpoint. Change dest = follow-up on the same row (`parent_id` unused). Change Travis = later `invoke` on the same `thread_id`. Glass Technical Architect. PM-019 on [#163](https://github.com/bywale-com/travis/pull/163). Next number is **036**.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-11 16:35 UTC — **SCP-036 signed.** Circuit breaker: full-audit walks, dumb sensor, Engineer triage, and blocker hold. In-flight failure triage partitions into Bucket A (Code / Plant Misses) vs Bucket B (Founder Ops / Platform Blockers). Platform blockers hold redeployment via `docs/register/BLOCKER-NNN-*.md` and `[skip ci]`. Label `blocker` added, seat automations silenced, email via Resend. Founder clears blocker and removes `blocker` label on PR (Option A) to resume deploy. Automation prompts updated to checkout PR head ref before diff gate check. Next number is **037**.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -854,4 +854,34 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-035-STREAM-ARCH.md`](./SYSTEMS-CHANGE-PACKET-035-STREAM-ARCH.md)
 
 **Handoff:** Engineer plants 035 on **this same PR**. Next packet number is **036**. Do not remint 023–034. Do not remint dest mail. Do not mint a cousin.
+
+---
+
+## 2026-09-11 16:35 UTC — SCP-036 circuit breaker (PM-021 on #177)
+
+**Kind:** Packet ascribe. Automation prompt gate fix + circuit breaker specification. PM-021 on this PR. 020–035 stay planted — not reminted.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-021 lock + 14:00 flag). Not Architect. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** The concept is not to try to fix everything, it’s identify the cause and fix it if it needs a fix and do whatever else is necessary to bridge the gap... It needs to complete everything so it can count and get all the failures, and then send back in the loop for the engineer to build... Before it says, "Okay, Vercel, you're good to build again." Because if Vercel builds again before those are done, it's going to come back for sure as failures.
+
+**Staples (not scenery):** Dumb runner · Engineer triage · Blocker hold (`[skip ci]`) · House mail · Resume switch (`blocker` label removal).
+
+**Quoted stood-up:**
+- Automation boot: Cloud agents boot on temporary branches defaulting workspace to `main`. Running `git diff --name-only HEAD~1` diffed against the previous commit on `main` rather than checking out the PR head branch.
+- Gate fix: All automation prompts (`packet-sa`, `sa-complete-engineer`, `pm-look`) must query `gh pr view --json headRefName` and checkout the PR head branch before diffing.
+- Runner: `.github/workflows/runtime-doors.yml` runs `npm run test:runtime` sequentially; removes brittle bash regexes; records complete tape to `$RUNNER_TEMP/walks.txt`; on failure, adds `fail-look` to PR.
+- Engineer triage: Engineer inspects tape; partitions into Bucket A (Code/Plant) and Bucket B (Platform Blocker).
+- Blocker hold: If Bucket B non-empty, writes `docs/register/BLOCKER-NNN-*.md`, commits with `[skip ci]`, and stops.
+- Notification: `.github/workflows/wake-packet-seats.yml` labels `blocker`, removes `fail-look`/`wake-engineer`/`wake-pm-look`, sends Resend letter to founder.
+- Resume switch: Removing `blocker` label on PR triggers redeployment.
+
+**Ascribed:**
+1. **No database store.** Blocker is a git/PR contract: `docs/register/BLOCKER-NNN-*.md` + PR label `blocker`. Named silence: no rows in `travis.initiative` or `travis.motion`.
+2. **Prompts updated:** Head ref checkout prepended to prompt gates in `packet-sa`, `sa-complete-engineer`, `pm-look`.
+3. **Circuit breaker release:** Option A — removing `blocker` label releases hold.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md`](./SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md)
+
+**Handoff:** Engineer plants 036 on **this same PR**. Next packet number is **037**. Do not remint 020–035. Do not mint a cousin.
 

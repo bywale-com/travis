@@ -6,15 +6,25 @@ If this wake is a label **removed**, or `wake-sa` is not on the PR: **stop**.
 
 ## First action — gate, then stop or continue
 
-Do **not** accept the seat. Do **not** read `docs/README.md`, seat protocols, PHASE-ONE-LOG, or any packet. Run this and nothing else:
+Do **not** accept the seat. Do **not** read `docs/README.md`, seat protocols, PHASE-ONE-LOG, or any packet.
 
-```text
-git diff --name-only HEAD~1
+**Ensure you are on the PR branch:**
+Cursor Automations boot onto a temporary branch with your workspace checkout defaulting to `main`. You **must** switch to the PR's head branch first:
+```bash
+PR_BRANCH=$(gh pr view --json headRefName --jq .headRefName 2>/dev/null || true)
+if [ -n "$PR_BRANCH" ]; then
+  git checkout "$PR_BRANCH" 2>/dev/null || git checkout -b "$PR_BRANCH" "origin/$PR_BRANCH" 2>/dev/null || true
+  git pull origin "$PR_BRANCH" 2>/dev/null || true
+fi
 ```
 
-If `HEAD~1` does not exist (orphan / first commit), use `git diff --name-only --diff-filter=A HEAD`.
+Then check what changed on this PR / commit:
+```bash
+git diff --name-only origin/main...HEAD
+```
+(If `origin/main` is not fetched or available, use `git diff --name-only HEAD~1` or `git diff --name-only --diff-filter=A HEAD`).
 
-**Run only if this commit** added or changed a file matching:
+**Run only if this PR branch** added or changed a file matching:
 
 `docs/register/PM-PACKET-[0-9]*-*.md`
 
@@ -22,7 +32,7 @@ If `HEAD~1` does not exist (orphan / first commit), use `git diff --name-only --
 
 If that list is empty: **stop immediately**. One short sentence if you must speak. No comment. No commit. No cousin PR. No memories. Do not read further.
 
-Then open each matching packet on this commit. **Run only if at least one has this exact line:**
+Then open each matching packet on this branch. **Run only if at least one has this exact line:**
 
 `**Wake:** sa`
 
