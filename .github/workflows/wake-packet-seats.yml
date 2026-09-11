@@ -24,7 +24,7 @@ on:
       - ".github/workflows/wake-packet-seats.yml"
       - ".github/scripts/**"
   pull_request:
-    types: [unlabeled]
+    types: [unlabeled, labeled]
   workflow_dispatch:
     inputs:
       nnn:
@@ -284,6 +284,34 @@ jobs:
                 fi
               fi
             fi
+          fi
+
+  strip-fail-look-under-blocker:
+    if: github.event_name == 'pull_request' && github.event.action == 'labeled' && github.event.label.name == 'fail-look'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Strip fail-look when blocker hold is active
+        env:
+          WAKE_GITHUB_TOKEN: ${{ secrets.WAKE_GITHUB_TOKEN }}
+          FALLBACK_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          if [[ -n "${WAKE_GITHUB_TOKEN:-}" ]]; then
+            export GH_TOKEN="$WAKE_GITHUB_TOKEN"
+          else
+            export GH_TOKEN="$FALLBACK_GH_TOKEN"
+          fi
+          pr_labels=$(gh pr view "$PR" --json labels --jq '.labels[].name')
+          if echo "$pr_labels" | grep -q '^blocker$'; then
+            gh pr edit "$PR" --remove-label fail-look || true
+            gh pr edit "$PR" --remove-label wake-engineer || true
+            gh pr edit "$PR" --remove-label wake-pm-look || true
+            echo "PR #$PR blocker active. Stripped fail-look (runtime-doors on main)."
+          else
+            echo "PR #$PR no blocker. Keeping fail-look."
           fi
 
   release-blocker:

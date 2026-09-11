@@ -1,18 +1,12 @@
 # Engineer seat handoff — 2026-09-11
 
-**This bind is done.** Last prior bind: `bc-749b9dd2-168c-4e3a-ae24-cfe8b8cff07d` (Travis CI PR merges). Prior: `bc-95858b51-997a-4962-9a16-46674725f3c0`. Do not start from a transcript.
+**This bind is done.** Last prior bind: `bc-c3986494-c045-4b4c-8d86-dafc49fa918a` (Cursor Automation fail-look). Prior: `bc-749b9dd2-168c-4e3a-ae24-cfe8b8cff07d`. Do not start from a transcript.
 
 **036 SA ascribe landed (this PR):** [`SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md`](./SYSTEMS-CHANGE-PACKET-036-CIRCUIT-BREAKER.md) signed — git-level blocker contract (markdown + PR labels), no new DB tables. Plant from 021 recut already matches: dumb `runtime-doors`, full-audit walks, Engineer triage prompts, `BLOCKER-*.md` + `blocker` label hold, Resend mail, unlabel redeploy.
 
-**021 fail-look recut (this PR):** Red `runtime-doors` run 34621326711 — Bucket A: ESM on think-walks (087 recut: `createRequire("deepagents/node")`, isolated walk operator). Bucket B: `type-dest` Cursor hard limit → [`BLOCKER-001-CURSOR-HARD-LIMIT.md`](./BLOCKER-001-CURSOR-HARD-LIMIT.md). Pushed with `[vercel skip]`. Founder tops up $2, removes `blocker` label → empty commit redeploys.
+**021 fail-look recut (2026-09-11, automation wake):** Run [34630538050](https://github.com/bywale-com/travis/actions/runs/34630538050): 4/5 pass, `type-dest` Cursor hard limit — **Bucket B only.** Root cause of re-added `fail-look`: `repository_dispatch` runs `runtime-doors` from **main** (no blocker skip until #177 merges). Recut: `strip-fail-look-under-blocker` job on `fail-look` label add while `blocker` active; refreshed BLOCKER-001. Pushed `[vercel skip]`.
 
-**021 fail-look recut (2026-09-11, post-release):** Founder cleared `blocker`; release redeploy ran. Run [34628487426](https://github.com/bywale-com/travis/actions/runs/34628487426): 4/5 pass (ESM fix confirmed). Only `type-dest` still fails on Cursor $2 hard limit — **Bucket B only**. Refreshed BLOCKER-001, pushed `[vercel skip]` to re-hold.
-
-**021 fail-look recut (2026-09-11, hold retrigger):** Run [34628934780](https://github.com/bywale-com/travis/actions/runs/34628934780): same tape — 4/5 pass, `type-dest` Cursor hard limit. **Bucket B only.** Refreshed BLOCKER-001; `runtime-doors` now skips `fail-look` when `blocker` label is active (021 circuit breaker law). Pushed `[vercel skip]`.
-
-**021 fail-look recut (2026-09-11, fail-look loop):** Run [34629445893](https://github.com/bywale-com/travis/actions/runs/34629445893): 4/5 pass, `type-dest` Cursor hard limit — **Bucket B only.** Root cause of re-added `fail-look`: `repository_dispatch` runs `runtime-doors` from **main**, which lacks blocker skip until #177 merges. Recut: filesystem BLOCKER check + label check in `runtime-doors.yml`; `wake-packet-seats` strips wake labels on every push while `blocker` active. Refreshed BLOCKER-001. Pushed `[vercel skip]`.
-
-**021 fail-look recut (2026-09-11, automation wake):** Run [34630079165](https://github.com/bywale-com/travis/actions/runs/34630079165): same tape — 4/5 pass, `type-dest` Cursor hard limit — **Bucket B only.** No plant miss. `runtime-doors` on main still fresh-adds `fail-look` (skip logic lives on #177 until merge). Refreshed BLOCKER-001; pushed `[vercel skip]` → `wake-packet-seats` strips `fail-look` while `blocker` active.
+**021 fail-look recut (prior):** Runs 34621326711–34630079165 — Bucket A ESM fix (087), Bucket B Cursor hard limit. Blocker skip in `runtime-doors.yml` on #177; push-time strip in `wake-packet-seats`. See git log on #177.
 
 **088 fail-look skip (superseded on #177):** 021 replaces bash-regex skip with Engineer triage + blocker hold. 088 remains on `main` until #177 merges.
 
@@ -28,7 +22,7 @@
 
 ## Where we stopped
 
-**021 / 036 circuit breaker planted on [#177](https://github.com/bywale-com/travis/pull/177).** Bucket A done (4/5 walks green; ESM fix confirmed). **Still blocked:** `type-dest` needs Cursor Background Agent hard limit ≥ $2. Do not remove `blocker` until limit is topped up. When cleared, remove `blocker` → `release-blocker` redeploys → all 5 walks should pass. Blocker skip in `runtime-doors` takes full effect when #177 merges (until then, `wake-packet-seats` strips `fail-look` on push while `blocker` active). Then Technical Architect look+test per [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md).
+**021 / 036 circuit breaker planted on [#177](https://github.com/bywale-com/travis/pull/177).** Bucket A done (4/5 walks green; ESM fix confirmed). **Still blocked:** `type-dest` needs Cursor Background Agent hard limit ≥ $2. Do not remove `blocker` until limit is topped up. When cleared, remove `blocker` → `release-blocker` redeploys → all 5 walks should pass. `strip-fail-look-under-blocker` breaks the automation loop until #177 merges (main `runtime-doors` still lacks skip). Then Technical Architect look+test per [`PM-PACKET-021-CIRCUIT-BREAKER-TEST.md`](./PM-PACKET-021-CIRCUIT-BREAKER-TEST.md).
 
 **035 stream architecture is planted on [#163](https://github.com/bywale-com/travis/pull/163).** Do not remint stream-intent / stream-dispatch.
 
