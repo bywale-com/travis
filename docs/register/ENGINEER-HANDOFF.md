@@ -2,7 +2,7 @@
 
 **This bind is living.** Last prior bind: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a`. Do not start from a transcript.
 
-**086 runtime is the app (this PR):** Walks wait for Travis to speak. Inventory is `src/runtime/README.md` + `src/runtime/walks/README.md`. Seeded `type-walk-back`. SSE consume until done. Fresh sitting per walk. Glass shows the miss text with `seatKey: travis`. Next hotfix number **087**. Do not remint 084/085/086. Playwright glass still waits on SA 036.
+**086 runtime is the app (this PR):** Recut after first `runtime-doors` (type-dest / type-walk-back red; think-walks could green on named unwired). Think-walks require a speakable Travis post — unwired is red. Dest scores the leave, not Travis wrap. Fail dumps tape + SSE. Inventory is `src/runtime/README.md` + `src/runtime/walks/README.md`. Seeded `type-walk-back`. SSE consume until done. Fresh sitting per walk. Glass shows the miss text with `seatKey: travis`. Next hotfix number **087**. Do not remint 084/085/086. Playwright glass still waits on SA 036. Signal is the `runtime-doors` check, not the GitHub rollup.
 
 **085 type-dest recut (merged):** Type send returns SSE and writes the user turn before role dest resolve; chip dests dispatch write-and-leave (`dispatchToSeat` with `enqueueIfBusy: false` on role dests); SSE headers include `X-Accel-Buffering: no`. Merged on [PR #170](https://github.com/bywale-com/travis/pull/170).
 

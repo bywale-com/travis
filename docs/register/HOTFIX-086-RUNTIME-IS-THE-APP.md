@@ -14,15 +14,17 @@ Lived on psi: Type dest Travis, “what was the last thing of substance we discu
 
 The walks cancelled the SSE after headers and asserted the user line only. A generate miss still passed. One cookie resumes one room, but the suite ran in parallel. `insertStatusTurn` wrote no `seatKey`, so the glass said `??`. The status text (the miss) was discarded.
 
+First plant still treated named unwired as a pass and stacked Travis wrap on dest, so dest failed before the leave was scored and think-walks could go green without a mouth. Recut: think-walks require a post (unwired is red); dest scores the leave; fail dumps the tape.
+
 Runtime verification exists so that screen never reaches the phone. If a use is the app, the walk **is** that use.
 
 ## Cut
 
 1. `src/runtime/README.md` + `src/runtime/walks/README.md` — inventory: every seeded use, pass, fail; Playwright glass named as the SA 036 hole.
-2. `src/runtime/app-worked.ts` — tape after a use: fail `/error/i` status; named unwired is not a lie; else Travis must have spoken. Do not grade the sentence.
+2. `src/runtime/app-worked.ts` — think-walks fail `/error/i`, fail named unwired, require a speakable Travis post. Dest walk is leave-started. Fail dumps tape + SSE.
 3. `doors.ts` — `send` / `finalize` consume SSE until `done` or `error`. Do not cancel after headers.
 4. `desk.ts` — `readTurns` keeps `kind` / `seatKey` / `speakable`. `openFreshRoom` = End + open so walks do not share a tape. Suite `--test-concurrency=1`.
-5. Walks recut to wait for the mouth. Seed `type-walk-back.spec.ts` (the lived question). Dest still does not wait for the Engineer essay; it fails if Travis mouth last died.
+5. Walks recut to wait for the completion signal. Seed `type-walk-back.spec.ts` (two Travis posts). Dest scores the leave, not Travis wrap.
 6. `insertStatusTurn` stamps `seatKey`. Glass paints the miss text, not a mute `run error`.
 
 Do not remint dest assemble, stream-intent, Deep Agents `/node`, or 035. Do not plant Playwright until SA 036 ascribes the browser secrets.
