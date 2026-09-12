@@ -1,6 +1,6 @@
 # Engineer seat handoff — 2026-09-12
 
-**This bind is done.** Last prior bind: fail-look queue+504 recut on 091. Do not start from a transcript.
+**This bind is done.** Last prior bind: fail-look queue+504 recut on 091; blocker 001 for Cursor Cloud Agents cap. Do not start from a transcript.
 
 **091 stream-arch runtime walk (this PR, blocker):** Plant landed (`writeAndLeaveDest`, transcript SSE ping-before-resolve, Deep Agents CJS). Latest `runtime-doors` red on **Cursor Cloud Agents plan limit** — Bucket B. [`BLOCKER-001-CURSOR-CLOUD-AGENT-LIMIT.md`](./BLOCKER-001-CURSOR-CLOUD-AGENT-LIMIT.md). Founder frees capacity; re-run Deployment Check. Do not recut `src/` for this miss (088). Next hotfix **092**. Do not remint 035.
 
@@ -22,7 +22,7 @@
 
 ## Where we stopped
 
-**091 stream-arch runtime walk is planted on this PR.** Blocker **001** — Cursor Cloud Agents cap. Re-run `runtime-doors` after founder ops. Do not remint `stream-intent` / `stream-dispatch`. Do not recut #181.
+**091 stream-arch runtime walk is planted on this PR.** Blocker **001** — Cursor Cloud Agents cap ([`BLOCKER-001-CURSOR-CLOUD-AGENT-LIMIT.md`](./BLOCKER-001-CURSOR-CLOUD-AGENT-LIMIT.md)). Re-run `runtime-doors` after founder frees capacity. Do not remint `stream-intent` / `stream-dispatch`. Do not recut #181.
 
 **090 no PM Look wake is on `main` via [#182](https://github.com/bywale-com/travis/pull/182).** Action strips seats after Engineer plant. No `wake-pm-look`. Do not recut #181.
 
