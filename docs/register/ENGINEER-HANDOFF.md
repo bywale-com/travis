@@ -2,7 +2,7 @@
 
 **This bind is done.** Last prior bind: `bc-f837bcfa-86f5-46d0-8f47-748f4d781a74` (091 fail-look CJS); this recut `bc-80927f96-ec7a-4ce0-9716-abfc5c7118a0`. Do not start from a transcript.
 
-**091 stream-arch runtime walk (this PR, fail-look recut):** Walk planted. Lived red: Deep Agents ESM; live dest held `sendOrEnqueueMany` until Vercel 504. Recut: lazy `createRequire("deepagents/node")` CJS; live dest `dispatchToSeat` write-and-leave, JSON, mouth still finalize. Next hotfix **092**. 021 live watches stay on [#181](https://github.com/bywale-com/travis/pull/181) / [#180](https://github.com/bywale-com/travis/pull/180) — do not recut them. Do not remint 035.
+**091 stream-arch runtime walk (this PR, fail-look recut):** Walk planted. Lived red: Deep Agents ESM; live dest blocked on gateway before headers. Recut: `createRequire("deepagents/node")` CJS; live dest `dispatchToSeat` inside SSE (ping + done, no `pipeTravisText`). `type-dest` may still red on Cursor busy — 088 founder ops. Next hotfix **092**. 021 live watches stay on [#181](https://github.com/bywale-com/travis/pull/181) / [#180](https://github.com/bywale-com/travis/pull/180) — do not recut them. Do not remint 035.
 
 **090 no PM Look wake (merged [#182](https://github.com/bywale-com/travis/pull/182)):** Action no longer adds `wake-pm-look`. Preview green-lights when seats are clear. Engineer runs `npm test` after the handoff rewrite.
 
@@ -22,7 +22,7 @@
 
 ## Where we stopped
 
-**091 stream-arch runtime walk is planted on this PR.** Fail-look recut: live dest write-and-leave; Deep Agents `createRequire` CJS. Merge when `runtime-doors` is green. Do not remint `stream-intent` / `stream-dispatch`. Do not recut #181.
+**091 stream-arch runtime walk is planted on this PR.** Fail-look recut: live dest SSE headers before Cursor handoff; Deep Agents CJS require. Merge when `runtime-doors` is green (4/6 walks green on last deploy; `voice-stream-arch` + `type-dest` left). Do not remint `stream-intent` / `stream-dispatch`. Do not recut #181.
 
 **090 no PM Look wake is on `main` via [#182](https://github.com/bywale-com/travis/pull/182).** Action strips seats after Engineer plant. No `wake-pm-look`. Do not recut #181.
 

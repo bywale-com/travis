@@ -8,6 +8,8 @@ import {
   absorbLiveTravisPost,
   insertUserTurn,
   lastSpeakableTravisText,
+  sse,
+  sseHeaders,
 } from "@/server/seat-pipe";
 import { dispatchToSeat } from "@/server/dispatch";
 import { isSitProtocolRole } from "@/lib/protocol-path";
@@ -134,29 +136,48 @@ export async function POST(
   void liveShouldPipeTravis({ prompt, cursorDestCount: cursorDests.length });
   const classifyPhrase = prompt || heard;
   if (prompt && cursorDests.length) {
-    await runMotionRunner(sessionId);
-    await Promise.allSettled(
-      cursorDests.map((binding) =>
-        dispatchToSeat({
-          sessionId,
-          binding,
-          prompt,
-          enqueueIfBusy: isSitProtocolRole(binding.seatKey) ? false : undefined,
-        }),
-      ),
-    );
-    const openJobs = await listOpenDestJobs(sessionId).catch(() => []);
-    await dispatchStreamIntents({
-      sessionId,
-      phrase: classifyPhrase,
-      intents: streamIntent({ phrase: classifyPhrase, openJobs }),
-      skip: {
-        seatKeys: cursorDests.map((b) => b.seatKey),
-        bindingIds: cursorDests.map((b) => b.id),
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      async start(controller) {
+        controller.enqueue(encoder.encode(": ping\n\n"));
+        const send = (event: string, data: unknown) => {
+          controller.enqueue(encoder.encode(sse(event, data)));
+        };
+        try {
+          await Promise.allSettled(
+            cursorDests.map((binding) =>
+              dispatchToSeat({
+                sessionId,
+                binding,
+                prompt,
+                enqueueIfBusy: isSitProtocolRole(binding.seatKey)
+                  ? false
+                  : undefined,
+              }),
+            ),
+          );
+          const openJobs = await listOpenDestJobs(sessionId).catch(() => []);
+          await dispatchStreamIntents({
+            sessionId,
+            phrase: classifyPhrase,
+            intents: streamIntent({ phrase: classifyPhrase, openJobs }),
+            skip: {
+              seatKeys: cursorDests.map((b) => b.seatKey),
+              bindingIds: cursorDests.map((b) => b.id),
+            },
+          });
+          send("done", { ok: true, turn: userTurn });
+        } catch (err) {
+          send("error", {
+            error: err instanceof Error ? err.message : String(err),
+          });
+        } finally {
+          await runMotionRunner(sessionId).catch(() => {});
+          controller.close();
+        }
       },
     });
-    const here = await roomContextFor(sessionId).catch(() => "");
-    return NextResponse.json({ ok: true, turn: userTurn, here });
+    return new Response(stream, { headers: sseHeaders() });
   }
   if (dests.length && !prompt) {
     await runMotionRunner(sessionId);

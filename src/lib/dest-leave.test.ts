@@ -28,15 +28,21 @@ test("Type send stays invokeDeepAgent — no Responses cousin", () => {
   assert.match(src, /mode: params\.mode \?\? "synthesize"/);
 });
 
-test("live transcript dest write-and-leaves — no sendOrEnqueueMany hold", () => {
+test("live transcript dest write-and-leaves — SSE headers before Cursor handoff", () => {
   const src = readFileSync(
     join(process.cwd(), "src/app/api/session/[id]/live/transcript/route.ts"),
     "utf8",
   );
   assert.match(src, /dispatchToSeat/);
   assert.match(src, /dispatchStreamIntents/);
+  assert.match(src, /sseHeaders/);
+  assert.match(src, /send\("done"/);
   assert.equal(src.includes("sendOrEnqueueMany"), false);
   assert.equal(src.includes("pipeTravisText"), false);
+  assert.doesNotMatch(
+    src,
+    /if \(prompt && cursorDests\.length\) \{\s*await runMotionRunner/,
+  );
 });
 
 test("Deep Agents kit loads through CJS require, not a static ESM import", () => {
