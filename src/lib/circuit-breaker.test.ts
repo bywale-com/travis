@@ -102,6 +102,12 @@ test("wake-packet-seats: one seat at a time; green light after clear", () => {
   assert.doesNotMatch(yml, /--remove-label blocker/);
 });
 
+test("blocker letter script exists for wake-packet-seats", () => {
+  read(".github/scripts/send-blocker-letter.py");
+  const yml = read(".github/workflows/wake-packet-seats.yml");
+  assert.match(yml, /send-blocker-letter\.py/);
+});
+
 test("runtime-doors does not fail-look during handoff", () => {
   const yml = read(".github/workflows/runtime-doors.yml");
   assert.match(yml, /wake-sa/);
