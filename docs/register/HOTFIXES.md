@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **089**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **091**. |
 | PR title | `Hotfix NNN — …` (human tell). Action: this push lands `HOTFIX-NNN-*.md` → `wake-engineer` only. No `wake-sa`. |
 | Test | Every hotfix gets a `HOTFIX-NNN-*-TEST.md` (same job as a packet test). Emerge mails that sheet. |
 
@@ -16,6 +16,7 @@
 
 | # | File | Cut |
 |---|------|-----|
+| 090 | [`HOTFIX-090-NO-PM-LOOK.md`](./HOTFIX-090-NO-PM-LOOK.md) | No `wake-pm-look`. Engineer owns lib verify after the handoff rewrite. |
 | 088 | [`HOTFIX-088-FAIL-LOOK-OPS-SKIP.md`](./HOTFIX-088-FAIL-LOOK-OPS-SKIP.md) | Red doors does not `fail-look` unwired or Cursor hard limit. |
 | 086 | [`HOTFIX-086-RUNTIME-IS-THE-APP.md`](./HOTFIX-086-RUNTIME-IS-THE-APP.md) | Walks wait for the mouth. Inventory is the app. Lived Type walk-back. Glass shows the miss. |
 | 085 | [`HOTFIX-085-TYPE-DEST-RECUT.md`](./HOTFIX-085-TYPE-DEST-RECUT.md) | SSE before dest resolve, write-and-leave chip dispatch, and X-Accel-Buffering on type send. |

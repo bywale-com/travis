@@ -5,27 +5,37 @@ This run was started by a Cursor Automation because **`wake-engineer`** or **`fa
 If this wake is a label **removed**, or neither `wake-engineer` nor `fail-look` is on the PR: **stop**.
 
 - `wake-engineer` — SA just landed a change packet, **or** this PR is a **hotfix** (title `Hotfix NNN` / `HOTFIX-NNN` file). Skip SA.
-- `fail-look` — Technical Architect look+test failed, **or** `runtime-doors` is red. Recut on this PR. All lowercase.
+- `fail-look` — `runtime-doors` is red. Recut on this PR. All lowercase.
 
 ## First action — gate, then stop or continue
 
 Do **not** accept the seat. Do **not** read `AGENTS.md`, seat protocols, handoffs, or `src/`.
 
+**Ensure you are on the PR branch:**
+Cursor Automations boot onto a temporary branch with your workspace checkout defaulting to `main`. You **must** switch to the PR's head branch first:
+```bash
+PR_BRANCH=$(gh pr view --json headRefName --jq .headRefName 2>/dev/null || true)
+if [ -n "$PR_BRANCH" ]; then
+  git checkout "$PR_BRANCH" 2>/dev/null || git checkout -b "$PR_BRANCH" "origin/$PR_BRANCH" 2>/dev/null || true
+  git pull origin "$PR_BRANCH" 2>/dev/null || true
+fi
+```
+
 **If `fail-look` is on this PR:** skip the file gate. Continue.
-- A `PM-LOOK-*.md` with **Verdict: Fail** → recut that.
-- Else → newest failed `runtime-doors` log for this PR.
-  - Cursor **hard limit** / `$2` / **Travis isn’t wired** → **stop**. Founder ops. Do not commit. Do not push.
-  - Else recut that miss. Do not stop for a missing PM-LOOK.
+- Newest failed `runtime-doors` log for this PR. Triage every failure:
+  - **Bucket A (plant / code):** fix in `src/`. Verify with `npm test`.
+  - **Bucket B (founder ops):** Cursor hard limit, unwired preview, missing secrets — file `docs/register/BLOCKER-NNN-*.md` with cause, action, URL, tape excerpt.
+- If **any Bucket B:** commit code fixes + blocker **without** the preview green-light subject. Do not use `[skip ci]`. Push stops here; Action labels `blocker` and mails the founder.
+- If **Bucket A only:** push **without** the preview green-light subject. Do not recut `handoff-seat.test.ts` to match a handoff rewrite — put the locked sentences back in `ENGINEER-HANDOFF.md`. Vercel stays skipped until handoff labels and `blocker` are gone.
 
 **Else** run this and nothing else:
 
-```text
-git diff --name-only HEAD~1
+```bash
+git diff --name-only origin/main...HEAD
 ```
+(If `origin/main` is not available, use `git diff --name-only HEAD~1` or `git diff --name-only --diff-filter=A HEAD`).
 
-If `HEAD~1` does not exist, use `git diff --name-only --diff-filter=A HEAD`.
-
-**Run only if this commit** added or materially revised **one of**:
+**Run only if this PR branch** added or materially revised **one of**:
 
 1. `docs/register/SYSTEMS-CHANGE-PACKET-*.md` (SA just completed), **or**
 2. `docs/register/HOTFIX-[0-9]*-*.md` excluding `*-TEST.md` (hotfix — no SA), **or**
@@ -85,7 +95,7 @@ Print the verify query the hotfix named (ids, paths, membership). Then the hang 
 - `docs/register/initiatives/<nnn>-<slug>/` if this pocket needs the folder — on **this** PR.
 - Hotfix files only if this cut is actually a hotfix (it is not, when a packet woke you).
 
-Commit and push to **this PR’s head branch**.
+Commit and push to **this PR’s head branch**. Never use the exact subject `Preview [vercel build]` — that line is the Action’s green light after `wake-sa` / `wake-engineer` / `fail-look` / `blocker` are all off. Do not put that phrase in the body as a charm.
 
 ## You do not write
 
@@ -110,4 +120,4 @@ The PM packet was placed on this PR. SA wrote on this PR. You plant here. A hotf
 
 ## When you stop
 
-Rewrite `docs/register/ENGINEER-HANDOFF.md` so the next Engineer does not start from a transcript. If `DATABASE_URL` was missing, say that in one line. Push. Stop.
+Rewrite `docs/register/ENGINEER-HANDOFF.md` so the next Engineer does not start from a transcript. If `DATABASE_URL` was missing, say that in one line. Then run `npm test`. If `handoff-seat.test.ts` fails, put the locked sentences back in the handoff file. Do not edit that test to match a rewrite. Commit the handoff and any fixes together. Push. Stop.
