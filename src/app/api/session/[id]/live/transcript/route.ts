@@ -11,11 +11,10 @@ import {
   sse,
   sseHeaders,
 } from "@/server/seat-pipe";
-import { dispatchToSeat } from "@/server/dispatch";
-import { isSitProtocolRole } from "@/lib/protocol-path";
 import { collapseSpeechStutter } from "@/lib/absorb-text";
 import { shouldDropHeardAsUser } from "@/lib/thread-truth";
 import { destBindingsForSend } from "@/server/dest-resolve";
+import { writeAndLeaveDest } from "@/server/dest-leave";
 import { AuthError } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
 import { runMotionRunner } from "@/server/motion";
@@ -34,6 +33,21 @@ type Body = {
   handle?: string | null;
   referenceTurnId?: string | null;
 };
+
+function mightCursorDest(params: {
+  decided:
+    | { kind: "send"; seatKeys: string[]; prompt: string }
+    | { kind: "switch"; seatKey: string }
+    | { kind: "empty" };
+  prompt: string;
+  seatKey: string | null;
+}): boolean {
+  if (!params.prompt) return false;
+  if (params.decided.kind === "send") {
+    if (params.decided.seatKeys.some((k) => !isTravisSeat(k))) return true;
+  }
+  return Boolean(params.seatKey && !isTravisSeat(params.seatKey));
+}
 
 export async function POST(
   req: Request,
@@ -115,27 +129,10 @@ export async function POST(
       ? { kind: "send" as const, seatKeys: [seatKey], prompt: calledPrompt }
       : { kind: "switch" as const, seatKey }
     : { kind: "send" as const, seatKeys: [], prompt: heard };
-  const dests = await destBindingsForSend({
-    sessionId,
-    decided,
-    referenceTurnId,
-  });
-  const cursorDests = dests.filter((b) => !isTravisSeat(b.seatKey));
-  const sticky = dests[dests.length - 1];
-  if (sticky) {
-    await db
-      .update(voiceSession)
-      .set({
-        activeBindingId: sticky.id,
-        bindingId: sticky.id,
-      })
-      .where(eq(voiceSession.id, sessionId));
-  }
   const prompt = decided.kind === "send" ? decided.prompt : "";
-  // 035 — helper stays explicit. Always false: mouth waits for finalize.
-  void liveShouldPipeTravis({ prompt, cursorDestCount: cursorDests.length });
   const classifyPhrase = prompt || heard;
-  if (prompt && cursorDests.length) {
+
+  if (mightCursorDest({ decided, prompt, seatKey })) {
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
       async start(controller) {
@@ -144,16 +141,29 @@ export async function POST(
           controller.enqueue(encoder.encode(sse(event, data)));
         };
         try {
+          const dests = await destBindingsForSend({
+            sessionId,
+            decided,
+            referenceTurnId,
+          });
+          const cursorDests = dests.filter((b) => !isTravisSeat(b.seatKey));
+          const sticky = dests[dests.length - 1];
+          if (sticky) {
+            await db
+              .update(voiceSession)
+              .set({
+                activeBindingId: sticky.id,
+                bindingId: sticky.id,
+              })
+              .where(eq(voiceSession.id, sessionId));
+          }
+          void liveShouldPipeTravis({
+            prompt,
+            cursorDestCount: cursorDests.length,
+          });
           await Promise.allSettled(
             cursorDests.map((binding) =>
-              dispatchToSeat({
-                sessionId,
-                binding,
-                prompt,
-                enqueueIfBusy: isSitProtocolRole(binding.seatKey)
-                  ? false
-                  : undefined,
-              }),
+              writeAndLeaveDest({ sessionId, binding, prompt }),
             ),
           );
           const openJobs = await listOpenDestJobs(sessionId).catch(() => []);
@@ -178,6 +188,22 @@ export async function POST(
       },
     });
     return new Response(stream, { headers: sseHeaders() });
+  }
+
+  const dests = await destBindingsForSend({
+    sessionId,
+    decided,
+    referenceTurnId,
+  });
+  const sticky = dests[dests.length - 1];
+  if (sticky) {
+    await db
+      .update(voiceSession)
+      .set({
+        activeBindingId: sticky.id,
+        bindingId: sticky.id,
+      })
+      .where(eq(voiceSession.id, sessionId));
   }
   if (dests.length && !prompt) {
     await runMotionRunner(sessionId);

@@ -17,5 +17,6 @@
 3. Inventory row in `src/runtime/walks/README.md`. Suite glob already picks `*.spec.ts`.
 4. Fail-look recut: live dest was still `sendOrEnqueueMany` (holds until Cursor done → Vercel 504). Same write-and-leave as Type (`dispatchToSeat`). Mouth still waits for finalize.
 5. Fail-look recut: static `import from "deepagents/node"` still loaded ESM on Vercel (`Cannot use import statement outside a module`). `createRequire` hits `exports.require` → `dist/node.cjs`. Still the `/node` hang.
+6. Fail-look recut: JSON transcript still ran `destBindingsForSend` before headers (504); type-dest queue empty after Travis wrap. SSE ping-before-resolve on live transcript cursor dest; `writeAndLeaveDest` (`dispatchToRoleDest` + `dest_job`) on send and transcript.
 
 Do not remint `stream-intent`, dest assemble, or 035. Interrupt / change remain the human sheet.

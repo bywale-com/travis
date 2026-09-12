@@ -6,7 +6,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
-- **2026-09-12** · Hotfix 091 · this PR — Live transcript dest returns SSE headers before `dispatchToSeat` handoff (ping + done), because synchronous dest on flush hit gateway 504; Deep Agents CJS require fixes Type generate ESM.
+- **2026-09-12** · Hotfix 091 · this PR — Live transcript cursor dest SSE defers role resolve behind ping; send and transcript use `writeAndLeaveDest` (role spin + dest_job), because runtime-doors still 504'd transcript and type-dest saw an empty queue after Travis wrap.
 - **2026-09-12** · Hotfix 091 · this PR — Runtime walks dest on live transcript and require the leave on the queue before I’m done, because 035 had grain and a human sheet but no app walk of start-before-wrap.
 
 - **2026-09-11** · Hotfix 090 · [PR #182](https://github.com/bywale-com/travis/pull/182) — Action does not add `wake-pm-look`; Engineer runs `npm test` after the handoff rewrite; preview green-lights when seats are clear, because PM Look was a second lib test with no extra context.

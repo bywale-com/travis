@@ -33,16 +33,27 @@ test("live transcript dest write-and-leaves — SSE headers before Cursor handof
     join(process.cwd(), "src/app/api/session/[id]/live/transcript/route.ts"),
     "utf8",
   );
-  assert.match(src, /dispatchToSeat/);
+  assert.match(src, /writeAndLeaveDest/);
   assert.match(src, /dispatchStreamIntents/);
   assert.match(src, /sseHeaders/);
   assert.match(src, /send\("done"/);
+  assert.match(src, /: ping/);
   assert.equal(src.includes("sendOrEnqueueMany"), false);
   assert.equal(src.includes("pipeTravisText"), false);
   assert.doesNotMatch(
     src,
     /if \(prompt && cursorDests\.length\) \{\s*await runMotionRunner/,
   );
+});
+
+test("writeAndLeaveDest files dest_job on started leave", () => {
+  const src = readFileSync(
+    join(process.cwd(), "src/server/dest-leave.ts"),
+    "utf8",
+  );
+  assert.match(src, /dispatchToRoleDest/);
+  assert.match(src, /insertDestJob/);
+  assert.match(src, /markDestJob/);
 });
 
 test("Deep Agents kit loads through CJS require, not a static ESM import", () => {
@@ -60,6 +71,15 @@ test("runtime transcript door consumes dest SSE so the leave can start before wr
   const fn = src.slice(src.indexOf("export async function transcript"));
   const body = fn.slice(0, fn.indexOf("export async function finalize"));
   assert.match(body, /consumeSse/);
+});
+
+test("type send uses writeAndLeaveDest for chip dests", () => {
+  const src = readFileSync(
+    join(process.cwd(), "src/app/api/session/[id]/send/route.ts"),
+    "utf8",
+  );
+  assert.match(src, /writeAndLeaveDest/);
+  assert.equal(src.includes("sendOrEnqueueMany"), false);
 });
 
 test("stream-dispatch does not speak", () => {
