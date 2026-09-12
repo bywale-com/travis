@@ -6,6 +6,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-12** · Hotfix 090 fail-look recut · [#182](https://github.com/bywale-com/travis/pull/182) — `deepagents/node` loads via `createRequire` so Vercel require hits CJS; `BLOCKER-001` names Cursor hard limit on `type-dest`, because runtime-doors red was ESM on generate plus founder ops on dest.
 - **2026-09-11** · Hotfix 090 · this PR — Action does not add `wake-pm-look`; Engineer runs `npm test` after the handoff rewrite; preview green-lights when seats are clear, because PM Look was a second lib test with no extra context.
 
 - **2026-09-11** · Hotfix 088 · [PR #174](https://github.com/bywale-com/travis/pull/174) — Red `runtime-doors` does not `fail-look` Cursor hard limit or unwired, because Engineer cannot recut founder ops and the loop kept booting B.

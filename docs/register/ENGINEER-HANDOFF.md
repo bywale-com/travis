@@ -1,8 +1,10 @@
-# Engineer seat handoff — 2026-09-11
+# Engineer seat handoff — 2026-09-12
 
-**This bind is done.** Last prior bind: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` (plant); `bc-e13698fe-c6c8-4b17-a9e1-5c0c787e385e` (re-wake verify). Do not start from a transcript.
+**This bind is done.** Last prior bind: `bc-f4f69275-8cb9-41f6-887e-16cdaf42f8d0` (fail-look recut on #182). Do not start from a transcript.
 
-**090 no PM Look wake (merged-ready on [#182](https://github.com/bywale-com/travis/pull/182)):** Action no longer adds `wake-pm-look`. Green-light commit landed. `npm test` 480 pass. Next hotfix **091**. 021 live watches stay on [#181](https://github.com/bywale-com/travis/pull/181) / [#180](https://github.com/bywale-com/travis/pull/180) — do not recut them.
+**090 fail-look recut on [#182](https://github.com/bywale-com/travis/pull/182):** `runtime-doors` [`34660503514`](https://github.com/bywale-com/travis/actions/runs/34660503514) — 5 fail. Bucket A: think-walks `Travis error: Cannot use import statement outside a module` (Next turned static import into dynamic `import("deepagents/node")`). Recut: `travis-deep-agent.ts` uses `createRequire` → `require("deepagents/node")` (080 `/node` hang kept). Bucket B: `type-dest` Cursor hard limit. [`BLOCKER-001-CURSOR-HARD-LIMIT.md`](./BLOCKER-001-CURSOR-HARD-LIMIT.md); push `[vercel skip]`. `npm test` 480 pass. Re-run walks after founder clears hard limit and preview deploys.
+
+**090 no PM Look wake (same PR):** Action no longer adds `wake-pm-look`. Green-light commit landed. Next hotfix **091**. 021 live watches stay on [#181](https://github.com/bywale-com/travis/pull/181) / [#180](https://github.com/bywale-com/travis/pull/180) — do not recut them.
 
 **086 runtime is the app (merged):** Walks wait for the mouth. Red `runtime-doors` fresh-adds `fail-look` (`WAKE_GITHUB_TOKEN`) so B recuts. Merged [#171](https://github.com/bywale-com/travis/pull/171).
 
@@ -20,7 +22,7 @@
 
 ## Where we stopped
 
-**090 no PM Look wake is planted on [#182](https://github.com/bywale-com/travis/pull/182).** Action strips seats after Engineer plant. No `wake-pm-look`. Green-light empty commit pushed. Lib tests pass. Merge when runtime-doors is green. Do not recut #181.
+**090 on [#182](https://github.com/bywale-com/travis/pull/182)** — workflow plant done; fail-look recut pushed ESM fix + `BLOCKER-001`. PR should carry `blocker`. Founder raises Cursor hard limit → resolve blocker → green-light preview → `runtime-doors` must pass think-walks and `type-dest`. Do not recut #181.
 
 **035 stream architecture is planted on [#163](https://github.com/bywale-com/travis/pull/163).** Classify is `src/lib/stream-intent.ts` (new / change / cancel / talk). Do is `src/server/stream-dispatch.ts` — hangs dest assemble, 034 follow-up, `cancelCursorRun`, and `invokeDeepAgent({ mode: "update" })`. Mouth is last. Live `liveShouldPipeTravis` is always false; transcript dest-by-name still leaves, then dispatches the rest, never `pipeTravisText`. Type send writes the tape, files chip / call-by-name dests, dispatches remaining intents, then synthesizes. Finalize strips the done-phrase, backup-Do once if a leave never started, then synthesizes. `parent_id` unused. No new table. Glass: `destGlassName` / `SIT_ROLE_LABEL.pm` / `seatKeyToLabel("pm")` → **Technical Architect**. Spoken “Technical Architect” and “Technical PM” both route to `pm`. Path `/protocols/pm.md`. Grain tests + `next build` passed. Human look+test is [`PM-PACKET-019-STREAM-ARCH-TEST.md`](./PM-PACKET-019-STREAM-ARCH-TEST.md) on Log · Type after this lands on psi. Do not remint dest assemble, dest-gate-on-ask, Cloud create, `dest_job`, checkpointer, or 031–034.
 
@@ -34,7 +36,7 @@
 
 **031 dest harness recut is on `main` via [#154](https://github.com/bywale-com/travis/pull/154).** Every dest leave assembles ask + dest print. Marker words are gone. `/print.md` and `/roster.md` hang on Type. Dest seats stay Cursor. Do not remint 031.
 
-**080 Deep Agents must answer is planted on [#151](https://github.com/bywale-com/travis/pull/151).** Type hangs `createDeepAgent` from `deepagents/node`. 032 deleted the Responses cousin that 080 had restored. Do not remint the `/node` hang.
+**080 Deep Agents must answer is planted on [#151](https://github.com/bywale-com/travis/pull/151).** Type hangs `createDeepAgent` from `deepagents/node` via `createRequire` (fail-look recut on #182). 032 deleted the Responses cousin that 080 had restored. Do not remint the `/node` hang.
 
 **079 Talk HTML as JSON is planted on [#149](https://github.com/bywale-com/travis/pull/149).** Voice / Talk finalize and Type `/send` use `readJson`. SSE chunks use `parseJsonText`. `generateTravisText` lazy-loads Deep Agents after the route has returned SSE.
 
@@ -180,7 +182,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 ```text
 You are Travis’s Engineer (full-stack implementer). Read docs/README.md “Engineer — identity” and accept it. Read repo-root AGENTS.md (always-on). You are not the Product Manager. You are not the Systems Analyst. Product face = voice/chat pipe (phone-first). Do not overwrite PHASE-ONE-LOG founder wording. Do not mint tables. Do not hard-code data into the SPA. Do not ship API keys to the client. Specified-and-clear: build it. Specified-but-blocked on PM or SA: name why; do not invent. Detailed: docs/seats/ENGINEER.md.
 
-You are a NEW bind. The last Engineer was bc-445017ca-7ddc-4af4-bc83-e1e666695ac9 (prior: bc-26131d8d-741b-4566-89b3-df312e8e48e1). They handed off. Read docs/register/ENGINEER-HANDOFF.md first.
+You are a NEW bind. The last Engineer was bc-f4f69275-8cb9-41f6-887e-16cdaf42f8d0 (prior: bc-26131d8d-741b-4566-89b3-df312e8e48e1). They handed off. Read docs/register/ENGINEER-HANDOFF.md first.
 
 Then, in order:
 1. docs/register/ENGINEER-HANDOFF.md — where we stopped, planted, leftover, locks.

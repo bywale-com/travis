@@ -4,11 +4,16 @@
  * SCP-034 — official checkpointer + thread_id = voice_session.id.
  */
 
-import {
+import { createRequire } from "node:module";
+
+// 080 hang: still `deepagents/node`, but Next/webpack turns a static import into
+// dynamic import() which resolves browser ESM on Vercel. require() hits node.cjs.
+const require = createRequire(import.meta.url);
+const {
   createDeepAgent,
   registerHarnessProfile,
   StateBackend,
-} from "deepagents/node";
+} = require("deepagents/node") as typeof import("deepagents/node");
 import { ChatOpenAI } from "@langchain/openai";
 import { isAIMessage, type BaseMessage } from "@langchain/core/messages";
 import { createMiddleware, tool } from "langchain";
