@@ -1,6 +1,6 @@
 # Automation — packet → SA → Engineer (same PR)
 
-**Start here for the whole build:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md). This file is the cheap gate and the three automations.
+**Start here for the whole build:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md). This file is the cheap gate and the SA / Engineer automations. PM Look is off (Hotfix 090).
 
 **Seat:** Technical Architect. Founder lock 2026-09-05: when a packet lands, spin SA for the full process protocol; when SA completes, Engineer builds; **all on the same PR the packet was placed in.**
 
@@ -24,12 +24,12 @@ Founder go → PM flips that line to **Wake:** sa and pushes
 SA automation — full SA protocol
         ↓  label wake-engineer
 Engineer automation — full Engineer protocol
-        ↓  label wake-pm-look  (src/ plant on a PR that already has packet + SCP)
-Technical Architect look + what it can test
-        ↓  Fail → label fail-look (same PR)
-        ↓  Pass → emerge. Action emails the *-TEST.md. Human walks that sheet.
-runtime-doors red → Action fresh-adds fail-look (WAKE_GITHUB_TOKEN) → same B
-        (skip if the miss is unwired or Cursor hard limit — founder ops)
+        ↓  plant src/ (or handoff). Action strips seat labels. No wake-pm-look.
+        ↓  when wake-sa / wake-engineer / fail-look / blocker are all off
+Action empty-commit Preview [vercel build]  (no LLM)
+        ↓
+Vercel preview → runtime-doors
+        red → fail-look on an idle PR
 ```
 
 **Waiting is a line the Action greps.** Draft is not the hold — we keep PRs draft through plant. Chat prose (“then SA”, “don’t wake Engineer”) is not the hold. The filename `PM-PACKET-NNN` is not the hold. Exact line on the packet, whole line:
@@ -57,11 +57,13 @@ label  wake-sa
         ↓
 SA → SYSTEMS-CHANGE-PACKET → label  wake-engineer
         ↓
-Engineer plants src/ → label  wake-pm-look
+Engineer plants src/ → Action strips seat labels (no wake-pm-look)
+        ↓  when wake-sa / wake-engineer / fail-look / blocker are all off
+Action empty-commit Preview [vercel build]  (no LLM)
         ↓
-Technical Architect look+test
-        Pass → label emerge + letter (human test)
-        Fail → label  fail-look  (loop)
+Vercel preview → runtime-doors
+        red → fail-look on an idle PR
+        (skip fail-look while any of those labels is still on)
 ```
 
 Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml). It diffs **this push** (`before…after`), not the whole PR. A new branch (`before` all zeros) diffs the tip commit — `git diff $after` on a clean checkout is empty and will not label. It greps `**Wake:** sa` on the packet at `after`. No Cursor token until the label is added. A packet on hold can sit on the PR; plates may edit it; no boot. If the PR is not open yet (push before create), it waits a few seconds.
@@ -78,24 +80,22 @@ label  wake-engineer     (no wake-sa)
         ↓
 Engineer plants the hotfix
         ↓  src/  or  ENGINEER-HANDOFF.md  (SQL-only hang may only touch the handoff)
-label  wake-pm-look
+Action strips seat labels. No wake-pm-look.
         ↓
-Technical Architect look+test (hotfix is enough — no packet, no SCP)
-        Fail → fail-look
-        Pass → emerge + HOTFIX-NNN-*-TEST.md
+Action empty-commit Preview [vercel build] when labels are clear
 ```
 
-**C must take a hotfix.** Live look that stops on “no packets” is the old paste. Re-paste [`house-now/automations/pm-look.prompt.md`](./house-now/automations/pm-look.prompt.md). A `HOTFIX-NNN` on the PR is the cut. Do not require a packet.
+**C must take a hotfix.** Live look that stops on “no packets” is the old paste. PM Look automation is off (Hotfix 090). Do not require a packet.
 
 **B must apply, not only plant a file.** A SQL file on the PR is not a hang. `DATABASE_URL` is a Cloud Agent **runtime secret** on the environment B uses. Unset → stop and name it. Set → run the existing file. Re-paste [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md).
 
-**Human must change the two automations** (I cannot Save + Activate):
+**Human must change the automations** (I cannot Save + Activate):
 
 1. Pause both, or every later stamp still boots on the old “PR pushed” triggers.
 2. **A** — drop Draft opened / PR opened / PR pushed. Trigger: **Pull request label changed**, label **`wake-sa`** (added).
-3. **B** — drop PR pushed. Trigger: **Pull request label changed**, label **`wake-engineer`** (added).
-4. Re-paste the prompts. Memories **off**. PR creation **off**.
-5. Create the two labels once if the Action has not already.
+3. **B** — drop PR pushed. Trigger: **Pull request label changed**, label **`wake-engineer`** (added). Also **`fail-look`** (added) if that is a separate automation.
+4. **C / PM Look** — disable it. The Action no longer adds `wake-pm-look`.
+5. Re-paste the Engineer prompt. Memories **off**. PR creation **off**.
 
 Prompt gate stays as a belt: do not accept the seat unless this commit has the matching file. Do not run on label **removed**.
 
