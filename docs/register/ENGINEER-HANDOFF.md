@@ -1,8 +1,10 @@
-# Engineer seat handoff — 2026-09-11
+# Engineer seat handoff — 2026-09-12
 
-**This bind is done.** Last prior bind: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` (plant); `bc-e13698fe-c6c8-4b17-a9e1-5c0c787e385e` (re-wake verify). Do not start from a transcript.
+**This bind is done.** Last prior bind: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` (090); this plant `bc-80927f96-ec7a-4ce0-9716-abfc5c7118a0`. Do not start from a transcript.
 
-**090 no PM Look wake (merged-ready on [#182](https://github.com/bywale-com/travis/pull/182)):** Action no longer adds `wake-pm-look`. Green-light commit landed. `npm test` 480 pass. Next hotfix **091**. 021 live watches stay on [#181](https://github.com/bywale-com/travis/pull/181) / [#180](https://github.com/bywale-com/travis/pull/180) — do not recut them.
+**091 stream-arch runtime walk (this PR):** `voice-stream-arch.spec.ts` dests on `/live/transcript` and requires the leave on `GET /queue` **before** `/finalize` I’m done. Transcript door consumes dest SSE. Next hotfix **092**. 021 live watches stay on [#181](https://github.com/bywale-com/travis/pull/181) / [#180](https://github.com/bywale-com/travis/pull/180) — do not recut them. Do not remint 035.
+
+**090 no PM Look wake (merged [#182](https://github.com/bywale-com/travis/pull/182)):** Action no longer adds `wake-pm-look`. Preview green-lights when seats are clear. Engineer runs `npm test` after the handoff rewrite.
 
 **086 runtime is the app (merged):** Walks wait for the mouth. Red `runtime-doors` fresh-adds `fail-look` (`WAKE_GITHUB_TOKEN`) so B recuts. Merged [#171](https://github.com/bywale-com/travis/pull/171).
 
@@ -20,7 +22,9 @@
 
 ## Where we stopped
 
-**090 no PM Look wake is planted on [#182](https://github.com/bywale-com/travis/pull/182).** Action strips seats after Engineer plant. No `wake-pm-look`. Green-light empty commit pushed. Lib tests pass. Merge when runtime-doors is green. Do not recut #181.
+**091 stream-arch runtime walk is planted on this PR.** Voice dest-by-name on live transcript; queue must show the leave before I’m done; wrap is a Travis mouth. `transcript()` consumes dest SSE. Grain lock in `dest-leave.test.ts`. Merge when `runtime-doors` is green. Do not remint `stream-intent` / `stream-dispatch`. Do not recut #181.
+
+**090 no PM Look wake is on `main` via [#182](https://github.com/bywale-com/travis/pull/182).** Action strips seats after Engineer plant. No `wake-pm-look`. Do not recut #181.
 
 **035 stream architecture is planted on [#163](https://github.com/bywale-com/travis/pull/163).** Classify is `src/lib/stream-intent.ts` (new / change / cancel / talk). Do is `src/server/stream-dispatch.ts` — hangs dest assemble, 034 follow-up, `cancelCursorRun`, and `invokeDeepAgent({ mode: "update" })`. Mouth is last. Live `liveShouldPipeTravis` is always false; transcript dest-by-name still leaves, then dispatches the rest, never `pipeTravisText`. Type send writes the tape, files chip / call-by-name dests, dispatches remaining intents, then synthesizes. Finalize strips the done-phrase, backup-Do once if a leave never started, then synthesizes. `parent_id` unused. No new table. Glass: `destGlassName` / `SIT_ROLE_LABEL.pm` / `seatKeyToLabel("pm")` → **Technical Architect**. Spoken “Technical Architect” and “Technical PM” both route to `pm`. Path `/protocols/pm.md`. Grain tests + `next build` passed. Human look+test is [`PM-PACKET-019-STREAM-ARCH-TEST.md`](./PM-PACKET-019-STREAM-ARCH-TEST.md) on Log · Type after this lands on psi. Do not remint dest assemble, dest-gate-on-ask, Cloud create, `dest_job`, checkpointer, or 031–034.
 
@@ -57,12 +61,12 @@ Do not remint 012 / 023–034 or the 074 SQL. Do not remint **035**. Do not remi
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **086** Runtime is the app. Next number **087**. |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **091** Stream-arch runtime walk. Next number **092**. |
 | One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
 | Face | Phone-first Voice / Log / Backlog. Smoke there. |
-| Last plant | **Hotfix 086 runtime is the app** · [PR #171](https://github.com/bywale-com/travis/pull/171). Prior: **Hotfix 085** · [PR #170](https://github.com/bywale-com/travis/pull/170). **Hotfix 084** · [PR #169](https://github.com/bywale-com/travis/pull/169). **035 stream architecture** · [#163](https://github.com/bywale-com/travis/pull/163). **034 what exists** · [#161](https://github.com/bywale-com/travis/pull/161). **033 lived redesign** · [#159](https://github.com/bywale-com/travis/pull/159). **032 compose the send harness** · [#157](https://github.com/bywale-com/travis/pull/157). **081 Voice uses the Type hang**. **031 dest harness recut** · [#154](https://github.com/bywale-com/travis/pull/154). **080 Deep Agents must answer** · [#151](https://github.com/bywale-com/travis/pull/151). **079 Talk HTML as JSON** · [#149](https://github.com/bywale-com/travis/pull/149). **030 Deep Agents** · [#147](https://github.com/bywale-com/travis/pull/147) (on `main`). **029 Lists show now** · [#144](https://github.com/bywale-com/travis/pull/144). **027 Voice stay** · [#140](https://github.com/bywale-com/travis/pull/140). **026 Serve** · [#134](https://github.com/bywale-com/travis/pull/134). **076 dest closer** · [#130](https://github.com/bywale-com/travis/pull/130). **075** live hang · same PR. **074** SQL file · same PR. **025** · [#127](https://github.com/bywale-com/travis/pull/127). **024** · [#126](https://github.com/bywale-com/travis/pull/126). **023** · [#123](https://github.com/bywale-com/travis/pull/123). Open: **022** · [#120](https://github.com/bywale-com/travis/pull/120). |
+| Last plant | **Hotfix 091 stream-arch runtime walk** · this PR. Prior: **Hotfix 090** · [PR #182](https://github.com/bywale-com/travis/pull/182). **Hotfix 086** · [PR #171](https://github.com/bywale-com/travis/pull/171). **Hotfix 085** · [PR #170](https://github.com/bywale-com/travis/pull/170). **Hotfix 084** · [PR #169](https://github.com/bywale-com/travis/pull/169). **035 stream architecture** · [#163](https://github.com/bywale-com/travis/pull/163). **034 what exists** · [#161](https://github.com/bywale-com/travis/pull/161). **033 lived redesign** · [#159](https://github.com/bywale-com/travis/pull/159). **032 compose the send harness** · [#157](https://github.com/bywale-com/travis/pull/157). **081 Voice uses the Type hang**. **031 dest harness recut** · [#154](https://github.com/bywale-com/travis/pull/154). **080 Deep Agents must answer** · [#151](https://github.com/bywale-com/travis/pull/151). **079 Talk HTML as JSON** · [#149](https://github.com/bywale-com/travis/pull/149). **030 Deep Agents** · [#147](https://github.com/bywale-com/travis/pull/147) (on `main`). **029 Lists show now** · [#144](https://github.com/bywale-com/travis/pull/144). **027 Voice stay** · [#140](https://github.com/bywale-com/travis/pull/140). **026 Serve** · [#134](https://github.com/bywale-com/travis/pull/134). **076 dest closer** · [#130](https://github.com/bywale-com/travis/pull/130). **075** live hang · same PR. **074** SQL file · same PR. **025** · [#127](https://github.com/bywale-com/travis/pull/127). **024** · [#126](https://github.com/bywale-com/travis/pull/126). **023** · [#123](https://github.com/bywale-com/travis/pull/123). Open: **022** · [#120](https://github.com/bywale-com/travis/pull/120). |
 | Prior plants | 065 · [#108](https://github.com/bywale-com/travis/pull/108) · 015 · [#107](https://github.com/bywale-com/travis/pull/107) · 064 · [#102](https://github.com/bywale-com/travis/pull/102) · **Hotfix 062** · [#98](https://github.com/bywale-com/travis/pull/98) |
 | Motion | SCP-013 · [PR #97](https://github.com/bywale-com/travis/pull/97) |
 | House | SCP-012 · `os_node` · [PR #93](https://github.com/bywale-com/travis/pull/93) — refile via `docs/register/house-now/file-house.ts` |
@@ -162,7 +166,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 | 032 psi walk | [`PM-PACKET-016-COMPOSE-TEST.md`](./PM-PACKET-016-COMPOSE-TEST.md) after this PR is on psi. Grain + compile are not that walk. |
 | 033 psi walk | [`PM-PACKET-017-LIVED-REDESIGN-TEST.md`](./PM-PACKET-017-LIVED-REDESIGN-TEST.md) after this PR is on psi. Grain + compile are not that walk. |
 | 034 psi walk | [`PM-PACKET-018-WHAT-EXISTS-TEST.md`](./PM-PACKET-018-WHAT-EXISTS-TEST.md) after this PR is on psi. Grain + compile are not that walk. |
-| 035 psi walk | [`PM-PACKET-019-STREAM-ARCH-TEST.md`](./PM-PACKET-019-STREAM-ARCH-TEST.md) after this PR is on psi. Grain + compile are not that walk. |
+| 035 psi walk | Runtime leave-before-wrap is **091** `voice-stream-arch`. Human A–E interrupt/change still [`PM-PACKET-019-STREAM-ARCH-TEST.md`](./PM-PACKET-019-STREAM-ARCH-TEST.md). Grain is not that walk. |
 
 ---
 
@@ -170,7 +174,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 
 1. Accept the seat from the paste below. Fetch `main`. Read **this file**, then [`ENGINEER.md`](../seats/ENGINEER.md), then `AGENTS.md`.
 2. Do not restart 012 / 013 / 014 / 015 / 023 / 024 / 025 / 026 / 027 / **029** / **030** / **031** / **032** / **033** / **034** / **035** / **081** / 062 / 064 / 065 / 077 / 078 / **079** / **080**. Do not remint the 074 SQL file. Do not remint the 075 hang. Do not remint the 076 dest closer. Do not remint the 027 cutoff. Do not remint the 029 index. Do not remint dest-with-context grain, the Deep Agents `/node` hang, Cloud HTTP create, the LangGraph `langgraph` checkpointer, or stream-intent / stream-dispatch. Do not mint a store. Do not append PM or SA logs.
-3. **086** is the living cut: walks are the app. Do not thin them back to header-only. **022** ports on [#120](https://github.com/bywale-com/travis/pull/120) stays signed, not planted. Do not remint `travis.port`. Dest by who `technical-pm` is human leftover on 075 — do not mail catalog `pm`. Do not send **That’s fine.**
+3. **091** is the living cut: stream-arch leave-before-wrap is a runtime walk. **086** law stays: walks are the app; do not thin them back to header-only. **022** ports on [#120](https://github.com/bywale-com/travis/pull/120) stays signed, not planted. Do not remint `travis.port`. Dest by who `technical-pm` is human leftover on 075 — do not mail catalog `pm`. Do not send **That’s fine.**
 4. When **you** stop: rewrite the **Current** lines at the top of this file (where we stopped, last plant, next hotfix number) so the next bind does not start from a transcript. Then you may write **This bind is done**.
 
 ---

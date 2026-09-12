@@ -37,6 +37,13 @@ test("live transcript never pipes Travis", () => {
   assert.match(src, /dispatchStreamIntents/);
 });
 
+test("runtime transcript door consumes dest SSE so the leave can start before wrap", () => {
+  const src = readFileSync(join(process.cwd(), "src/runtime/doors.ts"), "utf8");
+  const fn = src.slice(src.indexOf("export async function transcript"));
+  const body = fn.slice(0, fn.indexOf("export async function finalize"));
+  assert.match(body, /consumeSse/);
+});
+
 test("stream-dispatch does not speak", () => {
   const src = readFileSync(
     join(process.cwd(), "src/server/stream-dispatch.ts"),

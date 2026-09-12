@@ -67,7 +67,13 @@ export async function token(desk: Desk): Promise<{
 export async function transcript(
   desk: Desk,
   text: string,
-): Promise<{ ok: boolean; kind: ReturnType<typeof contentKind>; status: number }> {
+): Promise<{
+  ok: boolean;
+  kind: ReturnType<typeof contentKind>;
+  status: number;
+  events: string[];
+  error?: string;
+}> {
   const { res, bodyText, kind } = await doorFetch(
     `/api/session/${desk.sessionId}/live/transcript`,
     {
@@ -77,13 +83,19 @@ export async function transcript(
     },
   );
   if (kind === "sse") {
-    return { ok: false, kind, status: res.status };
+    const consumed = await consumeSse(res);
+    return {
+      ok: !consumed.error && res.status >= 200 && res.status < 500,
+      kind,
+      status: res.status,
+      ...consumed,
+    };
   }
   if (kind !== "json") {
     throw new Error(`transcript expected JSON, got ${kind} (${res.status})`);
   }
   const data = JSON.parse(bodyText) as { ok?: boolean };
-  return { ok: data.ok === true, kind, status: res.status };
+  return { ok: data.ok === true, kind, status: res.status, events: [] };
 }
 
 export async function finalize(
