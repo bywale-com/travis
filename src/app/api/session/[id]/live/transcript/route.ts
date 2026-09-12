@@ -135,10 +135,10 @@ export async function POST(
   void liveShouldPipeTravis({ prompt, cursorDestCount: cursorDests.length });
   const classifyPhrase = prompt || heard;
   if (prompt && cursorDests.length) {
-    await runMotionRunner(sessionId);
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
       async start(controller) {
+        controller.enqueue(encoder.encode(": ping\n\n"));
         const send = (event: string, data: unknown) => {
           controller.enqueue(encoder.encode(sse(event, data)));
         };
@@ -161,11 +161,13 @@ export async function POST(
               bindingIds: cursorDests.map((b) => b.id),
             },
           });
+          send("done", { ok: true });
         } catch (err) {
           send("error", {
             error: err instanceof Error ? err.message : String(err),
           });
         } finally {
+          await runMotionRunner(sessionId).catch(() => {});
           controller.close();
         }
       },

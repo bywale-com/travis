@@ -35,6 +35,16 @@ test("live transcript never pipes Travis", () => {
   );
   assert.equal(src.includes("pipeTravisText"), false);
   assert.match(src, /dispatchStreamIntents/);
+  assert.match(src, /send\("done"/);
+});
+
+test("Deep Agents kit loads through CJS require, not a static ESM import", () => {
+  const src = readFileSync(
+    join(process.cwd(), "src/server/travis-deep-agent.ts"),
+    "utf8",
+  );
+  assert.equal(src.includes('from "deepagents/node"'), false);
+  assert.match(src, /requireDeepAgents\("deepagents\/node"\)/);
 });
 
 test("runtime transcript door consumes dest SSE so the leave can start before wrap", () => {
