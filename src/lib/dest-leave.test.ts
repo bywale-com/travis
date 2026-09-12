@@ -28,14 +28,15 @@ test("Type send stays invokeDeepAgent — no Responses cousin", () => {
   assert.match(src, /mode: params\.mode \?\? "synthesize"/);
 });
 
-test("live transcript never pipes Travis", () => {
+test("live transcript dest write-and-leaves — no sendOrEnqueueMany hold", () => {
   const src = readFileSync(
     join(process.cwd(), "src/app/api/session/[id]/live/transcript/route.ts"),
     "utf8",
   );
-  assert.equal(src.includes("pipeTravisText"), false);
+  assert.match(src, /dispatchToSeat/);
   assert.match(src, /dispatchStreamIntents/);
-  assert.match(src, /send\("done"/);
+  assert.equal(src.includes("sendOrEnqueueMany"), false);
+  assert.equal(src.includes("pipeTravisText"), false);
 });
 
 test("Deep Agents kit loads through CJS require, not a static ESM import", () => {
@@ -45,6 +46,7 @@ test("Deep Agents kit loads through CJS require, not a static ESM import", () =>
   );
   assert.equal(src.includes('from "deepagents/node"'), false);
   assert.match(src, /requireDeepAgents\("deepagents\/node"\)/);
+  assert.match(src, /createRequire/);
 });
 
 test("runtime transcript door consumes dest SSE so the leave can start before wrap", () => {

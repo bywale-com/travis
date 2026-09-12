@@ -92,7 +92,13 @@ export async function transcript(
     };
   }
   if (kind !== "json") {
-    throw new Error(`transcript expected JSON, got ${kind} (${res.status})`);
+    return {
+      ok: false,
+      kind,
+      status: res.status,
+      events: [],
+      error: `transcript ${kind} ${res.status}`,
+    };
   }
   const data = JSON.parse(bodyText) as { ok?: boolean };
   return { ok: data.ok === true, kind, status: res.status, events: [] };
