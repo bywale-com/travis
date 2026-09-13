@@ -1,6 +1,6 @@
 # Hotfix 095 — create_agent timeout + runtime walk
 
-**Number:** `095` — next engineer hotfix is `096`. Never reuse.  
+**Number:** `095` — next engineer hotfix was `096` ([`HOTFIX-096-BIND-NOT-CREATE.md`](./HOTFIX-096-BIND-NOT-CREATE.md)). Never reuse.  
 **Seat:** Engineer.  
 **When:** 2026-09-13  
 **PR title shape:** `Hotfix 095 — create_agent timeout + runtime walk`  
@@ -16,4 +16,4 @@ Runtime doors had no walk for Travis creating a person — only think/dest/voice
 
 1. **`createCursorAgent` timeout** — `AbortSignal.timeout(CURSOR_CREATE_TIMEOUT_MS)` (45s) on `POST /v1/agents`; timeout surfaces as a clear error.
 2. **`runTravisTool` stream hygiene** — after `maybeCloseTravisStream`, force-close any remaining live Travis stream for that binding (`completed` or `failed`).
-3. **Runtime walk `create-agent.spec.ts`** — calls `POST /api/session/:id/live/tool` with `create_agent` (same server path as Deep Agents tools), asserts receipt, roster member, and no `streams.live`.
+3. **Runtime walk** — was `create-agent.spec.ts` (HTTP create). **Superseded by 096** `bind-agent.spec.ts` (no `POST /v1/agents`).

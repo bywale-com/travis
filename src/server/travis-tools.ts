@@ -59,13 +59,18 @@ import {
   MembershipError,
   renameRoom,
 } from "@/server/room-membership";
-import { createAgentBinding } from "@/server/create-agent";
+import {
+  agentBindingById,
+  bindAgentBinding,
+  createAgentBinding,
+} from "@/server/create-agent";
 import {
   listSeatRoster,
   openMemberByWho,
   resolveRoleDest,
   SitError,
   sitAgent,
+  sitBinding,
 } from "@/server/sit";
 import {
   fileDestJobInitiative,
@@ -366,9 +371,24 @@ export const TRAVIS_TOOL_DECLS = [
     },
   },
   {
+    name: "bind_agent",
+    description:
+      "Bind an existing Cursor cloud agent (bc-…) into the Travis catalog. Name them. cursor_agent_id is required — you do not provision a new agent. join defaults true — they become a member of this room. join false is catalog only. Optional protocol (pm, sa, engineer, or house path) seats them after join. Prefer this over create_agent when the founder already started the chat in Cursor.",
+    parameters: {
+      type: "object",
+      properties: {
+        label: { type: "string" },
+        cursor_agent_id: { type: "string" },
+        protocol: { type: "string" },
+        join: { type: "boolean" },
+      },
+      required: ["label", "cursor_agent_id"],
+    },
+  },
+  {
     name: "create_agent",
     description:
-      "Create a person in the catalog the same way the Create an agent screen does. Name them. Optional model, repository, and ref. join defaults true — they become a member of this room. join false is catalog only. You do not assign a role. You do not invent a Cursor id. Prompt stays the one-line stub. Not a seated protocol.",
+      "Create a person in the catalog the same way the Create an agent screen does. Name them. Optional model, repository, and ref. join defaults true — they become a member of this room. join false is catalog only. You do not assign a role. You do not invent a Cursor id. Prompt stays the one-line stub. Not a seated protocol. Prefer bind_agent when a bc- id already exists.",
     parameters: {
       type: "object",
       properties: {
@@ -397,7 +417,7 @@ export const TRAVIS_TOOL_DECLS = [
   {
     name: "file_plan",
     description:
-      "File an ordered sequence of your own tools as a Travis process and stay with the founder. The runner advances the steps after you return. Use this when several of your tools should run in a row (list then rename, two writes). Each step is one allowlisted tool plus frozen args. Cannot include send_to_seat, dispatch_to_seat, barge_or_drop, end_session, set_view, file_plan, create_agent, or sit_agent. Box tools are allowed. Title empty clips the latest user line.",
+      "File an ordered sequence of your own tools as a Travis process and stay with the founder. The runner advances the steps after you return. Use this when several of your tools should run in a row (list then rename, two writes). Each step is one allowlisted tool plus frozen args. Cannot include send_to_seat, dispatch_to_seat, barge_or_drop, end_session, set_view, file_plan, bind_agent, create_agent, or sit_agent. Box tools are allowed. Title empty clips the latest user line.",
     parameters: {
       type: "object",
       properties: {
@@ -1130,6 +1150,69 @@ export async function runTravisTool(params: {
       if (err instanceof SitError) return { ok: false, text: err.message };
       if (err instanceof MembershipError) return { ok: false, text: err.message };
       throw err;
+    }
+  }
+
+  if (name === "bind_agent") {
+    const label = String(args.label ?? "").trim();
+    const cursorAgentId = String(
+      args.cursor_agent_id ?? args.cursorAgentId ?? "",
+    ).trim();
+    if (!label) return { ok: false, text: "Name the agent." };
+    if (!cursorAgentId) return { ok: false, text: "Need cursor_agent_id (bc-…)." };
+    const join = args.join === false || args.join === "false" ? false : true;
+    const protocolRaw = String(args.protocol ?? "").trim();
+    try {
+      const agent = await bindAgentBinding({ label, cursorAgentId });
+      if (join) {
+        try {
+          await addMember(sessionId, agent.id);
+        } catch (err) {
+          if (err instanceof MembershipError) {
+            return {
+              ok: true,
+              text: `Bound ${agent.label} (${agent.cursorAgentId}). They are not in this room — ${err.message}`,
+            };
+          }
+          throw err;
+        }
+      }
+      if (protocolRaw) {
+        const binding = await agentBindingById(agent.id);
+        if (!binding) {
+          return { ok: false, text: "Binding missing after bind." };
+        }
+        if (!join) {
+          return {
+            ok: false,
+            text: "protocol requires join — add them to the room first.",
+          };
+        }
+        const sat = await sitBinding({
+          sessionId,
+          binding,
+          protocol: protocolRaw,
+        });
+        return {
+          ok: true,
+          text: `Bound ${sat.binding.label} (${agent.cursorAgentId}) in this room on ${sat.protocolPath}.`,
+        };
+      }
+      if (join) {
+        return {
+          ok: true,
+          text: `Bound ${agent.label} (${agent.cursorAgentId}) in this room.`,
+        };
+      }
+      return {
+        ok: true,
+        text: `Bound ${agent.label} (${agent.cursorAgentId}) in the catalog.`,
+      };
+    } catch (err) {
+      return {
+        ok: false,
+        text: err instanceof Error ? err.message : "Could not bind the agent.",
+      };
     }
   }
 

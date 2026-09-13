@@ -54,6 +54,7 @@ export const TOOL_POLICY: Record<string, ToolPolicy> = {
   read_initiative: { cls: "read" },
   list_backlog: { cls: "read" },
   file_plan: { cls: "write" },
+  bind_agent: { cls: "write" },
   create_agent: { cls: "write" },
   sit_agent: { cls: "write" },
   mark_initiative_done: { cls: "write" },

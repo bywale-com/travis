@@ -25,7 +25,7 @@ door kind=json status=400
 
 1. Raise the Cursor spend hard limit so Background Agent has at least $2 remaining, and free or upgrade concurrent Cloud Agent slots: https://www.cursor.com/dashboard?tab=settings
 2. Remove the `blocker` label after the house move.
-3. Green-light can then re-preview this PR. Do not remint 095. Recut already raised the create wait to 90s and set `maxDuration` 120 on the create doors.
+3. Green-light can then re-preview this PR. **096** retired the runtime walk that called `POST /v1/agents`; doors no longer need create to pass. Remove `blocker` when ready to re-preview.
 
 ## URL
 

@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { nextUniqueSlug, seatSlugFromLabel } from "@/lib/seat-slug";
 import { db } from "@/server/db/client";
 import { agentBinding } from "@/server/db/schema";
+import { isLivingCursorId } from "@/lib/dest-glass";
 import { createCursorAgent } from "@/server/cursor-port";
 import { ensureSitStore } from "@/server/sit-store";
 
@@ -207,6 +208,54 @@ export async function getIntegrationOptions(): Promise<OptionsResponse> {
   } catch {
     return { models: [], repositories: [], defaultModelId: null };
   }
+}
+
+// ---- Public: bind an existing Cursor cloud agent (no HTTP create) ----
+
+export async function bindAgentBinding(opts: {
+  cursorAgentId: string;
+  label: string;
+}): Promise<{ id: string; seatKey: string; label: string; cursorAgentId: string }> {
+  const cursorAgentId = opts.cursorAgentId.trim();
+  const label = opts.label.trim();
+  if (!label) throw new Error("Name the agent.");
+  if (!isLivingCursorId(cursorAgentId)) {
+    throw new Error("Need a Cursor cloud agent id (bc-…).");
+  }
+  await ensureSitStore();
+  const [existing] = await db
+    .select()
+    .from(agentBinding)
+    .where(eq(agentBinding.cursorAgentId, cursorAgentId))
+    .limit(1);
+  if (existing) {
+    return {
+      id: existing.id,
+      seatKey: existing.seatKey,
+      label: existing.label,
+      cursorAgentId: existing.cursorAgentId,
+    };
+  }
+  const rows = await db.select({ seatKey: agentBinding.seatKey }).from(agentBinding);
+  const taken = new Set(rows.map((r) => r.seatKey));
+  const seatKey = nextUniqueSlug(seatSlugFromLabel(label), taken);
+  const [row] = await db
+    .insert(agentBinding)
+    .values({
+      seatKey,
+      label,
+      cursorAgentId,
+      runtime: "cloud",
+      active: true,
+    })
+    .returning();
+  if (!row) throw new Error("Binding insert failed.");
+  return {
+    id: row.id,
+    seatKey: row.seatKey,
+    label: row.label,
+    cursorAgentId: row.cursorAgentId,
+  };
 }
 
 // ---- Public: create binding + Cursor agent ----
