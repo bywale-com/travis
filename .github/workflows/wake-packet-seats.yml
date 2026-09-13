@@ -60,9 +60,6 @@ jobs:
           BEFORE: ${{ github.event.before }}
           AFTER: ${{ github.sha }}
           HEAD_REF: ${{ github.ref_name }}
-          EMERGE_EMAIL: ${{ secrets.EMERGE_EMAIL }}
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          RESEND_FROM_EMAIL: ${{ secrets.RESEND_FROM_EMAIL }}
         run: |
           set -euo pipefail
           if [[ -n "${WAKE_GITHUB_TOKEN:-}" ]]; then
@@ -228,78 +225,6 @@ jobs:
               echo "Labeled #$pr fail-look"
               break
             fi
-          done
-
-          for f in $(echo "$files" | grep -E '^docs/register/PM-LOOK-.+\.md$' || true); do
-            if ! git show "$AFTER:$f" | grep -q '^\*\*Verdict:\*\* Pass'; then
-              continue
-            fi
-            hotfix=$(echo "$f" | sed -n 's#^docs/register/PM-LOOK-HOTFIX-\([0-9][0-9]*\).*#\1#p')
-            nnn=$(echo "$f" | sed -n 's#^docs/register/PM-LOOK-\([0-9][0-9]*\).*#\1#p')
-            if [[ -n "$hotfix" ]]; then
-              nnn="$hotfix"
-              kind="hotfix"
-              testfile=$(git ls-tree -r --name-only "$AFTER" | grep -E "^docs/register/HOTFIX-${nnn}-.+-TEST\\.md$" | head -n 1 || true)
-              issue_title="Hotfix ${nnn} emerged — walk this sheet"
-              missing="No HOTFIX-${nnn}-*-TEST.md on this commit."
-            elif [[ -n "$nnn" ]]; then
-              kind="packet"
-              testfile=$(git ls-tree -r --name-only "$AFTER" | grep -E "^docs/register/PM-PACKET-${nnn}-.+-TEST\\.md$" | head -n 1 || true)
-              issue_title="${nnn} emerged — walk this sheet"
-              missing="No PM-PACKET-${nnn}-*-TEST.md on this commit."
-            else
-              continue
-            fi
-            preview=$(git show "$AFTER:$f" | sed -n 's/^\*\*Preview:\*\* //p' | head -n 1)
-            repo=$(gh repo view --json nameWithOwner --jq .nameWithOwner)
-            letter=$(mktemp)
-            {
-              if [[ "$kind" == "hotfix" ]]; then
-                echo "Hotfix ${nnn} emerged. Human test."
-              else
-                echo "${nnn} emerged. Human test."
-              fi
-              echo
-              echo "PR: https://github.com/${repo}/pull/${pr}"
-              if [[ -n "$preview" ]]; then
-                echo "Preview: ${preview}"
-              fi
-              echo "Look: Pass. Walk the sheet. SSO / Talk / a typed sentence are still yours."
-              echo
-              echo "This is house mail. Not Travis."
-              echo
-              if [[ -n "$testfile" ]]; then
-                echo "Sheet: \`${testfile}\`"
-                echo
-                echo "---"
-                echo
-                git show "$AFTER:$testfile"
-              else
-                echo "$missing"
-              fi
-            } > "$letter"
-            strip_seats_except ""
-            gh pr edit "$pr" --add-label emerge && echo "Labeled #$pr emerge" || echo "Could not label emerge"
-            existing=$(gh issue list --state all --search "${issue_title} in:title" --json number --jq '.[0].number // empty')
-            if [[ -z "$existing" ]]; then
-              issue=$(gh issue create --title "$issue_title" --body-file "$letter" --assignee bywale-com \
-                || gh issue create --title "$issue_title" --body-file "$letter")
-              echo "Opened $issue"
-            else
-              echo "Issue #$existing already exists for ${nnn}"
-            fi
-            if [[ -n "${EMERGE_EMAIL:-}" && -n "${RESEND_API_KEY:-}" && -n "${RESEND_FROM_EMAIL:-}" ]]; then
-              att=""
-              if [[ -n "$testfile" ]]; then
-                att=$(mktemp)
-                git show "$AFTER:$testfile" > "$att"
-              fi
-              python3 .github/scripts/send-emerge-letter.py "$letter" "$nnn" "${att:-}" "${testfile:-}"
-              rm -f "$att"
-            else
-              echo "No EMERGE_EMAIL + RESEND_API_KEY + RESEND_FROM_EMAIL. Issue is the letter."
-            fi
-            rm -f "$letter"
           done
 
           # Plant finished. src/ or (hotfix + Engineer handoff).

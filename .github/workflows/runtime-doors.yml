@@ -142,3 +142,116 @@ jobs:
             echo "Could not add fail-look on #$pr."
             exit 1
           fi
+
+      - name: Emerge packet on success
+        if: success()
+        env:
+          WAKE_GITHUB_TOKEN: ${{ secrets.WAKE_GITHUB_TOKEN }}
+          FALLBACK_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEPLOY_SHA: ${{ github.event.client_payload.git.sha }}
+          DEPLOY_URL: ${{ github.event.client_payload.url }}
+          EMERGE_EMAIL: ${{ secrets.EMERGE_EMAIL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_FROM_EMAIL: ${{ secrets.RESEND_FROM_EMAIL }}
+        run: |
+          set -euo pipefail
+          if [[ -n "${WAKE_GITHUB_TOKEN:-}" ]]; then
+            export GH_TOKEN="$WAKE_GITHUB_TOKEN"
+            if ! gh api user --jq .login >/dev/null 2>&1; then
+              export GH_TOKEN="$FALLBACK_GH_TOKEN"
+            fi
+          else
+            export GH_TOKEN="$FALLBACK_GH_TOKEN"
+          fi
+
+          sha="${DEPLOY_SHA:-}"
+          if [[ -z "$sha" ]]; then
+            echo "No client_payload.git.sha. No emerge packet."
+            exit 0
+          fi
+
+          pr=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${sha}/pulls" \
+            --jq '[.[] | select(.state=="open")][0].number // empty')
+          if [[ -z "$pr" ]]; then
+            echo "No open PR for $sha. No emerge packet."
+            exit 0
+          fi
+
+          pr_files=$(gh pr view "$pr" --json files --jq '.files[].path')
+          hotfix_file=$(echo "$pr_files" | grep -E '^docs/register/HOTFIX-[0-9]+-.+\.md$' | head -n 1 || true)
+          packet_file=$(echo "$pr_files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | head -n 1 || true)
+
+          kind=""
+          nnn=""
+          testfile=""
+          issue_title=""
+          missing=""
+
+          if [[ -n "$hotfix_file" ]]; then
+            kind="hotfix"
+            nnn=$(echo "$hotfix_file" | sed -n 's#^docs/register/HOTFIX-\([0-9][0-9]*\).*#\1#p')
+            testfile=$(git ls-tree -r --name-only HEAD | grep -E "^docs/register/HOTFIX-${nnn}-.+-TEST\\.md$" | head -n 1 || true)
+            issue_title="Hotfix ${nnn} emerged — walk this sheet"
+            missing="No HOTFIX-${nnn}-*-TEST.md on this commit."
+          elif [[ -n "$packet_file" ]]; then
+            kind="packet"
+            nnn=$(echo "$packet_file" | sed -n 's#^docs/register/PM-PACKET-\([0-9][0-9]*\).*#\1#p')
+            testfile=$(git ls-tree -r --name-only HEAD | grep -E "^docs/register/PM-PACKET-${nnn}-.+-TEST\\.md$" | head -n 1 || true)
+            issue_title="${nnn} emerged — walk this sheet"
+            missing="No PM-PACKET-${nnn}-*-TEST.md on this commit."
+          else
+            echo "PR #$pr is neither a hotfix nor a packet PR. No emerge packet."
+            exit 0
+          fi
+
+          preview="${DEPLOY_URL:-}"
+          repo=$(gh repo view --json nameWithOwner --jq .nameWithOwner)
+          letter=$(mktemp)
+          {
+            if [[ "$kind" == "hotfix" ]]; then
+              echo "Hotfix ${nnn} emerged. Human test."
+            else
+              echo "${nnn} emerged. Human test."
+            fi
+            echo
+            echo "PR: https://github.com/${repo}/pull/${pr}"
+            if [[ -n "$preview" ]]; then
+              echo "Preview: ${preview}"
+            fi
+            echo "Doors: Green (runtime-doors painted pass). Walk the sheet. SSO / Talk / a typed sentence are still yours."
+            echo
+            echo "This is house mail. Not Travis."
+            echo
+            if [[ -n "$testfile" && -f "$testfile" ]]; then
+              echo "Sheet: \`${testfile}\`"
+              echo
+              echo "---"
+              echo
+              cat "$testfile"
+            else
+              echo "$missing"
+            fi
+          } > "$letter"
+
+          gh label create emerge --color CCCCCC --description "Doors Pass — human test" 2>/dev/null || true
+          gh pr edit "$pr" --add-label emerge && echo "Labeled #$pr emerge" || echo "Could not label emerge"
+
+          existing=$(gh issue list --state all --search "${issue_title} in:title" --json number --jq '.[0].number // empty' || true)
+          if [[ -z "$existing" ]]; then
+            issue=$(gh issue create --title "$issue_title" --body-file "$letter" --assignee bywale-com \
+              || gh issue create --title "$issue_title" --body-file "$letter" || true)
+            echo "Opened $issue"
+          else
+            echo "Issue #$existing already exists for ${nnn}"
+          fi
+
+          if [[ -n "${EMERGE_EMAIL:-}" && -n "${RESEND_API_KEY:-}" && -n "${RESEND_FROM_EMAIL:-}" ]]; then
+            att=""
+            if [[ -n "$testfile" && -f "$testfile" ]]; then
+              att="$testfile"
+            fi
+            python3 .github/scripts/send-emerge-letter.py "$letter" "$nnn" "${att:-}" "${testfile:-}"
+          else
+            echo "No EMERGE_EMAIL + RESEND_API_KEY + RESEND_FROM_EMAIL. Issue is the letter."
+          fi
+          rm -f "$letter"

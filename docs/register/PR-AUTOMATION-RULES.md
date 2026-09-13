@@ -92,6 +92,17 @@ Now, previews are strictly **gated**:
 3. **On Blocker Release:** If a PR was held by a `blocker` label, removing `blocker` allows the preview to proceed.
 4. **Incidental Pushes Skip Previews:** Pushing docs, notes, test sheets, or scripts to an unlabeled PR will **never** trigger a phantom Vercel preview.
 
+### The Emerge Packet Rule
+When Vercel finishes deploying the preview, `runtime-doors` executes all automated walks against the preview deployment URL.
+* **If doors paint Pass (Green):**
+  1. The `previewing` mutex lock is removed.
+  2. The PR is labeled **`emerge`**.
+  3. GitHub Actions sends an **Emerge packet email** to the founder containing the PR link, the live preview link, and the test sheet attachment (`HOTFIX-NNN-*-TEST.md` or `PM-PACKET-NNN-*-TEST.md`).
+  4. A GitHub Issue is also opened with the walk sheet for human smoke testing.
+* **If doors paint Fail (Red):**
+  1. The `previewing` mutex lock is removed.
+  2. The PR is labeled **`fail-look`** (if idle), re-waking the Engineer to diagnose and recut.
+
 ---
 
 ## 4. Keeping the PR Description Updated in Plain English
@@ -114,4 +125,5 @@ The PR description serves as the human-readable changelog of what was attempted,
 | Push edits to existing docs/notes | None | No |
 | Manually add label `preview` to PR | Removes `preview`, checks locks | **Yes** (adds `previewing` lock and triggers preview) |
 | Doors paint Fail and PR is idle | Removes `previewing`, adds `fail-look` | No |
+| Doors paint Pass (Green) | Removes `previewing`, adds `emerge`, sends email | No (already deployed) |
 | Push `BLOCKER-NNN-*.md` | Strips seats, adds `blocker` | No |

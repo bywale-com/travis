@@ -2,7 +2,9 @@
 
 **This bind is done.** Last prior bind: `bc-eb491ded-99db-48ea-8c9b-1a86b4fca903`; `bc-3a5884e5-0d93-43e9-9861-52f5b86a80b6`; also `bc-42e8e27d-3478-4cce-88c5-d17e9e0ac8e8` (091 + 092 mutex); `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` (plant); `bc-e13698fe-c6c8-4b17-a9e1-5c0c787e385e` (re-wake verify); `bc-26131d8d-741b-4566-89b3-df312e8e48e1`. Do not start from a transcript. This bind: `bc-774355a0-166d-4ed5-b5b9-1b4bb05cf9b8`.
 
-**091 stream-arch runtime walk (this PR):** Fail-look recut once. Dest leave files `dest_job` on the catalog / room bind before role resolve can spin Cursor create; that living bind is reused instead of spin; Cursor send miss does not fail the job. Tape was `sse events: message`, queue empty, no dest error — dest resolve was hanging on create. Next hotfix **094**.
+**094 emerge runtime-doors (this PR):** Wire emerge packet delivery and `emerge` label to `runtime-doors` on success (`if: success()`). Removed disconnected PM-LOOK pass loops from `wake-packet-seats.yml`. Test sheet is mailed via Resend and attached as an issue when doors green. Next hotfix **095**.
+
+**091 stream-arch runtime walk (merged into this PR):** Fail-look recut once. Dest leave files `dest_job` on the catalog / room bind before role resolve can spin Cursor create; that living bind is reused instead of spin; Cursor send miss does not fail the job. Tape was `sse events: message`, queue empty, no dest error — dest resolve was hanging on create.
 
 **093 gated preview (merged on [#185](https://github.com/bywale-com/travis/pull/185)):** Preview green-light is gated on plant finish (`src/` or `ENGINEER-HANDOFF.md`), blocker release, or manual `preview` label. Incidental pushes to unlabeled PRs skip `preview-when-clear`.
 
@@ -73,7 +75,7 @@ Do not remint 012 / 023–034 or the 074 SQL. Do not remint **035**. Do not remi
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **091** Stream-arch runtime walk (this PR). **093** Gated preview on `main`. Next number **094**. |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **094** Emerge runtime doors (this PR). **091** Stream-arch runtime walk. **093** Gated preview on `main`. Next number **095**. |
 | One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |
