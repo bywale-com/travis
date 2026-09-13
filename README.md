@@ -6,6 +6,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-13** · Blocker 002 · this PR — Dest walks stay red on Cursor’s Background Agent hard limit, because create needs at least $2 remaining and Engineer cannot recut spend.
+
 - **2026-09-13** · Hotfix 092 · [PR #184](https://github.com/bywale-com/travis/pull/184) — Green-light, fail-look, and seats share one token via `previewing`, because empty labels were not “the last preview finished” and a recut that edited the hotfix file re-armed Engineer.
 
 - **2026-09-12** · Hotfix 091 · this PR — Live transcript cursor dest SSE defers role resolve behind ping; send and transcript use `writeAndLeaveDest` (role spin + dest_job), because runtime-doors still 504'd transcript and type-dest saw an empty queue after Travis wrap.

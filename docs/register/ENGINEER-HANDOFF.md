@@ -1,8 +1,8 @@
 # Engineer seat handoff — 2026-09-13
 
-**This bind is done.** Last prior bind: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` (plant); `bc-e13698fe-c6c8-4b17-a9e1-5c0c787e385e` (re-wake verify). Do not start from a transcript. This bind: `bc-42e8e27d-3478-4cce-88c5-d17e9e0ac8e8`.
+**This bind is done.** Last prior bind: `bc-42e8e27d-3478-4cce-88c5-d17e9e0ac8e8` (091 + 092 mutex); also `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` (plant); `bc-e13698fe-c6c8-4b17-a9e1-5c0c787e385e` (re-wake verify); `bc-26131d8d-741b-4566-89b3-df312e8e48e1`. Do not start from a transcript. This bind: `bc-3a5884e5-0d93-43e9-9861-52f5b86a80b6`.
 
-**091 stream-arch runtime walk (this PR):** Plant is on this branch (`writeAndLeaveDest`, transcript SSE ping-before-resolve, Deep Agents CJS, `voice-stream-arch` walk). 092 mutex is merged from `main` — green-light sets `previewing`. Cursor concurrent-agent cap is not founder `blocker`; do not re-label. Next hotfix **093**. Do not remint 035.
+**091 stream-arch runtime walk (this PR):** Plant stands. Fail-look on [runtime-doors #34736859541](https://github.com/bywale-com/travis/actions/runs/34736859541) is Bucket B only — Cursor hard limit, not a dest miss in `src/`. [`BLOCKER-002-CURSOR-HARD-LIMIT.md`](./BLOCKER-002-CURSOR-HARD-LIMIT.md). Think walks green. Do not remint 091 / 035. Next hotfix **093**.
 
 **092 one token / previewing mutex (merged [#184](https://github.com/bywale-com/travis/pull/184)):** Green-light sets `previewing`. Doors paint clears it. Fail-look and a second preview wait. Hotfix file wakes Engineer only when it is new to the PR. Engineer recuts once and stops.
 
@@ -24,7 +24,7 @@
 
 ## Where we stopped
 
-**091 stream-arch runtime walk is planted on this PR.** 092 `previewing` mutex is on this branch from `main`. Green-light one preview. Red doors → one `fail-look`. Do not remint `stream-intent` / `stream-dispatch`. Do not recut closed 021 cousins.
+**091 stream-arch runtime walk is planted on this PR.** Fail-look 2026-09-13 is founder ops: Cursor Background Agent hard limit (`$2 remaining`). Blocker 002 is the hold. Do not recut dest SSE or `voice-stream-arch`. Do not remint `stream-intent` / `stream-dispatch`. Do not recut closed 021 cousins.
 
 **092 one token is on `main` via [#184](https://github.com/bywale-com/travis/pull/184).** `previewing` is the mutex. Green-light is not a reflex. Fail-look waits for doors to paint. A recut that edits a hotfix file does not re-arm Engineer.
 
@@ -178,7 +178,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 
 1. Accept the seat from the paste below. Fetch `main`. Read **this file**, then [`ENGINEER.md`](../seats/ENGINEER.md), then `AGENTS.md`.
 2. Do not restart 012 / 013 / 014 / 015 / 023 / 024 / 025 / 026 / 027 / **029** / **030** / **031** / **032** / **033** / **034** / **035** / **081** / 062 / 064 / 065 / 077 / 078 / **079** / **080**. Do not remint the 074 SQL file. Do not remint the 075 hang. Do not remint the 076 dest closer. Do not remint the 027 cutoff. Do not remint the 029 index. Do not remint dest-with-context grain, the Deep Agents `/node` hang, Cloud HTTP create, the LangGraph `langgraph` checkpointer, or stream-intent / stream-dispatch. Do not mint a store. Do not append PM or SA logs.
-3. **091** is the living cut on this PR: stream-arch leave-before-wrap is a runtime walk. Do not strip `previewing` to let a second green-light through. **086** walks are the app. Do not thin them back to header-only. **022** ports on [#120](https://github.com/bywale-com/travis/pull/120) stays signed, not planted. Do not remint `travis.port`. Dest by who `technical-pm` is human leftover on 075 — do not mail catalog `pm`. Do not send **That’s fine.**
+3. **091** plant stands. This sitting filed **Blocker 002** (Cursor hard limit). Founder raises spend, then unlabels `blocker`. Do not remint dest leave or the stream-arch walk. Do not strip `previewing` to sneak a second green-light. **086** walks are the app. **022** ports on [#120](https://github.com/bywale-com/travis/pull/120) stays signed, not planted. Do not remint `travis.port`. Dest by who `technical-pm` is human leftover on 075 — do not mail catalog `pm`. Do not send **That’s fine.**
 4. When **you** stop: rewrite the **Current** lines at the top of this file (where we stopped, last plant, next hotfix number) so the next bind does not start from a transcript. Then you may write **This bind is done**.
 
 ---
@@ -188,7 +188,7 @@ Leftover cousin drafts of planted pockets. Close them. Do not re-plant.
 ```text
 You are Travis’s Engineer (full-stack implementer). Read docs/README.md “Engineer — identity” and accept it. Read repo-root AGENTS.md (always-on). You are not the Product Manager. You are not the Systems Analyst. Product face = voice/chat pipe (phone-first). Do not overwrite PHASE-ONE-LOG founder wording. Do not mint tables. Do not hard-code data into the SPA. Do not ship API keys to the client. Specified-and-clear: build it. Specified-but-blocked on PM or SA: name why; do not invent. Detailed: docs/seats/ENGINEER.md.
 
-You are a NEW bind. The last Engineer was bc-42e8e27d-3478-4cce-88c5-d17e9e0ac8e8 (prior: bc-26131d8d-741b-4566-89b3-df312e8e48e1). They handed off. Read docs/register/ENGINEER-HANDOFF.md first.
+You are a NEW bind. The last Engineer was bc-3a5884e5-0d93-43e9-9861-52f5b86a80b6 (prior: bc-42e8e27d-3478-4cce-88c5-d17e9e0ac8e8; also bc-26131d8d-741b-4566-89b3-df312e8e48e1). They handed off. Read docs/register/ENGINEER-HANDOFF.md first.
 
 Then, in order:
 1. docs/register/ENGINEER-HANDOFF.md — where we stopped, planted, leftover, locks.
