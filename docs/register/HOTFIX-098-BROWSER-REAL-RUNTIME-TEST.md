@@ -6,17 +6,20 @@
 
 ## Automated deployment gate
 
-1. Unit tests pass, including exclusive ear transitions: Live connecting/connected excludes Web Speech; Live close never silently becomes Talk.
-2. Server-pipe walks pass and are identified as server contract coverage, not microphone coverage.
-3. Playwright opens the actual Vercel deployment at phone dimensions using the isolated test operator.
-4. **Type:** enter `One-line note on the tape.` in the visible composer. Before Send, no user turn/request exists. After Send, the rendered thread receives the turn and Travis result.
-5. **Talk:** deterministic SpeechRecognition emits interim and final text. Nothing sends before the completion gate. The gate sends through `/finalize`; the rendered thread receives the result.
-6. **Voice ownership:** while Travis Live is connecting and connected, injected SpeechRecognition records zero starts and no Talk draft appears.
-7. **Voice real canary:** Chromium’s fake microphone plays `stream-arch-cue.wav` through real `getUserMedia` → WebRTC → OpenAI Realtime. `/live/token` is wired.
-8. During the fixture silence after `Engineer, put this on the notes: stream-arch cue.`, the Engineer leave is already running/queued/drainable—before the fixture says `I’m done`.
-9. After `I’m done`, Travis produces a speakable/rendered wrap. No HTML, unwired line, run error, dual-ear state, or silent fallback.
-10. Runtime jobs are serialized; two deployments cannot consume the shared operator concurrently.
-11. Test output prints Realtime usage for the paid Voice canary.
+1. Action log proves `runtime-doors.yml` came from `main`, checked out the exact deployed Hotfix 098 SHA, and invoked that checkout’s `npm run test:runtime`.
+2. That branch-owned runtime entrypoint installs/locates Chromium and visibly runs the new browser suites. A green run that only executed the old endpoint inventory is red evidence for this hotfix.
+3. Static unit coverage proves main YAML remains a generic launcher and does not enumerate branch-specific tests; global runtime concurrency is serialized with `cancel-in-progress: false`.
+4. Unit tests pass, including exclusive ear transitions: Live connecting/connected excludes Web Speech; Live close never silently becomes Talk.
+5. Server-pipe walks pass and are identified as server contract coverage, not microphone coverage.
+6. Playwright opens the actual Vercel deployment at phone dimensions using the isolated test operator.
+7. **Type:** enter `One-line note on the tape.` in the visible composer. Before Send, no user turn/request exists. After Send, the rendered thread receives the turn and Travis result.
+8. **Talk:** deterministic SpeechRecognition emits interim and final text. Nothing sends before the completion gate. The gate sends through `/finalize`; the rendered thread receives the result.
+9. **Voice ownership:** while Travis Live is connecting and connected, injected SpeechRecognition records zero starts and no Talk draft appears.
+10. **Voice real canary:** Chromium’s fake microphone plays `stream-arch-cue.wav` through real `getUserMedia` → WebRTC → OpenAI Realtime. `/live/token` is wired.
+11. During the fixture silence after `Engineer, put this on the notes: stream-arch cue.`, the Engineer leave is already running/queued/drainable—before the fixture says `I’m done`.
+12. After `I’m done`, Travis produces a speakable/rendered wrap. No HTML, unwired line, run error, dual-ear state, or silent fallback.
+13. Runtime jobs are serialized; two deployments cannot consume the shared operator concurrently.
+14. Test output prints Realtime usage for the paid Voice canary.
 
 ## Human phone smoke
 

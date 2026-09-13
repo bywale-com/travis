@@ -58,13 +58,18 @@ Runtime verification must represent the human use through the rendered applicati
 
 ### CI/CD
 
-- **`.github/workflows/runtime-doors.yml`**:
+- **Bootstrap law — do not miss this:** `repository_dispatch` loads `.github/workflows/runtime-doors.yml` from `main`, even for a PR preview. That YAML then checks out the deployed PR SHA. Therefore a YAML step added only on this branch cannot prove itself before merge.
+- **`.github/workflows/runtime-doors.yml` is a stable launcher, not the test inventory.** It continues to check out the exact deployed SHA, run `npm ci`, invoke that checkout’s `npm run test:runtime`, paint status, and handle `fail-look` / emerge. Do not make branch-only YAML responsible for installing Playwright or enumerating browser tests.
+- **Branch-owned runtime entrypoint:** the checked-out branch’s `package.json` / runtime runner must:
+  - install or locate its declared Playwright Chromium version on the GitHub runner (including required Linux dependencies);
+  - run server-pipe walks, deterministic browser mode tests, then one real Voice canary against `RUNTIME_BASE_URL`;
+  - pass the existing Vercel bypass and test-operator credentials into the browser context.
+  This is how Hotfix 098’s preview executes Hotfix 098’s verifier before merge while the launcher still comes from `main`.
+- **`package.json`** — keep `npm run test:runtime` as the one launcher contract already called by `main`; it delegates to separate server-pipe and browser scripts and owns browser preparation. Do not require a new YAML step for those scripts to run.
+- **`.github/workflows/runtime-doors.yml` may change only for house orchestration**:
   - serialize all runtime jobs globally with `cancel-in-progress: false`; the suite shares one test operator and must not overlap;
-  - install/cache Playwright Chromium;
-  - run unit tests, server-pipe walks, deterministic browser mode tests, then one real Voice canary against the Vercel deployment URL;
-  - pass the existing Vercel bypass and test-operator credentials into the browser context;
-  - preserve red → `fail-look` and green → latest-sheet emerge behavior.
-- **`package.json`** — separate scripts for server-pipe and browser runtime; the aggregate runtime command runs both.
+  - preserve checkout of the deployed SHA, the branch-owned `npm run test:runtime` call, red → `fail-look`, and green → latest-sheet emerge behavior.
+  The branch cannot runtime-prove its own concurrency-YAML change; cover that static contract in unit tests and do not cite it as preview proof.
 - **`src/runtime/README.md` and `src/runtime/walks/README.md`** — state exactly what each layer proves. Remove claims that endpoint injection proves microphone/Voice behavior.
 - Capture Realtime `response.done` usage in test output so the paid canary cost is observable.
 
@@ -84,10 +89,12 @@ Runtime verification must represent the human use through the rendered applicati
 - Do not call a direct transcript/finalize endpoint and label that a Voice browser test.
 - Do not silently fall back from Voice Live to Talk/STT.
 - Do not run browser jobs concurrently against the shared test operator.
+- Do not claim a branch-only `runtime-doors.yml` change ran on that branch’s preview. The workflow definition came from `main`; preview proof comes from the deployed checkout’s runtime entrypoint.
+- Do not make Playwright preparation depend on a YAML step that is absent from `main`.
 - Do not add a database table.
 - Do not use an AI agent to operate the browser.
 - Do not weaken the real canary to mocks if headless media fails; validate headed Chromium under Xvfb instead.
 
 ## Engineer proof
 
-Before plant, prove fake-audio capture reaches the current WebRTC session in Chromium. After plant, name the Vercel preview URL and green `runtime-doors` check in `ENGINEER-HANDOFF.md`. A green unit suite alone is not completion.
+Before plant, prove fake-audio capture reaches the current WebRTC session in Chromium. On the preview run, show from the Action log that `npm run test:runtime` came from the deployed Hotfix 098 checkout and actually ran the browser suites and real Voice canary. After plant, name the Vercel preview URL and green `runtime-doors` check in `ENGINEER-HANDOFF.md`. A green unit suite—or green doors that ran only the old endpoint inventory—is not completion.
