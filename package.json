@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "tsx --test src/lib/*.test.ts src/server/db/*.test.ts src/runtime/*.test.ts",
+    "test:preflight": "tsx src/runtime/preflight.ts",
     "test:runtime": "tsx --test --test-concurrency=1 src/runtime/walks/*.spec.ts",
     "db:push": "tsx --env-file=.env.local src/server/db/migrate.ts",
     "db:seed": "tsx --env-file=.env.local src/server/db/seed.ts"
@@ -42,6 +43,7 @@
     "drizzle-kit": "^0.31.4",
     "eslint": "^9.33.0",
     "eslint-config-next": "^15.5.2",
+    "playwright": "^1.63.0",
     "tailwindcss": "^4.1.12",
     "tsx": "^4.20.4",
     "typescript": "^5.9.2"
