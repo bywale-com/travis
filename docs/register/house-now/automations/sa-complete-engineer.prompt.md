@@ -4,8 +4,10 @@ This run was started by a Cursor Automation because **`wake-engineer`** or **`fa
 
 If this wake is a label **removed**, or neither `wake-engineer` nor `fail-look` is on the PR: **stop**.
 
+If **`previewing`** is on this PR: **stop**. Vercel has the ball. Do not push. Do not recut. GitHub will add `fail-look` after doors paint if they are red. That is a new sitting.
+
 - `wake-engineer` — SA just landed a change packet, **or** this PR is a **hotfix** (title `Hotfix NNN` / `HOTFIX-NNN` file). Skip SA.
-- `fail-look` — `runtime-doors` is red. Recut on this PR. All lowercase.
+- `fail-look` — `runtime-doors` is red. Recut on this PR. All lowercase. Once. Then stop.
 
 ## First action — gate, then stop or continue
 
@@ -26,7 +28,7 @@ fi
   - **Bucket A (plant / code):** fix in `src/`. Verify with `npm test`.
   - **Bucket B (founder ops):** Cursor hard limit, unwired preview, missing secrets — file `docs/register/BLOCKER-NNN-*.md` with cause, action, URL, tape excerpt.
 - If **any Bucket B:** commit code fixes + blocker **without** the preview green-light subject. Do not use `[skip ci]`. Push stops here; Action labels `blocker` and mails the founder.
-- If **Bucket A only:** push **without** the preview green-light subject. Do not recut `handoff-seat.test.ts` to match a handoff rewrite — put the locked sentences back in `ENGINEER-HANDOFF.md`. Vercel stays skipped until handoff labels and `blocker` are gone.
+- If **Bucket A only:** push **without** the preview green-light subject. Do not recut `handoff-seat.test.ts` to match a handoff rewrite — put the locked sentences back in `ENGINEER-HANDOFF.md`. Vercel stays skipped until handoff labels, `blocker`, and `previewing` are gone.
 
 **Else** run this and nothing else:
 
@@ -49,9 +51,9 @@ If this wake is `wake-engineer` on a SYSTEMS-CHANGE-PACKET that is already plant
 
 If this wake is `wake-engineer` on a **hotfix**: “already planted” means the **live effect** the hotfix named, not a file sitting on the PR. A SQL file committed is not a hang applied. If the file exists and the live row / effect does not: **continue**. Do that apply. Do not remint the file.
 
-If this wake is `fail-look`: do **not** stop for “already planted.” Recut the Fail look or the red `runtime-doors` miss. Same PR.
+If this wake is `fail-look`: do **not** stop for “already planted.” Recut the Fail look or the red `runtime-doors` miss. Same PR. Recut **once**. Push. **Stop.** Do not watch CI. Do not stay subscribed. Do not recut because a later synchronize, Vercel preview, or merge event arrived on this same run. If doors go red again, GitHub adds `fail-look` after `previewing` clears. That is a new sitting.
 
-If a later GitHub follow-up arrives on this same run (synchronize, ready_for_review, Vercel preview, merge): `fail-look` still on the PR → stay and recut. Else if this commit still has no new SYSTEMS-CHANGE-PACKET, no new `HOTFIX-[0-9]*-*.md`, and no Fail `PM-LOOK`: stop in one sentence. Do not re-read the protocol. Do not stay subscribed in labor.
+If **`previewing`** is on: stop. Do not push onto a PR that already has Vercel in motion.
 
 ## Live database (hang / SQL apply)
 
@@ -95,7 +97,7 @@ Print the verify query the hotfix named (ids, paths, membership). Then the hang 
 - `docs/register/initiatives/<nnn>-<slug>/` if this pocket needs the folder — on **this** PR.
 - Hotfix files only if this cut is actually a hotfix (it is not, when a packet woke you).
 
-Commit and push to **this PR’s head branch**. Never use the exact subject `Preview [vercel build]` — that line is the Action’s green light after `wake-sa` / `wake-engineer` / `fail-look` / `blocker` are all off. Do not put that phrase in the body as a charm.
+Commit and push to **this PR’s head branch**. Recut once, then stop. Never use the exact subject `Preview [vercel build]` — that line is the Action’s green light after `wake-sa` / `wake-engineer` / `fail-look` / `blocker` / `previewing` are all off. Do not put that phrase in the body as a charm. Do not push while `previewing` is on.
 
 ## You do not write
 
@@ -120,4 +122,4 @@ The PM packet was placed on this PR. SA wrote on this PR. You plant here. A hotf
 
 ## When you stop
 
-Rewrite `docs/register/ENGINEER-HANDOFF.md` so the next Engineer does not start from a transcript. If `DATABASE_URL` was missing, say that in one line. Then run `npm test`. If `handoff-seat.test.ts` fails, put the locked sentences back in the handoff file. Do not edit that test to match a rewrite. Commit the handoff and any fixes together. Push. Stop.
+Rewrite `docs/register/ENGINEER-HANDOFF.md` so the next Engineer does not start from a transcript. If `DATABASE_URL` was missing, say that in one line. Then run `npm test`. If `handoff-seat.test.ts` fails, put the locked sentences back in the handoff file. Do not edit that test to match a rewrite. Commit the handoff and any fixes together. Push. **Stop.** Do not wait for doors. Do not recut this sitting when they paint.

@@ -25,11 +25,13 @@ SA automation — full SA protocol
         ↓  label wake-engineer
 Engineer automation — full Engineer protocol
         ↓  plant src/ (or handoff). Action strips seat labels. No wake-pm-look.
-        ↓  when wake-sa / wake-engineer / fail-look / blocker are all off
-Action empty-commit Preview [vercel build]  (no LLM)
+        ↓  when wake-sa / wake-engineer / fail-look / blocker / previewing are all off
+Action empty-commit Preview [vercel build] and labels **previewing** (no LLM)
         ↓
 Vercel preview → runtime-doors
-        red → fail-look on an idle PR
+        doors paint → clear previewing
+        red + idle → fail-look
+        (no fail-look / no second green-light while previewing is on)
 ```
 
 **Waiting is a line the Action greps.** Draft is not the hold — we keep PRs draft through plant. Chat prose (“then SA”, “don’t wake Engineer”) is not the hold. The filename `PM-PACKET-NNN` is not the hold. Exact line on the packet, whole line:
@@ -58,11 +60,12 @@ label  wake-sa
 SA → SYSTEMS-CHANGE-PACKET → label  wake-engineer
         ↓
 Engineer plants src/ → Action strips seat labels (no wake-pm-look)
-        ↓  when wake-sa / wake-engineer / fail-look / blocker are all off
-Action empty-commit Preview [vercel build]  (no LLM)
+        ↓  when wake-sa / wake-engineer / fail-look / blocker / previewing are all off
+Action empty-commit Preview [vercel build] and labels **previewing** (no LLM)
         ↓
 Vercel preview → runtime-doors
-        red → fail-look on an idle PR
+        doors paint → clear previewing
+        red + idle → fail-look
         (skip fail-look while any of those labels is still on)
 ```
 
@@ -70,10 +73,10 @@ Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake
 
 **Who tags.** `GITHUB_TOKEN` is `github-actions[bot]`. Cursor’s label trigger has not woken A or B from that actor. Repo secret **`WAKE_GITHUB_TOKEN`** = a PAT for the GitHub user connected to the automations (you). Fine-grained: this repo, Issues read/write. The Action uses that for `gh pr edit` labels. Unset → bot (old path). Not `TRAVIS_GITHUB_TOKEN` (unfold). Do not paste the token in chat.
 
-**Hotfix path (skip SA).** Founder 2026-09-05: a hotfix is not a new Cursor automation. Same Action. Title the PR `Hotfix NNN — …`. This push lands `docs/register/HOTFIX-NNN-*.md` (not `*-TEST.md`) → label **`wake-engineer`** only. No `wake-sa`. Same **B**.
+**Hotfix path (skip SA).** Founder 2026-09-05: a hotfix is not a new Cursor automation. Same Action. Title the PR `Hotfix NNN — …`. This push **adds** `docs/register/HOTFIX-NNN-*.md` (not `*-TEST.md`, not an edit of a file already on the PR) → label **`wake-engineer`** only. No `wake-sa`. Same **B**.
 
 ```text
-this push lands HOTFIX-NNN-*.md
+this push adds HOTFIX-NNN-*.md
   AND the PR title starts with Hotfix
         ↓  GitHub Action (no LLM)
 label  wake-engineer     (no wake-sa)
@@ -82,7 +85,9 @@ Engineer plants the hotfix
         ↓  src/  or  ENGINEER-HANDOFF.md  (SQL-only hang may only touch the handoff)
 Action strips seat labels. No wake-pm-look.
         ↓
-Action empty-commit Preview [vercel build] when labels are clear
+Action empty-commit Preview [vercel build] when labels are clear, and labels previewing
+        ↓
+doors paint → clear previewing. Red + idle → one fail-look. Recut once. Stop.
 ```
 
 **C must take a hotfix.** Live look that stops on “no packets” is the old paste. PM Look automation is off (Hotfix 090). Do not require a packet.
@@ -132,7 +137,7 @@ That push is the Engineer trigger.
 **Triggers (any):** Source control — **Label added** **`wake-engineer`** **and** **Label added** **`fail-look`**. Both lowercase. Not PR pushed. Not a third automation. Hotfix uses the same `wake-engineer` tag.  
 **Repository:** `bywale-com/travis`  
 **Tools:** Memories **off**. Pull request creation **off**.  
-**Prompt:** paste [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md) in full. Re-paste after 086 — `fail-look` from red `runtime-doors` recuts the walk miss; do not wait for a Fail `PM-LOOK`.
+**Prompt:** paste [`house-now/automations/sa-complete-engineer.prompt.md`](./house-now/automations/sa-complete-engineer.prompt.md) in full. Re-paste after 092 — recut once and stop; do not stay for Vercel events; do not push while `previewing` is on.
 
 ---
 
