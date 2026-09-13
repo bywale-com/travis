@@ -161,11 +161,15 @@ export async function POST(
           await noteTravisUnwired(sessionId);
         }
         const cursorBinds = destBindings.filter((b) => !isTravisSeat(b.seatKey));
-        await Promise.allSettled(
+        const left = await Promise.allSettled(
           cursorBinds.map((binding) =>
             writeAndLeaveDest({ sessionId, binding, prompt }),
           ),
         );
+        const destFail = left.find((row) => row.status === "rejected");
+        if (destFail && destFail.status === "rejected") {
+          throw destFail.reason;
+        }
         const openJobs = await listOpenDestJobs(sessionId).catch(() => []);
         await dispatchStreamIntents({
           sessionId,

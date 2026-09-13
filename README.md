@@ -7,6 +7,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-13** · Hotfix 091 · this PR — Dest leave files `dest_job` before Cursor send returns and role dest resolve does not await sit handoff, because runtime-doors dest walks hung until Vercel killed SSE with an empty queue and no dest error.
+
 - **2026-09-13** · Blocker 002 · this PR — Dest walks stay red on Cursor’s Background Agent hard limit, because create needs at least $2 remaining and Engineer cannot recut spend.
 
 - **2026-09-13** · Hotfix 093 · [PR #185](https://github.com/bywale-com/travis/pull/185) — Preview green-light fires only on plant finish (src/ or ENGINEER-HANDOFF.md), blocker release, or manual preview label, because unlabeled PR pushes were triggering unintended Vercel previews.

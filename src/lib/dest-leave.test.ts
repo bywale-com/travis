@@ -38,6 +38,7 @@ test("live transcript dest write-and-leaves — SSE headers before Cursor handof
   assert.match(src, /sseHeaders/);
   assert.match(src, /send\("done"/);
   assert.match(src, /: ping/);
+  assert.match(src, /destFail/);
   assert.equal(src.includes("sendOrEnqueueMany"), false);
   assert.equal(src.includes("pipeTravisText"), false);
   assert.doesNotMatch(
@@ -46,7 +47,7 @@ test("live transcript dest write-and-leaves — SSE headers before Cursor handof
   );
 });
 
-test("writeAndLeaveDest files dest_job on started leave", () => {
+test("writeAndLeaveDest files dest_job before Cursor handoff returns", () => {
   const src = readFileSync(
     join(process.cwd(), "src/server/dest-leave.ts"),
     "utf8",
@@ -54,6 +55,18 @@ test("writeAndLeaveDest files dest_job on started leave", () => {
   assert.match(src, /dispatchToRoleDest/);
   assert.match(src, /insertDestJob/);
   assert.match(src, /markDestJob/);
+  assert.match(src, /LEAVE_HANDOFF_MS/);
+  assert.match(src, /status: "dispatched"/);
+  assert.match(src, /isFounderOpsDestError/);
+  assert.match(src, /hard limit/);
+  const insertAt = src.indexOf("insertDestJob");
+  const handoffAt = src.indexOf("handoff(params)");
+  assert.ok(insertAt >= 0 && handoffAt > insertAt);
+});
+
+test("role dest resolve does not await sit handoff", () => {
+  const src = readFileSync(join(process.cwd(), "src/server/sit.ts"), "utf8");
+  assert.match(src, /void sitBinding\(/);
 });
 
 test("Deep Agents kit loads through CJS require, not a static ESM import", () => {
@@ -79,6 +92,7 @@ test("type send uses writeAndLeaveDest for chip dests", () => {
     "utf8",
   );
   assert.match(src, /writeAndLeaveDest/);
+  assert.match(src, /destFail/);
   assert.equal(src.includes("sendOrEnqueueMany"), false);
 });
 

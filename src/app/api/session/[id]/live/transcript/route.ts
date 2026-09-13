@@ -161,11 +161,15 @@ export async function POST(
             prompt,
             cursorDestCount: cursorDests.length,
           });
-          await Promise.allSettled(
+          const left = await Promise.allSettled(
             cursorDests.map((binding) =>
               writeAndLeaveDest({ sessionId, binding, prompt }),
             ),
           );
+          const destFail = left.find((row) => row.status === "rejected");
+          if (destFail && destFail.status === "rejected") {
+            throw destFail.reason;
+          }
           const openJobs = await listOpenDestJobs(sessionId).catch(() => []);
           await dispatchStreamIntents({
             sessionId,

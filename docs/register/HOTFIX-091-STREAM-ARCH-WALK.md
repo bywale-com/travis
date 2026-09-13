@@ -18,5 +18,6 @@
 4. Fail-look recut: live dest was still `sendOrEnqueueMany` (holds until Cursor done → Vercel 504). Same write-and-leave as Type (`dispatchToSeat`). Mouth still waits for finalize.
 5. Fail-look recut: static `import from "deepagents/node"` still loaded ESM on Vercel (`Cannot use import statement outside a module`). `createRequire` hits `exports.require` → `dist/node.cjs`. Still the `/node` hang.
 6. Fail-look recut: JSON transcript still ran `destBindingsForSend` before headers (504); type-dest queue empty after Travis wrap. SSE ping-before-resolve on live transcript cursor dest; `writeAndLeaveDest` (`dispatchToRoleDest` + `dest_job`) on send and transcript.
+7. Fail-look recut: dest walks hung until Vercel killed SSE (`sse events: message`, queue empty, no dest error). `writeAndLeaveDest` files `dest_job` dispatched before Cursor `send` returns; role dest resolve does not await sit handoff. Founder-ops dest errors still throw.
 
 Do not remint `stream-intent`, dest assemble, or 035. Interrupt / change remain the human sheet.

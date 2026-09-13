@@ -194,12 +194,12 @@ async function spinSeatedRole(params: {
   }
   const binding = await bindingBySeatKey(agent.seatKey);
   if (!binding) throw new SitError("Spin created a person we cannot sit.", 400);
-  const sat = await sitBinding({
+  void sitBinding({
     sessionId: params.sessionId,
     binding,
     protocol: params.role,
-  });
-  return sat.binding;
+  }).catch(() => {});
+  return binding;
 }
 
 /**
@@ -232,12 +232,11 @@ export async function resolveRoleDest(params: {
       }
     }
     if (!(living.protocolPath ?? "").trim()) {
-      const sat = await sitBinding({
+      void sitBinding({
         sessionId: params.sessionId,
         binding: living,
         protocol: parsed.role,
-      });
-      return sat.binding;
+      }).catch(() => {});
     }
     return living;
   }
