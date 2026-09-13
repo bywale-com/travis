@@ -1,6 +1,7 @@
 # travis
 
-**How we build** (start to finish, one PR, three seats): [`docs/BUILD-PROTOCOL.md`](docs/BUILD-PROTOCOL.md).
+**How we build** (start to finish, one PR, three seats): [`docs/BUILD-PROTOCOL.md`](docs/BUILD-PROTOCOL.md).  
+**PRs & Automation Rules** (plain English guide to packets, hotfixes, labels, and previews): [`docs/register/PR-AUTOMATION-RULES.md`](docs/register/PR-AUTOMATION-RULES.md).
 
 ## Implementation
 

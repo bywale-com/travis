@@ -142,6 +142,7 @@ You are the **third seat**. Technical Architect and SA specify. You **implement*
 | Folder | What it is | Entry point |
 |---|---|---|
 | [`BUILD-PROTOCOL.md`](./BUILD-PROTOCOL.md) | House build protocol, start to finish | this file |
+| [`register/PR-AUTOMATION-RULES.md`](./register/PR-AUTOMATION-RULES.md) | Plain-English guide to PR types, labels, and previews | [`register/PR-AUTOMATION-RULES.md`](./register/PR-AUTOMATION-RULES.md) |
 | [`method/`](./method/) | Portable Om Coda operating doctrine | [`method/00-INDEX.md`](./method/00-INDEX.md) |
 | [`build-foundation/`](./build-foundation/) | Build method + rudiments + brief | [`build-foundation/README.md`](./build-foundation/README.md) |
 | [`register/`](./register/) | Product thesis + PM/SA trails | [`register/PHASE-ONE.md`](./register/PHASE-ONE.md) |
