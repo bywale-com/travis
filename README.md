@@ -1,12 +1,17 @@
 # travis
 
-**How we build** (start to finish, one PR, three seats): [`docs/BUILD-PROTOCOL.md`](docs/BUILD-PROTOCOL.md).
+**How we build** (start to finish, one PR, three seats): [`docs/BUILD-PROTOCOL.md`](docs/BUILD-PROTOCOL.md).  
+**PRs & Automation Rules** (plain English guide to packets, hotfixes, labels, and previews): [`docs/register/PR-AUTOMATION-RULES.md`](docs/register/PR-AUTOMATION-RULES.md).
 
 ## Implementation
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
 - **2026-09-13** · Blocker 002 · this PR — Dest walks stay red on Cursor’s Background Agent hard limit, because create needs at least $2 remaining and Engineer cannot recut spend.
+
+- **2026-09-13** · Hotfix 093 · [PR #185](https://github.com/bywale-com/travis/pull/185) — Preview green-light fires only on plant finish (src/ or ENGINEER-HANDOFF.md), blocker release, or manual preview label, because unlabeled PR pushes were triggering unintended Vercel previews.
+
+- **2026-09-13** · Hotfix 092 · [PR #184](https://github.com/bywale-com/travis/pull/184) — Green-light, fail-look, and seats share one token via `previewing`, because empty labels were not “the last preview finished” and a recut that edited the hotfix file re-armed Engineer.
 
 - **2026-09-13** · Hotfix 092 · [PR #184](https://github.com/bywale-com/travis/pull/184) — Green-light, fail-look, and seats share one token via `previewing`, because empty labels were not “the last preview finished” and a recut that edited the hotfix file re-armed Engineer.
 
