@@ -6,7 +6,11 @@
  */
 
 import { isCatalogPm, isLivingCursorId } from "@/lib/dest-glass";
-import { isSitProtocolRole, type SitProtocolRole } from "@/lib/protocol-path";
+import {
+  destKeysForSeat,
+  isSitProtocolRole,
+  type SitProtocolRole,
+} from "@/lib/protocol-path";
 import { isTravisSeat } from "@/lib/seats";
 import { delay } from "@/lib/cursor-busy";
 import { dispatchToSeat, type DispatchOutcome } from "@/server/dispatch";
@@ -42,21 +46,27 @@ async function ensureOpenDestMember(
   }
 }
 
-/** Catalog / room bind for a dest key. Never catalog pm. No Cursor create. */
+/** Catalog / room bind for a dest key. Architect aliases to pm. No Cursor create. */
 export async function destBindingForSeatKey(
   sessionId: string,
   seatKey: string,
 ): Promise<AgentBinding | null> {
   if (!seatKey || isTravisSeat(seatKey)) return null;
-  const inRoom = await openBindingForSeat(sessionId, seatKey);
-  if (inRoom && !isCatalogPm(inRoom.seatKey)) return inRoom;
-  const catalog = await bindingBySeatKey(seatKey);
-  if (
-    catalog &&
-    isLivingCursorId(catalog.cursorAgentId) &&
-    !isCatalogPm(catalog.seatKey)
-  ) {
-    return catalog;
+  for (const key of destKeysForSeat(seatKey)) {
+    const inRoom = await openBindingForSeat(sessionId, key);
+    if (inRoom && isLivingCursorId(inRoom.cursorAgentId)) {
+      if (!isCatalogPm(inRoom.seatKey) || !(inRoom.protocolPath ?? "").trim()) {
+        return inRoom;
+      }
+    }
+    const catalog = await bindingBySeatKey(key);
+    if (
+      catalog &&
+      isLivingCursorId(catalog.cursorAgentId) &&
+      (!isCatalogPm(catalog.seatKey) || !(catalog.protocolPath ?? "").trim())
+    ) {
+      return catalog;
+    }
   }
   return null;
 }
@@ -91,7 +101,8 @@ async function handoff(params: {
   let binding = params.binding;
   let outcome: DispatchOutcome;
   const role = binding.seatKey;
-  if (role && isSitProtocolRole(role)) {
+  const seated = (binding.protocolPath ?? "").trim();
+  if (role && isSitProtocolRole(role) && seated) {
     const row = await dispatchToRoleDest({
       sessionId: params.sessionId,
       role: role as SitProtocolRole,

@@ -59,6 +59,10 @@ export function narrateToolCall(
       return "Renaming the room.";
     case "end_session":
       return "Ending the room.";
+    case "bind_agent": {
+      const label = clip(String(args.label ?? ""), 40);
+      return label ? `Binding ${label}.` : "Binding that agent.";
+    }
     case "create_agent": {
       const label = clip(String(args.label ?? ""), 40);
       return label ? `Creating ${label}.` : "Creating an agent.";

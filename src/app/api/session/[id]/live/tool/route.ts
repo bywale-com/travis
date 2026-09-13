@@ -10,6 +10,9 @@ import { requireOwnedSession } from "@/server/operator";
 
 type Body = { name?: string; args?: Record<string, unknown> };
 
+/** Create waits up to CURSOR_CREATE_TIMEOUT_MS; keep the door open past that. */
+export const maxDuration = 120;
+
 export async function POST(
   req: Request,
   ctx: { params: Promise<{ id: string }> },

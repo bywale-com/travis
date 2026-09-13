@@ -83,6 +83,7 @@ test("Technical PM and technical product manager are the pm role", () => {
     "pm",
   );
   assert.equal(parseCallByName("Technical Architect look").seatKey, "pm");
+  assert.equal(parseCallByName("Architect look").seatKey, "pm");
   assert.equal(seatKeyToLabel("pm"), "Technical Architect");
   assert.deepEqual(
     seatMentions("Send that to Technical Architect. Engineer as well."),

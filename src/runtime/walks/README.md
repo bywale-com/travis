@@ -10,6 +10,7 @@ Seeded files run on every deploy (`npm run test:runtime`). A row with no file is
 | Voice: two lines, I’m done | `voice-wrap.spec.ts` | Both lines on tape. Wrap is a Travis post. | HTML. Unwired. Run error after wrap. |
 | Voice dest while talking | `voice-stream-arch.spec.ts` | Transcript dest starts a leave. Queue is non-empty **before** I’m done. Wrap is a Travis mouth. | Queue empty after transcript. Wrap with no mouth. Engineer essay. |
 | Leave and come back | `come-back.spec.ts` | Same `session.id`. Line still there. That send also worked. | New blank sitting. Think miss on the first send. |
+| Bind a Cursor chat into the room | `bind-agent.spec.ts` | `bind_agent` via live tool port: catalog row + room member, no `POST /v1/agents`, stream not left live. | Tool miss. No member. Stream stuck live. |
 
 | Not seeded | Why |
 |---|---|

@@ -178,8 +178,8 @@ jobs:
           fi
 
           pr_files=$(gh pr view "$pr" --json files --jq '.files[].path')
-          hotfix_file=$(echo "$pr_files" | grep -E '^docs/register/HOTFIX-[0-9]+-.+\.md$' | head -n 1 || true)
-          packet_file=$(echo "$pr_files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | head -n 1 || true)
+          hotfix_file=$(echo "$pr_files" | grep -E '^docs/register/HOTFIX-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$' | sort -V | tail -n 1 || true)
+          packet_file=$(echo "$pr_files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$' | sort -V | tail -n 1 || true)
 
           kind=""
           nnn=""

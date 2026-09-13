@@ -9,6 +9,9 @@ type Body = {
   ref?: string;
 };
 
+/** Same bound as live/tool — Cursor create may take the full HTTP timeout. */
+export const maxDuration = 120;
+
 export async function POST(req: Request) {
   return jsonRoute(async () => {
     const body = (await req.json().catch(() => ({}))) as Body;

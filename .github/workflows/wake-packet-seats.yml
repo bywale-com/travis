@@ -60,6 +60,9 @@ jobs:
           BEFORE: ${{ github.event.before }}
           AFTER: ${{ github.sha }}
           HEAD_REF: ${{ github.ref_name }}
+          EMERGE_EMAIL: ${{ secrets.EMERGE_EMAIL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_FROM_EMAIL: ${{ secrets.RESEND_FROM_EMAIL }}
         run: |
           set -euo pipefail
           if [[ -n "${WAKE_GITHUB_TOKEN:-}" ]]; then
@@ -230,17 +233,22 @@ jobs:
           # Plant finished. src/ or (hotfix + Engineer handoff).
           # SQL-only hang may only rewrite ENGINEER-HANDOFF.md.
           # Do not wake PM Look. Strip seats so preview-when-clear may fire.
+          # If a new hotfix was added in this exact push, do not treat handoff as plant finished.
           if echo "$files" | grep -qE '^(src/|docs/register/ENGINEER-HANDOFF\.md$)'; then
-            pr_files=$(gh pr view "$pr" --json files --jq '.files[].path')
-            if echo "$pr_files" | grep -qE '^docs/register/HOTFIX-[0-9]+-.+\.md$'; then
-              strip_seats_except ""
-              echo "Hotfix plant finished. No wake-pm-look. Seats stripped."
-              echo "green_light=true" >> "$GITHUB_OUTPUT"
-            elif echo "$pr_files" | grep -qE '^docs/register/SYSTEMS-CHANGE-PACKET-'; then
-              if echo "$pr_files" | grep -qE '^docs/register/PM-PACKET-[0-9]'; then
+            if echo "$added" | grep -E '^docs/register/HOTFIX-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$' | grep -q .; then
+              echo "New hotfix spec added in this push. Not plant finished."
+            else
+              pr_files=$(gh pr view "$pr" --json files --jq '.files[].path')
+              if echo "$pr_files" | grep -qE '^docs/register/HOTFIX-[0-9]+-.+\.md$'; then
                 strip_seats_except ""
-                echo "Packet plant finished. No wake-pm-look. Seats stripped."
+                echo "Hotfix plant finished. No wake-pm-look. Seats stripped."
                 echo "green_light=true" >> "$GITHUB_OUTPUT"
+              elif echo "$pr_files" | grep -qE '^docs/register/SYSTEMS-CHANGE-PACKET-'; then
+                if echo "$pr_files" | grep -qE '^docs/register/PM-PACKET-[0-9]'; then
+                  strip_seats_except ""
+                  echo "Packet plant finished. No wake-pm-look. Seats stripped."
+                  echo "green_light=true" >> "$GITHUB_OUTPUT"
+                fi
               fi
             fi
           fi

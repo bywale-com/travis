@@ -117,6 +117,17 @@ export async function endSession(desk: Desk): Promise<void> {
 }
 
 export async function readTurns(desk: Desk, afterSeq?: number): Promise<TapeTurn[]> {
+  const payload = await readTurnsPayload(desk, afterSeq);
+  return payload.turns;
+}
+
+export async function readTurnsPayload(
+  desk: Desk,
+  afterSeq?: number,
+): Promise<{
+  turns: TapeTurn[];
+  streams: { live: unknown[]; cards: unknown[] };
+}> {
   const q = afterSeq != null ? `?afterSeq=${afterSeq}` : "";
   const { res, bodyText, kind } = await doorFetch(
     `/api/session/${desk.sessionId}/turns${q}`,
@@ -133,8 +144,9 @@ export async function readTurns(desk: Desk, afterSeq?: number): Promise<TapeTurn
       speakable?: boolean;
       seq?: number;
     }[];
+    streams?: { live?: unknown[]; cards?: unknown[] };
   };
-  return (data.turns ?? []).map((t) => ({
+  const turns = (data.turns ?? []).map((t) => ({
     text: String(t.text ?? ""),
     role: String(t.role ?? ""),
     kind: String(t.kind ?? ""),
@@ -142,6 +154,61 @@ export async function readTurns(desk: Desk, afterSeq?: number): Promise<TapeTurn
     speakable: t.speakable !== false,
     seq: Number(t.seq ?? 0),
   }));
+  const streams = data.streams ?? {};
+  return {
+    turns,
+    streams: {
+      live: Array.isArray(streams.live) ? streams.live : [],
+      cards: Array.isArray(streams.cards) ? streams.cards : [],
+    },
+  };
+}
+
+export type SessionSeat = { id: string; seatKey: string | null; label: string };
+
+export async function readSession(desk: Desk): Promise<{
+  id: string;
+  seats: SessionSeat[];
+} | null> {
+  const { res, bodyText, kind } = await doorFetch(
+    `/api/session?id=${encodeURIComponent(desk.sessionId)}`,
+  );
+  if (kind !== "json" || !res.ok) {
+    throw new Error(`readSession ${res.status}: ${bodyText.slice(0, 140)}`);
+  }
+  const data = JSON.parse(bodyText) as {
+    session?: { id?: string; seats?: SessionSeat[] } | null;
+  };
+  const session = data.session;
+  if (!session?.id) return null;
+  return { id: session.id, seats: session.seats ?? [] };
+}
+
+export async function runTravisTool(
+  desk: Desk,
+  name: string,
+  args: Record<string, unknown>,
+): Promise<{ ok: boolean; text: string; status: number }> {
+  const { res, bodyText, kind } = await doorFetch(
+    `/api/session/${desk.sessionId}/live/tool`,
+    {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ name, args }),
+    },
+  );
+  if (kind !== "json") {
+    throw new Error(`runTravisTool expected JSON, got ${kind} (${res.status})`);
+  }
+  const data = JSON.parse(bodyText) as { ok?: boolean; text?: string; error?: string };
+  if (!res.ok) {
+    throw new Error(data.error ?? `runTravisTool ${res.status}`);
+  }
+  return {
+    ok: data.ok === true,
+    text: String(data.text ?? ""),
+    status: res.status,
+  };
 }
 
 export async function readQueue(desk: Desk): Promise<{

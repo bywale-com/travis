@@ -111,6 +111,9 @@ test("blocker letter script exists for wake-packet-seats", () => {
   read(".github/scripts/send-blocker-letter.py");
   const yml = read(".github/workflows/wake-packet-seats.yml");
   assert.match(yml, /send-blocker-letter\.py/);
+  assert.match(yml, /EMERGE_EMAIL: \${{ secrets\.EMERGE_EMAIL }}/);
+  assert.match(yml, /RESEND_API_KEY: \${{ secrets\.RESEND_API_KEY }}/);
+  assert.match(yml, /RESEND_FROM_EMAIL: \${{ secrets\.RESEND_FROM_EMAIL }}/);
 });
 
 test("runtime-doors does not fail-look during handoff", () => {
@@ -124,6 +127,7 @@ test("runtime-doors does not fail-look during handoff", () => {
   assert.match(yml, /handoff\/hold/);
   assert.match(yml, /Emerge packet on success/);
   assert.match(yml, /send-emerge-letter\.py/);
+  assert.match(yml, /sort -V \| tail -n 1/);
 });
 
 test("Engineer prompt never green-lights a seat commit", () => {

@@ -3,9 +3,11 @@
  * Create is Cloud HTTP. No sdk-agent-store. No row without a bc- id.
  */
 import { eq } from "drizzle-orm";
+import { requestedBindSeatKey } from "@/lib/protocol-path";
 import { nextUniqueSlug, seatSlugFromLabel } from "@/lib/seat-slug";
 import { db } from "@/server/db/client";
 import { agentBinding } from "@/server/db/schema";
+import { isLivingCursorId } from "@/lib/dest-glass";
 import { createCursorAgent } from "@/server/cursor-port";
 import { ensureSitStore } from "@/server/sit-store";
 
@@ -207,6 +209,116 @@ export async function getIntegrationOptions(): Promise<OptionsResponse> {
   } catch {
     return { models: [], repositories: [], defaultModelId: null };
   }
+}
+
+// ---- Public: bind an existing Cursor cloud agent (no HTTP create) ----
+
+export async function bindAgentBinding(opts: {
+  cursorAgentId: string;
+  label: string;
+  seatKey?: string;
+}): Promise<{ id: string; seatKey: string; label: string; cursorAgentId: string }> {
+  const cursorAgentId = opts.cursorAgentId.trim();
+  const label = opts.label.trim();
+  const requested = requestedBindSeatKey(opts.seatKey);
+  if (!label) throw new Error("Name the agent.");
+  if (!isLivingCursorId(cursorAgentId)) {
+    throw new Error("Need a Cursor cloud agent id (bc-…).");
+  }
+  if (requested === "travis") {
+    throw new Error("Travis is the facilitator, not a Cursor seat.");
+  }
+  await ensureSitStore();
+  if (requested) {
+    const [bySeat] = await db
+      .select()
+      .from(agentBinding)
+      .where(eq(agentBinding.seatKey, requested))
+      .limit(1);
+    if (bySeat) {
+      const [row] = await db
+        .update(agentBinding)
+        .set({ cursorAgentId, label, active: true })
+        .where(eq(agentBinding.id, bySeat.id))
+        .returning();
+      const out = row ?? { ...bySeat, cursorAgentId, label, active: true };
+      return {
+        id: out.id,
+        seatKey: out.seatKey,
+        label: out.label,
+        cursorAgentId: out.cursorAgentId,
+      };
+    }
+    const [byCursor] = await db
+      .select()
+      .from(agentBinding)
+      .where(eq(agentBinding.cursorAgentId, cursorAgentId))
+      .limit(1);
+    if (byCursor) {
+      const [row] = await db
+        .update(agentBinding)
+        .set({ seatKey: requested, label, active: true })
+        .where(eq(agentBinding.id, byCursor.id))
+        .returning();
+      const out = row ?? { ...byCursor, seatKey: requested, label, active: true };
+      return {
+        id: out.id,
+        seatKey: out.seatKey,
+        label: out.label,
+        cursorAgentId: out.cursorAgentId,
+      };
+    }
+    const [row] = await db
+      .insert(agentBinding)
+      .values({
+        seatKey: requested,
+        label,
+        cursorAgentId,
+        runtime: "cloud",
+        active: true,
+      })
+      .returning();
+    if (!row) throw new Error("Binding insert failed.");
+    return {
+      id: row.id,
+      seatKey: row.seatKey,
+      label: row.label,
+      cursorAgentId: row.cursorAgentId,
+    };
+  }
+  const [existing] = await db
+    .select()
+    .from(agentBinding)
+    .where(eq(agentBinding.cursorAgentId, cursorAgentId))
+    .limit(1);
+  if (existing) {
+    return {
+      id: existing.id,
+      seatKey: existing.seatKey,
+      label: existing.label,
+      cursorAgentId: existing.cursorAgentId,
+    };
+  }
+  const rows = await db.select({ seatKey: agentBinding.seatKey }).from(agentBinding);
+  const taken = new Set(rows.map((r) => r.seatKey));
+  const seatKey = nextUniqueSlug(seatSlugFromLabel(label), taken);
+  const [row] = await db
+    .insert(agentBinding)
+    .values({
+      seatKey,
+      label,
+      cursorAgentId,
+      runtime: "cloud",
+      active: true,
+    })
+    .returning();
+  if (!row) throw new Error("Binding insert failed.");
+  return {
+    id: row.id,
+    seatKey: row.seatKey,
+    label: row.label,
+    cursorAgentId: row.cursorAgentId,
+  };
 }
 
 // ---- Public: create binding + Cursor agent ----

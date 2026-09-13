@@ -28,7 +28,7 @@ test("no tool actually grants a view of the code", () => {
   for (const forbidden of ["read_file", "read_diff", "run_tests", "read_ci"]) {
     assert.equal(names.includes(forbidden), false);
   }
-  assert.equal(names.length, 27);
+  assert.equal(names.length, 28);
   assert.equal(names.includes("run_box"), true);
   assert.equal(names.includes("read_box"), true);
   assert.equal(names.includes("write_box"), true);
@@ -36,6 +36,7 @@ test("no tool actually grants a view of the code", () => {
   assert.equal(names.includes("unfold_repo"), true);
   assert.equal(names.includes("computer_use"), false);
   assert.equal(names.includes("browse"), false);
+  assert.equal(names.includes("bind_agent"), true);
   assert.equal(names.includes("create_agent"), true);
   assert.equal(names.includes("sit_agent"), true);
   assert.equal(names.includes("search_room"), true);

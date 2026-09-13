@@ -3,8 +3,9 @@
  * SCP-028 — destFromReferencedTurn reads this agent_post’s author only.
  */
 import { and, eq } from "drizzle-orm";
+import { isLivingCursorId } from "@/lib/dest-glass";
+import { destKeysForSeat, sitRoleFromAlias } from "@/lib/protocol-path";
 import { isTravisSeat } from "@/lib/seats";
-import { isSitProtocolRole } from "@/lib/protocol-path";
 import { authorDestKeyFromTurn, mergeReplyDestKeys } from "@/lib/reply-dest";
 import type { TypedDest } from "@/lib/typed-dest";
 import type { AgentBinding } from "@/server/db/schema";
@@ -17,9 +18,14 @@ export async function resolveDestBinding(
   sessionId: string,
   destKey: string,
 ): Promise<AgentBinding | null> {
-  if (isSitProtocolRole(destKey)) {
+  for (const key of destKeysForSeat(destKey)) {
+    const open = await openBindingForSeat(sessionId, key);
+    if (open && isLivingCursorId(open.cursorAgentId)) return open;
+  }
+  const role = sitRoleFromAlias(destKey);
+  if (role) {
     try {
-      return await resolveRoleDest({ sessionId, role: destKey });
+      return await resolveRoleDest({ sessionId, role });
     } catch (err) {
       if (err instanceof SitError) return null;
       throw err;

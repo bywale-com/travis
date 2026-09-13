@@ -7,7 +7,15 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
-- **2026-09-13** · Hotfix 094 · this PR — Wire emerge packet delivery, email notification, and emerge label directly to runtime-doors on pass, because PM-LOOK verdict passes were decommissioned and green deployments never triggered emerge.
+- **2026-09-13** · Hotfix 097 · this PR — Direct `bind_agent` maps a `bc-` id to a seat (including architect) without a sit prompt, because an existing Cursor chat is already configured and dest should route to that open member.
+
+- **2026-09-13** · Hotfix 096 · this PR — `bind_agent` tool and `bind-agent` runtime walk (no `POST /v1/agents`), because Technical Architect seats are started in Cursor and Travis should bind `bc-…` ids instead of provisioning on doors.
+
+- **2026-09-13** · Blocker 003 · this PR — create-agent walk stayed red on Cursor create hang; superseded by 096 bind walk.
+
+- **2026-09-13** · Hotfix 095 · this PR — Cursor create timeout and close Travis stream after tools, because `create_agent` could hang with a live stream.
+
+- **2026-09-13** · Hotfix 094 · merged — Wire emerge packet delivery, email notification, and emerge label directly to runtime-doors on pass, because PM-LOOK verdict passes were decommissioned and green deployments never triggered emerge.
 
 - **2026-09-13** · Hotfix 091 · this PR — Dest leave files `dest_job` on the catalog bind before role resolve can spin Cursor create, because runtime-doors dest walks hung until Vercel killed SSE with an empty queue and no dest error.
 
