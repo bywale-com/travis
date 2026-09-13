@@ -111,6 +111,9 @@ test("blocker letter script exists for wake-packet-seats", () => {
   read(".github/scripts/send-blocker-letter.py");
   const yml = read(".github/workflows/wake-packet-seats.yml");
   assert.match(yml, /send-blocker-letter\.py/);
+  assert.match(yml, /EMERGE_EMAIL: \${{ secrets\.EMERGE_EMAIL }}/);
+  assert.match(yml, /RESEND_API_KEY: \${{ secrets\.RESEND_API_KEY }}/);
+  assert.match(yml, /RESEND_FROM_EMAIL: \${{ secrets\.RESEND_FROM_EMAIL }}/);
 });
 
 test("runtime-doors does not fail-look during handoff", () => {

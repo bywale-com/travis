@@ -60,6 +60,9 @@ jobs:
           BEFORE: ${{ github.event.before }}
           AFTER: ${{ github.sha }}
           HEAD_REF: ${{ github.ref_name }}
+          EMERGE_EMAIL: ${{ secrets.EMERGE_EMAIL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_FROM_EMAIL: ${{ secrets.RESEND_FROM_EMAIL }}
         run: |
           set -euo pipefail
           if [[ -n "${WAKE_GITHUB_TOKEN:-}" ]]; then
