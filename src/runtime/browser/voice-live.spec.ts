@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { assertThinkWorked, destLeaveStarted, failUse } from "../app-worked";
 import { readQueue, readTurns, runtimeBaseUrl } from "../desk";
-import { closePhone, launchPhone } from "./harness";
+import { closePhone, dumpFaceMiss, launchPhone, whichDoor } from "./harness";
 import { REALTIME_USAGE_HOOK } from "./injections";
 
 const haveUrl = Boolean(runtimeBaseUrl());
@@ -34,6 +34,7 @@ describe("browser voice-live", { skip: !haveUrl }, () => {
         failUse("voice-live", "Live is unwired — canary is red", await readTurns(phone.desk));
       }
       if (first === "miss") {
+        await dumpFaceMiss(phone.page, await whichDoor(phone.page));
         failUse("voice-live", "Voice never showed Talking with Travis…", await readTurns(phone.desk));
       }
 

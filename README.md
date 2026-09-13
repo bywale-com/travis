@@ -7,6 +7,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-13** · Hotfix 098 fail-look · this PR — Voice enter writes listening on the presence ref before armEar, because voice-live never saw Talking with Travis… while first enter still thought the room had ended.
+
 - **2026-09-13** · Hotfix 098 fail-look · this PR — Type dest leave stays on the tape when Cursor send misses, and dest_job is not marked failed, because type-dest saw `user/engineer` then an empty queue after Travis wrap.
 
 - **2026-09-13** · Hotfix 098 fail-look · this PR — Talk waits for the Talk/Pause door and drops a Live handle that finishes after leaving Voice, because talk-mode matched Voice “Listening…” and the SpeechRecognition double never started.

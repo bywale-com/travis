@@ -92,6 +92,7 @@ test("launchPhone closes Chromium on throw and finds View log by text", () => {
   assert.match(src, /getByText\("View log"/);
   assert.match(src, /travis-character/);
   assert.match(src, /name: "Continue"/);
+  assert.match(src, /grantPermissions/);
   assert.doesNotMatch(src, /getByRole\("button", \{ name: "View log" \}\)/);
   assert.match(character, /travis-character/);
   assert.equal(classifyFaceText("Send login link"), "login");
@@ -104,6 +105,20 @@ test("launchPhone closes Chromium on throw and finds View log by text", () => {
     "mode",
   );
   assert.equal(classifyFaceText("Vercel Authentication"), "none");
+});
+
+test("voice-live dumps the face when Talking never shows", () => {
+  const live = read("src/runtime/browser/voice-live.spec.ts");
+  assert.match(live, /dumpFaceMiss/);
+  assert.match(live, /Talking with Travis/);
+});
+
+test("attachSession writes listening on the presence ref before armEar", () => {
+  const room = read("src/components/Room.tsx");
+  const attach = room.slice(room.indexOf("const attachSession"), room.indexOf("const loadRooms"));
+  const refAt = attach.lastIndexOf('presenceRef.current = "listening"');
+  const armAt = attach.lastIndexOf("void armEar()");
+  assert.ok(refAt >= 0 && armAt > refAt, "ended presence on first enter must not block Live");
 });
 
 test("stream-arch cue fixture is checked in", () => {

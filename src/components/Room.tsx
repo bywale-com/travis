@@ -20,6 +20,7 @@ import {
   liveOwnsMic,
   modeSwitchEarAction,
   acceptFinishedLive,
+  presenceBlocksListen,
   sttAlreadySatisfies,
   sttMayStart,
   sttOnEndAction,
@@ -289,10 +290,6 @@ function waitForSpeechIdle(timeoutMs = 8000): Promise<void> {
     };
     tick();
   });
-}
-
-function presenceBlocksListen(presence: Presence): boolean {
-  return presence === "ended" || presence === "paused";
 }
 
 function QuietTextButton({
@@ -1859,6 +1856,7 @@ export function Room({
   const attachSession = useCallback(
     async (s: Session, resume: boolean) => {
       setSession(s);
+      sessionRef.current = s;
       sessionIdRef.current = s.id;
       const mode: ViewMode = s.viewMode === "log" ? "log" : "voice";
       setViewMode(mode);
@@ -1873,6 +1871,7 @@ export function Room({
       clearDraft();
       if (s.status === "ended") {
         setPresence("ended");
+        presenceRef.current = "ended";
         setSubtitle("");
         stopRecognition();
         void stopLive();
@@ -1892,6 +1891,7 @@ export function Room({
       }
       if (s.status === "paused") {
         setPresence("paused");
+        presenceRef.current = "paused";
         setSubtitle("Paused");
         stopRecognition();
         void stopLive();
@@ -1901,10 +1901,12 @@ export function Room({
         stopRecognition();
         void stopLive();
         setPresence("listening");
+        presenceRef.current = "listening";
         setSubtitle("");
         return;
       }
       setPresence("listening");
+      presenceRef.current = "listening";
       setSubtitle("Listening…");
       void armEar();
     },
@@ -2293,6 +2295,7 @@ export function Room({
     resumeSendSounds();
     if (presence === "paused") {
       setPresence("listening");
+      presenceRef.current = "listening";
       setSubtitle("Listening…");
       await fetch(`/api/session/${session.id}`, {
         method: "PATCH",
@@ -2302,6 +2305,7 @@ export function Room({
       void armEar();
     } else {
       setPresence("paused");
+      presenceRef.current = "paused";
       stopRecognition();
       void stopLive();
       setSubtitle("Paused");

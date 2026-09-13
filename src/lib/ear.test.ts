@@ -10,6 +10,7 @@ import {
   sttOnEndAction,
   wantedEar,
   acceptFinishedLive,
+  presenceBlocksListen,
   watchdogShouldStartStt,
   whichEar,
   type EarState,
@@ -260,6 +261,13 @@ test("old TTS onend (quit while speaking) leaves Talk deaf", () => {
  * recognizer is still running from that very utterance, so the old guard
  * ("already on STT, nothing to do") returned before anything tried Live.
  */
+test("ended and paused block the ear; listening does not", () => {
+  assert.equal(presenceBlocksListen("ended"), true);
+  assert.equal(presenceBlocksListen("paused"), true);
+  assert.equal(presenceBlocksListen("listening"), false);
+  assert.equal(presenceBlocksListen("speaking"), false);
+});
+
 test("saying travis in Voice wants Live even while the recognizer is running", () => {
   const travisVoice = {
     viewMode: "voice" as const,

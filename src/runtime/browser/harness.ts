@@ -147,6 +147,7 @@ export async function launchPhone(opts?: {
     if (opts?.initScript) {
       await context.addInitScript(opts.initScript);
     }
+    await context.grantPermissions(["microphone"], { origin: origin.origin });
     const page = await context.newPage();
     await page.goto(base, { waitUntil: "domcontentloaded" });
     const deadline = Date.now() + FACE_READY_MS;

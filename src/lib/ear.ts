@@ -17,6 +17,11 @@ export const LIVE_RECONNECTING_LINE = "Reconnecting…";
 
 export type Presence = "listening" | "paused" | "speaking" | "ended";
 
+/** Ended and paused must not arm STT or Live. Write the ref before armEar. */
+export function presenceBlocksListen(presence: Presence): boolean {
+  return presence === "ended" || presence === "paused";
+}
+
 export type SttOnEndAction = "stop" | "wait" | "restart";
 
 export type ModeSwitchAction = "keep" | "arm" | "release";
