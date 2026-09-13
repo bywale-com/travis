@@ -26,34 +26,41 @@ function tsxBin(): string {
   return require.resolve("tsx/cli");
 }
 
-preparePlaywrightChromium();
-console.log("runtime: proving fake-audio capture reaches a WebRTC session");
-await proveFakeAudioReachesWebRtc();
+async function main(): Promise<void> {
+  preparePlaywrightChromium();
+  console.log("runtime: proving fake-audio capture reaches a WebRTC session");
+  await proveFakeAudioReachesWebRtc();
 
-const tsx = tsxBin();
-run("server-pipe walks (HTTP contract, not microphone)", [
-  tsx,
-  "--test",
-  "--test-concurrency=1",
-  "src/runtime/walks/type-send.spec.ts",
-  "src/runtime/walks/type-walk-back.spec.ts",
-  "src/runtime/walks/type-dest.spec.ts",
-  "src/runtime/walks/voice-wrap.spec.ts",
-  "src/runtime/walks/voice-stream-arch.spec.ts",
-  "src/runtime/walks/come-back.spec.ts",
-  "src/runtime/walks/bind-agent.spec.ts",
-]);
-run("browser type-mode / talk-mode / voice-own (deterministic)", [
-  tsx,
-  "--test",
-  "--test-concurrency=1",
-  "src/runtime/browser/type-mode.spec.ts",
-  "src/runtime/browser/talk-mode.spec.ts",
-  "src/runtime/browser/voice-own.spec.ts",
-]);
-run("browser voice-live canary (real microphone → Realtime)", [
-  tsx,
-  "--test",
-  "--test-concurrency=1",
-  "src/runtime/browser/voice-live.spec.ts",
-]);
+  const tsx = tsxBin();
+  run("server-pipe walks (HTTP contract, not microphone)", [
+    tsx,
+    "--test",
+    "--test-concurrency=1",
+    "src/runtime/walks/type-send.spec.ts",
+    "src/runtime/walks/type-walk-back.spec.ts",
+    "src/runtime/walks/type-dest.spec.ts",
+    "src/runtime/walks/voice-wrap.spec.ts",
+    "src/runtime/walks/voice-stream-arch.spec.ts",
+    "src/runtime/walks/come-back.spec.ts",
+    "src/runtime/walks/bind-agent.spec.ts",
+  ]);
+  run("browser type-mode / talk-mode / voice-own (deterministic)", [
+    tsx,
+    "--test",
+    "--test-concurrency=1",
+    "src/runtime/browser/type-mode.spec.ts",
+    "src/runtime/browser/talk-mode.spec.ts",
+    "src/runtime/browser/voice-own.spec.ts",
+  ]);
+  run("browser voice-live canary (real microphone → Realtime)", [
+    tsx,
+    "--test",
+    "--test-concurrency=1",
+    "src/runtime/browser/voice-live.spec.ts",
+  ]);
+}
+
+void main().catch((err: unknown) => {
+  console.error(err);
+  process.exit(1);
+});

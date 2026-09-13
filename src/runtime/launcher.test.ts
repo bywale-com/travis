@@ -38,6 +38,12 @@ test("package.json test:runtime prepares the browser and delegates pipe then bro
   assert.match(run, /talk-mode\.spec\.ts/);
   assert.match(run, /voice-own\.spec\.ts/);
   assert.match(run, /voice-live\.spec\.ts/);
+  assert.match(run, /async function main/);
+  assert.doesNotMatch(
+    run,
+    /^await\s/m,
+    "tsx CJS cannot transform top-level await; keep the runner inside async main",
+  );
   const pipeAt = run.indexOf("server-pipe walks");
   const ownAt = run.indexOf("voice-own.spec.ts");
   const liveAt = run.indexOf("voice-live.spec.ts");
