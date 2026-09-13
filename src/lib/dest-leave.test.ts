@@ -68,6 +68,18 @@ test("writeAndLeaveDest files dest_job before Cursor handoff returns", () => {
   assert.ok(insertAt >= 0 && handoffAt > insertAt);
 });
 
+test("dest stream Cursor miss does not fail dest_job", () => {
+  const src = readFileSync(
+    join(process.cwd(), "src/server/seat-pipe.ts"),
+    "utf8",
+  );
+  const fn = src.slice(src.indexOf("async function driveDestCursorEvents"));
+  const body = fn.slice(0, fn.indexOf("export async function continueDestStream"));
+  const job = body.slice(body.indexOf("if (params.destJobId"));
+  assert.match(job, /if \(params\.destJobId && !failed\)/);
+  assert.doesNotMatch(job, /status: "failed"/);
+});
+
 test("role dest resolve does not await sit handoff", () => {
   const src = readFileSync(join(process.cwd(), "src/server/sit.ts"), "utf8");
   assert.match(src, /void sitBinding\(/);

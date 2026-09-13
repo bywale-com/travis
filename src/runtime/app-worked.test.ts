@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  destLeaveOnTape,
   destLeaveStarted,
   thinkMissReason,
   travisSpeakCount,
@@ -73,6 +74,42 @@ test("dest leave is running or queued, not a Travis essay", () => {
   );
   assert.equal(
     destLeaveStarted({ queue: { seats: [{ seatKey: "engineer" }] }, running: [] }),
+    true,
+  );
+});
+
+test("dest leave on tape is a dest-seat user turn, not Travis wrap", () => {
+  assert.equal(
+    destLeaveOnTape([
+      turn({
+        kind: "user",
+        role: "user",
+        seatKey: "travis",
+        speakable: true,
+        text: "Engineer, inspect.",
+        seq: 1,
+      }),
+      turn({
+        kind: "agent_post",
+        seatKey: "travis",
+        speakable: true,
+        text: "Engineer is already inspecting.",
+        seq: 2,
+      }),
+    ]),
+    false,
+  );
+  assert.equal(
+    destLeaveOnTape([
+      turn({
+        kind: "user",
+        role: "user",
+        seatKey: "engineer",
+        speakable: true,
+        text: "Engineer, inspect.",
+        seq: 2,
+      }),
+    ]),
     true,
   );
 });

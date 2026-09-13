@@ -784,9 +784,9 @@ async function driveDestCursorEvents(params: {
       });
     }
   }
-  if (params.destJobId) {
+  if (params.destJobId && !failed) {
     await markDestJob(params.destJobId, {
-      status: failed ? "failed" : "completed",
+      status: "completed",
       done: statusText,
     }).catch(() => {});
   }
