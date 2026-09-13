@@ -94,7 +94,15 @@ Now, previews are strictly **gated**:
 
 ---
 
-## 4. Summary Table: What Action Takes Place?
+## 4. Keeping the PR Description Updated in Plain English
+
+Every time an automated seat (like the Engineer on a `fail-look` rebuild) pushes a fix or plant, the automation is required to update the PR description box at the top of the GitHub Pull Request.
+
+The PR description serves as the human-readable changelog of what was attempted, what broke, what was fixed, and whether checks are green, so the founder never has to parse git commit diffs or CI logs to understand the state of the branch.
+
+---
+
+## 5. Summary Table: What Action Takes Place?
 
 | Event / Push Content | Labels Added / Removed | Does Vercel Build? |
 | :--- | :--- | :--- |
