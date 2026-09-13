@@ -78,6 +78,14 @@ export function wantedEar(opts: Omit<EarState, "liveUp">): EarKind {
 }
 
 /**
+ * A Live token that finishes after the founder left Voice must not keep the
+ * mic or halt Talk STT. Only Voice + dest Travis still wants that handle.
+ */
+export function acceptFinishedLive(opts: Omit<EarState, "liveUp">): boolean {
+  return wantedEar(opts) === "live";
+}
+
+/**
  * A running recognizer is reason to leave the mic alone only when STT is the
  * ear we wanted. In Voice + dest Travis it is a fallback to be replaced.
  */

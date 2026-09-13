@@ -9,6 +9,7 @@ import {
   sttMayStart,
   sttOnEndAction,
   wantedEar,
+  acceptFinishedLive,
   watchdogShouldStartStt,
   whichEar,
   type EarState,
@@ -360,6 +361,11 @@ test("leaving Voice for Talk on dest Travis also re-arms", () => {
     modeSwitchEarAction({ from: travisVoice, to: travisTalk, recLive: true }),
     "arm",
   );
+});
+
+test("a Live handle that finishes after leaving Voice is not kept", () => {
+  assert.equal(acceptFinishedLive(travisTalk), false);
+  assert.equal(acceptFinishedLive(travisVoice), true);
 });
 
 test("Type still releases the mic on dest Travis", () => {

@@ -187,8 +187,17 @@ export async function openLogType(page: Page): Promise<void> {
 export async function openLogTalk(page: Page): Promise<void> {
   await page.getByText("View log", { exact: true }).click();
   const talk = page.getByRole("button", { name: "Talk" });
-  if (await talk.count()) await talk.click();
-  await page.getByText("Listening", { exact: false }).waitFor({ timeout: 20_000 });
+  try {
+    await talk.waitFor({ timeout: 20_000 });
+  } catch (err) {
+    await dumpFaceMiss(page, await whichDoor(page));
+    throw err;
+  }
+  if ((await talk.getAttribute("aria-pressed")) !== "true") {
+    await talk.click();
+  }
+  await page.getByRole("button", { name: "Talk", pressed: true }).waitFor();
+  await page.getByRole("button", { name: "Pause" }).waitFor();
 }
 
 export function watchPosts(page: Page): { sends: string[]; finalizes: string[] } {

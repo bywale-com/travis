@@ -19,6 +19,7 @@ import {
   liveCloseAction,
   liveOwnsMic,
   modeSwitchEarAction,
+  acceptFinishedLive,
   sttAlreadySatisfies,
   sttMayStart,
   sttOnEndAction,
@@ -1111,6 +1112,11 @@ export function Room({
           lastConnectMissRef.current = sawUnwired ? "unwired" : "miss";
           return false;
         }
+        if (!acceptFinishedLive(readEar())) {
+          await handle.stop();
+          liveRef.current = null;
+          return false;
+        }
         liveRef.current = handle;
         lastConnectMissRef.current = null;
         haltRecognition();
@@ -1819,7 +1825,7 @@ export function Room({
 
     if (have === "live" || have === "live-connecting") return;
 
-    if (liveRef.current && !(voice && destTravis)) {
+    if (want === "stt" && (liveRef.current || liveConnectingRef.current)) {
       await stopLive();
       await delay(400);
       if (gen !== armEarGenRef.current) return;
@@ -2330,6 +2336,9 @@ export function Room({
     }
     setViewMode(mode);
     viewModeRef.current = mode;
+    if (from.viewMode === "voice" && mode === "log") {
+      await stopLive();
+    }
     await fetch(`/api/session/${session.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },

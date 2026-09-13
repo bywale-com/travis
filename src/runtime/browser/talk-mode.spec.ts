@@ -13,7 +13,10 @@ describe("browser talk-mode", { skip: !haveUrl }, () => {
     try {
       const posts = watchPosts(phone.page);
       await openLogTalk(phone.page);
-      await phone.page.waitForTimeout(800);
+      await phone.page.waitForFunction(
+        () => ((window as unknown as { __travisSttStarts?: number }).__travisSttStarts ?? 0) >= 1,
+        { timeout: 20_000 },
+      );
       const started = await phone.page.evaluate(() => (window as unknown as { __travisSttStarts?: number }).__travisSttStarts ?? 0);
       assert.ok(started >= 1, "Talk must start the SpeechRecognition double");
 

@@ -7,6 +7,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-13** · Hotfix 098 fail-look · this PR — Talk waits for the Talk/Pause door and drops a Live handle that finishes after leaving Voice, because talk-mode matched Voice “Listening…” and the SpeechRecognition double never started.
+
 - **2026-09-13** · Hotfix 098 fail-look · this PR — Browser launch seeds `travis-character` and walks Continue on the Mode door, because type-mode hit “Pick a character” and reported `door=none` after HTTP walks were green.
 
 - **2026-09-13** · Hotfix 099 fail-look · this PR — Browser suites spawn one spec at a time and exit on the first miss, because Node 22 rejects `--test-fail-fast` and doors died before Type/Talk/Voice ran.
