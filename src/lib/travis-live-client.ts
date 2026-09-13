@@ -177,13 +177,30 @@ export async function startTravisLive(opts: {
     void audioEl.play().catch(() => {});
   };
 
-  try {
+  const attachMicAfterPeerReady = async () => {
     mic = await navigator.mediaDevices.getUserMedia({
       audio: { echoCancellation: true, noiseSuppression: true },
     });
-    for (const track of mic.getAudioTracks()) pc.addTrack(track, mic);
+    const track = mic.getAudioTracks()[0];
+    if (!track) throw new Error("Live: no microphone track");
+    const sender =
+      pc.getSenders().find((s) => s.track?.kind === "audio") ??
+      pc.getSenders().find((s) => !s.track);
+    if (sender) await sender.replaceTrack(track);
+    else pc.addTrack(track, mic);
+  };
+
+  try {
+    // Hold the audio m-line without opening the mic. Chromium's fake-file
+    // capture starts at getUserMedia; the dest line is the first 4s of the
+    // fixture and was gone before RTP/session.update if we armed during ICE.
+    pc.addTransceiver("audio", { direction: "sendrecv" });
 
     dc = pc.createDataChannel("oai-events");
+    let resolveDcOpen = () => {};
+    const dcOpen = new Promise<void>((resolve) => {
+      resolveDcOpen = resolve;
+    });
     dc.addEventListener("open", () => {
       sendEvent({
         type: "session.update",
@@ -199,6 +216,7 @@ export async function startTravisLive(opts: {
         sendNotify(pendingNotify);
         pendingNotify = null;
       }
+      resolveDcOpen();
     });
     dc.addEventListener("message", (e) => {
       if (closed) return;
@@ -280,6 +298,15 @@ export async function startTravisLive(opts: {
       throw new Error(answerSdp.slice(0, 180) || `Live ${sdpRes.status}`);
     }
     await pc.setRemoteDescription({ type: "answer", sdp: answerSdp });
+    if (dc && dc.readyState !== "open") {
+      await Promise.race([
+        dcOpen,
+        new Promise<void>((resolve) => {
+          window.setTimeout(resolve, 4000);
+        }),
+      ]);
+    }
+    await attachMicAfterPeerReady();
 
     function stop() {
       closed = true;

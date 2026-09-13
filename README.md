@@ -7,6 +7,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-13** · Hotfix 098 fail-look · this PR — Live opens the mic after the Realtime peer can receive, because voice-live dest played in the first 4s of the fixture during ICE and the tape stayed empty.
+
 - **2026-09-13** · Runtime preflight · this PR — `npm run test:preflight` is the Engineer’s local first sensor (units + Chromium + phone-face doors), because Vercel doors were the first place runner and Mode/Talk misses showed up.
 
 - **2026-09-13** · Hotfix 098 fail-look · this PR — Voice enter writes listening on the presence ref before armEar, because voice-live never saw Talking with Travis… while first enter still thought the room had ended.

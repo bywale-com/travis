@@ -142,6 +142,7 @@ export const LIVE_OWNERSHIP_MOCKS = `
 export const REALTIME_USAGE_HOOK = `
 (() => {
   window.__realtimeUsage = null;
+  window.__realtimeTx = [];
   window.__travisSttStarts = 0;
   const Orig = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (Orig) {
@@ -170,6 +171,9 @@ export const REALTIME_USAGE_HOOK = `
             window.__realtimeUsage = ev.response && ev.response.usage
               ? ev.response.usage
               : ev.response || ev;
+          }
+          if (typeof ev.type === "string" && ev.type.indexOf("transcription") !== -1) {
+            window.__realtimeTx = (window.__realtimeTx || []).concat([ev.type]);
           }
         } catch (err) {}
       });

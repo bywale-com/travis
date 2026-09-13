@@ -111,6 +111,16 @@ test("voice-live dumps the face when Talking never shows", () => {
   const live = read("src/runtime/browser/voice-live.spec.ts");
   assert.match(live, /dumpFaceMiss/);
   assert.match(live, /Talking with Travis/);
+  assert.match(live, /leave-before-wrap/);
+});
+
+test("Live opens the mic after the Realtime peer can receive", () => {
+  const src = read("src/lib/travis-live-client.ts");
+  const remoteAt = src.indexOf("await pc.setRemoteDescription");
+  const armAt = src.lastIndexOf("await attachMicAfterPeerReady()");
+  assert.ok(remoteAt >= 0 && armAt > remoteAt, "dest line must not play during ICE");
+  assert.match(src, /replaceTrack/);
+  assert.match(src, /addTransceiver\("audio"/);
 });
 
 test("attachSession writes listening on the presence ref before armEar", () => {
