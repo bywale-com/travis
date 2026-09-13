@@ -9,6 +9,9 @@ import { OPERATOR_COOKIE } from "@/lib/operator-auth";
 import { STAY_KEY } from "@/lib/stay";
 import { doorFetch, openFreshRoom, runtimeBaseUrl, type Desk } from "../desk";
 
+/** Same key as `src/theme/character.tsx` — returning operator already picked. */
+export const CHARACTER_KEY = "travis-character";
+
 export const PHONE = { width: 390, height: 844 };
 
 export const TYPE_LINE = "One-line note on the tape.";
@@ -49,10 +52,11 @@ function bypassHeaders(): Record<string, string> {
   };
 }
 
-export type FaceDoor = "login" | "index" | "view-log" | "none";
+export type FaceDoor = "login" | "mode" | "index" | "view-log" | "none";
 
 export function classifyFaceText(text: string): FaceDoor {
   if (/Send login link/i.test(text)) return "login";
+  if (/Pick a character/i.test(text)) return "mode";
   if (/\bView log\b/.test(text)) return "view-log";
   if (/\bRooms\b/.test(text) && /TRAVIS/.test(text)) return "index";
   return "none";
@@ -127,13 +131,18 @@ export async function launchPhone(opts?: {
       ]);
     }
     await context.addInitScript(
-      ({ stayKey, sessionId }) => {
+      ({ stayKey, characterKey, sessionId }) => {
         localStorage.setItem(
           stayKey,
           JSON.stringify({ sessionId, plate: "room" }),
         );
+        localStorage.setItem(characterKey, "mission");
       },
-      { stayKey: STAY_KEY, sessionId: desk.sessionId },
+      {
+        stayKey: STAY_KEY,
+        characterKey: CHARACTER_KEY,
+        sessionId: desk.sessionId,
+      },
     );
     if (opts?.initScript) {
       await context.addInitScript(opts.initScript);
@@ -150,6 +159,10 @@ export async function launchPhone(opts?: {
       if (door === "login") {
         await dumpFaceMiss(page, door);
         throw new Error("Login door — test operator cookie did not open the desk");
+      }
+      if (door === "mode") {
+        const cont = page.getByRole("button", { name: "Continue" });
+        if (await cont.count()) await cont.click();
       }
       await page.waitForTimeout(250);
     }

@@ -85,14 +85,24 @@ test("runtime-doors cancelled or a walks miss is red, not emerge", () => {
 
 test("launchPhone closes Chromium on throw and finds View log by text", () => {
   const src = read("src/runtime/browser/harness.ts");
+  const character = read("src/theme/character.tsx");
   assert.match(src, /await browser\.close\(\)\.catch/);
   assert.match(src, /dumpFaceMiss/);
   assert.match(src, /classifyFaceText/);
   assert.match(src, /getByText\("View log"/);
+  assert.match(src, /travis-character/);
+  assert.match(src, /name: "Continue"/);
   assert.doesNotMatch(src, /getByRole\("button", \{ name: "View log" \}\)/);
+  assert.match(character, /travis-character/);
   assert.equal(classifyFaceText("Send login link"), "login");
   assert.equal(classifyFaceText("TRAVIS\nRooms\nNew room"), "index");
   assert.equal(classifyFaceText("Talking with Travis…\nView log"), "view-log");
+  assert.equal(
+    classifyFaceText(
+      "TRAVIS\nPick a character, not a brightness.\nMission\nCarbon\nMatch system\nContinue",
+    ),
+    "mode",
+  );
   assert.equal(classifyFaceText("Vercel Authentication"), "none");
 });
 
