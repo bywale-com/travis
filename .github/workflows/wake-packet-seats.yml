@@ -1,15 +1,17 @@
 # Cheap gate in front of Cursor Automations.
 # GitHub path filter + this-push diff. No Cursor boot until a label lands.
-# Labels: wake-sa · wake-engineer · fail-look · emerge · blocker
+# Labels: wake-sa · wake-engineer · fail-look · emerge · blocker · previewing
 # Packet: this push lands PM-PACKET-NNN-*.md AND that file has **Wake:** sa
 #   → wake-sa. Missing / hold = wait. Filename alone is not the go.
-# Hotfix: this push lands HOTFIX-NNN-*.md → wake-engineer only (no wake-sa).
+# Hotfix: this push **adds** HOTFIX-NNN-*.md → wake-engineer only (no wake-sa).
+#   A recut that edits a hotfix file already on the PR does not re-wake.
 # One seat label at a time — adding a wake strips the others.
 # blocker already on the PR → no new seat labels (hold).
+# previewing on the PR → Vercel has the ball. No new seat. No second green-light.
 # Plant finished (src/ or handoff on a packet/hotfix PR) → strip seats.
 # No wake-pm-look. Lib verify is Engineer, last, after the handoff rewrite.
-# Preview is opt-in: after handoff labels and blocker are gone, empty-commit
-# the green-light tag. Seat subjects must not be that line.
+# Preview is opt-in: after handoff labels, blocker, and previewing are gone,
+# empty-commit the green-light tag and add previewing in that same job.
 # Label adds must be the founder (WAKE_GITHUB_TOKEN), not github-actions[bot].
 # Cursor's label trigger does not treat the Actions bot as the owner.
 # See docs/register/AUTOMATION-PACKET-CHAIN.md
@@ -78,14 +80,19 @@ jobs:
             # clean checkout. Diff the tip commit itself.
             if git rev-parse --verify "${AFTER}^" >/dev/null 2>&1; then
               files=$(git diff --name-only "${AFTER}^" "$AFTER")
+              added=$(git diff --name-only --diff-filter=A "${AFTER}^" "$AFTER")
             else
               files=$(git diff-tree --no-commit-id --name-only -r "$AFTER")
+              added=$(git diff-tree --no-commit-id --name-only --diff-filter=A -r "$AFTER")
             fi
           else
             files=$(git diff --name-only "$BEFORE" "$AFTER")
+            added=$(git diff --name-only --diff-filter=A "$BEFORE" "$AFTER")
           fi
           echo "This push:"
           echo "$files"
+          echo "Added in this push:"
+          echo "$added"
 
           pr=""
           for i in 1 2 3 4 5 6; do
@@ -107,6 +114,7 @@ jobs:
           gh label create fail-look --color CCCCCC --description "Cursor: Engineer loop after PM look Fail" 2>/dev/null || true
           gh label create emerge --color CCCCCC --description "PM look Pass — human test" 2>/dev/null || true
           gh label create blocker --color CCCCCC --description "Founder ops hold — automations sleep" 2>/dev/null || true
+          gh label create previewing --color 1D76DB --description "Vercel has the ball — no second green-light, no new seat" 2>/dev/null || true
 
           strip_seats_except() {
             keep="${1:-}"
@@ -118,6 +126,10 @@ jobs:
           }
           add_seat() {
             lab="$1"
+            if gh pr view "$pr" --json labels --jq '.labels[].name' | grep -qx previewing; then
+              echo "previewing on #$pr. No new seat ($lab)."
+              return 0
+            fi
             strip_seats_except "$lab"
             gh pr edit "$pr" --remove-label "$lab" || true
             gh pr edit "$pr" --add-label "$lab"
@@ -161,10 +173,10 @@ jobs:
             exit 0
           fi
 
-          # Hotfix pickup: this push lands HOTFIX-NNN-*.md. Title the PR
-          # "Hotfix NNN — …" (human tell). Skip SA. Do not re-wake Engineer
-          # on later commits on the same PR (file not in this push).
-          if echo "$files" | grep -E '^docs/register/HOTFIX-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$' | grep -q .; then
+          # Hotfix pickup: this push **adds** HOTFIX-NNN-*.md (not an edit of
+          # a file already on the PR). Title the PR "Hotfix NNN — …". Skip SA.
+          # Recuts that touch the hotfix doc must not re-arm wake-engineer.
+          if echo "$added" | grep -E '^docs/register/HOTFIX-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$' | grep -q .; then
             # File plus title. Merging main into a packet PR brings HOTFIX
             # files in this-push; that is not a hotfix cut.
             title=$(gh pr view "$pr" --json title --jq .title)
@@ -172,12 +184,12 @@ jobs:
               # Re-arm: label-added only fires on a fresh add. A leftover
               # wake-engineer from an earlier push would otherwise stay silent.
               if add_seat wake-engineer; then
-                echo "Hotfix. Labeled #$pr wake-engineer. No wake-sa."
+                echo "Hotfix (new file). Labeled #$pr wake-engineer. No wake-sa."
               else
                 echo "Hotfix. Could not add wake-engineer. Fine-grained PAT needs Issues write AND Pull requests write on this repo."
               fi
             else
-              echo "HOTFIX files in this push; PR title is not Hotfix ($title). No wake-engineer."
+              echo "HOTFIX files added; PR title is not Hotfix ($title). No wake-engineer."
             fi
           elif echo "$files" | grep -E '^docs/register/PM-PACKET-[0-9]+-.+\.md$' | grep -v -- '-TEST\.md$' | grep -q .; then
             # Filename is not the go. Prose "then SA" is not the go.
@@ -306,9 +318,13 @@ jobs:
     needs: [label]
     if: github.event_name == 'push' && github.ref != 'refs/heads/main' && needs.label.result == 'success'
     runs-on: ubuntu-latest
+    concurrency:
+      group: green-light-${{ github.ref_name }}
+      cancel-in-progress: false
     permissions:
       contents: write
-      pull-requests: read
+      pull-requests: write
+      issues: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -337,9 +353,13 @@ jobs:
   blocker-release:
     if: github.event_name == 'pull_request' && github.event.action == 'unlabeled' && github.event.label.name == 'blocker'
     runs-on: ubuntu-latest
+    concurrency:
+      group: green-light-${{ github.event.pull_request.head.ref }}
+      cancel-in-progress: false
     permissions:
       contents: write
-      pull-requests: read
+      pull-requests: write
+      issues: write
     steps:
       - uses: actions/checkout@v4
         with:
