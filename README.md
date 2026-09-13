@@ -6,6 +6,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-13** · Hotfix 093 · this PR — Preview green-light fires only on plant finish (src/ or ENGINEER-HANDOFF.md), blocker release, or manual preview label, because unlabeled PR pushes were triggering unintended Vercel previews.
+
 - **2026-09-13** · Hotfix 092 · this PR — Green-light, fail-look, and seats share one token via `previewing`, because empty labels were not “the last preview finished” and a recut that edited the hotfix file re-armed Engineer.
 
 - **2026-09-11** · Hotfix 090 · this PR — Action does not add `wake-pm-look`; Engineer runs `npm test` after the handoff rewrite; preview green-lights when seats are clear, because PM Look was a second lib test with no extra context.

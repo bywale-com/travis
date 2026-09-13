@@ -59,8 +59,9 @@ label  wake-sa
         ↓
 SA → SYSTEMS-CHANGE-PACKET → label  wake-engineer
         ↓
-Engineer plants src/ → Action strips seat labels (no wake-pm-look)
-        ↓  when wake-sa / wake-engineer / fail-look / blocker / previewing are all off
+Engineer plants src/ → Action strips seat labels and sets green_light=true (no wake-pm-look)
+        ↓  when green_light is true AND wake-sa / wake-engineer / fail-look / blocker / previewing are all off
+           (or manual label `preview` added, or blocker unlabelled)
 Action empty-commit Preview [vercel build] and labels **previewing** (no LLM)
         ↓
 Vercel preview → runtime-doors
@@ -83,9 +84,9 @@ label  wake-engineer     (no wake-sa)
         ↓
 Engineer plants the hotfix
         ↓  src/  or  ENGINEER-HANDOFF.md  (SQL-only hang may only touch the handoff)
-Action strips seat labels. No wake-pm-look.
+Action strips seat labels and sets green_light=true. No wake-pm-look.
         ↓
-Action empty-commit Preview [vercel build] when labels are clear, and labels previewing
+Action empty-commit Preview [vercel build] when green_light is set and labels are clear, and labels previewing
         ↓
 doors paint → clear previewing. Red + idle → one fail-look. Recut once. Stop.
 ```

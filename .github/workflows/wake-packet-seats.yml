@@ -20,7 +20,7 @@ name: Wake packet seats
 
 on:
   pull_request:
-    types: [unlabeled]
+    types: [unlabeled, labeled]
   push:
     paths:
       - "docs/register/PM-PACKET-*.md"
@@ -42,6 +42,8 @@ jobs:
   label:
     if: github.event_name == 'push' && github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
+    outputs:
+      green_light: ${{ steps.label_step.outputs.green_light }}
     permissions:
       contents: read
       pull-requests: write
@@ -51,6 +53,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Label the open PR for this push only
+        id: label_step
         env:
           WAKE_GITHUB_TOKEN: ${{ secrets.WAKE_GITHUB_TOKEN }}
           FALLBACK_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -115,6 +118,7 @@ jobs:
           gh label create emerge --color CCCCCC --description "PM look Pass — human test" 2>/dev/null || true
           gh label create blocker --color CCCCCC --description "Founder ops hold — automations sleep" 2>/dev/null || true
           gh label create previewing --color 1D76DB --description "Vercel has the ball — no second green-light, no new seat" 2>/dev/null || true
+          gh label create preview --color 0E8A16 --description "Cursor: manually trigger Vercel preview build" 2>/dev/null || true
 
           strip_seats_except() {
             keep="${1:-}"
@@ -306,17 +310,19 @@ jobs:
             if echo "$pr_files" | grep -qE '^docs/register/HOTFIX-[0-9]+-.+\.md$'; then
               strip_seats_except ""
               echo "Hotfix plant finished. No wake-pm-look. Seats stripped."
+              echo "green_light=true" >> "$GITHUB_OUTPUT"
             elif echo "$pr_files" | grep -qE '^docs/register/SYSTEMS-CHANGE-PACKET-'; then
               if echo "$pr_files" | grep -qE '^docs/register/PM-PACKET-[0-9]'; then
                 strip_seats_except ""
                 echo "Packet plant finished. No wake-pm-look. Seats stripped."
+                echo "green_light=true" >> "$GITHUB_OUTPUT"
               fi
             fi
           fi
 
   preview-when-clear:
     needs: [label]
-    if: github.event_name == 'push' && github.ref != 'refs/heads/main' && needs.label.result == 'success'
+    if: github.event_name == 'push' && github.ref != 'refs/heads/main' && needs.label.result == 'success' && needs.label.outputs.green_light == 'true'
     runs-on: ubuntu-latest
     concurrency:
       group: green-light-${{ github.ref_name }}
@@ -349,6 +355,32 @@ jobs:
             exit 0
           fi
           sh .github/scripts/preview-when-clear.sh "$pr" "$HEAD_REF"
+
+  manual-preview:
+    if: github.event_name == 'pull_request' && github.event.action == 'labeled' && github.event.label.name == 'preview'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: green-light-${{ github.event.pull_request.head.ref }}
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.WAKE_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
+      - name: Green-light preview after manual preview label added
+        env:
+          GH_TOKEN: ${{ secrets.WAKE_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+          gh pr edit "$PR" --remove-label preview || true
+          sh .github/scripts/preview-when-clear.sh "$PR" "$HEAD_REF"
 
   blocker-release:
     if: github.event_name == 'pull_request' && github.event.action == 'unlabeled' && github.event.label.name == 'blocker'
