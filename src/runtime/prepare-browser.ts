@@ -4,12 +4,21 @@
  */
 
 import { spawnSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import { createRequire } from "node:module";
+import { dirname, join } from "node:path";
 
 const require = createRequire(import.meta.url);
 
 export function playwrightCli(): string {
-  return require.resolve("playwright/cli.js");
+  // Playwright's exports map does not publish `./cli.js`. Resolve the
+  // exported package.json, then take the sibling bin.
+  const pkg = require.resolve("playwright/package.json");
+  const cli = join(dirname(pkg), "cli.js");
+  if (!existsSync(cli)) {
+    throw new Error(`playwright cli.js missing next to ${pkg}`);
+  }
+  return cli;
 }
 
 export function preparePlaywrightChromium(): void {

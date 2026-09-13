@@ -7,6 +7,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-13** · Hotfix 098 fail-look · this PR — Runtime locates Playwright’s CLI via the exported `package.json` sibling `cli.js`, because `require.resolve("playwright/cli.js")` is not an exports subpath and doors died before any walk.
+
 - **2026-09-13** · Hotfix 098 fail-look · this PR — Runtime runner boots from `async function main` instead of a top-level `await`, because `tsx` CJS died on doors before any walk could start.
 
 - **2026-09-13** · Hotfix 098 · this PR — Browser-real Type/Talk/Voice walks and exclusive Live ear while connecting, because endpoint walks could not see Voice looking live while Talk barged the mic.

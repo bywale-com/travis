@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
+import { playwrightCli } from "./prepare-browser";
 
 function read(rel: string) {
   return readFileSync(new URL(`../../${rel}`, import.meta.url), "utf8");
@@ -48,6 +49,19 @@ test("package.json test:runtime prepares the browser and delegates pipe then bro
   const ownAt = run.indexOf("voice-own.spec.ts");
   const liveAt = run.indexOf("voice-live.spec.ts");
   assert.ok(pipeAt > 0 && ownAt > pipeAt && liveAt > ownAt, "pipe, then deterministic browser, then Voice canary");
+});
+
+test("playwright CLI is the sibling bin of the exported package.json", () => {
+  const src = read("src/runtime/prepare-browser.ts");
+  assert.doesNotMatch(
+    src,
+    /require\.resolve\(["']playwright\/cli\.js["']\)/,
+    "playwright/cli.js is not an exports subpath; tsx dies before any walk",
+  );
+  assert.match(src, /playwright\/package\.json/);
+  const cli = playwrightCli();
+  assert.match(cli, /cli\.js$/);
+  assert.equal(existsSync(cli), true);
 });
 
 test("stream-arch cue fixture is checked in", () => {
