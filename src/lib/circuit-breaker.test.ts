@@ -140,6 +140,7 @@ test("Engineer prompt never green-lights a seat commit", () => {
   assert.match(prompt, /Never use the exact subject `Preview \[vercel build\]`/);
   assert.match(prompt, /Do not recut `handoff-seat\.test\.ts`/);
   assert.match(prompt, /run `npm test`/);
+  assert.match(prompt, /npm run test:preflight/);
   assert.match(prompt, /previewing/);
   assert.doesNotMatch(prompt, /\[vercel skip\]/);
   assert.doesNotMatch(prompt, /\[skip ci\] so Vercel/);

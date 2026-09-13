@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "tsx --test src/lib/*.test.ts src/server/db/*.test.ts src/runtime/*.test.ts",
+    "test:preflight": "tsx src/runtime/preflight.ts",
     "test:runtime": "tsx src/runtime/run.ts",
     "test:runtime:prepare": "tsx src/runtime/prepare-browser.ts",
     "test:runtime:pipe": "tsx --test --test-concurrency=1 src/runtime/walks/*.spec.ts",
