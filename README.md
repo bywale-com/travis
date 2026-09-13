@@ -7,6 +7,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-13** · Hotfix 097 · this PR — Specced direct seat binding without mandatory protocol prompt, because binding an existing Cursor chat should simply map the ID to the seat rather than forcing a sit prompt handoff.
+
 - **2026-09-13** · Hotfix 096 · this PR — `bind_agent` tool and `bind-agent` runtime walk (no `POST /v1/agents`), because Technical Architect seats are started in Cursor and Travis should bind `bc-…` ids instead of provisioning on doors.
 
 - **2026-09-13** · Blocker 003 · this PR — create-agent walk stayed red on Cursor create hang; superseded by 096 bind walk.
