@@ -110,10 +110,12 @@ import { argsBody } from "@/lib/stream";
 import { destWithContextFor } from "@/server/dest-with-context";
 import {
   attachMotionToLiveStream,
+  closeStream,
+  finishStreamProcess,
+  liveStreamForBinding,
   maybeCloseTravisStream,
   openTravisStream,
   startStreamProcess,
-  finishStreamProcess,
 } from "@/server/stream";
 
 export const TRAVIS_TOOL_DECLS = [
@@ -727,6 +729,18 @@ export async function runTravisTool(params: {
       sessionId,
       failed: !result.ok,
     }).catch(() => {});
+    if (opened) {
+      const live = await liveStreamForBinding(sessionId, opened.binding.id).catch(
+        () => null,
+      );
+      if (live) {
+        await closeStream({
+          streamId: live.id,
+          status: result.ok ? "completed" : "failed",
+          closeTurnId: null,
+        }).catch(() => {});
+      }
+    }
     return result;
   };
 

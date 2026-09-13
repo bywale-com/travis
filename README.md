@@ -7,7 +7,9 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
-- **2026-09-13** · Hotfix 094 · this PR — Wire emerge packet delivery, email notification, and emerge label directly to runtime-doors on pass, because PM-LOOK verdict passes were decommissioned and green deployments never triggered emerge.
+- **2026-09-13** · Hotfix 095 · this PR — Cursor create timeout, close Travis stream after tools, and runtime `create-agent` walk, because `create_agent` could hang with a live stream and doors never exercised person creation.
+
+- **2026-09-13** · Hotfix 094 · merged — Wire emerge packet delivery, email notification, and emerge label directly to runtime-doors on pass, because PM-LOOK verdict passes were decommissioned and green deployments never triggered emerge.
 
 - **2026-09-13** · Hotfix 091 · this PR — Dest leave files `dest_job` on the catalog bind before role resolve can spin Cursor create, because runtime-doors dest walks hung until Vercel killed SSE with an empty queue and no dest error.
 

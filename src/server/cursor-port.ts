@@ -49,6 +49,9 @@ function apiKey(): string {
 
 const CURSOR_API = "https://api.cursor.com";
 
+/** Runtime walks and Type send must not leave a live stream on a hung create. */
+export const CURSOR_CREATE_TIMEOUT_MS = 45_000;
+
 function cursorBasicAuth(key: string): string {
   return `Basic ${Buffer.from(`${key}:`).toString("base64")}`;
 }
@@ -108,14 +111,25 @@ export async function createCursorAgent(params: {
       },
     ];
   }
-  const res = await fetch(`${CURSOR_API}/v1/agents`, {
-    method: "POST",
-    headers: {
-      Authorization: cursorBasicAuth(key),
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${CURSOR_API}/v1/agents`, {
+      method: "POST",
+      headers: {
+        Authorization: cursorBasicAuth(key),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(CURSOR_CREATE_TIMEOUT_MS),
+    });
+  } catch (err) {
+    if (err instanceof Error && err.name === "TimeoutError") {
+      throw new Error(
+        `Cursor create timed out after ${CURSOR_CREATE_TIMEOUT_MS / 1000}s.`,
+      );
+    }
+    throw err;
+  }
   const data: unknown = await res.json().catch(() => ({}));
   if (!res.ok) {
     throw new Error(cursorHttpError(data, res.status));
