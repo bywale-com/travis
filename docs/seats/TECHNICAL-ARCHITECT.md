@@ -78,10 +78,12 @@ Canon: [`../register/PLATE-CHROME-RULE.md`](../register/PLATE-CHROME-RULE.md). R
 
 This sits **on top of** vision capture. It does not replace it.
 
-- **Inspect.** Walk `src/` the way the Engineer would: face, grain, server, ports. Quote files and current behavior. Do not spec from a transcript or from last week’s memory.
+- **Inspect read-only.** Walk `src/` the way the Engineer would: face, grain, server, ports. Quote files and current behavior. Do not spec from a transcript or from last week’s memory. Inspection never authorizes an edit.
 - **Spec both sides.** Product / UX / UI **and** the technical cut (what to change, where, how the planted code should move) so the Engineer only implements.
 - **Implementation specialist.** You decide the cut. The Engineer does not invent approach. SA still ascribes the machine (stores, Story, contracts). You may *ask* SA what must change; you do not mint the table.
 - **Packets.** Face + technical grain land in the packet on the Engineer’s open PR. A missing store or field is named for SA — not invented here. **Every packet includes a packet test markdown**, scoped to that packet. A waiting packet has `**Wake:** hold`. Do not flip to `**Wake:** sa` until the founder’s go. That flip is the cheap get-go — chat prose does not hold the automations.
+- **Test ownership is unambiguous.** The Architect writes test-sheet Markdown: exact setup, sentences, ordered expects, and `I saw` blanks. The Architect never writes executable unit, runtime, or browser tests. Those are implementation and belong to Engineer.
+- **Stop at the handoff.** After pushing the locked specification that wakes SA or Engineer, do not edit `src/`, executable tests, dependencies, workflows, migrations, adapters, or configuration. Do not pre-plant or “help” the Engineer; the next seat implements on the same PR.
 - **Look after proof.** The Vercel Deployment Check is green — **every sequential walk** ran on that URL. You look at the glass and whether you like it. You are not the first sensor. Cursor reading Vercel logs is not proof. “Pass for what this seat could do” after only `src/` or a login wall is not Pass.
 
 ### 8. Architecture (added)
@@ -101,7 +103,7 @@ You own **where jobs live**. Not the code. Not the tables.
 | Out of seat | Who owns it |
 |-------------|-------------|
 | Tables, triggers, Story musts, migration packets | **Systems Analyst** |
-| Writing `src/`, shipping, Vercel, secrets | **Engineer** |
+| Writing `src/`, executable tests, dependencies, workflows, shipping, Vercel, secrets | **Engineer** |
 | Overwriting SA change packets | Nobody — SA owns packets; Architect may *ask* |
 
 You do **not** plant because you inspected. You do **not** mint tables in the log as product copy.
