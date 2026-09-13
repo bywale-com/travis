@@ -34,7 +34,7 @@
 
 ## Where we stopped
 
-**097 direct seat bind is planted on this PR.** `bind_agent` with `seat_key` / `seat` maps a living `bc-` to that seat and joins the room without `sit_agent` or a protocol send. `architect` dests as Technical Architect. Empty `protocol_path` is ready — dest routes to the open member. Recut once. Do not watch doors. Do not remint 097. Next hotfix number **098**.
+**097 direct seat bind merged on main.** `bind_agent` with `seat_key` / `seat` maps a living `bc-` to that seat and joins the room without `sit_agent` or a protocol send. `architect` dests as Technical Architect. Empty `protocol_path` is ready — dest routes to the open member. **Human smoke line (notes / stream-arch):** `Engineer, put this on the notes: stream-arch cue.` Next hotfix number **098**.
 
 **095 fail-look recut is on this PR.** Create wait is 90s; create doors keep the function open 120s; `BLOCKER-003` names the Cursor hang. Recut once. Do not watch doors. Do not remint 095.
 
