@@ -73,6 +73,26 @@ test("role dest resolve does not await sit handoff", () => {
   assert.match(src, /void sitBinding\(/);
 });
 
+test("direct bind dest uses the open member — no force-sit", () => {
+  const dest = readFileSync(
+    join(process.cwd(), "src/server/dest-resolve.ts"),
+    "utf8",
+  );
+  assert.match(dest, /destKeysForSeat/);
+  assert.match(dest, /sitRoleFromAlias/);
+  assert.match(dest, /isLivingCursorId/);
+  const leave = readFileSync(
+    join(process.cwd(), "src/server/dest-leave.ts"),
+    "utf8",
+  );
+  assert.match(leave, /destKeysForSeat/);
+  assert.match(leave, /protocolPath \?\? ""/);
+  const sit = readFileSync(join(process.cwd(), "src/server/sit.ts"), "utf8");
+  const fn = sit.slice(sit.indexOf("export async function resolveRoleDest"));
+  const body = fn.slice(0, fn.indexOf("export async function listSeatRoster"));
+  assert.doesNotMatch(body, /void sitBinding\(/);
+});
+
 test("role dest reuses catalog living bind before Cursor spin", () => {
   const src = readFileSync(join(process.cwd(), "src/server/sit.ts"), "utf8");
   const fn = src.slice(src.indexOf("export async function resolveRoleDest"));

@@ -23,6 +23,7 @@ describe("bind-agent", { skip: !haveUrl }, () => {
     const tool = await runTravisTool(desk, "bind_agent", {
       label,
       cursor_agent_id: cursorAgentId,
+      seat_key: "architect",
       join: true,
     });
 

@@ -8,6 +8,7 @@ import {
   formatSeatRosterLine,
   isSitProtocolRole,
   parseSitProtocol,
+  sitRoleFromAlias,
   SIT_PROTOCOL_BY_ROLE,
   SIT_ROLE_LABEL,
   type SitProtocolRole,
@@ -231,13 +232,6 @@ export async function resolveRoleDest(params: {
         throw err;
       }
     }
-    if (!(living.protocolPath ?? "").trim()) {
-      void sitBinding({
-        sessionId: params.sessionId,
-        binding: living,
-        protocol: parsed.role,
-      }).catch(() => {});
-    }
     return living;
   }
   const catalog = await bindingBySeatKey(params.role);
@@ -255,13 +249,6 @@ export async function resolveRoleDest(params: {
         }
         throw err;
       }
-    }
-    if (!(catalog.protocolPath ?? "").trim()) {
-      void sitBinding({
-        sessionId: params.sessionId,
-        binding: catalog,
-        protocol: parsed.role,
-      }).catch(() => {});
     }
     return catalog;
   }
@@ -291,7 +278,7 @@ export async function listSeatRoster(sessionId: string): Promise<string> {
 }
 
 export function roleFromSeatArg(seat: string): SitProtocolRole | null {
-  return isSitProtocolRole(seat) ? seat : null;
+  return sitRoleFromAlias(seat);
 }
 
 export { destKind } from "@/lib/protocol-path";

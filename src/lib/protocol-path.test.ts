@@ -1,9 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  destKeysForSeat,
   destKind,
   formatSeatRosterLine,
   parseSitProtocol,
+  requestedBindSeatKey,
+  sitRoleFromAlias,
   SIT_PROTOCOL_FILES,
   SIT_ROLE_LABEL,
 } from "./protocol-path";
@@ -29,6 +32,18 @@ test("pm sa engineer and full paths sit", () => {
     role: "engineer",
     path: "/protocols/engineer.md",
   });
+  assert.deepEqual(parseSitProtocol("architect"), {
+    ok: true,
+    role: "pm",
+    path: "/protocols/pm.md",
+  });
+  assert.deepEqual(parseSitProtocol("Architect"), {
+    ok: true,
+    role: "pm",
+    path: "/protocols/pm.md",
+  });
+  assert.equal(sitRoleFromAlias("architect"), "pm");
+  assert.equal(SIT_ROLE_LABEL.pm, "Technical Architect");
   assert.deepEqual(SIT_PROTOCOL_FILES, [
     "/protocols/pm.md",
     "/protocols/sa.md",
@@ -51,9 +66,18 @@ test("sit glass string for pm is Technical Architect", () => {
 
 test("who is person dest; role seat without who is role dest", () => {
   assert.equal(destKind({ seat: "pm" }), "role");
+  assert.equal(destKind({ seat: "architect" }), "role");
   assert.equal(destKind({ seat: "pm", who: "pat" }), "person");
   assert.equal(destKind({ who: "pat" }), "person");
   assert.equal(destKind({ seat: "pat" }), "none");
+});
+
+test("architect dest keys include the Technical Architect role", () => {
+  assert.deepEqual(destKeysForSeat("architect"), ["architect", "pm"]);
+  assert.deepEqual(destKeysForSeat("pm"), ["pm", "architect"]);
+  assert.equal(requestedBindSeatKey("Architect"), "architect");
+  assert.equal(requestedBindSeatKey("pm"), "pm");
+  assert.equal(requestedBindSeatKey(""), "");
 });
 
 test("roster line names path or not seated and idle or busy", () => {

@@ -15,9 +15,11 @@ import {
 import { destEnqueueIfBusy, destPathForBind } from "@/lib/dest-follow";
 import {
   destKind,
-  isSitProtocolRole,
+  sitRoleFromAlias,
   SIT_PROTOCOL_BY_ROLE,
 } from "@/lib/protocol-path";
+import { isLivingCursorId } from "@/lib/dest-glass";
+import { resolveDestBinding } from "@/server/dest-resolve";
 import { isCursorSeat } from "@/lib/seats";
 import { seatKeyToLabel } from "@/lib/router";
 import { db } from "@/server/db/client";
@@ -373,12 +375,14 @@ export const TRAVIS_TOOL_DECLS = [
   {
     name: "bind_agent",
     description:
-      "Bind an existing Cursor cloud agent (bc-…) into the Travis catalog. Name them. cursor_agent_id is required — you do not provision a new agent. join defaults true — they become a member of this room. join false is catalog only. Optional protocol (pm, sa, engineer, or house path) seats them after join. Prefer this over create_agent when the founder already started the chat in Cursor.",
+      "Bind an existing Cursor cloud agent (bc-…) to a Travis seat. cursor_agent_id is required — you do not provision a new agent. Binding an existing chat requires no prompt and no protocol: it maps the Cursor id to the seat, adds them as an open room member, and marks them ready immediately. Optional seat_key or seat assigns a role or custom key (architect or pm for Technical Architect, sa, engineer, or any seat key). join defaults true. Optional protocol seats them after join — omit it for a direct bind. Prefer this over create_agent and sit_agent when the founder already started the chat in Cursor.",
     parameters: {
       type: "object",
       properties: {
         label: { type: "string" },
         cursor_agent_id: { type: "string" },
+        seat_key: { type: "string" },
+        seat: { type: "string" },
         protocol: { type: "string" },
         join: { type: "boolean" },
       },
@@ -520,53 +524,66 @@ export async function handToDest(params: {
       return { ok: false, text: "Travis dest never uses the Cursor send path." };
     }
     binding = found;
-  } else if (isSitProtocolRole(seat)) {
-    const living = await livingSeated(SIT_PROTOCOL_BY_ROLE[seat]);
-    const open = living
-      ? (await listOpenDestJobs(sessionId)).some(
-          (row) => row.binding.id === living.id,
-        )
-      : false;
-    if (living && destPathForBind(open) === "follow-up") {
-      if (!(await isOpenMember(sessionId, living.id))) {
-        try {
-          await addMember(sessionId, living.id);
-        } catch (err) {
-          if (err instanceof MembershipError) {
-            return { ok: false, text: err.message };
-          }
-          throw err;
-        }
-      }
-      binding = living;
-      followUp = true;
-    } else {
-      try {
-        binding = await resolveRoleDest({
-          sessionId,
-          role: seat,
-        });
-      } catch (err) {
-        const label = seatKeyToLabel(seat as SeatKey);
-        if (err instanceof SitError) {
-          return { ok: false, text: nobodyReceipt({ hole: "spin", label }) };
-        }
-        return {
-          ok: false,
-          text: err instanceof Error ? err.message : String(err),
-        };
-      }
-      const seated = classifyOpenMember({ binding });
-      if (seated.class !== "theirs") {
-        return {
-          ok: false,
-          text: nobodyReceipt({
-            hole: seated.hole ?? "spin",
-            label: binding.label ?? seatKeyToLabel(seat as SeatKey),
-          }),
-        };
-      }
+  } else if (sitRoleFromAlias(seat)) {
+    const role = sitRoleFromAlias(seat);
+    const ready = await resolveDestBinding(sessionId, seat);
+    if (ready && isLivingCursorId(ready.cursorAgentId)) {
+      binding = ready;
       enqueueIfBusy = false;
+    } else {
+      const living = role
+        ? await livingSeated(SIT_PROTOCOL_BY_ROLE[role])
+        : null;
+      const open = living
+        ? (await listOpenDestJobs(sessionId)).some(
+            (row) => row.binding.id === living.id,
+          )
+        : false;
+      if (living && destPathForBind(open) === "follow-up") {
+        if (!(await isOpenMember(sessionId, living.id))) {
+          try {
+            await addMember(sessionId, living.id);
+          } catch (err) {
+            if (err instanceof MembershipError) {
+              return { ok: false, text: err.message };
+            }
+            throw err;
+          }
+        }
+        binding = living;
+        followUp = true;
+      } else if (role) {
+        try {
+          binding = await resolveRoleDest({
+            sessionId,
+            role,
+          });
+        } catch (err) {
+          const label = seatKeyToLabel(role);
+          if (err instanceof SitError) {
+            return { ok: false, text: nobodyReceipt({ hole: "spin", label }) };
+          }
+          return {
+            ok: false,
+            text: err instanceof Error ? err.message : String(err),
+          };
+        }
+        if (!isLivingCursorId(binding.cursorAgentId)) {
+          const seated = classifyOpenMember({ binding });
+          if (seated.class !== "theirs") {
+            return {
+              ok: false,
+              text: nobodyReceipt({
+                hole: seated.hole ?? "spin",
+                label: binding.label ?? seatKeyToLabel(role),
+              }),
+            };
+          }
+        }
+        enqueueIfBusy = false;
+      } else {
+        return { ok: false, text: "Need a role seat or a who." };
+      }
     }
   } else {
     return { ok: false, text: "Need a role seat or a who." };
@@ -1162,8 +1179,13 @@ export async function runTravisTool(params: {
     if (!cursorAgentId) return { ok: false, text: "Need cursor_agent_id (bc-…)." };
     const join = args.join === false || args.join === "false" ? false : true;
     const protocolRaw = String(args.protocol ?? "").trim();
+    const seatKey = String(args.seat_key ?? args.seat ?? "").trim();
     try {
-      const agent = await bindAgentBinding({ label, cursorAgentId });
+      const agent = await bindAgentBinding({
+        label,
+        cursorAgentId,
+        ...(seatKey ? { seatKey } : {}),
+      });
       if (join) {
         try {
           await addMember(sessionId, agent.id);
@@ -1201,12 +1223,12 @@ export async function runTravisTool(params: {
       if (join) {
         return {
           ok: true,
-          text: `Bound ${agent.label} (${agent.cursorAgentId}) in this room.`,
+          text: `Bound ${agent.label} (${agent.cursorAgentId}) in this room as ${agent.seatKey}.`,
         };
       }
       return {
         ok: true,
-        text: `Bound ${agent.label} (${agent.cursorAgentId}) in the catalog.`,
+        text: `Bound ${agent.label} (${agent.cursorAgentId}) in the catalog as ${agent.seatKey}.`,
       };
     } catch (err) {
       return {
