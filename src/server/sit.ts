@@ -240,6 +240,31 @@ export async function resolveRoleDest(params: {
     }
     return living;
   }
+  const catalog = await bindingBySeatKey(params.role);
+  if (
+    catalog &&
+    isLivingCursorId(catalog.cursorAgentId) &&
+    !isCatalogPm(catalog.seatKey)
+  ) {
+    if (!(await isOpenMember(params.sessionId, catalog.id))) {
+      try {
+        await addMember(params.sessionId, catalog.id);
+      } catch (err) {
+        if (err instanceof MembershipError) {
+          throw new SitError(err.message, err.status);
+        }
+        throw err;
+      }
+    }
+    if (!(catalog.protocolPath ?? "").trim()) {
+      void sitBinding({
+        sessionId: params.sessionId,
+        binding: catalog,
+        protocol: parsed.role,
+      }).catch(() => {});
+    }
+    return catalog;
+  }
   return spinSeatedRole({ sessionId: params.sessionId, role: parsed.role });
 }
 

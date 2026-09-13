@@ -13,7 +13,7 @@ import { MembershipError, requireOpenMember } from "@/server/room-membership";
 import { requireOwnedSession } from "@/server/operator";
 import { destBindingsForSend } from "@/server/dest-resolve";
 import { listOpenDestJobs } from "@/server/dest-job";
-import { writeAndLeaveDest } from "@/server/dest-leave";
+import { fileDestJobsForSeatKeys, writeAndLeaveDest } from "@/server/dest-leave";
 import { streamIntent } from "@/lib/stream-intent";
 import { dispatchStreamIntents } from "@/server/stream-dispatch";
 import { pipeTravisText } from "@/server/travis-reply";
@@ -147,11 +147,18 @@ export async function POST(
           undefined,
           referenceTurnId,
         );
-        const destBindings: AgentBinding[] = await destBindingsForSend({
+        const earlyDests = await fileDestJobsForSeatKeys({
           sessionId,
-          decided,
-          referenceTurnId,
+          seatKeys: decided.seatKeys,
+          prompt,
         });
+        const destBindings: AgentBinding[] = earlyDests.length
+          ? earlyDests
+          : await destBindingsForSend({
+              sessionId,
+              decided,
+              referenceTurnId,
+            });
         for (const dest of destBindings) {
           await requireOpenMember(sessionId, dest.id);
         }

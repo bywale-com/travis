@@ -33,6 +33,7 @@ test("live transcript dest write-and-leaves — SSE headers before Cursor handof
     join(process.cwd(), "src/app/api/session/[id]/live/transcript/route.ts"),
     "utf8",
   );
+  assert.match(src, /fileDestJobsForSeatKeys/);
   assert.match(src, /writeAndLeaveDest/);
   assert.match(src, /dispatchStreamIntents/);
   assert.match(src, /sseHeaders/);
@@ -57,8 +58,11 @@ test("writeAndLeaveDest files dest_job before Cursor handoff returns", () => {
   assert.match(src, /markDestJob/);
   assert.match(src, /LEAVE_HANDOFF_MS/);
   assert.match(src, /status: "dispatched"/);
+  assert.match(src, /fileDestJobsForSeatKeys/);
+  assert.match(src, /destBindingForSeatKey/);
   assert.match(src, /isFounderOpsDestError/);
   assert.match(src, /hard limit/);
+  assert.doesNotMatch(src, /status: "failed"/);
   const insertAt = src.indexOf("insertDestJob");
   const handoffAt = src.indexOf("handoff(params)");
   assert.ok(insertAt >= 0 && handoffAt > insertAt);
@@ -67,6 +71,15 @@ test("writeAndLeaveDest files dest_job before Cursor handoff returns", () => {
 test("role dest resolve does not await sit handoff", () => {
   const src = readFileSync(join(process.cwd(), "src/server/sit.ts"), "utf8");
   assert.match(src, /void sitBinding\(/);
+});
+
+test("role dest reuses catalog living bind before Cursor spin", () => {
+  const src = readFileSync(join(process.cwd(), "src/server/sit.ts"), "utf8");
+  const fn = src.slice(src.indexOf("export async function resolveRoleDest"));
+  const body = fn.slice(0, fn.indexOf("export async function listSeatRoster"));
+  const catalogAt = body.indexOf("bindingBySeatKey(params.role)");
+  const spinAt = body.lastIndexOf("spinSeatedRole");
+  assert.ok(catalogAt >= 0 && spinAt > catalogAt);
 });
 
 test("Deep Agents kit loads through CJS require, not a static ESM import", () => {
@@ -91,6 +104,7 @@ test("type send uses writeAndLeaveDest for chip dests", () => {
     join(process.cwd(), "src/app/api/session/[id]/send/route.ts"),
     "utf8",
   );
+  assert.match(src, /fileDestJobsForSeatKeys/);
   assert.match(src, /writeAndLeaveDest/);
   assert.match(src, /destFail/);
   assert.equal(src.includes("sendOrEnqueueMany"), false);

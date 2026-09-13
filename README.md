@@ -7,7 +7,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
-- **2026-09-13** · Hotfix 091 · this PR — Dest leave files `dest_job` before Cursor send returns and role dest resolve does not await sit handoff, because runtime-doors dest walks hung until Vercel killed SSE with an empty queue and no dest error.
+- **2026-09-13** · Hotfix 091 · this PR — Dest leave files `dest_job` on the catalog bind before role resolve can spin Cursor create, because runtime-doors dest walks hung until Vercel killed SSE with an empty queue and no dest error.
 
 - **2026-09-13** · Blocker 002 · this PR — Dest walks stay red on Cursor’s Background Agent hard limit, because create needs at least $2 remaining and Engineer cannot recut spend.
 

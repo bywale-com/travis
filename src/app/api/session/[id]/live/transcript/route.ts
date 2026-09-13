@@ -14,7 +14,7 @@ import {
 import { collapseSpeechStutter } from "@/lib/absorb-text";
 import { shouldDropHeardAsUser } from "@/lib/thread-truth";
 import { destBindingsForSend } from "@/server/dest-resolve";
-import { writeAndLeaveDest } from "@/server/dest-leave";
+import { fileDestJobsForSeatKeys, writeAndLeaveDest } from "@/server/dest-leave";
 import { AuthError } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
 import { runMotionRunner } from "@/server/motion";
@@ -141,11 +141,23 @@ export async function POST(
           controller.enqueue(encoder.encode(sse(event, data)));
         };
         try {
-          const dests = await destBindingsForSend({
+          const earlyDests = await fileDestJobsForSeatKeys({
             sessionId,
-            decided,
-            referenceTurnId,
+            seatKeys:
+              decided.kind === "send"
+                ? decided.seatKeys
+                : seatKey
+                  ? [seatKey]
+                  : [],
+            prompt: prompt || classifyPhrase,
           });
+          const dests = earlyDests.length
+            ? earlyDests
+            : await destBindingsForSend({
+                sessionId,
+                decided,
+                referenceTurnId,
+              });
           const cursorDests = dests.filter((b) => !isTravisSeat(b.seatKey));
           const sticky = dests[dests.length - 1];
           if (sticky) {
@@ -161,9 +173,10 @@ export async function POST(
             prompt,
             cursorDestCount: cursorDests.length,
           });
+          const destPrompt = prompt || classifyPhrase;
           const left = await Promise.allSettled(
             cursorDests.map((binding) =>
-              writeAndLeaveDest({ sessionId, binding, prompt }),
+              writeAndLeaveDest({ sessionId, binding, prompt: destPrompt }),
             ),
           );
           const destFail = left.find((row) => row.status === "rejected");
