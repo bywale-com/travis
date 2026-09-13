@@ -1,13 +1,14 @@
 # Deployment Check: Vercel hangs `vercel.deployment.ready` until this job
 # paints. Do not fold this into wake-packet-seats.yml — that file wakes seats.
 # Official hang: https://vercel.com/docs/deployment-checks
-# Red → fail-look only when the PR is idle (no handoff / hold labels).
+# Red → fail-look only when the PR is idle (no handoff / hold / previewing).
 # Engineer triages plant vs founder ops (021 circuit breaker).
 #
 # repository_dispatch always runs THIS FILE FROM main. The handoff/hold
 # → no fail-look skip must live on main or a later deploy re-wakes Engineer.
 # Walks still run. The check still paints red. Engineer is not re-woken
-# while wake-sa / wake-engineer / wake-pm-look / fail-look / blocker are on.
+# while wake-sa / wake-engineer / wake-pm-look / fail-look / blocker /
+# previewing are on. Doors paint → clear previewing, then maybe fail-look.
 name: Runtime doors
 
 on:
@@ -56,6 +57,39 @@ jobs:
         with:
           name: runtime-doors
 
+      - name: Clear previewing after doors paint
+        if: always()
+        env:
+          WAKE_GITHUB_TOKEN: ${{ secrets.WAKE_GITHUB_TOKEN }}
+          FALLBACK_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEPLOY_SHA: ${{ github.event.client_payload.git.sha }}
+        run: |
+          set -euo pipefail
+          if [[ -n "${WAKE_GITHUB_TOKEN:-}" ]]; then
+            export GH_TOKEN="$WAKE_GITHUB_TOKEN"
+            if ! gh api user --jq .login >/dev/null 2>&1; then
+              export GH_TOKEN="$FALLBACK_GH_TOKEN"
+            fi
+          else
+            export GH_TOKEN="$FALLBACK_GH_TOKEN"
+          fi
+
+          sha="${DEPLOY_SHA:-}"
+          if [[ -z "$sha" ]]; then
+            echo "No client_payload.git.sha. No previewing clear."
+            exit 0
+          fi
+
+          pr=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${sha}/pulls" \
+            --jq '[.[] | select(.state=="open")][0].number // empty')
+          if [[ -z "$pr" ]]; then
+            echo "No open PR for $sha. No previewing clear."
+            exit 0
+          fi
+
+          gh pr edit "$pr" --remove-label previewing || true
+          echo "Cleared previewing on #$pr (doors painted)."
+
       - name: Fresh-add fail-look on the open PR
         if: failure()
         env:
@@ -93,7 +127,7 @@ jobs:
           fi
 
           pr_labels=$(gh pr view "$pr" --json labels --jq '.labels[].name')
-          for hold in wake-sa wake-engineer wake-pm-look fail-look blocker; do
+          for hold in wake-sa wake-engineer wake-pm-look fail-look blocker previewing; do
             if echo "$pr_labels" | grep -qx "$hold"; then
               echo "PR #$pr has $hold (handoff/hold). No fail-look."
               exit 0

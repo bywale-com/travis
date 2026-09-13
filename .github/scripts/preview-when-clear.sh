@@ -1,6 +1,7 @@
 #!/bin/sh
 # After handoffs: empty-commit Preview [vercel build] so Vercel may build.
-# Skip while wake-sa / wake-engineer / wake-pm-look / fail-look / blocker are on.
+# Skip while wake-sa / wake-engineer / wake-pm-look / fail-look / blocker
+# / previewing are on. previewing is the mutex: Vercel has the ball.
 # Caller must pass a writable checkout of the PR head. $1 = PR number. $2 = branch.
 
 set -eu
@@ -11,7 +12,7 @@ labels=$(gh pr view "$pr" --json labels --jq '.labels[].name')
 echo "Labels on #$pr:"
 echo "$labels"
 
-for hold in wake-sa wake-engineer wake-pm-look fail-look blocker; do
+for hold in wake-sa wake-engineer wake-pm-look fail-look blocker previewing; do
   if echo "$labels" | grep -qx "$hold"; then
     echo "Handoff/hold '$hold' still on #$pr. No green light."
     exit 0
@@ -19,8 +20,15 @@ for hold in wake-sa wake-engineer wake-pm-look fail-look blocker; do
 done
 
 msg=$(git log -1 --pretty=%B)
-if echo "$msg" | grep -q '\[vercel build\]'; then
+first=$(printf '%s\n' "$msg" | awk 'NR==1 { sub(/\r$/, ""); print; exit }')
+if [ "$first" = "Preview [vercel build]" ]; then
   echo "HEAD already has the green-light tag. No extra commit."
+  exit 0
+fi
+
+gh label create previewing --color 1D76DB --description "Vercel has the ball — no second green-light, no new seat" 2>/dev/null || true
+if ! gh pr edit "$pr" --add-label previewing; then
+  echo "Could not add previewing on #$pr. No green light."
   exit 0
 fi
 
@@ -28,8 +36,16 @@ git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 git commit --allow-empty -m "Preview [vercel build]"
 if [ -n "$branch" ]; then
-  git push origin "HEAD:refs/heads/${branch}"
+  if ! git push origin "HEAD:refs/heads/${branch}"; then
+    gh pr edit "$pr" --remove-label previewing || true
+    echo "Push failed. Cleared previewing on #$pr."
+    exit 1
+  fi
 else
-  git push
+  if ! git push; then
+    gh pr edit "$pr" --remove-label previewing || true
+    echo "Push failed. Cleared previewing on #$pr."
+    exit 1
+  fi
 fi
-echo "Pushed green-light empty commit on #$pr."
+echo "Pushed green-light empty commit on #$pr. previewing is on."

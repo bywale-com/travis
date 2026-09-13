@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **091**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **093**. |
 | PR title | `Hotfix NNN — …` (human tell). Action: this push lands `HOTFIX-NNN-*.md` → `wake-engineer` only. No `wake-sa`. |
 | Test | Every hotfix gets a `HOTFIX-NNN-*-TEST.md` (same job as a packet test). Emerge mails that sheet. |
 
@@ -16,6 +16,7 @@
 
 | # | File | Cut |
 |---|------|-----|
+| 092 | [`HOTFIX-092-PREVIEWING-MUTEX.md`](./HOTFIX-092-PREVIEWING-MUTEX.md) | One token. `previewing` mutex so green-light, fail-look, and seats cannot overlap. |
 | 090 | [`HOTFIX-090-NO-PM-LOOK.md`](./HOTFIX-090-NO-PM-LOOK.md) | No `wake-pm-look`. Engineer owns lib verify after the handoff rewrite. |
 | 088 | [`HOTFIX-088-FAIL-LOOK-OPS-SKIP.md`](./HOTFIX-088-FAIL-LOOK-OPS-SKIP.md) | Red doors does not `fail-look` unwired or Cursor hard limit. |
 | 086 | [`HOTFIX-086-RUNTIME-IS-THE-APP.md`](./HOTFIX-086-RUNTIME-IS-THE-APP.md) | Walks wait for the mouth. Inventory is the app. Lived Type walk-back. Glass shows the miss. |
