@@ -8,7 +8,7 @@
 | Rule | Detail |
 |------|--------|
 | Format | `HOTFIX-NNN-SLUG.md` (three-digit, zero-padded) |
-| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **099**. |
+| Next | Always `max(existing NNN) + 1`. **Never reuse** a number. Next: **100**. |
 | PR title | `Hotfix NNN — …` (human tell). Action: this push lands `HOTFIX-NNN-*.md` → `wake-engineer` only. No `wake-sa`. |
 | Test | Every hotfix gets a `HOTFIX-NNN-*-TEST.md` (same job as a packet test). Emerge mails that sheet. |
 
@@ -16,6 +16,7 @@
 
 | # | File | Cut |
 |---|------|-----|
+| 099 | [`HOTFIX-099-CANCELLED-DOORS-ARE-RED.md`](./HOTFIX-099-CANCELLED-DOORS-ARE-RED.md) | Cancelled doors are red; browser launch cannot leak Chromium. |
 | 098 | [`HOTFIX-098-BROWSER-REAL-RUNTIME.md`](./HOTFIX-098-BROWSER-REAL-RUNTIME.md) | Browser-real Type/Talk/Voice verification; exclusive microphone owner. |
 | 097 | [`HOTFIX-097-DIRECT-SEAT-BIND.md`](./HOTFIX-097-DIRECT-SEAT-BIND.md) | Direct seat binding without mandatory protocol prompt. |
 | 096 | [`HOTFIX-096-BIND-NOT-CREATE.md`](./HOTFIX-096-BIND-NOT-CREATE.md) | bind_agent tool; retire create provisioning runtime walk. |

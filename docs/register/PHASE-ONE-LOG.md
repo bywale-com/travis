@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-11 14:40 UTC — Hotfix 086 PM look Pass; runtime-doors correctly red on preview (generate miss), not false green. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-13 15:10 UTC — Hotfix 099 spec: cancelled doors are red; 098 Playwright ran then leaked and painted false green. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3755,3 +3755,17 @@ Not the model. Not a new face.
 **Test.** `npm test` 472/472. `runtime-doors` CI 0/5 on preview — correct failure, not false green. Fail-look step planted; live on merge. [`PM-LOOK-HOTFIX-086.md`](./PM-LOOK-HOTFIX-086.md) **Verdict: Pass**. No `fail-look`.
 
 **Emerged.** Human may walk [`HOTFIX-086-RUNTIME-IS-THE-APP-TEST.md`](./HOTFIX-086-RUNTIME-IS-THE-APP-TEST.md) on preview after SSO.
+
+---
+
+## 2026-09-13 15:10 UTC — Hotfix 099 spec: cancelled doors are red (Technical Architect)
+
+**Kind:** Hotfix spec. Same PR as 098. Flag 14:00 2026-08-25 stands. Not a plant.
+
+**Founder (preserved):** a cancelled run is similar to a blocker run, because it triggers the founder to look into it. Diagnose thoroughly, then specify exactly what the Engineer should solve.
+
+**Lived.** [runtime-doors #34762697149](https://github.com/bywale-com/travis/actions/runs/34762697149) on [#190](https://github.com/bywale-com/travis/pull/190). Playwright ran. HTTP walks passed. Talk `launchPhone` timed out waiting for `View log`. Chromium leaked. Job hit `timeout-minutes: 30` and cancelled. Paint wrote **success**. No `fail-look`. No emerge. Engineer did not wake.
+
+**Lock.** Cancelled or timed-out doors are red. Emerge stays success-only. `launchPhone` must close the browser on throw and dump the wall. First browser miss exits; do not sit until the cap. 098’s Type/Talk/Voice proof still stands — this cut makes that suite able to fail honestly.
+
+**Landed.** [`HOTFIX-099-CANCELLED-DOORS-ARE-RED.md`](./HOTFIX-099-CANCELLED-DOORS-ARE-RED.md) + test sheet. **Wake:** engineer. Same PR. Architect stops.

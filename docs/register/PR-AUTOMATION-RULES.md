@@ -102,6 +102,7 @@ When Vercel finishes deploying the preview, `runtime-doors` executes all automat
 * **If doors paint Fail (Red):**
   1. The `previewing` mutex lock is removed.
   2. The PR is labeled **`fail-look`** (if idle), re-waking the Engineer to diagnose and recut.
+* **If the doors job is cancelled or times out:** treat it as Fail (Red), not Pass. No emerge. Add `fail-look` when idle. A cancel is not a green check.
 
 ---
 
