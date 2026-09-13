@@ -7,6 +7,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-13** · Hotfix 099 fail-look · this PR — Browser suites spawn one spec at a time and exit on the first miss, because Node 22 rejects `--test-fail-fast` and doors died before Type/Talk/Voice ran.
+
 - **2026-09-13** · Hotfix 099 · this PR — Browser launch closes Chromium on a face miss, the runner fail-fasts, and cancelled doors paint red + fail-look, because a leaked Talk wait sat until the job cap and painted false green.
 
 - **2026-09-13** · Hotfix 098 fail-look · this PR — Runtime locates Playwright’s CLI via the exported `package.json` sibling `cli.js`, because `require.resolve("playwright/cli.js")` is not an exports subpath and doors died before any walk.

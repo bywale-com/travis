@@ -41,7 +41,12 @@ test("package.json test:runtime prepares the browser and delegates pipe then bro
   assert.match(run, /voice-own\.spec\.ts/);
   assert.match(run, /voice-live\.spec\.ts/);
   assert.match(run, /async function main/);
-  assert.match(run, /--test-fail-fast/);
+  assert.match(run, /one spec per spawn/);
+  assert.doesNotMatch(
+    run,
+    /--test-fail-fast/,
+    "Node 22 rejects --test-fail-fast; first miss exits via one spec per spawn",
+  );
   assert.doesNotMatch(
     run,
     /^await\s/m,

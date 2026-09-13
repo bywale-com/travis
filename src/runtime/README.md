@@ -18,6 +18,6 @@ If a use is on the phone, a walk here is that use. The Deployment Check `runtime
 - On fail: dump the tape and SSE events. That is the report.
 - One test-operator cookie resumes one live room. The suite runs **sequentially**. Each walk starts a fresh sitting (`End` + open) except the come-back resume beat.
 - Do not invent a Scenario Graph. Add a walk when the app gains a use. Named error-path walks when that miss is lived.
-- `npm run test:runtime` prepares Playwright Chromium, runs server-pipe walks, then browser suites (`--test-fail-fast`), then one real Voice canary. A launch miss dumps URL / title / door / visible text and closes Chromium. `runtime-doors.yml` on `main` only invokes that script. Cancelled or a walks miss paints `runtime-doors` failure and `fail-look`; emerge is success only.
+- `npm run test:runtime` prepares Playwright Chromium, runs server-pipe walks, then browser suites (one spec per spawn so the first miss exits), then one real Voice canary. A launch miss dumps URL / title / door / visible text and closes Chromium. `runtime-doors.yml` on `main` only invokes that script. Cancelled or a walks miss paints `runtime-doors` failure and `fail-look`; emerge is success only.
 
 Inventory: [`walks/README.md`](./walks/README.md) · [`browser/`](./browser/).

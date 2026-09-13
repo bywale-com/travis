@@ -32,6 +32,9 @@ async function main(): Promise<void> {
   await proveFakeAudioReachesWebRtc();
 
   const tsx = tsxBin();
+  const nodeTest = (label: string, spec: string) =>
+    run(label, [tsx, "--test", "--test-concurrency=1", spec]);
+
   run("server-pipe walks (HTTP contract, not microphone)", [
     tsx,
     "--test",
@@ -44,22 +47,14 @@ async function main(): Promise<void> {
     "src/runtime/walks/come-back.spec.ts",
     "src/runtime/walks/bind-agent.spec.ts",
   ]);
-  run("browser type-mode / talk-mode / voice-own (deterministic)", [
-    tsx,
-    "--test",
-    "--test-concurrency=1",
-    "--test-fail-fast",
-    "src/runtime/browser/type-mode.spec.ts",
-    "src/runtime/browser/talk-mode.spec.ts",
-    "src/runtime/browser/voice-own.spec.ts",
-  ]);
-  run("browser voice-live canary (real microphone → Realtime)", [
-    tsx,
-    "--test",
-    "--test-concurrency=1",
-    "--test-fail-fast",
+  // fail-fast: one spec per spawn — GitHub Node 22 has no fail-fast test flag
+  nodeTest("browser type-mode (deterministic)", "src/runtime/browser/type-mode.spec.ts");
+  nodeTest("browser talk-mode (deterministic)", "src/runtime/browser/talk-mode.spec.ts");
+  nodeTest("browser voice-own (deterministic)", "src/runtime/browser/voice-own.spec.ts");
+  nodeTest(
+    "browser voice-live canary (real microphone → Realtime)",
     "src/runtime/browser/voice-live.spec.ts",
-  ]);
+  );
 }
 
 void main().catch((err: unknown) => {
