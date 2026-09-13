@@ -15,6 +15,10 @@ on:
   repository_dispatch:
     types: [vercel.deployment.ready]
 
+concurrency:
+  group: runtime-doors
+  cancel-in-progress: false
+
 permissions:
   contents: read
   statuses: write

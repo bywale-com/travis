@@ -1,13 +1,19 @@
 /** Who owns the microphone for this glass state. */
 
-export type EarKind = "none" | "stt" | "live";
+export type EarKind = "none" | "stt" | "live-connecting" | "live";
 
 export type EarState = {
   viewMode: "voice" | "log";
   logSubmode: "talk" | "type";
   destTravis: boolean;
   liveUp: boolean;
+  /** In-flight WebRTC counts as Live ownership — not a window for STT. */
+  liveConnecting?: boolean;
 };
+
+export type LiveCloseAction = "reconnect" | "wait";
+
+export const LIVE_RECONNECTING_LINE = "Reconnecting…";
 
 export type Presence = "listening" | "paused" | "speaking" | "ended";
 
@@ -18,7 +24,45 @@ export type ModeSwitchAction = "keep" | "arm" | "release";
 export function whichEar(opts: EarState): EarKind {
   if (opts.viewMode === "log" && opts.logSubmode === "type") return "none";
   if (opts.viewMode === "voice" && opts.destTravis && opts.liveUp) return "live";
+  if (opts.viewMode === "voice" && opts.destTravis && opts.liveConnecting) {
+    return "live-connecting";
+  }
   return "stt";
+}
+
+/** Connecting or connected — Voice + Travis never shares the mic with Talk. */
+export function liveOwnsMic(opts: EarState): boolean {
+  const ear = whichEar(opts);
+  return ear === "live" || ear === "live-connecting";
+}
+
+/**
+ * Voice + Travis wants Live. STT must not arm on the way there, while
+ * connecting, or while up. Talk/Type dest Engineer still use STT.
+ */
+export function sttMayStart(opts: Omit<EarState, "liveUp"> & Partial<EarState>): boolean {
+  return wantedEar(opts) === "stt";
+}
+
+export function watchdogShouldStartStt(opts: EarState & { recLive: boolean }): boolean {
+  if (opts.recLive) return false;
+  if (!sttMayStart(opts)) return false;
+  return true;
+}
+
+/**
+ * Live drop never becomes Talk. Voice + Travis reconnects while listen is
+ * wanted; otherwise wait for an explicit user action.
+ */
+export function liveCloseAction(opts: {
+  viewMode: "voice" | "log";
+  destTravis: boolean;
+  listeningWanted: boolean;
+}): LiveCloseAction {
+  if (opts.viewMode === "voice" && opts.destTravis && opts.listeningWanted) {
+    return "reconnect";
+  }
+  return "wait";
 }
 
 /**

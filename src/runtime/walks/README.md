@@ -1,6 +1,8 @@
 # Walks — every use that is the app
 
-Seeded files run on every deploy (`npm run test:runtime`). A row with no file is a named hole, not a green. A walk names **one use** and that use’s **outcome**. Completeness is this list plus grain tests, not an oracle that tries to catch every error.
+Server-pipe walks. They POST session doors with prepared text. They prove the HTTP contract. They do **not** open the phone face, acquire a microphone, or prove which ear owns speech. Microphone / Voice / Talk / Type glass lives in `src/runtime/browser/`.
+
+Seeded files run on every deploy (`npm run test:runtime` runs this layer, then the browser layer). A row with no file is a named hole, not a green. A walk names **one use** and that use’s **outcome**. Completeness is this list plus browser suites plus grain tests, not an oracle that tries to catch every error.
 
 | Use on the phone | Walk | Pass | Fail |
 |---|---|---|---|
@@ -12,8 +14,15 @@ Seeded files run on every deploy (`npm run test:runtime`). A row with no file is
 | Leave and come back | `come-back.spec.ts` | Same `session.id`. Line still there. That send also worked. | New blank sitting. Think miss on the first send. |
 | Bind a Cursor chat into the room | `bind-agent.spec.ts` | `bind_agent` via live tool port: catalog row + room member, no `POST /v1/agents`, stream not left live. | Tool miss. No member. Stream stuck live. |
 
+| Browser face (not this folder) | What it proves |
+|---|---|
+| `browser/type-mode.spec.ts` | Real composer. No `/send` before Send. Rendered turn + Travis mouth. |
+| `browser/talk-mode.spec.ts` | SpeechRecognition double. No `/finalize` before I’m done. Then the gate. |
+| `browser/voice-own.spec.ts` | Mocked Live. STT starts stay zero while connecting/connected. No Talk draft. |
+| `browser/voice-live.spec.ts` | Real `/live/token` + WebRTC + fixture WAV. Dest leave before I’m done. Wrap. Usage printed. |
+
 | Not seeded | Why |
 |---|---|
-| `unwired-glass.spec.ts` (Playwright subtitle **Travis isn’t wired**) | Specified in 020. SA 036 has not ascribed how the browser carries bypass + cookie. HTTP walks cannot see `Room.tsx`. |
+| `unwired-glass.spec.ts` (Playwright subtitle **Travis isn’t wired**) | Specified in 020. The Voice canary fails if Live is unwired. A dedicated unwired-glass walk is still a named hole. |
 
 Do not mint Backlog / plate walks from this file. A later packet adds a walk when it plants that use. A lived error path gets its own walk — it does not thicken every happy path.

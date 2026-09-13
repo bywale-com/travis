@@ -7,6 +7,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-13** · Hotfix 098 · this PR — Browser-real Type/Talk/Voice walks and exclusive Live ear while connecting, because endpoint walks could not see Voice looking live while Talk barged the mic.
+
 - **2026-09-13** · Hotfix 097 · this PR — Direct `bind_agent` maps a `bc-` id to a seat (including architect) without a sit prompt, because an existing Cursor chat is already configured and dest should route to that open member.
 
 - **2026-09-13** · Hotfix 096 · this PR — `bind_agent` tool and `bind-agent` runtime walk (no `POST /v1/agents`), because Technical Architect seats are started in Cursor and Travis should bind `bc-…` ids instead of provisioning on doors.

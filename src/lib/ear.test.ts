@@ -1,11 +1,15 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  liveCloseAction,
+  liveOwnsMic,
   modeSwitchEarAction,
   sameRoomEar,
   sttAlreadySatisfies,
+  sttMayStart,
   sttOnEndAction,
   wantedEar,
+  watchdogShouldStartStt,
   whichEar,
   type EarState,
 } from "./ear";
@@ -393,4 +397,76 @@ test("dest Engineer still keeps its recognizer across Talk and Voice", () => {
 test("a Live session already up on dest Travis is not torn down by a no-op", () => {
   const up: EarState = { ...travisVoice, liveUp: true };
   assert.equal(sameRoomEar(up, up), false, "Voice + Travis wants live, not stt");
+});
+
+test("connecting Voice + Travis is Live ownership, not STT", () => {
+  const connecting: EarState = {
+    ...travisVoice,
+    liveUp: false,
+    liveConnecting: true,
+  };
+  assert.equal(whichEar(connecting), "live-connecting");
+  assert.equal(liveOwnsMic(connecting), true);
+  assert.equal(sttMayStart(connecting), false);
+  assert.equal(
+    watchdogShouldStartStt({ ...connecting, recLive: false }),
+    false,
+    "watchdog must not arm Talk while Live is connecting",
+  );
+});
+
+test("connected Voice + Travis excludes Web Speech", () => {
+  const up: EarState = { ...travisVoice, liveUp: true };
+  assert.equal(whichEar(up), "live");
+  assert.equal(liveOwnsMic(up), true);
+  assert.equal(sttMayStart(up), false);
+  assert.equal(watchdogShouldStartStt({ ...up, recLive: false }), false);
+});
+
+test("Voice + Travis wants Live even before connect starts — STT must not arm", () => {
+  assert.equal(wantedEar(travisVoice), "live");
+  assert.equal(sttMayStart(travisVoice), false);
+  assert.equal(
+    watchdogShouldStartStt({ ...travisVoice, recLive: false }),
+    false,
+  );
+});
+
+test("Talk dest Travis still may start STT", () => {
+  assert.equal(sttMayStart(travisTalk), true);
+  assert.equal(
+    watchdogShouldStartStt({ ...travisTalk, recLive: false }),
+    true,
+  );
+  assert.equal(
+    watchdogShouldStartStt({ ...travisTalk, recLive: true }),
+    false,
+  );
+});
+
+test("Live close never silently becomes Talk", () => {
+  assert.equal(
+    liveCloseAction({
+      viewMode: "voice",
+      destTravis: true,
+      listeningWanted: true,
+    }),
+    "reconnect",
+  );
+  assert.equal(
+    liveCloseAction({
+      viewMode: "voice",
+      destTravis: true,
+      listeningWanted: false,
+    }),
+    "wait",
+  );
+  assert.equal(
+    liveCloseAction({
+      viewMode: "log",
+      destTravis: true,
+      listeningWanted: true,
+    }),
+    "wait",
+  );
 });
