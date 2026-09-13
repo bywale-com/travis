@@ -98,6 +98,10 @@ test("wake-packet-seats: one seat at a time; green light after clear", () => {
   assert.match(yml, /preview-when-clear:/);
   assert.match(yml, /preview-when-clear\.sh/);
   assert.match(yml, /No wake-pm-look/);
+  assert.match(yml, /needs\.label\.outputs\.green_light == 'true'/);
+  assert.match(yml, /echo "green_light=true" >> "\$GITHUB_OUTPUT"/);
+  assert.match(yml, /manual-preview:/);
+  assert.match(yml, /github\.event\.label\.name == 'preview'/);
   assert.doesNotMatch(yml, /add_seat wake-pm-look/);
   assert.doesNotMatch(yml, /VERCEL_DEPLOY_HOOK_URL/);
   assert.doesNotMatch(yml, /--remove-label blocker/);
