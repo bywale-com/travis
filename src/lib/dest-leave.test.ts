@@ -18,6 +18,19 @@ test("create-agent has no Agent.create", () => {
   assert.equal(src.includes("Agent.create("), false);
 });
 
+test("chip dest files dest_job so leave starts before Cursor run_started", () => {
+  const send = readFileSync(
+    join(process.cwd(), "src/app/api/session/[id]/send/route.ts"),
+    "utf8",
+  );
+  const queue = readFileSync(
+    join(process.cwd(), "src/app/api/session/[id]/queue/route.ts"),
+    "utf8",
+  );
+  assert.match(send, /insertDestJob/);
+  assert.match(queue, /d\.job\.status === "created"/);
+});
+
 test("Type send stays invokeDeepAgent — no Responses cousin", () => {
   const src = readFileSync(
     join(process.cwd(), "src/server/travis-openai.ts"),

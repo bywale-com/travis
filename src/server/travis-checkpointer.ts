@@ -1,9 +1,12 @@
 /**
  * SCP-034 — official LangGraph PostgresSaver. Schema `langgraph`, not `travis`.
  * Own tiny pg.Pool. Do not share the drizzle client.
+ * CJS load — the package's ESM entry throws on Vercel require().
  */
 
-import { PostgresSaver } from "@langchain/langgraph-checkpoint-postgres";
+import { createRequire } from "node:module";
+import { join } from "node:path";
+import type { PostgresSaver } from "@langchain/langgraph-checkpoint-postgres";
 import { Pool } from "pg";
 
 export const CHECKPOINTER_SCHEMA = "langgraph";
@@ -21,6 +24,11 @@ export async function travisCheckpointer(): Promise<PostgresSaver> {
   return ready;
 }
 
+function loadPostgresSaver(): typeof import("@langchain/langgraph-checkpoint-postgres") {
+  const req = createRequire(join(process.cwd(), "package.json"));
+  return req("@langchain/langgraph-checkpoint-postgres");
+}
+
 async function makeSaver(): Promise<PostgresSaver> {
   const connectionString = process.env.DATABASE_URL?.trim() ?? "";
   if (!connectionString) {
@@ -28,6 +36,7 @@ async function makeSaver(): Promise<PostgresSaver> {
       "DATABASE_URL is not set — LangGraph checkpointer cannot hang.",
     );
   }
+  const { PostgresSaver } = loadPostgresSaver();
   const pool = new Pool({
     connectionString,
     max: CHECKPOINTER_POOL_MAX,

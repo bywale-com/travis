@@ -18,7 +18,12 @@ export async function GET(
     const now = Date.now();
     const dests = await listOpenDestJobs(id).catch(() => []);
     const destRunning = dests
-      .filter((d) => d.job.status === "dispatched" || d.job.status === "in_progress")
+      .filter(
+        (d) =>
+          d.job.status === "created" ||
+          d.job.status === "dispatched" ||
+          d.job.status === "in_progress",
+      )
       .map((d) => toInFlightRow(d.job, d.binding, now));
     const runs = destRunning.length
       ? destRunning.map((row) => ({

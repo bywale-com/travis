@@ -76,7 +76,24 @@ export async function dispatchToSeat(params: {
     // Walk only as far as the run identifying itself. Live events continue
     // on the stream store so Travis's mouth is not held (039).
     for (let i = 0; i < 4; i++) {
-      const next = await gen.next();
+      const next = await new Promise<IteratorResult<CursorStreamEvent>>(
+        (resolve, reject) => {
+          const timer = setTimeout(
+            () => reject(new Error("Cursor run did not start")),
+            8_000,
+          );
+          gen.next().then(
+            (value) => {
+              clearTimeout(timer);
+              resolve(value);
+            },
+            (err) => {
+              clearTimeout(timer);
+              reject(err);
+            },
+          );
+        },
+      );
       if (next.done) break;
       event = next.value;
       if (

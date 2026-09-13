@@ -23,11 +23,21 @@ test("Type invoke hangs official PostgresSaver + session thread_id", () => {
   assert.match(agent, /travisCheckpointer/);
   assert.match(agent, /checkpointer/);
   assert.match(agent, /thread_id:\s*params\.sessionId/);
+  assert.match(agent, /createRequire/);
+  assert.match(agent, /deepagents\/node/);
   assert.equal(agent.includes("MemorySaver"), false);
   assert.equal(agent.includes("InMemorySaver"), false);
   assert.match(saver, /@langchain\/langgraph-checkpoint-postgres/);
+  assert.match(saver, /createRequire/);
   assert.match(saver, /schema:\s*CHECKPOINTER_SCHEMA/);
   assert.match(saver, /langgraph/);
   assert.equal(saver.includes("from \"@/server/db/client\""), false);
   assert.equal(saver.includes("from \"@/server/db/pool\""), false);
+});
+
+test("Next server hang forces CJS for deepagents and langchain", () => {
+  const cfg = readFileSync(join(process.cwd(), "next.config.ts"), "utf8");
+  assert.match(cfg, /serverExternalPackages/);
+  assert.match(cfg, /deepagents\/node/);
+  assert.match(cfg, /commonjs \$\{request\}/);
 });

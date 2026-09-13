@@ -13,7 +13,7 @@ import { AuthError, jsonRoute } from "@/server/api-error";
 import { MembershipError, requireOpenMember } from "@/server/room-membership";
 import { requireOwnedSession } from "@/server/operator";
 import { destBindingsForSend } from "@/server/dest-resolve";
-import { listOpenDestJobs } from "@/server/dest-job";
+import { insertDestJob, listOpenDestJobs } from "@/server/dest-job";
 import { dispatchToSeat } from "@/server/dispatch";
 import { streamIntent } from "@/lib/stream-intent";
 import { dispatchStreamIntents } from "@/server/stream-dispatch";
@@ -162,6 +162,16 @@ export async function POST(
           await noteTravisUnwired(sessionId);
         }
         const cursorBinds = destBindings.filter((b) => !isTravisSeat(b.seatKey));
+        await Promise.allSettled(
+          cursorBinds.map((binding) =>
+            insertDestJob({
+              sessionId,
+              binding,
+              text: prompt,
+              userTurnId: userTurn.id,
+            }),
+          ),
+        );
         await Promise.allSettled(
           cursorBinds.map((binding) =>
             dispatchToSeat({

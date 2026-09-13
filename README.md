@@ -6,6 +6,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-13** · Hotfix 093 fail-look · this PR — Type think loads Deep Agents and LangChain through `createRequire` CJS, and a chip dest files `dest_job` before Cursor `run_started`, because runtime-doors died on `Cannot use import statement outside a module` and type-dest never scored a leave.
+
 - **2026-09-13** · Hotfix 093 · this PR — Preview green-light fires only on plant finish (src/ or ENGINEER-HANDOFF.md), blocker release, or manual preview label, because unlabeled PR pushes were triggering unintended Vercel previews.
 
 - **2026-09-13** · Hotfix 092 · this PR — Green-light, fail-look, and seats share one token via `previewing`, because empty labels were not “the last preview finished” and a recut that edited the hotfix file re-armed Engineer.

@@ -87,7 +87,7 @@ export async function generateTravisText(params: {
     // Load after the send route has already returned SSE. A static import
     // of deepagents on this module made finalize/send/live-token HTML 500
     // at function load — the phone then parsed <!DOCTYPE as JSON.
-    // 080: hang `deepagents/node` so Vercel require() hits CJS, not browser ESM.
+    // 080: hang `deepagents/node` via createRequire so Vercel hits CJS, not ESM.
     // 032: kit throw reaches pipeTravisText → travisGenerateMiss. No cousin.
     // 033: create is HTTP — SDK create no longer loads on this send.
     const { invokeDeepAgent } = await import("@/server/travis-deep-agent");
