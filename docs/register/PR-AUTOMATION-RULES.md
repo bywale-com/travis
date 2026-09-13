@@ -112,6 +112,14 @@ Every time an automated seat (like the Engineer on a `fail-look` rebuild) pushes
 
 The PR description serves as the human-readable changelog of what was attempted, what broke, what was fixed, and whether checks are green, so the founder never has to parse git commit diffs or CI logs to understand the state of the branch.
 
+### Timeline — only this PR
+
+A timeline belongs in the description **only when more than one hotfix (or packet) landed on this same open PR**. Newest cut at the top. Each entry is what caused that cut **on this PR**.
+
+It is not a history of every hotfix the house has ever shipped. A merged cousin is a different PR — do not pull 095 / 096 / 097 (or any other merged number) into a new PR’s timeline just because the title is the next number.
+
+Example: title says Hotfix 097, and 095 + 096 + 097 all happened on that still-open PR → those three are the timeline. A later PR that starts at 098 lists 098, then 099 if 099 is specced on that same PR. Not 095.
+
 ---
 
 ## 5. Summary Table: What Action Takes Place?

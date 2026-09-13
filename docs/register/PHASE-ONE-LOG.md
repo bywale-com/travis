@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-13 15:10 UTC — Hotfix 099 spec: cancelled doors are red; 098 Playwright ran then leaked and painted false green. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-13 15:20 UTC — PR description timeline is this open PR only, not the house hotfix index. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3769,3 +3769,15 @@ Not the model. Not a new face.
 **Lock.** Cancelled or timed-out doors are red. Emerge stays success-only. `launchPhone` must close the browser on throw and dump the wall. First browser miss exits; do not sit until the cap. 098’s Type/Talk/Voice proof still stands — this cut makes that suite able to fail honestly.
 
 **Landed.** [`HOTFIX-099-CANCELLED-DOORS-ARE-RED.md`](./HOTFIX-099-CANCELLED-DOORS-ARE-RED.md) + test sheet. **Wake:** engineer. Same PR. Architect stops.
+
+---
+
+## 2026-09-13 15:20 UTC — PR timeline is this PR only (founder correction)
+
+**Kind:** Protocol. Flag 14:00 2026-08-25 stands.
+
+**Founder (preserved):** the timeline is only for that PR specifically, because a hotfix is referencing the same PR. That’s when you show a timeline of, even though the title says hotfix 97, actually inside of this PR we’ve had 95, 96, 97. It’s not every hotfix that has ever existed. This PR is not the same PR that had 95, 96, and 97 — that one already merged.
+
+**Lock.** Description timeline = cuts that landed on **this still-open PR**, newest first. Merged cousins stay on their own PR. Do not rewrite #190 in this sitting.
+
+**Landed.** [`PR-AUTOMATION-RULES.md`](./PR-AUTOMATION-RULES.md) § 4 · Engineer prompt · Architect seat · BUILD-PROTOCOL. Re-paste B if the live automation is stale.

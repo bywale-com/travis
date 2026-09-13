@@ -69,6 +69,8 @@ On **one** new branch and **one** open PR for this pocket (usually the Engineer 
 
 The Architect’s “test” is this Markdown contract. Executable unit, runtime, and browser test code is part of the plant and belongs to Engineer. After the specification push wakes the next seat, Architect stops and does not pre-plant implementation on the branch.
 
+If this open PR later takes a second hotfix, the PR description timeline is **this PR’s cuts only** — not the house’s whole hotfix index. Canon: [`register/PR-AUTOMATION-RULES.md`](./register/PR-AUTOMATION-RULES.md) § 4.
+
 Waiting is one whole line on the packet, nothing else:
 
 ```text
