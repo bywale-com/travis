@@ -48,6 +48,7 @@ async function main(): Promise<void> {
     tsx,
     "--test",
     "--test-concurrency=1",
+    "--test-fail-fast",
     "src/runtime/browser/type-mode.spec.ts",
     "src/runtime/browser/talk-mode.spec.ts",
     "src/runtime/browser/voice-own.spec.ts",
@@ -56,6 +57,7 @@ async function main(): Promise<void> {
     tsx,
     "--test",
     "--test-concurrency=1",
+    "--test-fail-fast",
     "src/runtime/browser/voice-live.spec.ts",
   ]);
 }

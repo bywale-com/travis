@@ -128,6 +128,8 @@ test("runtime-doors does not fail-look during handoff", () => {
   assert.match(yml, /Emerge packet on success/);
   assert.match(yml, /send-emerge-letter\.py/);
   assert.match(yml, /sort -V \| tail -n 1/);
+  assert.match(yml, /failure\(\) \|\| cancelled\(\)/);
+  assert.match(yml, /Paint red unless walks succeeded/);
 });
 
 test("Engineer prompt never green-lights a seat commit", () => {

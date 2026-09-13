@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
+import { classifyFaceText } from "./browser/harness";
 import { playwrightCli } from "./prepare-browser";
 
 function read(rel: string) {
@@ -40,6 +41,7 @@ test("package.json test:runtime prepares the browser and delegates pipe then bro
   assert.match(run, /voice-own\.spec\.ts/);
   assert.match(run, /voice-live\.spec\.ts/);
   assert.match(run, /async function main/);
+  assert.match(run, /--test-fail-fast/);
   assert.doesNotMatch(
     run,
     /^await\s/m,
@@ -62,6 +64,31 @@ test("playwright CLI is the sibling bin of the exported package.json", () => {
   const cli = playwrightCli();
   assert.match(cli, /cli\.js$/);
   assert.equal(existsSync(cli), true);
+});
+
+test("runtime-doors cancelled or a walks miss is red, not emerge", () => {
+  const yml = read(".github/workflows/runtime-doors.yml");
+  assert.match(yml, /timeout-minutes: 60/);
+  assert.match(yml, /Paint red unless walks succeeded/);
+  assert.match(yml, /steps\.walks\.outcome != 'success'/);
+  const failLook = yml.slice(yml.indexOf("Fresh-add fail-look on the open PR"));
+  assert.match(failLook, /if: failure\(\) \|\| cancelled\(\)/);
+  const emerge = yml.slice(yml.indexOf("Emerge packet on success"));
+  assert.match(emerge, /if: success\(\)/);
+  assert.doesNotMatch(emerge.slice(0, 80), /cancelled/);
+});
+
+test("launchPhone closes Chromium on throw and finds View log by text", () => {
+  const src = read("src/runtime/browser/harness.ts");
+  assert.match(src, /await browser\.close\(\)\.catch/);
+  assert.match(src, /dumpFaceMiss/);
+  assert.match(src, /classifyFaceText/);
+  assert.match(src, /getByText\("View log"/);
+  assert.doesNotMatch(src, /getByRole\("button", \{ name: "View log" \}\)/);
+  assert.equal(classifyFaceText("Send login link"), "login");
+  assert.equal(classifyFaceText("TRAVIS\nRooms\nNew room"), "index");
+  assert.equal(classifyFaceText("Talking with Travis…\nView log"), "view-log");
+  assert.equal(classifyFaceText("Vercel Authentication"), "none");
 });
 
 test("stream-arch cue fixture is checked in", () => {

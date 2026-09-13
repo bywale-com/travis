@@ -49,6 +49,31 @@ function bypassHeaders(): Record<string, string> {
   };
 }
 
+export type FaceDoor = "login" | "index" | "view-log" | "none";
+
+export function classifyFaceText(text: string): FaceDoor {
+  if (/Send login link/i.test(text)) return "login";
+  if (/\bView log\b/.test(text)) return "view-log";
+  if (/\bRooms\b/.test(text) && /TRAVIS/.test(text)) return "index";
+  return "none";
+}
+
+export async function whichDoor(page: Page): Promise<FaceDoor> {
+  const text = await page.locator("body").innerText().catch(() => "");
+  return classifyFaceText(text);
+}
+
+export async function dumpFaceMiss(page: Page, door: FaceDoor): Promise<void> {
+  const url = page.url();
+  const title = await page.title().catch(() => "");
+  const text = (await page.locator("body").innerText().catch(() => "")).slice(0, 800);
+  console.error(
+    `runtime: face miss door=${door} url=${url} title=${title}\n${text}`,
+  );
+}
+
+const FACE_READY_MS = 20_000;
+
 export async function launchPhone(opts?: {
   fakeAudio?: boolean;
   headed?: boolean;
@@ -73,53 +98,67 @@ export async function launchPhone(opts?: {
     headless: opts?.headed ? false : true,
     args,
   });
-  const origin = new URL(base);
-  const bypass = process.env.VERCEL_AUTOMATION_BYPASS_SECRET?.trim() ?? "";
-  const cookie = process.env.TRAVIS_TEST_OPERATOR_COOKIE?.trim() ?? "";
-  const context = await browser.newContext({
-    viewport: PHONE,
-    extraHTTPHeaders: bypassHeaders(),
-  });
-  if (bypass) {
-    await context.addCookies([
-      {
-        name: "x-vercel-protection-bypass",
-        value: bypass,
-        domain: origin.hostname,
-        path: "/",
+  try {
+    const origin = new URL(base);
+    const bypass = process.env.VERCEL_AUTOMATION_BYPASS_SECRET?.trim() ?? "";
+    const cookie = process.env.TRAVIS_TEST_OPERATOR_COOKIE?.trim() ?? "";
+    const context = await browser.newContext({
+      viewport: PHONE,
+      extraHTTPHeaders: bypassHeaders(),
+    });
+    if (bypass) {
+      await context.addCookies([
+        {
+          name: "x-vercel-protection-bypass",
+          value: bypass,
+          domain: origin.hostname,
+          path: "/",
+        },
+      ]);
+    }
+    if (cookie) {
+      await context.addCookies([
+        {
+          name: OPERATOR_COOKIE,
+          value: cookie,
+          domain: origin.hostname,
+          path: "/",
+        },
+      ]);
+    }
+    await context.addInitScript(
+      ({ stayKey, sessionId }) => {
+        localStorage.setItem(
+          stayKey,
+          JSON.stringify({ sessionId, plate: "room" }),
+        );
       },
-    ]);
+      { stayKey: STAY_KEY, sessionId: desk.sessionId },
+    );
+    if (opts?.initScript) {
+      await context.addInitScript(opts.initScript);
+    }
+    const page = await context.newPage();
+    await page.goto(base, { waitUntil: "domcontentloaded" });
+    const deadline = Date.now() + FACE_READY_MS;
+    let door: FaceDoor = "none";
+    while (Date.now() < deadline) {
+      door = await whichDoor(page);
+      if (door === "view-log") {
+        return { browser, context, page, desk, base };
+      }
+      if (door === "login") {
+        await dumpFaceMiss(page, door);
+        throw new Error("Login door — test operator cookie did not open the desk");
+      }
+      await page.waitForTimeout(250);
+    }
+    await dumpFaceMiss(page, door);
+    throw new Error(`Phone face miss — door=${door}`);
+  } catch (err) {
+    await browser.close().catch(() => {});
+    throw err;
   }
-  if (cookie) {
-    await context.addCookies([
-      {
-        name: OPERATOR_COOKIE,
-        value: cookie,
-        domain: origin.hostname,
-        path: "/",
-      },
-    ]);
-  }
-  await context.addInitScript(
-    ({ stayKey, sessionId }) => {
-      localStorage.setItem(
-        stayKey,
-        JSON.stringify({ sessionId, plate: "room" }),
-      );
-    },
-    { stayKey: STAY_KEY, sessionId: desk.sessionId },
-  );
-  if (opts?.initScript) {
-    await context.addInitScript(opts.initScript);
-  }
-  const page = await context.newPage();
-  await page.goto(base, { waitUntil: "domcontentloaded" });
-  if (await page.getByRole("button", { name: "Send login link" }).count()) {
-    await browser.close();
-    throw new Error("Login door — test operator cookie did not open the desk");
-  }
-  await page.getByRole("button", { name: "View log" }).waitFor({ timeout: 45_000 });
-  return { browser, context, page, desk, base };
 }
 
 export async function closePhone(phone: PhoneBrowser): Promise<void> {
@@ -127,13 +166,13 @@ export async function closePhone(phone: PhoneBrowser): Promise<void> {
 }
 
 export async function openLogType(page: Page): Promise<void> {
-  await page.getByRole("button", { name: "View log" }).click();
+  await page.getByText("View log", { exact: true }).click();
   await page.getByRole("button", { name: "Type" }).click();
   await page.getByPlaceholder("Message the room").waitFor();
 }
 
 export async function openLogTalk(page: Page): Promise<void> {
-  await page.getByRole("button", { name: "View log" }).click();
+  await page.getByText("View log", { exact: true }).click();
   const talk = page.getByRole("button", { name: "Talk" });
   if (await talk.count()) await talk.click();
   await page.getByText("Listening", { exact: false }).waitFor({ timeout: 20_000 });

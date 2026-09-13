@@ -9,20 +9,21 @@ const haveUrl = Boolean(runtimeBaseUrl());
 
 describe("browser voice-live", { skip: !haveUrl }, () => {
   it("real Voice canary: fake mic → Live → dest leave before I'm done → wrap", async () => {
-    let phone: Awaited<ReturnType<typeof launchPhone>>;
+    let phone: Awaited<ReturnType<typeof launchPhone>> | undefined;
     try {
-      phone = await launchPhone({ fakeAudio: true, initScript: REALTIME_USAGE_HOOK });
-    } catch (e) {
-      const headed = process.env.DISPLAY || process.env.TRAVIS_BROWSER_HEADED === "1";
-      if (headed) throw e;
-      console.log("runtime: headless Voice launch missed; retrying headed under current DISPLAY/Xvfb");
-      phone = await launchPhone({
-        fakeAudio: true,
-        headed: true,
-        initScript: REALTIME_USAGE_HOOK,
-      });
-    }
-    try {
+      try {
+        phone = await launchPhone({ fakeAudio: true, initScript: REALTIME_USAGE_HOOK });
+      } catch (e) {
+        const headed = process.env.DISPLAY || process.env.TRAVIS_BROWSER_HEADED === "1";
+        if (headed) throw e;
+        console.log("runtime: headless Voice launch missed; retrying headed under current DISPLAY/Xvfb");
+        phone = await launchPhone({
+          fakeAudio: true,
+          headed: true,
+          initScript: REALTIME_USAGE_HOOK,
+        });
+      }
+      if (!phone) throw new Error("launchPhone did not return a phone");
       const liveLine = phone.page.getByText("Talking with Travis…");
       const unwired = phone.page.getByText("Travis isn’t wired");
       const first = await Promise.race([
@@ -92,7 +93,7 @@ describe("browser voice-live", { skip: !haveUrl }, () => {
       console.log("realtime usage:", JSON.stringify(usage));
       assert.ok(usage, "response.done usage must be captured for the paid canary");
     } finally {
-      await closePhone(phone);
+      if (phone) await closePhone(phone);
     }
   });
 });
