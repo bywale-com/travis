@@ -7,6 +7,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-13** · Blocker 003 · this PR — create-agent walk stays red on a Cursor create hang (45s abort; dest walks green), because Engineer cannot make `POST /v1/agents` answer and 091 no longer waits on spin.
+
 - **2026-09-13** · Hotfix 095 · this PR — Cursor create timeout, close Travis stream after tools, and runtime `create-agent` walk, because `create_agent` could hang with a live stream and doors never exercised person creation.
 
 - **2026-09-13** · Hotfix 094 · merged — Wire emerge packet delivery, email notification, and emerge label directly to runtime-doors on pass, because PM-LOOK verdict passes were decommissioned and green deployments never triggered emerge.

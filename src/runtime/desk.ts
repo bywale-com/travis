@@ -188,7 +188,7 @@ export async function runTravisTool(
   desk: Desk,
   name: string,
   args: Record<string, unknown>,
-): Promise<{ ok: boolean; text: string }> {
+): Promise<{ ok: boolean; text: string; status: number }> {
   const { res, bodyText, kind } = await doorFetch(
     `/api/session/${desk.sessionId}/live/tool`,
     {
@@ -204,7 +204,11 @@ export async function runTravisTool(
   if (!res.ok) {
     throw new Error(data.error ?? `runTravisTool ${res.status}`);
   }
-  return { ok: data.ok === true, text: String(data.text ?? "") };
+  return {
+    ok: data.ok === true,
+    text: String(data.text ?? ""),
+    status: res.status,
+  };
 }
 
 export async function readQueue(desk: Desk): Promise<{

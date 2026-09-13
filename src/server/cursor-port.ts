@@ -50,7 +50,7 @@ function apiKey(): string {
 const CURSOR_API = "https://api.cursor.com";
 
 /** Runtime walks and Type send must not leave a live stream on a hung create. */
-export const CURSOR_CREATE_TIMEOUT_MS = 45_000;
+export const CURSOR_CREATE_TIMEOUT_MS = 90_000;
 
 function cursorBasicAuth(key: string): string {
   return `Basic ${Buffer.from(`${key}:`).toString("base64")}`;

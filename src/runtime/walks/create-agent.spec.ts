@@ -29,7 +29,7 @@ describe("create-agent", { skip: !haveUrl }, () => {
         "create-agent",
         `create_agent tool failed: ${tool.text}`,
         turns,
-        { kind: "json", status: 400 },
+        { kind: "json", status: tool.status },
       );
     }
     if (!/created/i.test(tool.text)) {
