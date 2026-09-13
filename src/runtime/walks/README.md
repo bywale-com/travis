@@ -8,6 +8,7 @@ Seeded files run on every deploy (`npm run test:runtime`). A row with no file is
 | Ask what we just said (walk-back) | `type-walk-back.spec.ts` | Two Type beats. A **second** Travis post. | Unwired. Mute. Second beat adds no post. Lived `?? · run error`. |
 | Type work to a seat | `type-dest.spec.ts` | Dest line on tape. Queue shows a leave. | HTML. No leave. Not the Engineer essay. Not Travis wrap. |
 | Voice: two lines, I’m done | `voice-wrap.spec.ts` | Both lines on tape. Wrap is a Travis post. | HTML. Unwired. Run error after wrap. |
+| Voice dest while talking | `voice-stream-arch.spec.ts` | Transcript dest starts a leave. Queue is non-empty **before** I’m done. Wrap is a Travis mouth. | Queue empty after transcript. Wrap with no mouth. Engineer essay. |
 | Leave and come back | `come-back.spec.ts` | Same `session.id`. Line still there. That send also worked. | New blank sitting. Think miss on the first send. |
 
 | Not seeded | Why |

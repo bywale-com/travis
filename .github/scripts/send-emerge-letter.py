@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""House mail. Not Travis. Called from wake-packet-seats.yml."""
+"""House mail. Not Travis. Called from runtime-doors.yml on doors green (or manual dispatch)."""
 
 from __future__ import annotations
 

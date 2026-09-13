@@ -8,13 +8,13 @@ import {
   absorbLiveTravisPost,
   insertUserTurn,
   lastSpeakableTravisText,
-  sendOrEnqueueMany,
   sse,
   sseHeaders,
 } from "@/server/seat-pipe";
 import { collapseSpeechStutter } from "@/lib/absorb-text";
 import { shouldDropHeardAsUser } from "@/lib/thread-truth";
 import { destBindingsForSend } from "@/server/dest-resolve";
+import { fileDestJobsForSeatKeys, writeAndLeaveDest } from "@/server/dest-leave";
 import { AuthError } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
 import { runMotionRunner } from "@/server/motion";
@@ -33,6 +33,21 @@ type Body = {
   handle?: string | null;
   referenceTurnId?: string | null;
 };
+
+function mightCursorDest(params: {
+  decided:
+    | { kind: "send"; seatKeys: string[]; prompt: string }
+    | { kind: "switch"; seatKey: string }
+    | { kind: "empty" };
+  prompt: string;
+  seatKey: string | null;
+}): boolean {
+  if (!params.prompt) return false;
+  if (params.decided.kind === "send") {
+    if (params.decided.seatKeys.some((k) => !isTravisSeat(k))) return true;
+  }
+  return Boolean(params.seatKey && !isTravisSeat(params.seatKey));
+}
 
 export async function POST(
   req: Request,
@@ -114,43 +129,60 @@ export async function POST(
       ? { kind: "send" as const, seatKeys: [seatKey], prompt: calledPrompt }
       : { kind: "switch" as const, seatKey }
     : { kind: "send" as const, seatKeys: [], prompt: heard };
-  const dests = await destBindingsForSend({
-    sessionId,
-    decided,
-    referenceTurnId,
-  });
-  const cursorDests = dests.filter((b) => !isTravisSeat(b.seatKey));
-  const sticky = dests[dests.length - 1];
-  if (sticky) {
-    await db
-      .update(voiceSession)
-      .set({
-        activeBindingId: sticky.id,
-        bindingId: sticky.id,
-      })
-      .where(eq(voiceSession.id, sessionId));
-  }
   const prompt = decided.kind === "send" ? decided.prompt : "";
-  // 035 — helper stays explicit. Always false: mouth waits for finalize.
-  void liveShouldPipeTravis({ prompt, cursorDestCount: cursorDests.length });
   const classifyPhrase = prompt || heard;
-  if (prompt && cursorDests.length) {
-    await runMotionRunner(sessionId);
+
+  if (mightCursorDest({ decided, prompt, seatKey })) {
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
       async start(controller) {
+        controller.enqueue(encoder.encode(": ping\n\n"));
         const send = (event: string, data: unknown) => {
           controller.enqueue(encoder.encode(sse(event, data)));
         };
         try {
-          await sendOrEnqueueMany({
+          const earlyDests = await fileDestJobsForSeatKeys({
             sessionId,
-            bindings: cursorDests,
-            prompt,
-            send,
-            userTurn,
-            referenceTurnId,
+            seatKeys:
+              decided.kind === "send"
+                ? decided.seatKeys
+                : seatKey
+                  ? [seatKey]
+                  : [],
+            prompt: prompt || classifyPhrase,
           });
+          const dests = earlyDests.length
+            ? earlyDests
+            : await destBindingsForSend({
+                sessionId,
+                decided,
+                referenceTurnId,
+              });
+          const cursorDests = dests.filter((b) => !isTravisSeat(b.seatKey));
+          const sticky = dests[dests.length - 1];
+          if (sticky) {
+            await db
+              .update(voiceSession)
+              .set({
+                activeBindingId: sticky.id,
+                bindingId: sticky.id,
+              })
+              .where(eq(voiceSession.id, sessionId));
+          }
+          void liveShouldPipeTravis({
+            prompt,
+            cursorDestCount: cursorDests.length,
+          });
+          const destPrompt = prompt || classifyPhrase;
+          const left = await Promise.allSettled(
+            cursorDests.map((binding) =>
+              writeAndLeaveDest({ sessionId, binding, prompt: destPrompt }),
+            ),
+          );
+          const destFail = left.find((row) => row.status === "rejected");
+          if (destFail && destFail.status === "rejected") {
+            throw destFail.reason;
+          }
           const openJobs = await listOpenDestJobs(sessionId).catch(() => []);
           await dispatchStreamIntents({
             sessionId,
@@ -161,16 +193,34 @@ export async function POST(
               bindingIds: cursorDests.map((b) => b.id),
             },
           });
+          send("done", { ok: true, turn: userTurn });
         } catch (err) {
           send("error", {
             error: err instanceof Error ? err.message : String(err),
           });
         } finally {
+          await runMotionRunner(sessionId).catch(() => {});
           controller.close();
         }
       },
     });
     return new Response(stream, { headers: sseHeaders() });
+  }
+
+  const dests = await destBindingsForSend({
+    sessionId,
+    decided,
+    referenceTurnId,
+  });
+  const sticky = dests[dests.length - 1];
+  if (sticky) {
+    await db
+      .update(voiceSession)
+      .set({
+        activeBindingId: sticky.id,
+        bindingId: sticky.id,
+      })
+      .where(eq(voiceSession.id, sessionId));
   }
   if (dests.length && !prompt) {
     await runMotionRunner(sessionId);

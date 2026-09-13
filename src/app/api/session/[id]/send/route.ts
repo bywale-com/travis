@@ -1,7 +1,6 @@
 import { eq } from "drizzle-orm";
 import { destLeaveMiss } from "@/lib/travis-miss";
 import { collapseSpeechStutter } from "@/lib/absorb-text";
-import { isSitProtocolRole } from "@/lib/protocol-path";
 import { resolveTypedSend, uniqueSeatKeys } from "@/lib/typed-dest";
 import { seatKeyToLabel } from "@/lib/router";
 import { isTravisSeat } from "@/lib/seats";
@@ -14,7 +13,7 @@ import { MembershipError, requireOpenMember } from "@/server/room-membership";
 import { requireOwnedSession } from "@/server/operator";
 import { destBindingsForSend } from "@/server/dest-resolve";
 import { listOpenDestJobs } from "@/server/dest-job";
-import { dispatchToSeat } from "@/server/dispatch";
+import { fileDestJobsForSeatKeys, writeAndLeaveDest } from "@/server/dest-leave";
 import { streamIntent } from "@/lib/stream-intent";
 import { dispatchStreamIntents } from "@/server/stream-dispatch";
 import { pipeTravisText } from "@/server/travis-reply";
@@ -148,11 +147,18 @@ export async function POST(
           undefined,
           referenceTurnId,
         );
-        const destBindings: AgentBinding[] = await destBindingsForSend({
+        const earlyDests = await fileDestJobsForSeatKeys({
           sessionId,
-          decided,
-          referenceTurnId,
+          seatKeys: decided.seatKeys,
+          prompt,
         });
+        const destBindings: AgentBinding[] = earlyDests.length
+          ? earlyDests
+          : await destBindingsForSend({
+              sessionId,
+              decided,
+              referenceTurnId,
+            });
         for (const dest of destBindings) {
           await requireOpenMember(sessionId, dest.id);
         }
@@ -162,16 +168,15 @@ export async function POST(
           await noteTravisUnwired(sessionId);
         }
         const cursorBinds = destBindings.filter((b) => !isTravisSeat(b.seatKey));
-        await Promise.allSettled(
+        const left = await Promise.allSettled(
           cursorBinds.map((binding) =>
-            dispatchToSeat({
-              sessionId,
-              binding,
-              prompt,
-              enqueueIfBusy: isSitProtocolRole(binding.seatKey) ? false : undefined,
-            }),
+            writeAndLeaveDest({ sessionId, binding, prompt }),
           ),
         );
+        const destFail = left.find((row) => row.status === "rejected");
+        if (destFail && destFail.status === "rejected") {
+          throw destFail.reason;
+        }
         const openJobs = await listOpenDestJobs(sessionId).catch(() => []);
         await dispatchStreamIntents({
           sessionId,

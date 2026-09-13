@@ -194,12 +194,12 @@ async function spinSeatedRole(params: {
   }
   const binding = await bindingBySeatKey(agent.seatKey);
   if (!binding) throw new SitError("Spin created a person we cannot sit.", 400);
-  const sat = await sitBinding({
+  void sitBinding({
     sessionId: params.sessionId,
     binding,
     protocol: params.role,
-  });
-  return sat.binding;
+  }).catch(() => {});
+  return binding;
 }
 
 /**
@@ -232,14 +232,38 @@ export async function resolveRoleDest(params: {
       }
     }
     if (!(living.protocolPath ?? "").trim()) {
-      const sat = await sitBinding({
+      void sitBinding({
         sessionId: params.sessionId,
         binding: living,
         protocol: parsed.role,
-      });
-      return sat.binding;
+      }).catch(() => {});
     }
     return living;
+  }
+  const catalog = await bindingBySeatKey(params.role);
+  if (
+    catalog &&
+    isLivingCursorId(catalog.cursorAgentId) &&
+    !isCatalogPm(catalog.seatKey)
+  ) {
+    if (!(await isOpenMember(params.sessionId, catalog.id))) {
+      try {
+        await addMember(params.sessionId, catalog.id);
+      } catch (err) {
+        if (err instanceof MembershipError) {
+          throw new SitError(err.message, err.status);
+        }
+        throw err;
+      }
+    }
+    if (!(catalog.protocolPath ?? "").trim()) {
+      void sitBinding({
+        sessionId: params.sessionId,
+        binding: catalog,
+        protocol: parsed.role,
+      }).catch(() => {});
+    }
+    return catalog;
   }
   return spinSeatedRole({ sessionId: params.sessionId, role: parsed.role });
 }

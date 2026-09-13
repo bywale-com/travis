@@ -7,11 +7,22 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
-- **2026-09-13** · Hotfix 093 · this PR — Preview green-light fires only on plant finish (src/ or ENGINEER-HANDOFF.md), blocker release, or manual preview label, because unlabeled PR pushes were triggering unintended Vercel previews.
+- **2026-09-13** · Hotfix 094 · this PR — Wire emerge packet delivery, email notification, and emerge label directly to runtime-doors on pass, because PM-LOOK verdict passes were decommissioned and green deployments never triggered emerge.
 
-- **2026-09-13** · Hotfix 092 · this PR — Green-light, fail-look, and seats share one token via `previewing`, because empty labels were not “the last preview finished” and a recut that edited the hotfix file re-armed Engineer.
+- **2026-09-13** · Hotfix 091 · this PR — Dest leave files `dest_job` on the catalog bind before role resolve can spin Cursor create, because runtime-doors dest walks hung until Vercel killed SSE with an empty queue and no dest error.
 
-- **2026-09-11** · Hotfix 090 · this PR — Action does not add `wake-pm-look`; Engineer runs `npm test` after the handoff rewrite; preview green-lights when seats are clear, because PM Look was a second lib test with no extra context.
+- **2026-09-13** · Blocker 002 · this PR — Dest walks stay red on Cursor’s Background Agent hard limit, because create needs at least $2 remaining and Engineer cannot recut spend.
+
+- **2026-09-13** · Hotfix 093 · [PR #185](https://github.com/bywale-com/travis/pull/185) — Preview green-light fires only on plant finish (src/ or ENGINEER-HANDOFF.md), blocker release, or manual preview label, because unlabeled PR pushes were triggering unintended Vercel previews.
+
+- **2026-09-13** · Hotfix 092 · [PR #184](https://github.com/bywale-com/travis/pull/184) — Green-light, fail-look, and seats share one token via `previewing`, because empty labels were not “the last preview finished” and a recut that edited the hotfix file re-armed Engineer.
+
+- **2026-09-13** · Hotfix 092 · [PR #184](https://github.com/bywale-com/travis/pull/184) — Green-light, fail-look, and seats share one token via `previewing`, because empty labels were not “the last preview finished” and a recut that edited the hotfix file re-armed Engineer.
+
+- **2026-09-12** · Hotfix 091 · this PR — Live transcript cursor dest SSE defers role resolve behind ping; send and transcript use `writeAndLeaveDest` (role spin + dest_job), because runtime-doors still 504'd transcript and type-dest saw an empty queue after Travis wrap.
+- **2026-09-12** · Hotfix 091 · this PR — Runtime walks dest on live transcript and require the leave on the queue before I’m done, because 035 had grain and a human sheet but no app walk of start-before-wrap.
+
+- **2026-09-11** · Hotfix 090 · [PR #182](https://github.com/bywale-com/travis/pull/182) — Action does not add `wake-pm-look`; Engineer runs `npm test` after the handoff rewrite; preview green-lights when seats are clear, because PM Look was a second lib test with no extra context.
 
 - **2026-09-11** · Hotfix 088 · [PR #174](https://github.com/bywale-com/travis/pull/174) — Red `runtime-doors` does not `fail-look` Cursor hard limit or unwired, because Engineer cannot recut founder ops and the loop kept booting B.
 

@@ -1,0 +1,24 @@
+# Hotfix 091 — Stream architecture runtime walk
+
+**Number:** `091` — next engineer hotfix is `092`. Never reuse. Index: [`HOTFIXES.md`](./HOTFIXES.md).  
+**Seat:** Engineer.  
+**When:** 2026-09-12  
+**PR title shape:** `Hotfix 091 — Stream architecture runtime walk`  
+**Test:** [`HOTFIX-091-STREAM-ARCH-WALK-TEST.md`](./HOTFIX-091-STREAM-ARCH-WALK-TEST.md)
+
+## Why
+
+035 is planted. Grain covers classify. The human sheet is A–E. The runtime suite had no walk of the packet’s job: a leave starts on the live flush, not on “I’m done.”
+
+## Cut
+
+1. `src/runtime/doors.ts` — `transcript` consumes dest SSE the same way `send` / `finalize` consume. A 504 is a miss, not a throw.
+2. `src/runtime/walks/voice-stream-arch.spec.ts` — Voice doors, one sitting: dest-by-name on `/live/transcript`, `GET /queue` must already show a leave, **then** `/finalize` `I'm done`, Travis mouth. Do not wait for the Engineer essay. Do not grade the sentence.
+3. Inventory row in `src/runtime/walks/README.md`. Suite glob already picks `*.spec.ts`.
+4. Fail-look recut: live dest was still `sendOrEnqueueMany` (holds until Cursor done → Vercel 504). Same write-and-leave as Type (`dispatchToSeat`). Mouth still waits for finalize.
+5. Fail-look recut: static `import from "deepagents/node"` still loaded ESM on Vercel (`Cannot use import statement outside a module`). `createRequire` hits `exports.require` → `dist/node.cjs`. Still the `/node` hang.
+6. Fail-look recut: JSON transcript still ran `destBindingsForSend` before headers (504); type-dest queue empty after Travis wrap. SSE ping-before-resolve on live transcript cursor dest; `writeAndLeaveDest` (`dispatchToRoleDest` + `dest_job`) on send and transcript.
+7. Fail-look recut: dest walks hung until Vercel killed SSE (`sse events: message`, queue empty, no dest error). `writeAndLeaveDest` files `dest_job` dispatched before Cursor `send` returns; role dest resolve does not await sit handoff. Founder-ops dest errors still throw.
+8. Fail-look recut: dest resolve still awaited Cursor create when catalog Engineer had no `protocol_path` (`sse events: message`, queue empty, no dest error). File `dest_job` on the catalog / room bind before resolve; reuse that living bind instead of spin; keep the job dispatched when Cursor send misses.
+
+Do not remint `stream-intent`, dest assemble, or 035. Interrupt / change remain the human sheet.

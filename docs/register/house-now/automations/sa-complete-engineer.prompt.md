@@ -122,4 +122,8 @@ The PM packet was placed on this PR. SA wrote on this PR. You plant here. A hotf
 
 ## When you stop
 
-Rewrite `docs/register/ENGINEER-HANDOFF.md` so the next Engineer does not start from a transcript. If `DATABASE_URL` was missing, say that in one line. Then run `npm test`. If `handoff-seat.test.ts` fails, put the locked sentences back in the handoff file. Do not edit that test to match a rewrite. Commit the handoff and any fixes together. Push. **Stop.** Do not wait for doors. Do not recut this sitting when they paint.
+Rewrite `docs/register/ENGINEER-HANDOFF.md` so the next Engineer does not start from a transcript. If `DATABASE_URL` was missing, say that in one line. Then run `npm test`. If `handoff-seat.test.ts` fails, put the locked sentences back in the handoff file. Do not edit that test to match a rewrite.
+
+**Update the PR description:** Before ending your run, update the PR description using the pull request management tools (or `gh pr edit "$PR" --body "..."`). Write a clear, plain-English summary of what this cut or recut fixed so the human founder can follow along at the top of the PR without digging through commits or logs.
+
+Commit the handoff, prompt, and any fixes together. Push. **Stop.** Do not wait for doors. Do not recut this sitting when they paint.

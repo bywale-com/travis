@@ -4,11 +4,7 @@
  * SCP-034 — official checkpointer + thread_id = voice_session.id.
  */
 
-import {
-  createDeepAgent,
-  registerHarnessProfile,
-  StateBackend,
-} from "deepagents/node";
+import { createRequire } from "node:module";
 import { ChatOpenAI } from "@langchain/openai";
 import { isAIMessage, type BaseMessage } from "@langchain/core/messages";
 import { createMiddleware, tool } from "langchain";
@@ -25,14 +21,33 @@ import {
   unclippedPrintFor,
 } from "@/server/dest-with-context";
 
-registerHarnessProfile("openai", {
-  excludedTools: ["task", "execute"],
-  generalPurposeSubagent: { enabled: false },
-});
-registerHarnessProfile(`openai:${TRAVIS_TEXT_MODEL}`, {
-  excludedTools: ["task", "execute"],
-  generalPurposeSubagent: { enabled: false },
-});
+const requireDeepAgents = createRequire(import.meta.url);
+
+type DeepAgentsNode = typeof import("deepagents/node");
+
+let deepAgentsKit: DeepAgentsNode | null = null;
+let harnessReady = false;
+
+function deepAgentsNode(): DeepAgentsNode {
+  if (!deepAgentsKit) {
+    // 080: require() the CJS entry so Vercel Node does not evaluate browser ESM.
+    deepAgentsKit = requireDeepAgents("deepagents/node") as DeepAgentsNode;
+  }
+  return deepAgentsKit;
+}
+
+function ensureHarnessProfiles(registerHarnessProfile: DeepAgentsNode["registerHarnessProfile"]) {
+  if (harnessReady) return;
+  registerHarnessProfile("openai", {
+    excludedTools: ["task", "execute"],
+    generalPurposeSubagent: { enabled: false },
+  });
+  registerHarnessProfile(`openai:${TRAVIS_TEXT_MODEL}`, {
+    excludedTools: ["task", "execute"],
+    generalPurposeSubagent: { enabled: false },
+  });
+  harnessReady = true;
+}
 
 function asArgs(input: unknown): Record<string, unknown> {
   if (input && typeof input === "object" && !Array.isArray(input)) {
@@ -136,6 +151,9 @@ export async function invokeDeepAgent(params: {
   room: string;
   mode?: DeepAgentMode;
 }): Promise<string> {
+  const { createDeepAgent, registerHarnessProfile, StateBackend } =
+    deepAgentsNode();
+  ensureHarnessProfiles(registerHarnessProfile);
   const mode = params.mode ?? "synthesize";
   const prompt =
     mode === "update"

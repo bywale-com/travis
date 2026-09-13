@@ -30,13 +30,13 @@ WHERE NOT EXISTS (SELECT 1 FROM travis.agent_binding WHERE seat_key = 'sa');
 UPDATE travis.agent_binding
 SET
   label = 'Engineer',
-  cursor_agent_id = 'bc-94804572-3a2f-4075-b290-a95c73730bd3',
+  cursor_agent_id = 'bc-42e8e27d-3478-4cce-88c5-d17e9e0ac8e8',
   runtime = 'cloud',
   active = true
 WHERE seat_key = 'engineer';
 
 INSERT INTO travis.agent_binding (seat_key, label, cursor_agent_id, runtime, active)
-SELECT 'engineer', 'Engineer', 'bc-94804572-3a2f-4075-b290-a95c73730bd3', 'cloud', true
+SELECT 'engineer', 'Engineer', 'bc-42e8e27d-3478-4cce-88c5-d17e9e0ac8e8', 'cloud', true
 WHERE NOT EXISTS (SELECT 1 FROM travis.agent_binding WHERE seat_key = 'engineer');
 
 -- Live row on PM was for the dead seed id. Drop it so the next PM send

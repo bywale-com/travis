@@ -107,6 +107,12 @@ test("wake-packet-seats: one seat at a time; green light after clear", () => {
   assert.doesNotMatch(yml, /--remove-label blocker/);
 });
 
+test("blocker letter script exists for wake-packet-seats", () => {
+  read(".github/scripts/send-blocker-letter.py");
+  const yml = read(".github/workflows/wake-packet-seats.yml");
+  assert.match(yml, /send-blocker-letter\.py/);
+});
+
 test("runtime-doors does not fail-look during handoff", () => {
   const yml = read(".github/workflows/runtime-doors.yml");
   assert.match(yml, /wake-sa/);
@@ -116,6 +122,8 @@ test("runtime-doors does not fail-look during handoff", () => {
   assert.match(yml, /blocker/);
   assert.match(yml, /previewing/);
   assert.match(yml, /handoff\/hold/);
+  assert.match(yml, /Emerge packet on success/);
+  assert.match(yml, /send-emerge-letter\.py/);
 });
 
 test("Engineer prompt never green-lights a seat commit", () => {

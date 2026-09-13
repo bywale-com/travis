@@ -28,13 +28,86 @@ test("Type send stays invokeDeepAgent — no Responses cousin", () => {
   assert.match(src, /mode: params\.mode \?\? "synthesize"/);
 });
 
-test("live transcript never pipes Travis", () => {
+test("live transcript dest write-and-leaves — SSE headers before Cursor handoff", () => {
   const src = readFileSync(
     join(process.cwd(), "src/app/api/session/[id]/live/transcript/route.ts"),
     "utf8",
   );
-  assert.equal(src.includes("pipeTravisText"), false);
+  assert.match(src, /fileDestJobsForSeatKeys/);
+  assert.match(src, /writeAndLeaveDest/);
   assert.match(src, /dispatchStreamIntents/);
+  assert.match(src, /sseHeaders/);
+  assert.match(src, /send\("done"/);
+  assert.match(src, /: ping/);
+  assert.match(src, /destFail/);
+  assert.equal(src.includes("sendOrEnqueueMany"), false);
+  assert.equal(src.includes("pipeTravisText"), false);
+  assert.doesNotMatch(
+    src,
+    /if \(prompt && cursorDests\.length\) \{\s*await runMotionRunner/,
+  );
+});
+
+test("writeAndLeaveDest files dest_job before Cursor handoff returns", () => {
+  const src = readFileSync(
+    join(process.cwd(), "src/server/dest-leave.ts"),
+    "utf8",
+  );
+  assert.match(src, /dispatchToRoleDest/);
+  assert.match(src, /insertDestJob/);
+  assert.match(src, /markDestJob/);
+  assert.match(src, /LEAVE_HANDOFF_MS/);
+  assert.match(src, /status: "dispatched"/);
+  assert.match(src, /fileDestJobsForSeatKeys/);
+  assert.match(src, /destBindingForSeatKey/);
+  assert.match(src, /isFounderOpsDestError/);
+  assert.match(src, /hard limit/);
+  assert.doesNotMatch(src, /status: "failed"/);
+  const insertAt = src.indexOf("insertDestJob");
+  const handoffAt = src.indexOf("handoff(params)");
+  assert.ok(insertAt >= 0 && handoffAt > insertAt);
+});
+
+test("role dest resolve does not await sit handoff", () => {
+  const src = readFileSync(join(process.cwd(), "src/server/sit.ts"), "utf8");
+  assert.match(src, /void sitBinding\(/);
+});
+
+test("role dest reuses catalog living bind before Cursor spin", () => {
+  const src = readFileSync(join(process.cwd(), "src/server/sit.ts"), "utf8");
+  const fn = src.slice(src.indexOf("export async function resolveRoleDest"));
+  const body = fn.slice(0, fn.indexOf("export async function listSeatRoster"));
+  const catalogAt = body.indexOf("bindingBySeatKey(params.role)");
+  const spinAt = body.lastIndexOf("spinSeatedRole");
+  assert.ok(catalogAt >= 0 && spinAt > catalogAt);
+});
+
+test("Deep Agents kit loads through CJS require, not a static ESM import", () => {
+  const src = readFileSync(
+    join(process.cwd(), "src/server/travis-deep-agent.ts"),
+    "utf8",
+  );
+  assert.equal(src.includes('from "deepagents/node"'), false);
+  assert.match(src, /requireDeepAgents\("deepagents\/node"\)/);
+  assert.match(src, /createRequire/);
+});
+
+test("runtime transcript door consumes dest SSE so the leave can start before wrap", () => {
+  const src = readFileSync(join(process.cwd(), "src/runtime/doors.ts"), "utf8");
+  const fn = src.slice(src.indexOf("export async function transcript"));
+  const body = fn.slice(0, fn.indexOf("export async function finalize"));
+  assert.match(body, /consumeSse/);
+});
+
+test("type send uses writeAndLeaveDest for chip dests", () => {
+  const src = readFileSync(
+    join(process.cwd(), "src/app/api/session/[id]/send/route.ts"),
+    "utf8",
+  );
+  assert.match(src, /fileDestJobsForSeatKeys/);
+  assert.match(src, /writeAndLeaveDest/);
+  assert.match(src, /destFail/);
+  assert.equal(src.includes("sendOrEnqueueMany"), false);
 });
 
 test("stream-dispatch does not speak", () => {
