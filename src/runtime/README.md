@@ -12,4 +12,6 @@ If a use is on the phone, a walk here is that use. The Deployment Check `runtime
 - One test-operator cookie resumes one live room. The suite runs **sequentially**. Each walk starts a fresh sitting (`End` + open) except the come-back resume beat.
 - Do not invent a Scenario Graph. Add a walk when the app gains a use. Named error-path walks when that miss is lived.
 
+**Local first sensor:** `npm run test:preflight` runs unit tests, prepares Chromium, and walks Mode / View log / Talk / Type against a loopback face fixture. No Vercel. Engineer runs it before push. `npm run test:runtime` remains the deploy gate on the preview URL.
+
 Inventory: [`walks/README.md`](./walks/README.md).

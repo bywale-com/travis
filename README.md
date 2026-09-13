@@ -7,6 +7,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-13** · Runtime preflight · this PR — `npm run test:preflight` is the Engineer’s local first sensor (units + Chromium + phone-face doors), because Vercel doors were the first place runner and Mode/Talk misses showed up.
+
 - **2026-09-13** · Hotfix 097 · this PR — Direct `bind_agent` maps a `bc-` id to a seat (including architect) without a sit prompt, because an existing Cursor chat is already configured and dest should route to that open member.
 
 - **2026-09-13** · Hotfix 096 · this PR — `bind_agent` tool and `bind-agent` runtime walk (no `POST /v1/agents`), because Technical Architect seats are started in Cursor and Travis should bind `bc-…` ids instead of provisioning on doors.

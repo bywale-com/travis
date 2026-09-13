@@ -65,6 +65,7 @@ v1 surfaces everything **readable** from the assistant stream.
 ### 5. Verify (runtime — you own this)
 
 - Run the project build. Run `npm test`. That is not done.
+- **Before every push:** run `npm run test:preflight` when that script exists. Local unit tests + Chromium + phone-face doors on a loopback fixture. That is the first sensor. Do not wait for Vercel `runtime-doors` to find a runner flag, a Mode door, or Talk matching Voice “Listening…”.
 - **Add or extend** a sequential walk in `src/runtime/walks/` (named after the human use). Inventory: [`../../src/runtime/README.md`](../../src/runtime/README.md). If the use is the app, wait for the mouth. A generate miss is red. Do not mint a packet-named spec. Do not drop yesterday’s walks. Do not fire four doors in parallel on one session. Suite is `--test-concurrency=1`. You may run `test:runtime` locally while planting. **Done** is the **whole** walk suite on this deploy, painted as a Vercel Deployment Check.
 - Do not sit in Vercel MCP and call that runtime verification. Logs are for a **red** check. PostHog only if SA hung it.
 - If the preview has no OpenAI key, the test asserts **unwired**. It does not pretend Live is up.
