@@ -159,7 +159,7 @@ test("attachSession writes listening on the presence ref before armEar", () => {
   assert.ok(refAt >= 0 && armAt > refAt, "ended presence on first enter must not block Live");
 });
 
-test("stream-arch cue fixture is checked in", () => {
+test("non-mutating Engineer canary fixture is checked in", () => {
   const wav = fileURLToPath(
     new URL("./fixtures/stream-arch-cue.wav", import.meta.url),
   );

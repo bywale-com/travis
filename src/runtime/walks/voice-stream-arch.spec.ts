@@ -4,7 +4,8 @@ import { assertThinkWorked, destLeaveStarted, failUse } from "../app-worked";
 import { openFreshRoom, readQueue, readTurns, runtimeBaseUrl } from "../desk";
 import { finalize, token, transcript } from "../doors";
 
-const DEST_LINE = "Engineer, put this on the notes: stream-arch cue.";
+const DEST_LINE =
+  "Engineer, this is a Travis runtime canary. Acknowledge only. Do not edit files, commit, push, or update the handoff.";
 const haveUrl = Boolean(runtimeBaseUrl());
 
 describe("voice-stream-arch", { skip: !haveUrl }, () => {
@@ -27,7 +28,7 @@ describe("voice-stream-arch", { skip: !haveUrl }, () => {
     if (flushed.error) {
       failUse("voice-stream-arch flush", `transcript sse error: ${flushed.error}`, afterFlush, flushed);
     }
-    if (!afterFlush.some((row) => row.role === "user" && row.text.includes("stream-arch cue"))) {
+    if (!afterFlush.some((row) => row.role === "user" && row.text.includes("runtime canary"))) {
       failUse("voice-stream-arch flush", "dest line never landed", afterFlush, flushed);
     }
 

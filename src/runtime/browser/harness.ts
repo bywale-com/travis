@@ -15,7 +15,8 @@ export const CHARACTER_KEY = "travis-character";
 export const PHONE = { width: 390, height: 844 };
 
 export const TYPE_LINE = "One-line note on the tape.";
-export const DEST_LINE = "Engineer, put this on the notes: stream-arch cue.";
+export const DEST_LINE =
+  "Engineer, this is a Travis runtime canary. Acknowledge only. Do not edit files, commit, push, or update the handoff.";
 
 export function streamArchWavPath(): string {
   return fileURLToPath(new URL("../fixtures/stream-arch-cue.wav", import.meta.url));
