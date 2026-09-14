@@ -134,6 +134,8 @@ test("Live SDP exchanges through Travis", () => {
   assert.match(openai, /\/v1\/realtime\/calls/);
   assert.match(openai, /realtimeSdpForm/);
   assert.match(grain, /FormData/);
+  assert.match(grain, /fd\.set\("sdp", offerSdp\)/);
+  assert.doesNotMatch(grain, /new File/);
   assert.doesNotMatch(openai, /body: opts\.offerSdp/);
 });
 

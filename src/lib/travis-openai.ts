@@ -32,12 +32,13 @@ export function openaiErrorMessage(data: unknown, status: number): string {
 }
 
 /**
- * GA `/v1/realtime/calls` reads a multipart `sdp` part.
- * A raw `application/sdp` string body arrives as EOF / invalid_offer.
+ * GA `/v1/realtime/calls` reads a multipart **text** field named `sdp`.
+ * A raw `application/sdp` HTTP body is EOF / invalid_offer.
+ * A File/filename part is “field sdp is required but not found.”
  */
 export function realtimeSdpForm(offerSdp: string): FormData {
   const fd = new FormData();
-  fd.set("sdp", new File([offerSdp], "offer.sdp", { type: "application/sdp" }));
+  fd.set("sdp", offerSdp);
   return fd;
 }
 
