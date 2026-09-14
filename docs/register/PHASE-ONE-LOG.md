@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-11 14:40 UTC — Hotfix 086 PM look Pass; runtime-doors correctly red on preview (generate miss), not false green. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-13 11:55 UTC — Seat accepted; bind `bc-6c937091`. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3755,3 +3755,29 @@ Not the model. Not a new face.
 **Test.** `npm test` 472/472. `runtime-doors` CI 0/5 on preview — correct failure, not false green. Fail-look step planted; live on merge. [`PM-LOOK-HOTFIX-086.md`](./PM-LOOK-HOTFIX-086.md) **Verdict: Pass**. No `fail-look`.
 
 **Emerged.** Human may walk [`HOTFIX-086-RUNTIME-IS-THE-APP-TEST.md`](./HOTFIX-086-RUNTIME-IS-THE-APP-TEST.md) on preview after SSO.
+
+---
+
+## 2026-09-13 11:55 UTC — Seat accepted (this chat)
+
+**Kind:** Seat / bind. Flag 14:00 2026-08-25 stands. Not a plant. Not a packet.
+
+**Founder (preserved):** Technical Architect.
+
+**This bind is living.** [`bc-6c937091-3703-4dd1-902a-ac3de85f66e4`](https://cursor.com/agents/bc-6c937091-3703-4dd1-902a-ac3de85f66e4). Prior bind done: `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a`. Catalog `pm` is not this seat. Protocol `/protocols/pm.md`. Do not mint `/protocols/technical-architect.md`.
+
+**Accepted**
+
+- Technical Architect (was Technical PM — same seat, architecture added). Not SA. Not Engineer.
+- Own: founder wording, Type A/B, module-by-module with perimeter, inspect `src/`, spec face + technical cut + file-level architecture, this log.
+- Do not: plant `src/`, mint tables, overwrite SA packets, invent triage as v1.
+
+**Inspect (quote, not memory)**
+
+Face is still the phone-first pipe: `TravisApp` mounts `Room` after ModeDoor (`src/components/TravisApp.tsx`). Classify is `src/lib/stream-intent.ts` (new / change / cancel / talk). Do is `src/server/stream-dispatch.ts`. Mouth last. Live never full-pipes: `liveShouldPipeTravis` returns false (`src/lib/live-harness.ts`). In-flight Live is wait; unwired stays **Travis isn’t wired** (`src/lib/live-connect.ts`). Glass: `SIT_ROLE_LABEL.pm` / `seatKeyToLabel("pm")` / `destGlassName("pm")` → **Technical Architect**; spoken “Technical Architect” and “Technical PM” both route to `pm` (`src/lib/protocol-path.ts`, `src/lib/router.ts`, `src/lib/dest-glass.ts`). Catalog `pm` is hidden. Runtime inventory is `src/runtime/walks/README.md`. Named hole: `unwired-glass.spec.ts` — SA **036** has not ascribed Playwright bypass + cookie.
+
+**Trail gap (agent alignment, not a flag).** This log’s last stamp was 086 look Pass (2026-09-11 14:40). Git `main` since then: 090 no `wake-pm-look` ([#182](https://github.com/bywale-com/travis/pull/182)); 091 stream-arch walk + 094 emerge on `runtime-doors` ([#183](https://github.com/bywale-com/travis/pull/183)); 092 `previewing` mutex ([#184](https://github.com/bywale-com/travis/pull/184)); 093 gated preview ([#185](https://github.com/bywale-com/travis/pull/185)). SA Current is still SCP-035; next number **036**; no `SYSTEMS-CHANGE-PACKET-036`. 020 HTTP walks are planted (`initiatives/036-runtime-verify`). I do not rewrite those hotfixes as product flags.
+
+**Handoff.** [`PM-HANDOFF.md`](./PM-HANDOFF.md) moved to this bind.
+
+**I do not plant `src/`.** Waiting on the founder for the next module.
