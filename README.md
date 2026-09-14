@@ -7,6 +7,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-14** · Hotfix 098 fail-look · this PR — Live late-arms the real mic after session.update (no silent hold, unconstrained `getUserMedia`, unmute then `replaceTrack`), because voice-live showed Talking then dest miss `tx=[]` / empty tape.
+
 - **2026-09-14** · Hotfix 098 fail-look · this PR — Live SDP answer keeps a trailing CRLF (`realtimeSdpAnswer`), because voice-live died on Chromium `a=ice-pwd` Invalid SDP line after `trim()` ate the last newline.
 
 - **2026-09-14** · Hotfix 098 fail-look · this PR — Live SDP posts to OpenAI with `node:https` and Content-Length, because Next.js fetch on Vercel delivered an empty body and voice-live died on unmarshal SDP EOF before dest leave.

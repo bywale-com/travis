@@ -101,6 +101,14 @@ export const LIVE_OWNERSHIP_MOCKS = `
       this._sender = { track: track, replaceTrack: async (next) => { this._sender.track = next; } };
       return this._sender;
     }
+    addTransceiver(kind) {
+      this._sender = {
+        track: null,
+        kind: kind,
+        replaceTrack: async (next) => { this._sender.track = next; },
+      };
+      return { sender: this._sender, receiver: {}, direction: "sendrecv" };
+    }
     getSenders() {
       return this._sender ? [this._sender] : [];
     }
@@ -156,6 +164,7 @@ export const REALTIME_USAGE_HOOK = `
 (() => {
   window.__realtimeUsage = null;
   window.__realtimeTx = [];
+  window.__realtimeEv = [];
   window.__travisSttStarts = 0;
   const Orig = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (Orig) {
@@ -180,6 +189,9 @@ export const REALTIME_USAGE_HOOK = `
       dc.addEventListener("message", function (e) {
         try {
           const ev = JSON.parse(String(e.data));
+          if (typeof ev.type === "string") {
+            window.__realtimeEv = (window.__realtimeEv || []).concat([ev.type]).slice(-40);
+          }
           if (ev.type === "response.done") {
             window.__realtimeUsage = ev.response && ev.response.usage
               ? ev.response.usage

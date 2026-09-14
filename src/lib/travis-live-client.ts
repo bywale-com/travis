@@ -25,32 +25,20 @@ async function namedFetch(
   }
 }
 
-/** Silent send track so the offer has audio without opening the fake-file mic. */
-function makeSilentHold(): { stream: MediaStream; stop: () => void } {
-  const ctx = new AudioContext();
-  const dest = ctx.createMediaStreamDestination();
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  gain.gain.value = 0;
-  osc.connect(gain);
-  gain.connect(dest);
-  osc.start();
-  const stream = dest.stream;
-  let stopped = false;
-  return {
-    stream,
-    stop: () => {
-      if (stopped) return;
-      stopped = true;
-      try {
-        osc.stop();
-      } catch {
-        /* already stopped */
-      }
-      for (const t of stream.getTracks()) t.stop();
-      void ctx.close().catch(() => {});
-    },
-  };
+/** Chromium often delivers getUserMedia tracks muted until the first frame. */
+function waitTrackUnmuted(track: MediaStreamTrack): Promise<void> {
+  if (!track.muted) return Promise.resolve();
+  return new Promise((resolve) => {
+    const t = window.setTimeout(resolve, 2500);
+    track.addEventListener(
+      "unmute",
+      () => {
+        window.clearTimeout(t);
+        resolve();
+      },
+      { once: true },
+    );
+  });
 }
 
 export type TravisLiveSession = {
@@ -220,11 +208,13 @@ export async function startTravisLive(opts: {
   };
 
   const attachMicAfterPeerReady = async (): Promise<MediaStream> => {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: { echoCancellation: true, noiseSuppression: true },
-    });
+    // Unconstrained audio — forcing AEC/NS on Chromium's fake-file capture
+    // zeroes the fixture. Real phones still get the UA default.
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const track = stream.getAudioTracks()[0];
     if (!track) throw new Error("Live: no microphone track");
+    track.enabled = true;
+    await waitTrackUnmuted(track);
     const sender =
       pc.getSenders().find((s) => s.track?.kind === "audio") ??
       pc.getSenders().find((s) => !s.track);
@@ -233,14 +223,11 @@ export async function startTravisLive(opts: {
     return stream;
   };
 
-  const hold = makeSilentHold();
   try {
-    // Silent send m-line so the offer is a real audio send. Chromium's
-    // fake-file capture starts at getUserMedia; the dest line is the first
-    // 4s of the fixture and was gone during ICE if we armed the real mic then.
-    const holdTrack = hold.stream.getAudioTracks()[0];
-    if (!holdTrack) throw new Error("Live: no hold track");
-    pc.addTrack(holdTrack, hold.stream);
+    // Late media: sendrecv m-line without opening the fake-file mic.
+    // Chromium starts the fixture at getUserMedia; dest is the first ~11s.
+    // Arm after SDP + data-channel session.update so Realtime can hear it.
+    pc.addTransceiver("audio", { direction: "sendrecv" });
 
     dc = pc.createDataChannel("oai-events");
     let resolveDcOpen = () => {};
@@ -346,8 +333,6 @@ export async function startTravisLive(opts: {
       throw new Error(sdpData.error?.slice(0, 180) || `Live SDP ${sdpRes.status}`);
     }
     await pc.setRemoteDescription({ type: "answer", sdp: answerSdp });
-    mic = await attachMicAfterPeerReady();
-    hold.stop();
     if (dc && dc.readyState !== "open") {
       await Promise.race([
         dcOpen,
@@ -356,6 +341,23 @@ export async function startTravisLive(opts: {
         }),
       ]);
     }
+    if (pc.connectionState !== "connected") {
+      await new Promise<void>((resolve) => {
+        const t = window.setTimeout(resolve, 8000);
+        const onState = () => {
+          if (
+            pc.connectionState === "connected" ||
+            pc.connectionState === "failed"
+          ) {
+            window.clearTimeout(t);
+            pc.removeEventListener("connectionstatechange", onState);
+            resolve();
+          }
+        };
+        pc.addEventListener("connectionstatechange", onState);
+      });
+    }
+    mic = await attachMicAfterPeerReady();
 
     function stop() {
       closed = true;
@@ -394,7 +396,6 @@ export async function startTravisLive(opts: {
     return { stop, notify };
   } catch (err) {
     closed = true;
-    hold.stop();
     try {
       dc?.close();
       pc.close();

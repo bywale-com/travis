@@ -38,7 +38,7 @@ describe("browser voice-live", { skip: !haveUrl }, () => {
         failUse("voice-live", "Voice never showed Talking with Travis…", await readTurns(phone.desk));
       }
 
-      const destDeadline = Date.now() + 45_000;
+      const destDeadline = Date.now() + 60_000;
       let leaveBeforeDone = false;
       while (Date.now() < destDeadline) {
         const face = await phone.page.innerText("body").catch(() => "");
@@ -66,11 +66,16 @@ describe("browser voice-live", { skip: !haveUrl }, () => {
       }
       if (!leaveBeforeDone) {
         await dumpFaceMiss(phone.page, await whichDoor(phone.page));
-        const tx = await phone.page.evaluate(
-          () =>
-            (window as unknown as { __realtimeTx?: string[] }).__realtimeTx ?? [],
+        const probe = await phone.page.evaluate(() => {
+          const w = window as unknown as {
+            __realtimeTx?: string[];
+            __realtimeEv?: string[];
+          };
+          return { tx: w.__realtimeTx ?? [], ev: w.__realtimeEv ?? [] };
+        });
+        console.error(
+          `runtime: voice-live dest miss tx=${JSON.stringify(probe.tx)} ev=${JSON.stringify(probe.ev)}`,
         );
-        console.error(`runtime: voice-live dest miss tx=${JSON.stringify(tx)}`);
         failUse(
           "voice-live leave-before-wrap",
           "Engineer leave was not running/queued before I'm done",

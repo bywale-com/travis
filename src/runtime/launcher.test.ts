@@ -118,10 +118,16 @@ test("voice-live dumps the face when Talking never shows", () => {
 test("Live opens the mic after the Realtime peer can receive", () => {
   const src = read("src/lib/travis-live-client.ts");
   const remoteAt = src.indexOf("await pc.setRemoteDescription");
+  const dcWaitAt = src.indexOf("dc.readyState !== \"open\"");
   const armAt = src.lastIndexOf("await attachMicAfterPeerReady()");
   assert.ok(remoteAt >= 0 && armAt > remoteAt, "dest line must not play during ICE");
+  assert.ok(dcWaitAt >= 0 && armAt > dcWaitAt, "arm the fixture after session.update");
   assert.match(src, /replaceTrack/);
-  assert.match(src, /createMediaStreamDestination/);
+  assert.match(src, /waitTrackUnmuted/);
+  assert.match(src, /getUserMedia\(\{ audio: true \}\)/);
+  assert.match(src, /addTransceiver/);
+  assert.doesNotMatch(src, /echoCancellation: true/);
+  assert.doesNotMatch(src, /createMediaStreamDestination/);
   assert.match(src, /\/live\/sdp/);
   assert.match(src, /realtimeSdpAnswer/);
   assert.doesNotMatch(src, /sdpData\.sdp\?\.trim/);
