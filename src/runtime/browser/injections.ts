@@ -95,8 +95,16 @@ export const LIVE_OWNERSHIP_MOCKS = `
       this.localDescription = { type: "offer", sdp: "v=0" };
       this.ontrack = null;
       this.onicegatheringstatechange = null;
+      this._sender = null;
     }
-    addTrack() {}
+    addTrack(track) {
+      this._sender = { track: track, replaceTrack: async (next) => { this._sender.track = next; } };
+      return this._sender;
+    }
+    getSenders() {
+      return this._sender ? [this._sender] : [];
+    }
+    async replaceTrack() {}
     createDataChannel() {
       const dc = {
         readyState: "connecting",
@@ -126,12 +134,17 @@ export const LIVE_OWNERSHIP_MOCKS = `
   const origFetch = window.fetch.bind(window);
   window.fetch = function (input, init) {
     const url = String(typeof input === "string" ? input : input && input.url);
-    if (url.indexOf("api.openai.com") !== -1) {
+    if (url.indexOf("api.openai.com") !== -1 || url.indexOf("/live/sdp") !== -1) {
       return Promise.resolve(
-        new Response("v=0\\r\\no=- 0 0 IN IP4 127.0.0.1\\r\\ns=-\\r\\nt=0 0\\r\\n", {
-          status: 200,
-          headers: { "content-type": "application/sdp" },
-        }),
+        new Response(
+          JSON.stringify({
+            sdp: "v=0\\r\\no=- 0 0 IN IP4 127.0.0.1\\r\\ns=-\\r\\nt=0 0\\r\\n",
+          }),
+          {
+            status: 200,
+            headers: { "content-type": "application/json" },
+          },
+        ),
       );
     }
     return origFetch(input, init);

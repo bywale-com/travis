@@ -11,6 +11,47 @@ import {
   type ToolDecl,
 } from "@/lib/travis-openai";
 
+async function namedFetch(
+  label: string,
+  input: string,
+  init?: RequestInit,
+): Promise<Response> {
+  try {
+    return await fetch(input, init);
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    throw new Error(`${label}: ${msg}`);
+  }
+}
+
+/** Silent send track so the offer has audio without opening the fake-file mic. */
+function makeSilentHold(): { stream: MediaStream; stop: () => void } {
+  const ctx = new AudioContext();
+  const dest = ctx.createMediaStreamDestination();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  gain.gain.value = 0;
+  osc.connect(gain);
+  gain.connect(dest);
+  osc.start();
+  const stream = dest.stream;
+  let stopped = false;
+  return {
+    stream,
+    stop: () => {
+      if (stopped) return;
+      stopped = true;
+      try {
+        osc.stop();
+      } catch {
+        /* already stopped */
+      }
+      for (const t of stream.getTracks()) t.stop();
+      void ctx.close().catch(() => {});
+    },
+  };
+}
+
 export type TravisLiveSession = {
   stop: () => Promise<void>;
   /** One short beat. Not a seat body. */
@@ -27,7 +68,7 @@ export async function startTravisLive(opts: {
   onClose?: () => void;
   getReferenceTurnId?: () => string | null;
 }): Promise<TravisLiveSession | null> {
-  const tokenRes = await fetch(`/api/session/${opts.sessionId}/live/token`, {
+  const tokenRes = await namedFetch("Live token", `/api/session/${opts.sessionId}/live/token`, {
     method: "POST",
   });
   const tokenData = await readJson<{
@@ -191,11 +232,14 @@ export async function startTravisLive(opts: {
     return stream;
   };
 
+  const hold = makeSilentHold();
   try {
-    // Hold the audio m-line without opening the mic. Chromium's fake-file
-    // capture starts at getUserMedia; the dest line is the first 4s of the
-    // fixture and was gone before RTP/session.update if we armed during ICE.
-    pc.addTransceiver("audio", { direction: "sendrecv" });
+    // Silent send m-line so the offer is a real audio send. Chromium's
+    // fake-file capture starts at getUserMedia; the dest line is the first
+    // 4s of the fixture and was gone during ICE if we armed the real mic then.
+    const holdTrack = hold.stream.getAudioTracks()[0];
+    if (!holdTrack) throw new Error("Live: no hold track");
+    pc.addTrack(holdTrack, hold.stream);
 
     dc = pc.createDataChannel("oai-events");
     let resolveDcOpen = () => {};
@@ -286,19 +330,23 @@ export async function startTravisLive(opts: {
 
     const sdp = pc.localDescription?.sdp;
     if (!sdp) throw new Error("Live: no SDP offer");
-    const sdpRes = await fetch("https://api.openai.com/v1/realtime/calls", {
-      method: "POST",
-      body: sdp,
-      headers: {
-        Authorization: `Bearer ${secret}`,
-        "Content-Type": "application/sdp",
+    const sdpRes = await namedFetch(
+      "Live SDP",
+      `/api/session/${opts.sessionId}/live/sdp`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sdp, token: secret }),
       },
-    });
-    const answerSdp = await sdpRes.text();
-    if (!sdpRes.ok) {
-      throw new Error(answerSdp.slice(0, 180) || `Live ${sdpRes.status}`);
+    );
+    const sdpData = await readJson<{ sdp?: string; error?: string }>(sdpRes);
+    const answerSdp = sdpData.sdp?.trim() ?? "";
+    if (!sdpRes.ok || !answerSdp) {
+      throw new Error(sdpData.error?.slice(0, 180) || `Live SDP ${sdpRes.status}`);
     }
     await pc.setRemoteDescription({ type: "answer", sdp: answerSdp });
+    mic = await attachMicAfterPeerReady();
+    hold.stop();
     if (dc && dc.readyState !== "open") {
       await Promise.race([
         dcOpen,
@@ -307,7 +355,6 @@ export async function startTravisLive(opts: {
         }),
       ]);
     }
-    mic = await attachMicAfterPeerReady();
 
     function stop() {
       closed = true;
@@ -346,6 +393,7 @@ export async function startTravisLive(opts: {
     return { stop, notify };
   } catch (err) {
     closed = true;
+    hold.stop();
     try {
       dc?.close();
       pc.close();

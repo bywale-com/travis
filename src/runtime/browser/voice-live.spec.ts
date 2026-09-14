@@ -41,6 +41,18 @@ describe("browser voice-live", { skip: !haveUrl }, () => {
       const destDeadline = Date.now() + 45_000;
       let leaveBeforeDone = false;
       while (Date.now() < destDeadline) {
+        const face = await phone.page.innerText("body").catch(() => "");
+        if (/Travis isn’t wired/i.test(face)) {
+          failUse("voice-live", "unwired line appeared", await readTurns(phone.desk));
+        }
+        if (/Travis Live is down/i.test(face) || /Failed to fetch/i.test(face)) {
+          await dumpFaceMiss(phone.page, await whichDoor(phone.page));
+          failUse(
+            "voice-live",
+            "Live dropped before dest leave",
+            await readTurns(phone.desk),
+          );
+        }
         const queue = await readQueue(phone.desk);
         const turns = await readTurns(phone.desk);
         if (destLeaveStarted(queue) || destLeaveOnTape(turns)) {

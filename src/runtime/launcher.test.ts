@@ -112,6 +112,7 @@ test("voice-live dumps the face when Talking never shows", () => {
   assert.match(live, /dumpFaceMiss/);
   assert.match(live, /Talking with Travis/);
   assert.match(live, /leave-before-wrap/);
+  assert.match(live, /Live dropped before dest leave/);
 });
 
 test("Live opens the mic after the Realtime peer can receive", () => {
@@ -120,7 +121,16 @@ test("Live opens the mic after the Realtime peer can receive", () => {
   const armAt = src.lastIndexOf("await attachMicAfterPeerReady()");
   assert.ok(remoteAt >= 0 && armAt > remoteAt, "dest line must not play during ICE");
   assert.match(src, /replaceTrack/);
-  assert.match(src, /addTransceiver\("audio"/);
+  assert.match(src, /createMediaStreamDestination/);
+  assert.match(src, /\/live\/sdp/);
+  assert.doesNotMatch(src, /api\.openai\.com/);
+});
+
+test("Live SDP exchanges through Travis", () => {
+  const route = read("src/app/api/session/[id]/live/sdp/route.ts");
+  const openai = read("src/server/travis-openai.ts");
+  assert.match(route, /exchangeRealtimeSdp/);
+  assert.match(openai, /\/v1\/realtime\/calls/);
 });
 
 test("attachSession writes listening on the presence ref before armEar", () => {

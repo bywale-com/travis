@@ -72,6 +72,24 @@ export async function mintLiveToken(sessionId: string): Promise<{
   return { token, model: TRAVIS_LIVE_MODEL };
 }
 
+/** Browser SDP POST to api.openai.com is CORS/Failed to fetch from the preview origin. */
+export async function exchangeRealtimeSdp(opts: {
+  token: string;
+  offerSdp: string;
+}): Promise<{ ok: true; sdp: string } | { ok: false; status: number; body: string }> {
+  const res = await fetch("https://api.openai.com/v1/realtime/calls", {
+    method: "POST",
+    body: opts.offerSdp,
+    headers: {
+      Authorization: `Bearer ${opts.token}`,
+      "Content-Type": "application/sdp",
+    },
+  });
+  const body = await res.text();
+  if (!res.ok) return { ok: false, status: res.status, body };
+  return { ok: true, sdp: body };
+}
+
 export async function generateTravisText(params: {
   sessionId: string;
   prompt: string;
