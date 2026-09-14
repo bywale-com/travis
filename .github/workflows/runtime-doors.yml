@@ -97,6 +97,12 @@ jobs:
             exit 0
           fi
 
+          head_sha=$(gh pr view "$pr" --json headRefOid --jq .headRefOid)
+          if [[ "$sha" != "$head_sha" ]]; then
+            echo "Deploy $sha is stale; PR #$pr is now $head_sha. Keep previewing."
+            exit 0
+          fi
+
           gh pr edit "$pr" --remove-label previewing || true
           echo "Cleared previewing on #$pr (doors painted)."
 
@@ -133,6 +139,12 @@ jobs:
             --jq '[.[] | select(.state=="open")][0].number // empty')
           if [[ -z "$pr" ]]; then
             echo "No open PR for $sha. No fail-look."
+            exit 0
+          fi
+
+          head_sha=$(gh pr view "$pr" --json headRefOid --jq .headRefOid)
+          if [[ "$sha" != "$head_sha" ]]; then
+            echo "Deploy $sha is stale; PR #$pr is now $head_sha. No fail-look."
             exit 0
           fi
 
@@ -184,6 +196,12 @@ jobs:
             --jq '[.[] | select(.state=="open")][0].number // empty')
           if [[ -z "$pr" ]]; then
             echo "No open PR for $sha. No emerge packet."
+            exit 0
+          fi
+
+          head_sha=$(gh pr view "$pr" --json headRefOid --jq .headRefOid)
+          if [[ "$sha" != "$head_sha" ]]; then
+            echo "Deploy $sha is stale; PR #$pr is now $head_sha. No emerge."
             exit 0
           fi
 
