@@ -123,6 +123,8 @@ test("Live opens the mic after the Realtime peer can receive", () => {
   assert.match(src, /replaceTrack/);
   assert.match(src, /createMediaStreamDestination/);
   assert.match(src, /\/live\/sdp/);
+  assert.match(src, /realtimeSdpAnswer/);
+  assert.doesNotMatch(src, /sdpData\.sdp\?\.trim/);
   assert.doesNotMatch(src, /api\.openai\.com/);
 });
 
@@ -136,12 +138,14 @@ test("Live SDP exchanges through Travis", () => {
   assert.match(openai, /httpsRequest/);
   assert.match(openai, /Content-Length/);
   assert.match(openai, /realtimeSdpMultipart/);
+  assert.match(openai, /realtimeSdpAnswer/);
   assert.match(openai, /Bearer \$\{key\}/);
   assert.doesNotMatch(openai, /Bearer \$\{opts\.token\}/);
   assert.match(grain, /application\/sdp/);
   assert.match(grain, /multipart\/form-data/);
   assert.match(grain, /name="sdp"/);
   assert.match(grain, /name="session"/);
+  assert.match(grain, /realtimeSdpAnswer/);
   assert.doesNotMatch(grain, /new File/);
   assert.doesNotMatch(grain, /FormData/);
   assert.doesNotMatch(openai, /fetch\("https:\/\/api\.openai\.com\/v1\/realtime\/calls"/);

@@ -7,6 +7,7 @@ import {
   interpretRealtimeEvent,
   liveInstructions,
   parseEphemeralSecret,
+  realtimeSdpAnswer,
   realtimeSessionConfig,
   type ToolDecl,
 } from "@/lib/travis-openai";
@@ -340,7 +341,7 @@ export async function startTravisLive(opts: {
       },
     );
     const sdpData = await readJson<{ sdp?: string; error?: string }>(sdpRes);
-    const answerSdp = sdpData.sdp?.trim() ?? "";
+    const answerSdp = realtimeSdpAnswer(sdpData.sdp ?? "") ?? "";
     if (!sdpRes.ok || !answerSdp) {
       throw new Error(sdpData.error?.slice(0, 180) || `Live SDP ${sdpRes.status}`);
     }

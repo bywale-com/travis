@@ -11,6 +11,7 @@ import {
   liveInstructions,
   openaiErrorMessage,
   parseEphemeralSecret,
+  realtimeSdpAnswer,
   realtimeSdpMultipart,
   realtimeSessionConfig,
 } from "@/lib/travis-openai";
@@ -138,12 +139,13 @@ export async function exchangeRealtimeSdp(opts: {
   if (posted.status < 200 || posted.status >= 300) {
     return { ok: false, status: posted.status, body: posted.body };
   }
-  const sdp = posted.body.trim();
-  if (!sdp.startsWith("v=")) {
+  const sdp = realtimeSdpAnswer(posted.body);
+  if (!sdp) {
+    const snippet = posted.body.trim().slice(0, 180);
     return {
       ok: false,
       status: posted.status || 502,
-      body: sdp.slice(0, 180) || "Live: empty SDP answer",
+      body: snippet || "Live: empty SDP answer",
     };
   }
   return { ok: true, sdp };

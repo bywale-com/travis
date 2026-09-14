@@ -71,6 +71,20 @@ export function realtimeSdpMultipart(
   return { body, contentType: `multipart/form-data; boundary=${boundary}` };
 }
 
+/**
+ * Chromium rejects the last SDP line when it has no terminating newline.
+ * OpenAI's Realtime answer often *is* that last line (`a=ice-pwd:…`).
+ * `String.trim()` strips the CRLF and the phone dies on Invalid SDP line.
+ */
+export function realtimeSdpAnswer(raw: string): string | null {
+  const start = raw.indexOf("v=");
+  if (start < 0) return null;
+  const lines = raw.slice(start).split(/\r\n|\n|\r/);
+  while (lines.length && lines[lines.length - 1] === "") lines.pop();
+  if (!lines[0]?.startsWith("v=")) return null;
+  return `${lines.join("\r\n")}\r\n`;
+}
+
 export function toRealtimeTools(decls: ToolDecl[]) {
   return decls.map((d) => ({
     type: "function" as const,

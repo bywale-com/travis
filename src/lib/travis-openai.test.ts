@@ -5,6 +5,7 @@ import {
   liveInstructions,
   openaiErrorMessage,
   parseEphemeralSecret,
+  realtimeSdpAnswer,
   realtimeSdpMultipart,
   realtimeSessionConfig,
   responsesText,
@@ -47,6 +48,22 @@ test("realtimeSdpMultipart is sdp + session parts with no filename", () => {
   assert.match(text, /v=0\r\no=- 0 0 IN IP4 127\.0\.0\.1/);
   assert.match(text, /"type":"realtime"/);
   assert.equal(body.byteLength, Buffer.byteLength(text, "utf8"));
+});
+
+test("realtimeSdpAnswer keeps a trailing CRLF after trim would strip ice-pwd", () => {
+  const raw =
+    "v=0\r\no=- 0 0 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\n" +
+    "a=ice-pwd:vBdf4yVCRUSU3Ui02QYyr5512RmR5uiI\r\n";
+  const stripped = raw.trim();
+  assert.equal(stripped.endsWith("\n"), false);
+  const answer = realtimeSdpAnswer(stripped);
+  assert.equal(answer?.endsWith("\r\n"), true);
+  assert.match(
+    answer ?? "",
+    /a=ice-pwd:vBdf4yVCRUSU3Ui02QYyr5512RmR5uiI\r\n$/,
+  );
+  assert.equal(realtimeSdpAnswer('{"error":"nope"}'), null);
+  assert.equal(realtimeSdpAnswer(""), null);
 });
 
 test("toRealtimeTools keeps existing port names", () => {
