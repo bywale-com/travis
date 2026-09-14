@@ -32,14 +32,32 @@ export function openaiErrorMessage(data: unknown, status: number): string {
 }
 
 /**
- * GA `/v1/realtime/calls` reads a multipart **text** field named `sdp`.
- * A raw `application/sdp` HTTP body is EOF / invalid_offer.
- * A File/filename part is “field sdp is required but not found.”
+ * GA `/v1/realtime/calls` reads a multipart `sdp` part with
+ * Content-Type: application/sdp and **no filename**.
+ * Node's form helpers cannot emit that shape:
+ * - typeless text field → unmarshal SDP EOF
+ * - File / Blob part → filename= → field "sdp" is required but not found
+ * A raw `application/sdp` string body arrived empty (EOF) on Vercel fetch.
  */
-export function realtimeSdpForm(offerSdp: string): FormData {
-  const fd = new FormData();
-  fd.set("sdp", offerSdp);
-  return fd;
+export function realtimeSdpMultipart(offerSdp: string): {
+  body: Uint8Array;
+  contentType: string;
+} {
+  const boundary = `----TravisSdp${crypto.randomUUID().replaceAll("-", "")}`;
+  const head =
+    `--${boundary}\r\n` +
+    `Content-Disposition: form-data; name="sdp"\r\n` +
+    `Content-Type: application/sdp\r\n\r\n`;
+  const tail = `\r\n--${boundary}--\r\n`;
+  const encoder = new TextEncoder();
+  const headBytes = encoder.encode(head);
+  const sdpBytes = encoder.encode(offerSdp);
+  const tailBytes = encoder.encode(tail);
+  const body = new Uint8Array(headBytes.length + sdpBytes.length + tailBytes.length);
+  body.set(headBytes, 0);
+  body.set(sdpBytes, headBytes.length);
+  body.set(tailBytes, headBytes.length + sdpBytes.length);
+  return { body, contentType: `multipart/form-data; boundary=${boundary}` };
 }
 
 export function toRealtimeTools(decls: ToolDecl[]) {

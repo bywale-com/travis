@@ -132,10 +132,11 @@ test("Live SDP exchanges through Travis", () => {
   const grain = read("src/lib/travis-openai.ts");
   assert.match(route, /exchangeRealtimeSdp/);
   assert.match(openai, /\/v1\/realtime\/calls/);
-  assert.match(openai, /realtimeSdpForm/);
-  assert.match(grain, /FormData/);
-  assert.match(grain, /fd\.set\("sdp", offerSdp\)/);
+  assert.match(openai, /realtimeSdpMultipart/);
+  assert.match(grain, /name="sdp"/);
+  assert.match(grain, /application\/sdp/);
   assert.doesNotMatch(grain, /new File/);
+  assert.doesNotMatch(grain, /FormData/);
   assert.doesNotMatch(openai, /body: opts\.offerSdp/);
 });
 

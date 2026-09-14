@@ -9,7 +9,7 @@ import {
   liveInstructions,
   openaiErrorMessage,
   parseEphemeralSecret,
-  realtimeSdpForm,
+  realtimeSdpMultipart,
   realtimeSessionConfig,
 } from "@/lib/travis-openai";
 import { TRAVIS_SYSTEM } from "@/server/travis-tools";
@@ -78,12 +78,14 @@ export async function exchangeRealtimeSdp(opts: {
   token: string;
   offerSdp: string;
 }): Promise<{ ok: true; sdp: string } | { ok: false; status: number; body: string }> {
+  const wire = realtimeSdpMultipart(opts.offerSdp);
   const res = await fetch("https://api.openai.com/v1/realtime/calls", {
     method: "POST",
-    body: realtimeSdpForm(opts.offerSdp),
+    body: Buffer.from(wire.body),
     headers: {
       Authorization: `Bearer ${opts.token}`,
       Accept: "application/sdp",
+      "Content-Type": wire.contentType,
     },
     cache: "no-store",
   });

@@ -7,6 +7,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-14** · Hotfix 098 fail-look · this PR — Live SDP multipart `sdp` is an `application/sdp` part with no filename, because voice-live got unmarshal SDP EOF from a typeless text field and Live dropped before dest leave.
+
 - **2026-09-14** · Hotfix 098 fail-look · this PR — Live SDP multipart `sdp` is a text field, because voice-live got `field "sdp" is required but not found` from a File part and Live dropped before dest leave.
 
 - **2026-09-14** · Hotfix 098 fail-look · this PR — Live SDP to OpenAI is GA multipart `sdp`, because voice-live got `invalid_offer` / unmarshal SDP EOF from a raw string body and Live dropped before dest leave.

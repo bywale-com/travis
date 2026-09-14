@@ -5,7 +5,7 @@ import {
   liveInstructions,
   openaiErrorMessage,
   parseEphemeralSecret,
-  realtimeSdpForm,
+  realtimeSdpMultipart,
   realtimeSessionConfig,
   responsesText,
   toRealtimeTools,
@@ -29,19 +29,16 @@ test("openaiErrorMessage prefers the API error string", () => {
   assert.equal(openaiErrorMessage({}, 500), "OpenAI 500");
 });
 
-test("realtimeSdpForm is a text sdp field, not a file part", async () => {
+test("realtimeSdpMultipart is an application/sdp part with no filename", () => {
   const offer = "v=0\r\no=- 0 0 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\n";
-  const fd = realtimeSdpForm(offer);
-  const part = fd.get("sdp");
-  assert.equal(typeof part, "string", "sdp must be a text field, not a File");
-  assert.equal(part, offer);
-  const wire = await new Request("https://api.openai.com/v1/realtime/calls", {
-    method: "POST",
-    body: fd,
-  }).text();
+  const { body, contentType } = realtimeSdpMultipart(offer);
+  assert.match(contentType, /^multipart\/form-data; boundary=----TravisSdp/);
+  const wire = new TextDecoder().decode(body);
   assert.match(wire, /name="sdp"/);
+  assert.match(wire, /Content-Type: application\/sdp/);
   assert.doesNotMatch(wire, /filename=/);
   assert.match(wire, /v=0/);
+  assert.ok(wire.includes(offer));
 });
 
 test("toRealtimeTools keeps existing port names", () => {
