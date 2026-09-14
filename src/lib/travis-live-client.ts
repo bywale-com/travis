@@ -177,17 +177,18 @@ export async function startTravisLive(opts: {
     void audioEl.play().catch(() => {});
   };
 
-  const attachMicAfterPeerReady = async () => {
-    mic = await navigator.mediaDevices.getUserMedia({
+  const attachMicAfterPeerReady = async (): Promise<MediaStream> => {
+    const stream = await navigator.mediaDevices.getUserMedia({
       audio: { echoCancellation: true, noiseSuppression: true },
     });
-    const track = mic.getAudioTracks()[0];
+    const track = stream.getAudioTracks()[0];
     if (!track) throw new Error("Live: no microphone track");
     const sender =
       pc.getSenders().find((s) => s.track?.kind === "audio") ??
       pc.getSenders().find((s) => !s.track);
     if (sender) await sender.replaceTrack(track);
-    else pc.addTrack(track, mic);
+    else pc.addTrack(track, stream);
+    return stream;
   };
 
   try {
@@ -306,7 +307,7 @@ export async function startTravisLive(opts: {
         }),
       ]);
     }
-    await attachMicAfterPeerReady();
+    mic = await attachMicAfterPeerReady();
 
     function stop() {
       closed = true;
