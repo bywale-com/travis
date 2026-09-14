@@ -437,6 +437,29 @@ test("connected Voice + Travis excludes Web Speech", () => {
   assert.equal(watchdogShouldStartStt({ ...up, recLive: false }), false);
 });
 
+test("dest leave that flips the chip does not give the mic to Talk while Live is up", () => {
+  const destLeft: EarState = {
+    ...engineerVoice,
+    liveUp: true,
+  };
+  assert.equal(whichEar(destLeft), "live");
+  assert.equal(liveOwnsMic(destLeft), true);
+  assert.equal(wantedEar(destLeft), "live");
+  assert.equal(sttMayStart(destLeft), false);
+  assert.equal(
+    watchdogShouldStartStt({ ...destLeft, recLive: false }),
+    false,
+    "watchdog must not arm Talk after dest leave while Live is still the ear",
+  );
+  const reconnecting: EarState = {
+    ...engineerVoice,
+    liveUp: false,
+    liveConnecting: true,
+  };
+  assert.equal(whichEar(reconnecting), "live-connecting");
+  assert.equal(sttMayStart(reconnecting), false);
+});
+
 test("Voice + Travis wants Live even before connect starts — STT must not arm", () => {
   assert.equal(wantedEar(travisVoice), "live");
   assert.equal(sttMayStart(travisVoice), false);

@@ -1078,7 +1078,6 @@ export function Room({
             void refreshTurns(sid);
           },
           onSeatStream: (res) => {
-            void stopLive();
             void consumeAgentStream(sid, res);
             void refreshSession(sid);
           },
@@ -1132,7 +1131,6 @@ export function Room({
       haltRecognition,
       refreshSession,
       refreshTurns,
-      stopLive,
     ],
   );
 

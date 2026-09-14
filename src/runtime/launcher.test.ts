@@ -157,6 +157,27 @@ test("Live SDP exchanges through Travis", () => {
   assert.doesNotMatch(openai, /fetch\("https:\/\/api\.openai\.com\/v1\/realtime\/calls"/);
 });
 
+test("dest leave SSE does not stop Live or hand the mic to Talk", () => {
+  const room = read("src/components/Room.tsx");
+  const live = read("src/lib/travis-live-client.ts");
+  const seat = room.slice(
+    room.indexOf("onSeatStream:"),
+    room.indexOf("onError:"),
+  );
+  assert.doesNotMatch(
+    seat,
+    /stopLive/,
+    "dest leave must keep Live; wrap still needs the ear",
+  );
+  const persist = live.slice(live.indexOf("const persist"), live.indexOf("const flushUser"));
+  assert.match(persist, /onSeatStream\(res\)/);
+  assert.doesNotMatch(
+    persist,
+    /stopLive:\s*true/,
+    "dest SSE is not a vocative dest switch",
+  );
+});
+
 test("attachSession writes listening on the presence ref before armEar", () => {
   const room = read("src/components/Room.tsx");
   const attach = room.slice(room.indexOf("const attachSession"), room.indexOf("const loadRooms"));

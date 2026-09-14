@@ -117,7 +117,8 @@ export async function startTravisLive(opts: {
     const ct = res.headers.get("content-type") ?? "";
     if (ct.includes("text/event-stream")) {
       opts.onSeatStream(res);
-      return { stopLive: true };
+      // Dest leave is a Cursor job. Live stays the ear for wrap.
+      return {};
     }
     const data = await readJson<{
       stopLive?: boolean;

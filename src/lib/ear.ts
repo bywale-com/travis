@@ -28,8 +28,9 @@ export type ModeSwitchAction = "keep" | "arm" | "release";
 
 export function whichEar(opts: EarState): EarKind {
   if (opts.viewMode === "log" && opts.logSubmode === "type") return "none";
-  if (opts.viewMode === "voice" && opts.destTravis && opts.liveUp) return "live";
-  if (opts.viewMode === "voice" && opts.destTravis && opts.liveConnecting) {
+  // Live up/connecting owns Voice even if dest leave flipped the chip.
+  if (opts.viewMode === "voice" && opts.liveUp) return "live";
+  if (opts.viewMode === "voice" && opts.liveConnecting) {
     return "live-connecting";
   }
   return "stt";
@@ -76,9 +77,16 @@ export function liveCloseAction(opts: {
  * is circular, because Voice + dest Travis always reads "stt" until Live is
  * already up, and nothing ever brings Live up.
  */
-export function wantedEar(opts: Omit<EarState, "liveUp">): EarKind {
+export function wantedEar(
+  opts: Omit<EarState, "liveUp"> & Partial<EarState>,
+): EarKind {
   if (opts.viewMode === "log" && opts.logSubmode === "type") return "none";
-  if (opts.viewMode === "voice" && opts.destTravis) return "live";
+  if (
+    opts.viewMode === "voice" &&
+    (opts.destTravis || opts.liveUp || opts.liveConnecting)
+  ) {
+    return "live";
+  }
   return "stt";
 }
 
