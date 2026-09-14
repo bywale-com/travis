@@ -3,6 +3,7 @@ import { exchangeRealtimeSdp } from "@/server/travis-openai";
 import { AuthError, jsonRoute } from "@/server/api-error";
 import { requireOwnedSession } from "@/server/operator";
 
+export const runtime = "nodejs";
 export const maxDuration = 30;
 
 type Body = { sdp?: string; token?: string };

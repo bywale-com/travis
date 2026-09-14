@@ -131,13 +131,16 @@ test("Live SDP exchanges through Travis", () => {
   const openai = read("src/server/travis-openai.ts");
   const grain = read("src/lib/travis-openai.ts");
   assert.match(route, /exchangeRealtimeSdp/);
+  assert.match(route, /runtime = "nodejs"/);
   assert.match(openai, /\/v1\/realtime\/calls/);
-  assert.match(openai, /realtimeSdpMultipart/);
-  assert.match(grain, /name="sdp"/);
+  assert.match(openai, /httpsRequest/);
+  assert.match(openai, /Content-Length/);
+  assert.match(openai, /realtimeSdpWire/);
   assert.match(grain, /application\/sdp/);
   assert.doesNotMatch(grain, /new File/);
   assert.doesNotMatch(grain, /FormData/);
-  assert.doesNotMatch(openai, /body: opts\.offerSdp/);
+  assert.doesNotMatch(grain, /multipart\/form-data/);
+  assert.doesNotMatch(openai, /fetch\("https:\/\/api\.openai\.com\/v1\/realtime\/calls"/);
 });
 
 test("attachSession writes listening on the presence ref before armEar", () => {

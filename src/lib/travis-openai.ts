@@ -32,32 +32,19 @@ export function openaiErrorMessage(data: unknown, status: number): string {
 }
 
 /**
- * GA `/v1/realtime/calls` reads a multipart `sdp` part with
- * Content-Type: application/sdp and **no filename**.
- * Node's form helpers cannot emit that shape:
- * - typeless text field → unmarshal SDP EOF
- * - File / Blob part → filename= → field "sdp" is required but not found
- * A raw `application/sdp` string body arrived empty (EOF) on Vercel fetch.
+ * GA WebRTC POST is a raw `application/sdp` body (same as the browser demo).
+ * Do not send this through Next.js `fetch` on Vercel — the patched fetch
+ * streams the body and OpenAI unmarshals EOF / invalid_offer. The server
+ * posts these bytes with `node:https` and Content-Length.
  */
-export function realtimeSdpMultipart(offerSdp: string): {
+export function realtimeSdpWire(offerSdp: string): {
   body: Uint8Array;
-  contentType: string;
+  contentType: "application/sdp";
 } {
-  const boundary = `----TravisSdp${crypto.randomUUID().replaceAll("-", "")}`;
-  const head =
-    `--${boundary}\r\n` +
-    `Content-Disposition: form-data; name="sdp"\r\n` +
-    `Content-Type: application/sdp\r\n\r\n`;
-  const tail = `\r\n--${boundary}--\r\n`;
-  const encoder = new TextEncoder();
-  const headBytes = encoder.encode(head);
-  const sdpBytes = encoder.encode(offerSdp);
-  const tailBytes = encoder.encode(tail);
-  const body = new Uint8Array(headBytes.length + sdpBytes.length + tailBytes.length);
-  body.set(headBytes, 0);
-  body.set(sdpBytes, headBytes.length);
-  body.set(tailBytes, headBytes.length + sdpBytes.length);
-  return { body, contentType: `multipart/form-data; boundary=${boundary}` };
+  return {
+    body: new TextEncoder().encode(offerSdp),
+    contentType: "application/sdp",
+  };
 }
 
 export function toRealtimeTools(decls: ToolDecl[]) {
