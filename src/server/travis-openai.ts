@@ -11,7 +11,7 @@ import {
   liveInstructions,
   openaiErrorMessage,
   parseEphemeralSecret,
-  realtimeSdpWire,
+  realtimeSdpMultipart,
   realtimeSessionConfig,
 } from "@/lib/travis-openai";
 import { TRAVIS_SYSTEM } from "@/server/travis-tools";
@@ -88,13 +88,23 @@ function readHttpBody(res: IncomingMessage): Promise<string> {
 
 /** Browser SDP POST to api.openai.com is CORS/Failed to fetch from the preview origin. */
 export async function exchangeRealtimeSdp(opts: {
-  token: string;
   offerSdp: string;
+  sessionId: string;
 }): Promise<{ ok: true; sdp: string } | { ok: false; status: number; body: string }> {
-  const wire = realtimeSdpWire(opts.offerSdp);
+  const key = openaiKey();
+  if (!key) {
+    return { ok: false, status: 503, body: "Travis isn’t wired" };
+  }
+  const room = await roomContextFor(opts.sessionId).catch(() => "");
+  const session = realtimeSessionConfig({
+    instructions: liveInstructions(TRAVIS_SYSTEM, room),
+    tools: [],
+  });
+  const wire = realtimeSdpMultipart(opts.offerSdp, JSON.stringify(session));
   const body = Buffer.from(wire.body);
   // Next.js patched fetch on Vercel streamed raw / multipart SDP as empty
   // (OpenAI: unmarshal SDP EOF). node:https sends Content-Length + bytes.
+  // Project key + multipart is the GA server path; ek_ + raw SDP still EOF.
   const posted = await new Promise<{ status: number; body: string }>(
     (resolve, reject) => {
       const req = httpsRequest(
@@ -103,10 +113,11 @@ export async function exchangeRealtimeSdp(opts: {
           path: "/v1/realtime/calls",
           method: "POST",
           headers: {
-            Authorization: `Bearer ${opts.token}`,
+            Authorization: `Bearer ${key}`,
             Accept: "application/sdp",
             "Content-Type": wire.contentType,
-            "Content-Length": body.byteLength,
+            "Content-Length": String(body.byteLength),
+            "OpenAI-Safety-Identifier": `travis-session-${opts.sessionId}`,
           },
         },
         (res) => {
@@ -120,7 +131,8 @@ export async function exchangeRealtimeSdp(opts: {
       req.setTimeout(25_000, () => {
         req.destroy(new Error("Live SDP timed out"));
       });
-      req.end(body);
+      req.write(body);
+      req.end();
     },
   );
   if (posted.status < 200 || posted.status >= 300) {

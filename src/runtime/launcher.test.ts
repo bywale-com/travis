@@ -135,11 +135,15 @@ test("Live SDP exchanges through Travis", () => {
   assert.match(openai, /\/v1\/realtime\/calls/);
   assert.match(openai, /httpsRequest/);
   assert.match(openai, /Content-Length/);
-  assert.match(openai, /realtimeSdpWire/);
+  assert.match(openai, /realtimeSdpMultipart/);
+  assert.match(openai, /Bearer \$\{key\}/);
+  assert.doesNotMatch(openai, /Bearer \$\{opts\.token\}/);
   assert.match(grain, /application\/sdp/);
+  assert.match(grain, /multipart\/form-data/);
+  assert.match(grain, /name="sdp"/);
+  assert.match(grain, /name="session"/);
   assert.doesNotMatch(grain, /new File/);
   assert.doesNotMatch(grain, /FormData/);
-  assert.doesNotMatch(grain, /multipart\/form-data/);
   assert.doesNotMatch(openai, /fetch\("https:\/\/api\.openai\.com\/v1\/realtime\/calls"/);
 });
 

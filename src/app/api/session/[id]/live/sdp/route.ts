@@ -26,14 +26,14 @@ export async function POST(
     const body = (await req.json()) as Body;
     const offerSdp = String(body.sdp ?? "").trim();
     const token = String(body.token ?? "").trim();
-    if (!offerSdp) {
+    if (!offerSdp.startsWith("v=")) {
       return NextResponse.json({ error: "Live: no SDP offer" }, { status: 400 });
     }
     if (!token) {
       return NextResponse.json({ error: "Live: no token" }, { status: 400 });
     }
 
-    const exchanged = await exchangeRealtimeSdp({ token, offerSdp });
+    const exchanged = await exchangeRealtimeSdp({ offerSdp, sessionId });
     if (!exchanged.ok) {
       const detail = exchanged.body.trim().slice(0, 180) || `Live SDP ${exchanged.status}`;
       return NextResponse.json({ error: detail }, { status: 502 });

@@ -32,19 +32,43 @@ export function openaiErrorMessage(data: unknown, status: number): string {
 }
 
 /**
- * GA WebRTC POST is a raw `application/sdp` body (same as the browser demo).
- * Do not send this through Next.js `fetch` on Vercel — the patched fetch
- * streams the body and OpenAI unmarshals EOF / invalid_offer. The server
- * posts these bytes with `node:https` and Content-Length.
+ * GA `/v1/realtime/calls` with a project API key is multipart:
+ * `sdp` as application/sdp (no filename) + `session` as application/json.
+ * Raw `application/sdp` is the ephemeral-token browser path — OpenAI still
+ * unmarshaled EOF when Travis posted that with the ek_ on Vercel.
+ * Do not send this through Next.js `fetch` (empty body). The server posts
+ * these bytes with `node:https` and Content-Length.
  */
-export function realtimeSdpWire(offerSdp: string): {
+export function realtimeSdpMultipart(
+  offerSdp: string,
+  sessionJson: string,
+  boundary = `----TravisSdp${crypto.randomUUID().replaceAll("-", "")}`,
+): {
   body: Uint8Array;
-  contentType: "application/sdp";
+  contentType: string;
 } {
-  return {
-    body: new TextEncoder().encode(offerSdp),
-    contentType: "application/sdp",
-  };
+  const sdp = offerSdp.endsWith("\n") ? offerSdp : `${offerSdp}\r\n`;
+  const encoder = new TextEncoder();
+  const chunks = [
+    `--${boundary}\r\n` +
+      `Content-Disposition: form-data; name="sdp"\r\n` +
+      `Content-Type: application/sdp\r\n\r\n`,
+    sdp,
+    `\r\n--${boundary}\r\n` +
+      `Content-Disposition: form-data; name="session"\r\n` +
+      `Content-Type: application/json\r\n\r\n`,
+    sessionJson,
+    `\r\n--${boundary}--\r\n`,
+  ].map((part) => encoder.encode(part));
+  let size = 0;
+  for (const chunk of chunks) size += chunk.byteLength;
+  const body = new Uint8Array(size);
+  let offset = 0;
+  for (const chunk of chunks) {
+    body.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return { body, contentType: `multipart/form-data; boundary=${boundary}` };
 }
 
 export function toRealtimeTools(decls: ToolDecl[]) {
