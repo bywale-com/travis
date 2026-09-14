@@ -31,6 +31,16 @@ export function openaiErrorMessage(data: unknown, status: number): string {
   return `OpenAI ${status}`;
 }
 
+/**
+ * GA `/v1/realtime/calls` reads a multipart `sdp` part.
+ * A raw `application/sdp` string body arrives as EOF / invalid_offer.
+ */
+export function realtimeSdpForm(offerSdp: string): FormData {
+  const fd = new FormData();
+  fd.set("sdp", new File([offerSdp], "offer.sdp", { type: "application/sdp" }));
+  return fd;
+}
+
 export function toRealtimeTools(decls: ToolDecl[]) {
   return decls.map((d) => ({
     type: "function" as const,

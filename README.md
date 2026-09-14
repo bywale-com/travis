@@ -7,6 +7,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-14** · Hotfix 098 fail-look · this PR — Live SDP to OpenAI is GA multipart `sdp`, because voice-live got `invalid_offer` / unmarshal SDP EOF from a raw string body and Live dropped before dest leave.
+
 - **2026-09-14** · Hotfix 098 fail-look · this PR — Live SDP exchanges through Travis and the real mic waits on a silent hold track, because voice-live showed Talking then `Travis Live is down` / `Failed to fetch` and dest never started.
 
 - **2026-09-14** · Hotfix 098 fail-look · this PR — Live error cleanup typechecks, because Vercel `next build` died on `mic.getTracks` as `never` and the preview never came up.

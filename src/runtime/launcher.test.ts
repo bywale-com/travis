@@ -129,8 +129,12 @@ test("Live opens the mic after the Realtime peer can receive", () => {
 test("Live SDP exchanges through Travis", () => {
   const route = read("src/app/api/session/[id]/live/sdp/route.ts");
   const openai = read("src/server/travis-openai.ts");
+  const grain = read("src/lib/travis-openai.ts");
   assert.match(route, /exchangeRealtimeSdp/);
   assert.match(openai, /\/v1\/realtime\/calls/);
+  assert.match(openai, /realtimeSdpForm/);
+  assert.match(grain, /FormData/);
+  assert.doesNotMatch(openai, /body: opts\.offerSdp/);
 });
 
 test("attachSession writes listening on the presence ref before armEar", () => {

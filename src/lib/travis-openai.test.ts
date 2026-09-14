@@ -5,6 +5,7 @@ import {
   liveInstructions,
   openaiErrorMessage,
   parseEphemeralSecret,
+  realtimeSdpForm,
   realtimeSessionConfig,
   responsesText,
   toRealtimeTools,
@@ -26,6 +27,15 @@ test("openaiErrorMessage prefers the API error string", () => {
     "invalid_api_key",
   );
   assert.equal(openaiErrorMessage({}, 500), "OpenAI 500");
+});
+
+test("realtimeSdpForm is a nonempty multipart sdp part", async () => {
+  const offer = "v=0\r\no=- 0 0 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\n";
+  const fd = realtimeSdpForm(offer);
+  const part = fd.get("sdp");
+  assert.ok(part instanceof File, "sdp must be a File part, not a raw string body");
+  assert.equal(part.type, "application/sdp");
+  assert.equal(await part.text(), offer);
 });
 
 test("toRealtimeTools keeps existing port names", () => {
