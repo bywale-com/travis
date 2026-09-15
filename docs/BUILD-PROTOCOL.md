@@ -79,6 +79,8 @@ Waiting is one whole line on the packet, nothing else:
 
 or no Wake line. Chat prose (“then SA”) is not the hold. The filename is not the hold. Draft is not the hold — we keep the PR draft through plant.
 
+**Stateless / park.** A packet the founder wants **on the board but not in the loop** uses the same hold line **and** the process in [`register/STATELESS-PR.md`](./register/STATELESS-PR.md). No SCP. No plant. No merge of that park until go. Quiet house cuts that must land on `main` without a seat are that same file’s “quiet house cut.”
+
 ### 3. Get-go
 
 When you say go, Architect flips that line to exactly:
@@ -234,5 +236,6 @@ A seat is disposable. The log is not.
 | PM packets | [`docs/register/PM-PACKETS.md`](./register/PM-PACKETS.md) |
 | Hotfixes | [`docs/register/HOTFIXES.md`](./register/HOTFIXES.md) |
 | Plates | [`docs/register/PLATE-CHROME-RULE.md`](./register/PLATE-CHROME-RULE.md) |
+| Stateless PR | [`docs/register/STATELESS-PR.md`](./register/STATELESS-PR.md) |
 | UI rudiments | [`docs/build-foundation/00-rudiments.md`](./build-foundation/00-rudiments.md) |
 | How we think | [`docs/method/00-INDEX.md`](./method/00-INDEX.md) |

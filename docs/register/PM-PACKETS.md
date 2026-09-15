@@ -6,6 +6,7 @@
 **Wake.** Each packet carries one machine line the Action greps:
 
 - `**Wake:** hold` — waiting (sign, plates, leftover grain). File may land. No `wake-sa`.
+- `**Stateless:** park` — human tell. Same as hold for the Action. Process: [`STATELESS-PR.md`](./STATELESS-PR.md). No SCP, no plant, no merge until founder go.
 - `**Wake:** sa` — get-go. This push labels `wake-sa`.
 - Own line. The Action greps `^**Wake:** sa` as the whole line. Do not tuck it onto Status.
 - Missing line = hold.
