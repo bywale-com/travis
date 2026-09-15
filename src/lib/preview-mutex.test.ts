@@ -21,6 +21,7 @@ test("wake-packet-seats: hotfix wakes only on an added file; add_seat is a no-op
   assert.match(yml, /diff-filter=A/);
   assert.match(yml, /echo "\$added"/);
   assert.match(yml, /previewing on #\$pr\. No new seat/);
+  assert.match(yml, /outside-look on #\$pr\. No new seat/);
   assert.match(yml, /gh label create previewing/);
   assert.match(yml, /green-light-\$\{\{ github\.ref_name \}\}/);
   assert.match(yml, /cancel-in-progress: false/);
@@ -36,9 +37,12 @@ test("runtime-doors clears previewing then skips fail-look if it is still on", (
   assert.match(yml, /--remove-label previewing/);
   const holds = yml.slice(yml.indexOf("for hold in"));
   assert.match(holds, /previewing/);
+  assert.match(holds, /outside-look/);
   const clearAt = yml.indexOf("Clear previewing after doors paint");
+  const armAt = yml.indexOf("Arm delayed outside-look from Look seed comment");
   const failAt = yml.indexOf("Fresh-add fail-look on the open PR");
   assert.ok(clearAt > 0 && failAt > clearAt, "clear previewing before fail-look");
+  assert.ok(armAt > clearAt && armAt < failAt, "arm delayed outside-look before fail-look");
 });
 
 test("Engineer prompt recuts once and will not push while previewing", () => {

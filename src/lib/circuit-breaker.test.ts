@@ -82,6 +82,7 @@ test("preview-when-clear waits on handoff and hold labels", () => {
     "fail-look",
     "blocker",
     "previewing",
+    "outside-look",
   ]) {
     assert.match(sh, new RegExp(lab));
   }
@@ -124,6 +125,7 @@ test("runtime-doors does not fail-look during handoff", () => {
   assert.match(yml, /fail-look/);
   assert.match(yml, /blocker/);
   assert.match(yml, /previewing/);
+  assert.match(yml, /outside-look/);
   assert.match(yml, /handoff\/hold/);
   assert.match(yml, /Emerge packet on success/);
   assert.match(yml, /send-emerge-letter\.py/);

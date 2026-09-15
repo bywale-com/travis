@@ -7,7 +7,9 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
-- **2026-09-15** · Hotfix 098 fail-look · this PR — Dest Cursor miss stamps dest seat (`Dest error:`) and think-walks ignore dest-seat status, because voice-stream-arch dest’d then wrap died on unseated `status/- error`.
+- **2026-09-15** · Packet 021 / SCP-037 · this PR — Quiet **Look** on Log files a lived miss to GitHub (`POST /look`, `outside-look`), because doors never saw the founder-discovered pipe miss and File must not dest, Hold, or mint `travis.look`.
+
+- **2026-09-15** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Dest Cursor miss stamps dest seat (`Dest error:`) and think-walks ignore dest-seat status, because voice-stream-arch dest’d then wrap died on unseated `status/- error`.
 
 - **2026-09-14** · Hotfix 098 fail-look · this PR — Dest leave on Live keeps the WebRTC ear (SSE does not stop Live; Live up/connecting still owns the mic if dest leave flips the chip), because voice-live dest’d then armed SpeechRecognition (`both ears`).
 
@@ -25,9 +27,7 @@ Newest first. On completion of a packet or hotfix the Engineer **prepends** one 
 
 - **2026-09-14** · Hotfix 098 fail-look · this PR — Live error cleanup typechecks, because Vercel `next build` died on `mic.getTracks` as `never` and the preview never came up.
 
-- **2026-09-13** · Hotfix 098 fail-look · this PR — Live opens the mic after the Realtime peer can receive, because voice-live dest played in the first 4s of the fixture during ICE and the tape stayed empty.
-
-- **2026-09-13** · Runtime preflight · this PR — `npm run test:preflight` is the Engineer’s local first sensor (units + Chromium + phone-face doors), because Vercel doors were the first place runner and Mode/Talk misses showed up.
+- **2026-09-13** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Live opens the mic after the Realtime peer can receive, because voice-live dest played in the first 4s of the fixture during ICE and the tape stayed empty.
 
 - **2026-09-13** · Hotfix 098 fail-look · this PR — Voice enter writes listening on the presence ref before armEar, because voice-live never saw Talking with Travis… while first enter still thought the room had ended.
 

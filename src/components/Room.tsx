@@ -95,6 +95,7 @@ import {
   type BacklogTicketData,
 } from "@/components/plates/BacklogTicket";
 import { RequestLogDoor } from "@/components/plates/RequestLogDoor";
+import { LookMissDoor } from "@/components/plates/LookMissDoor";
 import { RoomIndex, type RoomRow } from "@/components/plates/RoomIndex";
 import { RosterDoor, type RosterMember } from "@/components/plates/RosterDoor";
 import {
@@ -148,7 +149,7 @@ type Session = {
 };
 
 type PlateFace = "index" | "create" | "create-agent" | "room" | "integrations";
-type Door = null | "roster" | "inflight" | "requests" | "backlog";
+type Door = null | "roster" | "inflight" | "requests" | "backlog" | "look";
 
 function pendingReplyAuthorLabel(
   turnId: string,
@@ -2654,6 +2655,8 @@ export function Room({
               alignItems: "center",
               gap: 14,
               marginLeft: "auto",
+              flexWrap: "wrap",
+              justifyContent: "flex-end",
             }}
           >
             {motionCount > 0 ? (
@@ -2693,6 +2696,22 @@ export function Room({
             >
               Backlog
             </button>
+            {viewMode === "log" ? (
+              <button
+                type="button"
+                onClick={() => setDoor("look")}
+                style={{
+                  border: "none",
+                  background: "transparent",
+                  color: t.textSecondary,
+                  fontSize: 13,
+                  padding: 0,
+                  cursor: "pointer",
+                }}
+              >
+                Look
+              </button>
+            ) : null}
             <button
               type="button"
               onClick={() => setDoor("requests")}
@@ -3530,6 +3549,19 @@ export function Room({
           onToggleAdd={() => setRosterAdding((v) => !v)}
           onRename={(title) => void renameRoomTitle(session.id, title)}
           onEnd={() => void closeRoom(session.id)}
+        />
+      ) : null}
+
+      {door === "look" ? (
+        <LookMissDoor
+          t={t}
+          sessionId={session.id}
+          turns={turns.map((turn) => ({
+            id: turn.id,
+            kind: turn.kind,
+            text: turn.text,
+          }))}
+          onClose={() => setDoor(null)}
         />
       ) : null}
 

@@ -1,7 +1,7 @@
 #!/bin/sh
 # After handoffs: empty-commit Preview [vercel build] so Vercel may build.
 # Skip while wake-sa / wake-engineer / wake-pm-look / fail-look / blocker
-# / previewing are on. previewing is the mutex: Vercel has the ball.
+# / previewing / outside-look are on. previewing is the mutex: Vercel has the ball.
 # Caller must pass a writable checkout of the PR head. $1 = PR number. $2 = branch.
 
 set -eu
@@ -12,7 +12,21 @@ labels=$(gh pr view "$pr" --json labels --jq '.labels[].name')
 echo "Labels on #$pr:"
 echo "$labels"
 
-for hold in wake-sa wake-engineer wake-pm-look fail-look blocker previewing; do
+if ! echo "$labels" | grep -qx outside-look; then
+  if ! echo "$labels" | grep -qx previewing && ! echo "$labels" | grep -qx blocker; then
+    repo=$(gh repo view --json nameWithOwner --jq .nameWithOwner)
+    if gh api "repos/${repo}/issues/${pr}/comments" --paginate --jq '.[].body' 2>/dev/null | grep -q '<!-- travis-look -->'; then
+      gh label create outside-look --color CCCCCC --description "Cursor: outside look (lived miss from Log)" 2>/dev/null || true
+      gh pr edit "$pr" --remove-label outside-look || true
+      if gh pr edit "$pr" --add-label outside-look; then
+        echo "Armed delayed outside-look on #$pr from Look seed comment."
+        labels=$(gh pr view "$pr" --json labels --jq '.labels[].name')
+      fi
+    fi
+  fi
+fi
+
+for hold in wake-sa wake-engineer wake-pm-look fail-look blocker previewing outside-look; do
   if echo "$labels" | grep -qx "$hold"; then
     echo "Handoff/hold '$hold' still on #$pr. No green light."
     exit 0

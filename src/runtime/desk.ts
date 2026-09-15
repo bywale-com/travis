@@ -137,6 +137,7 @@ export async function readTurnsPayload(
   }
   const data = JSON.parse(bodyText) as {
     turns?: {
+      id?: string;
       text?: string;
       role?: string;
       kind?: string;
@@ -147,6 +148,7 @@ export async function readTurnsPayload(
     streams?: { live?: unknown[]; cards?: unknown[] };
   };
   const turns = (data.turns ?? []).map((t) => ({
+    id: String(t.id ?? ""),
     text: String(t.text ?? ""),
     role: String(t.role ?? ""),
     kind: String(t.kind ?? ""),

@@ -179,4 +179,40 @@ export async function runPreflightFaceWalks(): Promise<void> {
     );
     assert.equal(starts, 0, "SpeechRecognition must not start on Voice");
   }, { initScript: STT_DOUBLE });
+
+  await walk("Log Look files a miss and Voice has no Look", async (phone) => {
+    await phone.page.getByText("View log", { exact: true }).waitFor();
+    assert.equal(
+      await phone.page.getByRole("button", { name: "Look", exact: true }).count(),
+      0,
+      "Voice has no Look",
+    );
+    await phone.page.getByText("View log", { exact: true }).click();
+    await phone.page.getByRole("button", { name: "Type" }).waitFor();
+    const look = phone.page.getByRole("button", { name: "Look", exact: true });
+    await look.scrollIntoViewIfNeeded();
+    await look.waitFor();
+    assert.ok(
+      (await phone.page.getByRole("button", { name: "Requests" }).count()) >= 1,
+      "Look lives in the same cluster as Requests",
+    );
+    await look.click();
+    await phone.page.getByRole("button", { name: "File" }).waitFor();
+    await phone.page.getByRole("textbox", { name: "Note" }).fill("Mouth never came back.");
+    const posted = phone.page.waitForResponse(
+      (res) =>
+        res.request().method() === "POST" && res.url().includes("/look"),
+      { timeout: 10_000 },
+    );
+    await phone.page.getByRole("button", { name: "File" }).click();
+    const lookRes = await posted;
+    assert.ok(
+      lookRes.status() >= 200 && lookRes.status() < 300,
+      `Look File must POST /look 2xx, got ${lookRes.status()}`,
+    );
+    await phone.page.getByRole("button", { name: "File" }).waitFor({
+      state: "detached",
+      timeout: 10_000,
+    });
+  });
 }
