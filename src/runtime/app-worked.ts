@@ -21,6 +21,8 @@ export type DoorTrace = {
 
 export function isRunErrorTurn(turn: TapeTurn): boolean {
   if (turn.kind !== "status") return false;
+  // Dest-seat terminal is dest, not a Travis think miss (086 dest scores the leave).
+  if (turn.seatKey && turn.seatKey !== "travis") return false;
   return /error/i.test(turn.text);
 }
 

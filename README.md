@@ -7,6 +7,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-15** · Hotfix 098 fail-look · this PR — Dest Cursor miss stamps dest seat (`Dest error:`) and think-walks ignore dest-seat status, because voice-stream-arch dest’d then wrap died on unseated `status/- error`.
+
 - **2026-09-14** · Hotfix 098 fail-look · this PR — Dest leave on Live keeps the WebRTC ear (SSE does not stop Live; Live up/connecting still owns the mic if dest leave flips the chip), because voice-live dest’d then armed SpeechRecognition (`both ears`).
 
 - **2026-09-14** · Hotfix 098 fail-look · this PR — Live late-arms the real mic after session.update (no silent hold, unconstrained `getUserMedia`, unmute then `replaceTrack`), because voice-live showed Talking then dest miss `tx=[]` / empty tape.

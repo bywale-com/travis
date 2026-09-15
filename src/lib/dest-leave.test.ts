@@ -80,6 +80,21 @@ test("dest stream Cursor miss does not fail dest_job", () => {
   assert.doesNotMatch(job, /status: "failed"/);
 });
 
+test("dest stream error stamps dest seat — Dest error, not unseated error", () => {
+  const src = readFileSync(
+    join(process.cwd(), "src/server/seat-pipe.ts"),
+    "utf8",
+  );
+  const fn = src.slice(src.indexOf("async function driveDestCursorEvents"));
+  const body = fn.slice(0, fn.indexOf("export async function continueDestStream"));
+  assert.match(body, /destLeaveMiss/);
+  assert.match(body, /insertStatusTurn\(sessionId, tapeStatus, seatKey\)/);
+  assert.doesNotMatch(
+    body,
+    /insertTurn\(sessionId, \{\s*role: "status"/,
+  );
+});
+
 test("role dest resolve does not await sit handoff", () => {
   const src = readFileSync(join(process.cwd(), "src/server/sit.ts"), "utf8");
   assert.match(src, /void sitBinding\(/);

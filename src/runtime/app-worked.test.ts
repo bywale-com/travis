@@ -45,6 +45,49 @@ test("named unwired is red on a think-walk", () => {
   assert.match(thinkMissReason(turns) ?? "", /isn.t wired/i);
 });
 
+test("dest-seat status error is dest — wrap still thinks if Travis spoke", () => {
+  const turns: TapeTurn[] = [
+    turn({
+      kind: "user",
+      role: "user",
+      seatKey: "travis",
+      speakable: true,
+      text: "Engineer, this is a Travis runtime canary.",
+      seq: 1,
+    }),
+    turn({
+      kind: "user",
+      role: "user",
+      seatKey: "engineer",
+      speakable: true,
+      text: "this is a Travis runtime canary.",
+      seq: 2,
+    }),
+    turn({
+      kind: "status",
+      seatKey: "engineer",
+      text: "error",
+      seq: 3,
+    }),
+    turn({
+      kind: "user",
+      role: "user",
+      seatKey: "travis",
+      speakable: true,
+      text: "I'm done.",
+      seq: 4,
+    }),
+    turn({
+      kind: "agent_post",
+      seatKey: "travis",
+      speakable: true,
+      text: "Understood.",
+      seq: 5,
+    }),
+  ];
+  assert.equal(thinkMissReason(turns), null);
+});
+
 test("Travis spoke — do not grade the sentence", () => {
   const turns: TapeTurn[] = [
     turn({ kind: "user", role: "user", text: "hello", seq: 1 }),
