@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-15 21:58 UTC — **SCP-038 Smarter loop (N-red escalate).** PM-022 on [#201](https://github.com/bywale-com/travis/pull/201). After N=4 current-head idle reds, doors fresh-add **`outside-look`** instead of **`fail-look`**. Count = GitHub issue timeline `labeled` events — no Travis table. Stale SHA skipped before script. 021 hold lists sufficient. Look File still **`wake-engineer`**. Next number is **039**. Do not steal 039. 036 stays the unsigned 020 hole — do not reuse.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-15 22:05 UTC — **SCP-038 recut (N-red outside-look).** Count = GitHub Issue Timeline `labeled` events, not check-runs, not a Travis table. Live jq lives in `runtime-doors.yml` `run:` (repository_dispatch from **main**). Fresh-add `emerge` so green resets. `outside-look` already in the hold list is enough. Look File stays **037** → `wake-engineer`. N=4 immutable. No `travis.red_count`. PM-022 on [#201](https://github.com/bywale-com/travis/pull/201). Next number is **039**. Do not steal 039. 036 stays the unsigned 020 hole — do not reuse.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -963,4 +963,43 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-038-SMARTER-LOOP.md`](./SYSTEMS-CHANGE-PACKET-038-SMARTER-LOOP.md)
 
 **Handoff:** Engineer verifies plant on **this same PR** (script + workflow already landed). Next packet number is **039**. Do not steal 039. Do not remint 037 / Look. Do not mint a cousin.
+
+---
+
+## 2026-09-15 22:05 UTC — SCP-038 recut (live path + emerge reset) (PM-022 on #201)
+
+**Kind:** Packet recut. 21:58 sitting signed 038. Recut in place: live count is YAML `run:` (repository_dispatch from **main**), paginate `--jq '.[]'`, fresh-add `emerge`. Do not steal **039**. 023–037 stay planted — not reminted. **036** stays the unsigned 020 hole.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-022 lock + 14:00 flag). Not Architect. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):**
+
+> Building a smarter agent loop. After a certain amount of failures (especially now that we have preflight) a certain number of production failures triggers a smarter agent to diagnose / specify / and fix (without tripping wires) … Really a spec of the work order.
+
+> I don't think these kinds of issues spin up our external… outside look agent… I think it just spins up the regular engineer… The workflow that triggers the external agent… is after… that's what is in PR 22.
+
+**Staples (not scenery):** **`fail-look`** · **`outside-look`** · **`emerge`**. No new FACE. LK1–LK2 stay 021.
+
+**Quoted stood-up:**
+
+- Timeline contract: `GET /repos/{owner}/{repo}/issues/{n}/timeline` (`Accept: application/vnd.github+json`, `per_page` max 100, `Link` rel=next). `labeled` has `created_at` + `label.name` (GitHub issue-event types). Check-runs are a different port.
+- This branch dumps `--paginate` JSON into one `jq` (`.github/scripts/runtime-doors-red-label.sh` L9–18) and the red step `bash`es that file at the **deploy SHA** (`runtime-doors.yml` L229). Workflow comment: repository_dispatch runs **this file from main**.
+- Stale SHA exits before any label (`runtime-doors.yml` L215–218).
+- Holds already include `outside-look` (`runtime-doors.yml` L222 · `preview-when-clear.sh` L37). Delayed Look arm still before the red step (`preview-mutex.test.ts` L46–49).
+- Look File fresh-adds `wake-engineer` (`look-github.ts` L12, L176–177).
+- Emerge is `--add-label` only (`runtime-doors.yml` L342–343) — no new `labeled` event if the label is already on.
+- Dest canary acknowledge-only (`dest-canary.ts` L1–3).
+
+**Ascribed:**
+
+1. **No mint.** Count is timeline `labeled` events. Refuse `travis.red_count`. N=4 is an immutable wall, not a GitHub Variable.
+2. **Port** = timeline, not `/issues/{n}/events`, not check-runs. `gh api --paginate --jq '.[] | …'` per page. Do not dump concatenated arrays.
+3. **Live path** = jq in `runtime-doors.yml` `run:` (main). Do not bash a deploy-SHA script as the live path — in-flight PRs would miss the file and add neither label.
+4. **Reset** = last `emerge` or `outside-look` `labeled`. Green must **fresh-add** `emerge`.
+5. **Hold:** `outside-look` already on is enough. Doors need no extra names. Look arm before red stays — 022 does not steal a Look seed.
+6. **Silence:** Save+Activate `outside-look` (founder). Complete-plant `fail-look` (outside agent / work order).
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-038-SMARTER-LOOP.md`](./SYSTEMS-CHANGE-PACKET-038-SMARTER-LOOP.md) (recut in place).
+
+**Handoff:** Engineer recuts the **038** plant on **this same PR**. Next packet number is **039**. Do not steal 039. Do not remint Look. Do not mint a cousin.
 
