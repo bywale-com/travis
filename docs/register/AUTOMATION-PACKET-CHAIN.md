@@ -19,6 +19,7 @@ Cursor Automations cannot trigger “when an agent finishes.” Closest document
 ```text
 PM writes PM-PACKET-NNN on a PR with **Wake:** hold  (or no Wake line)
         ↓  plates, stamps, talk — Action does not label
+        ↓  **Stateless park** ([`STATELESS-PR.md`](./STATELESS-PR.md)): stay here. No SCP. No plant. No merge.
 Founder go → PM flips that line to **Wake:** sa and pushes
         ↓  label wake-sa
 SA automation — full SA protocol

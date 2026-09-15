@@ -13,6 +13,7 @@ In Travis, every piece of work belongs on **one pull request** (`One PR per init
 | **1. Packets (Feature Initiatives)** | Big architectural or product changes designed across seats (Architect → Systems Analyst → Engineer). | **Systems Analyst (SA)** (once founder gives the go) |
 | **2. Hotfixes** | Ad-hoc code fixes, bugfixes, or technical tune-ups cut directly by an Engineer. Skips SA completely. | **Engineer** |
 | **3. Non-Packet / Regular PRs** | Routine edits like documentation updates, notes, exploratory drafts, or plates. | **Nobody** (no automated seats wake up) |
+| **4. Stateless / parked** | A packet (or quiet house cut) that must sit without automations until the founder triggers it. Canon: [`STATELESS-PR.md`](./STATELESS-PR.md). | **Nobody** until the founder flips `**Wake:** sa` |
 
 ---
 
@@ -127,7 +128,7 @@ Example: title says Hotfix 097, and 095 + 096 + 097 all happened on that still-o
 
 | Event / Push Content | Labels Added / Removed | Does Vercel Build? |
 | :--- | :--- | :--- |
-| Push new packet with `**Wake:** hold` | None | No |
+| Push new packet with `**Wake:** hold` (stateless park) | None | No |
 | Push packet with `**Wake:** sa` | Adds `wake-sa` | No |
 | Push `SYSTEMS-CHANGE-PACKET` | Adds `wake-engineer`, then strips `wake-sa`. GraphQL add retries. A failed add must not leave the PR unlabeled. | No |
 | Push brand-new `HOTFIX-NNN-*.md` (PR title: `Hotfix NNN — ...`) | Adds `wake-engineer` | No |

@@ -9,6 +9,8 @@
 
 You are the **third seat**. Technical Architect and SA specify. You **implement** what they have already specced. You do not invent product flags. You do not invent the technical cut or the file plan. You do not mint tables. Your trail is **git + PRs**.
 
+A **stateless / park** PR is not your pickup. Do not plant, dest, or touch the handoff until the founder leaves the park. [`../register/STATELESS-PR.md`](../register/STATELESS-PR.md).
+
 ---
 
 ## Accept the seat

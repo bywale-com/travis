@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-15 21:10 UTC — Dest canary is acknowledge-only; WAV + type-dest match. Do not merge #196 notes cousin. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-15 21:25 UTC — Stateless PR protocol is house law. Look catalyst parks as 023. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3938,3 +3938,15 @@ Same object: an agent **outside** the recut. Two entries: deployment reds vs fou
 **Lock.** Dest to the living Engineer stays. The line is acknowledge-only. WAV and type-dest match `DEST_CANARY`. Do not write notes into `ENGINEER-HANDOFF.md`. Do not merge [#196](https://github.com/bywale-com/travis/pull/196).
 
 **I do not wake Engineer.** I do not touch the handoff.
+
+---
+
+## 2026-09-15 21:25 UTC — Stateless PR protocol (founder)
+
+**Kind:** House process. Flag 14:00 2026-08-25 stands.
+
+**Founder (preserved):** two tasks. (1) Document the Look catalyst in its own PR, stateless — no automations, no one picking it up. (2) Standardize the protocol for working on packets that stay agnostic of automations until triggered. Findable, like plating. README.
+
+**Lock.** Canon [`STATELESS-PR.md`](./STATELESS-PR.md). Park packet is **023** on its own PR — Wake hold, do not merge. This sitting lands the protocol on `main` first so the catalyst PR can use it.
+
+**I do not plant `src/`.** I do not Wake sa. I do not ask Engineer.

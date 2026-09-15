@@ -67,7 +67,7 @@ Mixing methods is failure: solving Type A with a Type B UI polish, or solving Ty
 
 ### 6. Plates — screenshot first
 
-Canon: [`../register/PLATE-CHROME-RULE.md`](../register/PLATE-CHROME-RULE.md). Read a locked plate with [`../register/PLATE-READ.md`](../register/PLATE-READ.md).
+Canon: [`../register/PLATE-CHROME-RULE.md`](../register/PLATE-CHROME-RULE.md). Read a locked plate with [`../register/PLATE-READ.md`](../register/PLATE-READ.md). Park a pocket without waking a seat: [`../register/STATELESS-PR.md`](../register/STATELESS-PR.md).
 
 - Screenshot the live desk first. Lock Voice / Log / Backlog chrome as it actually is.
 - Paint only the new hole. Compare. Drift is trash.
