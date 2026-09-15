@@ -129,7 +129,7 @@ Example: title says Hotfix 097, and 095 + 096 + 097 all happened on that still-o
 | :--- | :--- | :--- |
 | Push new packet with `**Wake:** hold` | None | No |
 | Push packet with `**Wake:** sa` | Adds `wake-sa` | No |
-| Push `SYSTEMS-CHANGE-PACKET` | Removes `wake-sa`, adds `wake-engineer` | No |
+| Push `SYSTEMS-CHANGE-PACKET` | Adds `wake-engineer`, then strips `wake-sa`. GraphQL add retries. A failed add must not leave the PR unlabeled. | No |
 | Push brand-new `HOTFIX-NNN-*.md` (PR title: `Hotfix NNN — ...`) | Adds `wake-engineer` | No |
 | Push code plant (`src/` or `ENGINEER-HANDOFF.md`) | Strips seat labels, sets `green_light=true` | **Yes** (adds `previewing` lock and triggers preview) |
 | Push edits to existing docs/notes | None | No |

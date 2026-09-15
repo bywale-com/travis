@@ -134,9 +134,23 @@ jobs:
               echo "previewing on #$pr. No new seat ($lab)."
               return 0
             fi
+            # Add first, then strip the others. Strip-then-add left #194
+            # unlabeled when GitHub GraphQL died on --add-label (SCP-037).
+            added=""
+            for attempt in 1 2 3 4; do
+              gh pr edit "$pr" --remove-label "$lab" || true
+              if gh pr edit "$pr" --add-label "$lab"; then
+                added=1
+                break
+              fi
+              echo "add-label $lab failed (attempt ${attempt}). Retry."
+              sleep $((attempt * 4))
+            done
+            if [[ -z "$added" ]]; then
+              echo "Could not add $lab after retries. PAT needs Issues write AND Pull requests write, or GitHub GraphQL flaked."
+              return 1
+            fi
             strip_seats_except "$lab"
-            gh pr edit "$pr" --remove-label "$lab" || true
-            gh pr edit "$pr" --add-label "$lab"
           }
 
           # Blocker hold: this push lands BLOCKER-NNN-*.md (not *-RESOLVED).
@@ -218,8 +232,12 @@ jobs:
           fi
 
           if echo "$files" | grep -E '^docs/register/SYSTEMS-CHANGE-PACKET-.+\.md$'; then
-            add_seat wake-engineer
-            echo "Labeled #$pr wake-engineer"
+            if add_seat wake-engineer; then
+              echo "Labeled #$pr wake-engineer"
+            else
+              echo "SCP. Could not add wake-engineer. Leaving prior seat labels in place."
+              exit 1
+            fi
           fi
 
           for f in $(echo "$files" | grep -E '^docs/register/PM-LOOK-.+\.md$' || true); do

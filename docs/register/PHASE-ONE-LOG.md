@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-15 12:30 UTC — Split: 021 Look go; 022 Smarter loop hold. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-15 12:45 UTC — 021 hung after SCP-037: GraphQL failed `wake-engineer` after stripping `wake-sa`. Recut `add_seat`. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3874,3 +3874,17 @@ Same object: an agent **outside** the recut. Two entries: deployment reds vs fou
 **Lock.** [`PM-PACKET-021-LOOK.md`](./PM-PACKET-021-LOOK.md) is the lived-miss door (LK1 click path). **Wake:** sa. SA **037**. N-red escalate is [`PM-PACKET-022-SMARTER-LOOP.md`](./PM-PACKET-022-SMARTER-LOOP.md) on a sibling PR. **Wake:** hold.
 
 **I do not plant `src/`.**
+
+---
+
+## 2026-09-15 12:45 UTC — 021 hung: add_seat stripped then GraphQL-failed (Technical Architect)
+
+**Kind:** House gate. Flag 14:00 2026-08-25 stands. Not Look chrome.
+
+**Lived.** SA signed [`SYSTEMS-CHANGE-PACKET-037-LOOK.md`](./SYSTEMS-CHANGE-PACKET-037-LOOK.md) on [#194](https://github.com/bywale-com/travis/pull/194) (`816b735`). Wake packet seats saw the SCP, stripped `wake-sa`, then `gh pr edit --add-label wake-engineer` died: GitHub GraphQL `Something went wrong` `6C31:EAB1A:F4E8C8:338CEBB:6AA92420`. Job exit 1. PR unlabeled. Engineer never sat.
+
+**Recut.** `add_seat` adds the new seat (4 tries, backoff) **then** strips the others. Failed add leaves the prior seat. SCP path reports and exits 1 instead of echoing “Labeled” after a dead add.
+
+**Re-arm.** Fresh-add `wake-engineer` on #194 after this lands so Engineer plants 037.
+
+**I do not plant Look `src/`.**
