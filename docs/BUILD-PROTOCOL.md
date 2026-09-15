@@ -160,7 +160,7 @@ Locked verdicts:
 | Verdict | Meaning | What happens |
 |---------|---------|--------------|
 | **Pass** | Walked what you could; tape matches the lock; this deploy’s door check is already green | Emerge |
-| **Fail** | Plant or walk missed the lock | Label `fail-look` → Engineer, same PR |
+| **Fail** | Plant or walk missed the lock | Label `fail-look` → Engineer, same PR. **4th** current-head red → `outside-look` instead ([`WORK-ORDER-OUTSIDE.md`](./register/WORK-ORDER-OUTSIDE.md)). |
 | **No walk** | Could not send (SSO wall, no Type). Not a Pass | No emerge. No fail-look |
 
 “Pass for what this seat could do” after only reading `src/` or hitting a login wall is **not** Pass. Voice **like** stays human. Voice **doors** are the Deployment Check. Do not invent a tester product. Do not have Cursor triage Vercel instead of the check.
@@ -230,6 +230,7 @@ A seat is disposable. The log is not.
 | Seat READMEs | [`docs/seats/`](./seats/) |
 | House process files | [`docs/register/house-now/protocols/`](./register/house-now/protocols/) |
 | Wake / automations / emerge | [`docs/register/AUTOMATION-PACKET-CHAIN.md`](./register/AUTOMATION-PACKET-CHAIN.md) |
+| Outside look (Nth red / lived miss) | [`docs/register/WORK-ORDER-OUTSIDE.md`](./register/WORK-ORDER-OUTSIDE.md) · packet [`021`](./register/PM-PACKET-021-OUTSIDE-LOOP.md) |
 | PM packets | [`docs/register/PM-PACKETS.md`](./register/PM-PACKETS.md) |
 | Hotfixes | [`docs/register/HOTFIXES.md`](./register/HOTFIXES.md) |
 | Plates | [`docs/register/PLATE-CHROME-RULE.md`](./register/PLATE-CHROME-RULE.md) |

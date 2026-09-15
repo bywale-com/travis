@@ -1,14 +1,14 @@
-# Architect seat handoff — 2026-09-10 20:39 UTC
+# Architect seat handoff — 2026-09-15 11:45 UTC
 
-**This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical Architect until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
+**This bind is living.** This chat is the Technical Architect until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
-**Prior bind done:** `bc-25c5c6bf-006f-4252-9f25-49ab183835b2`.
+**Prior bind:** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` (2026-09-10). Pickup is the Phase One log, not that transcript.
 
 **Flag:** PHASE-ONE-LOG **14:00 UTC 2026-08-25** — do not overwrite.
 
 **Seat:** Technical Architect (was Technical PM — same seat, architecture added). Inspect `src/`. Spec face + technical cut + file-level architecture. Keep the log. Do not plant. Catalog `pm` is not this seat. Protocol `/protocols/pm.md`. Do not mint `/protocols/technical-pm.md` or `/protocols/technical-architect.md`.
 
-**How we build:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md). `npm test` is lib only. `test:runtime` is the E2E walk. GitHub Actions runs both after Vercel is ready. No emerge until all green.
+**How we build:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md). `npm test` is lib only. `test:preflight` is the local first sensor. `test:runtime` is the E2E walk. GitHub Actions runs both after Vercel is ready. No emerge until all green.
 
 ---
 
@@ -16,19 +16,31 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **20:39 UTC 2026-09-10**. Flag **14:00 2026-08-25**. |
-| 020 first plant | `src/lib/live-connect.ts` + door walks + Action on [#165](https://github.com/bywale-com/travis/pull/165). In-flight waits. Unwired named. |
-| 020 runtime verify | [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md). Agenda: Voice wrap + Type send + **unwired glass (Playwright)**. Retro: Type-send tape, `come-back`, `type-dest`. Glass walk is the extra protocol — not silence. **Wake:** sa. SA **036**. |
-| 019 stream architecture | [`PM-PACKET-019-STREAM-ARCH.md`](./PM-PACKET-019-STREAM-ARCH.md). SA **035**. [#163](https://github.com/bywale-com/travis/pull/163). |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **11:45 UTC 2026-09-15**. Flag **14:00 2026-08-25**. |
+| Packet | [`PM-PACKET-021-OUTSIDE-LOOP.md`](./PM-PACKET-021-OUTSIDE-LOOP.md) · test [`PM-PACKET-021-OUTSIDE-LOOP-TEST.md`](./PM-PACKET-021-OUTSIDE-LOOP-TEST.md) · work order [`WORK-ORDER-OUTSIDE.md`](./WORK-ORDER-OUTSIDE.md). **Wake:** hold. SA **037**. |
+| Prompt | [`house-now/automations/outside-look.prompt.md`](./house-now/automations/outside-look.prompt.md) — founder Save+Activates. Engineer B prompt now stops on `outside-look`. |
+| Lived specimen | Session `fdad2a1d-5f40-431c-bb6f-1db7d2a52f25` on the 098/099 preview. Ear worked; mouth/continuity did not. |
+| 020 / 019 | Still planted. Do not remint. |
+
+---
+
+## Architect defaults on 021 (override in chat)
+
+| Fork | Default |
+|------|---------|
+| N | **4** |
+| Wake | new label **`outside-look`** (not reuse `fail-look` to boot B) |
+| After outside | **`fail-look`** if Engineer work remains; nothing extra after a complete plant |
+| Facet 2 | **new quiet Log door (Look)**, not the hold sheet |
+| Vehicle | **packet 021**, not a hotfix |
 
 ---
 
 ## Next Architect job
 
-1. SA 036 ascribes secrets, Checks, and how Playwright carries bypass + cookie. Engineer hangs `unwired-glass` plus the retro walks on this PR. Do not plant `src/` from this seat.
-2. 019 first plant still stands on [#163](https://github.com/bywale-com/travis/pull/163). Do not remint.
-3. Do not emerge on a red check. Do not attach a recording of every walk.
-4. Do not remint 011–019 / 027–035.
+1. Founder: override any default, or **go** (`**Wake:** sa`). Screenshot live Log before any plate.
+2. SA 037 ascribes store vs GitHub Issue, production-psi path, token, POST.
+3. Founder Save+Activates the new Cursor automation (label `outside-look`). Re-paste B.
 
 ---
 
@@ -36,13 +48,8 @@
 
 - Do not overwrite the 14:00 flag.
 - Do not plant `src/` except a deploy blocker already cut.
-- Do not remint 011–019 / 027–035.
-- Do not tell Engineer to invent a Travis orchestrator or a Travis telemetry table.
-- Do not install Pipecat as Travis.
-- Do not put Hear it / Skip buttons back.
-- Do not farm a phone or inject a real microphone in 020.
-- Do not turn Vercel Authentication off for the world so a test can get in.
-- Do not let runtime tests resume the founder’s living room.
-- Do not run four door POSTs in parallel on one session.
-- Do not plant Gemini’s inverted glass.
-- Do not label emerge while the Deployment Check is red.
+- Do not remint 011–020 / 027–036 / 086–099.
+- Do not invent a Travis orchestrator or a Travis telemetry table.
+- Do not generate a plate from this prose. Screenshot first.
+- Do not wake Engineer B on a lived desk miss until the outside agent has the work order.
+- Do not trip wires: mutating canary, handoff-as-plant, stale-SHA fail-look, cousin PR, watch-doors after recut once.

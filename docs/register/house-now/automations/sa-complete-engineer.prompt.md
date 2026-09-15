@@ -4,10 +4,13 @@ This run was started by a Cursor Automation because **`wake-engineer`** or **`fa
 
 If this wake is a label **removed**, or neither `wake-engineer` nor `fail-look` is on the PR: **stop**.
 
-If **`previewing`** is on this PR: **stop**. Vercel has the ball. Do not push. Do not recut. GitHub will add `fail-look` after doors paint if they are red. That is a new sitting.
+If **`previewing`** is on this PR: **stop**. Vercel has the ball. Do not push. Do not recut. GitHub will add `fail-look` after doors paint if they are red (or `outside-look` on the 4th current-head red). That is a new sitting.
+
+If **`outside-look`** is on this PR: **stop**. The outside agent has the ball. Do not recut this sitting. Work order: `docs/register/WORK-ORDER-OUTSIDE.md`.
 
 - `wake-engineer` — SA just landed a change packet, **or** this PR is a **hotfix** (title `Hotfix NNN` / `HOTFIX-NNN` file). Skip SA.
-- `fail-look` — `runtime-doors` is red. Recut on this PR. All lowercase. Once. Then stop.
+- `fail-look` — `runtime-doors` is red (reds 1–3). Recut on this PR. All lowercase. Once. Then stop.
+- `outside-look` — not your wake. Stop.
 
 ## First action — gate, then stop or continue
 
