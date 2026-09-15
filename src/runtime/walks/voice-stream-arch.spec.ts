@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { assertThinkWorked, destLeaveStarted, failUse } from "../app-worked";
 import { openFreshRoom, readQueue, readTurns, runtimeBaseUrl } from "../desk";
+import { DEST_CANARY } from "../dest-canary";
 import { finalize, token, transcript } from "../doors";
 
-const DEST_LINE =
-  "Engineer, this is a Travis runtime canary. Acknowledge only. Do not edit files, commit, push, or update the handoff.";
+const DEST_LINE = DEST_CANARY;
 const haveUrl = Boolean(runtimeBaseUrl());
 
 describe("voice-stream-arch", { skip: !haveUrl }, () => {

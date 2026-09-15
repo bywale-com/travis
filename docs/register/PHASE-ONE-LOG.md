@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-15 13:40 UTC — #194 label job died on force-push ghost BEFORE; recut the diff guard and re-arm preview. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-15 21:10 UTC — Dest canary is acknowledge-only; WAV + type-dest match. Do not merge #196 notes cousin. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3926,3 +3926,15 @@ Same object: an agent **outside** the recut. Two entries: deployment reds vs fou
 **Recut.** Same file as the add_seat hang: if BEFORE is not in the clone, diff the tip commit only. Do not treat rewritten history as added hotfixes. Handoff touch re-arms plant-finished so this SHA can preview.
 
 **I do not remint Look chrome.** Do not merge 194 until doors paint.
+
+---
+
+## 2026-09-15 21:10 UTC — Dest canary: acknowledge-only (founder)
+
+**Kind:** House. Flag 14:00 2026-08-25 stands.
+
+**Founder (preserved):** clean that up first. We clean it up ourselves. Do not ask Engineer. Do not trip wires.
+
+**Lock.** Dest to the living Engineer stays. The line is acknowledge-only. WAV and type-dest match `DEST_CANARY`. Do not write notes into `ENGINEER-HANDOFF.md`. Do not merge [#196](https://github.com/bywale-com/travis/pull/196).
+
+**I do not wake Engineer.** I do not touch the handoff.

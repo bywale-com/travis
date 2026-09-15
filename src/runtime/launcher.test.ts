@@ -192,3 +192,18 @@ test("non-mutating Engineer canary fixture is checked in", () => {
   );
   assert.equal(existsSync(wav), true);
 });
+
+test("runtime dest canary is acknowledge-only — not notes on the handoff", () => {
+  const canary = read("src/runtime/dest-canary.ts");
+  assert.match(canary, /Acknowledge only/);
+  assert.doesNotMatch(canary, /put this on the notes/);
+  for (const rel of [
+    "src/runtime/walks/voice-stream-arch.spec.ts",
+    "src/runtime/walks/type-dest.spec.ts",
+    "src/runtime/browser/harness.ts",
+  ]) {
+    const src = read(rel);
+    assert.match(src, /DEST_CANARY/);
+    assert.doesNotMatch(src, /put this on the notes/);
+  }
+});
