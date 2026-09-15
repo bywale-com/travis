@@ -2,11 +2,10 @@
 
 **Number:** `022` — next packet is `023`. Never reuse. Index: [`PM-PACKETS.md`](./PM-PACKETS.md).  
 **Seat:** Technical Architect. **SA** ascribes as **038**.  
-**When:** Named 2026-09-15. Split from 021. Parked on `main` stateless 2026-09-15.  
-**Status:** Specified — **park**. No plant until founder go.  
-**Wake:** hold  
-**Stateless:** park  
-**Process:** [`STATELESS-PR.md`](./STATELESS-PR.md) — packet on `main`; automations stay off until **Wake:** sa.  
+**When:** Named 2026-09-15. Split from 021. Founder go 2026-09-15.  
+**Status:** Specified. Plant on this PR.  
+**Wake:** sa  
+**SCP:** [`SYSTEMS-CHANGE-PACKET-038-SMARTER-LOOP.md`](./SYSTEMS-CHANGE-PACKET-038-SMARTER-LOOP.md)  
 **Test spec:** [`PM-PACKET-022-SMARTER-LOOP-TEST.md`](./PM-PACKET-022-SMARTER-LOOP-TEST.md)  
 **Sibling:** Look [`PM-PACKET-021-LOOK.md`](./PM-PACKET-021-LOOK.md) on `main` ([#194](https://github.com/bywale-com/travis/pull/194)). File wakes **Engineer B**. Catalyst [`PM-PACKET-023-LOOK-CATALYST.md`](./PM-PACKET-023-LOOK-CATALYST.md) is a different pocket. This packet is the only **outside-agent** wake. Work order: [`WORK-ORDER-OUTSIDE.md`](./WORK-ORDER-OUTSIDE.md).  
 **Flag:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) **14:00 UTC 2026-08-25**.  
@@ -14,7 +13,7 @@
 **Meaning:** After **4** current-head `runtime-doors` reds, wake the **outside** agent on the **failing PR** instead of Engineer B. Look File is a different door.  
 **Do not remint:** 020 walks, 021 Look door, dest mail, stream-intent.
 
-**Where:** `main` (stateless park). Initiative plant lands on one open PR after go — do not open a cousin of 021. Do not plant until **Wake:** sa.
+**Where:** this PR. SA **038** + Engineer plant here. Do not open a cousin of 021.
 
 ---
 
@@ -111,6 +110,6 @@ N is not a Travis table. Do not mint telemetry. Do not isolate dest to a disposa
 
 ---
 
-## I do not plant
+## Engineer plant (038)
 
-No `src/`. No Action edit until **Wake:** sa.
+`.github/scripts/runtime-doors-red-label.sh` + `runtime-doors.yml` fresh-add step. Reds 1–3 → `fail-look`. 4th → `outside-look`. Founder Save+Activates `outside-look` automation separately.

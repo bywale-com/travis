@@ -1,10 +1,9 @@
 # Test spec — 022 Smarter loop
 
 **Packet:** [`PM-PACKET-022-SMARTER-LOOP.md`](./PM-PACKET-022-SMARTER-LOOP.md)  
-**Process:** [`STATELESS-PR.md`](./STATELESS-PR.md). **Park** on `main` until **Wake:** sa. Walk after plant — not while park.
+**SCP:** [`SYSTEMS-CHANGE-PACKET-038-SMARTER-LOOP.md`](./SYSTEMS-CHANGE-PACKET-038-SMARTER-LOOP.md). Walk after plant.
 
-**Pass (after go)** = (1) reds 1–3 still `fail-look`; (2) 4th current-head idle red adds `outside-look` not `fail-look`; (3) stale SHA still skipped; (4) Live still in both sensors.  
-**Miss while park:** `src/` or `ENGINEER-HANDOFF.md` on a get-go PR before Wake sa.  
+**Pass** = (1) reds 1–3 still `fail-look`; (2) 4th current-head idle red adds `outside-look` not `fail-look`; (3) stale SHA still skipped; (4) Live still in both sensors.  
 **Look door regressions are 021, not this sheet.**
 
 ---
