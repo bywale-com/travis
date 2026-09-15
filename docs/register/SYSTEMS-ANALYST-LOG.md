@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-15 11:20 UTC — **SCP-037 signed.** Look File persists on GitHub (Issue + PR comment); wake is `outside-look` as `WAKE_GITHUB_TOKEN`. No `travis.look`. No tape row. Walk Files do not label. Production psi mints a draft `look/{issue}` PR. PM-021 on [#194](https://github.com/bywale-com/travis/pull/194). Next number is **038**. 036 stays the unsigned 020 hole — do not reuse.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-15 12:16 UTC — **SCP-037 recut (who-wakes).** Look File still persists on GitHub (Issue + PR comment); wake is **`wake-engineer`**, never `outside-look`. Token stays `WAKE_GITHUB_TOKEN`. Delayed arm from unarmed `<!-- travis-look -->`. Production psi still mints a draft `look/{issue}` PR. `outside-look` hold name may stay (022). No `travis.look`. PM-021 recut on [#194](https://github.com/bywale-com/travis/pull/194). Next number is **038**. Do not steal 038. 036 stays the unsigned 020 hole — do not reuse.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -889,4 +889,40 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-037-LOOK.md`](./SYSTEMS-CHANGE-PACKET-037-LOOK.md)
 
 **Handoff:** Engineer plants **037** on **this same PR**. Next packet number is **038**. Do not remint 023–035. Do not remint dest mail. Do not reuse 036. Do not mint a cousin.
+
+---
+
+## 2026-09-15 12:16 UTC — SCP-037 recut (who-wakes) (PM-021 recut on #194)
+
+**Kind:** Packet recut. Automation woke this seat. PM-021 recut on this PR: File wakes Engineer B, not the outside agent. **037** stays the number. Do not steal **038** (022). Chrome + `POST /look` + GitHub seed from the first plant stand — not reminted.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-021 recut lock). Not Architect. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):**
+
+> I don't think these kinds of issues spin up our external… outside look agent… I think it just spins up the regular engineer… The workflow that triggers the external agent… is after… that's what is in PR 22.
+
+**Staples (not scenery):** **Look** · **File** · **Close**. Dest-to-Engineer canary stays. Live stays in both sensors.
+
+**Quoted stood-up (this PR, after first plant):**
+
+- Log header **Look** when `viewMode === "log"` (`Room.tsx` L2679–2693). `LookMissDoor` `id="look-miss"` portal sheet, File → `POST /look`.
+- `fileLookOnGithub` still fresh-adds **`outside-look`** and strips `wake-engineer` (`look-github.ts` L11–16, L170–180). That is the miss.
+- Delayed arm in `runtime-doors.yml` L99–156 and `preview-when-clear.sh` L15–27 still adds `outside-look`.
+- Hold lists already include `outside-look` (`runtime-doors.yml` L204 · `preview-when-clear.sh` L29 · `wake-packet-seats.yml` L126–141). Keep the name for 022. File must not add it.
+- Token stays `WAKE_GITHUB_TOKEN` (`look-github.ts` L36–38). Walk dry-run stands.
+- Engineer B prompt already skips the file gate on `<!-- travis-look -->` (`sa-complete-engineer.prompt.md` L36–40). Founder re-pastes. Do not recut the prompt this sitting.
+
+**Ascribed:**
+
+1. **No mint** of `travis.look`. No remint of Look chrome, grain, or HTTP status table.
+2. **File wake** = fresh-add **`wake-engineer`**. Never add / create / strip `outside-look` from the door or delayed arm.
+3. **Token** stands. Walk Files still do not label. Production-psi still mints `look/{issue}` draft PR.
+4. **Delayed arm** after `previewing` / `blocker` clears: `wake-engineer` from an unarmed `<!-- travis-look -->` comment. PATCH `<!-- travis-look-armed -->` so green-light does not re-wake. Strip `fail-look` / `wake-sa` / `wake-pm-look` so B’s fail-look gate does not steal the seed.
+5. **`outside-look` hold name stays** (022). Engineer B still stops while it is on. Do not Save+Activate that automation for Look.
+6. Runtime walk still asserts HTTP 2xx + no initiative — **not** the GitHub label.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-037-LOOK.md`](./SYSTEMS-CHANGE-PACKET-037-LOOK.md) (recut in place).
+
+**Handoff:** Engineer plants the **037 recut** on **this same PR**. Next packet number is **038**. Do not steal 038. Do not remint chrome. Do not plant 022. Do not mint a cousin.
 
