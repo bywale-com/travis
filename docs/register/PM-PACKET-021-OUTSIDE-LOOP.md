@@ -6,6 +6,7 @@
 **Status:** Specified. Architect defaults below; founder can override N / label names in chat.  
 **Wake:** hold
 **Test spec:** [`PM-PACKET-021-OUTSIDE-LOOP-TEST.md`](./PM-PACKET-021-OUTSIDE-LOOP-TEST.md)  
+**FACE (facet 2):** [`PLATES-LOOK.md`](./PLATES-LOOK.md) LK1–LK2. Lock photos `travis-lk0-psi-*`. Do not mint from old L/C/D Log plates.  
 **Work order:** [`WORK-ORDER-OUTSIDE.md`](./WORK-ORDER-OUTSIDE.md)  
 **Prompt (founder Save+Activates):** [`house-now/automations/outside-look.prompt.md`](./house-now/automations/outside-look.prompt.md)  
 **Flag:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) **14:00 UTC 2026-08-25**.  
@@ -153,17 +154,24 @@ const DEST_LINE = "Engineer, put this on the notes: stream-arch cue.";
 
 Parametric: one job per surface — this is a **second** job on Log, so it lives **behind a door**. Quiet until invited (text/icon, not a new section bar). One loud action in the sheet: **File**. No extra borders on every thread row. Do not add a fifth hold-sheet row next to Initiative.
 
-**Chrome (lock live Log first — screenshot `travis-psi` before any plate).** Session header already has Backlog · Requests · Leave (`session-header`). Thread is `thread`. Hold sheet is Copy · Reply · Open in log · Initiative.
+**Chrome (locked from psi 2026-09-15).** [`plates/travis-lk0-psi-log-chrome.png`](./plates/travis-lk0-psi-log-chrome.png) · overlay family [`plates/travis-lk0-psi-requests-overlay.png`](./plates/travis-lk0-psi-requests-overlay.png). Session header: artifacts · room pill · via Travis · Backlog · Requests · Leave. Talk\|Type. Overlapping marks. ← Back to voice. Listening / Pause. Hold sheet stays Copy · Reply · Open in log · Initiative.
 
-Cut:
+Cut (plates **LK1** · **LK2**):
 
-- Quiet control visible on **Log** only (header cluster, same weight as Requests — not accent). Label **Look** (or SA’s glass string if they pick a quieter word). Not on Voice-only chrome. Not on every turn.
-- Opens a portal sheet (same overlay family as hold / Request log: portal + fixed; do not absolute-position under `overflow: hidden`).
-- Sheet body: short note field; a list of this room’s recent turns with quiet selected state (hairline / wash / weight — not accent rings on every row). Default selection: the last user turn plus the following assistant turns in that beat, or empty with the note still required. Founder can toggle.
-- One loud action: **File**. Dismiss / cancel is quiet.
-- After File: sheet closes. No success toast stack. A single muted receipt on the tape is enough if SA ascribes a turn; **do not** invent a turn kind. GitHub taking the label is the wake.
+- Quiet **Look** on **Log** only, header cluster, same weight as Requests — not accent. Not on Voice-only chrome. Not on every turn.
+- Portal sheet (Requests family: portal + fixed). Note field. Recent turns with quiet selected wash — not accent rings. Default: last user turn plus following assistant turns in that beat, or empty with the note still required.
+- One loud action: **File**. Close is quiet.
+- After File: sheet closes. No toast stack. Tape receipt only if SA ascribes a turn. GitHub taking the label is the wake.
 
-Do not generate a plate from this prose. Screenshot first. Paint only this hole.
+### Five buckets (LK1 + LK2)
+
+| Bucket | What |
+|--------|------|
+| **1. Copy** | Look in the Log header cluster. Sheet: note, select turns, File. Wakes the outside agent. Not Initiative. Not Requests. |
+| **2. Do not build** | Specimen phrases on the PNG. Stray punctuation. “this room” as required copy. Listening/Pause peeking under a short sheet. Lock-photo empty tape. Bezel / wordmark / End session from old Log plates. |
+| **3. Implied** | Look opens the sheet. Close dismisses. File needs a note or a selection. Selected wash toggles. Overlay is portaled. Talk\|Type still the Log. |
+| **4. Completes** | Empty note + empty selection is a miss (400). Voice has no Look. After File the sheet is gone. Production-psi targeting (SA 037). |
+| **5. Out** | Facet 1 N-count / `outside-look` Action. Hold → Initiative. Requests search + All/Today/Week. Dest Engineer. Mint `travis.look`. 098 Live. |
 
 ### Technical cut (hole for SA)
 

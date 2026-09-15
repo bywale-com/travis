@@ -71,7 +71,7 @@ Open the Engineer handoff on this PR. It must name: `outside-look` label, N = 4,
 
 **Do:** Open Log on the preview (phone width). Do not open Look.
 
-**Expect:** Thread is the job. No always-on checkbox grid. No new bordered section competing with the tape. **Look** is a quiet header control, same family as Requests, not accent.
+**Expect:** Thread is the job. No always-on checkbox grid. No new bordered section competing with the tape. **Look** is a quiet header control, same family as Requests, not accent. Glass: [`PLATES-LOOK.md`](./PLATES-LOOK.md) **LK1**.
 
 **I saw:**
 
@@ -81,7 +81,7 @@ Open the Engineer handoff on this PR. It must name: `outside-look` label, N = 4,
 
 **Do:** Log · Look. Select one or two turns. Type `Mouth never came back after Hey Travis.` File.
 
-**Expect:** Sheet closes. **No** new backlog initiative. Hold sheet still says Initiative hands a ticket to Travis. GitHub path SA named received the seed (Issue/PR body has session id + turns + note). `outside-look` on the targeted PR (or the production path SA ascribed).
+**Expect:** Sheet matches **LK2** (note + wash-selected turns + text **File**, not a fifth hold verb). Sheet closes. **No** new backlog initiative. GitHub path SA named received the seed. `outside-look` on the targeted PR (or the production path SA ascribed).
 
 **I saw:**
 
