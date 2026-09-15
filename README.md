@@ -7,6 +7,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-15** · Blocker 004 · this PR — Look walk 503 on Preview because `WAKE_GITHUB_TOKEN` and `TRAVIS_TEST_OPERATOR_COOKIE` are unset on Vercel, because File is wired in `src/` and founder ops must paste those two secrets.
+
 - **2026-09-15** · Packet 021 / SCP-037 · this PR — Quiet **Look** on Log files a lived miss to GitHub (`POST /look`, `outside-look`), because doors never saw the founder-discovered pipe miss and File must not dest, Hold, or mint `travis.look`.
 
 - **2026-09-15** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Dest Cursor miss stamps dest seat (`Dest error:`) and think-walks ignore dest-seat status, because voice-stream-arch dest’d then wrap died on unseated `status/- error`.
