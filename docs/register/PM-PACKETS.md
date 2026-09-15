@@ -36,7 +36,7 @@ Draft is not the hold. “Then SA” in a sentence is not the hold.
 | 018 | [`PM-PACKET-018-WHAT-EXISTS.md`](./PM-PACKET-018-WHAT-EXISTS.md) · test [`PM-PACKET-018-WHAT-EXISTS-TEST.md`](./PM-PACKET-018-WHAT-EXISTS-TEST.md) | What exists for the life loop. SA **034**. [#161](https://github.com/bywale-com/travis/pull/161). |
 | 019 | [`PM-PACKET-019-STREAM-ARCH.md`](./PM-PACKET-019-STREAM-ARCH.md) · test [`PM-PACKET-019-STREAM-ARCH-TEST.md`](./PM-PACKET-019-STREAM-ARCH-TEST.md) | Stream architecture + seat is Technical Architect. SA **035**. [#163](https://github.com/bywale-com/travis/pull/163). |
 | 020 | [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md) · test [`PM-PACKET-020-RUNTIME-VERIFY-TEST.md`](./PM-PACKET-020-RUNTIME-VERIFY-TEST.md) | Runtime verification. Engineer owns the loop. SA **036**. [#165](https://github.com/bywale-com/travis/pull/165) merged. |
-| 021 | Look (lived miss from Log) — sibling [#194](https://github.com/bywale-com/travis/pull/194). Not this PR. |
+| 021 | Look (lived miss from Log → Engineer B) — sibling [#194](https://github.com/bywale-com/travis/pull/194). Not this PR. |
 | 022 | [`PM-PACKET-022-SMARTER-LOOP.md`](./PM-PACKET-022-SMARTER-LOOP.md) · test [`PM-PACKET-022-SMARTER-LOOP-TEST.md`](./PM-PACKET-022-SMARTER-LOOP-TEST.md) | Smarter loop: N=4 runtime-doors reds escalate. **Wake:** hold. SA **038**. |
 
 Next packet number follows the last cut. Do not reuse.

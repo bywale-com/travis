@@ -6,10 +6,10 @@
 **Status:** Specified. **Held.**  
 **Wake:** hold
 **Test spec:** [`PM-PACKET-022-SMARTER-LOOP-TEST.md`](./PM-PACKET-022-SMARTER-LOOP-TEST.md)  
-**Sibling (go):** Look is [`PM-PACKET-021-LOOK.md`](./PM-PACKET-021-LOOK.md) on [#194](https://github.com/bywale-com/travis/pull/194). Work order and `outside-look` prompt land there.  
+**Sibling (go):** Look is [`PM-PACKET-021-LOOK.md`](./PM-PACKET-021-LOOK.md) on [#194](https://github.com/bywale-com/travis/pull/194). File wakes **Engineer B**. This packet is the only outside-agent wake. Work order: [`WORK-ORDER-OUTSIDE.md`](./WORK-ORDER-OUTSIDE.md) (lands with 021; canon for this agent).  
 **Flag:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) **14:00 UTC 2026-08-25**.  
 **Law:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md).  
-**Meaning:** After **4** current-head `runtime-doors` reds, wake the **outside** agent on the **failing PR** instead of Engineer B. Same agent Look already files.  
+**Meaning:** After **4** current-head `runtime-doors` reds, wake the **outside** agent on the **failing PR** instead of Engineer B. Look File is a different door.  
 **Do not remint:** 020 walks, 021 Look door, dest mail, stream-intent.
 
 **Where:** this PR. Do not open a cousin of 021. Do not plant until **Wake:** sa.
@@ -22,9 +22,9 @@
 >
 > So this is pretty simple, it’s really just architecture and me setting up the right automation, and also… deciding on what tools we give this external agent that breaks the loop. So maybe around like 3 or 4 runtime failures. This will spin up and… diagnose, like, do exactly what you did. And maybe fix it. So go all the way to merging and then merging into the existing PR that’s failing so that… attaching a label like fail-look or something to trigger the engineer…
 
-> Let's separate the two initiatives into 2 prs. hold on the second initiative - Smarter loop.
+> I don't think these kinds of issues spin up our external… outside look agent… I think it just spins up the regular engineer… The workflow that triggers the external agent… is after… that's what is in PR 22.
 
-Work order without tripping wires: [`WORK-ORDER-OUTSIDE.md`](./WORK-ORDER-OUTSIDE.md) (021). Dest-to-Engineer stays; change the canary **line**. Leave handoff-as-plant. Keep Live in both sensors.
+Work order without tripping wires: [`WORK-ORDER-OUTSIDE.md`](./WORK-ORDER-OUTSIDE.md). Dest-to-Engineer stays; change the canary **line**. Leave handoff-as-plant. Keep Live in both sensors.
 
 ---
 
@@ -32,7 +32,7 @@ Work order without tripping wires: [`WORK-ORDER-OUTSIDE.md`](./WORK-ORDER-OUTSID
 
 Type A — who owns the recut after N reds.
 
-Count this PR’s current-head `runtime-doors` reds. At **N = 4**, add `outside-look` **instead of** `fail-look`. That agent already exists for 021 Look. Diagnose, specify, maybe plant **without tripping wires**, on the failing branch. If Engineer work remains, **then** `fail-look`.
+Count this PR’s current-head `runtime-doors` reds. At **N = 4**, add `outside-look` **instead of** `fail-look`. That is the only wake of the outside agent. Diagnose, specify, maybe plant **without tripping wires**, on the failing branch. If Engineer work remains, **then** `fail-look`.
 
 It is **not** the Look door. It is **not** a cousin PR. It is **not** a telemetry table.
 
@@ -43,7 +43,7 @@ It is **not** the Look door. It is **not** a cousin PR. It is **not** a telemetr
 | Fork | Default |
 |------|---------|
 | **N** | **4** |
-| **Wake** | **`outside-look`** (already 021’s label — do not reuse `fail-look` to boot B) |
+| **Wake** | **`outside-look`** (this packet’s label — do not reuse `fail-look` to boot B; do not use Look File) |
 | **After outside** | **`fail-look`** if plant incomplete; nothing extra after a complete plant |
 
 ---

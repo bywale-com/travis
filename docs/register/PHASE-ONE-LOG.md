@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-15 12:32 UTC — Packet 022 Smarter loop specified, **Wake hold**. 021 Look is #194. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-15 13:16 UTC — 022 still hold. Outside agent is this packet only; Look File is Engineer. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3765,6 +3765,18 @@ Not the model. Not a new face.
 **Founder:** two PRs. Hold Smarter loop. Look is the go (#194, packet 021).
 
 **This PR.** [`PM-PACKET-022-SMARTER-LOOP.md`](./PM-PACKET-022-SMARTER-LOOP.md) — N=4 current-head `runtime-doors` reds add `outside-look` instead of `fail-look`. Same agent as Look. Work order lives on 021. SA **038** when go.
+
+**I do not plant `src/`.**
+
+---
+
+## 2026-09-15 13:16 UTC — 022 is the only outside wake (founder)
+
+**Kind:** Packet recut. Flag 14:00 2026-08-25 stands. **Wake:** hold.
+
+**Founder:** Look File sits the regular Engineer. The external agent is this packet — after N cycles inside the loop.
+
+**This PR.** Recut [`PM-PACKET-022-SMARTER-LOOP.md`](./PM-PACKET-022-SMARTER-LOOP.md): `outside-look` is not 021’s label. Look is #194.
 
 **I do not plant `src/`.**
 
