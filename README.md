@@ -11,45 +11,45 @@ Newest first. On completion of a packet or hotfix the Engineer **prepends** one 
 
 - **2026-09-15** · Blocker 004 · this PR — Look walk 503 on Preview because `WAKE_GITHUB_TOKEN` and `TRAVIS_TEST_OPERATOR_COOKIE` are unset on Vercel, because File is wired in `src/` and founder ops must paste those two secrets.
 
-- **2026-09-15** · Packet 021 / SCP-037 · this PR — Quiet **Look** on Log files a lived miss to GitHub (`POST /look`, `outside-look`), because doors never saw the founder-discovered pipe miss and File must not dest, Hold, or mint `travis.look`.
+- **2026-09-15** · Packet 021 / SCP-037 · this PR — Quiet **Look** on Log files a lived miss to GitHub (`POST /look`), because doors never saw the founder-discovered pipe miss and File must not dest, Hold, or mint `travis.look`. Who-wakes recut: **`wake-engineer`**, never `outside-look`.
 
 - **2026-09-15** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Dest Cursor miss stamps dest seat (`Dest error:`) and think-walks ignore dest-seat status, because voice-stream-arch dest’d then wrap died on unseated `status/- error`.
 
-- **2026-09-14** · Hotfix 098 fail-look · this PR — Dest leave on Live keeps the WebRTC ear (SSE does not stop Live; Live up/connecting still owns the mic if dest leave flips the chip), because voice-live dest’d then armed SpeechRecognition (`both ears`).
+- **2026-09-14** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Dest leave on Live keeps the WebRTC ear (SSE does not stop Live; Live up/connecting still owns the mic if dest leave flips the chip), because voice-live dest’d then armed SpeechRecognition (`both ears`).
 
-- **2026-09-14** · Hotfix 098 fail-look · this PR — Live late-arms the real mic after session.update (no silent hold, unconstrained `getUserMedia`, unmute then `replaceTrack`), because voice-live showed Talking then dest miss `tx=[]` / empty tape.
+- **2026-09-14** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Live late-arms the real mic after session.update (no silent hold, unconstrained `getUserMedia`, unmute then `replaceTrack`), because voice-live showed Talking then dest miss `tx=[]` / empty tape.
 
-- **2026-09-14** · Hotfix 098 fail-look · this PR — Live SDP answer keeps a trailing CRLF (`realtimeSdpAnswer`), because voice-live died on Chromium `a=ice-pwd` Invalid SDP line after `trim()` ate the last newline.
+- **2026-09-14** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Live SDP answer keeps a trailing CRLF (`realtimeSdpAnswer`), because voice-live died on Chromium `a=ice-pwd` Invalid SDP line after `trim()` ate the last newline.
 
-- **2026-09-14** · Hotfix 098 fail-look · this PR — Live SDP posts to OpenAI with `node:https` and Content-Length, because Next.js fetch on Vercel delivered an empty body and voice-live died on unmarshal SDP EOF before dest leave.
+- **2026-09-14** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Live SDP posts to OpenAI with `node:https` and Content-Length, because Next.js fetch on Vercel delivered an empty body and voice-live died on unmarshal SDP EOF before dest leave.
 
-- **2026-09-14** · Hotfix 098 fail-look · this PR — Live SDP multipart `sdp` is a text field, because voice-live got `field "sdp" is required but not found` from a File part and Live dropped before dest leave.
+- **2026-09-14** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Live SDP multipart `sdp` is a text field, because voice-live got `field "sdp" is required but not found` from a File part and Live dropped before dest leave.
 
-- **2026-09-14** · Hotfix 098 fail-look · this PR — Live SDP to OpenAI is GA multipart `sdp`, because voice-live got `invalid_offer` / unmarshal SDP EOF from a raw string body and Live dropped before dest leave.
+- **2026-09-14** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Live SDP to OpenAI is GA multipart `sdp`, because voice-live got `invalid_offer` / unmarshal SDP EOF from a raw string body and Live dropped before dest leave.
 
-- **2026-09-14** · Hotfix 098 fail-look · this PR — Live SDP exchanges through Travis and the real mic waits on a silent hold track, because voice-live showed Talking then `Travis Live is down` / `Failed to fetch` and dest never started.
+- **2026-09-14** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Live SDP exchanges through Travis and the real mic waits on a silent hold track, because voice-live showed Talking then `Travis Live is down` / `Failed to fetch` and dest never started.
 
-- **2026-09-14** · Hotfix 098 fail-look · this PR — Live error cleanup typechecks, because Vercel `next build` died on `mic.getTracks` as `never` and the preview never came up.
+- **2026-09-14** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Live error cleanup typechecks, because Vercel `next build` died on `mic.getTracks` as `never` and the preview never came up.
 
 - **2026-09-13** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Live opens the mic after the Realtime peer can receive, because voice-live dest played in the first 4s of the fixture during ICE and the tape stayed empty.
 
-- **2026-09-13** · Hotfix 098 fail-look · this PR — Voice enter writes listening on the presence ref before armEar, because voice-live never saw Talking with Travis… while first enter still thought the room had ended.
+- **2026-09-13** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Voice enter writes listening on the presence ref before armEar, because voice-live never saw Talking with Travis… while first enter still thought the room had ended.
 
-- **2026-09-13** · Hotfix 098 fail-look · this PR — Type dest leave stays on the tape when Cursor send misses, and dest_job is not marked failed, because type-dest saw `user/engineer` then an empty queue after Travis wrap.
+- **2026-09-13** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Type dest leave stays on the tape when Cursor send misses, and dest_job is not marked failed, because type-dest saw `user/engineer` then an empty queue after Travis wrap.
 
-- **2026-09-13** · Hotfix 098 fail-look · this PR — Talk waits for the Talk/Pause door and drops a Live handle that finishes after leaving Voice, because talk-mode matched Voice “Listening…” and the SpeechRecognition double never started.
+- **2026-09-13** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Talk waits for the Talk/Pause door and drops a Live handle that finishes after leaving Voice, because talk-mode matched Voice “Listening…” and the SpeechRecognition double never started.
 
-- **2026-09-13** · Hotfix 098 fail-look · this PR — Browser launch seeds `travis-character` and walks Continue on the Mode door, because type-mode hit “Pick a character” and reported `door=none` after HTTP walks were green.
+- **2026-09-13** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Browser launch seeds `travis-character` and walks Continue on the Mode door, because type-mode hit “Pick a character” and reported `door=none` after HTTP walks were green.
 
-- **2026-09-13** · Hotfix 099 fail-look · this PR — Browser suites spawn one spec at a time and exit on the first miss, because Node 22 rejects `--test-fail-fast` and doors died before Type/Talk/Voice ran.
+- **2026-09-13** · Hotfix 099 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Browser suites spawn one spec at a time and exit on the first miss, because Node 22 rejects `--test-fail-fast` and doors died before Type/Talk/Voice ran.
 
-- **2026-09-13** · Hotfix 099 · this PR — Browser launch closes Chromium on a face miss, the runner fail-fasts, and cancelled doors paint red + fail-look, because a leaked Talk wait sat until the job cap and painted false green.
+- **2026-09-13** · Hotfix 099 · [#190](https://github.com/bywale-com/travis/pull/190) — Browser launch closes Chromium on a face miss, the runner fail-fasts, and cancelled doors paint red + fail-look, because a leaked Talk wait sat until the job cap and painted false green.
 
-- **2026-09-13** · Hotfix 098 fail-look · this PR — Runtime locates Playwright’s CLI via the exported `package.json` sibling `cli.js`, because `require.resolve("playwright/cli.js")` is not an exports subpath and doors died before any walk.
+- **2026-09-13** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Runtime locates Playwright’s CLI via the exported `package.json` sibling `cli.js`, because `require.resolve("playwright/cli.js")` is not an exports subpath and doors died before any walk.
 
-- **2026-09-13** · Hotfix 098 fail-look · this PR — Runtime runner boots from `async function main` instead of a top-level `await`, because `tsx` CJS died on doors before any walk could start.
+- **2026-09-13** · Hotfix 098 fail-look · [#190](https://github.com/bywale-com/travis/pull/190) — Runtime runner boots from `async function main` instead of a top-level `await`, because `tsx` CJS died on doors before any walk could start.
 
-- **2026-09-13** · Hotfix 098 · this PR — Browser-real Type/Talk/Voice walks and exclusive Live ear while connecting, because endpoint walks could not see Voice looking live while Talk barged the mic.
+- **2026-09-13** · Hotfix 098 · [#190](https://github.com/bywale-com/travis/pull/190) — Browser-real Type/Talk/Voice walks and exclusive Live ear while connecting, because endpoint walks could not see Voice looking live while Talk barged the mic.
 
 - **2026-09-13** · Hotfix 097 · this PR — Direct `bind_agent` maps a `bc-` id to a seat (including architect) without a sit prompt, because an existing Cursor chat is already configured and dest should route to that open member.
 

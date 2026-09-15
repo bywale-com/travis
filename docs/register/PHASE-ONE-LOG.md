@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-15 13:15 UTC — 021 recut: Look File wakes Engineer B, not the outside agent. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-15 13:30 UTC — #190 merged; #194 rebased onto that main. Do not merge 194 until doors paint. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3900,5 +3900,17 @@ Same object: an agent **outside** the recut. Two entries: deployment reds vs fou
 **Lock.** File → GitHub seed → **`wake-engineer`**. Not `outside-look`. Not `fail-look`. Outside agent stays **022** (held). Engineer B prompt: `<!-- travis-look -->` skips the file gate; `fail-look` still wins if both are on.
 
 **Landed.** Recut [`PM-PACKET-021-LOOK.md`](./PM-PACKET-021-LOOK.md) · test · house chain · Engineer B prompt · work order is 022-only. SA recuts **037**.
+
+**I do not plant `src/`.** Founder re-pastes Engineer B. Do not Save+Activate `outside-look` for Look.
+
+---
+
+## 2026-09-15 13:30 UTC — #190 merged; #194 rebased (founder)
+
+**Kind:** House. Flag 14:00 2026-08-25 stands. Not a plant.
+
+**Founder (preserved):** Yeah sure merge.
+
+**Lock.** [#190](https://github.com/bywale-com/travis/pull/190) (098 + 099) is on `main` (`c89c100`, 12:25 UTC). [#194](https://github.com/bywale-com/travis/pull/194) rebased onto that tip. Plant still File → **`wake-engineer`**. Do not merge 194 until doors paint on the new base. [#195](https://github.com/bywale-com/travis/pull/195) (022) stays **Wake:** hold.
 
 **I do not plant `src/`.** Founder re-pastes Engineer B. Do not Save+Activate `outside-look` for Look.
