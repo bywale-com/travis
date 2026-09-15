@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-11 14:40 UTC — Hotfix 086 PM look Pass; runtime-doors correctly red on preview (generate miss), not false green. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-15 12:32 UTC — Packet 022 Smarter loop specified, **Wake hold**. 021 Look is #194. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3755,3 +3755,16 @@ Not the model. Not a new face.
 **Test.** `npm test` 472/472. `runtime-doors` CI 0/5 on preview — correct failure, not false green. Fail-look step planted; live on merge. [`PM-LOOK-HOTFIX-086.md`](./PM-LOOK-HOTFIX-086.md) **Verdict: Pass**. No `fail-look`.
 
 **Emerged.** Human may walk [`HOTFIX-086-RUNTIME-IS-THE-APP-TEST.md`](./HOTFIX-086-RUNTIME-IS-THE-APP-TEST.md) on preview after SSO.
+
+---
+
+## 2026-09-15 12:32 UTC — Packet 022 Smarter loop held (Technical Architect)
+
+**Kind:** Packet. Flag 14:00 2026-08-25 stands. Not a plant. **Wake:** hold.
+
+**Founder:** two PRs. Hold Smarter loop. Look is the go (#194, packet 021).
+
+**This PR.** [`PM-PACKET-022-SMARTER-LOOP.md`](./PM-PACKET-022-SMARTER-LOOP.md) — N=4 current-head `runtime-doors` reds add `outside-look` instead of `fail-look`. Same agent as Look. Work order lives on 021. SA **038** when go.
+
+**I do not plant `src/`.**
+
