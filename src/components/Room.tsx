@@ -15,15 +15,24 @@ import { applyReadbackVoice } from "@/lib/speak-voice";
 import { isPinnedToBottom } from "@/lib/thread-scroll";
 import { parseCallByName, parseDeadManResponse, seatKeyToShort } from "@/lib/router";
 import {
+  LIVE_RECONNECTING_LINE,
+  liveCloseAction,
+  liveOwnsMic,
   modeSwitchEarAction,
+  acceptFinishedLive,
+  presenceBlocksListen,
+  sttAlreadySatisfies,
+  sttMayStart,
   sttOnEndAction,
   sttShouldKeepWaiting,
+  wantedEar,
+  watchdogShouldStartStt,
   whichEar,
-  sttAlreadySatisfies,
   STT_ONEND_RETRY_MS,
   type EarState,
 } from "@/lib/ear";
 import {
+  LIVE_DOWN_SHIRT,
   decideLiveConnect,
   liveMissSubtitle,
   waitForLiveConnect,
@@ -281,10 +290,6 @@ function waitForSpeechIdle(timeoutMs = 8000): Promise<void> {
     };
     tick();
   });
-}
-
-function presenceBlocksListen(presence: Presence): boolean {
-  return presence === "ended" || presence === "paused";
 }
 
 function QuietTextButton({
@@ -677,9 +682,18 @@ export function Room({
   );
 
   const liveConnectingRef = useRef(false);
+  const liveCloseTriedRef = useRef(false);
   const lastConnectMissRef = useRef<LiveConnectMiss | null>(null);
   const armEarGenRef = useRef(0);
   const armEarRef = useRef<() => Promise<void>>(async () => {});
+
+  const readEar = (): EarState => ({
+    viewMode: viewModeRef.current,
+    logSubmode: logSubmodeRef.current,
+    destTravis: isTravisSeat(sessionRef.current?.activeSeatKey),
+    liveUp: Boolean(liveRef.current),
+    liveConnecting: liveConnectingRef.current,
+  });
 
   const stopLive = useCallback(async () => {
     const handle = liveRef.current;
@@ -1044,6 +1058,7 @@ export function Room({
       }
       liveConnectingRef.current = true;
       lastConnectMissRef.current = null;
+      liveCloseTriedRef.current = false;
       setSubtitle("Talking with Travis…");
       let sawUnwired = false;
       try {
@@ -1063,7 +1078,6 @@ export function Room({
             void refreshTurns(sid);
           },
           onSeatStream: (res) => {
-            void stopLive();
             void consumeAgentStream(sid, res);
             void refreshSession(sid);
           },
@@ -1071,18 +1085,32 @@ export function Room({
           getReferenceTurnId: () => pendingRefTurnRef.current,
           onClose: () => {
             liveRef.current = null;
-            if (
-              listeningWantedRef.current &&
-              viewModeRef.current === "voice" &&
-              isTravisSeat(sessionRef.current?.activeSeatKey)
-            ) {
-              startRecognitionRef.current();
+            const destTravis = isTravisSeat(sessionRef.current?.activeSeatKey);
+            const action = liveCloseAction({
+              viewMode: viewModeRef.current,
+              destTravis,
+              listeningWanted: listeningWantedRef.current,
+            });
+            if (action === "reconnect" && !liveCloseTriedRef.current) {
+              liveCloseTriedRef.current = true;
+              const sid = sessionIdRef.current;
+              setSubtitle(LIVE_RECONNECTING_LINE);
+              if (sid) void connectLive(sid);
+              return;
+            }
+            if (viewModeRef.current === "voice" && destTravis) {
+              setSubtitle(LIVE_DOWN_SHIRT);
             }
           },
         });
         if (!handle) {
           liveRef.current = null;
           lastConnectMissRef.current = sawUnwired ? "unwired" : "miss";
+          return false;
+        }
+        if (!acceptFinishedLive(readEar())) {
+          await handle.stop();
+          liveRef.current = null;
           return false;
         }
         liveRef.current = handle;
@@ -1103,7 +1131,6 @@ export function Room({
       haltRecognition,
       refreshSession,
       refreshTurns,
-      stopLive,
     ],
   );
 
@@ -1515,14 +1542,7 @@ export function Room({
   );
 
   const startRecognition = useCallback(() => {
-    if (viewModeRef.current === "log" && logSubmodeRef.current === "type") {
-      return;
-    }
-    if (
-      isTravisSeat(sessionRef.current?.activeSeatKey) &&
-      viewModeRef.current === "voice" &&
-      liveRef.current
-    ) {
+    if (!sttMayStart(readEar())) {
       return;
     }
     const Ctor = getSpeechRecognition();
@@ -1545,15 +1565,7 @@ export function Room({
       sttArmingRef.current = false;
       return;
     }
-    if (viewModeRef.current === "log" && logSubmodeRef.current === "type") {
-      sttArmingRef.current = false;
-      return;
-    }
-    if (
-      isTravisSeat(sessionRef.current?.activeSeatKey) &&
-      viewModeRef.current === "voice" &&
-      liveRef.current
-    ) {
+    if (!sttMayStart(readEar())) {
       sttArmingRef.current = false;
       return;
     }
@@ -1598,7 +1610,7 @@ export function Room({
       setDraft(full);
 
       const destTravis = isTravisSeat(sessionRef.current?.activeSeatKey);
-      if (destTravis && viewModeRef.current === "voice" && liveRef.current) {
+      if (destTravis && viewModeRef.current === "voice" && liveOwnsMic(readEar())) {
         return;
       }
 
@@ -1765,13 +1777,11 @@ export function Room({
       }
       if (presenceBlocksListen(presenceRef.current)) return;
       if (presenceRef.current === "speaking" || speechEngineBusy()) return;
-      if (viewModeRef.current === "log" && logSubmodeRef.current === "type") {
-        return;
-      }
       if (
-        isTravisSeat(sessionRef.current?.activeSeatKey) &&
-        viewModeRef.current === "voice" &&
-        liveRef.current
+        !watchdogShouldStartStt({
+          ...readEar(),
+          recLive: recognitionLiveRef.current,
+        })
       ) {
         return;
       }
@@ -1793,12 +1803,9 @@ export function Room({
     const destTravis = isTravisSeat(sessionRef.current?.activeSeatKey);
     const voice = viewModeRef.current === "voice";
     const sid = sessionIdRef.current;
-    const want = whichEar({
-      viewMode: viewModeRef.current,
-      logSubmode: logSubmodeRef.current,
-      destTravis,
-      liveUp: Boolean(liveRef.current),
-    });
+    const ear = readEar();
+    const have = whichEar(ear);
+    const want = wantedEar(ear);
 
     if (
       sttAlreadySatisfies({
@@ -1811,15 +1818,15 @@ export function Room({
       return;
     }
 
-    if (want === "live") return;
+    if (have === "live" || have === "live-connecting") return;
 
-    if (liveRef.current && !(voice && destTravis)) {
+    if (want === "stt" && (liveRef.current || liveConnectingRef.current)) {
       await stopLive();
       await delay(400);
       if (gen !== armEarGenRef.current) return;
     }
 
-    if (voice && destTravis && sid) {
+    if (want === "live" && sid) {
       haltRecognition();
       await delay(400);
       if (gen !== armEarGenRef.current) return;
@@ -1828,7 +1835,7 @@ export function Room({
         viewModeRef.current !== "voice" ||
         !isTravisSeat(sessionRef.current?.activeSeatKey)
       ) {
-        startRecognitionRef.current();
+        if (sttMayStart(readEar())) startRecognitionRef.current();
         return;
       }
       const ok = await connectLive(sid);
@@ -1836,9 +1843,10 @@ export function Room({
       if (ok) return;
       const reason = lastConnectMissRef.current ?? "miss";
       setSubtitle(liveMissSubtitle(reason));
+      return;
     }
 
-    startRecognitionRef.current();
+    if (sttMayStart(readEar())) startRecognitionRef.current();
   }, [connectLive, haltRecognition, stopLive]);
 
   armEarRef.current = armEar;
@@ -1846,6 +1854,7 @@ export function Room({
   const attachSession = useCallback(
     async (s: Session, resume: boolean) => {
       setSession(s);
+      sessionRef.current = s;
       sessionIdRef.current = s.id;
       const mode: ViewMode = s.viewMode === "log" ? "log" : "voice";
       setViewMode(mode);
@@ -1860,6 +1869,7 @@ export function Room({
       clearDraft();
       if (s.status === "ended") {
         setPresence("ended");
+        presenceRef.current = "ended";
         setSubtitle("");
         stopRecognition();
         void stopLive();
@@ -1879,6 +1889,7 @@ export function Room({
       }
       if (s.status === "paused") {
         setPresence("paused");
+        presenceRef.current = "paused";
         setSubtitle("Paused");
         stopRecognition();
         void stopLive();
@@ -1888,10 +1899,12 @@ export function Room({
         stopRecognition();
         void stopLive();
         setPresence("listening");
+        presenceRef.current = "listening";
         setSubtitle("");
         return;
       }
       setPresence("listening");
+      presenceRef.current = "listening";
       setSubtitle("Listening…");
       void armEar();
     },
@@ -2280,6 +2293,7 @@ export function Room({
     resumeSendSounds();
     if (presence === "paused") {
       setPresence("listening");
+      presenceRef.current = "listening";
       setSubtitle("Listening…");
       await fetch(`/api/session/${session.id}`, {
         method: "PATCH",
@@ -2289,6 +2303,7 @@ export function Room({
       void armEar();
     } else {
       setPresence("paused");
+      presenceRef.current = "paused";
       stopRecognition();
       void stopLive();
       setSubtitle("Paused");
@@ -2307,6 +2322,7 @@ export function Room({
       logSubmode: logSubmodeRef.current,
       destTravis: isTravisSeat(session.activeSeatKey),
       liveUp: Boolean(liveRef.current),
+      liveConnecting: liveConnectingRef.current,
     };
     if (viewModeRef.current === "log" && mode === "voice") {
       const viewed = [...seenInLogRef.current];
@@ -2322,6 +2338,9 @@ export function Room({
     }
     setViewMode(mode);
     viewModeRef.current = mode;
+    if (from.viewMode === "voice" && mode === "log") {
+      await stopLive();
+    }
     await fetch(`/api/session/${session.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -2338,6 +2357,7 @@ export function Room({
       logSubmode: logSubmodeRef.current,
       destTravis: isTravisSeat(session.activeSeatKey),
       liveUp: Boolean(liveRef.current),
+      liveConnecting: liveConnectingRef.current,
     };
     const switchAction = modeSwitchEarAction({
       from,

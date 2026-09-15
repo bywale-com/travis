@@ -7,9 +7,39 @@ import {
   interpretRealtimeEvent,
   liveInstructions,
   parseEphemeralSecret,
+  realtimeSdpAnswer,
   realtimeSessionConfig,
   type ToolDecl,
 } from "@/lib/travis-openai";
+
+async function namedFetch(
+  label: string,
+  input: string,
+  init?: RequestInit,
+): Promise<Response> {
+  try {
+    return await fetch(input, init);
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    throw new Error(`${label}: ${msg}`);
+  }
+}
+
+/** Chromium often delivers getUserMedia tracks muted until the first frame. */
+function waitTrackUnmuted(track: MediaStreamTrack): Promise<void> {
+  if (!track.muted) return Promise.resolve();
+  return new Promise((resolve) => {
+    const t = window.setTimeout(resolve, 2500);
+    track.addEventListener(
+      "unmute",
+      () => {
+        window.clearTimeout(t);
+        resolve();
+      },
+      { once: true },
+    );
+  });
+}
 
 export type TravisLiveSession = {
   stop: () => Promise<void>;
@@ -27,7 +57,7 @@ export async function startTravisLive(opts: {
   onClose?: () => void;
   getReferenceTurnId?: () => string | null;
 }): Promise<TravisLiveSession | null> {
-  const tokenRes = await fetch(`/api/session/${opts.sessionId}/live/token`, {
+  const tokenRes = await namedFetch("Live token", `/api/session/${opts.sessionId}/live/token`, {
     method: "POST",
   });
   const tokenData = await readJson<{
@@ -87,7 +117,8 @@ export async function startTravisLive(opts: {
     const ct = res.headers.get("content-type") ?? "";
     if (ct.includes("text/event-stream")) {
       opts.onSeatStream(res);
-      return { stopLive: true };
+      // Dest leave is a Cursor job. Live stays the ear for wrap.
+      return {};
     }
     const data = await readJson<{
       stopLive?: boolean;
@@ -177,13 +208,33 @@ export async function startTravisLive(opts: {
     void audioEl.play().catch(() => {});
   };
 
+  const attachMicAfterPeerReady = async (): Promise<MediaStream> => {
+    // Unconstrained audio — forcing AEC/NS on Chromium's fake-file capture
+    // zeroes the fixture. Real phones still get the UA default.
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const track = stream.getAudioTracks()[0];
+    if (!track) throw new Error("Live: no microphone track");
+    track.enabled = true;
+    await waitTrackUnmuted(track);
+    const sender =
+      pc.getSenders().find((s) => s.track?.kind === "audio") ??
+      pc.getSenders().find((s) => !s.track);
+    if (sender) await sender.replaceTrack(track);
+    else pc.addTrack(track, stream);
+    return stream;
+  };
+
   try {
-    mic = await navigator.mediaDevices.getUserMedia({
-      audio: { echoCancellation: true, noiseSuppression: true },
-    });
-    for (const track of mic.getAudioTracks()) pc.addTrack(track, mic);
+    // Late media: sendrecv m-line without opening the fake-file mic.
+    // Chromium starts the fixture at getUserMedia; dest is the first ~11s.
+    // Arm after SDP + data-channel session.update so Realtime can hear it.
+    pc.addTransceiver("audio", { direction: "sendrecv" });
 
     dc = pc.createDataChannel("oai-events");
+    let resolveDcOpen = () => {};
+    const dcOpen = new Promise<void>((resolve) => {
+      resolveDcOpen = resolve;
+    });
     dc.addEventListener("open", () => {
       sendEvent({
         type: "session.update",
@@ -199,6 +250,7 @@ export async function startTravisLive(opts: {
         sendNotify(pendingNotify);
         pendingNotify = null;
       }
+      resolveDcOpen();
     });
     dc.addEventListener("message", (e) => {
       if (closed) return;
@@ -267,19 +319,46 @@ export async function startTravisLive(opts: {
 
     const sdp = pc.localDescription?.sdp;
     if (!sdp) throw new Error("Live: no SDP offer");
-    const sdpRes = await fetch("https://api.openai.com/v1/realtime/calls", {
-      method: "POST",
-      body: sdp,
-      headers: {
-        Authorization: `Bearer ${secret}`,
-        "Content-Type": "application/sdp",
+    const sdpRes = await namedFetch(
+      "Live SDP",
+      `/api/session/${opts.sessionId}/live/sdp`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sdp, token: secret }),
       },
-    });
-    const answerSdp = await sdpRes.text();
-    if (!sdpRes.ok) {
-      throw new Error(answerSdp.slice(0, 180) || `Live ${sdpRes.status}`);
+    );
+    const sdpData = await readJson<{ sdp?: string; error?: string }>(sdpRes);
+    const answerSdp = realtimeSdpAnswer(sdpData.sdp ?? "") ?? "";
+    if (!sdpRes.ok || !answerSdp) {
+      throw new Error(sdpData.error?.slice(0, 180) || `Live SDP ${sdpRes.status}`);
     }
     await pc.setRemoteDescription({ type: "answer", sdp: answerSdp });
+    if (dc && dc.readyState !== "open") {
+      await Promise.race([
+        dcOpen,
+        new Promise<void>((resolve) => {
+          window.setTimeout(resolve, 4000);
+        }),
+      ]);
+    }
+    if (pc.connectionState !== "connected") {
+      await new Promise<void>((resolve) => {
+        const t = window.setTimeout(resolve, 8000);
+        const onState = () => {
+          if (
+            pc.connectionState === "connected" ||
+            pc.connectionState === "failed"
+          ) {
+            window.clearTimeout(t);
+            pc.removeEventListener("connectionstatechange", onState);
+            resolve();
+          }
+        };
+        pc.addEventListener("connectionstatechange", onState);
+      });
+    }
+    mic = await attachMicAfterPeerReady();
 
     function stop() {
       closed = true;

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  destLeaveOnTape,
   destLeaveStarted,
   thinkMissReason,
   travisSpeakCount,
@@ -44,6 +45,49 @@ test("named unwired is red on a think-walk", () => {
   assert.match(thinkMissReason(turns) ?? "", /isn.t wired/i);
 });
 
+test("dest-seat status error is dest — wrap still thinks if Travis spoke", () => {
+  const turns: TapeTurn[] = [
+    turn({
+      kind: "user",
+      role: "user",
+      seatKey: "travis",
+      speakable: true,
+      text: "Engineer, this is a Travis runtime canary.",
+      seq: 1,
+    }),
+    turn({
+      kind: "user",
+      role: "user",
+      seatKey: "engineer",
+      speakable: true,
+      text: "this is a Travis runtime canary.",
+      seq: 2,
+    }),
+    turn({
+      kind: "status",
+      seatKey: "engineer",
+      text: "error",
+      seq: 3,
+    }),
+    turn({
+      kind: "user",
+      role: "user",
+      seatKey: "travis",
+      speakable: true,
+      text: "I'm done.",
+      seq: 4,
+    }),
+    turn({
+      kind: "agent_post",
+      seatKey: "travis",
+      speakable: true,
+      text: "Understood.",
+      seq: 5,
+    }),
+  ];
+  assert.equal(thinkMissReason(turns), null);
+});
+
 test("Travis spoke — do not grade the sentence", () => {
   const turns: TapeTurn[] = [
     turn({ kind: "user", role: "user", text: "hello", seq: 1 }),
@@ -73,6 +117,42 @@ test("dest leave is running or queued, not a Travis essay", () => {
   );
   assert.equal(
     destLeaveStarted({ queue: { seats: [{ seatKey: "engineer" }] }, running: [] }),
+    true,
+  );
+});
+
+test("dest leave on tape is a dest-seat user turn, not Travis wrap", () => {
+  assert.equal(
+    destLeaveOnTape([
+      turn({
+        kind: "user",
+        role: "user",
+        seatKey: "travis",
+        speakable: true,
+        text: "Engineer, inspect.",
+        seq: 1,
+      }),
+      turn({
+        kind: "agent_post",
+        seatKey: "travis",
+        speakable: true,
+        text: "Engineer is already inspecting.",
+        seq: 2,
+      }),
+    ]),
+    false,
+  );
+  assert.equal(
+    destLeaveOnTape([
+      turn({
+        kind: "user",
+        role: "user",
+        seatKey: "engineer",
+        speakable: true,
+        text: "Engineer, inspect.",
+        seq: 2,
+      }),
+    ]),
     true,
   );
 });

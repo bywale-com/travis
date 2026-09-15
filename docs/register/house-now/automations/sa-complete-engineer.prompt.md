@@ -124,6 +124,6 @@ The PM packet was placed on this PR. SA wrote on this PR. You plant here. A hotf
 
 Rewrite `docs/register/ENGINEER-HANDOFF.md` so the next Engineer does not start from a transcript. If `DATABASE_URL` was missing, say that in one line. Then run `npm test`. If `handoff-seat.test.ts` fails, put the locked sentences back in the handoff file. Do not edit that test to match a rewrite.
 
-**Update the PR description:** Before ending your run, update the PR description using the pull request management tools (or `gh pr edit "$PR" --body "..."`). Write a clear, plain-English summary of what this cut or recut fixed so the human founder can follow along at the top of the PR without digging through commits or logs.
+**Update the PR description:** Before ending your run, update the PR description using the pull request management tools (or `gh pr edit "$PR" --body "..."`). Write a clear, plain-English summary of what this cut or recut fixed so the human founder can follow along at the top of the PR without digging through commits or logs. A timeline is only the hotfixes/packets that landed on **this same open PR**, newest first, each with what caused it. Do not list merged hotfixes from a different PR. Canon: `docs/register/PR-AUTOMATION-RULES.md` § 4.
 
 Commit the handoff, prompt, and any fixes together. Run `npm run test:preflight` (or `npm test` if that script is not on this branch). Push. **Stop.** Do not wait for doors. Do not recut this sitting when they paint.

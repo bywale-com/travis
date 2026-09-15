@@ -18,7 +18,7 @@ They do not swap jobs.
 
 | Seat | Owns | Writes | Does not write |
 |------|------|--------|----------------|
-| **Technical Architect** | Founder wording, Type A vs Type B, face + technical cut + file architecture, plates, packet test, look | Phase One log, packets (`PM-PACKET-*`), plates, PM-LOOK, PM-HANDOFF | `src/`, tables, SA log |
+| **Technical Architect** | Founder wording, Type A vs Type B, face + technical cut + file architecture, plates, packet test sheet, look | Phase One log, specification Markdown, packet/hotfix test-sheet Markdown, plates, PM-LOOK, PM-HANDOFF | `src/`, executable tests, dependencies, workflows, migrations, adapters, configuration, tables, SA log |
 | **Systems Analyst** | Machine: Story → Requirements → stores, runtime, ports | SA log, SYSTEMS-CHANGE-PACKET, signed SQL when the packet cuts it | Phase One log, `src/` |
 | **Engineer** | Plant what Architect and SA already specced | `src/`, git + PRs, ENGINEER-HANDOFF, initiative folder, hotfixes | Architect log, SA log, stores nobody ascribed |
 
@@ -66,6 +66,10 @@ On **one** new branch and **one** open PR for this pocket (usually the Engineer 
 - `docs/register/PM-PACKET-NNN-…-TEST.md` — always. Setup, exact sentences, ordered expects, **I saw** blanks. Scoped to this packet.
 - Index row on `docs/register/PM-PACKETS.md`.
 - Stamp Phase One log. Move **Current**. Update `PM-HANDOFF.md`.
+
+The Architect’s “test” is this Markdown contract. Executable unit, runtime, and browser test code is part of the plant and belongs to Engineer. After the specification push wakes the next seat, Architect stops and does not pre-plant implementation on the branch.
+
+If this open PR later takes a second hotfix, the PR description timeline is **this PR’s cuts only** — not the house’s whole hotfix index. Canon: [`register/PR-AUTOMATION-RULES.md`](./register/PR-AUTOMATION-RULES.md) § 4.
 
 Waiting is one whole line on the packet, nothing else:
 

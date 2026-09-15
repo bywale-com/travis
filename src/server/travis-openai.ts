@@ -4,11 +4,15 @@
  * Key stays server-side. Phone gets an ephemeral ek_ only.
  */
 
+import { request as httpsRequest } from "node:https";
+import type { IncomingMessage } from "node:http";
 import { TRAVIS_LIVE_MODEL, TRAVIS_TEXT_MODEL } from "@/lib/travis-models";
 import {
   liveInstructions,
   openaiErrorMessage,
   parseEphemeralSecret,
+  realtimeSdpAnswer,
+  realtimeSdpMultipart,
   realtimeSessionConfig,
 } from "@/lib/travis-openai";
 import { TRAVIS_SYSTEM } from "@/server/travis-tools";
@@ -70,6 +74,81 @@ export async function mintLiveToken(sessionId: string): Promise<{
   const token = parseEphemeralSecret(data);
   if (!token) return null;
   return { token, model: TRAVIS_LIVE_MODEL };
+}
+
+function readHttpBody(res: IncomingMessage): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    res.on("data", (chunk: Buffer | string) => {
+      chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
+    });
+    res.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
+    res.on("error", reject);
+  });
+}
+
+/** Browser SDP POST to api.openai.com is CORS/Failed to fetch from the preview origin. */
+export async function exchangeRealtimeSdp(opts: {
+  offerSdp: string;
+  sessionId: string;
+}): Promise<{ ok: true; sdp: string } | { ok: false; status: number; body: string }> {
+  const key = openaiKey();
+  if (!key) {
+    return { ok: false, status: 503, body: "Travis isn’t wired" };
+  }
+  const room = await roomContextFor(opts.sessionId).catch(() => "");
+  const session = realtimeSessionConfig({
+    instructions: liveInstructions(TRAVIS_SYSTEM, room),
+    tools: [],
+  });
+  const wire = realtimeSdpMultipart(opts.offerSdp, JSON.stringify(session));
+  const body = Buffer.from(wire.body);
+  // Next.js patched fetch on Vercel streamed raw / multipart SDP as empty
+  // (OpenAI: unmarshal SDP EOF). node:https sends Content-Length + bytes.
+  // Project key + multipart is the GA server path; ek_ + raw SDP still EOF.
+  const posted = await new Promise<{ status: number; body: string }>(
+    (resolve, reject) => {
+      const req = httpsRequest(
+        {
+          hostname: "api.openai.com",
+          path: "/v1/realtime/calls",
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${key}`,
+            Accept: "application/sdp",
+            "Content-Type": wire.contentType,
+            "Content-Length": String(body.byteLength),
+            "OpenAI-Safety-Identifier": `travis-session-${opts.sessionId}`,
+          },
+        },
+        (res) => {
+          void readHttpBody(res).then(
+            (text) => resolve({ status: res.statusCode ?? 0, body: text }),
+            reject,
+          );
+        },
+      );
+      req.on("error", reject);
+      req.setTimeout(25_000, () => {
+        req.destroy(new Error("Live SDP timed out"));
+      });
+      req.write(body);
+      req.end();
+    },
+  );
+  if (posted.status < 200 || posted.status >= 300) {
+    return { ok: false, status: posted.status, body: posted.body };
+  }
+  const sdp = realtimeSdpAnswer(posted.body);
+  if (!sdp) {
+    const snippet = posted.body.trim().slice(0, 180);
+    return {
+      ok: false,
+      status: posted.status || 502,
+      body: snippet || "Live: empty SDP answer",
+    };
+  }
+  return { ok: true, sdp };
 }
 
 export async function generateTravisText(params: {

@@ -163,7 +163,7 @@ export async function dispatchToSeat(params: {
           closeTurnId: post.id,
         });
       }
-      await insertStatusTurn(sessionId, "stand-in");
+      await insertStatusTurn(sessionId, "stand-in", seatKey);
       return { status: "stand-in", seatLabel };
     }
 

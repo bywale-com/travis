@@ -1,11 +1,17 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  liveCloseAction,
+  liveOwnsMic,
   modeSwitchEarAction,
   sameRoomEar,
   sttAlreadySatisfies,
+  sttMayStart,
   sttOnEndAction,
   wantedEar,
+  acceptFinishedLive,
+  presenceBlocksListen,
+  watchdogShouldStartStt,
   whichEar,
   type EarState,
 } from "./ear";
@@ -255,6 +261,13 @@ test("old TTS onend (quit while speaking) leaves Talk deaf", () => {
  * recognizer is still running from that very utterance, so the old guard
  * ("already on STT, nothing to do") returned before anything tried Live.
  */
+test("ended and paused block the ear; listening does not", () => {
+  assert.equal(presenceBlocksListen("ended"), true);
+  assert.equal(presenceBlocksListen("paused"), true);
+  assert.equal(presenceBlocksListen("listening"), false);
+  assert.equal(presenceBlocksListen("speaking"), false);
+});
+
 test("saying travis in Voice wants Live even while the recognizer is running", () => {
   const travisVoice = {
     viewMode: "voice" as const,
@@ -358,6 +371,11 @@ test("leaving Voice for Talk on dest Travis also re-arms", () => {
   );
 });
 
+test("a Live handle that finishes after leaving Voice is not kept", () => {
+  assert.equal(acceptFinishedLive(travisTalk), false);
+  assert.equal(acceptFinishedLive(travisVoice), true);
+});
+
 test("Type still releases the mic on dest Travis", () => {
   assert.equal(
     modeSwitchEarAction({
@@ -393,4 +411,99 @@ test("dest Engineer still keeps its recognizer across Talk and Voice", () => {
 test("a Live session already up on dest Travis is not torn down by a no-op", () => {
   const up: EarState = { ...travisVoice, liveUp: true };
   assert.equal(sameRoomEar(up, up), false, "Voice + Travis wants live, not stt");
+});
+
+test("connecting Voice + Travis is Live ownership, not STT", () => {
+  const connecting: EarState = {
+    ...travisVoice,
+    liveUp: false,
+    liveConnecting: true,
+  };
+  assert.equal(whichEar(connecting), "live-connecting");
+  assert.equal(liveOwnsMic(connecting), true);
+  assert.equal(sttMayStart(connecting), false);
+  assert.equal(
+    watchdogShouldStartStt({ ...connecting, recLive: false }),
+    false,
+    "watchdog must not arm Talk while Live is connecting",
+  );
+});
+
+test("connected Voice + Travis excludes Web Speech", () => {
+  const up: EarState = { ...travisVoice, liveUp: true };
+  assert.equal(whichEar(up), "live");
+  assert.equal(liveOwnsMic(up), true);
+  assert.equal(sttMayStart(up), false);
+  assert.equal(watchdogShouldStartStt({ ...up, recLive: false }), false);
+});
+
+test("dest leave that flips the chip does not give the mic to Talk while Live is up", () => {
+  const destLeft: EarState = {
+    ...engineerVoice,
+    liveUp: true,
+  };
+  assert.equal(whichEar(destLeft), "live");
+  assert.equal(liveOwnsMic(destLeft), true);
+  assert.equal(wantedEar(destLeft), "live");
+  assert.equal(sttMayStart(destLeft), false);
+  assert.equal(
+    watchdogShouldStartStt({ ...destLeft, recLive: false }),
+    false,
+    "watchdog must not arm Talk after dest leave while Live is still the ear",
+  );
+  const reconnecting: EarState = {
+    ...engineerVoice,
+    liveUp: false,
+    liveConnecting: true,
+  };
+  assert.equal(whichEar(reconnecting), "live-connecting");
+  assert.equal(sttMayStart(reconnecting), false);
+});
+
+test("Voice + Travis wants Live even before connect starts — STT must not arm", () => {
+  assert.equal(wantedEar(travisVoice), "live");
+  assert.equal(sttMayStart(travisVoice), false);
+  assert.equal(
+    watchdogShouldStartStt({ ...travisVoice, recLive: false }),
+    false,
+  );
+});
+
+test("Talk dest Travis still may start STT", () => {
+  assert.equal(sttMayStart(travisTalk), true);
+  assert.equal(
+    watchdogShouldStartStt({ ...travisTalk, recLive: false }),
+    true,
+  );
+  assert.equal(
+    watchdogShouldStartStt({ ...travisTalk, recLive: true }),
+    false,
+  );
+});
+
+test("Live close never silently becomes Talk", () => {
+  assert.equal(
+    liveCloseAction({
+      viewMode: "voice",
+      destTravis: true,
+      listeningWanted: true,
+    }),
+    "reconnect",
+  );
+  assert.equal(
+    liveCloseAction({
+      viewMode: "voice",
+      destTravis: true,
+      listeningWanted: false,
+    }),
+    "wait",
+  );
+  assert.equal(
+    liveCloseAction({
+      viewMode: "log",
+      destTravis: true,
+      listeningWanted: true,
+    }),
+    "wait",
+  );
 });

@@ -21,6 +21,8 @@ export type DoorTrace = {
 
 export function isRunErrorTurn(turn: TapeTurn): boolean {
   if (turn.kind !== "status") return false;
+  // Dest-seat terminal is dest, not a Travis think miss (086 dest scores the leave).
+  if (turn.seatKey && turn.seatKey !== "travis") return false;
   return /error/i.test(turn.text);
 }
 
@@ -87,6 +89,17 @@ export function assertThinkWorked(
 ): void {
   const reason = thinkMissReason(turns);
   if (reason) failUse(label, reason, turns, trace);
+}
+
+/** Dest already left — a user turn on a Cursor seat. Do not wait for the essay. */
+export function destLeaveOnTape(turns: TapeTurn[]): boolean {
+  return turns.some(
+    (t) =>
+      t.kind === "user" &&
+      Boolean(t.seatKey) &&
+      t.seatKey !== "travis" &&
+      t.speakable,
+  );
 }
 
 export function destLeaveStarted(queue: {

@@ -3,6 +3,7 @@ import { delay, isDeadStreamError } from "@/lib/cursor-busy";
 import { absorbText, nextLiveTravisText } from "@/lib/absorb-text";
 import { nextDestSeatText, nextSeatBeat, postIsInRunChain } from "@/lib/beats";
 import { isTravisSeat } from "@/lib/seats";
+import { destLeaveMiss } from "@/lib/travis-miss";
 import { decideDestStreamClose } from "@/lib/stream";
 import { seatKeyToLabel } from "@/lib/router";
 import {
@@ -744,12 +745,12 @@ async function driveDestCursorEvents(params: {
   });
 
   const statusText = donePayload?.statusText ?? "finished";
-  const statusTurn = await insertTurn(sessionId, {
-    role: "status",
-    kind: "status",
-    speakable: false,
-    text: statusText,
-  });
+  const failed = donePayload?.mode === "error" || cancelled;
+  const tapeStatus =
+    donePayload?.mode === "error"
+      ? destLeaveMiss(donePayload.error ?? statusText)
+      : statusText;
+  const statusTurn = await insertStatusTurn(sessionId, tapeStatus, seatKey);
 
   if (bareError) {
     const errText = donePayload?.error ?? "Cursor send failed";
@@ -769,7 +770,6 @@ async function driveDestCursorEvents(params: {
     ownedTerminal = !(await seatHasActiveRun(binding));
   }
 
-  const failed = donePayload?.mode === "error" || cancelled;
   if (streamId) {
     if (destClose.action === "close" && postTurn) {
       await closeStream({
@@ -784,9 +784,9 @@ async function driveDestCursorEvents(params: {
       });
     }
   }
-  if (params.destJobId) {
+  if (params.destJobId && !failed) {
     await markDestJob(params.destJobId, {
-      status: failed ? "failed" : "completed",
+      status: "completed",
       done: statusText,
     }).catch(() => {});
   }
@@ -895,7 +895,7 @@ export async function reapFinishedLiveRuns(sessionId: string): Promise<void> {
         startedAt: live.startedAt,
       });
     }
-    await insertStatusTurn(sessionId, "finished");
+    await insertStatusTurn(sessionId, "finished", seatKey);
     await releaseLiveRunIfMatch(binding.id, live.cursorRunId);
     const liveStream = await liveStreamForBinding(sessionId, binding.id);
     if (liveStream) {

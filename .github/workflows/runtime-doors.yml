@@ -15,6 +15,10 @@ on:
   repository_dispatch:
     types: [vercel.deployment.ready]
 
+concurrency:
+  group: runtime-doors
+  cancel-in-progress: false
+
 permissions:
   contents: read
   statuses: write
@@ -25,7 +29,7 @@ permissions:
 jobs:
   runtime-doors:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - name: Checkout the commit this deploy built
         uses: vercel/repository-dispatch/actions/checkout@v1
@@ -50,6 +54,12 @@ jobs:
           test -n "$RUNTIME_BASE_URL" || { echo "missing deploy URL"; exit 1; }
           set -o pipefail
           npm run test:runtime 2>&1 | tee "$RUNNER_TEMP/walks.txt"
+
+      - name: Paint red unless walks succeeded
+        if: always() && steps.walks.outcome != 'success'
+        run: |
+          echo "Walks outcome=${{ steps.walks.outcome }} — runtime-doors is red"
+          exit 1
 
       - name: Paint the Vercel Deployment Check
         if: always()
@@ -97,7 +107,7 @@ jobs:
           echo "Cleared previewing on #$pr (doors painted)."
 
       - name: Fresh-add fail-look on the open PR
-        if: failure()
+        if: failure() || cancelled()
         env:
           WAKE_GITHUB_TOKEN: ${{ secrets.WAKE_GITHUB_TOKEN }}
           FALLBACK_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

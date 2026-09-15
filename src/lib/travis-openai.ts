@@ -31,6 +31,60 @@ export function openaiErrorMessage(data: unknown, status: number): string {
   return `OpenAI ${status}`;
 }
 
+/**
+ * GA `/v1/realtime/calls` with a project API key is multipart:
+ * `sdp` as application/sdp (no filename) + `session` as application/json.
+ * Raw `application/sdp` is the ephemeral-token browser path — OpenAI still
+ * unmarshaled EOF when Travis posted that with the ek_ on Vercel.
+ * Do not send this through Next.js `fetch` (empty body). The server posts
+ * these bytes with `node:https` and Content-Length.
+ */
+export function realtimeSdpMultipart(
+  offerSdp: string,
+  sessionJson: string,
+  boundary = `----TravisSdp${crypto.randomUUID().replaceAll("-", "")}`,
+): {
+  body: Uint8Array;
+  contentType: string;
+} {
+  const sdp = offerSdp.endsWith("\n") ? offerSdp : `${offerSdp}\r\n`;
+  const encoder = new TextEncoder();
+  const chunks = [
+    `--${boundary}\r\n` +
+      `Content-Disposition: form-data; name="sdp"\r\n` +
+      `Content-Type: application/sdp\r\n\r\n`,
+    sdp,
+    `\r\n--${boundary}\r\n` +
+      `Content-Disposition: form-data; name="session"\r\n` +
+      `Content-Type: application/json\r\n\r\n`,
+    sessionJson,
+    `\r\n--${boundary}--\r\n`,
+  ].map((part) => encoder.encode(part));
+  let size = 0;
+  for (const chunk of chunks) size += chunk.byteLength;
+  const body = new Uint8Array(size);
+  let offset = 0;
+  for (const chunk of chunks) {
+    body.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return { body, contentType: `multipart/form-data; boundary=${boundary}` };
+}
+
+/**
+ * Chromium rejects the last SDP line when it has no terminating newline.
+ * OpenAI's Realtime answer often *is* that last line (`a=ice-pwd:…`).
+ * `String.trim()` strips the CRLF and the phone dies on Invalid SDP line.
+ */
+export function realtimeSdpAnswer(raw: string): string | null {
+  const start = raw.indexOf("v=");
+  if (start < 0) return null;
+  const lines = raw.slice(start).split(/\r\n|\n|\r/);
+  while (lines.length && lines[lines.length - 1] === "") lines.pop();
+  if (!lines[0]?.startsWith("v=")) return null;
+  return `${lines.join("\r\n")}\r\n`;
+}
+
 export function toRealtimeTools(decls: ToolDecl[]) {
   return decls.map((d) => ({
     type: "function" as const,

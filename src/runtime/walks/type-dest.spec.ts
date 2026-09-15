@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { destLeaveStarted, failUse } from "../app-worked";
+import { destLeaveOnTape, destLeaveStarted, failUse } from "../app-worked";
 import { openFreshRoom, readQueue, readTurns, runtimeBaseUrl } from "../desk";
 import { send } from "../doors";
 
@@ -22,10 +22,10 @@ describe("type-dest", { skip: !haveUrl }, () => {
     }
 
     const queueData = await readQueue(desk);
-    if (!destLeaveStarted(queueData)) {
+    if (!destLeaveStarted(queueData) && !destLeaveOnTape(turns)) {
       failUse(
         "type-dest",
-        `no dest leave on queue (sse error=${sent.error ?? "none"})`,
+        `no dest leave on queue or tape (sse error=${sent.error ?? "none"})`,
         turns,
         sent,
       );
