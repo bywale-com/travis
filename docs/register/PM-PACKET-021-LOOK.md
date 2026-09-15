@@ -1,6 +1,6 @@
 # Packet 021 — Look (file a lived miss from Log)
 
-**Number:** `021` — next packet is `022` (Smarter loop — **held**, sibling PR). Never reuse. Index: [`PM-PACKETS.md`](./PM-PACKETS.md).  
+**Number:** `021` — sibling **022** (Smarter loop) is on `main` park. Never reuse. Index: [`PM-PACKETS.md`](./PM-PACKETS.md).  
 **Seat:** Technical Architect. **SA** recuts **037** (same Look ascribe; who-wakes fork). Do not steal **038** (022).  
 **When:** Named 2026-09-15. Who-wakes recut the same day.  
 **Status:** Specified. Recut: File wakes Engineer B, not the outside agent.  
