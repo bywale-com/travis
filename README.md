@@ -7,6 +7,8 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-15** · Packet 021 / SCP-037 recut · this PR — Look File fresh-adds **`wake-engineer`** and never `outside-look`, because a lived miss must wake regular Engineer B, not the outside agent.
+
 - **2026-09-15** · Blocker 004 · this PR — Look walk 503 on Preview because `WAKE_GITHUB_TOKEN` and `TRAVIS_TEST_OPERATOR_COOKIE` are unset on Vercel, because File is wired in `src/` and founder ops must paste those two secrets.
 
 - **2026-09-15** · Packet 021 / SCP-037 · this PR — Quiet **Look** on Log files a lived miss to GitHub (`POST /look`, `outside-look`), because doors never saw the founder-discovered pipe miss and File must not dest, Hold, or mint `travis.look`.

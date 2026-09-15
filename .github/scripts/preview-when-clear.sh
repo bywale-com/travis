@@ -12,16 +12,24 @@ labels=$(gh pr view "$pr" --json labels --jq '.labels[].name')
 echo "Labels on #$pr:"
 echo "$labels"
 
-if ! echo "$labels" | grep -qx outside-look; then
-  if ! echo "$labels" | grep -qx previewing && ! echo "$labels" | grep -qx blocker; then
-    repo=$(gh repo view --json nameWithOwner --jq .nameWithOwner)
-    if gh api "repos/${repo}/issues/${pr}/comments" --paginate --jq '.[].body' 2>/dev/null | grep -q '<!-- travis-look -->'; then
-      gh label create outside-look --color CCCCCC --description "Cursor: outside look (lived miss from Log)" 2>/dev/null || true
-      gh pr edit "$pr" --remove-label outside-look || true
-      if gh pr edit "$pr" --add-label outside-look; then
-        echo "Armed delayed outside-look on #$pr from Look seed comment."
-        labels=$(gh pr view "$pr" --json labels --jq '.labels[].name')
-      fi
+if ! echo "$labels" | grep -qx previewing && ! echo "$labels" | grep -qx blocker; then
+  repo=$(gh repo view --json nameWithOwner --jq .nameWithOwner)
+  unarmed=$(gh api "repos/${repo}/issues/${pr}/comments" --paginate --jq \
+    '.[] | select((.body // "") | contains("<!-- travis-look -->") and (contains("<!-- travis-look-armed -->") | not)) | .id' 2>/dev/null || true)
+  if [ -n "$unarmed" ]; then
+    gh pr edit "$pr" --remove-label wake-engineer || true
+    if gh pr edit "$pr" --add-label wake-engineer; then
+      echo "Armed delayed wake-engineer on #$pr from Look seed comment."
+      for lab in wake-sa wake-pm-look fail-look; do
+        gh pr edit "$pr" --remove-label "$lab" || true
+      done
+      printf '%s\n' "$unarmed" | while IFS= read -r id; do
+        [ -z "$id" ] && continue
+        gh api "repos/${repo}/issues/comments/${id}" --jq .body \
+          | jq -Rs '{body: (. | rtrimstr("\n") + "\n<!-- travis-look-armed -->\n")}' \
+          | gh api --method PATCH "repos/${repo}/issues/comments/${id}" --input -
+      done
+      labels=$(gh pr view "$pr" --json labels --jq '.labels[].name')
     fi
   fi
 fi

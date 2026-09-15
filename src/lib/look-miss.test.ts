@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
   LOOK_EMPTY,
@@ -61,4 +62,15 @@ test("seed carries the Look staples", () => {
   assert.match(seed, /\*\*Session:\*\*/);
   assert.match(seed, /\*\*Note:\*\*/);
   assert.match(seed, /Mouth never came back/);
+});
+
+test("Look File fresh-adds wake-engineer and never outside-look", () => {
+  const src = readFileSync(new URL("../server/look-github.ts", import.meta.url), "utf8");
+  assert.match(src, /freshAddWakeEngineer/);
+  assert.match(src, /LOOK_WAKE_LABEL = "wake-engineer"/);
+  assert.match(src, /travis-look-armed/);
+  assert.doesNotMatch(src, /freshAddOutsideLook/);
+  assert.doesNotMatch(src, /ensureOutsideLookLabel/);
+  assert.doesNotMatch(src, /name: "outside-look"/);
+  assert.doesNotMatch(src, /addLabel\([\s\S]*"outside-look"/);
 });

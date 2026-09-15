@@ -1,19 +1,16 @@
 /**
  * SCP-037 — Look GitHub side-effect. WAKE_GITHUB_TOKEN only.
- * Issue + PR comment hold the seed. Fresh-add outside-look. No table.
+ * Issue + PR comment hold the seed. Fresh-add wake-engineer. No table.
  */
 
 import { LOOK_SEED_MARKER } from "@/lib/look-miss";
 
 export const LOOK_NOT_WIRED = "Look is not wired. Set WAKE_GITHUB_TOKEN.";
+export const LOOK_ARMED_MARKER = "<!-- travis-look-armed -->";
 
 const HOLD_LABELS = ["previewing", "blocker"] as const;
-const STRIP_ON_LOOK = [
-  "wake-sa",
-  "wake-engineer",
-  "wake-pm-look",
-  "fail-look",
-] as const;
+const LOOK_WAKE_LABEL = "wake-engineer";
+const STRIP_ON_LOOK = ["wake-sa", "wake-pm-look", "fail-look"] as const;
 const API = "https://api.github.com";
 
 export class LookGithubError extends Error {
@@ -90,34 +87,37 @@ function refused(status: number, extra?: string): LookGithubError {
   return new LookGithubError(extra ? `${base} ${extra}` : base, status);
 }
 
-async function ensureOutsideLookLabel(
-  token: string,
-  owner: string,
-  repo: string,
-): Promise<void> {
-  const created = await gh(token, `/repos/${owner}/${repo}/labels`, {
-    method: "POST",
-    body: {
-      name: "outside-look",
-      color: "CCCCCC",
-      description: "Cursor: outside look (lived miss from Log)",
-    },
-  });
-  if (created.status === 201 || created.status === 422) return;
-  if (created.status >= 400) throw refused(created.status);
-}
-
 async function commentOn(
   token: string,
   owner: string,
   repo: string,
   n: number,
   seed: string,
-): Promise<void> {
+): Promise<number | null> {
   const res = await gh(token, `/repos/${owner}/${repo}/issues/${n}/comments`, {
     method: "POST",
     body: { body: seed },
   });
+  if (res.status >= 400) throw refused(res.status);
+  const id = Number((res.json as { id?: number } | null)?.id);
+  return Number.isInteger(id) && id > 0 ? id : null;
+}
+
+async function markCommentArmed(
+  token: string,
+  owner: string,
+  repo: string,
+  commentId: number,
+  seed: string,
+): Promise<void> {
+  const body = seed.includes(LOOK_ARMED_MARKER)
+    ? seed
+    : `${seed.trimEnd()}\n${LOOK_ARMED_MARKER}\n`;
+  const res = await gh(
+    token,
+    `/repos/${owner}/${repo}/issues/comments/${commentId}`,
+    { method: "PATCH", body: { body } },
+  );
   if (res.status >= 400) throw refused(res.status);
 }
 
@@ -167,14 +167,14 @@ async function addLabel(
   if (res.status >= 400) throw refused(res.status);
 }
 
-async function freshAddOutsideLook(
+async function freshAddWakeEngineer(
   token: string,
   owner: string,
   repo: string,
   n: number,
 ): Promise<void> {
-  await removeLabel(token, owner, repo, n, "outside-look");
-  await addLabel(token, owner, repo, n, "outside-look");
+  await removeLabel(token, owner, repo, n, LOOK_WAKE_LABEL);
+  await addLabel(token, owner, repo, n, LOOK_WAKE_LABEL);
   for (const lab of STRIP_ON_LOOK) {
     await removeLabel(token, owner, repo, n, lab);
   }
@@ -192,7 +192,7 @@ async function labelIfIdle(
 ): Promise<boolean> {
   const labels = await issueLabels(token, owner, repo, n);
   if (shouldHold(labels)) return false;
-  await freshAddOutsideLook(token, owner, repo, n);
+  await freshAddWakeEngineer(token, owner, repo, n);
   return true;
 }
 
@@ -336,8 +336,11 @@ async function fileOnPr(
   seed: string,
   issue?: number,
 ): Promise<LookGithubOk> {
-  await commentOn(token, owner, repo, pr, seed);
+  const commentId = await commentOn(token, owner, repo, pr, seed);
   const labeled = await labelIfIdle(token, owner, repo, pr);
+  if (labeled && commentId) {
+    await markCommentArmed(token, owner, repo, commentId, seed);
+  }
   return issue ? { pr, labeled, issue } : { pr, labeled };
 }
 
@@ -353,7 +356,6 @@ export async function fileLookOnGithub(args: {
   }
 
   const { owner, repo } = lookRepo(env);
-  await ensureOutsideLookLabel(token, owner, repo);
 
   const preview = previewPrId(env);
   if (preview) {
