@@ -4,7 +4,7 @@
 
 **Purpose:** Running log so a new Systems Analyst chat starts where the last one stopped. Stamps are **witnessing history** — not a second product flag.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-09 19:05 UTC — **SCP-035 signed.** Stream architecture: classify is lib; Do is hang; mouth last. In-flight = open `dest_job` + LangGraph checkpoint. Change dest = follow-up on the same row (`parent_id` unused). Change Travis = later `invoke` on the same `thread_id`. Glass Technical Architect. PM-019 on [#163](https://github.com/bywale-com/travis/pull/163). Next number is **036**.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-15 11:20 UTC — **SCP-037 signed.** Look File persists on GitHub (Issue + PR comment); wake is `outside-look` as `WAKE_GITHUB_TOKEN`. No `travis.look`. No tape row. Walk Files do not label. Production psi mints a draft `look/{issue}` PR. PM-021 on [#194](https://github.com/bywale-com/travis/pull/194). Next number is **038**. 036 stays the unsigned 020 hole — do not reuse.
 
 **How we maintain this log** (same discipline as Phase One)
 
@@ -854,4 +854,39 @@ Packet on `main` already has question 5 = **None**.
 **Cut:** [`SYSTEMS-CHANGE-PACKET-035-STREAM-ARCH.md`](./SYSTEMS-CHANGE-PACKET-035-STREAM-ARCH.md)
 
 **Handoff:** Engineer plants 035 on **this same PR**. Next packet number is **036**. Do not remint 023–034. Do not remint dest mail. Do not mint a cousin.
+
+---
+
+## 2026-09-15 11:20 UTC — SCP-037 Look (PM-021 on #194)
+
+**Kind:** Packet ascribe. Automation woke this seat. PM-021 Look + LK1–LK2 on this PR. No SYSTEMS-CHANGE-PACKET for Look was on the branch. 023–035 stay planted — not reminted. **036** was named for PM-020 and never signed (020 planted on #165). Do not steal 036. **022** N-red escalate is held — not this cut.
+
+**Seat:** Systems Analyst. Job-law from the founder (PM-021 lock + plates). Not Architect. Not Engineer.
+
+**Founder lock (from the packet, not rewritten):** Automate filing the lived miss without the founder explaining it in Cursor. A door on the desk — select relevant turns, add a note, File. Wake an agent that is not Engineer B. Split from Smarter loop; hold 022.
+
+**Staples (not scenery):** **Look** · **File** · **Close**. Dest-to-Engineer canary stays. Live stays in both sensors.
+
+**Quoted stood-up:**
+
+- Header cluster is Backlog · Requests · Leave (`Room.tsx` L2659–2703). No Look.
+- Hold → Initiative is `POST /api/session/:id/initiatives` → `holdInitiative` (`initiatives/route.ts` L48–69). Requests is `RequestLogDoor` `id="request-log"`.
+- Unfold token is `TRAVIS_GITHUB_TOKEN` only (`travis-unfold.ts` L17–18). GitHub fetch already uses Bearer + `application/vnd.github+json` (`travis-unfold.ts` L53–61).
+- Seat labels use Actions secret `WAKE_GITHUB_TOKEN`; bot `GITHUB_TOKEN` does not wake Cursor (`wake-packet-seats.yml` L58–76).
+- fail-look / green-light holds: `wake-sa` · `wake-engineer` · `wake-pm-look` · `fail-look` · `blocker` · `previewing`. No `outside-look` (`runtime-doors.yml` L141–147 · `preview-when-clear.sh` L15–20).
+- Walks send `TRAVIS_TEST_OPERATOR_COOKIE` (`desk.ts` L26–36). `kind=status` without `error` is hidden (`travis-miss.ts` L6–8).
+- `voice_turn` already holds the selected ids (`schema.ts` L59–80). `requireOwnedSession` is the door auth (`operator.ts` L185–208).
+
+**Ascribed:**
+
+1. **No mint** of `travis.look`. Seed = GitHub Issue body (production) + PR comment (always). Marker `<!-- travis-look -->`.
+2. **Token** = `WAKE_GITHUB_TOKEN` on Vercel (same PAT as Actions). Not unfold. Not `GITHUB_TOKEN`. Unset → 503 named. Walk cookie match → 200 `filed: false` (sensors must not label).
+3. **Preview** = comment on that PR. Fresh-add `outside-look` unless `previewing` / `blocker` — then Action arms after the hold clears.
+4. **Production psi** = Issue + empty-commit `look/{issue}` + draft PR against `main` + label. Cursor wakes on PR labels. Title never `Hotfix`.
+5. **No tape row.** `POST /api/session/:id/look`. Never initiatives / dest. `outside-look` is a hold like `fail-look`. Do not plant 022’s count.
+6. Runtime walk asserts HTTP 2xx + no initiative — **not** the GitHub label.
+
+**Cut:** [`SYSTEMS-CHANGE-PACKET-037-LOOK.md`](./SYSTEMS-CHANGE-PACKET-037-LOOK.md)
+
+**Handoff:** Engineer plants **037** on **this same PR**. Next packet number is **038**. Do not remint 023–035. Do not remint dest mail. Do not reuse 036. Do not mint a cousin.
 
