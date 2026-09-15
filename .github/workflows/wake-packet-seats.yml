@@ -78,9 +78,14 @@ jobs:
             export GH_TOKEN="$FALLBACK_GH_TOKEN"
             echo "Label actor: github-actions[bot] (no WAKE_GITHUB_TOKEN)"
           fi
-          if [[ "$BEFORE" == "0000000000000000000000000000000000000000" ]]; then
-            # New branch. `git diff $AFTER` is worktree vs tip — empty on a
-            # clean checkout. Diff the tip commit itself.
+          if [[ "$BEFORE" == "0000000000000000000000000000000000000000" ]] \
+            || ! git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then
+            # New branch, or a force-push whose old tip is gone. `git diff`
+            # a ghost BEFORE exits 128 (#194 rebase onto #190). Diff the tip
+            # commit only — do not treat rewritten history as added hotfixes.
+            if [[ "$BEFORE" != "0000000000000000000000000000000000000000" ]]; then
+              echo "BEFORE $BEFORE is not in this clone (force-push). Diff the tip commit."
+            fi
             if git rev-parse --verify "${AFTER}^" >/dev/null 2>&1; then
               files=$(git diff --name-only "${AFTER}^" "$AFTER")
               added=$(git diff --name-only --diff-filter=A "${AFTER}^" "$AFTER")

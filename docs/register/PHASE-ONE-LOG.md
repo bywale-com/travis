@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-15 13:30 UTC — #190 merged; #194 rebased onto that main. Do not merge 194 until doors paint. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-15 13:40 UTC — #194 label job died on force-push ghost BEFORE; recut the diff guard and re-arm preview. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3914,3 +3914,15 @@ Same object: an agent **outside** the recut. Two entries: deployment reds vs fou
 **Lock.** [#190](https://github.com/bywale-com/travis/pull/190) (098 + 099) is on `main` (`c89c100`, 12:25 UTC). [#194](https://github.com/bywale-com/travis/pull/194) rebased onto that tip. Plant still File → **`wake-engineer`**. Do not merge 194 until doors paint on the new base. [#195](https://github.com/bywale-com/travis/pull/195) (022) stays **Wake:** hold.
 
 **I do not plant `src/`.** Founder re-pastes Engineer B. Do not Save+Activate `outside-look` for Look.
+
+---
+
+## 2026-09-15 13:40 UTC — #194 stuck: force-push ghost BEFORE (Technical Architect)
+
+**Kind:** House gate. Flag 14:00 2026-08-25 stands.
+
+**Lived.** Force-push `9c74be7` → `dbcf61d` after the rebase. Wake packet seats `label` ran `git diff $BEFORE $AFTER` with BEFORE already dropped. `fatal: bad object 9c74be7`. Exit 128. No `green_light`. `preview-when-clear` skipped. Vercel **Ignored**. No `runtime-doors`. Stale `emerge` remains.
+
+**Recut.** Same file as the add_seat hang: if BEFORE is not in the clone, diff the tip commit only. Do not treat rewritten history as added hotfixes. Handoff touch re-arms plant-finished so this SHA can preview.
+
+**I do not remint Look chrome.** Do not merge 194 until doors paint.

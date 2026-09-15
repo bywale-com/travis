@@ -24,6 +24,8 @@ test("wake-packet-seats: hotfix wakes only on an added file; add_seat is a no-op
   assert.match(yml, /echo "\$added"/);
   assert.match(yml, /previewing on #\$pr\. No new seat/);
   assert.match(yml, /outside-look on #\$pr\. No new seat/);
+  assert.match(yml, /cat-file -e "\$\{BEFORE\}\^\{commit\}"/);
+  assert.match(yml, /force-push/);
   assert.match(yml, /gh label create previewing/);
   assert.match(yml, /green-light-\$\{\{ github\.ref_name \}\}/);
   assert.match(yml, /cancel-in-progress: false/);
