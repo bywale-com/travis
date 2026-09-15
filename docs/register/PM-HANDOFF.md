@@ -16,8 +16,8 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current **12:30 UTC 2026-09-15**. Flag **14:00 2026-08-25**. |
-| **021 Look** (this PR, go) | [`PM-PACKET-021-LOOK.md`](./PM-PACKET-021-LOOK.md) · FACE [`PLATES-LOOK.md`](./PLATES-LOOK.md) LK1–LK2 · test. **Wake:** sa. SA **037**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current **13:15 UTC 2026-09-15**. Flag **14:00 2026-08-25**. |
+| **021 Look** (this PR, go) | [`PM-PACKET-021-LOOK.md`](./PM-PACKET-021-LOOK.md) · FACE [`PLATES-LOOK.md`](./PLATES-LOOK.md) LK1–LK2 · test. File → **`wake-engineer`**. **Wake:** sa. SA recuts **037**. |
 | **022 Smarter loop** (sibling, hold) | N=4 `runtime-doors` reds → `outside-look`. Packet on the other PR. |
 | Lived specimen | Session `fdad2a1d-5f40-431c-bb6f-1db7d2a52f25`. |
 
@@ -25,7 +25,7 @@
 
 ## Next Architect job
 
-SA 037 ascribes the Look hang. Founder Save+Activates `outside-look`. 022 stays hold until go.
+SA recuts 037: File → `wake-engineer`. Founder re-pastes Engineer B (Look-seed gate). Do **not** Save+Activate `outside-look` for Look. 022 stays hold until go.
 
 ---
 

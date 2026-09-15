@@ -85,7 +85,7 @@ Do not remint 012 / 023–034 or the 074 SQL. Do not remint **035**. Do not remi
 | What | Where |
 |------|--------|
 | Implementation trail | Root [`README.md`](../../README.md) — newest first |
-| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **097** direct seat bind (this PR). **096** bind-not-create on this PR. **095** create_agent walk (this PR; fail-look + Blocker 003). **094** Emerge runtime doors on `main`. Next number **098**. **Blocker 004** Look Vercel secrets (this PR, fail-look). |
+| Hotfix index | [`HOTFIXES.md`](./HOTFIXES.md) — **099** cancelled doors are red · **098** browser-real runtime · [PR #190](https://github.com/bywale-com/travis/pull/190) (`main`). **097** direct seat bind. Next number **100**. **Blocker 004** Look Vercel secrets (this PR). |
 | One PR law | [`initiatives/README.md`](./initiatives/README.md) |
 | Production | `https://travis-psi.vercel.app` |
 | Store | Shared Postgres schema `travis`. Cloud Agent `DATABASE_URL` is the live DB. |

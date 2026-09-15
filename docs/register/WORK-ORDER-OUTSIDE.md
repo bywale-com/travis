@@ -1,8 +1,9 @@
 # Work order — Outside look (do not trip the wires)
 
 **Seat:** the **outside** agent (`outside-look`). Not Engineer B. Not SA. Not Technical Architect occupying those seats.  
-**Canon packet:** [`PM-PACKET-021-LOOK.md`](./PM-PACKET-021-LOOK.md) (File from Log). N-red escalate is **022** (held).  
-**Prompt paste:** [`house-now/automations/outside-look.prompt.md`](./house-now/automations/outside-look.prompt.md)  
+**Canon packet:** [`PM-PACKET-022-SMARTER-LOOP.md`](./PM-PACKET-022-SMARTER-LOOP.md) (N-red escalate — **held**).  
+**Not this agent:** Log · Look File is packet **021**. That door wakes **Engineer B** (`wake-engineer`).  
+**Prompt paste (022, when go):** [`house-now/automations/outside-look.prompt.md`](./house-now/automations/outside-look.prompt.md)  
 **Flag (read-only):** PHASE-ONE-LOG **14:00 UTC 2026-08-25**.  
 **Why this page exists:** agents were rediscovering trip-wires every sitting. This is the work order. Read it before touching `src/` or labels.
 
@@ -10,14 +11,15 @@ You diagnose like the 2026-09-15 lived session: tape + question + Vercel logs + 
 
 ---
 
-## Two entries, one agent
+## One entry
 
 | Entry | Wake | Where you sit |
 |-------|------|----------------|
-| **Look (021)** — founder files a lived miss from Log | Desk door adds `outside-look` | Open plant PR for that deploy if one exists; else SA’s ascribed GitHub Issue → PR path. Still one PR. |
-| **Smarter loop (022)** — N consecutive current-head `runtime-doors` reds | **Held.** Not this plant. Action does not yet add `outside-look` instead of `fail-look`. | — |
+| **Smarter loop (022)** — N consecutive current-head `runtime-doors` reds | **Held.** Action does not yet add `outside-look` instead of `fail-look`. | The failing PR. |
 
-Do not wake Engineer B until this sitting has either planted a complete Bucket A cut or named what remains. Do not dest Travis seats as the canary.
+**Look (021)** is not your wake. Founder File sits Engineer B.
+
+Do not dest Travis seats as the canary.
 
 ---
 

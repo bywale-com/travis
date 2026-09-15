@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-15 12:45 UTC — 021 hung after SCP-037: GraphQL failed `wake-engineer` after stripping `wake-sa`. Recut `add_seat`. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-15 13:15 UTC — 021 recut: Look File wakes Engineer B, not the outside agent. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3888,3 +3888,17 @@ Same object: an agent **outside** the recut. Two entries: deployment reds vs fou
 **Re-arm.** Fresh-add `wake-engineer` on #194 after this lands so Engineer plants 037.
 
 **I do not plant Look `src/`.**
+
+---
+
+## 2026-09-15 13:15 UTC — 021 recut: File wakes Engineer B (founder)
+
+**Kind:** Type A recut. Flag 14:00 2026-08-25 stands. Not a plant. **Wake:** sa.
+
+**Founder (preserved):** Look File should not spin up the outside agent. Regular Engineer. The external agent is packet 022 — after N cycles on the same PR.
+
+**Lock.** File → GitHub seed → **`wake-engineer`**. Not `outside-look`. Not `fail-look`. Outside agent stays **022** (held). Engineer B prompt: `<!-- travis-look -->` skips the file gate; `fail-look` still wins if both are on.
+
+**Landed.** Recut [`PM-PACKET-021-LOOK.md`](./PM-PACKET-021-LOOK.md) · test · house chain · Engineer B prompt · work order is 022-only. SA recuts **037**.
+
+**I do not plant `src/`.** Founder re-pastes Engineer B. Do not Save+Activate `outside-look` for Look.

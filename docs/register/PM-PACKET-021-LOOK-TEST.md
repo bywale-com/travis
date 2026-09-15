@@ -7,17 +7,18 @@
 
 Fill **I saw** on this step before the next.
 
-**Pass** = Log · Look files a miss without writing an initiative; `outside-look` lands on the PR SA named; Live is still in preflight and runtime-doors.  
+**Pass** = Log · Look files a miss without writing an initiative; **`wake-engineer`** lands on the PR SA named; Live is still in preflight and runtime-doors.  
 **Hold → Initiative as the file-miss path is a miss.**  
+**File adding `outside-look` is a miss** — that label is packet 022.  
 **A 4th-red counter on this plant is a miss** — that is packet 022.  
-**Cousin PR from the outside agent is a miss.**  
+**Cousin PR from Engineer is a miss.**  
 **Mutating canary dest (“put this on the notes”) is a miss.**
 
 ---
 
 ## Before
 
-Open the Engineer handoff on this PR. It must name: Look door, `outside-look` from File, and that founder Save+Activates the new automation (or that it is already live). It must **not** claim the N=4 door counter is this plant.
+Open the Engineer handoff on this PR. It must name: Look door, **`wake-engineer`** from File, Engineer B Look-seed gate. It must **not** claim File wakes the outside agent. It must **not** claim the N=4 door counter is this plant.
 
 **I saw:**
 
@@ -37,7 +38,7 @@ Open the Engineer handoff on this PR. It must name: Look door, `outside-look` fr
 
 **Do:** Log · Look. Select one or two turns. Type `Mouth never came back after Hey Travis.` File.
 
-**Expect:** Sheet matches **LK2** (note + wash-selected turns + text **File**). Sheet closes. **No** new backlog initiative. GitHub path SA named received the seed. `outside-look` on the targeted PR (or the production path SA ascribed).
+**Expect:** Sheet matches **LK2** (note + wash-selected turns + text **File**). Sheet closes. **No** new backlog initiative. GitHub path SA named received the seed. **`wake-engineer`** on the targeted PR (or the production path SA ascribed). **No** `outside-look` from this File.
 
 **I saw:**
 
@@ -65,6 +66,6 @@ Open the Engineer handoff on this PR. It must name: Look door, `outside-look` fr
 
 ## After
 
-You walked to see if Look is quiet enough. The breaks were already the Engineer’s — including a File that minted a table or dested Engineer.
+You walked to see if Look is quiet enough. The breaks were already the Engineer’s — including a File that minted a table, dested Engineer, or labeled `outside-look`.
 
-**Steps I could not do (human):** Save+Activate the Cursor automation; Talk on a phone; SSO.
+**Steps I could not do (human):** Re-paste Engineer B; Talk on a phone; SSO.
