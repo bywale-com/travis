@@ -16,18 +16,18 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current **21:25 UTC 2026-09-15**. Flag **14:00 2026-08-25**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current **21:55 UTC 2026-09-15**. Flag **14:00 2026-08-25**. |
 | **Stateless PR** | [`STATELESS-PR.md`](./STATELESS-PR.md) — park until founder triggers. |
 | **021 Look** | On `main`. File → **`wake-engineer`**. |
-| **022 Smarter loop** | Held. Sibling PR. |
-| **023 Look catalyst** | Park. Lived Voice miss that named Look. Wake hold. Do not merge until go. |
+| **022 Smarter loop** | On `main` — **Wake:** hold · **Stateless:** park. SA **038** after go. Work order [`WORK-ORDER-OUTSIDE.md`](./WORK-ORDER-OUTSIDE.md). |
+| **023 Look catalyst** | Park ([#199](https://github.com/bywale-com/travis/pull/199)). Lived Voice miss. Wake hold. |
 | Lived specimen | Session `fdad2a1d-5f40-431c-bb6f-1db7d2a52f25`. |
 
 ---
 
 ## Next Architect job
 
-SA recuts 037: File → `wake-engineer`. Founder re-pastes Engineer B (Look-seed gate). Do **not** Save+Activate `outside-look` for Look. 022 stays hold until go.
+022 spec is on `main` (stateless park). Next go: flip **022** to **Wake:** sa, SA **038**, Engineer plants N-count — **not** on the Look door. Do **not** Save+Activate `outside-look` for Look File (021).
 
 ---
 

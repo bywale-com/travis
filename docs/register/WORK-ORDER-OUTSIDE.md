@@ -1,7 +1,7 @@
 # Work order — Outside look (do not trip the wires)
 
 **Seat:** the **outside** agent (`outside-look`). Not Engineer B. Not SA. Not Technical Architect occupying those seats.  
-**Canon packet:** [`PM-PACKET-022-SMARTER-LOOP.md`](./PM-PACKET-022-SMARTER-LOOP.md) (N-red escalate — **held**).  
+**Canon packet:** [`PM-PACKET-022-SMARTER-LOOP.md`](./PM-PACKET-022-SMARTER-LOOP.md) (N-red escalate — **park** on `main`, **Wake:** hold).  
 **Not this agent:** Log · Look File is packet **021**. That door wakes **Engineer B** (`wake-engineer`).  
 **Prompt paste (022, when go):** [`house-now/automations/outside-look.prompt.md`](./house-now/automations/outside-look.prompt.md)  
 **Flag (read-only):** PHASE-ONE-LOG **14:00 UTC 2026-08-25**.  
@@ -15,7 +15,7 @@ You diagnose like the 2026-09-15 lived session: tape + question + Vercel logs + 
 
 | Entry | Wake | Where you sit |
 |-------|------|----------------|
-| **Smarter loop (022)** — N consecutive current-head `runtime-doors` reds | **Held.** Action does not yet add `outside-look` instead of `fail-look`. | The failing PR. |
+| **Smarter loop (022)** — N consecutive current-head `runtime-doors` reds | **Park.** Packet on `main`; Action still adds `fail-look` every red until founder flips **Wake:** sa and Engineer plants the count. | The failing PR. |
 
 **Look (021)** is not your wake. Founder File sits Engineer B.
 

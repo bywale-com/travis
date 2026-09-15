@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-15 21:25 UTC — Stateless PR protocol is house law. Look catalyst parks as 023. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-15 21:55 UTC — Packet 022 Smarter loop on `main` (stateless park). 023 catalyst still open on #199. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3950,3 +3950,15 @@ Same object: an agent **outside** the recut. Two entries: deployment reds vs fou
 **Lock.** Canon [`STATELESS-PR.md`](./STATELESS-PR.md). Park packet is **023** on its own PR — Wake hold, do not merge. This sitting lands the protocol on `main` first so the catalyst PR can use it.
 
 **I do not plant `src/`.** I do not Wake sa. I do not ask Engineer.
+
+---
+
+## 2026-09-15 21:55 UTC — Packet 022 Smarter loop (stateless on main)
+
+**Kind:** Park packet merged stateless. Flag 14:00 2026-08-25 stands.
+
+**Founder (preserved):** work **022** stateless, merge handled — spec on `main`, no automations until go.
+
+**Lock.** [`PM-PACKET-022-SMARTER-LOOP.md`](./PM-PACKET-022-SMARTER-LOOP.md) + test + index. **Wake:** hold · **Stateless:** park. N **= 4** → `outside-look` (when planted). Work order [`WORK-ORDER-OUTSIDE.md`](./WORK-ORDER-OUTSIDE.md). Supersedes draft [#195](https://github.com/bywale-com/travis/pull/195). Closes #195.
+
+**I do not plant `src/`.** I do not Wake sa. I do not Save+Activate `outside-look` until go.
