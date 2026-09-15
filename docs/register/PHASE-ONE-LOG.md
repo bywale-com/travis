@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-13 15:20 UTC — PR description timeline is this open PR only, not the house hotfix index. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-15 13:40 UTC — #194 label job died on force-push ghost BEFORE; recut the diff guard and re-arm preview. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3781,3 +3781,148 @@ Not the model. Not a new face.
 **Lock.** Description timeline = cuts that landed on **this still-open PR**, newest first. Merged cousins stay on their own PR. Do not rewrite #190 in this sitting.
 
 **Landed.** [`PR-AUTOMATION-RULES.md`](./PR-AUTOMATION-RULES.md) § 4 · Engineer prompt · Architect seat · BUILD-PROTOCOL. Re-paste B if the live automation is stale.
+
+---
+
+## 2026-09-15 10:26 UTC — Smarter loop: break the recut; file the lived miss (founder)
+
+**Kind:** Type A. How we build. Two facets, one object. Flag 14:00 2026-08-25 stands. Not a plant. Not a packet until go.
+
+**Founder (preserved):**
+
+> Building a smarter agent loop. After a certain amount of failures… After a certain amount of failures (especially now that we have preflight) a certain number of production failures triggers a smarter agent to diagnose / specify / and fix (without tripping wires) — we need a detailed spec of working without tripping wires, so agents aren’t rediscovering this every time. Really a spec of the work order.
+>
+> So this is pretty simple, it’s really just architecture and me setting up the right automation, and also… deciding on what tools we give this external agent that breaks the loop. So maybe around like 3 or 4 runtime failures. This will spin up and… diagnose, like, do exactly what you did. And maybe fix it. So go all the way to merging and then merging into the existing PR that’s failing so that… attaching a label like fail-look or something to trigger the engineer…
+>
+> Now, the second thing is, if we can automate what we just did with this last… those last errors in the app without me needing to explain. Because this is kind of different from the other failures. The other failures are happening in a state that the agents can… discover. What happens here is like a broad failure. So I have to discover it and then create the ticket. So there’s a way to create a ticket inside of the app. Maybe something like a button? And I might be able to select… what’s most relevant in context to this failure? Maybe add some other… information in the app itself. And I was able to trigger a loop, maybe a smarter agent loop, so it wouldn’t go to an engineer, it might go to this newer automation.
+
+**Lived specimen (this sitting, not a substitute flag).** Hotfix 098/099 preview session `fdad2a1d-5f40-431c-bb6f-1db7d2a52f25`. Founder asked only to inspect the most recent conversation. Tape: repeated “Hey Travis”; agent-ID question; one delayed answer; “ID” heard as “idea”; fragment “Hey. I’m”; then “What was I just asking you?” with no reply. Runtime logs: Live token/SDP/transcript 200, `/events` 60s timeout. Diagnosis did not need a seeded ticket beyond the question. That save-time is the wanted loop.
+
+**What is already true (inspect, not memory).**
+
+- Local first sensor: `npm run test:preflight` (`src/runtime/preflight.ts`). Deploy gate: `.github/workflows/runtime-doors.yml` on `vercel.deployment.ready`. Red + idle → `fail-look`. Engineer B recuts **once** (`docs/register/house-now/automations/sa-complete-engineer.prompt.md`). `previewing` mutex. Stale deploy SHA must not clear `previewing` / add `fail-look` / emerge.
+- There is **no** counter of consecutive reds. Each red is a new sitting. The in-loop Engineer cannot step outside the recut. The loop stops when something **external** stops it (founder, blocker, merge).
+- Product face ticket today is **hold → On the backlog** (`promoteInitiative` in `src/components/Room.tsx` → `POST /api/session/:id/initiatives` with `foundingTurnId`). Source `hold` or `via_travis`. That is a Travis backlog ticket for dest work — **not** a house build ticket, **not** a wake of a Cursor automation. Request log door lists user turns; it does not file a miss.
+
+**Two facets — do not mix methods.**
+
+| Facet | Kind | Job |
+|-------|------|-----|
+| **1. Escalate the build loop** | Type A — who owns the recut after N reds | Cheap GitHub count of **this PR’s** current-head `runtime-doors` failures. At N, wake an **outside** agent. Work order: diagnose like this sitting, specify, maybe plant **without tripping wires**, merge that cut onto **the failing PR**, then a seat label so Engineer continues if anything remains. |
+| **2. File a lived miss from the desk** | Type A (who wakes) + Type B leaf (one door on Log) | Founder-discovered pipe miss that doors never saw. Seed is the question plus selected context. Wakes the **same outside agent**, not Engineer B. |
+
+Same object: an agent **outside** the recut. Two entries: deployment reds vs founder raise.
+
+**Agent alignment (not the flag) — work order without tripping wires.** This sitting already paid for the list. It must be a written spec, not a memory:
+
+1. One PR. Merge the diagnosis/fix onto the **failing** branch. No cousin.
+2. Do not dest Engineer with a mutating canary. Spoken/runtime dest lines acknowledge-only.
+3. Do not treat `ENGINEER-HANDOFF.md` notes as plant-finished / green-light.
+4. Stale deploy SHA ≠ current PR head → no `fail-look`, no emerge, keep `previewing`.
+5. Recut **once**, then stop. Do not watch doors. Do not strip `previewing` to sneak a second green-light.
+6. `test:preflight` before push. Keep Live in preflight and runtime-doors.
+7. Bucket A plant vs Bucket B blocker. Do not invent a store. Do not append PM/SA logs.
+8. Tools for the outside agent: GitHub (PR, Actions logs, labels), Cursor cloud-agent list/transcripts, Vercel logs for **this** deploy URL, live Postgres **read** of the named room, magic-link / bypass only as already hung. No desktop puppet. No world-open Vercel auth.
+
+**Plates.** Facet 2 is a hole on the live Log. Screenshot `travis-psi` first. Lock chrome. Paint only the file-miss door. Do not generate from this prose. No plate this stamp.
+
+**Not locked until he says so.** N = 3 vs 4. After merge: reuse `fail-look` vs a new label. Facet 2: hold-sheet vs a new quiet control. Packet 021 vs hotfix. SA: whether a house ticket is a new store or GitHub Issue / label only.
+
+**I do not plant `src/`.** I do not mint a table. I do not Save + Activate a Cursor automation.
+
+---
+
+## 2026-09-15 11:45 UTC — Packet 021: outside look (Technical Architect)
+
+**Kind:** Packet. Face + technical cut + work-order spec. Flag 14:00 2026-08-25 stands. Not a plant. **Wake:** hold.
+
+**Founder:** continue executing (after the 10:26 vision). Dest-to-Engineer stays; change the canary **line**. Leave handoff-as-plant. Keep Live in both sensors. Do not isolate dest to a disposable agent.
+
+**Architect defaults (override in chat):** N **= 4**. Wake label **`outside-look`** (new — `fail-look` is Engineer B). After the outside sitting: `fail-look` only if Engineer work remains. Facet 2: **new quiet Log door (Look)**, not hold → Initiative. Vehicle: **this packet**, not a hotfix. SA **037**.
+
+**Landed.**
+
+- [`WORK-ORDER-OUTSIDE.md`](./WORK-ORDER-OUTSIDE.md) — do not trip the wires.
+- [`PM-PACKET-021-OUTSIDE-LOOP.md`](./PM-PACKET-021-OUTSIDE-LOOP.md) · [`PM-PACKET-021-OUTSIDE-LOOP-TEST.md`](./PM-PACKET-021-OUTSIDE-LOOP-TEST.md)
+- [`house-now/automations/outside-look.prompt.md`](./house-now/automations/outside-look.prompt.md)
+- Engineer B prompt stops when `outside-look` is on. `PR-AUTOMATION-RULES` · `BUILD-PROTOCOL` · `AUTOMATION-PACKET-CHAIN` · `PM-PACKETS` index.
+
+**Plates.** Still none. Screenshot `travis-psi` Log before painting Look.
+
+**I do not plant `src/`.** I do not mint a table. Founder Save+Activates the new automation. Flip `**Wake:** sa` on go.
+
+---
+
+## 2026-09-15 12:15 UTC — 021 Look plates from psi chrome (Technical Architect)
+
+**Kind:** FACE. Facet 2 of packet 021. Flag 14:00 2026-08-25 stands. Not a plant. **Wake:** hold.
+
+**Protocol.** Screenshot psi first. Locked Log + Requests overlay. Painted only Look. Regenerated LK1 so Look is the same muted weight as Requests (first pass oxblooded the cluster — trash). Regenerated LK2 so File is a text control, not a filled pill, and so a teaching caption did not land on the glass.
+
+**Landed.** [`PLATES-LOOK.md`](./PLATES-LOOK.md) · LK1 [`plates/travis-lk1-log-look-mission.png`](./plates/travis-lk1-log-look-mission.png) · LK2 [`plates/travis-lk2-look-sheet-mission.png`](./plates/travis-lk2-look-sheet-mission.png) · lock [`plates/travis-lk0-psi-log-chrome.png`](./plates/travis-lk0-psi-log-chrome.png). Five buckets in the packet.
+
+**I do not plant `src/`.** Founder signs the look, then go.
+
+---
+
+## 2026-09-15 12:30 UTC — Split 021 Look / 022 Smarter loop (founder)
+
+**Kind:** Protocol. Flag 14:00 2026-08-25 stands.
+
+**Founder (preserved):** separate the two initiatives into 2 PRs. Hold Smarter loop. Pursue Look. Once separated, trigger SA.
+
+**Lock.** [`PM-PACKET-021-LOOK.md`](./PM-PACKET-021-LOOK.md) is the lived-miss door (LK1 click path). **Wake:** sa. SA **037**. N-red escalate is [`PM-PACKET-022-SMARTER-LOOP.md`](./PM-PACKET-022-SMARTER-LOOP.md) on a sibling PR. **Wake:** hold.
+
+**I do not plant `src/`.**
+
+---
+
+## 2026-09-15 12:45 UTC — 021 hung: add_seat stripped then GraphQL-failed (Technical Architect)
+
+**Kind:** House gate. Flag 14:00 2026-08-25 stands. Not Look chrome.
+
+**Lived.** SA signed [`SYSTEMS-CHANGE-PACKET-037-LOOK.md`](./SYSTEMS-CHANGE-PACKET-037-LOOK.md) on [#194](https://github.com/bywale-com/travis/pull/194) (`816b735`). Wake packet seats saw the SCP, stripped `wake-sa`, then `gh pr edit --add-label wake-engineer` died: GitHub GraphQL `Something went wrong` `6C31:EAB1A:F4E8C8:338CEBB:6AA92420`. Job exit 1. PR unlabeled. Engineer never sat.
+
+**Recut.** `add_seat` adds the new seat (4 tries, backoff) **then** strips the others. Failed add leaves the prior seat. SCP path reports and exits 1 instead of echoing “Labeled” after a dead add.
+
+**Re-arm.** Fresh-add `wake-engineer` on #194 after this lands so Engineer plants 037.
+
+**I do not plant Look `src/`.**
+
+---
+
+## 2026-09-15 13:15 UTC — 021 recut: File wakes Engineer B (founder)
+
+**Kind:** Type A recut. Flag 14:00 2026-08-25 stands. Not a plant. **Wake:** sa.
+
+**Founder (preserved):** Look File should not spin up the outside agent. Regular Engineer. The external agent is packet 022 — after N cycles on the same PR.
+
+**Lock.** File → GitHub seed → **`wake-engineer`**. Not `outside-look`. Not `fail-look`. Outside agent stays **022** (held). Engineer B prompt: `<!-- travis-look -->` skips the file gate; `fail-look` still wins if both are on.
+
+**Landed.** Recut [`PM-PACKET-021-LOOK.md`](./PM-PACKET-021-LOOK.md) · test · house chain · Engineer B prompt · work order is 022-only. SA recuts **037**.
+
+**I do not plant `src/`.** Founder re-pastes Engineer B. Do not Save+Activate `outside-look` for Look.
+
+---
+
+## 2026-09-15 13:30 UTC — #190 merged; #194 rebased (founder)
+
+**Kind:** House. Flag 14:00 2026-08-25 stands. Not a plant.
+
+**Founder (preserved):** Yeah sure merge.
+
+**Lock.** [#190](https://github.com/bywale-com/travis/pull/190) (098 + 099) is on `main` (`c89c100`, 12:25 UTC). [#194](https://github.com/bywale-com/travis/pull/194) rebased onto that tip. Plant still File → **`wake-engineer`**. Do not merge 194 until doors paint on the new base. [#195](https://github.com/bywale-com/travis/pull/195) (022) stays **Wake:** hold.
+
+**I do not plant `src/`.** Founder re-pastes Engineer B. Do not Save+Activate `outside-look` for Look.
+
+---
+
+## 2026-09-15 13:40 UTC — #194 stuck: force-push ghost BEFORE (Technical Architect)
+
+**Kind:** House gate. Flag 14:00 2026-08-25 stands.
+
+**Lived.** Force-push `9c74be7` → `dbcf61d` after the rebase. Wake packet seats `label` ran `git diff $BEFORE $AFTER` with BEFORE already dropped. `fatal: bad object 9c74be7`. Exit 128. No `green_light`. `preview-when-clear` skipped. Vercel **Ignored**. No `runtime-doors`. Stale `emerge` remains.
+
+**Recut.** Same file as the add_seat hang: if BEFORE is not in the clone, diff the tip commit only. Do not treat rewritten history as added hotfixes. Handoff touch re-arms plant-finished so this SHA can preview.
+
+**I do not remint Look chrome.** Do not merge 194 until doors paint.

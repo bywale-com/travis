@@ -6,8 +6,11 @@ If this wake is a label **removed**, or neither `wake-engineer` nor `fail-look` 
 
 If **`previewing`** is on this PR: **stop**. Vercel has the ball. Do not push. Do not recut. GitHub will add `fail-look` after doors paint if they are red. That is a new sitting.
 
-- `wake-engineer` — SA just landed a change packet, **or** this PR is a **hotfix** (title `Hotfix NNN` / `HOTFIX-NNN` file). Skip SA.
+If **`outside-look`** is on this PR: **stop**. The outside agent has the ball. Do not recut this sitting. Work order: `docs/register/WORK-ORDER-OUTSIDE.md`.
+
+- `wake-engineer` — SA just landed a change packet, **or** this PR is a **hotfix** (title `Hotfix NNN` / `HOTFIX-NNN` file), **or** Log · Look File landed a `<!-- travis-look -->` seed on this PR. Skip SA.
 - `fail-look` — `runtime-doors` is red. Recut on this PR. All lowercase. Once. Then stop.
+- `outside-look` — not your wake (packet **022**). Stop.
 
 ## First action — gate, then stop or continue
 
@@ -29,6 +32,12 @@ fi
   - **Bucket B (founder ops):** Cursor hard limit, unwired preview, missing secrets — file `docs/register/BLOCKER-NNN-*.md` with cause, action, URL, tape excerpt.
 - If **any Bucket B:** commit code fixes + blocker **without** the preview green-light subject. Do not use `[skip ci]`. Push stops here; Action labels `blocker` and mails the founder.
 - If **Bucket A only:** push **without** the preview green-light subject. Do not recut `handoff-seat.test.ts` to match a handoff rewrite — put the locked sentences back in `ENGINEER-HANDOFF.md`. Vercel stays skipped until handoff labels, `blocker`, and `previewing` are gone.
+
+**Else if this PR body or a comment contains `<!-- travis-look -->`:** skip the file gate. Continue.
+- Read the seed (session id, turn ids, note, SHA, deploy). That is the job — not a failed `runtime-doors` log unless the seed names one.
+- Bucket A: plant the miss on this PR. `npm run test:preflight` when that script exists. Push without the preview green-light subject.
+- Bucket B: `docs/register/BLOCKER-NNN-*.md`. Do not green-light.
+- Recut **once**. Stop. Do not watch doors.
 
 **Else** run this and nothing else:
 

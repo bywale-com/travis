@@ -31,6 +31,7 @@ Action empty-commit Preview [vercel build] and labels **previewing** (no LLM)
 Vercel preview → runtime-doors
         doors paint → clear previewing
         red + idle → fail-look
+        Log · Look File → wake-engineer (packet 021)
         (no fail-look / no second green-light while previewing is on)
 ```
 
@@ -67,7 +68,8 @@ Action empty-commit Preview [vercel build] and labels **previewing** (no LLM)
 Vercel preview → runtime-doors
         doors paint → clear previewing
         red + idle → fail-look
-        (skip fail-look while any of those labels is still on)
+        Log · Look File → wake-engineer (packet 021)
+        (skip fail-look while previewing / seats / blocker is still on)
 ```
 
 Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml). It diffs **this push** (`before…after`), not the whole PR. A new branch (`before` all zeros) diffs the tip commit — `git diff $after` on a clean checkout is empty and will not label. It greps `**Wake:** sa` on the packet at `after`. No Cursor token until the label is added. A packet on hold can sit on the PR; plates may edit it; no boot. If the PR is not open yet (push before create), it waits a few seconds.
@@ -99,9 +101,10 @@ doors paint → clear previewing. Red + idle → one fail-look. Recut once. Stop
 
 1. Pause both, or every later stamp still boots on the old “PR pushed” triggers.
 2. **A** — drop Draft opened / PR opened / PR pushed. Trigger: **Pull request label changed**, label **`wake-sa`** (added).
-3. **B** — drop PR pushed. Trigger: **Pull request label changed**, label **`wake-engineer`** (added). Also **`fail-look`** (added) if that is a separate automation.
+3. **B** — drop PR pushed. Trigger: **Pull request label changed**, label **`wake-engineer`** (added). Also **`fail-look`** (added) if that is a separate automation. Re-paste B so Look File (`<!-- travis-look -->`) skips the file gate, and so B **stops** when `outside-look` is on (022).
 4. **C / PM Look** — disable it. The Action no longer adds `wake-pm-look`.
-5. Re-paste the Engineer prompt. Memories **off**. PR creation **off**.
+5. **Outside look** — packet **022** only (held). Do not Save+Activate for Log · Look File. Trigger later: **Pull request label changed**, label **`outside-look`** (added). Paste [`house-now/automations/outside-look.prompt.md`](./house-now/automations/outside-look.prompt.md). Same environment as B (`DATABASE_URL`). Memories **off**. PR creation **off**.
+6. Re-paste the Engineer prompt. Memories **off**. PR creation **off**.
 
 Prompt gate stays as a belt: do not accept the seat unless this commit has the matching file. Do not run on label **removed**.
 

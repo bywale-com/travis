@@ -33,8 +33,17 @@ const FACE_HTML = `<!doctype html>
   var STAY_KEY = "travis-stay";
   var plate = "voice";
   var logSubmode = "talk";
+  var lookOpen = false;
   var draft = "";
   var root = document.getElementById("root");
+
+  function byName(name) {
+    var all = root.querySelectorAll("button");
+    for (var i = 0; i < all.length; i++) {
+      if (all[i].textContent === name) return all[i];
+    }
+    return null;
+  }
 
   function sessionId() {
     try {
@@ -103,6 +112,12 @@ const FACE_HTML = `<!doctype html>
     var talkOn = logSubmode === "talk";
     var html =
       "<div>" +
+      "<button type=\\"button\\">Backlog</button>" +
+      "<button type=\\"button\\">Look</button>" +
+      "<button type=\\"button\\">Requests</button>" +
+      "<button type=\\"button\\">Leave</button>" +
+      "</div>" +
+      "<div>" +
       "<button type=\\"button\\" aria-pressed=\\"" + (talkOn ? "true" : "false") + "\\">Talk</button>" +
       "<button type=\\"button\\" aria-pressed=\\"" + (talkOn ? "false" : "true") + "\\">Type</button>" +
       (talkOn ? "<button type=\\"button\\">Pause</button><p>Listening... tap once to pause</p>" : "") +
@@ -115,21 +130,50 @@ const FACE_HTML = `<!doctype html>
         "<button type=\\"button\\">Send</button>" +
         "<div id=\\"thread\\"></div>";
     }
+    if (lookOpen) {
+      html +=
+        "<div>" +
+        "<h2>Look</h2>" +
+        "<button type=\\"button\\">Close</button>" +
+        "<textarea aria-label=\\"Note\\"></textarea>" +
+        "<button type=\\"button\\">File</button>" +
+        "</div>";
+    }
     root.innerHTML = html;
-    var buttons = root.querySelectorAll("button");
-    buttons[0].addEventListener("click", function () {
+    byName("Talk").addEventListener("click", function () {
       logSubmode = "talk";
       paint();
       startTalkEar();
     });
-    buttons[1].addEventListener("click", function () {
+    byName("Type").addEventListener("click", function () {
       logSubmode = "type";
       paint();
     });
+    byName("Look").addEventListener("click", function () {
+      lookOpen = true;
+      paint();
+    });
+    if (lookOpen) {
+      byName("Close").addEventListener("click", function () {
+        lookOpen = false;
+        paint();
+      });
+      byName("File").addEventListener("click", function () {
+        var sid = sessionId();
+        var note = (root.querySelector("textarea") || {}).value || "";
+        fetch("/api/session/" + sid + "/look", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ note: note, turnIds: [] }),
+        }).then(function () {
+          lookOpen = false;
+          paint();
+        });
+      });
+    }
     if (!talkOn) {
       var input = root.querySelector("input");
-      var send = buttons[2];
-      send.addEventListener("click", function () {
+      byName("Send").addEventListener("click", function () {
         var text = input.value || "";
         var sid = sessionId();
         fetch("/api/session/" + sid + "/send", {
@@ -257,6 +301,11 @@ export async function startPreflightFace(): Promise<{
 
       if (method === "GET" && tail === "queue") {
         json(res, 200, { queue: [], drainable: [], running: [] });
+        return;
+      }
+
+      if (method === "POST" && tail === "look") {
+        json(res, 200, { ok: true, filed: false, reason: "walk" });
         return;
       }
 

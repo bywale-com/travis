@@ -230,6 +230,7 @@ A seat is disposable. The log is not.
 | Seat READMEs | [`docs/seats/`](./seats/) |
 | House process files | [`docs/register/house-now/protocols/`](./register/house-now/protocols/) |
 | Wake / automations / emerge | [`docs/register/AUTOMATION-PACKET-CHAIN.md`](./register/AUTOMATION-PACKET-CHAIN.md) |
+| Outside look (Look door / lived miss) | [`docs/register/WORK-ORDER-OUTSIDE.md`](./register/WORK-ORDER-OUTSIDE.md) · packet [`021`](./register/PM-PACKET-021-LOOK.md) |
 | PM packets | [`docs/register/PM-PACKETS.md`](./register/PM-PACKETS.md) |
 | Hotfixes | [`docs/register/HOTFIXES.md`](./register/HOTFIXES.md) |
 | Plates | [`docs/register/PLATE-CHROME-RULE.md`](./register/PLATE-CHROME-RULE.md) |

@@ -4,6 +4,7 @@
  */
 
 export type TapeTurn = {
+  id?: string;
   text: string;
   role: string;
   kind: string;

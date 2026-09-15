@@ -1,6 +1,6 @@
 # Cheap gate in front of Cursor Automations.
 # GitHub path filter + this-push diff. No Cursor boot until a label lands.
-# Labels: wake-sa · wake-engineer · fail-look · emerge · blocker · previewing
+# Labels: wake-sa · wake-engineer · fail-look · emerge · blocker · previewing · outside-look
 # Packet: this push lands PM-PACKET-NNN-*.md AND that file has **Wake:** sa
 #   → wake-sa. Missing / hold = wait. Filename alone is not the go.
 # Hotfix: this push **adds** HOTFIX-NNN-*.md → wake-engineer only (no wake-sa).
@@ -78,9 +78,14 @@ jobs:
             export GH_TOKEN="$FALLBACK_GH_TOKEN"
             echo "Label actor: github-actions[bot] (no WAKE_GITHUB_TOKEN)"
           fi
-          if [[ "$BEFORE" == "0000000000000000000000000000000000000000" ]]; then
-            # New branch. `git diff $AFTER` is worktree vs tip — empty on a
-            # clean checkout. Diff the tip commit itself.
+          if [[ "$BEFORE" == "0000000000000000000000000000000000000000" ]] \
+            || ! git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then
+            # New branch, or a force-push whose old tip is gone. `git diff`
+            # a ghost BEFORE exits 128 (#194 rebase onto #190). Diff the tip
+            # commit only — do not treat rewritten history as added hotfixes.
+            if [[ "$BEFORE" != "0000000000000000000000000000000000000000" ]]; then
+              echo "BEFORE $BEFORE is not in this clone (force-push). Diff the tip commit."
+            fi
             if git rev-parse --verify "${AFTER}^" >/dev/null 2>&1; then
               files=$(git diff --name-only "${AFTER}^" "$AFTER")
               added=$(git diff --name-only --diff-filter=A "${AFTER}^" "$AFTER")
@@ -119,10 +124,11 @@ jobs:
           gh label create blocker --color CCCCCC --description "Founder ops hold — automations sleep" 2>/dev/null || true
           gh label create previewing --color 1D76DB --description "Vercel has the ball — no second green-light, no new seat" 2>/dev/null || true
           gh label create preview --color 0E8A16 --description "Cursor: manually trigger Vercel preview build" 2>/dev/null || true
+          gh label create outside-look --color CCCCCC --description "Cursor: outside look (lived miss from Log)" 2>/dev/null || true
 
           strip_seats_except() {
             keep="${1:-}"
-            for l in wake-sa wake-engineer wake-pm-look fail-look; do
+            for l in wake-sa wake-engineer wake-pm-look fail-look outside-look; do
               if [[ "$l" != "$keep" ]]; then
                 gh pr edit "$pr" --remove-label "$l" || true
               fi
@@ -130,13 +136,32 @@ jobs:
           }
           add_seat() {
             lab="$1"
-            if gh pr view "$pr" --json labels --jq '.labels[].name' | grep -qx previewing; then
+            pr_labels=$(gh pr view "$pr" --json labels --jq '.labels[].name')
+            if echo "$pr_labels" | grep -qx previewing; then
               echo "previewing on #$pr. No new seat ($lab)."
               return 0
             fi
+            if echo "$pr_labels" | grep -qx outside-look; then
+              echo "outside-look on #$pr. No new seat ($lab)."
+              return 0
+            fi
+            # Add first, then strip the others. Strip-then-add left #194
+            # unlabeled when GitHub GraphQL died on --add-label (SCP-037).
+            added=""
+            for attempt in 1 2 3 4; do
+              gh pr edit "$pr" --remove-label "$lab" || true
+              if gh pr edit "$pr" --add-label "$lab"; then
+                added=1
+                break
+              fi
+              echo "add-label $lab failed (attempt ${attempt}). Retry."
+              sleep $((attempt * 4))
+            done
+            if [[ -z "$added" ]]; then
+              echo "Could not add $lab after retries. PAT needs Issues write AND Pull requests write, or GitHub GraphQL flaked."
+              return 1
+            fi
             strip_seats_except "$lab"
-            gh pr edit "$pr" --remove-label "$lab" || true
-            gh pr edit "$pr" --add-label "$lab"
           }
 
           # Blocker hold: this push lands BLOCKER-NNN-*.md (not *-RESOLVED).
@@ -218,8 +243,12 @@ jobs:
           fi
 
           if echo "$files" | grep -E '^docs/register/SYSTEMS-CHANGE-PACKET-.+\.md$'; then
-            add_seat wake-engineer
-            echo "Labeled #$pr wake-engineer"
+            if add_seat wake-engineer; then
+              echo "Labeled #$pr wake-engineer"
+            else
+              echo "SCP. Could not add wake-engineer. Leaving prior seat labels in place."
+              exit 1
+            fi
           fi
 
           for f in $(echo "$files" | grep -E '^docs/register/PM-LOOK-.+\.md$' || true); do

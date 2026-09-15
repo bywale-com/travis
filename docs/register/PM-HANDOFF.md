@@ -1,14 +1,14 @@
-# Architect seat handoff — 2026-09-10 20:39 UTC
+# Architect seat handoff — 2026-09-15 12:30 UTC
 
-**This bind is living.** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` is the Technical Architect until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
+**This bind is living.** This chat is the Technical Architect until the founder pastes the successor block into a new chat. Do not write **This bind is done** until that handoff.
 
-**Prior bind done:** `bc-25c5c6bf-006f-4252-9f25-49ab183835b2`.
+**Prior bind:** `bc-b64bcdbb-a2dd-43ad-9904-6a69af55be8a` (2026-09-10). Pickup is the Phase One log, not that transcript.
 
 **Flag:** PHASE-ONE-LOG **14:00 UTC 2026-08-25** — do not overwrite.
 
-**Seat:** Technical Architect (was Technical PM — same seat, architecture added). Inspect `src/`. Spec face + technical cut + file-level architecture. Keep the log. Do not plant. Catalog `pm` is not this seat. Protocol `/protocols/pm.md`. Do not mint `/protocols/technical-pm.md` or `/protocols/technical-architect.md`.
+**Seat:** Technical Architect. Inspect `src/`. Spec face + technical cut + file-level architecture. Keep the log. Do not plant. Catalog `pm` is not this seat. Protocol `/protocols/pm.md`.
 
-**How we build:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md). `npm test` is lib only. `test:runtime` is the E2E walk. GitHub Actions runs both after Vercel is ready. No emerge until all green.
+**How we build:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md).
 
 ---
 
@@ -16,33 +16,23 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current is **20:39 UTC 2026-09-10**. Flag **14:00 2026-08-25**. |
-| 020 first plant | `src/lib/live-connect.ts` + door walks + Action on [#165](https://github.com/bywale-com/travis/pull/165). In-flight waits. Unwired named. |
-| 020 runtime verify | [`PM-PACKET-020-RUNTIME-VERIFY.md`](./PM-PACKET-020-RUNTIME-VERIFY.md). Agenda: Voice wrap + Type send + **unwired glass (Playwright)**. Retro: Type-send tape, `come-back`, `type-dest`. Glass walk is the extra protocol — not silence. **Wake:** sa. SA **036**. |
-| 019 stream architecture | [`PM-PACKET-019-STREAM-ARCH.md`](./PM-PACKET-019-STREAM-ARCH.md). SA **035**. [#163](https://github.com/bywale-com/travis/pull/163). |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current **13:15 UTC 2026-09-15**. Flag **14:00 2026-08-25**. |
+| **021 Look** (this PR, go) | [`PM-PACKET-021-LOOK.md`](./PM-PACKET-021-LOOK.md) · FACE [`PLATES-LOOK.md`](./PLATES-LOOK.md) LK1–LK2 · test. File → **`wake-engineer`**. **Wake:** sa. SA recuts **037**. |
+| **022 Smarter loop** (sibling, hold) | N=4 `runtime-doors` reds → `outside-look`. Packet on the other PR. |
+| Lived specimen | Session `fdad2a1d-5f40-431c-bb6f-1db7d2a52f25`. |
 
 ---
 
 ## Next Architect job
 
-1. SA 036 ascribes secrets, Checks, and how Playwright carries bypass + cookie. Engineer hangs `unwired-glass` plus the retro walks on this PR. Do not plant `src/` from this seat.
-2. 019 first plant still stands on [#163](https://github.com/bywale-com/travis/pull/163). Do not remint.
-3. Do not emerge on a red check. Do not attach a recording of every walk.
-4. Do not remint 011–019 / 027–035.
+SA recuts 037: File → `wake-engineer`. Founder re-pastes Engineer B (Look-seed gate). Do **not** Save+Activate `outside-look` for Look. 022 stays hold until go.
 
 ---
 
 ## Must-not
 
 - Do not overwrite the 14:00 flag.
-- Do not plant `src/` except a deploy blocker already cut.
-- Do not remint 011–019 / 027–035.
-- Do not tell Engineer to invent a Travis orchestrator or a Travis telemetry table.
-- Do not install Pipecat as Travis.
-- Do not put Hear it / Skip buttons back.
-- Do not farm a phone or inject a real microphone in 020.
-- Do not turn Vercel Authentication off for the world so a test can get in.
-- Do not let runtime tests resume the founder’s living room.
-- Do not run four door POSTs in parallel on one session.
-- Do not plant Gemini’s inverted glass.
-- Do not label emerge while the Deployment Check is red.
+- Do not plant `src/`.
+- Do not remint 011–020 / 027–036 / 086–099.
+- Do not plant 022’s N-red counter on the Look PR.
+- Do not mint a table.
