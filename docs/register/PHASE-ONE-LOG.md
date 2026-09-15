@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-15 12:15 UTC — 021 Look plates LK1–LK2 from psi chrome. Wake hold. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-15 12:30 UTC — Split: 021 Look go; 022 Smarter loop hold. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3862,3 +3862,15 @@ Same object: an agent **outside** the recut. Two entries: deployment reds vs fou
 **Landed.** [`PLATES-LOOK.md`](./PLATES-LOOK.md) · LK1 [`plates/travis-lk1-log-look-mission.png`](./plates/travis-lk1-log-look-mission.png) · LK2 [`plates/travis-lk2-look-sheet-mission.png`](./plates/travis-lk2-look-sheet-mission.png) · lock [`plates/travis-lk0-psi-log-chrome.png`](./plates/travis-lk0-psi-log-chrome.png). Five buckets in the packet.
 
 **I do not plant `src/`.** Founder signs the look, then go.
+
+---
+
+## 2026-09-15 12:30 UTC — Split 021 Look / 022 Smarter loop (founder)
+
+**Kind:** Protocol. Flag 14:00 2026-08-25 stands.
+
+**Founder (preserved):** separate the two initiatives into 2 PRs. Hold Smarter loop. Pursue Look. Once separated, trigger SA.
+
+**Lock.** [`PM-PACKET-021-LOOK.md`](./PM-PACKET-021-LOOK.md) is the lived-miss door (LK1 click path). **Wake:** sa. SA **037**. N-red escalate is [`PM-PACKET-022-SMARTER-LOOP.md`](./PM-PACKET-022-SMARTER-LOOP.md) on a sibling PR. **Wake:** hold.
+
+**I do not plant `src/`.**

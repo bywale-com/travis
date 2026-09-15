@@ -101,9 +101,9 @@ When Vercel finishes deploying the preview, `runtime-doors` executes all automat
   4. A GitHub Issue is also opened with the walk sheet for human smoke testing.
 * **If doors paint Fail (Red):**
   1. The `previewing` mutex lock is removed.
-  2. The PR is labeled **`fail-look`** (if idle), re-waking the Engineer to diagnose and recut.
+  2. The PR is labeled **`fail-look`** (if idle), re-waking the Engineer to diagnose and recut. Nth-red escalate is packet **022** (held).
 * **If the doors job is cancelled or times out:** treat it as Fail (Red), not Pass. No emerge. Add `fail-look` when idle. A cancel is not a green check.
-* **Lived miss from the app (Log · Look):** not an initiative. Files context + note into the same `outside-look` agent. Not Engineer B. Not hold → Initiative.
+* **Lived miss from the app (Log · Look, packet 021):** not an initiative. Files context + note into `outside-look`. Not Engineer B. Not hold → Initiative.
 
 ---
 
@@ -134,8 +134,7 @@ Example: title says Hotfix 097, and 095 + 096 + 097 all happened on that still-o
 | Push code plant (`src/` or `ENGINEER-HANDOFF.md`) | Strips seat labels, sets `green_light=true` | **Yes** (adds `previewing` lock and triggers preview) |
 | Push edits to existing docs/notes | None | No |
 | Manually add label `preview` to PR | Removes `preview`, checks locks | **Yes** (adds `previewing` lock and triggers preview) |
-| Doors paint Fail and PR is idle (reds 1–3 since reset) | Removes `previewing`, adds `fail-look` | No |
-| Doors paint Fail and PR is idle (4th current-head red) | Removes `previewing`, adds `outside-look` (not `fail-look`) | No |
-| Log · Look File (lived miss) | Adds `outside-look` on the targeted PR (SA 037 ascribes production-psi) | No |
+| Doors paint Fail and PR is idle | Removes `previewing`, adds `fail-look` | No |
+| Log · Look File (lived miss, packet 021) | Adds `outside-look` on the targeted PR (SA 037 ascribes production-psi) | No |
 | Doors paint Pass (Green) | Removes `previewing`, adds `emerge`, sends email | No (already deployed) |
 | Push `BLOCKER-NNN-*.md` | Strips seats, adds `blocker` | No |

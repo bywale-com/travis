@@ -1,7 +1,7 @@
 # Work order — Outside look (do not trip the wires)
 
 **Seat:** the **outside** agent (`outside-look`). Not Engineer B. Not SA. Not Technical Architect occupying those seats.  
-**Canon packet:** [`PM-PACKET-021-OUTSIDE-LOOP.md`](./PM-PACKET-021-OUTSIDE-LOOP.md)  
+**Canon packet:** [`PM-PACKET-021-LOOK.md`](./PM-PACKET-021-LOOK.md) (File from Log). N-red escalate is **022** (held).  
 **Prompt paste:** [`house-now/automations/outside-look.prompt.md`](./house-now/automations/outside-look.prompt.md)  
 **Flag (read-only):** PHASE-ONE-LOG **14:00 UTC 2026-08-25**.  
 **Why this page exists:** agents were rediscovering trip-wires every sitting. This is the work order. Read it before touching `src/` or labels.
@@ -14,8 +14,8 @@ You diagnose like the 2026-09-15 lived session: tape + question + Vercel logs + 
 
 | Entry | Wake | Where you sit |
 |-------|------|----------------|
-| **Facet 1** — N consecutive current-head `runtime-doors` reds | Action adds `outside-look` **instead of** `fail-look` | The **failing** open PR. Same branch. No cousin. |
-| **Facet 2** — founder files a lived miss from Log | Same label, from the desk door | Open plant PR for that deploy if one exists; else SA’s ascribed GitHub Issue → PR path. Still one PR. |
+| **Look (021)** — founder files a lived miss from Log | Desk door adds `outside-look` | Open plant PR for that deploy if one exists; else SA’s ascribed GitHub Issue → PR path. Still one PR. |
+| **Smarter loop (022)** — N consecutive current-head `runtime-doors` reds | **Held.** Not this plant. Action does not yet add `outside-look` instead of `fail-look`. | — |
 
 Do not wake Engineer B until this sitting has either planted a complete Bucket A cut or named what remains. Do not dest Travis seats as the canary.
 
@@ -27,7 +27,7 @@ Paid for on [#190](https://github.com/bywale-com/travis/pull/190) and [#193](htt
 
 ### 1. One PR
 
-Work lands on the PR that is failing (facet 1) or the PR the desk door targeted (facet 2). `git checkout` that head. Commit. Push. **Do not** `gh pr create`. **Do not** mint a cousin because a second seat sat.
+Work lands on the PR the desk door targeted. `git checkout` that head. Commit. Push. **Do not** `gh pr create`. **Do not** mint a cousin because a second seat sat.
 
 ### 2. Non-mutating canary
 
@@ -51,7 +51,7 @@ If you touch dest/runtime walks, the spoken line is acknowledge-only, for exampl
 
 ### 5. Recut once, then stop
 
-Same law as Engineer B. One sitting. Push. **Stop.** Do not watch doors. Do not stay subscribed. Do not recut because a later synchronize, Vercel preview, or merge event arrived on this same run. If doors go red again, GitHub counts; at N it is a **new** outside sitting.
+Same law as Engineer B. One sitting. Push. **Stop.** Do not watch doors. Do not stay subscribed. Do not recut because a later synchronize, Vercel preview, or merge event arrived on this same run.
 
 ### 6. Preflight before push; Live stays in both sensors
 
@@ -102,7 +102,7 @@ Do not sit in Vercel MCP and call that done. Do not ask the founder to re-explai
 
 Match the 15 Sep sitting:
 
-1. Name the PR, head SHA, deploy URL, newest current-head `runtime-doors` conclusion (facet 1) **or** the session id + founder note (facet 2).
+1. Name the session id + founder note + selected turns (and the PR/deploy if the desk knew one).
 2. Read the tape of the named room (Postgres and/or Log). Read Vercel logs for that URL around the miss.
 3. Split **ear / mouth / continuity / dest / doors**. The specimen: Live token/SDP/transcript 200; `/events` timed out; founder asked “What was I just asking you?” with no reply. Ear mostly worked; mouth/continuity did not.
 4. Bucket A vs B. Specified-and-clear vs not.
@@ -113,7 +113,7 @@ Then either plant, or write a hotfix/spec on **this** PR that Engineer can plant
 
 ## After this sitting (labels)
 
-Remove `outside-look` when you push the outcome (fresh-add on the next N would otherwise no-op while you still hold the seat).
+Remove `outside-look` when you push the outcome.
 
 | Outcome | Label |
 |---------|--------|
@@ -128,18 +128,9 @@ Never use the exact subject `Preview [vercel build]`.
 
 ---
 
-## Count (facet 1 — cheap GitHub)
+## Count (022 — held)
 
-N **= 4** (Architect default; founder said 3 or 4).
-
-On a current-head `runtime-doors` red, when the PR is idle (no `wake-sa` / `wake-engineer` / `wake-pm-look` / `fail-look` / `outside-look` / `blocker` / `previewing`):
-
-1. Find the last reset: newer of last `emerge` label-add or last `outside-look` label-add on this PR (or PR open if neither).
-2. Count `fail-look` **labeled** events after that reset.
-3. If `count + 1 >= 4`: add `outside-look` (**do not** add `fail-look`).
-4. Else: add `fail-look` as today (fresh-add).
-
-Stale-SHA reds do not count (they never label). Green emerge resets. An outside sitting resets. Engineer then gets another three recuts before the next outside wake.
+N-red escalate is **packet 022**. Do not plant it from a Look sitting. Until 022 lands, every idle current-head red still `fail-look`s Engineer B.
 
 ---
 

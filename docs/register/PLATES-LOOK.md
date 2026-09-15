@@ -1,8 +1,8 @@
 # Plates — Look (file a lived miss from Log)
 
-**Status:** FACE for packet **021** facet 2. Not planted.  
-**Packet:** [`PM-PACKET-021-OUTSIDE-LOOP.md`](./PM-PACKET-021-OUTSIDE-LOOP.md)  
-**Test:** [`PM-PACKET-021-OUTSIDE-LOOP-TEST.md`](./PM-PACKET-021-OUTSIDE-LOOP-TEST.md)  
+**Status:** FACE for packet **021** Look. Not planted.  
+**Packet:** [`PM-PACKET-021-LOOK.md`](./PM-PACKET-021-LOOK.md)  
+**Test:** [`PM-PACKET-021-LOOK-TEST.md`](./PM-PACKET-021-LOOK-TEST.md)  
 **Seat:** Technical Architect.  
 **When:** Printed 2026-09-15.  
 **Chrome rule:** [`PLATE-CHROME-RULE.md`](./PLATE-CHROME-RULE.md).  

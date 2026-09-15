@@ -30,8 +30,8 @@ Action empty-commit Preview [vercel build] and labels **previewing** (no LLM)
         ↓
 Vercel preview → runtime-doors
         doors paint → clear previewing
-        red + idle → fail-look (reds 1–3)
-        4th current-head red → outside-look (same PR; not Engineer B)
+        red + idle → fail-look
+        Log · Look File → outside-look (packet 021)
         (no fail-look / no second green-light while previewing is on)
 ```
 
@@ -67,9 +67,9 @@ Action empty-commit Preview [vercel build] and labels **previewing** (no LLM)
         ↓
 Vercel preview → runtime-doors
         doors paint → clear previewing
-        red + idle → fail-look (reds 1–3 since emerge / last outside-look)
-        4th current-head red → outside-look (not fail-look)
-        (skip both while previewing / seats / blocker / outside-look is still on)
+        red + idle → fail-look
+        Log · Look File → outside-look (packet 021; skip fail-look while outside-look is on)
+        (skip fail-look while previewing / seats / blocker / outside-look is still on)
 ```
 
 Action: [`.github/workflows/wake-packet-seats.yml`](../../.github/workflows/wake-packet-seats.yml). It diffs **this push** (`before…after`), not the whole PR. A new branch (`before` all zeros) diffs the tip commit — `git diff $after` on a clean checkout is empty and will not label. It greps `**Wake:** sa` on the packet at `after`. No Cursor token until the label is added. A packet on hold can sit on the PR; plates may edit it; no boot. If the PR is not open yet (push before create), it waits a few seconds.
@@ -90,7 +90,7 @@ Action strips seat labels and sets green_light=true. No wake-pm-look.
         ↓
 Action empty-commit Preview [vercel build] when green_light is set and labels are clear, and labels previewing
         ↓
-doors paint → clear previewing. Red + idle → fail-look (reds 1–3). 4th current-head red → outside-look. Recut once. Stop.
+doors paint → clear previewing. Red + idle → one fail-look. Recut once. Stop.
 ```
 
 **C must take a hotfix.** Live look that stops on “no packets” is the old paste. PM Look automation is off (Hotfix 090). Do not require a packet.
@@ -103,7 +103,7 @@ doors paint → clear previewing. Red + idle → fail-look (reds 1–3). 4th cur
 2. **A** — drop Draft opened / PR opened / PR pushed. Trigger: **Pull request label changed**, label **`wake-sa`** (added).
 3. **B** — drop PR pushed. Trigger: **Pull request label changed**, label **`wake-engineer`** (added). Also **`fail-look`** (added) if that is a separate automation. Re-paste B so it **stops** when `outside-look` is on.
 4. **C / PM Look** — disable it. The Action no longer adds `wake-pm-look`.
-5. **Outside look** (packet 021) — **new** automation. Trigger: **Pull request label changed**, label **`outside-look`** (added). Paste [`house-now/automations/outside-look.prompt.md`](./house-now/automations/outside-look.prompt.md). Same environment as B (`DATABASE_URL`). Memories **off**. PR creation **off**.
+5. **Outside look** (packet 021 Look) — **new** automation. Trigger: **Pull request label changed**, label **`outside-look`** (added). Paste [`house-now/automations/outside-look.prompt.md`](./house-now/automations/outside-look.prompt.md). Same environment as B (`DATABASE_URL`). Memories **off**. PR creation **off**. N-red escalate is packet **022** (held) — do not wire the counter until then.
 6. Re-paste the Engineer prompt. Memories **off**. PR creation **off**.
 
 Prompt gate stays as a belt: do not accept the seat unless this commit has the matching file. Do not run on label **removed**.
