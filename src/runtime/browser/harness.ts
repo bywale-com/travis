@@ -7,6 +7,7 @@ import { chromium, type Browser, type BrowserContext, type Page } from "playwrig
 import { fileURLToPath } from "node:url";
 import { OPERATOR_COOKIE } from "@/lib/operator-auth";
 import { STAY_KEY } from "@/lib/stay";
+import { DEST_CANARY } from "../dest-canary";
 import { doorFetch, openFreshRoom, runtimeBaseUrl, type Desk } from "../desk";
 
 /** Same key as `src/theme/character.tsx` — returning operator already picked. */
@@ -15,8 +16,7 @@ export const CHARACTER_KEY = "travis-character";
 export const PHONE = { width: 390, height: 844 };
 
 export const TYPE_LINE = "One-line note on the tape.";
-export const DEST_LINE =
-  "Engineer, this is a Travis runtime canary. Acknowledge only. Do not edit files, commit, push, or update the handoff.";
+export const DEST_LINE = DEST_CANARY;
 
 export function streamArchWavPath(): string {
   return fileURLToPath(new URL("../fixtures/stream-arch-cue.wav", import.meta.url));

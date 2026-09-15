@@ -35,13 +35,14 @@ Work lands on the PR the desk door targeted. `git checkout` that head. Commit. P
 
 Do not dest Engineer (or any seated agent) with a line that asks them to edit files, commit, push, or update the handoff.
 
-On `main` today the stream-arch walk still dests:
+On `main` the dest canary is acknowledge-only:
 
-```7:7:src/runtime/walks/voice-stream-arch.spec.ts
-const DEST_LINE = "Engineer, put this on the notes: stream-arch cue.";
+```1:3:src/runtime/dest-canary.ts
+export const DEST_CANARY =
+  "Engineer, this is a Travis runtime canary. Acknowledge only. Do not edit files, commit, push, or update the handoff.";
 ```
 
-If you touch dest/runtime walks, the spoken line is acknowledge-only, for example: `Engineer, this is a Travis runtime canary. Acknowledge only. Do not edit files, commit, push, or update the handoff.` Do not “leave a note” in `ENGINEER-HANDOFF.md` from a canary.
+Keep that line. Do not “leave a note” in `ENGINEER-HANDOFF.md` from a canary.
 
 ### 3. Handoff notes are not a plant (leave the exception)
 
