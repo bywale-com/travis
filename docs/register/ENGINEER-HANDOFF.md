@@ -1,19 +1,15 @@
-# Engineer seat handoff — 2026-09-15
+# Engineer seat handoff — 2026-09-21
 
-**This bind is living.** Packet **022** Smarter loop on **this PR**. **Wake:** sa · SCP **038** signed.
+**This bind is done.** Packet **022** Smarter loop merged on `main` ([#201](https://github.com/bywale-com/travis/pull/201)). N-count lives in `runtime-doors-red-label.sh`.
 
-**Plant:** `.github/scripts/runtime-doors-red-label.sh` — timeline count of `fail-look` since last `emerge` / `outside-look`. Reds **1–3** fresh-add **`fail-look`**. **4th** fresh-add **`outside-look`** (not `fail-look`). Stale SHA and hold skips unchanged. Do not remint **037** Look (`wake-engineer` only). Do not add `outside-look` from Look File.
+**Outside agent:** **`outside-look`** may be labeled on the 4th red. Founder runs the outside sitting **manually** (no Save+Activate automation). Work order still [`WORK-ORDER-OUTSIDE.md`](./WORK-ORDER-OUTSIDE.md).
 
-**Founder after merge:** Save+Activate Cursor automation **`outside-look`** with [`outside-look.prompt.md`](./house-now/automations/outside-look.prompt.md). Action only creates the label; automation must exist to run the outside agent.
+**Next initiative:** **023** Look catalyst — lived Voice/session miss ([`PM-PACKET-023-LOOK-CATALYST.md`](./PM-PACKET-023-LOOK-CATALYST.md)). **Wake:** hold until founder go. Work on the **catalyst PR** (not a cousin). Specimen `fdad2a1d-5f40-431c-bb6f-1db7d2a52f25`.
 
-**Before push:** `npm run test:preflight` when green locally.
-
-**Trail:** git + this PR. **One PR per initiative.** Do not append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
+**Trail:** git + PRs. **One PR per initiative.** Do not append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
 
 ---
 
 ## Where we stopped
 
-022 N-count planted. Walk sheet [`PM-PACKET-022-SMARTER-LOOP-TEST.md`](./PM-PACKET-022-SMARTER-LOOP-TEST.md). Human proof of 4th-red label is founder/SSO. Do not watch doors after push.
-
-**Prior binds:** 037 Look who-wakes on [#194](https://github.com/bywale-com/travis/pull/194) (merged). Dest canary acknowledge-only on `main` ([#197](https://github.com/bywale-com/travis/pull/197)).
+022 closed. 023 park lands on `main` with [#199](https://github.com/bywale-com/travis/pull/199). Catalyst **fix** (events / mouth / session) is the next plant when **Wake:** sa — not Look File (021).

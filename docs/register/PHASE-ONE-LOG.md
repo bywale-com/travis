@@ -2,7 +2,7 @@
 
 **Purpose:** Running log so a new agent can start where we stopped. Thesis stays in [`PHASE-ONE.md`](./PHASE-ONE.md). Nothing is more important than this file staying current.
 
-**Current (read first, then the newest stamp at the bottom):** 2026-09-15 21:55 UTC — Packet 022 Smarter loop on `main` (stateless park). 023 catalyst still open on #199. Flag 14:00 2026-08-25 stands.
+**Current (read first, then the newest stamp at the bottom):** 2026-09-21 09:55 UTC — Balance: **022** plant on `main` ([#201](https://github.com/bywale-com/travis/pull/201)); `outside-look` label only, agent **manual**. **023** catalyst park on `main`; fix work on the catalyst PR. Flag 14:00 2026-08-25 stands.
 
 **How we maintain this log**
 
@@ -3962,3 +3962,25 @@ Same object: an agent **outside** the recut. Two entries: deployment reds vs fou
 **Lock.** [`PM-PACKET-022-SMARTER-LOOP.md`](./PM-PACKET-022-SMARTER-LOOP.md) + test + index. **Wake:** hold · **Stateless:** park. N **= 4** → `outside-look` (when planted). Work order [`WORK-ORDER-OUTSIDE.md`](./WORK-ORDER-OUTSIDE.md). Supersedes draft [#195](https://github.com/bywale-com/travis/pull/195). Closes #195.
 
 **I do not plant `src/`.** I do not Wake sa. I do not Save+Activate `outside-look` until go.
+
+---
+
+## 2026-09-15 21:40 UTC — Packet 023 Look catalyst (park)
+
+**Kind:** Park packet only. Flag 14:00 2026-08-25 stands.
+
+**Lock.** [`PM-PACKET-023-LOOK-CATALYST.md`](./PM-PACKET-023-LOOK-CATALYST.md) + test on a **draft** stateless PR. **Wake:** hold · **Stateless:** park. Specimen session `fdad2a1d-5f40-431c-bb6f-1db7d2a52f25`. Not a plant. Not a merge until founder go.
+
+**I do not Wake sa.** I do not touch `ENGINEER-HANDOFF.md`.
+
+---
+
+## 2026-09-21 09:55 UTC — House balance (founder)
+
+**Kind:** Merge + manual outside. Flag 14:00 2026-08-25 stands.
+
+**Founder (preserved):** merge what we need; **outside-look** automation stays off — run the outside agent **manually** when the label appears. Ready to tackle **023** Look catalyst on its PR.
+
+**Lock.** [#201](https://github.com/bywale-com/travis/pull/201) merged (022 N-count). Park **023** lands on `main`; catalyst **fix** continues on the catalyst initiative PR (**Wake:** hold until go). Do not block 023 on Save+Activate `outside-look`.
+
+**I do not Wake sa on 023 yet.**

@@ -16,18 +16,18 @@
 
 | What | Where |
 |------|--------|
-| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current **21:55 UTC 2026-09-15**. Flag **14:00 2026-08-25**. |
+| Trail | [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) — Current **09:55 UTC 2026-09-21**. Flag **14:00 2026-08-25**. |
 | **Stateless PR** | [`STATELESS-PR.md`](./STATELESS-PR.md) — park until founder triggers. |
 | **021 Look** | On `main`. File → **`wake-engineer`**. |
-| **022 Smarter loop** | **Wake:** sa · SCP **038** on open initiative PR. N=4 → `outside-look`. |
-| **023 Look catalyst** | Park ([#199](https://github.com/bywale-com/travis/pull/199)). Lived Voice miss. Wake hold. |
+| **022 Smarter loop** | Merged [#201](https://github.com/bywale-com/travis/pull/201). N=4 labels **`outside-look`**; agent **manual**. |
+| **023 Look catalyst** | Park → `main` via [#199](https://github.com/bywale-com/travis/pull/199); **fix** on catalyst PR. **Wake:** hold. |
 | Lived specimen | Session `fdad2a1d-5f40-431c-bb6f-1db7d2a52f25`. |
 
 ---
 
 ## Next Architect job
 
-022 triggered: **Wake:** sa, SCP **038**, Engineer plant on initiative PR. Founder Save+Activates `outside-look` automation after merge — not for Look File (021).
+**023** catalyst: spec on `main`; diagnose/fix on the catalyst initiative PR when founder flips **Wake:** sa. **022** outside agent is **manual** (no automation). Do not block 023 on `outside-look` Save+Activate.
 
 ---
 
