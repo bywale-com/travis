@@ -1,17 +1,20 @@
 # Engineer seat handoff — 2026-09-21
 
-**This bind is living.** Packet **023** Look catalyst on **this PR** ([#202](https://github.com/bywale-com/travis/pull/202)). **Wake:** sa · SCP **039** signed.
+**This bind is living.** Packet **023** on **[#202](https://github.com/bywale-com/travis/pull/202)**.
 
-**Plant:** Room wire rotates before the 60s Hobby cap — `src/lib/room-wire.ts`, `GET …/events` lifetime close at 54s, client abort at 52s / `wire` rotate event. Reconnect stays immediate (`afterSeq`). Specimen `fdad2a1d-5f40-431c-bb6f-1db7d2a52f25`.
+**Pickup (Technical Architect cut):** [`PM-PACKET-023-LOOK-CATALYST-ENGINEER-CUT.md`](./PM-PACKET-023-LOOK-CATALYST-ENGINEER-CUT.md) — read first.
 
-**Before push:** `npm run test:preflight`. **Human:** walk test B on psi (recall question) — doors do not close the catalyst alone.
+**Immediate**
 
-**Not this PR:** Look File (037). **022** outside label is manual.
+1. **Remove `previewing`** on #202 (founder label write if Actions bot cannot).  
+2. **Preview is red** because `events/route` used a non-literal `maxDuration`. Revert plant `97564b9` **or** fix with literal `60` per the cut — **only Path B if packet is `Wake:** sa** again.
 
-**Trail:** git + this PR. **One PR per initiative.** Do not append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
+**Do not** assume the room-wire commit is good to merge as-is.
+
+**Trail:** git + #202. **One PR per initiative.** Do not append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
 
 ---
 
 ## Where we stopped
 
-039 planted. Preview + `runtime-doors` on this head. Do not watch doors after one recut.
+Premature 039 plant broke Vercel build. Founder re-held product intent: spec/park first, plant when cut is clear. Mutex: `previewing` on #202 until removed.

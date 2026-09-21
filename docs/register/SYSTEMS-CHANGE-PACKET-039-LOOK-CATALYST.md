@@ -1,7 +1,7 @@
 # SYSTEMS-CHANGE-PACKET-039 — Look catalyst (room wire continuity)
 
 **Number:** `039` — next systems packet is **040**. Never reuse.  
-**Status:** **Signed.** Plant on this PR ([#202](https://github.com/bywale-com/travis/pull/202)).  
+**Status:** **Signed** (intent). **First plant invalid** — `maxDuration` must stay literal `60` on the route. Engineer cut: [`PM-PACKET-023-LOOK-CATALYST-ENGINEER-CUT.md`](./PM-PACKET-023-LOOK-CATALYST-ENGINEER-CUT.md).  
 **Seat:** Systems Analyst. Engineer pastes this.  
 **When:** 2026-09-21 (founder go on PM-023).  
 **PM packet:** [`PM-PACKET-023-LOOK-CATALYST.md`](./PM-PACKET-023-LOOK-CATALYST.md)  

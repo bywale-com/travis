@@ -9,8 +9,8 @@ test("Engineer Current names where the last bind stopped", () => {
   );
   assert.match(handoff, /This bind is living/);
   assert.match(handoff, /023/);
-  assert.match(handoff, /Look catalyst/);
-  assert.match(handoff, /fdad2a1d/);
+  assert.match(handoff, /LOOK-CATALYST-ENGINEER-CUT/);
+  assert.match(handoff, /previewing/);
   assert.match(handoff, /One PR per initiative/);
 });
 

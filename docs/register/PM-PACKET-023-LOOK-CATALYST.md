@@ -1,11 +1,12 @@
 # Packet 023 — Look catalyst (lived Voice miss that named Look)
 
 **Number:** `023` — PM packet for the **catalyst**, not a remint of SA [`SYSTEMS-CHANGE-PACKET-023-TAPE.md`](./SYSTEMS-CHANGE-PACKET-023-TAPE.md) (tape / 2026-09-03). Index: [`PM-PACKETS.md`](./PM-PACKETS.md).  
-**Seat:** Engineer. **SA** ascribes **039**.  
-**When:** Named 2026-09-15. Founder go 2026-09-21.  
-**Status:** Specified. Plant on [#202](https://github.com/bywale-com/travis/pull/202).  
-**Wake:** sa  
-**SCP:** [`SYSTEMS-CHANGE-PACKET-039-LOOK-CATALYST.md`](./SYSTEMS-CHANGE-PACKET-039-LOOK-CATALYST.md)  
+**Seat:** Engineer (pickup). **SA** **039** intent; plant recut required.  
+**When:** Named 2026-09-15.  
+**Status:** Specified — **hold** (premature plant reverted or fixed per engineer cut).  
+**Wake:** hold  
+**Engineer cut:** [`PM-PACKET-023-LOOK-CATALYST-ENGINEER-CUT.md`](./PM-PACKET-023-LOOK-CATALYST-ENGINEER-CUT.md)  
+**SCP:** [`SYSTEMS-CHANGE-PACKET-039-LOOK-CATALYST.md`](./SYSTEMS-CHANGE-PACKET-039-LOOK-CATALYST.md) (intent; first plant invalid)  
 **Test spec:** [`PM-PACKET-023-LOOK-CATALYST-TEST.md`](./PM-PACKET-023-LOOK-CATALYST-TEST.md)  
 **Flag:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) **10:26 UTC 2026-09-15** (catalyst) · **21:25 UTC** (park).  
 **Law:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md).  
@@ -63,4 +64,4 @@ Human walk on psi remains open after any automation greens.
 
 SA number for ascribe. Whether fix is events lifetime, reconnect, STT/TTS ordering, or a store field. Whether preflight/runtime can ever catch this without a lived Voice walk.
 
-**Plant:** room wire rotate (`src/lib/room-wire.ts`, events route, `Room.tsx`). Human walk on psi still closes the catalyst.
+**Engineer:** follow the cut. Do not merge broken preview. Human walk on psi still closes the catalyst when plant is valid.
