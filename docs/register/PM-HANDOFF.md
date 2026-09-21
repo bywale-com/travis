@@ -20,7 +20,7 @@
 | **Stateless PR** | [`STATELESS-PR.md`](./STATELESS-PR.md) — park until founder triggers. |
 | **021 Look** | On `main`. File → **`wake-engineer`**. |
 | **022 Smarter loop** | Merged [#201](https://github.com/bywale-com/travis/pull/201). N=4 labels **`outside-look`**; agent **manual**. |
-| **023 Look catalyst** | Park → `main` via [#199](https://github.com/bywale-com/travis/pull/199); **fix** on catalyst PR. **Wake:** hold. |
+| **023 Look catalyst** | Park on `main` ([#199](https://github.com/bywale-com/travis/pull/199)). **Work:** [#202](https://github.com/bywale-com/travis/pull/202). **Wake:** hold. |
 | Lived specimen | Session `fdad2a1d-5f40-431c-bb6f-1db7d2a52f25`. |
 
 ---

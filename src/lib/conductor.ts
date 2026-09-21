@@ -114,3 +114,26 @@ export function conductorOnEnd(opts: {
   if (!matchConductorPhrase(opts.text, opts.phrases).matched) return NO_SEND;
   return { send: true, text: opts.text };
 }
+
+/**
+ * Voice Live wrap door (SCP-035). Dest already left on transcript.
+ * Finalize only synthesizes. End-anchored I'm done still wins.
+ * Realtime can concatenate wrap before the dest line ("I'm done. Engineer, …").
+ */
+export function liveWrapUtterance(
+  text: string,
+  phrases: string[],
+): string | null {
+  if (conductorOnEnd({ text, phrases }).send) return "I'm done";
+  const folded = foldSttContractions(text.trim());
+  if (!folded) return null;
+  const sorted = [...phrases].sort((a, b) => b.length - a.length);
+  for (const phrase of sorted) {
+    const p = phrase.trim();
+    if (!p) continue;
+    const escaped = p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const re = new RegExp(`^${escaped}\\s*[.?!]+\\s+`, "i");
+    if (re.test(folded)) return "I'm done";
+  }
+  return null;
+}

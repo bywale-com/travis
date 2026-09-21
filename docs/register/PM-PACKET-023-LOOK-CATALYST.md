@@ -1,18 +1,18 @@
 # Packet 023 — Look catalyst (lived Voice miss that named Look)
 
 **Number:** `023` — PM packet for the **catalyst**, not a remint of SA [`SYSTEMS-CHANGE-PACKET-023-TAPE.md`](./SYSTEMS-CHANGE-PACKET-023-TAPE.md) (tape / 2026-09-03). Index: [`PM-PACKETS.md`](./PM-PACKETS.md).  
-**Seat:** Technical Architect (park). **Do not plant** until founder go.  
-**When:** Named 2026-09-15 (stateless park).  
-**Status:** Specified — **park**. Underlying product miss; **021** is the filing door, not this fix.  
+**Seat:** Engineer (pickup). **SA** **039** intent; plant recut required.  
+**When:** Named 2026-09-15.  
+**Status:** Specified — **hold** (premature plant reverted or fixed per engineer cut).  
 **Wake:** hold  
-**Stateless:** park  
+**Engineer cut:** [`PM-PACKET-023-LOOK-CATALYST-ENGINEER-CUT.md`](./PM-PACKET-023-LOOK-CATALYST-ENGINEER-CUT.md)  
+**SCP:** [`SYSTEMS-CHANGE-PACKET-039-LOOK-CATALYST.md`](./SYSTEMS-CHANGE-PACKET-039-LOOK-CATALYST.md) (intent; first plant invalid)  
 **Test spec:** [`PM-PACKET-023-LOOK-CATALYST-TEST.md`](./PM-PACKET-023-LOOK-CATALYST-TEST.md)  
-**Process:** [`STATELESS-PR.md`](./STATELESS-PR.md) — draft PR stays open; no automations until triggered.  
 **Flag:** [`PHASE-ONE-LOG.md`](./PHASE-ONE-LOG.md) **10:26 UTC 2026-09-15** (catalyst) · **21:25 UTC** (park).  
 **Law:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md).  
 **Sibling (held):** [`PM-PACKET-022`](./PM-PACKETS.md) Smarter loop / N-red → outside agent — **not** this packet.
 
-**Where:** park on `main`; **fix** on the open **catalyst initiative PR** (same number as the park merge). Do not land on 021’s merged cut. Do not open a cousin. Do not flip **Wake:** sa until founder go on the fix.
+**Where:** this PR ([#202](https://github.com/bywale-com/travis/pull/202)). Do not land on 021’s merged cut. Do not open a cousin.
 
 ---
 
@@ -64,4 +64,4 @@ Human walk on psi remains open after any automation greens.
 
 SA number for ascribe. Whether fix is events lifetime, reconnect, STT/TTS ordering, or a store field. Whether preflight/runtime can ever catch this without a lived Voice walk.
 
-**I do not plant `src/`.** **I do not Wake sa.** **I do not sign an SCP.** **I do not merge this PR** until founder go.
+**Engineer:** follow the cut. Do not merge broken preview. Human walk on psi still closes the catalyst when plant is valid.

@@ -9,7 +9,12 @@ import {
   mergeLiveTranscript,
 } from "@/lib/absorb-text";
 import { isOpenStreamingPost } from "@/lib/beats";
-import { conductorGate, conductorOnEnd, isDuplicateSend } from "@/lib/conductor";
+import {
+  conductorGate,
+  conductorOnEnd,
+  isDuplicateSend,
+  liveWrapUtterance,
+} from "@/lib/conductor";
 import { speakableAgentPost } from "@/lib/agent-post";
 import { applyReadbackVoice } from "@/lib/speak-voice";
 import { isPinnedToBottom } from "@/lib/thread-scroll";
@@ -413,6 +418,7 @@ export function Room({
   const listenRestartGenRef = useRef(0);
   const inflightRef = useRef(0);
   const liveRef = useRef<TravisLiveSession | null>(null);
+  const liveFinalizeRef = useRef<(utterance: string) => void>(() => {});
   const notifiedNewRef = useRef<Set<string>>(new Set());
   const wakeNewTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const offeredKeyRef = useRef("");
@@ -1071,9 +1077,14 @@ export function Room({
             setSubtitle("Travis isn’t wired");
             void refreshTurns(sid);
           },
-          onUserText: () => {
+          onUserText: (text) => {
             playSendSwoosh("voice");
             void refreshTurns(sid);
+            const phrases = phrasesRef.current.length
+              ? phrasesRef.current
+              : ["I'm done"];
+            const wrap = liveWrapUtterance(text, phrases);
+            if (wrap) liveFinalizeRef.current(wrap);
           },
           onTravisText: () => {
             void refreshTurns(sid);
@@ -1432,6 +1443,10 @@ export function Room({
       runHear,
     ],
   );
+
+  liveFinalizeRef.current = (utterance) => {
+    void finalizeUtterance(utterance);
+  };
 
   const postQueueJson = useCallback(
     async (url: string, body: unknown) => {

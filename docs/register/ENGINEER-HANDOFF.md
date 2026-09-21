@@ -1,15 +1,17 @@
 # Engineer seat handoff — 2026-09-21
 
-**This bind is done.** Packet **022** Smarter loop merged on `main` ([#201](https://github.com/bywale-com/travis/pull/201)). N-count lives in `runtime-doors-red-label.sh`.
+**This bind is living.** Packet **023** on **[#202](https://github.com/bywale-com/travis/pull/202)**.
 
-**Outside agent:** **`outside-look`** may be labeled on the 4th red. Founder runs the outside sitting **manually** (no Save+Activate automation). Work order still [`WORK-ORDER-OUTSIDE.md`](./WORK-ORDER-OUTSIDE.md).
+**Pickup (Technical Architect cut):** [`PM-PACKET-023-LOOK-CATALYST-ENGINEER-CUT.md`](./PM-PACKET-023-LOOK-CATALYST-ENGINEER-CUT.md) — read first.
 
-**Next initiative:** **023** Look catalyst — lived Voice/session miss ([`PM-PACKET-023-LOOK-CATALYST.md`](./PM-PACKET-023-LOOK-CATALYST.md)). **Wake:** hold until founder go. Work on the **catalyst PR** (not a cousin). Specimen `fdad2a1d-5f40-431c-bb6f-1db7d2a52f25`.
+**This sitting (`fail-look`):** `runtime-doors` [35592439396](https://github.com/bywale-com/travis/actions/runs/35592439396) red on `voice-live` — dest leave landed, then “I'm done. Engineer, …” user turns, no speakable Travis `agent_post`. Live dest SSE never handed the user line to Room, so Voice wrap never POSTed `/finalize` (SCP-035). Recut: dest SSE still calls `onUserText`; `liveWrapUtterance` POSTs `/finalize` with `I'm done`. Packet **023 / SCP 039** stays **`Wake:** hold** — do **not** Path B (room-wire rotate) until founder flips **Wake:** sa. `maxDuration = 60` stays a literal.
 
-**Trail:** git + PRs. **One PR per initiative.** Do not append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
+**`previewing`:** already off at pickup. Do not assume a later green-light is a go to plant 039.
+
+**Trail:** git + #202. **One PR per initiative.** Do not append PHASE-ONE-LOG or SYSTEMS-ANALYST-LOG.
 
 ---
 
 ## Where we stopped
 
-022 closed. 023 park lands on `main` with [#199](https://github.com/bywale-com/travis/pull/199). Catalyst **fix** (events / mouth / session) is the next plant when **Wake:** sa — not Look File (021).
+Fail-look recut once. Next Engineer: if doors red again, GitHub adds `fail-look` after `previewing` clears — new sitting. Path B only after **Wake:** sa — literal `60` plus `ROOM_WIRE_LIFETIME_MS` / client rotate per the cut file plan. Human walk B on psi still closes the catalyst. Do not remint 039. Do not watch doors this sitting.

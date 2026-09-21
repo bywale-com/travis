@@ -7,13 +7,11 @@ test("Engineer Current names where the last bind stopped", () => {
     new URL("../../docs/register/ENGINEER-HANDOFF.md", import.meta.url),
     "utf8",
   );
-  assert.match(handoff, /This bind is done/);
-  assert.match(handoff, /022/);
+  assert.match(handoff, /This bind is living/);
   assert.match(handoff, /023/);
-  assert.match(handoff, /Look catalyst/);
-  assert.match(handoff, /manual/);
+  assert.match(handoff, /LOOK-CATALYST-ENGINEER-CUT/);
+  assert.match(handoff, /previewing/);
   assert.match(handoff, /One PR per initiative/);
-  assert.match(handoff, /fdad2a1d/);
 });
 
 test("always-on and seat README point at the pickup file", () => {
