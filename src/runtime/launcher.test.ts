@@ -76,7 +76,9 @@ test("runtime-doors cancelled or a walks miss is red, not emerge", () => {
   assert.match(yml, /timeout-minutes: 60/);
   assert.match(yml, /Paint red unless walks succeeded/);
   assert.match(yml, /steps\.walks\.outcome != 'success'/);
-  const failLook = yml.slice(yml.indexOf("Fresh-add fail-look on the open PR"));
+  const failLook = yml.slice(
+    yml.indexOf("Fresh-add fail-look or outside-look on the open PR"),
+  );
   assert.match(failLook, /if: failure\(\) \|\| cancelled\(\)/);
   const emerge = yml.slice(yml.indexOf("Emerge packet on success"));
   assert.match(emerge, /if: success\(\)/);

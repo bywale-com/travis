@@ -176,7 +176,7 @@ jobs:
             echo "Could not add wake-engineer on #$pr."
           fi
 
-      - name: Fresh-add fail-look on the open PR
+      - name: Fresh-add fail-look or outside-look on the open PR
         if: failure() || cancelled()
         env:
           WAKE_GITHUB_TOKEN: ${{ secrets.WAKE_GITHUB_TOKEN }}
@@ -226,12 +226,20 @@ jobs:
             fi
           done
 
-          gh label create fail-look --color CCCCCC --description "Cursor: Engineer loop after PM look Fail" 2>/dev/null || true
-          gh pr edit "$pr" --remove-label fail-look || true
-          if gh pr edit "$pr" --add-label fail-look; then
-            echo "Labeled #$pr fail-look (fresh add)."
+          label=$(bash .github/scripts/runtime-doors-red-label.sh "$pr")
+          echo "Red #$pr is fail-look count+1 → label ${label} (N=${RUNTIME_DOORS_ESCALATE_N:-4})."
+
+          if [[ "$label" == "fail-look" ]]; then
+            gh label create fail-look --color CCCCCC --description "Cursor: Engineer loop after PM look Fail" 2>/dev/null || true
           else
-            echo "Could not add fail-look on #$pr."
+            gh label create outside-look --color CCCCCC --description "Cursor: outside agent after N runtime-doors reds (022)" 2>/dev/null || true
+          fi
+
+          gh pr edit "$pr" --remove-label "$label" || true
+          if gh pr edit "$pr" --add-label "$label"; then
+            echo "Labeled #$pr ${label} (fresh add)."
+          else
+            echo "Could not add ${label} on #$pr."
             exit 1
           fi
 

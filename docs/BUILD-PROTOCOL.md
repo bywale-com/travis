@@ -162,7 +162,7 @@ Locked verdicts:
 | Verdict | Meaning | What happens |
 |---------|---------|--------------|
 | **Pass** | Walked what you could; tape matches the lock; this deploy’s door check is already green | Emerge |
-| **Fail** | Plant or walk missed the lock | Label `fail-look` → Engineer, same PR |
+| **Fail** | Plant or walk missed the lock | Label `fail-look` → Engineer (reds 1–3), or `outside-look` on 4th red (022), same PR |
 | **No walk** | Could not send (SSO wall, no Type). Not a Pass | No emerge. No fail-look |
 
 “Pass for what this seat could do” after only reading `src/` or hitting a login wall is **not** Pass. Voice **like** stays human. Voice **doors** are the Deployment Check. Do not invent a tester product. Do not have Cursor triage Vercel instead of the check.

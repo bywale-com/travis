@@ -44,11 +44,13 @@ test("runtime-doors clears previewing then skips fail-look if it is still on", (
   assert.match(holds, /outside-look/);
   const clearAt = yml.indexOf("Clear previewing after doors paint");
   const armAt = yml.indexOf("Arm delayed wake-engineer from Look seed comment");
-  const failAt = yml.indexOf("Fresh-add fail-look on the open PR");
-  assert.ok(clearAt > 0 && failAt > clearAt, "clear previewing before fail-look");
-  assert.ok(armAt > clearAt && armAt < failAt, "arm delayed wake-engineer before fail-look");
+  const failAt = yml.indexOf("Fresh-add fail-look or outside-look on the open PR");
+  assert.ok(clearAt > 0 && failAt > clearAt, "clear previewing before red label");
+  assert.ok(armAt > clearAt && armAt < failAt, "arm delayed wake-engineer before red label");
   assert.match(yml, /--add-label wake-engineer/);
-  assert.doesNotMatch(yml, /--add-label outside-look/);
+  const armBlock = yml.slice(armAt, failAt);
+  assert.doesNotMatch(armBlock, /--add-label outside-look/);
+  assert.match(yml, /runtime-doors-red-label\.sh/);
 });
 
 test("Engineer prompt recuts once and will not push while previewing", () => {
