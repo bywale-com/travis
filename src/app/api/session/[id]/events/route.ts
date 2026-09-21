@@ -13,9 +13,13 @@ import {
 } from "@/server/seat-pipe";
 import { listSessionStreams } from "@/server/stream";
 import { turnsAfterSeq } from "@/server/turns-read";
+import {
+  ROOM_WIRE_LIFETIME_MS,
+  ROOM_WIRE_MAX_DURATION_SEC,
+} from "@/lib/room-wire";
 
-/** Hobby cap. Resume from last seq when this function ends. */
-export const maxDuration = 60;
+/** Hobby cap. Resume from last seq when this function ends (039 rotates early). */
+export const maxDuration = ROOM_WIRE_MAX_DURATION_SEC;
 
 const HEARTBEAT_MS = 15_000;
 const REAP_MS = 2_000;
@@ -72,6 +76,7 @@ export async function GET(
         let unlisten: (() => Promise<unknown>) | null = null;
         let heartbeat: ReturnType<typeof setInterval> | null = null;
         let reap: ReturnType<typeof setInterval> | null = null;
+        let rotateTimer: ReturnType<typeof setTimeout> | null = null;
         let emitTail = Promise.resolve();
 
         const emit = (event: string, data: unknown, eventId?: number) => {
@@ -131,6 +136,7 @@ export async function GET(
           closed = true;
           if (heartbeat) clearInterval(heartbeat);
           if (reap) clearInterval(reap);
+          if (rotateTimer) clearTimeout(rotateTimer);
           try {
             if (unlisten) await unlisten();
           } catch {
@@ -190,6 +196,12 @@ export async function GET(
               });
             });
           }, REAP_MS);
+
+          rotateTimer = setTimeout(() => {
+            if (closed) return;
+            emit("wire", { action: "rotate", afterSeq: lastSentSeq });
+            void cleanup();
+          }, ROOM_WIRE_LIFETIME_MS);
 
           req.signal.addEventListener("abort", () => {
             void cleanup();

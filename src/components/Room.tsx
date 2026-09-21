@@ -110,6 +110,7 @@ import {
   mergeTurnsById,
   openDoorTick,
 } from "@/lib/list-live";
+import { ROOM_WIRE_CLIENT_ROTATE_MS } from "@/lib/room-wire";
 import { streamPollMs, type StreamGrain } from "@/lib/stream";
 import { SurfaceBoundary } from "@/surfaces/SurfaceBoundary";
 import type { Tokens } from "@/theme/tokens";
@@ -423,6 +424,7 @@ export function Room({
   const pendingRefTurnRef = useRef<string | null>(null);
   const ticketIdRef = useRef<string | null>(null);
   const turnsRef = useRef<Turn[]>([]);
+  const wireRotateAbortRef = useRef<AbortController | null>(null);
   const seenArtifactRef = useRef<Set<string>>(new Set());
   const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const consumeAgentStreamRef = useRef<
@@ -1992,6 +1994,9 @@ export function Room({
       if (event === "queue" || event === "queued") {
         applyQueue(data.queue as { seats?: QueueSeatDto[] } | undefined);
       }
+      if (event === "wire" && data.action === "rotate") {
+        wireRotateAbortRef.current?.abort();
+      }
     },
     [applyIncomingTurns, applyQueue],
   );
@@ -2034,18 +2039,29 @@ export function Room({
           await fallbackCatchUp(sid);
           if (cancelled) return;
           abort = new AbortController();
+          wireRotateAbortRef.current = abort;
+          const rotateTimer = window.setTimeout(() => {
+            abort?.abort();
+          }, ROOM_WIRE_CLIENT_ROTATE_MS);
           const afterSeq = maxTurnSeq(turnsRef.current);
           const params = new URLSearchParams();
           if (afterSeq != null) params.set("afterSeq", String(afterSeq));
           if (ticketIdRef.current) params.set("ticketId", ticketIdRef.current);
           const headers: HeadersInit = {};
           if (afterSeq != null) headers["Last-Event-ID"] = String(afterSeq);
-          const res = await fetch(
-            `/api/session/${sid}/events?${params.toString()}`,
-            { signal: abort.signal, headers },
-          );
-          if (!res.ok) throw new Error("room wire down");
-          await consumeRoomWire(res);
+          try {
+            const res = await fetch(
+              `/api/session/${sid}/events?${params.toString()}`,
+              { signal: abort.signal, headers },
+            );
+            if (!res.ok) throw new Error("room wire down");
+            await consumeRoomWire(res);
+          } finally {
+            window.clearTimeout(rotateTimer);
+            if (wireRotateAbortRef.current === abort) {
+              wireRotateAbortRef.current = null;
+            }
+          }
         } catch (err) {
           if (cancelled) return;
           if (err instanceof DOMException && err.name === "AbortError") {
