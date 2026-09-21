@@ -12,7 +12,7 @@
 **Law:** [`docs/BUILD-PROTOCOL.md`](../BUILD-PROTOCOL.md).  
 **Sibling (held):** [`PM-PACKET-022`](./PM-PACKETS.md) Smarter loop / N-red → outside agent — **not** this packet.
 
-**Where:** its own stateless PR. Do not land on 021’s merged cut. Do not open a cousin. Do not merge until founder go.
+**Where:** park on `main`; **fix** on the open **catalyst initiative PR** (same number as the park merge). Do not land on 021’s merged cut. Do not open a cousin. Do not flip **Wake:** sa until founder go on the fix.
 
 ---
 

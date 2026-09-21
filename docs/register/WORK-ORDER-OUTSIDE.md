@@ -3,7 +3,7 @@
 **Seat:** the **outside** agent (`outside-look`). Not Engineer B. Not SA. Not Technical Architect occupying those seats.  
 **Canon packet:** [`PM-PACKET-022-SMARTER-LOOP.md`](./PM-PACKET-022-SMARTER-LOOP.md) (N-red escalate — **038** planted).  
 **Not this agent:** Log · Look File is packet **021**. That door wakes **Engineer B** (`wake-engineer`).  
-**Prompt paste (022, when go):** [`house-now/automations/outside-look.prompt.md`](./house-now/automations/outside-look.prompt.md)  
+**Prompt paste (022):** [`house-now/automations/outside-look.prompt.md`](./house-now/automations/outside-look.prompt.md) — founder may run this **manually** in Cloud Agent; Save+Activate automation is **optional**.  
 **Flag (read-only):** PHASE-ONE-LOG **14:00 UTC 2026-08-25**.  
 **Why this page exists:** agents were rediscovering trip-wires every sitting. This is the work order. Read it before touching `src/` or labels.
 
@@ -15,7 +15,7 @@ You diagnose like the 2026-09-15 lived session: tape + question + Vercel logs + 
 
 | Entry | Wake | Where you sit |
 |-------|------|----------------|
-| **Smarter loop (022)** — N consecutive current-head `runtime-doors` reds | **`outside-look`** on the 4th idle current-head red (`runtime-doors-red-label.sh`). Reds 1–3 still **`fail-look`**. Founder Save+Activates the Cursor automation. | The failing PR. |
+| **Smarter loop (022)** — N consecutive current-head `runtime-doors` reds | **`outside-look`** on the 4th idle current-head red (`runtime-doors-red-label.sh`). Reds 1–3 still **`fail-look`**. **Manual:** founder starts the outside agent when the label appears (automation not required). | The failing PR. |
 
 **Look (021)** is not your wake. Founder File sits Engineer B.
 
