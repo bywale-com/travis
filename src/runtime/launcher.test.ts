@@ -173,11 +173,25 @@ test("dest leave SSE does not stop Live or hand the mic to Talk", () => {
   );
   const persist = live.slice(live.indexOf("const persist"), live.indexOf("const flushUser"));
   assert.match(persist, /onSeatStream\(res\)/);
+  assert.match(
+    persist,
+    /onUserText\(text\)/,
+    "dest SSE still hands the user line to Room so wrap can POST /finalize",
+  );
   assert.doesNotMatch(
     persist,
     /stopLive:\s*true/,
     "dest SSE is not a vocative dest switch",
   );
+});
+
+test("Live wrap posts finalize when dest flush carries I'm done", () => {
+  const room = read("src/components/Room.tsx");
+  const conductor = read("src/lib/conductor.ts");
+  assert.match(conductor, /export function liveWrapUtterance/);
+  const user = room.slice(room.indexOf("onUserText:"), room.indexOf("onTravisText:"));
+  assert.match(user, /liveWrapUtterance/);
+  assert.match(user, /liveFinalizeRef/);
 });
 
 test("attachSession writes listening on the presence ref before armEar", () => {

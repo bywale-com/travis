@@ -8,6 +8,7 @@
 
 Newest first. On completion of a packet or hotfix the Engineer **prepends** one line: date · ref · PR — the change, because. One sentence. Not an essay.
 
+- **2026-09-21** · Packet 023 fail-look · [#202](https://github.com/bywale-com/travis/pull/202) — Voice Live dest SSE still hands the user line to Room so wrap POSTs `/finalize`, because `voice-live` dest’d then never got a Travis mouth.
 - **2026-09-21** · Packet 023 Path A / SCP 039 · [#202](https://github.com/bywale-com/travis/pull/202) — Reverted the premature room-wire rotate plant so `events` keeps literal `maxDuration = 60`, because founder held 023 and the first plant broke Vercel.
 
 - **2026-09-15** · Packet 021 / SCP-037 recut · this PR — Look File fresh-adds **`wake-engineer`** and never `outside-look`, because a lived miss must wake regular Engineer B, not the outside agent.

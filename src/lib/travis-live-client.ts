@@ -118,6 +118,9 @@ export async function startTravisLive(opts: {
     if (ct.includes("text/event-stream")) {
       opts.onSeatStream(res);
       // Dest leave is a Cursor job. Live stays the ear for wrap.
+      // Wrap can ride the same flush ("I'm done. Engineer, …"). Room still
+      // needs the user line so conductor can POST /finalize — not a full-pipe.
+      if (role === "user") opts.onUserText(text);
       return {};
     }
     const data = await readJson<{
