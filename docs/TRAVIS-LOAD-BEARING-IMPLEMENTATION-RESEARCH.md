@@ -49,6 +49,12 @@ Most constructs should remain thin, local implementations. The principal
 production gap is **durable execution after dispatch**: detached work in a
 serverless request does not have a process-lifetime guarantee.
 
+The source audit also found correctness cuts that precede new capability:
+cross-isolate sequence allocation, authenticated artifact download, one
+canonical routing path, explicit seat readiness, exact run/job correlation,
+and browser audio generations that survive late media promises. These are
+repairs to existing boundaries, not new platforms.
+
 The first pass selected Graphile Worker. Deeper failure-mode research changes
 that recommendation. Core Graphile Worker leaves abruptly interrupted jobs
 locked for at least four hours, and that lease is not configurable without
@@ -102,7 +108,7 @@ Do not add, at current scale:
 | # | Construct | Decision |
 |---|---|---|
 | 1 | Room | Keep the relational room aggregate. |
-| 2 | Voice and Log | Keep one durable tape; borrow playout-truth ideas from LiveKit. |
+| 2 | Voice and Log | Keep one durable tape; canonicalize modality routing and defer playout tracking. |
 | 3 | Conductor | Keep deterministic terminal-phrase commit. |
 | 4 | Role-based agents | Keep database roles; do not add another agent framework. |
 | 5 | Seat and sit | Keep dynamic binding; add explicit readiness semantics. |
@@ -118,15 +124,15 @@ Do not add, at current scale:
 | 15 | Cursor thread | Persist exact run IDs; explicitly reconcile ambiguous sends. |
 | 16 | Artifacts | Treat Cursor-only files as transient; copy durable turn attachments at finalization. |
 | 17 | Backlog | Keep explicit promotion from conversation. |
-| 18 | Requests | Keep Postgres search; add FTS only after measurement. |
-| 19 | Hear/Skip | Keep per-turn acknowledgement. |
-| 20 | One ear | Keep local arbitration; use Web Locks for cross-tab exclusion. |
-| 21 | Readback | Keep Realtime + browser TTS; no cloud TTS yet. |
-| 22 | Pipe hygiene | Keep typed event allowlists and speech-time sanitization. |
-| 23 | Doors | Keep local domain state; use existing Ant overlay primitives. |
-| 24 | Themes | Keep typed custom tokens. |
-| 25 | Surface registry | Keep the thin custom registry. |
-| 26 | Look | Keep GitHub handoff; mitigate duplicates and expose ambiguous outcomes. |
+| 18 | Requests | Unify server search; choose trigram or FTS only after semantics and measurement. |
+| 19 | Hear/Skip | Define receipt meaning, then make per-turn claiming atomic. |
+| 20 | One ear | Keep local leases; use Web Locks for cross-tab exclusion. |
+| 21 | Readback | Keep Realtime + browser TTS behind one result-bearing controller. |
+| 22 | Pipe hygiene | Keep typed event allowlists and sanitize completed stored posts. |
+| 23 | Doors | Use one typed selection and the installed Ant Drawer mechanics. |
+| 24 | Themes | Keep typed tokens; persist and subscribe to system mode correctly. |
+| 25 | Surface registry | Keep it thin; register mounted instances in a parented tree. |
+| 26 | Look | Keep GitHub; bound public evidence and expose ambiguous outcomes. |
 
 ---
 
@@ -145,8 +151,9 @@ Do not add, at current scale:
 
 ## Mechanism — verified
 
-Synapse creates a durable room identity and transactionally persists room
-metadata plus initial state/membership events. Mattermost's channel model keeps
+Synapse creates a durable room identity and persists room metadata plus
+initial state/membership events, but its handler explicitly spans multiple
+steps and is not an atomic-room reference. Mattermost's channel model keeps
 identity, deletion/lifecycle state, last-post activity, and message counts
 independent of connected clients. OpenHands reopens conversation state from a
 stable conversation ID and persisted state/event material.
@@ -179,6 +186,13 @@ answer is stronger than the distributed Matrix case: create room, owner
 membership, and initial state in one transaction, with a caller-generated
 creation command ID under a unique constraint.
 
+Current Travis creation already inserts the session and initial memberships
+in one Drizzle transaction. Ending is weaker: session and membership closure
+are separate writes. Turn order is protected only by a process-local promise
+map, and the database index on `(session_id, seq)` is not unique. Across
+server isolates, duplicate sequence values can therefore enter the tape and
+break cursor replay.
+
 ## Options and trade-offs
 
 | Approach | Advantage | Cost |
@@ -198,6 +212,10 @@ Use compare-and-set lifecycle changes (`open` → `ended`) so concurrent Leave,
 End, or reconnect requests cannot reopen or double-close the room. Every
 child read/write must scope by room membership in the server query, not only
 by a client-supplied room ID.
+
+Make ending transactional. Allocate turn sequence while locking the room row
+or counter and enforce `UNIQUE(session_id, seq)`; the current process-local
+serializer is neither cross-isolate exclusion nor bounded lifecycle state.
 
 **Unresolved:** room deletion, retention, and child-row redaction are product
 policy. Do not infer cascade deletion from the aggregate metaphor.
@@ -259,20 +277,19 @@ application's responsibility.
 Keep Voice and Log as projections over the Postgres tape. Do not move the
 durable conversation into LiveKit.
 
-Borrow two mechanisms:
-
-1. all modalities enter one room-turn writer;
-2. track a playout cursor so the product can distinguish generated text from
-   text actually spoken.
+Borrow one mechanism now: all modalities enter one canonical room-turn and
+routing writer. Type, Live transcript, and finalize currently take materially
+different server paths, so one tape does not yet guarantee equivalent
+semantics.
 
 Give each submitted utterance a client command ID before either Type or Talk
 crosses the network. The server owns deduplication and canonical turn
 creation. Interim STT and streaming assistant text remain provisional; only a
 finalized turn enters the durable tape.
 
-Do not adopt LiveKit only for transcript timing. Travis can retain the smaller
-concepts: utterance identity, provisional text, playout position,
-interruption, and terminal completion.
+Do not adopt LiveKit only for transcript timing. Add a durable playout cursor
+only if partial-readback continuity is a specified product requirement;
+current `heard_at` cannot prove audio completion or partial position.
 
 **Unresolved:** whether interrupted assistant text remains fully readable in
 Log while only the played prefix is marked heard is a product choice.
@@ -350,6 +367,13 @@ from an older generation cannot commit or append to the current draft. If a
 new interim follows a final segment before the phrase boundary, clear the
 “fully final” assumption just as Pipecat does.
 
+Return the actual configured phrase that matched. Current Live wrapping
+normalizes every match to literal `"I'm done"`, discarding which configured
+phrase actually matched. The current seed includes that phrase, but
+server re-verification would fail if it were deactivated or removed. Add
+Hark's Unicode-apostrophe, phrase-collision, and precedence cases to the local
+matcher tests.
+
 Adopting a voice framework solely for this matcher would increase complexity
 without improving the product guarantee.
 
@@ -423,6 +447,11 @@ Version role instructions/protocol references and record which version a
 binding received. A framework-level agent object is configuration, not proof
 that a durable specialist is ready.
 
+Centralize role labels, aliases, and protocol mapping. Current `SeatKey` and
+router mappings are closed, and unknown labels fall through to Engineer;
+casting a person slug into that type can silently mislabel authorship. This is
+a local type/configuration defect, not a reason to add an agent framework.
+
 **Unresolved:** whether a protocol update should invalidate, re-hand, or
 grandfather an occupied seat needs an explicit product lifecycle rule.
 
@@ -450,10 +479,10 @@ handoffs per run and permits resolving a different agent at invocation time,
 but that availability is not durable role assignment.
 
 Cursor provides two existing primitives relevant to Sit: a caller can supply a
-durable agent ID for an idempotent create flow, and archive/unarchive are
-idempotent lifecycle operations. These remove the need to invent retry
-semantics for vendor identity creation, but they do not mark Travis protocol
-handoff complete.
+durable agent ID and treat `409 agent_id_conflict` as a reconciliation signal,
+while archive/unarchive are idempotent lifecycle operations. These reduce the
+vendor-identity retry surface, but they do not mark Travis protocol handoff
+complete.
 
 ## Failure handling and integration boundary — verified
 
@@ -493,6 +522,11 @@ resolve role
 `protocol_path` assignment alone should not imply readiness. A small
 `seat_status`/`ready_at` or versioned assignment record would close that
 ambiguity without adding an agent framework.
+
+This is a present failure window, not a hypothetical one: current Sit writes
+`protocol_path` before delivery, and spin starts Sit without awaiting it.
+Protocol failure can therefore leave a discoverable “seated” binding and the
+first founder task can race the handoff.
 
 Use explicit states such as preparing → handing → ready/failed, and allow
 dispatch only from ready. If a timeout occurs after the run ID is known,
@@ -567,6 +601,12 @@ Represent routing as a pure decision result (`matched`, `ambiguous`,
 same role configuration that drives the UI label so the router and visible
 cast cannot drift.
 
+Route every ingress through the same operation:
+`resolve → verify open/ready → gate → file job → dispatch`. Current Type/Live
+fast paths pre-resolve catalog bindings, can bypass the canonical gate, and
+can insert a second user turn during dispatch. Remove those shortcuts and pass
+the already-created founder turn through the operation.
+
 The pure decision is only a snapshot. When creating the durable command and
 queue job, transactionally revalidate that the selected binding is still a
 ready room member at the version the router observed. If it changed, reject
@@ -632,6 +672,12 @@ Temporal provides stronger durable workflow replay, timers, and external
 updates, but requires a Temporal service, worker fleet, deterministic workflow
 code, and another operational system.
 
+Current Travis has no durable worker boundary here:
+[`writeAndLeaveDest()`](https://github.com/bywale-com/travis/blob/bd45fe866bcf8d36e182f160a896a9f65084a8f7/src/server/dest-leave.ts#L122-L167)
+inserts the business row, races handoff against eight seconds, then detaches
+the remaining promise. The business insert and Cursor dispatch are not one
+durable operation, so request death can strand every post-insert stage.
+
 ## Failure handling and integration boundary — verified
 
 | Failure | Established handling |
@@ -668,6 +714,13 @@ Use pg-boss when recutting this seam:
    send;
 5. configure heartbeat, expiry, retries, and retention from the product's
    actual execution window.
+
+Keep dispatch short: establish and persist the exact Cursor run, then let a
+separate observer/reconciliation task follow it. A queue lease must not stay
+open for the whole Cloud run. Classify authentication, validation, archived
+agent, and entitlement errors as permanent business outcomes; classify
+`agent_busy` as normal serialization; send ambiguity enters reconciliation,
+not ordinary retry backoff.
 
 Graphile Worker is no longer the recommendation because its free crash lease
 is materially longer than Travis's current timeout. Do not add Redis or
@@ -716,6 +769,14 @@ queue attempt says how often delivery code ran. `dest_job` says whether the
 user's command was accepted, dispatched to a particular Cursor run, completed,
 cancelled, or failed.
 
+Current identity is prompt-derived
+([source](https://github.com/bywale-com/travis/blob/bd45fe866bcf8d36e182f160a896a9f65084a8f7/src/server/dest-job.ts#L57-L99)):
+binding plus the first 240 prompt characters. This aliases two legitimate
+repeated asks forever, while the select-then-insert path races concurrent
+callers. Current lifecycle updates are blind, `cursorRunId` is not stored on
+the job, and completion can close every open job for a binding rather than
+the exact accepted run.
+
 ## Failure handling and integration boundary — verified
 
 - Queue rows can be retried or deleted without deleting business history.
@@ -749,7 +810,10 @@ Keep `dest_job` authoritative and strengthen it:
   ambiguous pre-run-ID outcome explicitly as `send_unknown`;
 - represent `cancel_requested_at` separately from terminal cancellation;
 - treat heartbeat as liveness evidence, not proof of useful execution;
-- let worker tasks contain only the job ID.
+- let worker tasks contain only the job ID;
+- create/recover with atomic `INSERT ... ON CONFLICT ... RETURNING`, not a
+  preflight select;
+- finalize by exact `destJobId + cursorRunId`, never by binding-wide status.
 
 Do not copy pg-boss attempt counters and stack traces into product state by
 default. Expose only the final delivery error and timestamps the product needs;
@@ -787,6 +851,15 @@ deferred or dependency-blocked jobs can be skipped according to the documented
 policy. Cursor separately enforces one active run per persistent agent and
 returns `agent_busy` for a concurrent send.
 
+Current Travis queue mechanics are not durable serialization:
+[`MAX(seq)+1`](https://github.com/bywale-com/travis/blob/bd45fe866bcf8d36e182f160a896a9f65084a8f7/src/server/queue.ts#L96-L132)
+is unlocked,
+[`withDrainLock`](https://github.com/bywale-com/travis/blob/bd45fe866bcf8d36e182f160a896a9f65084a8f7/src/server/seat-pipe.ts#L113-L134)
+is process-local, and
+[`drainHead()`](https://github.com/bywale-com/travis/blob/bd45fe866bcf8d36e182f160a896a9f65084a8f7/src/server/seat-pipe.ts#L833-L858)
+deletes the row before Cursor accepts the send. A crash in that window loses
+the utterance permanently.
+
 ## Failure handling and integration boundary — verified
 
 - A queue may deliver twice; every item needs its own stable command ID and
@@ -817,6 +890,13 @@ Use one pg-boss queue configured as `key_strict_fifo`, with the binding or
 Cursor agent ID as `singletonKey`. Give every logical command its own durable
 ID and keep `agent_busy` as the vendor-side final guard. This removes custom
 claim/drain/wake-up logic while allowing unrelated agents to run concurrently.
+
+Do not delete product-visible queue state until the exact run ID is accepted
+and persisted. The short dispatch job may then finish, so the next keyed head
+must check a durable active-run gate. While that run remains active, defer or
+retry the head; under `key_strict_fifo` that retrying head blocks later work
+for the key. Terminal observation clears the gate and expedites that head.
+Neither progression path depends on a connected SSE request.
 
 Keep `queued_utterance` only if pending utterances are independently visible,
 editable, or retained product history. In that case it remains product truth
@@ -860,6 +940,13 @@ exclusive, run-scoped offset. A dropped live `Send` stream does not cancel the
 run. Live-send offsets must not be reused with `ObserveRun`; recovery begins
 from the start or from an offset previously produced by `ObserveRun`.
 
+Current projection cannot reliably apply that replay:
+[`nextSeq()`](https://github.com/bywale-com/travis/blob/bd45fe866bcf8d36e182f160a896a9f65084a8f7/src/server/stream.ts#L223-L232)
+uses unlocked `MAX(seq)+1`; process events are inserted without Cursor
+`callId`; and no upstream event ID or observation cursor is persisted. Replay
+can therefore duplicate process rows while concurrent writers can collide on
+local sequence.
+
 ## Failure handling and integration boundary — verified
 
 - Keepalives carry no durable offset and must not advance a cursor.
@@ -892,6 +979,12 @@ Keep `stream` plus ordered `stream_event`:
 - replay by sequence;
 - compact or expire low-value process events;
 - keep final specialist output on `voice_turn`.
+
+Upsert tool/process records by `cursorRunId + callId` where the source
+provides it. If Cursor replay has expired, reconcile terminal truth from exact
+`Get Run`; intermediate diagnostics may be lost, but final output, terminal
+state, cancellation evidence, and artifact relationships may not be compacted
+away.
 
 No BullMQ/Redis adoption is justified.
 
@@ -935,6 +1028,13 @@ stream still produces a terminal cancelled result after cancellation.
 The SDK also exposes `run.steer(text)`, but its documented Cloud Agent outcome
 is `revert_to_followup`; active steering is local-only. It therefore does not
 provide Travis's Cloud runs with in-flight mutation.
+
+Current Travis's classifier is appropriately conservative, but execution is
+not yet this state machine: `cancel` persists neither intent nor outcome,
+errors are swallowed, and recovery can collapse cancelled/error runs into
+“finished.” Cancellation fallback may select the latest active run rather
+than proving room/job ownership. These are business-state defects, not
+classifier limitations.
 
 ## Failure handling and integration boundary — verified
 
@@ -1008,6 +1108,11 @@ a dedicated counter row). `UPDATE ... SET next_seq = next_seq + 1 ...
 RETURNING next_seq` takes a row lock and assigns one position. Insert the turn
 in the same transaction. A unique `(session_id, seq)` constraint is the last
 line of defense, not the allocation algorithm.
+
+Current Travis uses `MAX(seq)+1` behind a process-local promise map and has no
+unique `(session_id, seq)` constraint. Multiple paths also update existing
+turn rows in place. A client replaying `WHERE seq > cursor` cannot discover a
+body correction to a sequence it has already applied.
 
 ## Failure handling and integration boundary — verified
 
@@ -1120,6 +1225,13 @@ catch-up-before-LISTEN race by subscribing and committing first, then reading
 the catch-up snapshot. Continue deduping by durable identity and reconnecting
 at the 60-second boundary.
 
+Repeat that durable catch-up after every listener re-registration, not only
+initial startup. Current Postgres.js reconnects the dedicated listener, but
+Travis supplies no `onlisten` catch-up, so notifications committed while
+disconnected remain missing until a later hint or wire rotation. A catch-up
+query failure should close the SSE and force cursor replay; it must not be
+silently swallowed.
+
 Add fanout infrastructure only after measured Postgres connection pressure.
 
 Do not run LISTEN over a transaction-pooled URL. If the deployment cannot
@@ -1139,9 +1251,11 @@ how many dedicated listener connections the serverless deployment can hold.
 - LangGraph:
   [persistence concepts](https://docs.langchain.com/oss/python/langgraph/persistence)
 - LangGraph.js:
-  [`PostgresSaver`](https://github.com/langchain-ai/langgraphjs/blob/86389fa3/libs/checkpoint-postgres/src/index.ts)
+  [`PostgresSaver` 1.0.5 source](https://github.com/langchain-ai/langgraphjs/blob/6530ba9b4c577c560422d9c9de18914e67411d9d/libs/checkpoint-postgres/src/index.ts)
 - LangGraph.js:
-  [PostgresSaver integration tests](https://github.com/langchain-ai/langgraphjs/blob/86389fa3/libs/checkpoint-postgres/src/tests/checkpoints.int.test.ts)
+  [PostgresSaver 1.0.5 integration tests](https://github.com/langchain-ai/langgraphjs/blob/6530ba9b4c577c560422d9c9de18914e67411d9d/libs/checkpoint-postgres/src/tests/checkpoints.int.test.ts)
+- LangGraph.js:
+  [1.1.0 migration and branch-fix notes](https://github.com/langchain-ai/langgraphjs/blob/4510774dd362264f44efd34b29b4f5648eeb4c4c/libs/checkpoint-postgres/CHANGELOG.md)
 - OpenHands:
   [conversation persistence](https://docs.openhands.dev/sdk/guides/convo-persistence)
 
@@ -1158,6 +1272,13 @@ configuration, and `deleteThread`.
 deletes that thread's checkpoints, writes, and blobs. The saver does not
 provide exclusive ownership for two concurrent graph invocations using the
 same thread; checkpoint persistence is not a room-level mutex.
+
+In the installed 1.0.5 implementation, checkpoint/blob `put()` and pending
+write `putWrites()` are separate transactions. `setup()` is not protected
+against concurrent cold-start migration. Version 1.1.0 fixes a same-parent
+branch channel-version collision and changes pending-write ordering, so an
+upgrade requires its migration notes and incomplete-thread behavior to be
+reviewed rather than assumed patch-compatible.
 
 ## Failure handling and integration boundary — verified
 
@@ -1194,6 +1315,8 @@ specialist work. Add retention by invoking `deleteThread` when room policy
 says the thread is gone; do not prune saver tables behind the library.
 
 Do not add LangGraph Store until Travis has a specified cross-room memory use.
+Evaluate 1.1.0 before permitting checkpoint branching, but run `setup()` once
+from deployment for either version.
 
 **Unresolved:** LangGraph.js documents whole-thread deletion, not a stable
 age-based checkpoint compaction contract. Define room/thread retention before
@@ -1234,6 +1357,13 @@ transport error does not prove run failure.
 
 This is distinct from the Travis thread. Cursor owns specialist execution
 context; Travis owns the product-visible room, routing, and audit trail.
+
+Current Travis already stores exact run IDs in live-run/stream records and can
+query an exact run, but `dest_job` does not directly record that run,
+`agent.send()` does not pass the available key, stream failure is not replayed,
+and terminal recovery collapses distinct `FINISHED`, `ERROR`, `CANCELLED`, and
+`EXPIRED` outcomes. Newest-run discovery remains as a cancellation fallback
+and can select the wrong business operation.
 
 ## Failure handling and integration boundary — verified
 
@@ -1318,6 +1448,14 @@ Cursor's current v1 contract adds important boundaries:
 The API does not provide a run ID on each listed artifact. Timestamp filtering
 is therefore a heuristic, not a provenance guarantee.
 
+Current Travis uses that heuristic (`updatedAt >= run start`) and stores
+`(turn_id, path)` without run ID, checksum, media type, or promotion state.
+More urgently, the room artifact list is ownership-scoped but
+[`/api/artifacts/:id`](https://github.com/bywale-com/travis/blob/bd45fe866bcf8d36e182f160a896a9f65084a8f7/src/app/api/artifacts/%5Bid%5D/route.ts#L11-L52)
+does not authenticate or call `requireOwnedSession`; possession of an artifact
+UUID is currently sufficient. The download adapter also buffers the whole
+object without an upstream timeout or size ceiling.
+
 ## Failure handling and integration boundary — verified
 
 - Never persist or expose the presigned URL. Request a fresh URL after expiry
@@ -1337,6 +1475,8 @@ is therefore a heuristic, not a provenance guarantee.
 - If Travis copies bytes later, write to a temporary object, verify size/hash,
   then commit owned metadata. Mattermost's resumable upload path similarly
   separates upload session progress from final `FileInfo`.
+- Reject arbitrary external URLs or proxy only an explicit scheme/host
+  allowlist; a redirect to a model-supplied URL bypasses controlled serving.
 
 ## Options and trade-offs
 
@@ -1356,6 +1496,12 @@ availability or immutable run provenance. For any file that must remain
 attached to a historical turn, copy bytes to an immutable owned object key
 during turn/run finalization and persist its hash, size, source run, and
 ordering. Do not store file bytes in Postgres.
+
+Immediate correctness precedes durable promotion: authenticate the download
+route, authorize `sessionId`, stream with timeout and size bounds, and preserve
+useful 404/410/502 distinctions. Durable promotion should use
+create → stream/copy while hashing with built-in SHA-256 → finalize metadata;
+the attachment is not ready until size and digest commit.
 
 Prefer the SDK's authenticated `downloadArtifact()` byte stream when available
 over manually exposing a presigned URL. Bound download size/time and content
@@ -1423,13 +1569,21 @@ source/command identity, not the plugin's storage implementation.
 ## Recommendation for Travis — inference
 
 Keep Hold/pass-on as explicit promotion. Preserve the source room/turn and a
-frozen founding line, while giving the backlog item its own title, status,
-ownership, and lifecycle. Never project every request automatically and never
-infer Done merely because an agent replied.
+stable founding meaning, while giving the backlog item its own title, status,
+ownership, and lifecycle. Current Travis does **not** freeze founding text on
+the initiative; reads resolve it from `voice_turn`. Either snapshot it during
+promotion or explicitly enforce source turns as insert-only. Never project
+every request automatically and never infer Done merely because an agent
+replied.
 
 Use the source turn ID (or explicit promotion command ID) under a unique
 constraint and insert with conflict recovery. This is smaller and stronger
 than fuzzy title/body duplicate detection.
+
+Promotion insert and source stamping are currently separate statements.
+Perform both in one transaction, return the existing initiative on conflict,
+and make Done a conditional `WHERE status = 'open'` transition. Add keyset
+pagination before whole-room initiative loading becomes a product limit.
 
 **Unresolved:** whether one turn may intentionally found several initiatives
 must be decided before choosing uniqueness scope. If yes, the command ID—not
@@ -1507,6 +1661,14 @@ search library: one generated vector, one GIN index, one room-authorized query.
 Measure whether `simple` or language stemming matches Travis's prompts before
 locking the generated expression.
 
+First repair the current split contract: the Requests door filters its loaded
+tape, while server `search_room` fetches only the newest 200 user turns and
+then filters in memory. Move room/kind/time/query predicates into SQL before
+`LIMIT`, use `(seq, id)` keyset pagination, and make UI and tool share that
+server contract. Preserve current substring semantics with escaped `ILIKE`;
+if substring indexing is measured necessary, `pg_trgm` is a closer fit than
+FTS.
+
 **Unresolved:** the expected search semantics—natural language, exact phrase,
 code/path substring, or all three—must be named before selecting one index.
 
@@ -1560,13 +1722,21 @@ optimistic progress UI is not the receipt authority.
 
 ## Recommendation for Travis — inference
 
-Retain per-turn `heard_at`; Hear and Skip are direct actions on a particular
-turn, so a room cursor loses product meaning. Make acknowledgement idempotent:
-`UPDATE ... SET heard_at = now() WHERE heard_at IS NULL`, and bulk-ack in one
-transaction.
+Retain one per-turn field only if the product means room-wide
+“handled/dismissed.” Current `heard_at` does not prove playback: Hear stamps it
+before synthesis, Hear and Skip become indistinguishable, concurrent
+select-then-update callers can claim the same oldest turn, and sending a new
+user turn automatically marks older reports heard. Make selection/claim
+atomic and acknowledgement idempotent:
+`UPDATE ... SET heard_at = now() WHERE heard_at IS NULL`.
 
 If Hear versus Skip later changes product behavior, add an explicit mode.
 Do not overload the timestamp with a distinction it cannot represent.
+
+If “heard” means synthesis completed, write the receipt from the client after
+the current playback generation ends. If automatic advancement remains,
+record it as a distinct `superseded` action rather than pretending explicit
+Hear occurred.
 
 For Travis's current single-owner per-turn timestamp, one conditional update
 is enough; no receipt library or lock table is needed. If multiple users gain
@@ -1634,6 +1804,14 @@ The media boundary has sharper edges:
 - `devicechange` tells the app to re-enumerate devices, not that it may reuse
   a dead track.
 
+Current generation checks do not cancel the acquisition inside
+`startTravisLive()`. During a pending permission prompt, teardown has no track
+handle; a late result can still activate. Acceptance also lacks the initiating
+session ID, so an acquisition begun for room A can arrive while room B owns
+the mode. There is no cross-tab authority, complete unmount cleanup, or
+track/device-loss recovery
+([current coordinator](https://github.com/bywale-com/travis/blob/bd45fe866bcf8d36e182f160a896a9f65084a8f7/src/components/Room.tsx#L694-L1188)).
+
 ## Failure handling and integration boundary — verified
 
 - Use a generation token even with Web Locks. If a late acquisition resolves
@@ -1670,8 +1848,15 @@ token on every transition; an acquisition resolving under an old token must
 immediately stop every acquired track. Fully stop and release the prior owner
 before starting the next.
 
-Use half-duplex while browser TTS is speaking. Do not add LiveKit or Pipecat
-solely for client-side arbitration.
+Represent each attempt as an immutable `{ epoch, sessionId, owner }` lease and
+serialize transitions. Validate all three fields before attaching a late
+stream. Attach `ended`/`mute`/`unmute` listeners to real tracks and use
+`devicechange` only to trigger re-enumeration/recovery, not as proof of which
+track failed.
+
+Use half-duplex while browser TTS is speaking. Live Realtime may remain
+intentionally full-duplex; do not describe half-duplex as a system-wide
+guarantee. Do not add LiveKit or Pipecat solely for client-side arbitration.
 
 Wrap the tab-local state machine in `navigator.locks.request("travis-mic")`
 when supported. Keep the lock callback bounded even when the permission
@@ -1715,6 +1900,11 @@ current utterance and clears all queued utterances, and `voiceschanged`
 signals that the initially empty or later-updated voice list should be read
 again.
 
+Browser completion evidence is limited. `SpeechSynthesis` `end` is engine
+completion, not proof of physical audibility; `HTMLMediaElement.play()`
+fulfillment proves playback started, not finished. Cancellation events and
+activation behavior remain uneven across supported browsers.
+
 ## Failure handling and integration boundary — verified
 
 - Keep one application queue in front of the browser queue; otherwise unrelated
@@ -1729,6 +1919,10 @@ again.
   application state; they do not identify which Travis turn is speaking.
 - Realtime model audio and browser TTS must share the same output ownership so
   both cannot speak at once.
+- Resolve every application item as `completed | interrupted | failed(code)`;
+  do not collapse `end` and all errors into one success-like completion.
+- Bound an utterance with a fallback timeout because a missing cancellation
+  callback can otherwise leave the queue pending forever.
 
 ## Options and trade-offs
 
@@ -1744,6 +1938,11 @@ Keep Realtime audio for short Travis conversation beats and browser TTS for
 explicit specialist Play replies and fallback. Use one serialized output
 queue. Hold microphone ownership until `onend` or `onerror`, then wait for the
 audio system to become idle before reacquiring input.
+
+The controller must own cancellation generations, expose Stop, and rearm
+capture only for the generation that actually terminated. Current global
+`cancel()` can replace unrelated logical speech, and a late completion from
+the first Play can otherwise rearm recognition during its replacement.
 
 Persist the text and heard state, not generated audio. Add cloud TTS only if
 measured browser inconsistency breaks the product experience.
@@ -1776,16 +1975,13 @@ from measured behavior before claiming uninterrupted long-form playback.
 ## Mechanism — verified
 
 LiveKit filters transcription tokens and suppresses non-speech markers before
-publication. Pipecat's stateful filter removes Markdown structures from TTS
-text while preserving ordinary language across streaming chunks. Both derive
-a presentation form from structured source content; they do not rewrite the
-underlying conversational record.
-
-Both projects make the filter stateful because Markdown delimiters and code
-fences cross stream chunks. Pipecat tracks whether it is inside a code block
-and resets that state on interruption. LiveKit tests its Markdown transform
-with chunk sizes down to one character and applies Markdown/emoji transforms
-before TTS by default.
+publication. Its filter buffers incomplete Markdown across arbitrary chunk
+boundaries, with tests down to one-character chunks. Pipecat tracks
+code-block/table interruption state, but its ordinary inline Markdown
+conversion operates per supplied string; its tests do not establish arbitrary
+delimiter-split correctness. Both derive presentation text without rewriting
+the underlying conversational record, but only LiveKit is verified here as
+the streaming-parser reference.
 
 Typed execution events remain a separate concern. A text sanitizer cannot
 reliably infer whether “running npm test” is assistant prose, a tool event, or
@@ -1795,11 +1991,13 @@ quoted user content.
 
 - Classify vendor events before concatenating text. Once event types are
   flattened, tool/thought provenance cannot be recovered safely.
-- Unknown event types are retained as diagnostics and default non-speakable.
+- Retain unknown event types as bounded diagnostics and default them
+  non-speakable.
 - Keep the canonical body unchanged; derive TTS text as a projection so
   filtering bugs never corrupt the tape.
-- Carry filter state across deltas and reset it at turn end, interruption, or
-  error. A stateless regex per delta mishandles split fences/emphasis.
+- Carry filter state across deltas only if deltas are actually spoken, and
+  reset it at turn end, interruption, or error. A stateless regex per delta
+  mishandles split fences/emphasis.
 - Bound buffered incomplete markup. A never-closed fence must not retain an
   unbounded stream.
 - Sanitization should remove presentation syntax while preserving ordinary
@@ -1823,13 +2021,15 @@ Use two deterministic stages:
    artifact, or diagnostic;
 2. derive speakable text from the stored product post.
 
-Unknown event types default to Stream/non-speakable. Never mutate the stored
-body to suit TTS, and do not add model-based triage in v1.
+Unknown event types default non-speakable but should emit a bounded diagnostic
+or metric so a vendor schema change does not silently erase output. Never
+mutate the stored body to suit TTS, and do not add model-based triage in v1.
 
-Reuse a tested streaming transform if Travis's current sanitizer grows beyond
-its small grammar. Do not import an entire voice pipeline: LiveKit's transform
-contract or Pipecat's tests can be adapted as fixtures for a thin local
-filter.
+Travis currently speaks completed stored posts, not specialist deltas, so a
+streaming parser is unnecessary. Define deterministic handling for fenced
+code, tables, HTML, URLs, images, and malformed Markdown. If streaming speech
+is later introduced, adapt LiveKit's buffering shape and one-character chunk
+tests; do not import an entire voice pipeline.
 
 **Unresolved:** whether user-requested code should be read verbatim, skipped,
 or announced (“code block”) is product speech policy, not a parser default.
@@ -1862,6 +2062,14 @@ keyboard close, focus management, masks, and controlled open state.
 
 These libraries solve overlay mechanics. They do not decide which product
 object is selected or which door should be open.
+
+Current Travis mostly hand-builds fixed layers rather than using the installed
+Ant primitive. Those layers generally lack dialog naming, initial focus,
+focus trap, Escape, trigger restoration, and scroll locking. Independent
+`door`, `ticket`, `artifactsOpen`, `artifactFullId`, `openStreamId`, and
+`holdTurn` values can also describe contradictory simultaneous overlays;
+Stream is fixed but not portaled and can remain inside an ancestor stacking or
+clipping context.
 
 Ant's current Drawer contract is more specific than “it handles focus”:
 
@@ -1907,6 +2115,12 @@ Radix solely for doors.
 
 Converge `door`, `artifactsOpen`, and `openStreamId` toward one typed selection
 model so mutually exclusive surfaces cannot drift into contradictory states.
+
+Render one named bottom Drawer at a time and replace the selected object for
+detail rather than nesting where practical. Add 390px browser coverage for
+initial focus, Tab/Shift-Tab containment, Escape, focus restoration, scroll
+lock, safe area, and Back. React context crosses portals, so Travis/Ant
+providers do not require duplicate roots.
 
 Use route/query state only for doors that must survive reload or support Back
 and deep links. Transient controls remain local. Do not route every popover.
@@ -1955,6 +2169,14 @@ The browser system theme is an external store. `matchMedia` change events plus
 `useSyncExternalStore` provide a stable subscribe/snapshot contract and an
 explicit server snapshot for hydration.
 
+Current `matchSystem` samples once and does not subscribe. It persists the
+resolved character rather than a durable `mission | carbon | system` choice,
+so reload turns “follow system” into a fixed mode. SSR renders the default
+until hydration, browser `theme-color` remains Mission under Carbon, and
+`--travis-accent` is a fixed root burgundy rather than the active theme token,
+so the registry highlight does not follow character
+([provider](https://github.com/bywale-com/travis/blob/bd45fe866bcf8d36e182f160a896a9f65084a8f7/src/theme/character.tsx#L15-L115)).
+
 ## Failure handling and integration boundary — verified
 
 - Resolve one effective mode from explicit choice (`light`/`dark`) or
@@ -1987,6 +2209,12 @@ portals and non-React consumers. Do not add a token compiler at this scale.
 
 If theme follows the operating system, subscribe to preference changes rather
 than sampling only at provider initialization.
+
+Persist the mode, add/clean up the `MediaQueryList` change listener, update
+browser `theme-color`, and publish only the Travis variables actually needed
+by non-React/portal styling. Ant `cssVar: true` is optional; React context
+already crosses portals and CSS-variable mode is not a replacement for the
+semantic `Tokens` contract.
 
 Ant v6 already uses CSS variables internally, but those names are library
 implementation vocabulary. Keep Travis semantic variables as the stable
@@ -2025,6 +2253,13 @@ cleanup, an immutable cached snapshot, and a server snapshot for SSR.
 StrictMode deliberately runs setup/cleanup again in development, exposing
 registries that increment on mount but fail to decrement on cleanup.
 
+Current registry is flat and has no consumer beyond boundaries. Duplicate IDs
+are silently ignored: if A and B share an ID, B is discarded, then unmounting
+A removes the registration while B remains mounted. Repeated pattern rows
+collapse accidentally, metadata has no parent relation, and the registry
+cannot yet answer “where does this region live?”
+([current registry](https://github.com/bywale-com/travis/blob/bd45fe866bcf8d36e182f160a896a9f65084a8f7/src/surfaces/SurfaceBoundary.tsx#L13-L103)).
+
 ## Failure handling and integration boundary — verified
 
 - Store registrations by mounted instance token, not only semantic ID.
@@ -2056,6 +2291,12 @@ registries that increment on mount but fail to decrement on cleanup.
 Keep the custom boundary registry. Use ARIA roles and names for interactive
 controls and `data-surface-id` for product regions. Make registrations
 ephemeral and clean them up on unmount.
+
+Have `register()` return an opaque instance token and store
+`semantic ID → mounted instances`; unregister only that token. Require an
+instance key for declared patterns, derive parent ID from nested boundary
+context, and clear highlighting only when the last matching instance unmounts.
+Throw in development on incompatible duplicate metadata.
 
 In development, warn or throw when unrelated mounted boundaries reuse an ID;
 pattern rows should intentionally share one pattern identity. Do not ship
@@ -2101,6 +2342,16 @@ context and let the destination system own the working session.
 These references cover generic feedback and contextual handoff. Travis's
 selected-turn evidence and repository workflow are product-specific.
 
+Current Look seed includes selected turn IDs, not selected text or surrounding
+context. The destination repository is public, so adding excerpts or
+screenshots would publish them. The flow has no submission key, drops GitHub
+rate-limit headers, flattens failure classes to 503, ignores label-removal
+errors, has no timeout/bounded retry, and can leave issue/branch/commit/PR
+partial state. Its runtime path dry-runs GitHub, so that state machine lacks
+behavioral failure-boundary tests
+([route](https://github.com/bywale-com/travis/blob/bd45fe866bcf8d36e182f160a896a9f65084a8f7/src/app/api/session/%5Bid%5D/look/route.ts),
+[GitHub adapter](https://github.com/bywale-com/travis/blob/bd45fe866bcf8d36e182f160a896a9f65084a8f7/src/server/look-github.ts)).
+
 GitHub's create-issue endpoint has no documented idempotency key or
 conditional-create contract. An ambiguous timeout can mean “created, response
 lost”; blindly retrying can create a duplicate. It can also return `410` when
@@ -2143,6 +2394,12 @@ Keep Look as a custom GitHub-backed handoff. Package the selected turns plus
 deployment, commit, PR, route/surface identity, and requested labels. Those
 are stronger engineering evidence than generic free-form feedback.
 
+“Package selected turns” requires a prior privacy decision and bounded,
+escaped excerpts; IDs alone are not evidence text, while raw text in this
+public repository is public disclosure. Reserve body headroom below GitHub's
+operational 65,536-character limit for the stable marker and generated
+evidence.
+
 Do not add Sentry or PostHog solely for Look. If Sentry is later adopted for
 monitoring, attach its event/replay ID to the same GitHub seed. Defer screenshot
 annotation until selected transcript and deployment evidence prove
@@ -2151,6 +2408,13 @@ insufficient.
 The remaining custom code should only package Travis-specific evidence and
 maintain the submission command/issue relationship. Authentication, issue
 creation, labels, and retry headers come from GitHub's API/client.
+
+Retain one client-generated submission UUID across retries. Preserve GitHub
+status and headers internally, classify 401/403/410/422/429/5xx, apply
+`AbortSignal.timeout`, bounded backoff, and mutation pacing, and retry only
+operations that are known safe or have first been reconciled by marker. Mock
+every partial-success boundary. Defer screenshots until consent, redaction,
+storage, retention, and mobile capture behavior are specified.
 
 Exactly-once issue creation is impossible across this API boundary: a process
 can fail after GitHub creates the issue but before Travis records the `201`.
@@ -2188,12 +2452,20 @@ infrastructure decision and a small set of correctness cuts:
 7. Serialize LangGraph writers with the same keyed FIFO using room ID, move
    saver setup to deployment, and define whole-thread retention.
 8. Make seat readiness explicit after the protocol handoff is confirmed.
-9. Use Web Locks for cross-tab microphone exclusion and keep the local
-   generation/state machine for intra-tab ownership.
-10. Use explicit Ant focus settings, React `useSyncExternalStore`, PostgreSQL
-   FTS, and GitHub retry headers where those established APIs already solve
-   the generic problem.
-11. Keep the remaining constructs local until measurement demonstrates the
+9. Authenticate and room-authorize artifact download; stream with timeout,
+   size, host, and retention bounds before treating any output as durable.
+10. Canonicalize all modality routing and transactionally repair room ending,
+   initiative promotion, queue claims, and receipt selection.
+11. Use Web Locks for cross-tab microphone exclusion and keep an immutable
+   `{epoch, sessionId, owner}` lease for intra-tab ownership and late media.
+12. Replace manual overlay mechanics with one explicitly focused Ant Drawer;
+   repair theme system-mode subscription and registry instance lifecycle.
+13. Preserve GitHub status/rate-limit information, reconcile by submission
+   marker, and test every Look partial-success boundary.
+14. Use React `useSyncExternalStore`, PostgreSQL FTS or trigram indexing, and
+   GitHub retry headers only where those established APIs solve the measured
+   generic problem.
+15. Keep the remaining constructs local until measurement demonstrates the
    specific scale, quality, or operability failure that a new dependency
    would remove.
 
