@@ -143,12 +143,12 @@ view.
 
 The entered room exposes room-scoped projections:
 
-- Artifacts;
+- an Artifacts chrome control;
 - room title and roster;
 - `via <active agent>`;
 - number of motions currently in progress;
 - Backlog;
-- Look;
+- Look while the room is in Log mode;
 - Requests;
 - Leave.
 
@@ -1030,7 +1030,7 @@ Ephemeral:
 ```text
 spoken name, Type chip, or reply target
       ↓
-router / destKeysForSeat / reference author
+router / protocol-path dest keys / reference author
       ↓
 open room member or role resolution
       ↓
@@ -1080,7 +1080,9 @@ work.
 
 The function starts the actual handoff and races it against
 `LEAVE_HANDOFF_MS`. If Cursor startup is slow, the route can still return a
-started state backed by the filed job.
+started state backed by the filed job. In that timeout branch, the response
+field named `runId` contains the `dest_job.id` as a temporary work handle, not
+a confirmed Cursor run ID.
 
 ### Step 3: `dispatchToSeat()` consumes only to `run_started`
 
@@ -1228,10 +1230,16 @@ child-job graph.
 
 ## Persisted and local state
 
-All authoritative job state is in Postgres. The browser only mirrors it through
-queue and room-event responses.
+Persisted:
 
-## Complete lifecycle
+- the complete job identity, payload, status, heartbeat, and links.
+
+Local:
+
+- the browser's current in-flight projection received through queue and room
+  events.
+
+## Complete path
 
 ```text
 new leave
@@ -1474,7 +1482,8 @@ The classifier has almost no direct UI of its own. Its effects are visible:
 - “Engineer, …” starts work;
 - “Actually, use the other approach” follows the open work;
 - “Cancel that” cancels the targeted run;
-- “What did we do yesterday?” updates/consults the Travis thread;
+- “What did we do yesterday?” is classified as a new walk-back against the
+  existing Travis thread and invokes it in update mode;
 - ordinary conversation remains talk.
 
 ## Code pass
@@ -2686,9 +2695,10 @@ Raw vendor events do not go directly to speech.
 
 ### Step 3: tool narration is deliberately non-speakable
 
-`narrateToolCall()` inserts a Travis `agent_post` with
-`speakable: false`. `Room.tsx` renders this as quiet italic receipt text,
-without a normal seat bubble or Play reply behavior.
+`runTravisTool()` in `src/server/travis-tools.ts` invokes
+`narrateToolCall()` from `src/lib/tool-narration.ts`, then uses
+`insertAgentPostTurn(..., speakable: false)`. `Room.tsx` renders this as quiet
+italic receipt text, without a normal seat bubble or Play reply behavior.
 
 ### Step 4: display and speech have separate formatting
 
@@ -2782,8 +2792,15 @@ The controls are mostly quiet text or icons until the operator asks for detail.
 const [door, setDoor] = useState<Door>(null);
 ```
 
-It separately stores `plate` for major faces such as index, create, room, and
-integrations.
+That union controls roster, in-flight, Requests, Backlog, and Look. It
+separately stores:
+
+- `plate` for major faces such as index, create, room, and integrations;
+- `artifactsOpen` and `artifactFullId` for Artifacts;
+- `openStreamId` for Stream.
+
+All three mechanisms follow the same progressive-disclosure law, but Artifacts
+and Stream are not values in the `Door` union.
 
 Using a union gives TypeScript a finite set of permitted strings and catches
 many misspellings at compile time.
@@ -2887,6 +2904,9 @@ Mission and Carbon each provide every required field.
 - waits for hydration before claiming a selection;
 - optionally listens to `prefers-color-scheme`;
 - exposes the selected token object through React context.
+
+`src/app/page.tsx` mounts `CharacterProvider` around `TravisApp`;
+`TravisApp` consumes that context rather than creating the provider itself.
 
 ### Step 3: `TravisApp` passes tokens down
 
